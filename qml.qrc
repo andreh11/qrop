@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>PlantingsPage.qml</file>
+        <file>CalendarPage.qml</file>
+        <file>HarvestsPage.qml</file>
+        <file>OverviewPage.qml</file>
+        <file>MapPage.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>CPTabButton.qml</file>
+        <file>DrawerItemDelegate.qml</file>
+        <file>Timeline.qml</file>
+    </qresource>
+</RCC>
