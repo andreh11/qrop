@@ -33,6 +33,32 @@ QVariant SqlPlantingModel::data(const QModelIndex &index, int role) const
         return value;
 }
 
+QString SqlPlantingModel::crop() const
+{
+    return m_crop;
+}
+
+void SqlPlantingModel::setCrop(const QString &crop)
+{
+   if (crop == m_crop)
+       return;
+
+   m_crop = crop;
+
+    if (m_crop == "") {
+        qInfo("null!");
+        setFilter("");
+    } else {
+        const QString filterString = QString::fromLatin1(
+            "(crop LIKE '%%%1%%')").arg(crop);
+        setFilter(filterString);
+    }
+
+    select();
+
+    emit cropChanged();
+}
+
 QHash<int, QByteArray> SqlPlantingModel::roleNames() const
 {
     QHash<int, QByteArray> names;

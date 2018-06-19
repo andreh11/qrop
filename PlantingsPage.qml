@@ -9,6 +9,7 @@ Page {
     title: "Plantings"
     padding: 16
     property bool showTimegraph: true
+    property string filterText: ""
 
     //    Component {
     //        id: sectionHeading
@@ -60,7 +61,10 @@ Page {
         //                section.criteria: ViewSection.FullString
         //        section.delegate: sectionHeading
 
-        model: SqlPlantingModel {}
+        model: SqlPlantingModel {
+            crop: filterText
+        }
+
 //        populate: Transition {
 //            NumberAnimation { properties: "y"; duration: 200 }
 //        }

@@ -299,7 +299,7 @@ ApplicationWindow {
                 iconText: "\ueb4c" // spa:wa
                 onClicked: {
                     stackView.pop()
-                    stackView.push("SuccessionPage.qml")
+                    stackView.push(plantingsPage)
                     if (!largeDisplay) {
                         drawer.close()
                     }
@@ -370,6 +370,12 @@ ApplicationWindow {
 
     OverviewPage {
         id: overviewPage
+    }
+
+    PlantingsPage {
+        id: plantingsPage
+        filterText: searchField.text
+
     }
 
     StackView {
