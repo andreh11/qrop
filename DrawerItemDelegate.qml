@@ -18,7 +18,7 @@ ItemDelegate {
 
     contentItem: Row {
         anchors.centerIn: parent
-        spacing: railMode ? 0 : 24
+        spacing: largeDisplay && railMode ? 0 : 24
         Label {
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
@@ -26,7 +26,7 @@ ItemDelegate {
             text: iconText
             font.family: "Material Icons"
             font.pixelSize: 24
-            horizontalAlignment: railMode ? Text.AlignHCenter : Text.AlignLeft
+            horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
@@ -34,7 +34,7 @@ ItemDelegate {
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
             id: textLabel
-            text: railMode ? "" : control.text
+            text: largeDisplay && railMode ? "" : control.text
             verticalAlignment: Text.AlignVCenter
         }
     }

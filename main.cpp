@@ -8,6 +8,7 @@
 
 #include "sqlplantingmodel.h"
 #include "sqltaskmodel.h"
+#include "sqlnotemodel.h"
 
 static void connectToDatabase()
 {
@@ -39,11 +40,15 @@ static void connectToDatabase()
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setApplicationName("Qrop");
+    QCoreApplication::setOrganizationName("AH");
+    QCoreApplication::setOrganizationDomain("io.qrop");
 
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<SqlPlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
     qmlRegisterType<SqlTaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
+    qmlRegisterType<SqlNoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
 
     connectToDatabase();
 

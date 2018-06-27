@@ -8,7 +8,7 @@ import io.croplan.components 1.0
 Page {
     title: "Plantings"
     padding: 16
-    property bool showTimegraph: true
+    property bool showTimegraph: timegraphButton.checked
     property string filterText: ""
 
     //    Component {
@@ -43,15 +43,24 @@ Page {
         ToolButton {
             text: qsTr("Remove")
         }
+        ToolButton {
+            id: timegraphButton
+            visible: largeDisplay
+            text: qsTr("Timegraph")
+            checkable: true
+            checked: true
+        }
     }
 
     ListView {
         id: listView
+        clip: true
         width: parent.width
         height: parent.height - buttonRow.height
         spacing: 0
         anchors.top: buttonRow.bottom
         ScrollBar.vertical: ScrollBar {
+            visible: largeDisplay
             parent: listView.parent
             anchors.top: listView.top
             anchors.left: listView.right
@@ -73,7 +82,7 @@ Page {
             id: headerRectangle
             height: headerRow.height
             width: parent.width
-            color: headerCheckbox.checked ? Material.color(Material.primary, Material.Shade100) : (headerRectangle.hovered ? "red" : "white")
+            color: headerCheckbox.checked ? Material.color(Material.primary, Material.Shade100) : "white"
             z: 3
             Column {
                 width: parent.width
@@ -186,7 +195,12 @@ Page {
         delegate: Rectangle {
             height: row.height
             width: parent.width
-            color: checkBox.checked ? Material.color(Material.primary, Material.Shade100) : "white"
+            color: checkBox.checked ? Material.color(Material.primary, Material.Shade100) : (mouseArea.containsMouse ? Material.color(Material.Grey, Material.Shade100) : "white")
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
             Column {
                 width: parent.width
                 Rectangle {
@@ -220,10 +234,11 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Timeline {
-                            seedingDate: model.seeding_date
-                            transplantingDate: model.transplanting_date
-                            beginHarvestDate: model.beg_harvest_date
-                            endHarvestDate: model.end_harvest_date
+                        visible: showTimegraph
+                        seedingDate: model.seeding_date
+                        transplantingDate: model.transplanting_date
+                        beginHarvestDate: model.beg_harvest_date
+                        endHarvestDate: model.end_harvest_date
                     }
                     Label {
                         text: model.seeding_date
@@ -234,6 +249,7 @@ Page {
                 }
             }
         }
+
     }
     RoundButton {
         id: addButton

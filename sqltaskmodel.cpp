@@ -15,7 +15,7 @@ SqlTaskModel::SqlTaskModel(QObject *parent)
     setTable(taskTableName);
     setSort(2, Qt::AscendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
-    setDate(QDate::currentDate());
+//    setDate(QDate::currentDate());
     select();
     qInfo("%d", rowCount());
 }

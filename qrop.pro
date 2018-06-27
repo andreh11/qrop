@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     sqlplantingmodel.cpp \
-    sqltaskmodel.cpp
+    sqltaskmodel.cpp \
+    sqlnotemodel.cpp
 
 RESOURCES += qml.qrc \
     resources.qrc
@@ -33,4 +34,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     sqlplantingmodel.h \
-    sqltaskmodel.h
+    sqltaskmodel.h \
+    sqlnotemodel.h

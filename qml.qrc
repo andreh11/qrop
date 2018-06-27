@@ -11,5 +11,8 @@
         <file>CPTabButton.qml</file>
         <file>DrawerItemDelegate.qml</file>
         <file>Timeline.qml</file>
+        <file>Card.qml</file>
+        <file>NotesPage.qml</file>
+        <file>NotesEditPage.qml</file>
     </qresource>
 </RCC>
