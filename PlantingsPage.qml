@@ -130,21 +130,32 @@ Page {
                             spacing: 0
                             Repeater {
                                 model: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+                                Item {
+                                    width: 61
+                                    height: parent.height
                                 Rectangle {
+                                    id: lineRectangle
                                     height: parent.height
                                     width: 1
                                     color: Material.color(Material.Grey, Material.Shade400)
                                 }
                                 Label {
                                     text: modelData
+                                    anchors.left: lineRectangle.right
                                     font.family: "Roboto Condensed"
                                     color: Material.color(Material.Grey, Material.Shade700)
-                                    width: 60 - headerRow.spacing - 1
+                                    width: 60 - 1
                                     anchors.verticalCenter: parent.verticalCenter
                                     horizontalAlignment: Text.AlignHCenter
 
                                 }
+                                }
                             }
+                                Rectangle {
+                                    height: parent.height
+                                    width: 1
+                                    color: Material.color(Material.Grey, Material.Shade400)
+                                }
                         }
 //                        Timeline {
 //                            seedingDate: new Date(2018, 2, 3)
@@ -156,41 +167,6 @@ Page {
                 }
             }
         }
-
-//        delegate: Rectangle {
-//            height: row.height
-//            width: parent.width
-////            color: checkBox.checked ? Material.color(Material.primary, Material.Shade100) : "white"
-//            Column {
-//                Rectangle {
-//                    width: parent.width
-//                    height: 1
-//                    color: Material.color(Material.Grey, Material.Shade400)
-//                }
-//                Row {
-//                    id: row
-//                    height: 47 * 2
-//                    spacing: 18
-//                    leftPadding: 16
-//                    Label {
-//                        text: model.crop
-//                        font.family: "Roboto Condensed"
-//                        font.pixelSize: 14
-//                        anchors.verticalCenter: parent.verticalCenter
-//                    }
-//                    Label {
-//                        text: model.variety
-//                        font.family: "Roboto Condensed"
-//                        anchors.verticalCenter: parent.verticalCenter
-//                    }
-
-////                    CheckBox {
-////                        id: checkBox
-////                        width: 24
-////                    }
-//                }
-
-//            }
 
         delegate: Rectangle {
             height: row.height

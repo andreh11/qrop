@@ -40,7 +40,7 @@ Item {
         height: parent.height
         spacing: monthWidth
         Repeater {
-            model: 12
+            model: 13
             Rectangle {
                 height: parent.height
                 width: 1

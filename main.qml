@@ -180,7 +180,7 @@ ApplicationWindow {
                 verticalAlignment: Qt.AlignVCenter
                 font.pixelSize: 20
                 visible: largeDisplay || searchMode
-                color: largeDisplay ? "white" : "black"
+                color: "black"
                 placeholderText: qsTr("Search")
                 Layout.fillWidth: true
                 background: Rectangle {
@@ -214,10 +214,10 @@ ApplicationWindow {
             ToolButton {
                 id: saveButton
                 visible: showSaveButton
-                text: qsTr("Save")
-                font.family: "Roboto Regular"
+                text: "\ue876"
+                font.family: "Material Icons"
                 font.capitalization: Font.Capitalize
-                font.pixelSize: 20
+                font.pixelSize: 24
                 onClicked: {
                     stackView.currentItem.save()
                     stackView.pop()
@@ -263,16 +263,6 @@ ApplicationWindow {
 
         }
     }
-    //    header: StackView {
-    //        id: toolBarStack
-    //        height: toolBar.height
-    //        initialItem: toolBar
-    //        visible: true
-    //    }
-
-    //    Component {
-    //        id: toolBar
-    //    }
 
     Drawer {
         id: drawer
@@ -394,7 +384,7 @@ ApplicationWindow {
 
             DrawerItemDelegate {
                 text: qsTr("Notes")
-                iconText: "\ue801" // poll
+                iconText: "\ue616" // event_note
                 onClicked: {
                     stackView.pop()
                     stackView.push("NotesPage.qml")
