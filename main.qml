@@ -95,7 +95,7 @@ ApplicationWindow {
 
     header: ToolBar {
         id: toolBar
-        visible: true
+        visible: !largeDisplay
         leftPadding: 8 + (largeDisplay ? drawer.width : 0)
         rightPadding: 8
         contentHeight: drawerButton.implicitHeight
