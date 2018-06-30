@@ -12,10 +12,9 @@ SqlPlantingModel::SqlPlantingModel(QObject *parent)
     : QSqlTableModel(parent)
 {
     setTable(plantingTableName);
-    setSort(2, Qt::AscendingOrder);
+    setSort(1, Qt::AscendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
-    qInfo("rows: %d", rowCount());
 }
 
 QVariant SqlPlantingModel::data(const QModelIndex &index, int role) const
@@ -61,20 +60,10 @@ void SqlPlantingModel::setCrop(const QString &crop)
 
 QHash<int, QByteArray> SqlPlantingModel::roleNames() const
 {
-    QHash<int, QByteArray> names;
-    names[Qt::UserRole] = "planting_id";
-    names[Qt::UserRole + 1] = "crop";
-    names[Qt::UserRole + 2] = "variety";
-    names[Qt::UserRole + 3] = "family";
-    names[Qt::UserRole + 4] = "unit";
-    names[Qt::UserRole + 5] = "code";
-    names[Qt::UserRole + 6] = "planting_type";
-    names[Qt::UserRole + 7] = "comments";
-    names[Qt::UserRole + 8] = "keywords";
-    names[Qt::UserRole + 9] = "seeding_date";
-    names[Qt::UserRole + 10] = "transplanting_date";
-    names[Qt::UserRole + 11] = "beg_harvest_date";
-    names[Qt::UserRole + 12] = "end_harvest_date";
+    QHash<int, QByteArray> roles;
 
-    return names;
+    for (int i = 0; i < this->record().count(); i ++)
+        roles.insert(Qt::UserRole + i, record().fieldName(i).toUtf8());
+
+    return roles;
 }

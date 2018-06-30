@@ -136,6 +136,7 @@ Page {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                 }
+
                 ToolButton {
                     text: "\ue152" // filter_list
                     font.family: "Material Icons"
@@ -148,6 +149,7 @@ Page {
                     }
 
                 }
+
                 ToolButton {
                     text: "\ue145" // add
                     font.family: "Material Icons"
@@ -166,6 +168,7 @@ Page {
             height: parent.height - buttonRectangle.height
             spacing: 0
             anchors.top: buttonRectangle.bottom
+
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
                 parent: listView.parent
@@ -173,6 +176,7 @@ Page {
                 anchors.left: listView.right
                 anchors.bottom: listView.bottom
             }
+
             Shortcut {
                 sequence: "Ctrl+K"
                 onActivated: {
@@ -180,10 +184,6 @@ Page {
                     filterField.focus = true
                 }
             }
-
-            //                                section.property: "crop"
-            //                                section.criteria: ViewSection.FullString
-            //        section.delegate: sectionHeading
 
             model: SqlPlantingModel {
                 crop: filterField.text
@@ -204,19 +204,26 @@ Page {
                         spacing: 18
                         leftPadding: 16
 
+                        property TableHeaderLabel filterLabel: cropLabel
+
                         CheckBox {
                             id: headerCheckbox
                             width: 24
                         }
 
                         TableHeaderLabel {
+                            id: cropLabel
                             text: qsTr("Crop")
+                            state: "descending"
                             width: 120
                         }
+
                         TableHeaderLabel {
+                            id: varietyLabel
                             text: qsTr("Variety")
                             width: 120
                         }
+
                         Item {
                             height: parent.height
                             width: headerTimelineRow.width
@@ -300,18 +307,13 @@ Page {
                             }
                         }
 
-                        Label {
+                        TableLabel {
                             text: model.crop
-                            font.family: "Roboto Condensed"
-                            font.pixelSize: 14
                             width: 120
-                            anchors.verticalCenter: parent.verticalCenter
                         }
-                        Label {
+                        TableLabel {
                             text: model.variety
-                            font.family: "Roboto Condensed"
                             width: 120
-                            anchors.verticalCenter: parent.verticalCenter
                         }
                         Timeline {
                             visible: showTimegraph
@@ -320,18 +322,14 @@ Page {
                             beginHarvestDate: model.beg_harvest_date
                             endHarvestDate: model.end_harvest_date
                         }
-                        Label {
+                        TableLabel {
                             text: model.seeding_date
-                            font.family: "Roboto Condensed"
                             width: 120
-                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
                 }
             }
-
         }
-
     }
 
     RoundButton {

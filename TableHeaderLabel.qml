@@ -4,10 +4,12 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 Item {
-    property alias text: headerLabel.text
     id: header
     height: headerLabel.height
     anchors.verticalCenter: parent.verticalCenter
+
+    property alias text: headerLabel.text
+    property Item container
 
     Row {
         id: row
@@ -23,7 +25,6 @@ Item {
             id: iconLabel
             transformOrigin: Item.Center
             text: ""
-//            width: 18
             visible: false
             color: "black"
             font.family: "Material Icons"
@@ -45,7 +46,6 @@ Item {
             }
         },
 
-
         State {
             name: "descending"
             PropertyChanges {
@@ -60,6 +60,7 @@ Item {
             }
 
         },
+
         State {
             name: "ascending"
             PropertyChanges {
@@ -75,29 +76,45 @@ Item {
         }
     ]
 
-    transitions: Transition {
-        from: "descending"; to: "ascending"
+    transitions: [
+        Transition {
+            from: "descending"; to: "ascending"
 
-        RotationAnimation {
-            target: iconLabel
-            duration: 200
+            RotationAnimation {
+                target: iconLabel
+                duration: 200
+            }
+        },
+
+        Transition {
+            from: "ascending"; to: "descending"
+
+            RotationAnimation {
+                target: iconLabel
+                duration: 200
+            }
         }
-    }
+    ]
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
             switch (header.state) {
             case "":
                 header.state = "descending";
+                if (header.parent.filterLabel !== header) {
+                    header.parent.filterLabel.state = ""
+                    header.parent.filterLabel = header
+                }
                 break;
             case "descending":
                 header.state = "ascending";
                 break;
             case "ascending":
-                header.state = "";
+                header.state = "descending";
                 break;
             }
             console.log(header.state)
