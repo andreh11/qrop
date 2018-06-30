@@ -16,5 +16,6 @@
         <file>NotesEditPage.qml</file>
         <file>TableHeaderLabel.qml</file>
         <file>TableLabel.qml</file>
+        <file>IconButton.qml</file>
     </qresource>
 </RCC>

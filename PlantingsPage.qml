@@ -62,11 +62,8 @@ Page {
                     }
                 }
 
-                ToolButton {
+                IconButton {
                     text: "\ue5cd" // delete
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     onClicked: {
                         filterMode = false
                         filterField.text = ""
@@ -79,6 +76,7 @@ Page {
                 anchors.fill: parent
                 spacing: 0
                 visible: !filterMode
+
                 Label {
                     anchors.verticalCenter: parent.verticalCenter
                     text: checks + " item" + (checks > 1 ? "s" : "") + " selected"
@@ -91,6 +89,7 @@ Page {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
                 }
+
                 Label {
                     text: qsTr("Plantings")
                     visible: checks === 0
@@ -100,33 +99,24 @@ Page {
                     Layout.fillWidth: true
                 }
 
-                ToolButton {
+                IconButton {
                     text: "\ue3c9" // edit
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     visible: checks > 0
                 }
-                ToolButton {
+
+                IconButton {
                     text: "\ue14d" // content_copy
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     visible: checks > 0
                 }
-                ToolButton {
+
+                IconButton {
                     text: "\ue872" // delete
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     visible: checks > 0
                 }
-                ToolButton {
+
+                IconButton {
                     id: timegraphButton
                     hoverEnabled: true
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     text: "\ue0b8"
                     visible: largeDisplay && checks == 0
                     checkable: true
@@ -137,24 +127,17 @@ Page {
                     ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                 }
 
-                ToolButton {
+                IconButton {
                     text: "\ue152" // filter_list
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     visible: checks === 0
                     onClicked: {
                         filterMode = true
                         filterField.focus = true
                     }
-
                 }
 
-                ToolButton {
+                IconButton {
                     text: "\ue145" // add
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-                    width: 24
                     visible: checks === 0
                 }
             }
