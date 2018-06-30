@@ -14,5 +14,6 @@
         <file>Card.qml</file>
         <file>NotesPage.qml</file>
         <file>NotesEditPage.qml</file>
+        <file>TableHeaderLabel.qml</file>
     </qresource>
 </RCC>

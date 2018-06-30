@@ -278,7 +278,14 @@ ApplicationWindow {
 
         Column {
             anchors.fill: parent
-            spacing: 6
+//            spacing: 6
+
+//            Image {
+//                source: "logo.png"
+//                width: drawer.width - 16
+//                fillMode: Image.PreserveAspectFit
+//                anchors.horizontalCenter: parent.horizontalCenter
+//            }
 
             Label {
                 id: programLabel
