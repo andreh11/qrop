@@ -14,6 +14,18 @@ Page {
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
+    property int currentYear: 2018
+
+    function formatDate(date) {
+        var year = date.getFullYear()
+        var text = week(date)
+
+        if (year !== currentYear) {
+            text += "⋅" + year.toString().substr(2)
+        }
+
+        return text
+    }
 
 //    Pane {
 //        id: chartPane
@@ -61,7 +73,6 @@ Page {
                             filterMode = false
                             filterField.text = ""
                         }
-
                     }
 
                     background: Rectangle {
@@ -215,6 +226,7 @@ Page {
             property string filterColumn: "crop"
             property TableHeaderLabel filterLabel: headerRow.cropLabel
 
+
 //            onFilterLabelChanged: {
 //                console.log("changed!")
 //                switch (filterLabel) {
@@ -330,11 +342,22 @@ Page {
 
                         TableHeaderLabel {
                             text: qsTr("Seeding date")
-                            width: 100
+                            width: 80
                         }
+
                         TableHeaderLabel {
                             text: qsTr("Planting date")
-                            width: 100
+                            width: 80
+                        }
+
+                        TableHeaderLabel {
+                            text: qsTr("Harvest begin")
+                            width: 80
+                        }
+
+                        TableHeaderLabel {
+                            text: qsTr("Harvest end")
+                            width: 80
                         }
                     }
                 }
@@ -343,12 +366,22 @@ Page {
             delegate: Rectangle {
                 height: row.height
                 width: parent.width
-                color: checkBox.checked ? Material.color(Material.primary, Material.Shade100) : (mouseArea.containsMouse ? Material.color(Material.Grey, Material.Shade100) : "white")
+                color: {
+                    if (checkBox.checked) {
+                       return Material.color(Material.primary, Material.Shade100)
+                    } else if (mouseArea.containsMouse) {
+                       return Material.color(Material.Grey, Material.Shade100)
+                    } else {
+                        return "white"
+                    }
+                }
+
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
                 }
+
                 Column {
                     width: parent.width
 
@@ -378,11 +411,13 @@ Page {
                             elide: Text.ElideRight
                             width: 100
                         }
+
                         TableLabel {
                             text: model.variety
                             elide: Text.ElideRight
                             width: 100
                         }
+
                         Timeline {
                             visible: showTimegraph
                             seedingDate: model.seeding_date
@@ -390,15 +425,29 @@ Page {
                             beginHarvestDate: model.beg_harvest_date
                             endHarvestDate: model.end_harvest_date
                         }
+
                         TableLabel {
-                            text: model.seeding_date
+                            text: formatDate(model.seeding_date)
                             elide: Text.ElideRight
-                            width: 100
+                            width: 80
                         }
+
                         TableLabel {
+                            text: formatDate(model.transplanting_date)
                             elide: Text.ElideRight
-                            text: model.seeding_date
-                            width: 100
+                            width: 80
+                        }
+
+                        TableLabel {
+                            text: formatDate(model.beg_harvest_date)
+                            elide: Text.ElideRight
+                            width: 80
+                        }
+
+                        TableLabel {
+                            text: formatDate(model.end_harvest_date)
+                            elide: Text.ElideRight
+                            width: 80
                         }
                     }
                 }
