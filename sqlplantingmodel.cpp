@@ -12,8 +12,25 @@ SqlPlantingModel::SqlPlantingModel(QObject *parent)
     : QSqlTableModel(parent)
 {
     setTable(plantingTableName);
-    setSort(1, Qt::AscendingOrder);
+    for (int i = 0; i < this->record().count(); i++) {
+        m_rolesIndexes.insert(record().fieldName(i).toUtf8(), i);
+    }
+
+//    setSort(1, Qt::AscendingOrder);
+    setSortColumn("seeding_date", "ascending");
     setEditStrategy(QSqlTableModel::OnManualSubmit);
+    select();
+
+}
+
+void SqlPlantingModel::setSortColumn(const QString fieldName, const QString order)
+{
+    if (!m_rolesIndexes.contains(fieldName)) {
+        qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
+        return;
+    }
+    qInfo() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
+    setSort(m_rolesIndexes[fieldName], order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
 }
 

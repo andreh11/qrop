@@ -17,5 +17,7 @@
         <file>TableHeaderLabel.qml</file>
         <file>TableLabel.qml</file>
         <file>IconButton.qml</file>
+        <file>CardSpinBox.qml</file>
+        <file>ThinDivider.qml</file>
     </qresource>
 </RCC>

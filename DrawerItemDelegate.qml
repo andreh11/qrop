@@ -8,13 +8,16 @@ import QtGraphicalEffects 1.0
 
 ItemDelegate {
     id: control
-    //    property bool isActive: index == navigationIndex
+    property Page page
+    property bool selected: page === currentPage
     property string iconText
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
     focusPolicy: Qt.NoFocus
     height: 48
     width: drawer.width
+
+    Material.background: selected ? Material.red : Material.blue
 
     contentItem: Row {
         anchors.centerIn: parent

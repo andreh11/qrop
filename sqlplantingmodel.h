@@ -16,13 +16,15 @@ public:
 
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+    Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
 
 signals:
     void cropChanged();
 
 private:
     QString m_crop;
-
+    QHash<QString, int> m_rolesIndexes;
+    QHash<QModelIndex, bool> m_selected;
 };
 
 #endif // SQLPLANTINGMODEL_H

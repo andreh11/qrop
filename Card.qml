@@ -23,7 +23,7 @@ Item {
             id: cardPane
             width: parent.width
             height: parent.height
-            Material.elevation: 2
+            Material.elevation: 1
 //            children: paneContent
         }
     }

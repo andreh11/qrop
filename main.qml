@@ -1,3 +1,4 @@
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -8,10 +9,13 @@ import Qt.labs.platform 1.0 as Platform
 
 ApplicationWindow {
     id: window
+    title: "Qrop"
     visible: true
     width: 1024
     height: 768
-    title: "Qrop"
+
+    Material.primary: Material.Teal
+    Material.accent: Material.Orange
 
     readonly property bool largeDisplay: width > 800
     property bool railMode: true
@@ -19,6 +23,7 @@ ApplicationWindow {
     property bool showSaveButton: false
     property string searchString: searchField.text
     property alias stackView: stackView
+    property Page currentPage: stackView.get(stackView.index)
 
     // font sizes - defaults from Google Material Design Guide
     property int fontSizeDisplay4: 112
@@ -54,16 +59,16 @@ ApplicationWindow {
         }
     }
 
-    Shortcut {
-        sequence: "Ctrl+K"
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            if (!largeDisplay) {
-                searchMode = true
-            }
-            searchField.focus = true
-        }
-    }
+//    Shortcut {
+//        sequence: "Ctrl+K"
+//        context: Qt.ApplicationShortcut
+//        onActivated: {
+//            if (!largeDisplay) {
+//                searchMode = true
+//            }
+//            searchField.focus = true
+//        }
+//    }
 
     Component {
         id: searchBar
@@ -274,7 +279,8 @@ ApplicationWindow {
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
-        Material.background: Material.color(Material.Teal, Material.Shade300)
+//        Material.background: Material.color(Material.Teal, Material.Shade300)
+        Material.background: Material.primary
 
         Column {
             anchors.fill: parent
@@ -305,36 +311,15 @@ ApplicationWindow {
                 }
             }
 
-//            ComboBox {
-//                id: seasonBox
-//                width: parent.width
-//                font.family: "Roboto Condensed"
-//                Material.elevation: 0
-//                //                    editable: true
-//                visible: largeDisplay
-//                model: [qsTr("Spring"), qsTr("Summer"), qsTr("Autumn"), qsTr("Fall")]
-//                Material.foreground: "white"
-//            }
-
-//            SpinBox {
-//                id: yearBox
-//                from: 2000
-//                to: 3000
-//                value: Date.now().toLocaleString("yyyy")
-//                width: parent.width
-//                font.family: "Roboto Condensed"
-//                Material.elevation: 0
-//                visible: largeDisplay
-//                Material.foreground: "white"
-//            }
-
             DrawerItemDelegate {
                 id: button
                 text: qsTr("Overview")
                 iconText: "\ue871"
+                page: overviewPage
+
                 onClicked: {
                     stackView.pop()
-                    stackView.push(overviewPage)
+                    stackView.push(page)
                     if (!largeDisplay) {
                         drawer.close()
                     }
@@ -344,9 +329,11 @@ ApplicationWindow {
             DrawerItemDelegate {
                 text: qsTr("Crops")
                 iconText: "\ueb4c" // spa
+                page: plantingsPage
+
                 onClicked: {
                     stackView.pop()
-                    stackView.push(plantingsPage)
+                    stackView.push(page)
                     if (!largeDisplay) {
                         drawer.close()
                     }

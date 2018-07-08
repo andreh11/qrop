@@ -8,6 +8,9 @@ Item {
     height: headerLabel.height
     anchors.verticalCenter: parent.verticalCenter
 
+    property var filterLabel
+    property string filterColumn
+    property string columnName
     property alias text: headerLabel.text
     property Item container
 
@@ -24,8 +27,8 @@ Item {
         Label {
             id: iconLabel
             transformOrigin: Item.Center
-            text: ""
-            visible: false
+            text: "\ue5db"
+            visible: mouseArea.containsMouse
             color: "black"
             font.family: "Material Icons"
             font.pixelSize: 16
@@ -38,7 +41,7 @@ Item {
             name: ""
             PropertyChanges {
                 target: iconLabel
-                visible: false
+                visible: mouseArea.containsMouse
             }
             PropertyChanges {
                 target: headerLabel
@@ -50,7 +53,6 @@ Item {
             name: "descending"
             PropertyChanges {
                 target: iconLabel
-                text: "\ue5db"
                 visible: true
                 rotation: 0
             }
@@ -105,9 +107,10 @@ Item {
             switch (header.state) {
             case "":
                 header.state = "descending";
-                if (header.parent.filterLabel !== header) {
-                    header.parent.filterLabel.state = ""
-                    header.parent.filterLabel = header
+                if (parent.filterLabel !== header) {
+                    parent.filterLabel.state = ""
+                    parent.filterLabel = header
+                    parent.filterColumn = parent.columnName
                 }
                 break;
             case "descending":

@@ -2,10 +2,12 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
+import QtCharts 2.0
 
 import io.croplan.components 1.0
 
 Page {
+    id: page
     title: "Plantings"
     padding: 8
     property bool showTimegraph: timegraphButton.checked
@@ -13,7 +15,18 @@ Page {
     property string filterText: ""
     property int checks: 0
 
+//    Pane {
+//        id: chartPane
+//        visible: false
+//        height: parent.height/4
+//        width: parent.width
+//        padding: 0
+//        Material.elevation: 1
+//     }
+
     Pane {
+        width: parent.width
+        height: parent.height
         anchors.fill: parent
         padding: 0
         Material.elevation: 1
@@ -24,6 +37,7 @@ Page {
             visible: true
             width: parent.width
             height: 48
+
             RowLayout {
                 id: filterRow
                 anchors.fill: parent
@@ -40,6 +54,7 @@ Page {
                     placeholderText: qsTr("Search")
                     Layout.fillWidth: true
                     anchors.verticalCenter: parent.verticalCenter
+
                     Shortcut {
                         sequence: "Escape"
                         onActivated: {
@@ -48,6 +63,7 @@ Page {
                         }
 
                     }
+
                     background: Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height * 0.7
@@ -90,13 +106,57 @@ Page {
                     verticalAlignment: Qt.AlignVCenter
                 }
 
-                Label {
-                    text: qsTr("Plantings")
+                ToolButton {
+                    font.pixelSize: fontSizeBodyAndButton
+                    leftPadding: 24
                     visible: checks === 0
-                    leftPadding: 16
-                    font.family: "Roboto Regular"
-                    font.pixelSize: 20
+                    text: qsTr("Add planting")
+                }
+
+//                Label {
+//                    text: qsTr("Summer")
+//                    visible: checks === 0
+//                    leftPadding: 16
+//                    font.family: "Roboto Regular"
+//                    font.pixelSize: 20
+////                    Layout.fillWidth: true
+//                }
+
+                Label {
                     Layout.fillWidth: true
+                }
+
+                CardSpinBox {
+                    visible: checks === 0
+                     from: 0
+                     to: items.length - 1
+                     value: 1
+
+                     property var items: ["Spring", "Summer", "Autumn", "Fall"]
+
+                     validator: RegExpValidator {
+                         regExp: new RegExp("(Small|Medium|Large)", "i")
+                     }
+
+                     textFromValue: function(value) {
+                         return items[value];
+                     }
+
+                     valueFromText: function(text) {
+                         for (var i = 0; i < items.length; ++i) {
+                             if (items[i].toLowerCase().indexOf(text.toLowerCase()) === 0)
+                                 return i
+                         }
+                         return sb.value
+                     }
+                 }
+
+                CardSpinBox {
+                    visible: checks === 0
+                    id: yearSpinBox
+                    from: 2000
+                    to: 2100
+                    value: 2018
                 }
 
                 IconButton {
@@ -116,8 +176,8 @@ Page {
 
                 IconButton {
                     id: timegraphButton
-                    hoverEnabled: true
                     text: "\ue0b8"
+                    hoverEnabled: true
                     visible: largeDisplay && checks == 0
                     checkable: true
                     checked: true
@@ -136,10 +196,10 @@ Page {
                     }
                 }
 
-                IconButton {
-                    text: "\ue145" // add
-                    visible: checks === 0
-                }
+//                IconButton {
+//                    text: "\ue145" // add
+//                    visible: checks === 0
+//                }
             }
         }
 
@@ -151,6 +211,21 @@ Page {
             height: parent.height - buttonRectangle.height
             spacing: 0
             anchors.top: buttonRectangle.bottom
+
+            property string filterColumn: "crop"
+            property TableHeaderLabel filterLabel: headerRow.cropLabel
+
+//            onFilterLabelChanged: {
+//                console.log("changed!")
+//                switch (filterLabel) {
+//                case cropLabel:
+//                    listView.model.setSortColumn("crop", filterLabel.state)
+//                    break
+//                case varietyLabel:
+//                    listView.model.setSortColumn("variety", filterLabel.state)
+//                    break
+//                }
+//            }
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
@@ -171,12 +246,14 @@ Page {
             model: SqlPlantingModel {
                 crop: filterField.text
             }
+
             headerPositioning: ListView.OverlayHeader
+
             header: Rectangle {
                 id: headerRectangle
                 height: headerRow.height
                 width: parent.width
-                color: headerCheckbox.checked ? Material.color(Material.primary, Material.Shade100) : "white"
+                color: "white"
                 z: 3
                 Column {
                     width: parent.width
@@ -187,8 +264,6 @@ Page {
                         spacing: 18
                         leftPadding: 16
 
-                        property TableHeaderLabel filterLabel: cropLabel
-
                         CheckBox {
                             id: headerCheckbox
                             width: 24
@@ -197,21 +272,26 @@ Page {
                         TableHeaderLabel {
                             id: cropLabel
                             text: qsTr("Crop")
+                            filterLabel: listView.filterLabel
+                            filterColumn: listView.filterColumn
+                            columnName: "crop"
                             state: "descending"
-                            width: 120
+                            width: 100
                         }
 
                         TableHeaderLabel {
                             id: varietyLabel
+                            filterLabel: listView.filterLabel
+                            filterColumn: listView.filterColumn
+                            columnName: "variety"
                             text: qsTr("Variety")
-                            width: 120
+                            width: 100
                         }
 
                         Item {
                             height: parent.height
                             width: headerTimelineRow.width
                             visible: showTimegraph
-                            //                        width: 200
                             Row {
                                 id: headerTimelineRow
                                 anchors.verticalCenter: parent.verticalCenter
@@ -247,9 +327,14 @@ Page {
                                 }
                             }
                         }
+
                         TableHeaderLabel {
                             text: qsTr("Seeding date")
-                            width: 120
+                            width: 100
+                        }
+                        TableHeaderLabel {
+                            text: qsTr("Planting date")
+                            width: 100
                         }
                     }
                 }
@@ -266,10 +351,8 @@ Page {
                 }
                 Column {
                     width: parent.width
-                    Rectangle {
-                        width: parent.width
-                        height: 1
-                        color: Material.color(Material.Grey, Material.Shade400)
+
+                    ThinDivider {
                     }
 
                     Row {
@@ -292,11 +375,13 @@ Page {
 
                         TableLabel {
                             text: model.crop
-                            width: 120
+                            elide: Text.ElideRight
+                            width: 100
                         }
                         TableLabel {
                             text: model.variety
-                            width: 120
+                            elide: Text.ElideRight
+                            width: 100
                         }
                         Timeline {
                             visible: showTimegraph
@@ -307,7 +392,13 @@ Page {
                         }
                         TableLabel {
                             text: model.seeding_date
-                            width: 120
+                            elide: Text.ElideRight
+                            width: 100
+                        }
+                        TableLabel {
+                            elide: Text.ElideRight
+                            text: model.seeding_date
+                            width: 100
                         }
                     }
                 }
