@@ -17,13 +17,25 @@ ApplicationWindow {
     Material.primary: Material.Teal
     Material.accent: Material.Orange
 
+    property var navigationModel: [
+        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
+        { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
+        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" },
+        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
+        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
+        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
+        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
+    ]
+    property int navigationIndex: 0
+    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
+
     readonly property bool largeDisplay: width > 800
     property bool railMode: true
     property bool searchMode: false
     property bool showSaveButton: false
     property string searchString: searchField.text
     property alias stackView: stackView
-    property Page currentPage: stackView.get(stackView.index)
 
     // font sizes - defaults from Google Material Design Guide
     property int fontSizeDisplay4: 112
@@ -229,7 +241,6 @@ ApplicationWindow {
                 }
             }
 
-
             ToolButton {
                 id: saveButton
                 visible: showSaveButton
@@ -298,14 +309,6 @@ ApplicationWindow {
 
         Column {
             anchors.fill: parent
-//            spacing: 6
-
-//            Image {
-//                source: "logo.png"
-//                width: drawer.width - 16
-//                fillMode: Image.PreserveAspectFit
-//                anchors.horizontalCenter: parent.horizontalCenter
-//            }
 
             Label {
                 id: programLabel
@@ -317,6 +320,7 @@ ApplicationWindow {
                 padding: 12
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
@@ -325,133 +329,45 @@ ApplicationWindow {
                 }
             }
 
-            DrawerItemDelegate {
-                id: button
-                text: qsTr("Overview")
-                iconText: "\ue871"
-                page: overviewPage
+            Repeater {
+                model: navigationModel
 
-                onClicked: {
-                    stackView.pop()
-                    stackView.push(page)
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
+                DrawerItemDelegate {
+                    text: modelData.name
+                    iconText: modelData.iconText
                 }
+
             }
-
-            DrawerItemDelegate {
-                text: qsTr("Crops")
-                iconText: "\ueb4c" // spa
-                page: plantingsPage
-
-                onClicked: {
-                    stackView.pop()
-                    stackView.push(page)
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Task Calendar")
-                iconText: "\ue876"
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("CalendarPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Crop map")
-                iconText: "\ue55b"  // map
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("CropMapPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Harvests")
-                iconText: "\ue896" // list
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("HarvestsPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Notes")
-                iconText: "\ue616" // event_note
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("NotesPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Reports")
-                iconText: "\ue801" // poll
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("HarvestsPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
-            DrawerItemDelegate {
-                text: qsTr("Settings")
-                iconText: "\ue8b8" // settings
-                onClicked: {
-                    stackView.pop()
-                    stackView.push("HarvestsPage.qml")
-                    if (!largeDisplay) {
-                        drawer.close()
-                    }
-                }
-            }
-
         }
     }
 
-    OverviewPage {
-        id: overviewPage
-    }
+    Repeater {
+        id: pages
+        model: navigationModel
 
-    PlantingsPage {
-        id: plantingsPage
-        filterText: searchField.text
+        Loader {
+            property string title
+            source: modelData.source
+            onLoaded: title = item.title
+        }
     }
-
-    NotesPage {
-        id: notesPage
-    }
-
 
     StackView {
         id: stackView
         anchors.fill: parent
         anchors.leftMargin: largeDisplay ? drawer.width : undefined
-        initialItem: overviewPage
         topPadding: 20
         leftPadding: 20
         rightPadding: 20
         bottomPadding: 20
+
+
+        function activatePage(index) {
+            if (index < pages.count)
+                stackView.replace(pages.itemAt(index))
+        }
+
+        Component.onCompleted: stackView.push(pages.itemAt(0))
     }
 
     Dialog {

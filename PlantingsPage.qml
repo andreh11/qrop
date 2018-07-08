@@ -10,6 +10,7 @@ Page {
     id: page
     title: "Plantings"
     padding: 8
+
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
     property string filterText: ""
@@ -224,7 +225,7 @@ Page {
             anchors.top: buttonRectangle.bottom
 
             property string filterColumn: "crop"
-            property TableHeaderLabel filterLabel: headerRow.cropLabel
+//            property TableHeaderLabel filterLabel: headerRow.cropLabel
 
 
 //            onFilterLabelChanged: {

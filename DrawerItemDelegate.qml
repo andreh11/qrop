@@ -1,23 +1,24 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.1
-import QtQuick.Controls.Universal 2.1
+import QtQuick.Controls.Material 2.2
 import QtGraphicalEffects 1.0
 
 
 ItemDelegate {
     id: control
-    property Page page
-    property bool selected: page === currentPage
+
+    property string page
+    property bool isActive: index === navigationIndex
     property string iconText
+
+
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
     focusPolicy: Qt.NoFocus
     height: 48
     width: drawer.width
-
-    Material.background: selected ? Material.red : Material.blue
+    highlighted: isActive
 
     contentItem: Row {
         anchors.centerIn: parent
@@ -33,12 +34,20 @@ ItemDelegate {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
+
         Label {
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
             id: textLabel
             text: largeDisplay && railMode ? "" : control.text
             verticalAlignment: Text.AlignVCenter
+        }
+    }
+
+    onClicked: {
+        navigationIndex = index
+        if (!largeDisplay) {
+            drawer.close()
         }
     }
 }

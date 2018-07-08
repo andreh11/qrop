@@ -14,10 +14,14 @@ Item {
     property alias text: headerLabel.text
     property Item container
 
+
     Row {
         id: row
+        width: parent.width
         Label {
             id: headerLabel
+//            implicitWidth: parent.width - iconLabel.width
+            elide: Text.ElideRight
             color: Material.color(Material.Grey, Material.Shade700)
             font.family: "Roboto Condensed"
             font.pixelSize: 14
