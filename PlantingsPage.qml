@@ -17,25 +17,49 @@ Page {
     property int checks: 0
     property int currentYear: 2018
 
+    property var tableHeaderModel: [
+        { name: qsTr("Crop"),           columnName: "crop",    width: 100 },
+        { name: qsTr("Variety"),        columnName: "variety", width: 100 },
+        { name: qsTr("Seeding Date"),   columnName: "seeding_date", width: 80 },
+        { name: qsTr("Planting Date"),  columnName: "transplanting_date", width: 80 },
+        { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date", width: 80 },
+        { name: qsTr("End of harvest"),  columnName: "end_harvest_date", width: 80 }
+    ]
+    property int tableSortColumn: 0
+    property string tableSortOrder: "descending"
+
+    onTableSortColumnChanged: {
+        var columnName = tableHeaderModel[tableSortColumn].columnName
+        tableSortOrder = "descending"
+        listView.model.setSortColumn(columnName, tableSortOrder)
+    }
+
+    onTableSortOrderChanged: {
+        var columnName = tableHeaderModel[tableSortColumn].columnName
+        listView.model.setSortColumn(columnName, tableSortOrder)
+    }
+
     function formatDate(date) {
         var year = date.getFullYear()
         var text = week(date)
 
-        if (year !== currentYear) {
-            text += "⋅" + year.toString().substr(2)
+        if (year < currentYear) {
+            text += " <"
+        } else  if (year > currentYear) {
+            text += " >"
         }
 
         return text
     }
 
-//    Pane {
-//        id: chartPane
-//        visible: false
-//        height: parent.height/4
-//        width: parent.width
-//        padding: 0
-//        Material.elevation: 1
-//     }
+    //    Pane {
+    //        id: chartPane
+    //        visible: false
+    //        height: parent.height/4
+    //        width: parent.width
+    //        padding: 0
+    //        Material.elevation: 1
+    //     }
 
     Pane {
         width: parent.width
@@ -125,14 +149,14 @@ Page {
                     text: qsTr("Add planting")
                 }
 
-//                Label {
-//                    text: qsTr("Summer")
-//                    visible: checks === 0
-//                    leftPadding: 16
-//                    font.family: "Roboto Regular"
-//                    font.pixelSize: 20
-////                    Layout.fillWidth: true
-//                }
+                //                Label {
+                //                    text: qsTr("Summer")
+                //                    visible: checks === 0
+                //                    leftPadding: 16
+                //                    font.family: "Roboto Regular"
+                //                    font.pixelSize: 20
+                ////                    Layout.fillWidth: true
+                //                }
 
                 Label {
                     Layout.fillWidth: true
@@ -140,28 +164,28 @@ Page {
 
                 CardSpinBox {
                     visible: checks === 0
-                     from: 0
-                     to: items.length - 1
-                     value: 1
+                    from: 0
+                    to: items.length - 1
+                    value: 1
 
-                     property var items: ["Spring", "Summer", "Autumn", "Fall"]
+                    property var items: ["Spring", "Summer", "Autumn", "Fall"]
 
-                     validator: RegExpValidator {
-                         regExp: new RegExp("(Small|Medium|Large)", "i")
-                     }
+                    validator: RegExpValidator {
+                        regExp: new RegExp("(Small|Medium|Large)", "i")
+                    }
 
-                     textFromValue: function(value) {
-                         return items[value];
-                     }
+                    textFromValue: function(value) {
+                        return items[value];
+                    }
 
-                     valueFromText: function(text) {
-                         for (var i = 0; i < items.length; ++i) {
-                             if (items[i].toLowerCase().indexOf(text.toLowerCase()) === 0)
-                                 return i
-                         }
-                         return sb.value
-                     }
-                 }
+                    valueFromText: function(text) {
+                        for (var i = 0; i < items.length; ++i) {
+                            if (items[i].toLowerCase().indexOf(text.toLowerCase()) === 0)
+                                return i
+                        }
+                        return sb.value
+                    }
+                }
 
                 CardSpinBox {
                     visible: checks === 0
@@ -208,10 +232,10 @@ Page {
                     }
                 }
 
-//                IconButton {
-//                    text: "\ue145" // add
-//                    visible: checks === 0
-//                }
+                //                IconButton {
+                //                    text: "\ue145" // add
+                //                    visible: checks === 0
+                //                }
             }
         }
 
@@ -225,20 +249,20 @@ Page {
             anchors.top: buttonRectangle.bottom
 
             property string filterColumn: "crop"
-//            property TableHeaderLabel filterLabel: headerRow.cropLabel
+            //            property TableHeaderLabel filterLabel: headerRow.cropLabel
 
 
-//            onFilterLabelChanged: {
-//                console.log("changed!")
-//                switch (filterLabel) {
-//                case cropLabel:
-//                    listView.model.setSortColumn("crop", filterLabel.state)
-//                    break
-//                case varietyLabel:
-//                    listView.model.setSortColumn("variety", filterLabel.state)
-//                    break
-//                }
-//            }
+            //            onFilterLabelChanged: {
+            //                console.log("changed!")
+            //                switch (filterLabel) {
+            //                case cropLabel:
+            //                    listView.model.setSortColumn("crop", filterLabel.state)
+            //                    break
+            //                case varietyLabel:
+            //                    listView.model.setSortColumn("variety", filterLabel.state)
+            //                    break
+            //                }
+            //            }
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
@@ -282,23 +306,14 @@ Page {
                             width: 24
                         }
 
-                        TableHeaderLabel {
-                            id: cropLabel
-                            text: qsTr("Crop")
-                            filterLabel: listView.filterLabel
-                            filterColumn: listView.filterColumn
-                            columnName: "crop"
-                            state: "descending"
-                            width: 100
-                        }
+                        Repeater {
+                            model: page.tableHeaderModel.slice(0, 2)
 
-                        TableHeaderLabel {
-                            id: varietyLabel
-                            filterLabel: listView.filterLabel
-                            filterColumn: listView.filterColumn
-                            columnName: "variety"
-                            text: qsTr("Variety")
-                            width: 100
+                            TableHeaderLabel {
+                                text: modelData.name
+                                width: modelData.width
+                                state: page.tableSortColumn === index ? page.tableSortOrder : ""
+                            }
                         }
 
                         Item {
@@ -341,24 +356,15 @@ Page {
                             }
                         }
 
-                        TableHeaderLabel {
-                            text: qsTr("Seeding date")
-                            width: 80
-                        }
+                        Repeater {
+                            model: page.tableHeaderModel
 
-                        TableHeaderLabel {
-                            text: qsTr("Planting date")
-                            width: 80
-                        }
-
-                        TableHeaderLabel {
-                            text: qsTr("Harvest begin")
-                            width: 80
-                        }
-
-                        TableHeaderLabel {
-                            text: qsTr("Harvest end")
-                            width: 80
+                            TableHeaderLabel {
+                                text: modelData.name
+                                width: modelData.width
+                                visible: index > 1
+                                state: page.tableSortColumn === index ? page.tableSortOrder : ""
+                            }
                         }
                     }
                 }
@@ -369,9 +375,9 @@ Page {
                 width: parent.width
                 color: {
                     if (checkBox.checked) {
-                       return Material.color(Material.primary, Material.Shade100)
+                        return Material.color(Material.primary, Material.Shade100)
                     } else if (mouseArea.containsMouse) {
-                       return Material.color(Material.Grey, Material.Shade100)
+                        return Material.color(Material.Grey, Material.Shade100)
                     } else {
                         return "white"
                     }

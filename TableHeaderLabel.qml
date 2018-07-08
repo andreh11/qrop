@@ -8,12 +8,11 @@ Item {
     height: headerLabel.height
     anchors.verticalCenter: parent.verticalCenter
 
-    property var filterLabel
-    property string filterColumn
-    property string columnName
+//    property var filterLabel
+//    property string filterColumn
+//    property string columnName
     property alias text: headerLabel.text
     property Item container
-
 
     Row {
         id: row
@@ -110,21 +109,18 @@ Item {
         onClicked: {
             switch (header.state) {
             case "":
-                header.state = "descending";
-                if (parent.filterLabel !== header) {
-                    parent.filterLabel.state = ""
-                    parent.filterLabel = header
-                    parent.filterColumn = parent.columnName
+                if (page.tableSortColumn !== index) {
+                    page.tableSortColumn = index
+                    page.tableSortOrder = "descending"
                 }
-                break;
+                break
             case "descending":
-                header.state = "ascending";
+                page.tableSortOrder = "ascending"
                 break;
             case "ascending":
-                header.state = "descending";
+                page.tableSortOrder = "descending"
                 break;
             }
-            console.log(header.state)
         }
     }
 }
