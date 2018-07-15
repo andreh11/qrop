@@ -52,6 +52,13 @@ Page {
         return text
     }
 
+    PlantingDialog {
+        id: plantingDialog
+        width: parent.width / 2
+        height: parent.height
+        x: (parent.width - width) / 2
+    }
+
     //    Pane {
     //        id: chartPane
     //        visible: false
@@ -147,6 +154,7 @@ Page {
                     leftPadding: 24
                     visible: checks === 0
                     text: qsTr("Add planting")
+                    onClicked: plantingDialog.open()
                 }
 
                 //                Label {

@@ -19,5 +19,7 @@
         <file>IconButton.qml</file>
         <file>CardSpinBox.qml</file>
         <file>ThinDivider.qml</file>
+        <file>PlantingDialog.qml</file>
+        <file>MyTextField.qml</file>
     </qresource>
 </RCC>
