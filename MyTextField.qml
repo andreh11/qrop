@@ -12,6 +12,7 @@ TextField {
     property color color: Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property string helperText
+    property string suffixText: ""
     property bool floatingLabel: false
     property bool hasError: characterLimit && length > characterLimit
     property int characterLimit
@@ -89,6 +90,16 @@ TextField {
             Behavior on color {
                 ColorAnimation { duration: 200 }
             }
+        }
+
+        Label {
+            id: suffixText
+            text: control.suffixText
+            anchors.right: parent.right
+            anchors.bottomMargin: 16
+            anchors.bottom: parent.bottom
+            font.pixelSize: 14
+            visible: control.suffixText !== "" && control.text != ""
         }
 
 

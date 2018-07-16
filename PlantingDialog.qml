@@ -42,11 +42,10 @@ Dialog {
 
         }
 
-        GroupBox {
+        FormGroupBox {
             id: successionsBox
 //            title: qsTr("Greenhouse details")
             width: parent.width
-            padding: 8
             RowLayout {
                 anchors.fill: parent
                 anchors.topMargin: 16
@@ -61,15 +60,15 @@ Dialog {
                     floatingLabel: true
                     placeholderText: qsTr("Time between successions")
                     Layout.fillWidth: true
+                    suffixText: "days"
                 }
             }
         }
 
-        GroupBox {
+        FormGroupBox {
             id: plantingAmountBox
 //            title: qsTr("Greenhouse details")
             width: parent.width
-            padding: 8
             RowLayout {
                 anchors.fill: parent
                 anchors.topMargin: 16
@@ -78,12 +77,14 @@ Dialog {
                     floatingLabel: true
                     placeholderText: qsTr("Planting Amount")
                     Layout.fillWidth: true
+                    suffixText: "bed m"
                 }
 
                 MyTextField {
                     floatingLabel: true
                     placeholderText: qsTr("In-row spacing")
                     Layout.fillWidth: true
+                    suffixText: "cm"
                 }
 
                 MyTextField {
@@ -97,82 +98,172 @@ Dialog {
         }
 
 
-        GroupBox {
+        FormGroupBox {
             id: plantingDatesBox
             title: qsTr("Planting dates")
             width: parent.width
-            spacing: 16
 
             ColumnLayout {
-                anchors.fill: parent
+                width: parent.width
+            spacing: 16
 
                 ComboBox {
                     id: plantingMethodCombo
+                    Material.elevation: 0
                     Layout.fillWidth: true
                     width: parent.width
+                    padding: 0
                     model : [qsTr("Direct sow"), qsTr("Transplant, greenhouse"), qsTr("Transplant, purchased")]
-                }
 
-                ThinDivider {
-                    width: parent.width
-                    Layout.fillWidth: true
+                    background : Item {
+                        id: background
+//                        implicitWidth: Math.max(250, control.width)
+        Rectangle {
+            id: underline
+            color:  (plantingMethodCombo.activeFocus ? Material.color(Material.accent)
+                                                             : Material.color(Material.Grey))
+
+            height: plantingMethodCombo.activeFocus ? 2 : 1
+            visible: true
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                bottomMargin: -4
+            }
+
+            Behavior on height {
+                NumberAnimation { duration: 200 }
+            }
+
+            Behavior on color {
+                ColorAnimation { duration: 200 }
+            }
+        }
+                    }
                 }
 
             RowLayout {
                 width: parent.width
                 anchors.topMargin: 16
                 spacing: 16
+                visible: plantingMethodCombo.currentIndex == 0
                 MyTextField {
                     id: fieldSowingDate
-                    visible: plantingMethodCombo.currentIndex == 0
                     Layout.fillWidth: true
                     floatingLabel: true
                     placeholderText: qsTr("Field Sowing Date")
                 }
 
                 MyTextField {
-                    id: ghStartDate
-                    visible: plantingMethodCombo.currentIndex == 1
+                    id: sowDtm
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("GH starting date")
+                    placeholderText: qsTr("Days to maturity")
+                }
+            }
+
+            RowLayout {
+                width: parent.width
+                anchors.topMargin: 16
+                spacing: 16
+                visible: plantingMethodCombo.currentIndex == 1
+                MyTextField {
+                    id: greenhouseStartDate
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Greenhouse start date")
                 }
 
+                MyTextField {
+                    id: greenhouseGrowTime
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Greenhouse duration")
+                    suffixText: qsTr("days")
+                }
+            }
+
+            RowLayout {
+                width: parent.width
+                anchors.topMargin: 16
+                spacing: 16
+                visible: plantingMethodCombo.currentIndex > 0
                 MyTextField {
                     id: fieldPlantingDate
-                    visible: plantingMethodCombo.currentIndex > 0
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Field Planting Date")
+                    placeholderText: qsTr("Field planting date")
                 }
 
                 MyTextField {
-                    id: firstHarvestDate
-                    floatingLabel: true
-                    placeholderText: qsTr("First Harvest")
+                    id: plantingDtm
                     Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Days to maturity")
+                    suffixText: qsTr("days")
+                }
+            }
+
+            RowLayout {
+                width: parent.width
+                anchors.topMargin: 16
+                spacing: 16
+                MyTextField {
+                    id: firstHarvestDate
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("First harvest date")
                 }
 
                 MyTextField {
                     id: harvestWindow
-                    floatingLabel: true
                     Layout.fillWidth: true
-                    placeholderText: qsTr("Harvest Window")
-                    helperText: text
+                    floatingLabel: true
+                    placeholderText: qsTr("Harvest window")
+                    helperText: text === "" ? "" : "Last harvest: 12/4"
+                    suffixText: qsTr("days")
                 }
             }
 
             }
         }
 
-        GroupBox {
-            id: greenhouseBox
-            title: qsTr("Greenhouse details")
-            width: parent.width
-            padding: 8
+        FormGroupBox {
+            id: seedBox
+            title: qsTr("Seeds")
+            visible: plantingMethodCombo.currentIndex < 2
             RowLayout {
                 width: parent.width
-                spacing: 0
+                spacing: 16
+                MyTextField {
+                    floatingLabel: true
+                    placeholderText: qsTr("Seeds needed")
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    floatingLabel: true
+                    placeholderText: qsTr("Extra %")
+                    suffixText: "%"
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    floatingLabel: true
+                    placeholderText: qsTr("Seeds/g")
+                    Layout.fillWidth: true
+                }
+            }
+        }
+        FormGroupBox {
+            id: greenhouseBox
+            title: qsTr("Greenhouse details")
+            visible: plantingMethodCombo.currentIndex == 1
+            RowLayout {
+                width: parent.width
+                spacing: 16
                 MyTextField {
                     floatingLabel: true
                     placeholderText: qsTr("Flat type")
@@ -189,10 +280,12 @@ Dialog {
                     floatingLabel: true
                     placeholderText: qsTr("Estimated loss")
                     Layout.fillWidth: true
+                    suffixText: qsTr("%")
                 }
             }
+        }
+
         }
     }
     }
 
-}

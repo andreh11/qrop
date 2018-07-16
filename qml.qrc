@@ -21,5 +21,6 @@
         <file>ThinDivider.qml</file>
         <file>PlantingDialog.qml</file>
         <file>MyTextField.qml</file>
+        <file>FormGroupBox.qml</file>
     </qresource>
 </RCC>

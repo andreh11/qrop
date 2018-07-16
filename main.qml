@@ -15,7 +15,7 @@ ApplicationWindow {
     height: 768
 
     Material.primary: Material.Teal
-    Material.accent: Material.Orange
+    Material.accent: Material.Cyan
 
     property var navigationModel: [
         { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
