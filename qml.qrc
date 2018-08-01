@@ -22,5 +22,6 @@
         <file>PlantingDialog.qml</file>
         <file>MyTextField.qml</file>
         <file>FormGroupBox.qml</file>
+        <file>PlantingForm.qml</file>
     </qresource>
 </RCC>

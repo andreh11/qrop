@@ -60,6 +60,16 @@ Item {
         color: Material.color(Material.Green, Material.Shade200)
     }
 
+    Label {
+        text: formatDate(seedingDate)
+        color: Material.color(Material.Grey)
+        font.family: "Roboto Condensed"
+        visible: seedingCircle.visible
+        anchors.right: seedingCircle.left
+        anchors.verticalCenter: seedingCircle.verticalCenter
+        anchors.rightMargin: 4
+    }
+
     Rectangle {
         id: seedingLine
         visible: seedingDate < transplantingDate
@@ -76,7 +86,16 @@ Item {
         width: daysDelta(transplantingDate, beginHarvestDate)
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
-        color: Material.color(Material.Green, Material.Shade200)
+        color: Material.color(Material.Green, Material.Shade300)
+
+        Label {
+            text: formatDate(transplantingDate)
+            font.family: "Roboto Condensed"
+            color: Material.color(Material.Grey, Material.Shade100)
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 4
+        }
     }
 
     Rectangle {
@@ -85,6 +104,14 @@ Item {
         width: daysDelta(beginHarvestDate, endHarvestDate)
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
-        color: Material.color(Material.Green, Material.Shade600)
+        color: Material.color(Material.Green, Material.Shade700)
+        Label {
+            text: formatDate(beginHarvestDate)
+            font.family: "Roboto Condensed"
+            color: Material.color(Material.Grey, Material.Shade100)
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 4
+        }
     }
 }

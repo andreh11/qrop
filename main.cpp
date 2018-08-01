@@ -31,8 +31,8 @@ static void connectToDatabase()
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     database.setDatabaseName(fileName);
     if (!database.open()) {
-        qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
         QFile::remove(fileName);
+        qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
     qInfo("database open!");
 }

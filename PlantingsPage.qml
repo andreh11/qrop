@@ -470,6 +470,14 @@ Page {
         }
     }
 
+    Component {
+        id: plantingForm
+
+        PlantingForm {
+
+        }
+    }
+
     RoundButton {
         id: addButton
         font.family: "Material Icons"
@@ -485,7 +493,7 @@ Page {
         visible: !largeDisplay
         highlighted: true
 
-        onClicked: {
+        onClicked: { stackView.push(plantingForm)
         }
     }
 
