@@ -14,7 +14,6 @@ Item {
     property date transplantingDate
     property date beginHarvestDate
     property date endHarvestDate
-    property int monthWidth: 60
 
     function coordinate(day) {
         if (day < 0) {
@@ -22,7 +21,7 @@ Item {
         } else if (day > 365) {
             return 365
         } else {
-            return day / 360 * 12 * monthWidth
+            return day / 365 * 12 * monthWidth
         }
     }
 
@@ -39,6 +38,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
         spacing: monthWidth
+
         Repeater {
             model: 13
             Rectangle {
@@ -51,7 +51,7 @@ Item {
 
     Rectangle {
         id: seedingCircle
-        x: position(seedingDate)
+        x: position(seedingDate) - width/2
         visible: seedingDate < transplantingDate
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -73,7 +73,7 @@ Item {
     Rectangle {
         id: seedingLine
         visible: seedingDate < transplantingDate
-        width: daysDelta(seedingDate, transplantingDate)
+        width: daysDelta(seedingDate, transplantingDate) / 365 * 12 * monthWidth
         height: 1
         anchors.left:seedingCircle.right
         color: Material.color(Material.Green, Material.Shade200)
@@ -101,7 +101,7 @@ Item {
     Rectangle {
         id: harvestBar
         anchors.left: growBar.right
-        width: daysDelta(beginHarvestDate, endHarvestDate)
+        width: daysDelta(beginHarvestDate, endHarvestDate) / 365 * 12 * monthWidth
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
         color: Material.color(Material.Green, Material.Shade700)

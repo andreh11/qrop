@@ -29,7 +29,7 @@ void SqlPlantingModel::setSortColumn(const QString fieldName, const QString orde
         qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
         return;
     }
-    qInfo() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
+    qDebug() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
     setSort(m_rolesIndexes[fieldName], order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
 }

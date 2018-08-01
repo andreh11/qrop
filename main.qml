@@ -314,7 +314,7 @@ ApplicationWindow {
                 height: toolBar.height
                 text: "Qrop"
                 color: "white"
-                font.family: "Roboto Medium"
+                font.family: "Roboto Bold"
                 font.pixelSize: 20
                 padding: 12
                 horizontalAlignment: Text.AlignLeft

@@ -16,6 +16,8 @@ Page {
     property string filterText: ""
     property int checks: 0
     property int currentYear: 2018
+    property int rowHeight: 47
+    property int monthWidth: 60
 
     property var tableHeaderModel: [
         { name: qsTr("Crop"),           columnName: "crop",    width: 100 },
@@ -42,14 +44,15 @@ Page {
     function formatDate(date) {
         var year = date.getFullYear()
         var text = week(date)
+        var prefix = ""
 
         if (year < currentYear) {
-            text += " <"
+            prefix += "< "
         } else  if (year > currentYear) {
-            text += " >"
+            prefix += "> "
         }
 
-        return text
+        return prefix + text
     }
 
     PlantingDialog {
@@ -305,13 +308,14 @@ Page {
 
                     Row {
                         id: headerRow
-                        height: 47
+                        height: rowHeight
                         spacing: 18
                         leftPadding: 16
 
                         CheckBox {
                             id: headerCheckbox
                             width: 24
+                            anchors.verticalCenter: headerRow.verticalCenter
                         }
 
                         Repeater {
@@ -336,7 +340,7 @@ Page {
                                 Repeater {
                                     model: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
                                     Item {
-                                        width: 61
+                                        width: monthWidth + 1
                                         height: parent.height
                                         Rectangle {
                                             id: lineRectangle
@@ -405,12 +409,13 @@ Page {
 
                     Row {
                         id: row
-                        height: 47
+                        height: rowHeight
                         spacing: 18
                         leftPadding: 16
 
                         CheckBox {
                             id: checkBox
+                            anchors.verticalCenter: row.verticalCenter
                             width: 24
                             onCheckStateChanged: {
                                 if (checked) {
@@ -443,24 +448,28 @@ Page {
 
                         TableLabel {
                             text: formatDate(model.seeding_date)
+                            horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
                             text: formatDate(model.transplanting_date)
+                            horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
                             text: formatDate(model.beg_harvest_date)
+                            horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
                             text: formatDate(model.end_harvest_date)
+                            horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
@@ -474,6 +483,8 @@ Page {
         id: plantingForm
 
         PlantingForm {
+            anchors.fill: parent
+            anchors.margins: 8
 
         }
     }

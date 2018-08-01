@@ -40,7 +40,7 @@ TextField {
         }
     }
 
-    padding: 0
+    padding: 14
 
     font {
         family: echoMode == TextInput.Password ? "Default" : "Roboto Regular"
@@ -69,19 +69,18 @@ TextField {
 
         Rectangle {
             id: underline
-            color: background.hasError ? background.errorColor
+            color: "transparent"
+            radius: 4
+            border.color: background.hasError ? background.errorColor
                                        : (control.activeFocus ? background.color
                                                              : Material.color(Material.Grey))
 
-            height: control.activeFocus ? 2 : 1
+            border.width: control.activeFocus ? 2 : 1
+            height: parent.height
             visible: background.showBorder
-
-            anchors {
-                left: parent.left
-                right: parent.right
-                bottom: parent.bottom
-                bottomMargin: 12
-            }
+            width: parent.width
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
 
             Behavior on height {
                 NumberAnimation { duration: 200 }
@@ -102,15 +101,24 @@ TextField {
             visible: control.suffixText !== "" && control.text != ""
         }
 
-
         Label {
             id: fieldPlaceholder
 
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: underline.left
+            anchors.leftMargin: 14
             text: control.placeholderText
             font.pixelSize: 16
-            anchors.margins: -12
             visible: control.text != ""
+
+            background: Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: 4
+                width: parent.width + 8
+                color: "white"
+            }
+
             color: background.hasError ? background.errorColor
 //                                       : control.activeFocus && control.text !== ""
                                        : control.text == "" || !control.activeFocus
@@ -124,8 +132,7 @@ TextField {
                     when: control.displayText.length > 0 && background.floatingLabel
                     AnchorChanges {
                         target: fieldPlaceholder
-                        anchors.verticalCenter: undefined
-                        anchors.top: parent.top
+                        anchors.verticalCenter: underline.top
                     }
                     PropertyChanges {
                         target: fieldPlaceholder

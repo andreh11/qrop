@@ -165,23 +165,23 @@ Flickable {
                         //                        implicitWidth: Math.max(250, control.width)
                         Rectangle {
                             id: underline
-                            color:  (plantingMethodCombo.activeFocus ? Material.color(Material.accent)
-                                                                     : Material.color(Material.Grey))
-                            
-                            height: plantingMethodCombo.activeFocus ? 2 : 1
+                            color: "transparent"
+                            radius: 4
+                            border.color: (control.activeFocus ? Material.color(Material.accent)
+                                                                             : Material.color(Material.Grey))
+
+                            border.width: control.activeFocus ? 2 : 1
+                            height: parent.height
                             visible: true
-                            
-                            anchors {
-                                left: parent.left
-                                right: parent.right
-                                bottom: parent.bottom
-                                bottomMargin: -4
-                            }
-                            
+//                            visible: background.showBorder
+                            width: parent.width
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 4
+
                             Behavior on height {
                                 NumberAnimation { duration: 200 }
                             }
-                            
+
                             Behavior on color {
                                 ColorAnimation { duration: 200 }
                             }
