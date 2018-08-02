@@ -76,9 +76,9 @@ TextField {
                                                              : Material.color(Material.Grey))
 
             border.width: control.activeFocus ? 2 : 1
-            height: parent.height
+            height: control.height
             visible: background.showBorder
-            width: parent.width
+            width: control.width
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 4
 
@@ -95,6 +95,7 @@ TextField {
             id: suffixText
             text: control.suffixText
             anchors.right: parent.right
+            anchors.rightMargin: 14
             anchors.bottomMargin: 16
             anchors.bottom: parent.bottom
             font.pixelSize: 14
@@ -129,7 +130,8 @@ TextField {
             states: [
                 State {
                     name: "floating"
-                    when: control.displayText.length > 0 && background.floatingLabel
+//                    when: control.displayText.length > 0 && background.floatingLabel
+                    when: background.floatingLabel && (control.activeFocus || (control.displayText.length > 0))
                     AnchorChanges {
                         target: fieldPlaceholder
                         anchors.verticalCenter: underline.top
@@ -173,7 +175,8 @@ TextField {
             anchors {
                 left: parent.left
                 right: parent.right
-                top: underline.top
+                top: underline.bottom
+                leftMargin: 14
                 topMargin: 4
             }
 

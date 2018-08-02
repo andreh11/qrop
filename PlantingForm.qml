@@ -55,6 +55,7 @@ Flickable {
         return plantsNeeded() * seedsPerCell / flatType
     }
 
+    Component.onCompleted: cropField.focus = true
 
     Column {
         anchors.fill: parent
@@ -65,18 +66,21 @@ Flickable {
             spacing: 16
             
             MyTextField {
+                id: cropField
                 floatingLabel: true
                 placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
             }
             
             MyTextField {
+                id: varietyField
                 floatingLabel: true
                 placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
             }
             
             MyTextField {
+                id: familyField
                 floatingLabel: true
                 placeholderText: qsTr("Family")
                 Layout.fillWidth: true
@@ -99,7 +103,7 @@ Flickable {
                 
                 MyTextField {
                     floatingLabel: true
-                    placeholderText: qsTr("Time between successions")
+                    placeholderText: qsTr("Time between")
                     Layout.fillWidth: true
                     suffixText: "days"
                 }
@@ -117,7 +121,7 @@ Flickable {
                 MyTextField {
                     id: plantingAmountField
                     floatingLabel: true
-                    placeholderText: qsTr("Planting Amount")
+                    placeholderText: qsTr("Length")
                     Layout.fillWidth: true
                     suffixText: "bed m"
                 }
@@ -159,21 +163,17 @@ Flickable {
                     width: parent.width
                     padding: 0
                     model : [qsTr("Direct sow"), qsTr("Transplant, greenhouse"), qsTr("Transplant, purchased")]
-                    
-                    background : Item {
-                        id: background
-                        //                        implicitWidth: Math.max(250, control.width)
-                        Rectangle {
+                    background: Rectangle {
                             id: underline
                             color: "transparent"
                             radius: 4
-                            border.color: (control.activeFocus ? Material.color(Material.accent)
-                                                                             : Material.color(Material.Grey))
-
-                            border.width: control.activeFocus ? 2 : 1
+                            implicitHeight: 40
+                            implicitWidth: 120
+                            border.color: plantingMethodCombo.activeFocus ? Material.color(Material.accent)
+                                                              : Material.color(Material.Grey)
+                            border.width: plantingMethodCombo.activeFocus ? 2 : 1
                             height: parent.height
                             visible: true
-//                            visible: background.showBorder
                             width: parent.width
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: 4
@@ -186,7 +186,6 @@ Flickable {
                                 ColorAnimation { duration: 200 }
                             }
                         }
-                    }
                 }
                 
                 RowLayout {
