@@ -23,5 +23,9 @@
         <file>MyTextField.qml</file>
         <file>FormGroupBox.qml</file>
         <file>PlantingForm.qml</file>
+        <file>TaskForm.qml</file>
+        <file>TaskDialog.qml</file>
+        <file>MyComboBox.qml</file>
+        <file>PlantingList.qml</file>
     </qresource>
 </RCC>

@@ -9,15 +9,10 @@ import io.croplan.components 1.0
 Dialog {
     id: dialog
     modal: true
+    title: "Add task"
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    property string mode: "add"
-    property string plantingIds: ""
-
-    title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
-
-
-    PlantingForm {
+    TaskForm {
         anchors.fill: parent
     }
 }

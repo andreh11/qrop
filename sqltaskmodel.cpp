@@ -52,17 +52,10 @@ QVariant SqlTaskModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> SqlTaskModel::roleNames() const
 {
-    QHash<int, QByteArray> names;
-    names[Qt::UserRole] = "task_id";
-    names[Qt::UserRole + 1] = "task";
-    names[Qt::UserRole + 2] = "date_assigned";
-    names[Qt::UserRole + 3] = "date_completed";
-    names[Qt::UserRole + 4] = "duration";
-    names[Qt::UserRole + 5] = "on_ground";
-    names[Qt::UserRole + 6] = "labor_time";
-    names[Qt::UserRole + 7] = "descr";
-    names[Qt::UserRole + 8] = "planting_ids";
-    names[Qt::UserRole + 9] = "place_ids";
+    QHash<int, QByteArray> roles;
 
-    return names;
+    for (int i = 0; i < this->record().count(); i ++)
+        roles.insert(Qt::UserRole + i, record().fieldName(i).toUtf8());
+
+    return roles;
 }

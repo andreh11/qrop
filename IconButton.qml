@@ -7,5 +7,5 @@ import io.croplan.components 1.0
 
 ToolButton {
     font.family: "Material Icons"
-    font.pixelSize: 24
+    font.pixelSize: 20
 }

@@ -146,7 +146,6 @@ Flickable {
             }
         }
         
-        
         FormGroupBox {
             id: plantingDatesBox
             title: qsTr("Planting dates")
@@ -156,36 +155,10 @@ Flickable {
                 width: parent.width
                 spacing: 16
                 
-                ComboBox {
+                MyComboBox {
                     id: plantingMethodCombo
-                    Material.elevation: 0
                     Layout.fillWidth: true
-                    width: parent.width
-                    padding: 0
                     model : [qsTr("Direct sow"), qsTr("Transplant, greenhouse"), qsTr("Transplant, purchased")]
-                    background: Rectangle {
-                            id: underline
-                            color: "transparent"
-                            radius: 4
-                            implicitHeight: 40
-                            implicitWidth: 120
-                            border.color: plantingMethodCombo.activeFocus ? Material.color(Material.accent)
-                                                              : Material.color(Material.Grey)
-                            border.width: plantingMethodCombo.activeFocus ? 2 : 1
-                            height: parent.height
-                            visible: true
-                            width: parent.width
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 4
-
-                            Behavior on height {
-                                NumberAnimation { duration: 200 }
-                            }
-
-                            Behavior on color {
-                                ColorAnimation { duration: 200 }
-                            }
-                        }
                 }
                 
                 RowLayout {
