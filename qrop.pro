@@ -1,9 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-  core
+  core \
   desktop
 #  mobile
 
-desktop.depends = core
+#desktop.depends = core
 #mobile.depends = core

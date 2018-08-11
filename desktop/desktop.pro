@@ -1,4 +1,7 @@
+TEMPLATE = app
+
 QT += charts qml quick sql
+
 CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
@@ -13,18 +16,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp \
-    sqlplantingmodel.cpp \
-    sqltaskmodel.cpp \
-    sqlnotemodel.cpp
+        main.cpp
 
-HEADERS += \
-    sqlplantingmodel.h \
-    sqltaskmodel.h \
-    sqlnotemodel.h
+# HEADERS += \
 
 RESOURCES += qml.qrc \
     resources.qrc
+
+LIBS += -L$$OUT_PWD/../core/ -lcore
+INCLUDEPATH += $$PWD/../core
+DEPENDPATH += $$PWD/../core
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
