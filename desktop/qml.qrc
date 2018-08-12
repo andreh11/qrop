@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/qtquickcontrols2.conf</file>
+        <file alias="/qtquickcontrols2.conf">qml/qtquickcontrols2.conf</file>
         <file>qml/PlantingsPage.qml</file>
         <file>qml/CalendarPage.qml</file>
         <file>qml/HarvestsPage.qml</file>

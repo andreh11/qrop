@@ -302,7 +302,7 @@ Page {
                 visible: largeDisplay
                 parent: listView.parent
                 anchors.top: listView.top
-                anchors.left: listView.right
+                anchors.right: listView.right
                 anchors.bottom: listView.bottom
             }
 
