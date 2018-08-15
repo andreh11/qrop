@@ -12,8 +12,11 @@ SOURCES += \
     sqlnotemodel.cpp \
     sqlplantingmodel.cpp \
     planting.cpp \
-#    plantingdao.cpp
-    location.cpp
+    plantingdao.cpp \
+    location.cpp \
+    locationdao.cpp \
+    plantingmodel.cpp \
+    databasemanager.cpp
 
 
 HEADERS += \
@@ -22,7 +25,8 @@ HEADERS += \
     sqlnotemodel.h \
     sqlplantingmodel.h \
     planting.h \
-#    plantingdao.h
-    location.h
-
-
+    plantingdao.h \
+    location.h \
+    locationdao.h \
+    plantingmodel.h \
+    databasemanager.h

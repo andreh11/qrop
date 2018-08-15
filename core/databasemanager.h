@@ -14,39 +14,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLANTING_H
-#define PLANTING_H
+#ifndef DATABASEMANAGER_H
+#define DATABASEMANAGER_H
+
+#include <memory>
 
 #include <QString>
 
-#include "core_global.h"
+#include "plantingdao.h"
+#include "locationdao.h"
 
-class CORESHARED_EXPORT Planting
+class QSqlQuery;
+class QSqlDatabase;
+
+const QString DATABASE_FILENAME = "qrop.db";
+
+class DatabaseManager
 {
 public:
-    explicit Planting(const QString& crop = "");
+    static void debugQuery(const QSqlQuery& query);
 
-    int id () const;
-    void setId(int id);
+    static DatabaseManager& instance();
+    ~DatabaseManager();
 
-    QString crop() const;
-    void setCrop(const QString& crop);
-
-    QString variety() const;
-    void setVariety(const QString& variety);
-
-    QString family() const;
-    void setFamily(const QString& family);
-
-    QString unit() const;
-    void setUnit(const QString& unit);
+protected:
+    DatabaseManager(const QString& path = DATABASE_FILENAME);
+    DatabaseManager& operator=(const DatabaseManager& rhs);
 
 private:
-    int mId;
-    QString mCrop;
-    QString mVariety;
-    QString mFamily;
-    QString mUnit;
+    std::unique_ptr<QSqlDatabase> mDatabase;
+
+public:
+    const PlantingDao plantingDao;
+    const LocationDao locationDao;
 };
 
-#endif // PLANTING_H
+#endif // DATABASEMANAGER_H

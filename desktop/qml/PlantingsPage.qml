@@ -36,12 +36,12 @@ Page {
     property int monthWidth: 60
 
     property var tableHeaderModel: [
-        { name: qsTr("Crop"),           columnName: "crop",    width: 100 },
-        { name: qsTr("Variety"),        columnName: "variety", width: 100 },
-        { name: qsTr("Seeding Date"),   columnName: "seeding_date", width: 80 },
-        { name: qsTr("Planting Date"),  columnName: "transplanting_date", width: 80 },
-        { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date", width: 80 },
-        { name: qsTr("End of harvest"),  columnName: "end_harvest_date", width: 80 }
+        { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
+        { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
+        { name: qsTr("Seeding Date"),    columnName: "seeding_date",       width: 80 },
+        { name: qsTr("Planting Date"),   columnName: "transplanting_date", width: 80 },
+        { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date",   width: 80 },
+        { name: qsTr("End of harvest"),  columnName: "end_harvest_date",   width: 80 }
     ]
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
