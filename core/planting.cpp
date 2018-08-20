@@ -16,6 +16,8 @@
 
 #include "planting.h"
 
+class Task;
+
 Planting::Planting(const QString& crop) :
     mId(-1),
     mCrop(crop),
@@ -65,3 +67,26 @@ void Planting::setUnit(const QString& unit)
 {
     mUnit = unit;
 }
+
+//QList<Task>* Planting::generateTasks() const {
+//    QList<Task>* tasks = new QList<Task>;
+//    if (mPlantingType == PlantingType::DS) {
+//        Task* task = new Task();
+//        task->setType(TaskType::DS);
+//        tasks->pull_back(task);
+//    } else if (mPlantingType == PlantingType::TPBOUGHT) {
+//        Task* task = new Task();
+//        task->setType(TaskType::PLANT);
+//        tasks->pull_back(task);
+//    } else if (mPlantingType == PlantingType::TPRAISED) {
+//        Task* seedingTask = new Task();
+//        seedingTask->setType(TaskType::GHSEED);
+//        tasks->pull_back(seedingTask);
+
+//        Task* plantingTask = new Task();
+//        plantingTask->setType(TaskType::TRANSPLANT);
+//        tasks->pull_back(plantingTask);
+//    }
+
+//    return tasks;
+//}

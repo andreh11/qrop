@@ -18,13 +18,21 @@
 #define PLANTING_H
 
 #include <QString>
+#include <QList>
 
 #include "core_global.h"
+
+class Task;
 
 class CORESHARED_EXPORT Planting
 {
 public:
-    explicit Planting(const QString& crop = "");
+    enum PlantingType {
+        DS,
+        TPRAISED,
+        TPBOUGHT
+    };
+    explicit Planting(const QString &crop = "");
 
     int id () const;
     void setId(int id);
@@ -41,12 +49,15 @@ public:
     QString unit() const;
     void setUnit(const QString& unit);
 
+//    QList<Task>* generateTasks() const;
+
 private:
     int mId;
     QString mCrop;
     QString mVariety;
     QString mFamily;
     QString mUnit;
+//    PlantingType mPlantingType;
 };
 
 #endif // PLANTING_H

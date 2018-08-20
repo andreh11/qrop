@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QStandardPaths>
 
+
 void DatabaseManager::debugQuery(const QSqlQuery& query)
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {

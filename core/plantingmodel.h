@@ -44,7 +44,8 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    Q_INVOKABLE bool removeRows(int row, int count,
+                                const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
 
 private:

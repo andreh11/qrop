@@ -9,7 +9,7 @@ class SqlPlantingModel : public QSqlTableModel
     Q_PROPERTY(QString crop READ crop WRITE setCrop NOTIFY cropChanged)
 
 public:
-    SqlPlantingModel(QObject *parent = 0);
+    SqlPlantingModel(QObject *parent = nullptr);
 
     QString crop() const;
     void setCrop(const QString &crop);

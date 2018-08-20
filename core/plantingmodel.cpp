@@ -47,9 +47,8 @@ int PlantingModel::rowCount(const QModelIndex& parent) const
 
 QVariant PlantingModel::data(const QModelIndex& index, int role) const
 {
-    if (!isIndexValid(index)) {
+    if (!isIndexValid(index))
         return QVariant();
-    }
 
     const Planting& planting = *mPlantings->at(index.row());
 

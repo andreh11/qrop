@@ -17,7 +17,7 @@ public:
     void init() const;
 
     void addPlanting(Planting& planting) const;
-    void duplicatePlanting(const Planting& planting) const;
+//    void duplicatePlanting(const Planting& planting) const;
     void updatePlanting(const Planting& planting) const;
     void removePlanting(int id) const;
     std::unique_ptr<std::vector<std::unique_ptr<Planting>>> plantings() const;

@@ -24,8 +24,6 @@ import io.croplan.components 1.0
 
 Page {
     id: page
-    title: "Plantings"
-    padding: 8
 
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
@@ -35,6 +33,8 @@ Page {
     property int rowHeight: 47
     property int monthWidth: 60
 
+    property int tableSortColumn: 0
+    property string tableSortOrder: "descending"
     property var tableHeaderModel: [
         { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
         { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
@@ -43,33 +43,34 @@ Page {
         { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date",   width: 80 },
         { name: qsTr("End of harvest"),  columnName: "end_harvest_date",   width: 80 }
     ]
-    property int tableSortColumn: 0
-    property string tableSortOrder: "descending"
 
     onTableSortColumnChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName
-        tableSortOrder = "descending"
-        listView.model.setSortColumn(columnName, tableSortOrder)
+        var columnName = tableHeaderModel[tableSortColumn].columnName;
+        tableSortOrder = "descending";
+        listView.model.setSortColumn(columnName, tableSortOrder);
     }
 
     onTableSortOrderChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName
-        listView.model.setSortColumn(columnName, tableSortOrder)
+        var columnName = tableHeaderModel[tableSortColumn].columnName;
+        listView.model.setSortColumn(columnName, tableSortOrder);
     }
 
     function formatDate(date) {
-        var year = date.getFullYear()
-        var text = week(date)
-        var prefix = ""
+        var year = date.getFullYear();
+        var text = week(date);
+        var prefix = "";
 
         if (year < currentYear) {
-            prefix += "< "
+            prefix += "< ";
         } else  if (year > currentYear) {
-            prefix += "> "
+            prefix += "> ";
         }
 
-        return prefix + text
+        return prefix + text;
     }
+
+    title: "Plantings"
+    padding: 8
 
     PlantingDialog {
         id: plantingDialog

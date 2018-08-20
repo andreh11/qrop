@@ -66,6 +66,35 @@ void PlantingDao::addPlanting(Planting& planting) const
     DatabaseManager::debugQuery(query);
 }
 
+void PlantingDao::updatePlanting(const Planting& planting) const
+{
+    QSqlQuery query(mDatabase);
+    DatabaseManager::debugQuery(query);
+}
+
+void PlantingDao::removePlanting(int id) const
+{
+    QSqlQuery query(mDatabase);
+    DatabaseManager::debugQuery(query);
+}
+
+std::unique_ptr<std::vector<std::unique_ptr<Planting>>> PlantingDao::plantings() const
+{
+    QSqlQuery query(mDatabase);
+    query.prepare("SELECT * FROM planting)");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+
+    unique_ptr<vector<unique_ptr<Planting>>> list(new vector<unique_ptr<Planting>>());
+    while(query.next()) {
+        unique_ptr<Planting> planting(new Planting());
+        planting->setId(query.value("planting_id").toInt());
+        planting->setCrop(query.value("crop").toString());
+        list->push_back(move(planting));
+    }
+    return list;
+}
+
 void PlantingDao::addLocation(Planting& planting, Location& location) const
 {
     QSqlQuery query(mDatabase);

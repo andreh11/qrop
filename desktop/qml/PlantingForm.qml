@@ -105,7 +105,7 @@ Flickable {
                     floatingLabel: true
                     placeholderText: qsTr("Time between")
                     Layout.fillWidth: true
-                    suffixText: "days"
+                    suffixText: "weeks"
                 }
             }
         }
