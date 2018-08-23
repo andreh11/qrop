@@ -111,14 +111,14 @@ Item {
             case "":
                 if (page.tableSortColumn !== index) {
                     page.tableSortColumn = index
-                    page.tableSortOrder = "descending"
+                    page.tableSortOrder = Qt.DescendingOrder
                 }
                 break
             case "descending":
-                page.tableSortOrder = "ascending"
+                page.tableSortOrder = Qt.AscendingOrder
                 break;
             case "ascending":
-                page.tableSortOrder = "descending"
+                page.tableSortOrder = Qt.DescendingOrder
                 break;
             }
         }

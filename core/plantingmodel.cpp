@@ -14,106 +14,104 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QAbstractListModel>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QDebug>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QDate>
+#include <QVariant>
+#include <QString>
+#include <QHash>
 
 #include "plantingmodel.h"
+#include "sqltablemodel.h"
 
-using namespace std;
+static const char *plantingTableName = "planting";
 
-PlantingModel::PlantingModel(QObject* parent) :
-    QAbstractListModel(parent),
-    mDatabase(DatabaseManager::instance()),
-    mPlantings(mDatabase.plantingDao.plantings())
+PlantingModel::PlantingModel(QObject *parent)
+    : SqlTableModel(parent)
 {
-}
-
-QModelIndex PlantingModel::addPlanting(const Planting& planting)
-{
-    int rowIndex = rowCount();
-    beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Planting> newPlanting(new Planting(planting));
-    mDatabase.plantingDao.addPlanting(*newPlanting);
-    mPlantings->push_back(move(newPlanting));
-    endInsertRows();
-
-    return index(rowIndex, 0);
-}
-
-int PlantingModel::rowCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    return mPlantings->size();
-}
-
-QVariant PlantingModel::data(const QModelIndex& index, int role) const
-{
-    if (!isIndexValid(index))
-        return QVariant();
-
-    const Planting& planting = *mPlantings->at(index.row());
-
-    switch (role) {
-    case Qt::DisplayRole:
-        return planting.crop() + " " + planting.variety();
-    case Roles::IdRole:
-        return planting.id();
-    case Roles::CropRole:
-        return planting.crop();
-    case Roles::VarietyRole:
-        return planting.variety();
-    default:
-        return QVariant();
-    }
-}
-
-bool PlantingModel::setData(const QModelIndex& index, const QVariant& value, int role)
-{
-    if (!isIndexValid(index)
-            || role == IdRole) {
-        return false;
+    setTable(plantingTableName);
+    for (int i = 0; i < this->record().count(); i++) {
+        m_rolesIndexes.insert(record().fieldName(i).toUtf8(), i);
     }
 
-    Planting& planting = *mPlantings->at(index.row());
-    planting.setCrop(value.toString());
-    mDatabase.plantingDao.updatePlanting(planting);
-    emit dataChanged(index, index);
-
-    return true;
+//    setSort(1, Qt::AscendingOrder);
+    setSortColumn("seeding_date", Qt::AscendingOrder);
+    setEditStrategy(QSqlTableModel::OnManualSubmit);
+    select();
 }
 
-bool PlantingModel::removeRows(int row, int count, const QModelIndex& parent)
+void PlantingModel::setSortColumn(const QString fieldName, const Qt::SortOrder order)
 {
-    if  (row < 0
-         || row >= rowCount()
-         || count < 0
-         || (row + count) > rowCount()) {
-        return false;
+    if (!m_rolesIndexes.contains(fieldName)) {
+        qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
+        return;
+    }
+    qDebug() << "New sort column: " << fieldName << m_rolesIndexes[fieldName] << order;
+    setSort(m_rolesIndexes[fieldName], order);
+    select();
+}
+
+QVariant PlantingModel::data(const QModelIndex &index, int role) const
+{
+    QVariant value;
+
+    if (role < Qt::UserRole)
+        return QSqlTableModel::data(index, role);
+
+    const QSqlRecord sqlRecord = record(index.row());
+    value = sqlRecord.value(role - Qt::UserRole);
+    if ((Qt::UserRole + 9 <= role) && (role <= Qt::UserRole + 12))
+        return QDate::fromString(value.toString(), Qt::ISODate);
+    else
+        return value;
+}
+
+QString PlantingModel::crop() const
+{
+    return m_crop;
+}
+
+void PlantingModel::setCrop(const QString &crop)
+{
+   if (crop == m_crop)
+       return;
+
+   m_crop = crop;
+
+    if (m_crop == "") {
+        qInfo("null!");
+        setFilter("");
+    } else {
+        const QString filterString = QString::fromLatin1(
+            "(crop LIKE '%%%1%%')").arg(crop);
+        setFilter(filterString);
     }
 
-    beginRemoveRows(parent, row, row + count - 1);
-    int countLeft = count;
-    while (countLeft--) {
-        const Planting& planting = *mPlantings->at(row + countLeft);
-        mDatabase.plantingDao.removePlanting(planting.id());
+    select();
+
+    emit cropChanged();
+}
+
+void PlantingModel::addPlanting(QString crop, QHash<QString, QVariant> values)
+{
+    Q_UNUSED(values)
+    QSqlRecord r = record();
+    r.setValue("crop", crop);
+
+    if (!insertRecord(rowCount(), r)) {
+        qWarning() << "Failed to send message:" << lastError().text();
+        return;
     }
-    mPlantings->erase(mPlantings->begin() + row,
-                      mPlantings->begin() + row + count);
-    endRemoveRows();
 
-    return true;
-}
+    if (!submitAll()) {
+        qWarning() << "Failed to submit to DB:" << lastError().text();
+        return;
+    };
 
-QHash<int, QByteArray> PlantingModel::roleNames() const
-{
-    QHash<int, QByteArray> roles;
-    roles[Roles::IdRole] = "planting_id";
-    roles[Roles::CropRole] = "crop";
-    roles[Roles::VarietyRole] = "variety";
+    qDebug() << "Added planting: " << crop;
+    qInfo() << "Row count: " << rowCount();
 
-    return roles;
-}
-
-bool PlantingModel::isIndexValid(const QModelIndex& index) const
-{
-    return index.isValid() && (0 <= index.row() < rowCount());
 }

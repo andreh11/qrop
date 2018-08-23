@@ -10,7 +10,7 @@ class SqlNoteModel : public QSqlTableModel
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
 
 public:
-    SqlNoteModel(QObject *parent = 0);
+    SqlNoteModel(QObject *parent = nullptr);
 
     QDate date() const;
     void setDate(const QDate &date);

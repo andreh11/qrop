@@ -14,22 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOCATIONDAO_H
-#define LOCATIONDAO_H
+#ifndef CROPMODEL_H
+#define CROPMODEL_H
 
-#include <memory>
-#include <vector>
+#include "sqltablemodel.h"
+#include "core_global.h"
 
-class QSqlDatabase;
-class Location;
-
-class LocationDao
+class CORESHARED_EXPORT CropModel : public SqlTableModel
 {
 public:
-    LocationDao(QSqlDatabase& database);
-//    void init() const;
-private:
-    QSqlDatabase& mDatabase;
+    CropModel(QObject *parent = nullptr);
 };
 
-#endif // LOCATIONDAO_H
+#endif // CROPMODEL_H

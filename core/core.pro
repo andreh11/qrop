@@ -10,23 +10,17 @@ DEFINES += CORE_LIBRARY
 SOURCES += \
     sqltaskmodel.cpp \
     sqlnotemodel.cpp \
-    sqlplantingmodel.cpp \
-    planting.cpp \
-    plantingdao.cpp \
-    location.cpp \
-    locationdao.cpp \
+#    databasemanager.cpp \
     plantingmodel.cpp \
-    databasemanager.cpp
+    cropmodel.cpp \
+    sqltablemodel.cpp
 
 
 HEADERS += \
     core_global.h \
     sqltaskmodel.h \
     sqlnotemodel.h \
-    sqlplantingmodel.h \
-    planting.h \
-    plantingdao.h \
-    location.h \
-    locationdao.h \
+#    databasemanager.h \
     plantingmodel.h \
-    databasemanager.h
+    cropmodel.h \
+    sqltablemodel.h

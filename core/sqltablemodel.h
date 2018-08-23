@@ -14,12 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlDatabase>
+#ifndef SQLTABLEMODEL_H
+#define SQLTABLEMODEL_H
 
-#include "locationdao.h"
+#include <QSqlTableModel>
 
-LocationDao::LocationDao(QSqlDatabase &database) :
-    mDatabase(database)
+#include "core_global.h"
+
+class CORESHARED_EXPORT SqlTableModel : public QSqlTableModel
 {
+public:
+    SqlTableModel(QObject *parent = nullptr);
+    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+};
 
-}
+#endif // SQLTABLEMODEL_H
