@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 
 Item {
     id: item3
-    width: 600
+    width: 400
     height: 600
     property alias varietyField: varietyField
     property alias cropField: cropField
@@ -69,39 +69,30 @@ Item {
                 Label {
                     id: label2
                     text: qsTr("Family:")
+                    visible: false
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 }
 
                 ComboBox {
                     id: comboBox2
+                    visible: false
                     Layout.fillWidth: true
                     editable: true
                 }
 
+
+
+
                 Label {
-                    id: plantingMethodLabel
-                    text: qsTr("Planting method:")
+                    id: keywordsLabel
+                    text: qsTr("Keywords:")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 }
 
-                RowLayout {
+                ComboBox {
+                    id: keywordsField
                     Layout.fillWidth: true
-                    ExclusiveGroup {
-                        id: tabPositionGroup
-                    }
-                    RadioButton {
-                        text: "DS"
-                        checked: true
-                        exclusiveGroup: tabPositionGroup
-                    }
-                    RadioButton {
-                        text: "TP, bougth"
-                        exclusiveGroup: tabPositionGroup
-                    }
-                    RadioButton {
-                        text: "TP, greenhouse"
-                        exclusiveGroup: tabPositionGroup
-                    }
+                    editable: true
                 }
 
                 Label {
@@ -117,18 +108,6 @@ Item {
                     Layout.fillWidth: false
                     editable: true
                     model: ["kg", "bunch", "g"]
-                }
-
-                Label {
-                    id: keywordsLabel
-                    text: qsTr("Keywords:")
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                }
-
-                ComboBox {
-                    id: keywordsField
-                    Layout.fillWidth: true
-                    editable: true
                 }
 
                 Label {
@@ -164,11 +143,34 @@ Item {
                     }
                 }
 
-                ComboBox {
-                    id: plantinMethodField
+                Label {
+                    id: plantingMethodLabel
+                    text: qsTr("Planting method:")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                }
+
+
+                RowLayout {
                     Layout.fillWidth: true
-                    visible: false
-                    model: ["Direct sow", "Transplant, greenhouse", "Transplant, bought"]
+                    ExclusiveGroup {
+                        id: tabPositionGroup
+                    }
+                    RadioButton {
+                        id: directSeedButton
+                        text: "DS"
+                        checked: true
+                        exclusiveGroup: tabPositionGroup
+                    }
+                    RadioButton {
+                        id: greenhouseButton
+                        text: "TP, greenhouse"
+                        exclusiveGroup: tabPositionGroup
+                    }
+                    RadioButton {
+                        id: boughtButton
+                        text: "TP, bougth"
+                        exclusiveGroup: tabPositionGroup
+                    }
                 }
             }
         }
@@ -254,7 +256,7 @@ Item {
                     text: qsTr("Direct seed")
                     horizontalAlignment: Text.AlignRight
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: plantinMethodField.currentIndex == 0
+                    visible: directSeedButton.checked
                 }
 
                 DatePicker {
@@ -282,7 +284,7 @@ Item {
                     text: qsTr("Start plant")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     horizontalAlignment: Text.AlignRight
-                    visible: plantinMethodField.currentIndex == 1
+                    visible: greenhouseButton.checked
                 }
 
                 DatePicker {
@@ -310,7 +312,7 @@ Item {
                     text: qsTr("Plant")
                     horizontalAlignment: Text.AlignRight
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: plantinMethodField.currentIndex >= 1
+                    visible: !directSeedButton.checked
                 }
 
                 DatePicker {
