@@ -24,7 +24,7 @@ import io.croplan.components 1.0
 
 ListView {
     id: listView
-    model: PlantingModel { }
+    model: SqlPlantingModel { }
 
     delegate: Row {
         id: rowDelegate

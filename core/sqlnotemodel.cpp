@@ -68,4 +68,5 @@ void SqlNoteModel::addNote(const QString &content, const QDate &date)
         return;
     }
 
+    submitAll();
 }

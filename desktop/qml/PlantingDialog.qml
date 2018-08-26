@@ -16,11 +16,9 @@ Dialog {
 
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
+
     PlantingForm {
-        id: form
         anchors.fill: parent
     }
-
-    onAccepted: plantingModel.addPlanting(form.crop)
 }
 

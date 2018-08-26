@@ -21,8 +21,8 @@
 
 #include <QString>
 
-//#include "plantingdao.h"
-//#include "locationdao.h"
+#include "plantingdao.h"
+#include "locationdao.h"
 
 class QSqlQuery;
 class QSqlDatabase;
@@ -45,8 +45,8 @@ private:
     std::unique_ptr<QSqlDatabase> mDatabase;
 
 public:
-//    const PlantingDao plantingDao;
-//    const LocationDao locationDao;
+    const PlantingDao plantingDao;
+    const LocationDao locationDao;
 };
 
 #endif // DATABASEMANAGER_H

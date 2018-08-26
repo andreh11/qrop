@@ -2,15 +2,13 @@
 #include <QStandardPaths>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QSqlTableModel>
 #include <QQmlApplicationEngine>
 #include <QtQml>
 #include <QIcon>
 
-#include "plantingmodel.h"
+#include "sqlplantingmodel.h"
 #include "sqltaskmodel.h"
 #include "sqlnotemodel.h"
-#include "cropmodel.h"
 
 static void connectToDatabase()
 {
@@ -48,15 +46,11 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
+    qmlRegisterType<SqlPlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
     qmlRegisterType<SqlTaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
     qmlRegisterType<SqlNoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
-    qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
 
     connectToDatabase();
-
-    QSqlTableModel cropModel;
-    cropModel.setTable("crop");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

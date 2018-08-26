@@ -7,69 +7,52 @@ import QtCharts 2.0
 import io.croplan.components 1.0
 
 Flickable {
-    focus: true
     property alias plantingMethod: plantingMethodCombo.currentIndex
-    property alias crop: cropField.text
 
     function plantsNeeded() {
-        if (plantingAmountField.empty
-                || inRowSpacingField.empty
-                || rowsPerBedField.empty) {
-            return 0;
+        if (plantingAmountField.text === ""
+                || inRowSpacingField.text === ""
+                || rowsPerBedField.text === "") {
+            return 0
         }
 
-        var plantingAmount = parseInt(plantingAmountField.text);
-        var inRowSpacing = parseInt(inRowSpacingField.text);
-        var rowsPerBed = parseInt(rowsPerBedField.text);
-
-        return plantingAmount / inRowSpacing * 100 * rowsPerBed;
+        var plantingAmount = parseInt(plantingAmountField.text)
+        var inRowSpacing = parseInt(inRowSpacingField.text)
+        var rowsPerBed = parseInt(rowsPerBedField.text)
+        return plantingAmount / inRowSpacing * 100 * rowsPerBed
     }
 
     function seedsNeeded() {
-        var extraPercentage = 0;
-        var seeds = 0;
-        var seedsPerCell = 1;
+        var extraPercentage = 0
+        var seeds = 0
 
-        if (seedsExtraPercentageField.empty)
-            extraPercentage = parseInt(seedsExtraPercentageField.text);
-
-        if (extraPercentage === Number.NaN)
-            extraPercentage = 0;
-
-        if (!seedsPerCellField.empty)
-            seedsPerCell = parseInt(seedsPerCellField.text);
-
-        switch (plantingMethod) {
-        case 0: // DS
-            seeds = plantsNeeded() * (1 + extraPercentage/100);
-            break;
-        case 1: // Transplant, greenhouse
-            seeds = transplantsNeeded() * seedsPerCell * (1 + extraPercentage/100);
-            break;
-        default: // Transplant, bought
-            seeds = 0;
-            break;
+        if (seedsExtraPercentageField.text !== "")
+            extraPercentage = parseInt(seedsExtraPercentageField.text)
+        if (extraPercentage === Number.NaN) {
+            extraPercentage = 0
         }
 
-        return Math.round(seeds)
+        switch(plantingMethod) {
+            case 0: // DS
+                seeds = plantsNeeded() * (1 + extraPercentage/100);
+                break;
+            case 1: // Transplant, greenhouse
+                seeds = transplantsNeeded() * (1 + extraPercentage/100);
+                break;
+            default: // Transplant, bought
+                seeds = plantsNeeded();
+                break;
+        }
+
+        return seeds
     }
 
     function transplantsNeeded() {
-        var estimatedLoss =  0
+        var flatType = parseInt(flatTypeField.text)
+        var seedsPerCell = parseInt(seedsPerCellField.text)
+        var estimatedLoss = parseInt(greenhouseEstimatedLossField.text)
 
-        if (!greenhouseEstimatedLossField.empty)
-            estimatedLoss = parseInt(greenhouseEstimatedLossField.text);
-
-        return plantsNeeded() / (1 - (estimatedLoss/100));
-    }
-
-    function flatsNeeded() {
-        if (flatTypeField.empty)
-            return 0;
-
-        var flatSize = parseInt(flatTypeField.text)
-        console.log("flat size:", flatSize);
-        return (transplantsNeeded() / flatSize).toFixed(2);
+        return plantsNeeded() * seedsPerCell / flatType
     }
 
     Component.onCompleted: cropField.focus = true
@@ -82,34 +65,27 @@ Flickable {
             width: parent.width
             spacing: 16
             
-            TextField {
+            MyTextField {
                 id: cropField
-                ////floatingLabel: true
+                floatingLabel: true
                 placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
             }
-
-            ComboBox {
-                Layout.fillWidth: true
-                model: CropModel { }
-                textRole: "name"
-                editable: true
-                focus: true
-            }
-
-            TextField {
+            
+            MyTextField {
                 id: varietyField
-                //floatingLabel: true
+                floatingLabel: true
                 placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
             }
             
-            TextField {
+            MyTextField {
                 id: familyField
-                //floatingLabel: true
+                floatingLabel: true
                 placeholderText: qsTr("Family")
                 Layout.fillWidth: true
             }
+            
         }
         
         FormGroupBox {
@@ -119,20 +95,21 @@ Flickable {
                 anchors.fill: parent
                 anchors.topMargin: 16
                 spacing: 16
-                TextField {
-                    //floatingLabel: true
+                MyTextField {
+                    floatingLabel: true
                     placeholderText: qsTr("Number of successions")
                     Layout.fillWidth: true
                 }
                 
-                TextField {
-                    //floatingLabel: true
+                MyTextField {
+                    floatingLabel: true
                     placeholderText: qsTr("Time between")
                     Layout.fillWidth: true
-                    //suffixText: "weeks"
+                    suffixText: "weeks"
                 }
             }
         }
+
         
         FormGroupBox {
             id: plantingAmountBox
@@ -141,29 +118,31 @@ Flickable {
                 anchors.fill: parent
                 anchors.topMargin: 16
                 spacing: 16
-                TextField {
+                MyTextField {
                     id: plantingAmountField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Length")
                     Layout.fillWidth: true
-                    //suffixText: "bed m"
+                    suffixText: "bed m"
                 }
                 
-                TextField {
+                MyTextField {
                     id: inRowSpacingField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("In-row spacing")
                     Layout.fillWidth: true
-                    //suffixText: "cm"
+                    suffixText: "cm"
                 }
                 
-                TextField {
+                MyTextField {
                     id: rowsPerBedField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Rows per bed")
                     Layout.fillWidth: true
-                    //helperText: qsTr("Plants needed: ") + plantsNeeded()
+                    helperText: qsTr("Plants needed: ") + plantsNeeded()
                 }
+                
+                
             }
         }
         
@@ -176,12 +155,10 @@ Flickable {
                 width: parent.width
                 spacing: 16
                 
-                ComboBox {
+                MyComboBox {
                     id: plantingMethodCombo
                     Layout.fillWidth: true
-                    model : [qsTr("Direct sow"),
-                        qsTr("Transplant, greenhouse"),
-                        qsTr("Transplant, purchased")]
+                    model : [qsTr("Direct sow"), qsTr("Transplant, greenhouse"), qsTr("Transplant, purchased")]
                 }
                 
                 RowLayout {
@@ -189,19 +166,18 @@ Flickable {
                     anchors.topMargin: 16
                     spacing: 16
                     visible: plantingMethodCombo.currentIndex == 0
-                    TextField {
+                    MyTextField {
                         id: fieldSowingDate
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Field Sowing Date")
                     }
                     
-                    TextField {
+                    MyTextField {
                         id: sowDtm
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Days to maturity")
-                        //suffixText: qsTr("days")
                     }
                 }
                 
@@ -210,19 +186,19 @@ Flickable {
                     anchors.topMargin: 16
                     spacing: 16
                     visible: plantingMethodCombo.currentIndex == 1
-                    TextField {
+                    MyTextField {
                         id: greenhouseStartDate
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Greenhouse start date")
                     }
                     
-                    TextField {
+                    MyTextField {
                         id: greenhouseGrowTime
                         Layout.fillWidth: true
-                        //floatingLabel: true
-                        placeholderText: qsTr("Days to transplant")
-                        //suffixText: qsTr("days")
+                        floatingLabel: true
+                        placeholderText: qsTr("Greenhouse duration")
+                        suffixText: qsTr("days")
                     }
                 }
                 
@@ -231,19 +207,19 @@ Flickable {
                     anchors.topMargin: 16
                     spacing: 16
                     visible: plantingMethodCombo.currentIndex > 0
-                    TextField {
+                    MyTextField {
                         id: fieldPlantingDate
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Field planting date")
                     }
                     
-                    TextField {
+                    MyTextField {
                         id: plantingDtm
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Days to maturity")
-                        //suffixText: qsTr("days")
+                        suffixText: qsTr("days")
                     }
                 }
                 
@@ -251,22 +227,23 @@ Flickable {
                     width: parent.width
                     anchors.topMargin: 16
                     spacing: 16
-                    TextField {
+                    MyTextField {
                         id: firstHarvestDate
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("First harvest date")
                     }
                     
-                    TextField {
+                    MyTextField {
                         id: harvestWindow
                         Layout.fillWidth: true
-                        //floatingLabel: true
+                        floatingLabel: true
                         placeholderText: qsTr("Harvest window")
-                        //suffixText: qsTr("days")
-                        //helperText: text === "" ? "" : "Last harvest: 12/4"
+                        helperText: text === "" ? "" : "Last harvest: 12/4"
+                        suffixText: qsTr("days")
                     }
                 }
+                
             }
         }
         
@@ -277,25 +254,25 @@ Flickable {
             RowLayout {
                 width: parent.width
                 spacing: 16
-                TextField {
+                MyTextField {
                     id: seedsNeededField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Seeds needed")
                     Layout.fillWidth: true
                     text: seedsNeeded()
                 }
                 
-                TextField {
+                MyTextField {
                     id: seedsExtraPercentageField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Extra %")
-                    //suffixText: "%"
+                    suffixText: "%"
                     Layout.fillWidth: true
                 }
                 
-                TextField {
+                MyTextField {
                     id: seedsPerGramField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Seeds/g")
                     Layout.fillWidth: true
                 }
@@ -309,29 +286,30 @@ Flickable {
             RowLayout {
                 width: parent.width
                 spacing: 16
-                TextField {
+                MyTextField {
                     id: flatTypeField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Flat type")
                     Layout.fillWidth: true
                 }
                 
-                TextField {
+                MyTextField {
                     id: seedsPerCellField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Seeds per cell")
                     Layout.fillWidth: true
                 }
                 
-                TextField {
+                MyTextField {
                     id: greenhouseEstimatedLossField
-                    //floatingLabel: true
+                    floatingLabel: true
                     placeholderText: qsTr("Estimated loss")
                     Layout.fillWidth: true
-                    //suffixText: qsTr("%")
-                    //helperText: "Flats needed: " + flatsNeeded()
+                    suffixText: qsTr("%")
+                    helperText: transplantsNeeded()
                 }
             }
         }
+        
     }
 }

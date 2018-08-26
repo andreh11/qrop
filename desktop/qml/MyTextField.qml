@@ -9,7 +9,6 @@ import io.croplan.components 1.0
 
 TextField {
     id: control
-
     property color color: Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property string helperText
@@ -19,7 +18,6 @@ TextField {
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
-    property bool empty: text === ""
 
     QtObject {
         id: palette
@@ -43,6 +41,7 @@ TextField {
     }
 
     padding: 14
+
     font {
         family: echoMode == TextInput.Password ? "Default" : "Roboto Regular"
         pixelSize: fontSizeBodyAndButton

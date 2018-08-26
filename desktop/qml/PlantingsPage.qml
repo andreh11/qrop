@@ -32,10 +32,9 @@ Page {
     property int currentYear: 2018
     property int rowHeight: 47
     property int monthWidth: 60
-    property alias plantingModel: listView.model
 
     property int tableSortColumn: 0
-    property string tableSortOrder: Qt.AscendingOrder
+    property string tableSortOrder: "descending"
     property var tableHeaderModel: [
         { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
         { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
@@ -47,7 +46,7 @@ Page {
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName;
-        tableSortOrder = Qt.AscendingOrder
+        tableSortOrder = "descending";
         listView.model.setSortColumn(columnName, tableSortOrder);
     }
 
@@ -216,7 +215,7 @@ Page {
                     }
                 }
 
-                SpinBox {
+                CardSpinBox {
                     visible: checks === 0
                     id: yearSpinBox
                     from: 2000
@@ -267,14 +266,26 @@ Page {
                         filterField.focus = true
                     }
                 }
+
+                //                IconButton {
+                //                    text: "\ue145" // add
+                //                    visible: checks === 0
+                //                }
             }
         }
 
         ListView {
             id: listView
+            visible: true
+            clip: true
+            width: parent.width
+            height: parent.height - buttonRectangle.height
+            spacing: 0
+            anchors.top: buttonRectangle.bottom
 
             property string filterColumn: "crop"
             //            property TableHeaderLabel filterLabel: headerRow.cropLabel
+
 
             //            onFilterLabelChanged: {
             //                console.log("changed!")
@@ -287,13 +298,6 @@ Page {
             //                    break
             //                }
             //            }
-
-            visible: true
-            clip: true
-            width: parent.width
-            height: parent.height - buttonRectangle.height
-            spacing: 0
-            anchors.top: buttonRectangle.bottom
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
@@ -311,11 +315,12 @@ Page {
                 }
             }
 
-            model: PlantingModel {
+            model: SqlPlantingModel {
                 crop: filterField.text
             }
 
             headerPositioning: ListView.OverlayHeader
+
             header: Rectangle {
                 id: headerRectangle
                 height: headerRow.height
@@ -343,7 +348,7 @@ Page {
                             TableHeaderLabel {
                                 text: modelData.name
                                 width: modelData.width
-                                state: page.tableSortColumn === index ? (page.tableSortOrder === Qt.AscendingOrder ? "ascending" : "descending") : ""
+                                state: page.tableSortColumn === index ? page.tableSortOrder : ""
                             }
                         }
 
@@ -423,7 +428,8 @@ Page {
                 Column {
                     width: parent.width
 
-                    ThinDivider { }
+                    ThinDivider {
+                    }
 
                     Row {
                         id: row
@@ -525,4 +531,5 @@ Page {
         onClicked: { stackView.push(plantingForm)
         }
     }
+
 }
