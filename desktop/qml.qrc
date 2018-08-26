@@ -29,6 +29,5 @@
         <file>qml/PlantingList.qml</file>
         <file>qml/Planting.qml</file>
         <file>qml/PlantingForm.ui.qml</file>
-        <file>qml/DatePicker.qml</file>
     </qresource>
 </RCC>

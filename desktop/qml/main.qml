@@ -50,7 +50,7 @@ ApplicationWindow {
     property bool railMode: true
     property bool searchMode: false
     property bool showSaveButton: false
-//    property string searchString: searchField.text
+    property string searchString: searchField.text
     property alias stackView: stackView
 
     // font sizes - defaults from Google Material Design Guide
@@ -392,35 +392,35 @@ ApplicationWindow {
         Component.onCompleted: stackView.push(plantingPage)
     }
 
-//    Dialog {
-//        id: aboutDialog
-////        modal: true
-////        focus: true
-//        title: "About"
-//        x: (window.width - width) / 2
-//        y: window.height / 6
-//        width: Math.min(window.width, window.height) / 3 * 2
-////        contentHeight: aboutColumn.height
+    Dialog {
+        id: aboutDialog
+//        modal: true
+//        focus: true
+        title: "About"
+        x: (window.width - width) / 2
+        y: window.height / 6
+        width: Math.min(window.width, window.height) / 3 * 2
+//        contentHeight: aboutColumn.height
 
-//        Column {
-//            id: aboutColumn
-//            spacing: 20
+        Column {
+            id: aboutColumn
+            spacing: 20
 
-//            Label {
-//                width: aboutDialog.availableWidth
-//                text: "Logimaraich"
-//                font.family: "Roboto Medium"
-//                wrapMode: Label.Wrap
-//                font.pixelSize: 22
-//            }
+            Label {
+                width: aboutDialog.availableWidth
+                text: "Logimaraich"
+                font.family: "Roboto Medium"
+                wrapMode: Label.Wrap
+                font.pixelSize: 22
+            }
 
-//            Label {
-//                width: aboutDialog.availableWidth
-//                text: "A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers."
-//                font.family: "Roboto Regular"
-//                wrapMode: Label.Wrap
-//                font.pixelSize: 12
-//            }
-//        }
-//    }
+            Label {
+                width: aboutDialog.availableWidth
+                text: "A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers."
+                font.family: "Roboto Regular"
+                wrapMode: Label.Wrap
+                font.pixelSize: 12
+            }
+        }
+    }
 }
