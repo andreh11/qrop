@@ -94,9 +94,15 @@ Page {
             Column {
                 height: parent.height/2
                 width: largeDisplay ? parent.width / 2 : parent.width
-                spacing: 8
+                spacing: 16
+
+                DatePicker { mode: "date"}
+                DatePicker { mode: "date"}
+                DatePicker { mode: "date"}
+                DatePicker { mode: "date"}
 
                 Pane {
+                    visible: false
                     width: parent.width
                     height: parent.height
                     //        anchors.fill: parent

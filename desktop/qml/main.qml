@@ -74,6 +74,7 @@ ApplicationWindow {
     }
 
     function week(date) {
+        console.log("Week of" + date)
         var target = new Date(date.valueOf())
         var dayNr = (date.getDay() + 6) % 7
         target.setDate(target.getDate() - dayNr + 3)

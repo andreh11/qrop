@@ -27,5 +27,6 @@
         <file>qml/TaskDialog.qml</file>
         <file>qml/MyComboBox.qml</file>
         <file>qml/PlantingList.qml</file>
+        <file>qml/DatePicker.qml</file>
     </qresource>
 </RCC>
