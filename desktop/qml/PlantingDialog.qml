@@ -17,7 +17,7 @@ Dialog {
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
 
-    PlantingForm {
+    PlantingForm2 {
         anchors.fill: parent
     }
 }

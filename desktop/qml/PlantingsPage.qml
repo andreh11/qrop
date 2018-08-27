@@ -190,7 +190,7 @@ Page {
                     Layout.fillWidth: true
                 }
 
-                SpinBox {
+                MSpinBox {
                     visible: checks === 0
                     from: 0
                     to: items.length - 1
@@ -506,7 +506,7 @@ Page {
     Component {
         id: plantingForm
 
-        PlantingForm {
+        PlantingForm2 {
             anchors.fill: parent
             anchors.margins: 8
 

@@ -78,29 +78,28 @@ Flickable {
                 placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
             }
-            
+
             MyTextField {
-                id: familyField
+                id: keywordsField
                 floatingLabel: true
-                placeholderText: qsTr("Family")
+                placeholderText: qsTr("Keywords")
                 Layout.fillWidth: true
             }
-            
-        }
-        
-        FormGroupBox {
-            id: successionsBox
-            width: parent.width
+
+            MyComboBox {
+                id: unitCombo
+                Layout.fillWidth: true
+                model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
+            }
+
             RowLayout {
-                anchors.fill: parent
-                anchors.topMargin: 16
                 spacing: 16
                 MyTextField {
                     floatingLabel: true
                     placeholderText: qsTr("Number of successions")
                     Layout.fillWidth: true
                 }
-                
+
                 MyTextField {
                     floatingLabel: true
                     placeholderText: qsTr("Time between")
@@ -108,8 +107,25 @@ Flickable {
                     suffixText: "weeks"
                 }
             }
-        }
 
+            RowLayout {
+                Layout.fillWidth: true
+
+                RadioButton {
+                    id: directSeedRadio
+                    text: "DS"
+                    checked: true
+                }
+                RadioButton {
+                    id: greenhouseRadio
+                    text: "TP, greenhouse"
+                }
+                RadioButton {
+                    id: boughtRadio
+                    text: "TP, bougth"
+                }
+            }
+        }
         
         FormGroupBox {
             id: plantingAmountBox

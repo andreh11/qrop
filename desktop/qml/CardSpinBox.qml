@@ -6,7 +6,7 @@ import QtCharts 2.0
 
 import io.croplan.components 1.0
 
-SpinBox {
+MSpinBox {
     id: control
     editable: true
     font.family: "Roboto Regular"

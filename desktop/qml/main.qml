@@ -322,6 +322,11 @@ ApplicationWindow {
 //        Material.background: Material.color(Material.Teal, Material.Shade300)
         Material.background: Material.primary
 
+//        background: Rectangle {
+//            anchors.fill: parent
+//            color: "green"
+//        }
+
         Column {
             anchors.fill: parent
 
