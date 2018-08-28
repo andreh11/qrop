@@ -7,29 +7,32 @@ Item {
     height: textField.height
     width: textField.width
 
-    property date calendarDate: Date.parse("today")
+    property date calendarDate: new Date()
     property string mode: "date" // date or week
 
     MyTextField {
         id: textField
 
-        text: Qt.formatDate(calendarDate, "dd/MM/yyyy")
+        text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
         placeholderText: "Seeding date"
-        inputMethodHints: Qt.ImhDate
-//        inputMask: mode === "date" ? "99/99/9999" : "99"
-        helperText: mode === "date" ? qsTr("Week") + " " + week(calendarDate) : calendarDate.toISOString()
+        inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
+        inputMask: mode === "date" ? "99/99/9999" : "99"
+        helperText: mode === "date" ? qsTr("Week") + " " + isoWeek(calendarDate)
+                                    : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
+        prefixText: mode === "date" ? "" : qsTr("W")
 
         onEditingFinished: {
-            if (mode === "date") {
                 var newDate = new Date();
-                console.log(text.substr(0, 2));
+            if (mode === "date") {
                 newDate.setDate(text.substr(0, 2));
                 newDate.setMonth(text.substr(3, 2) - 1);
                 newDate.setFullYear(text.substr(6, 4));
 
                 calendarDate = newDate;
             } else {
-                calendarDate = Date()
+                var week = text.substr(0, 2);
+
+                calendarDate = mondayOfWeek(week, 2018);
             }
         }
 

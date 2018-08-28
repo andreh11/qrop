@@ -96,10 +96,10 @@ Page {
                 width: largeDisplay ? parent.width / 2 : parent.width
                 spacing: 16
 
-                DatePicker { mode: "date"}
-                DatePicker { mode: "date"}
-                DatePicker { mode: "date"}
-                DatePicker { mode: "date"}
+                DatePicker { mode: "week"}
+                DatePicker { mode: "week"}
+                DatePicker { mode: "week"}
+                DatePicker { mode: "week"}
 
                 Pane {
                     visible: false
