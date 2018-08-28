@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 
@@ -73,24 +74,24 @@ Item {
         }
     }
 
-//    Rectangle {
-//        id: focusShade
-//        parent: window.contentItem
-//        anchors.fill: parent
-//        opacity: calendar.visible ? 0.5 : 0
-//        color: "black"
+    Rectangle {
+        id: focusShade
+        parent: window.contentItem
+        anchors.fill: parent
+        opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
+        color: "black"
 
-//        Behavior on opacity {
-//            NumberAnimation {
-//            }
-//        }
+        Behavior on opacity {
+            NumberAnimation {
+            }
+        }
 
-//        MouseArea {
-//            anchors.fill: parent
-//            enabled: parent.opacity > 0
-//            onClicked: calendar.visible = false
-//        }
-//    }
+        MouseArea {
+            anchors.fill: parent
+            enabled: parent.opacity > 0
+            onClicked: calendar.visible = false
+        }
+    }
 
     Rectangle {
         id: calendar
@@ -99,9 +100,8 @@ Item {
 //        parent: window.contentItem
         visible: false
         z: 3
-        width: 200
         height: 100
-//        width: parent.width * 0.8
+        width: parent.width * 0.8
 //        height: width
 
         anchors.centerIn: parent
@@ -111,24 +111,9 @@ Item {
             visible = false;
         }
 
-        Column {
-            anchors.fill: parent
-            Rectangle {
-                width: parent.width
-                height: 200
-                color: Material.color(Material.Blue)
-                Label {
-                    text: calendarDate.toLocaleDateString()
-                    color: "white"
-                    anchors.centerIn: parent
-                }
-
-            }
-            Rectangle {
-                width: parent.width
-                height: 400
-                color: "yellow"
-            }
+        CalendarView {
+            date: calendarDate
+            Layout.fillWidth: true
         }
 
         MouseArea {

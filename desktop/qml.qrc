@@ -28,5 +28,6 @@
         <file>qml/MyComboBox.qml</file>
         <file>qml/PlantingList.qml</file>
         <file>qml/DatePicker.qml</file>
+        <file>qml/CalendarView.qml</file>
     </qresource>
 </RCC>
