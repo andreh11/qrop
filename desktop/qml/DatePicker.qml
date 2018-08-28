@@ -5,20 +5,25 @@ import QtQuick.Controls.Material 2.2
 Item {
     id: control
     height: textField.height
-    width: textField.width
+//    width: textField.width
 
     property date calendarDate: new Date()
     property string mode: "date" // date or week
+    property bool showDateHelper: true
+    property string dateHelperText: mode === "date" ? qsTr("W") + isoWeek(calendarDate)
+                                                    : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
+
 
     MyTextField {
         id: textField
 
+        width: parent.width
+        implicitWidth: 100
         text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
         placeholderText: "Seeding date"
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
-        inputMask: mode === "date" ? "99/99/9999" : "99"
-        helperText: mode === "date" ? qsTr("Week") + " " + isoWeek(calendarDate)
-                                    : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
+        inputMask: mode === "date" ? "99/99/9999" : ""
+//        suffixTextAddedMargin: iconLabel.width + 8
         prefixText: mode === "date" ? "" : qsTr("W")
 
         onEditingFinished: {
@@ -37,8 +42,23 @@ Item {
         }
 
         Label {
+            id: dateHelper
+            visible: showDateHelper
+            text: dateHelperText
+            font.family: "Roboto Regular"
+            font.italic: true
+            font.pointSize: textField.font.pointSize - 2
+            color: Material.color(Material.Grey)
+            anchors.right: iconLabel.right
+            anchors.rightMargin: 24
+            anchors.bottomMargin: 16
+            anchors.bottom: parent.bottom
+            font.pixelSize: 14
+        }
+
+        Label {
             id: iconLabel
-            bottomPadding: 8
+            bottomPadding: 6
             anchors.right: textField.right
             anchors.rightMargin: 12
             anchors.verticalCenter:  parent.verticalCenter

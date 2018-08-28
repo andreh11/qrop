@@ -21,6 +21,7 @@ TextField {
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
+    property int suffixTextAddedMargin: 0
 
     onActiveFocusChanged: {
         if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
@@ -50,10 +51,10 @@ TextField {
         }
     }
 
-    topPadding: 14
+    topPadding: 16
     bottomPadding: topPadding
-    rightPadding: topPadding + (suffixText.visible ? suffixText.width + 8 : 0)
-    leftPadding: topPadding + (prefixText.visible ? prefixText.width + 8 : 0)
+    rightPadding: topPadding + (suffixText.visible ? suffixText.width  : 0)
+    leftPadding: topPadding + (prefixText.visible ? prefixText.width : 0)
 
     font {
         family: echoMode == TextInput.Password ? "Default" : "Roboto Regular"
@@ -119,7 +120,7 @@ TextField {
             id: suffixText
             text: control.suffixText
             anchors.right: parent.right
-            anchors.rightMargin: 14
+            anchors.rightMargin: 14 + suffixTextAddedMargin
             anchors.bottomMargin: 16
             anchors.bottom: parent.bottom
             font.pixelSize: 14
