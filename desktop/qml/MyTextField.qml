@@ -19,6 +19,13 @@ TextField {
     property bool showBorder: true
     property color placeholderTextColor
 
+    onActiveFocusChanged: {
+        if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
+            selectAll();
+        else
+            select(0, 0);
+    }
+
     QtObject {
         id: palette
 

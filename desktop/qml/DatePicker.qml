@@ -15,7 +15,8 @@ Item {
 
         text: Qt.formatDate(calendarDate, "dd/MM/yyyy")
         placeholderText: "Seeding date"
-        inputMask: mode === "date" ? "99/99/9999" : "99"
+        inputMethodHints: Qt.ImhDate
+//        inputMask: mode === "date" ? "99/99/9999" : "99"
         helperText: mode === "date" ? qsTr("Week") + " " + week(calendarDate) : calendarDate.toISOString()
 
         onEditingFinished: {
