@@ -42,7 +42,7 @@ Item {
     RowLayout {
         id: buttonLayout
         width: parent.width
-        Button {
+        RoundButton {
             Material.background: "transparent"
             text: "\ue314"
             font.family: "Material Icons"
@@ -60,7 +60,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
         }
 
-        Button {
+        RoundButton {
             id: forwardButton
             Material.background: "transparent"
             text: "\ue315"
@@ -126,13 +126,11 @@ Item {
             id: grid
             month: control.month
             year: control.year
-            //            locale: Qt.locale("fr_FR")
             Layout.fillHeight: true
             delegate: RoundButton {
                 property bool isSelectedDate: model.date.valueOf() === control.date.valueOf()
                 text: model.day
                 font.family: "Roboto Condensed"
-                //                width: 35
                 height: width
                 checkable: true
                 checked: isSelectedDate
