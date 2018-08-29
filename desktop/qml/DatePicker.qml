@@ -18,6 +18,7 @@ Item {
     MyTextField {
         id: textField
 
+        floatingLabel: true
         width: parent.width
         implicitWidth: 100
         text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
@@ -48,13 +49,12 @@ Item {
             text: dateHelperText
             font.family: "Roboto Regular"
             font.italic: true
-            font.pointSize: textField.font.pointSize - 2
+            font.pointSize: textField.font.pointSize - 1
             color: Material.color(Material.Grey)
             anchors.right: iconLabel.right
             anchors.rightMargin: 24
             anchors.bottomMargin: 16
             anchors.bottom: parent.bottom
-            font.pixelSize: 14
         }
 
         Label {
@@ -96,15 +96,14 @@ Item {
     Rectangle {
         id: calendar
         parent: window.contentItem
-//        anchors.top: control.bottom
+        anchors.top: control.bottom
 //        parent: window.contentItem
         visible: false
         z: 3
-        height: 100
-        width: parent.width * 0.8
-//        height: width
+        width: 400
+        height: width
 
-        anchors.centerIn: parent
+//        anchors.centerIn: parent
 //        onClicked: visible = false
         Keys.onBackPressed: {
             event.accepted = true;
@@ -112,13 +111,15 @@ Item {
         }
 
         CalendarView {
-            date: calendarDate
-            Layout.fillWidth: true
+            anchors.fill: parent
+            id: calendarView
+            month: calendarDate.getMonth()
+            year: calendarDate.getFullYear()
         }
 
         MouseArea {
             anchors.fill: parent
-            onClicked: parent.visible = false
+//            onClicked: parent.visible = false
 
         }
     }

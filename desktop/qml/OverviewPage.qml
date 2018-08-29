@@ -96,11 +96,13 @@ Page {
                 width: largeDisplay ? parent.width / 2 : parent.width
                 spacing: 16
 
-                DatePicker { width: parent.width ; mode: "date"; showDateHelper: false }
-                DatePicker { width: parent.width ; mode: "date"}
-                DatePicker { width: parent.width ; mode: "date"}
-                DatePicker { width: parent.width ; mode: "date"}
-                DatePicker { width: parent.width ; mode: "date"}
+//                DatePicker { width: parent.width ; mode: "date"; showDateHelper: false }
+//                DatePicker { width: parent.width ; mode: "week"}
+//                DatePicker { width: parent.width ; mode: "date"}
+//                DatePicker { width: parent.width ; mode: "date"}
+//                DatePicker { width: parent.width ; mode: "date"}
+
+                CalendarView {width: parent.width; month: 8; year: 2018}
 
                 Pane {
                     visible: false
