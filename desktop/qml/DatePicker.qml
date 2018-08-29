@@ -96,14 +96,14 @@ Item {
     Rectangle {
         id: calendar
         parent: window.contentItem
-        anchors.top: control.bottom
+//        anchors.top: control.bottom
 //        parent: window.contentItem
         visible: false
-        z: 3
+        z: 10
         width: 400
         height: width
 
-//        anchors.centerIn: parent
+        anchors.centerIn: parent
 //        onClicked: visible = false
         Keys.onBackPressed: {
             event.accepted = true;
@@ -115,6 +115,7 @@ Item {
             id: calendarView
             month: calendarDate.getMonth()
             year: calendarDate.getFullYear()
+            onDateChanged: calendarDate = date
         }
 
         MouseArea {

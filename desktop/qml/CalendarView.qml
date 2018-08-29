@@ -6,6 +6,7 @@ import Qt.labs.calendar 1.0
 
 Item {
     id: control
+
     property date date: new Date()
     property int month
     property int year
@@ -21,7 +22,6 @@ Item {
     }
 
     function goForward() {
-        console.log("forward!")
         if (month == 11) {
             month = 0;
             year = year + 1;
@@ -30,25 +30,43 @@ Item {
         }
     }
 
+    function firstOfMonth(month) {
+        var date = new Date(2018, month, 1)
+        return date;
+    }
+
+    function monthName(month) {
+        return firstOfMonth(month).toLocaleString(Qt.locale(), "MMMM")
+    }
+
     RowLayout {
         id: buttonLayout
+        width: parent.width
         Button {
-            text: "<"
-            width: 20
+            Material.background: "transparent"
+            text: "\ue314"
+            font.family: "Material Icons"
+            font.pointSize: 20
+            padding: 0
             onClicked: goBackward()
+
         }
 
         Label {
-            text: (month + 1) + " " + year
+            text: monthName(month) + " " + year
             font.bold: true
             Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         Button {
             id: forwardButton
-            width: 20
-            text: ">"
+            Material.background: "transparent"
+            text: "\ue315"
+            font.family: "Material Icons"
             onClicked: goForward()
+            font.pointSize: 20
         }
     }
 
@@ -122,7 +140,7 @@ Item {
 
                 contentItem: Text {
                     text: parent.text
-                    font: control.font
+                    font: parent.font
                     color: (parent.checked || model.today) ? "white" : model.date.getMonth() !== control.month ? Material.color(Material.Grey, Material.Shade400) : "black"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
