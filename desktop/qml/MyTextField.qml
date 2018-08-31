@@ -12,12 +12,23 @@ TextField {
     property color color: Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property string helperText
+    property string prefixText: ""
     property string suffixText: ""
+    property bool persistentPrefix: false
+    property bool persistentSuffix: false
     property bool floatingLabel: false
     property bool hasError: characterLimit && length > characterLimit
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
+    property int suffixTextAddedMargin: 0
+
+    onActiveFocusChanged: {
+        if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
+            selectAll();
+        else
+            select(0, 0);
+    }
 
     QtObject {
         id: palette
@@ -40,7 +51,10 @@ TextField {
         }
     }
 
-    padding: 14
+    topPadding: 16
+    bottomPadding: topPadding
+    rightPadding: topPadding + (suffixText.visible ? suffixText.width  : 0)
+    leftPadding: topPadding + (prefixText.visible ? prefixText.width : 0)
 
     font {
         family: echoMode == TextInput.Password ? "Default" : "Roboto Regular"
@@ -92,14 +106,25 @@ TextField {
         }
 
         Label {
-            id: suffixText
-            text: control.suffixText
-            anchors.right: parent.right
-            anchors.rightMargin: 14
+            id: prefixText
+            text: control.prefixText
+            anchors.left: parent.left
+            anchors.leftMargin: 14
             anchors.bottomMargin: 16
             anchors.bottom: parent.bottom
             font.pixelSize: 14
-            visible: control.suffixText !== "" && control.text != ""
+            visible: persistentPrefix || (control.prefixText !== "" && control.text != "")
+        }
+
+        Label {
+            id: suffixText
+            text: control.suffixText
+            anchors.right: parent.right
+            anchors.rightMargin: 14 + suffixTextAddedMargin
+            anchors.bottomMargin: 16
+            anchors.bottom: parent.bottom
+            font.pixelSize: 14
+            visible: persistentSuffix || (control.suffixText !== "" && control.text != "")
         }
 
         Label {
