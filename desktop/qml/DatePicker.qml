@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
@@ -6,7 +22,10 @@ import QtQuick.Controls.Material 2.2
 Item {
     id: control
     height: textField.height
-//    width: textField.width
+    property alias placeHolderText: textField.placeholderText
+    implicitWidth: 200
+    Layout.minimumWidth: 140
+
 
     property date calendarDate: new Date()
     property string mode: "date" // date or week
@@ -22,10 +41,8 @@ Item {
         width: parent.width
         implicitWidth: 100
         text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
-        placeholderText: "Seeding date"
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         inputMask: mode === "date" ? "99/99/9999" : ""
-//        suffixTextAddedMargin: iconLabel.width + 8
         prefixText: mode === "date" ? "" : qsTr("W")
 
         onEditingFinished: {
@@ -69,10 +86,38 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: calendar.visible = true
+                onClicked: {
+                    if (largeDisplay)
+                        popup.open();
+                    else
+                        calendar.visible = true;
+                }
+
+                Popup {
+                    id: popup
+                    y: control.height/2
+                    x: -control.width
+                    width: contentItem.width
+                    height: contentItem.height
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    padding: 0
+
+                    contentItem: CalendarView {
+                        clip: true
+                        month: calendarDate.getMonth()
+                        year: calendarDate.getFullYear()
+                        date: calendarDate
+
+                        onDateChanged: {
+                            calendarDate = date;
+                            popup.close();
+                        }
+                    }
+                }
             }
         }
     }
+
 
     Rectangle {
         id: focusShade
@@ -99,29 +144,25 @@ Item {
 //        anchors.top: control.bottom
 //        parent: window.contentItem
         visible: false
+        focus: true
         z: 10
-        width: 400
-        height: width
+        width: childrenRect.width
+        height: childrenRect.height
 
         anchors.centerIn: parent
-//        onClicked: visible = false
         Keys.onBackPressed: {
             event.accepted = true;
             visible = false;
         }
 
         CalendarView {
-            anchors.fill: parent
-            id: calendarView
+            id: calView
             month: calendarDate.getMonth()
             year: calendarDate.getFullYear()
-            onDateChanged: calendarDate = date
-        }
-
-        MouseArea {
-            anchors.fill: parent
-//            onClicked: parent.visible = false
-
+            onDateChanged: {
+                calendarDate = date
+                parent.visible = false
+            }
         }
     }
 }

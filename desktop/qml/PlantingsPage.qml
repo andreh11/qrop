@@ -215,7 +215,7 @@ Page {
                     }
                 }
 
-                CardSpinBox {
+                SpinBox {
                     visible: checks === 0
                     id: yearSpinBox
                     from: 2000
