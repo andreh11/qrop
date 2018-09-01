@@ -137,7 +137,7 @@ Page {
                     Layout.fillWidth: true
                 }
 
-                CardSpinBox {
+                SpinBox {
                     visible: checks === 0
                     id: weekSpinBox
                     from: 1
@@ -145,7 +145,7 @@ Page {
                     value: 34
                 }
 
-                CardSpinBox {
+                SpinBox {
                     visible: checks === 0
                     id: yearSpinBox
                     from: 2000

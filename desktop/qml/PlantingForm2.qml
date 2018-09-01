@@ -7,7 +7,18 @@ import QtCharts 2.0
 import io.croplan.components 1.0
 
 Flickable {
-    property alias plantingMethod: plantingMethodCombo.currentIndex
+    id: control
+
+    property bool directSeeded: directSeedRadio.checked
+    property bool transplantRaised: greenhouseRadio.checked
+    property bool transplantBought: boughtRadio.checked
+
+    function updateDateField(from, length, to, direction) {
+        if (length.text === "")
+            to.calendarDate = from.calendarDate;
+        else
+            to.calendarDate = addDays(from.calendarDate, parseInt(length.text) * direction);
+    }
 
     function plantsNeeded() {
         if (plantingAmountField.text === ""
@@ -32,17 +43,12 @@ Flickable {
             extraPercentage = 0
         }
 
-        switch(plantingMethod) {
-            case 0: // DS
-                seeds = plantsNeeded() * (1 + extraPercentage/100);
-                break;
-            case 1: // Transplant, greenhouse
-                seeds = transplantsNeeded() * (1 + extraPercentage/100);
-                break;
-            default: // Transplant, bought
-                seeds = plantsNeeded();
-                break;
-        }
+        if (directSeedRadio.checked)
+            seeds = plantsNeeded() * (1 + extraPercentage/100);
+        else if (greenhouseRadio.checked)
+            seeds = transplantsNeeded() * (1 + extraPercentage/100);
+        else
+            seeds = plantsNeeded();
 
         return seeds
     }
@@ -59,19 +65,19 @@ Flickable {
 
     Column {
         anchors.fill: parent
-        spacing: 16
-        
+        spacing: 8
+
         ColumnLayout {
             width: parent.width
             spacing: 16
-            
+
             MyTextField {
                 id: cropField
                 floatingLabel: true
                 placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
             }
-            
+
             MyTextField {
                 id: varietyField
                 floatingLabel: true
@@ -92,181 +98,214 @@ Flickable {
                 model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
             }
 
-            RowLayout {
-                spacing: 16
-                MyTextField {
-                    floatingLabel: true
-                    placeholderText: qsTr("Number of successions")
-                    Layout.fillWidth: true
-                }
-
-                MyTextField {
-                    floatingLabel: true
-                    placeholderText: qsTr("Time between")
-                    Layout.fillWidth: true
-                    suffixText: "weeks"
-                }
-            }
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.topMargin: -16
 
                 RadioButton {
                     id: directSeedRadio
-                    text: "DS"
+                    text: qsTr("Direct seed")
                     checked: true
+                    Layout.fillWidth: true
                 }
                 RadioButton {
                     id: greenhouseRadio
-                    text: "TP, greenhouse"
+                    text: "Transplant, raised"
+                    Layout.fillWidth: true
                 }
                 RadioButton {
                     id: boughtRadio
-                    text: "TP, bougth"
+                    text: "Transplant, bought"
+                    Layout.fillWidth: true
                 }
             }
         }
-        
+
         FormGroupBox {
             id: plantingAmountBox
             width: parent.width
-            RowLayout {
-                anchors.fill: parent
-                anchors.topMargin: 16
-                spacing: 16
-                MyTextField {
-                    id: plantingAmountField
-                    floatingLabel: true
-                    placeholderText: qsTr("Length")
-                    Layout.fillWidth: true
-                    suffixText: "bed m"
-                }
-                
-                MyTextField {
-                    id: inRowSpacingField
-                    floatingLabel: true
-                    placeholderText: qsTr("In-row spacing")
-                    Layout.fillWidth: true
-                    suffixText: "cm"
-                }
-                
-                MyTextField {
-                    id: rowsPerBedField
-                    floatingLabel: true
-                    placeholderText: qsTr("Rows per bed")
-                    Layout.fillWidth: true
-                    helperText: qsTr("Plants needed: ") + plantsNeeded()
-                }
-                
-                
-            }
-        }
-        
-        FormGroupBox {
-            id: plantingDatesBox
-            title: qsTr("Planting dates")
-            width: parent.width
-            
+            title: qsTr("Amounts")
+
             ColumnLayout {
                 width: parent.width
                 spacing: 16
-                
-                MyComboBox {
-                    id: plantingMethodCombo
-                    Layout.fillWidth: true
-                    model : [qsTr("Direct sow"), qsTr("Transplant, greenhouse"), qsTr("Transplant, purchased")]
+
+                RowLayout {
+                    spacing: 16
+                    MyTextField {
+                        id: successionsField
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        floatingLabel: true
+                        placeholderText: qsTr("Successions")
+                        Layout.fillWidth: true
+                    }
+
+                    MyTextField {
+                        id: timeBetweenSuccessionsField
+                        floatingLabel: true
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        placeholderText: qsTr("Time between")
+                        Layout.fillWidth: true
+                        suffixText: "weeks"
+                    }
                 }
-                
+
+                RowLayout {
+                    spacing: 16
+                    MyTextField {
+                        id: plantingAmountField
+                        floatingLabel: true
+                        placeholderText: qsTr("Length")
+                        Layout.fillWidth: true
+                        suffixText: "bed m"
+                    }
+
+                    MyTextField {
+                        id: inRowSpacingField
+                        floatingLabel: true
+                        placeholderText: qsTr("In-row spacing")
+                        Layout.fillWidth: true
+                        suffixText: "cm"
+                    }
+
+                    MyTextField {
+                        id: rowsPerBedField
+                        floatingLabel: true
+                        placeholderText: qsTr("Rows per bed")
+                        Layout.fillWidth: true
+                        helperText: qsTr("Plants needed: ") + plantsNeeded()
+                    }
+                }
+
+
+            }
+        }
+
+        FormGroupBox {
+            id: plantingDatesBox
+            title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ? qsTr("(first succession)") : "")
+            width: parent.width
+
+            ColumnLayout {
+                width: parent.width
+                spacing: 16
+
                 RowLayout {
                     width: parent.width
                     anchors.topMargin: 16
                     spacing: 16
-                    visible: plantingMethodCombo.currentIndex == 0
-                    MyTextField {
+                    visible: directSeedRadio.checked
+                    DatePicker {
                         id: fieldSowingDate
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Field Sowing Date")
+
+                        onEditingFinished: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
                     }
-                    
+
                     MyTextField {
                         id: sowDtm
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        text: "1"
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Days to maturity")
+
+                        onTextChanged: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
                     }
                 }
-                
+
                 RowLayout {
                     width: parent.width
                     anchors.topMargin: 16
                     spacing: 16
-                    visible: plantingMethodCombo.currentIndex == 1
-                    MyTextField {
+                    visible: greenhouseRadio.checked
+                    DatePicker {
                         id: greenhouseStartDate
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Greenhouse start date")
+
+                        onEditingFinished: updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
                     }
-                    
+
                     MyTextField {
                         id: greenhouseGrowTime
+                        text: "1"
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Greenhouse duration")
                         suffixText: qsTr("days")
+
+                        onTextChanged:  updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
                     }
                 }
-                
+
                 RowLayout {
                     width: parent.width
                     anchors.topMargin: 16
                     spacing: 16
-                    visible: plantingMethodCombo.currentIndex > 0
-                    MyTextField {
+                    visible: !directSeedRadio.checked
+                    DatePicker {
                         id: fieldPlantingDate
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Field planting date")
+
+                        onEditingFinished: updateDateField(fieldPlantingDate, greenhouseGrowTime, greenhouseStartDate, -1);
+                        onCalendarDateChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
                     }
-                    
+
                     MyTextField {
                         id: plantingDtm
+                        text: "1"
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Days to maturity")
                         suffixText: qsTr("days")
+
+                        onTextChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
                     }
                 }
-                
+
                 RowLayout {
                     width: parent.width
                     anchors.topMargin: 16
                     spacing: 16
-                    MyTextField {
+                    DatePicker {
                         id: firstHarvestDate
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("First harvest date")
+
+                        onEditingFinished: {
+                            if (directSeeded)
+                                updateDateField(firstHarvestDate, sowDtm, fieldSowingDate, -1);
+                            else
+                                updateDateField(firstHarvestDate, plantingDtm, fieldPlantingDate, -1);
+                        }
                     }
-                    
+
                     MyTextField {
                         id: harvestWindow
+                        text: "1"
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Harvest window")
-                        helperText: text === "" ? "" : "Last harvest: 12/4"
+                        helperText: text === "" ? "" : qsTr("Last harvest: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
                         suffixText: qsTr("days")
                     }
                 }
-                
+
             }
         }
-        
+
         FormGroupBox {
             id: seedBox
             title: qsTr("Seeds")
-            visible: plantingMethodCombo.currentIndex < 2
+            visible: !boughtRadio.checked
             RowLayout {
                 width: parent.width
                 spacing: 16
@@ -277,7 +316,7 @@ Flickable {
                     Layout.fillWidth: true
                     text: seedsNeeded()
                 }
-                
+
                 MyTextField {
                     id: seedsExtraPercentageField
                     floatingLabel: true
@@ -285,7 +324,7 @@ Flickable {
                     suffixText: "%"
                     Layout.fillWidth: true
                 }
-                
+
                 MyTextField {
                     id: seedsPerGramField
                     floatingLabel: true
@@ -298,7 +337,7 @@ Flickable {
         FormGroupBox {
             id: greenhouseBox
             title: qsTr("Greenhouse details")
-            visible: plantingMethodCombo.currentIndex == 1
+            visible: greenhouseRadio.checked
             RowLayout {
                 width: parent.width
                 spacing: 16
@@ -308,14 +347,14 @@ Flickable {
                     placeholderText: qsTr("Flat type")
                     Layout.fillWidth: true
                 }
-                
+
                 MyTextField {
                     id: seedsPerCellField
                     floatingLabel: true
                     placeholderText: qsTr("Seeds per cell")
                     Layout.fillWidth: true
                 }
-                
+
                 MyTextField {
                     id: greenhouseEstimatedLossField
                     floatingLabel: true
@@ -326,6 +365,6 @@ Flickable {
                 }
             }
         }
-        
+
     }
 }

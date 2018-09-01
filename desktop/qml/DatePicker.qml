@@ -22,10 +22,10 @@ import QtQuick.Controls.Material 2.2
 Item {
     id: control
     height: textField.height
-    property alias placeHolderText: textField.placeholderText
     implicitWidth: 200
     Layout.minimumWidth: 140
-
+    property alias floatingLabel: textField.floatingLabel
+    property alias placeholderText: textField.placeholderText
 
     property date calendarDate: new Date()
     property string mode: "date" // date or week
@@ -33,11 +33,11 @@ Item {
     property string dateHelperText: mode === "date" ? qsTr("W") + isoWeek(calendarDate)
                                                     : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
 
+    signal editingFinished()
 
     MyTextField {
         id: textField
 
-        floatingLabel: true
         width: parent.width
         implicitWidth: 100
         text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
@@ -46,7 +46,7 @@ Item {
         prefixText: mode === "date" ? "" : qsTr("W")
 
         onEditingFinished: {
-                var newDate = new Date();
+            var newDate = new Date();
             if (mode === "date") {
                 newDate.setDate(text.substr(0, 2));
                 newDate.setMonth(text.substr(3, 2) - 1);
@@ -58,6 +58,8 @@ Item {
 
                 calendarDate = mondayOfWeek(week, 2018);
             }
+
+            control.editingFinished();
         }
 
         Label {
@@ -111,6 +113,7 @@ Item {
                         onDateChanged: {
                             calendarDate = date;
                             popup.close();
+                            control.editingFinished()
                         }
                     }
                 }
@@ -162,6 +165,7 @@ Item {
             onDateChanged: {
                 calendarDate = date
                 parent.visible = false
+                control.editingFinished()
             }
         }
     }

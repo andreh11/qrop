@@ -507,8 +507,8 @@ Page {
         id: plantingForm
 
         PlantingForm2 {
-            anchors.fill: parent
-            anchors.margins: 8
+//            anchors.fill: parent
+//            anchors.margins: 8
 
         }
     }
