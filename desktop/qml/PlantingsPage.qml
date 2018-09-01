@@ -506,7 +506,7 @@ Page {
     Component {
         id: plantingForm
 
-        PlantingForm2 {
+        PlantingForm {
 //            anchors.fill: parent
 //            anchors.margins: 8
 

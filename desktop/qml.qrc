@@ -22,12 +22,11 @@
         <file>qml/PlantingDialog.qml</file>
         <file>qml/MyTextField.qml</file>
         <file>qml/FormGroupBox.qml</file>
-        <file>qml/PlantingForm2.qml</file>
+        <file>qml/PlantingForm.qml</file>
         <file>qml/TaskForm.qml</file>
         <file>qml/TaskDialog.qml</file>
         <file>qml/MyComboBox.qml</file>
         <file>qml/PlantingList.qml</file>
-        <file>qml/PlantingForm.ui.qml</file>
         <file>qml/MSpinBox.qml</file>
         <file>qml/DatePicker.qml</file>
         <file>qml/CalendarView.qml</file>
