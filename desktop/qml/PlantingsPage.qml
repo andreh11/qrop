@@ -97,7 +97,8 @@ Page {
 
         Rectangle {
             id: buttonRectangle
-            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
+//            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
+            color: checks > 0 ? Material.accent : "white"
             visible: true
             width: parent.width
             height: 48

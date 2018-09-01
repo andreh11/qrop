@@ -63,7 +63,7 @@ TextField {
         id: suffixText
         text: control.suffixText
         anchors.right: parent.right
-        anchors.rightMargin: 14 + suffixTextAddedMargin
+        anchors.rightMargin: suffixTextAddedMargin
         anchors.bottomMargin: 16
         anchors.bottom: parent.bottom
         font.pixelSize: 14

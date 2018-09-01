@@ -70,8 +70,8 @@ Item {
             font.italic: true
             font.pointSize: textField.font.pointSize - 1
             color: Material.color(Material.Grey)
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
             anchors.right: iconLabel.right
             anchors.rightMargin: 24
             anchors.bottomMargin: 16
@@ -82,7 +82,6 @@ Item {
             id: iconLabel
             bottomPadding: 8
             anchors.right: textField.right
-            anchors.rightMargin: 12
             anchors.verticalCenter:  parent.verticalCenter
             font.family: "Font Awesome 5 Free"
             text: "\uf073" // calendar-alt
