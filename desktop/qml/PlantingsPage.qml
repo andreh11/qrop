@@ -30,7 +30,7 @@ Page {
     property string filterText: ""
     property int checks: 0
     property int currentYear: 2018
-    property int rowHeight: 47
+    property int rowHeight: 37
     property int monthWidth: 60
 
     property int tableSortColumn: 0
@@ -506,10 +506,13 @@ Page {
     Component {
         id: plantingForm
 
-        PlantingForm {
-//            anchors.fill: parent
-//            anchors.margins: 8
+        Page {
+            title: qsTr("Add plantings")
+            PlantingForm {
+                anchors.fill: parent
+                anchors.margins: 16
 
+            }
         }
     }
 

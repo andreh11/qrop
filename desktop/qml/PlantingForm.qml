@@ -9,6 +9,7 @@ import io.croplan.components 1.0
 Flickable {
     id: control
 
+
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
@@ -61,10 +62,14 @@ Flickable {
         return plantsNeeded() * seedsPerCell / flatType
     }
 
-    Component.onCompleted: cropField.focus = true
+    contentWidth: width
+    contentHeight: mainColumn.height
+    focus: true
+    flickableDirection: Flickable.VerticalFlick
 
     Column {
-        anchors.fill: parent
+        id: mainColumn
+        width: parent.width
         spacing: 8
 
         ColumnLayout {
@@ -76,6 +81,7 @@ Flickable {
                 floatingLabel: true
                 placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
+                focus: true
             }
 
             MyTextField {
@@ -94,7 +100,6 @@ Flickable {
 
             MyComboBox {
                 id: unitCombo
-                Layout.fillWidth: true
                 model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
             }
 
@@ -164,7 +169,7 @@ Flickable {
                     MyTextField {
                         id: inRowSpacingField
                         floatingLabel: true
-                        placeholderText: qsTr("In-row spacing")
+                        placeholderText: qsTr("Spacing")
                         Layout.fillWidth: true
                         suffixText: "cm"
                     }
@@ -172,7 +177,7 @@ Flickable {
                     MyTextField {
                         id: rowsPerBedField
                         floatingLabel: true
-                        placeholderText: qsTr("Rows per bed")
+                        placeholderText: qsTr("Rows")
                         Layout.fillWidth: true
                         helperText: qsTr("Plants needed: ") + plantsNeeded()
                     }
@@ -294,7 +299,7 @@ Flickable {
                         Layout.fillWidth: true
                         floatingLabel: true
                         placeholderText: qsTr("Harvest window")
-                        helperText: text === "" ? "" : qsTr("Last harvest: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
+                        helperText: text === "" ? "" : qsTr("Last: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
                         suffixText: qsTr("days")
                     }
                 }

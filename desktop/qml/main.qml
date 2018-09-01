@@ -186,14 +186,14 @@ ApplicationWindow {
 
             ToolButton {
                 id: drawerButton
-                text: stackView.depth > 2 ? "\ue5c4" : "\ue5d2"
+                text: stackView.depth > 1 ? "\ue5c4" : "\ue5d2"
                 visible: !largeDisplay && !searchMode
                 font.family: "Material Icons"
                 font.pixelSize: 24
                 onClicked: {
                     if (largeDisplay) {
                         railMode = !railMode
-                    } else if (stackView.depth > 2) {
+                    } else if (stackView.depth > 1) {
                         stackView.pop()
                     } else if (drawer.opened) {
                         drawer.close()

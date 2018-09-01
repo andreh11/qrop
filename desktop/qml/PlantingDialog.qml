@@ -17,8 +17,11 @@ Dialog {
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
 
-    PlantingForm {
+    ScrollView {
         anchors.fill: parent
+
+        PlantingForm {
+        }
     }
 }
 
