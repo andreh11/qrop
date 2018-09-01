@@ -70,6 +70,8 @@ Item {
             font.italic: true
             font.pointSize: textField.font.pointSize - 1
             color: Material.color(Material.Grey)
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
             anchors.right: iconLabel.right
             anchors.rightMargin: 24
             anchors.bottomMargin: 16
@@ -78,13 +80,13 @@ Item {
 
         Label {
             id: iconLabel
-            bottomPadding: 6
+            bottomPadding: 8
             anchors.right: textField.right
             anchors.rightMargin: 12
             anchors.verticalCenter:  parent.verticalCenter
             font.family: "Font Awesome 5 Free"
             text: "\uf073" // calendar-alt
-            font.pointSize: textField.font.pointSize * 1.3
+            font.pointSize: textField.font.pointSize * 1.2
 
             MouseArea {
                 anchors.fill: parent
@@ -97,8 +99,8 @@ Item {
 
                 Popup {
                     id: popup
-                    y: control.height/2
-                    x: -control.width
+                    y: control.height - iconLabel.height/2
+                    x: -control.width + iconLabel.width*2
                     width: contentItem.width
                     height: contentItem.height
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent

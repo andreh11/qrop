@@ -19,8 +19,10 @@ Dialog {
 
     ScrollView {
         anchors.fill: parent
+        clip: true
 
         PlantingForm {
+
         }
     }
 }

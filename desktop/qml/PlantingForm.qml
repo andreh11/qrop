@@ -9,7 +9,6 @@ import io.croplan.components 1.0
 Flickable {
     id: control
 
-
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
@@ -81,6 +80,7 @@ Flickable {
                 floatingLabel: true
                 placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
+                Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
                 focus: true
             }
 
