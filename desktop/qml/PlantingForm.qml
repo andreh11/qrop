@@ -73,7 +73,7 @@ Flickable {
 
         ColumnLayout {
             width: parent.width
-            spacing: 16
+            spacing: 8
 
             MyTextField {
                 id: cropField
@@ -102,7 +102,6 @@ Flickable {
                 id: unitCombo
                 model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
             }
-
 
             RowLayout {
                 Layout.fillWidth: true
@@ -192,118 +191,103 @@ Flickable {
             title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ? qsTr("(first succession)") : "")
             width: parent.width
 
-            ColumnLayout {
+            GridLayout {
                 width: parent.width
-                spacing: 16
+                columns: 2
+                rowSpacing: 16
+                columnSpacing: 16
 
-                RowLayout {
-                    width: parent.width
-                    anchors.topMargin: 16
-                    spacing: 16
+                DatePicker {
+                    id: fieldSowingDate
                     visible: directSeedRadio.checked
-                    DatePicker {
-                        id: fieldSowingDate
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Field Sowing Date")
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Field Sowing Date")
 
-                        onEditingFinished: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
-                    }
-
-                    MyTextField {
-                        id: sowDtm
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        text: "1"
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Days to maturity")
-
-                        onTextChanged: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
-                    }
+                    onEditingFinished: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
                 }
 
-                RowLayout {
-                    width: parent.width
-                    anchors.topMargin: 16
-                    spacing: 16
+                MyTextField {
+                    id: sowDtm
+                    visible: fieldSowingDate.visible
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    text: "1"
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Days to maturity")
+
+                    onTextChanged: updateDateField(fieldSowingDate, sowDtm, firstHarvestDate, 1)
+                }
+
+                DatePicker {
+                    id: greenhouseStartDate
                     visible: greenhouseRadio.checked
-                    DatePicker {
-                        id: greenhouseStartDate
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Greenhouse start date")
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Greenhouse start date")
 
-                        onEditingFinished: updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
-                    }
-
-                    MyTextField {
-                        id: greenhouseGrowTime
-                        text: "1"
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Greenhouse duration")
-                        suffixText: qsTr("days")
-
-                        onTextChanged:  updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
-                    }
+                    onEditingFinished: updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
                 }
 
-                RowLayout {
-                    width: parent.width
-                    anchors.topMargin: 16
-                    spacing: 16
+                MyTextField {
+                    id: greenhouseGrowTime
+                    visible: greenhouseStartDate.visible
+                    text: "1"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Greenhouse duration")
+                    suffixText: qsTr("days")
+
+                    onTextChanged:  updateDateField(greenhouseStartDate, greenhouseGrowTime, fieldPlantingDate, 1)
+                }
+
+                DatePicker {
+                    id: fieldPlantingDate
                     visible: !directSeedRadio.checked
-                    DatePicker {
-                        id: fieldPlantingDate
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Field planting date")
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Field planting date")
 
-                        onEditingFinished: updateDateField(fieldPlantingDate, greenhouseGrowTime, greenhouseStartDate, -1);
-                        onCalendarDateChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
-                    }
+                    onEditingFinished: updateDateField(fieldPlantingDate, greenhouseGrowTime, greenhouseStartDate, -1);
+                    onCalendarDateChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
+                }
 
-                    MyTextField {
-                        id: plantingDtm
-                        text: "1"
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Days to maturity")
-                        suffixText: qsTr("days")
+                MyTextField {
+                    id: plantingDtm
+                    visible: fieldPlantingDate.visible
+                    text: "1"
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Days to maturity")
+                    suffixText: qsTr("days")
 
-                        onTextChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
+                    onTextChanged: updateDateField(fieldPlantingDate, plantingDtm, firstHarvestDate, 1);
+                }
+
+                DatePicker {
+                    id: firstHarvestDate
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("First harvest date")
+
+                    onEditingFinished: {
+                        if (directSeeded)
+                            updateDateField(firstHarvestDate, sowDtm, fieldSowingDate, -1);
+                        else
+                            updateDateField(firstHarvestDate, plantingDtm, fieldPlantingDate, -1);
                     }
                 }
 
-                RowLayout {
-                    width: parent.width
-                    anchors.topMargin: 16
-                    spacing: 16
-                    DatePicker {
-                        id: firstHarvestDate
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("First harvest date")
-
-                        onEditingFinished: {
-                            if (directSeeded)
-                                updateDateField(firstHarvestDate, sowDtm, fieldSowingDate, -1);
-                            else
-                                updateDateField(firstHarvestDate, plantingDtm, fieldPlantingDate, -1);
-                        }
-                    }
-
-                    MyTextField {
-                        id: harvestWindow
-                        text: "1"
-                        Layout.fillWidth: true
-                        floatingLabel: true
-                        placeholderText: qsTr("Harvest window")
-                        helperText: text === "" ? "" : qsTr("Last: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
-                        suffixText: qsTr("days")
-                    }
+                MyTextField {
+                    id: harvestWindow
+                    text: "1"
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    placeholderText: qsTr("Harvest window")
+                    helperText: text === "" ? "" : qsTr("Last: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
+                    suffixText: qsTr("days")
                 }
-
             }
         }
 
@@ -355,6 +339,9 @@ Flickable {
 
                 MyTextField {
                     id: seedsPerCellField
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    maximumLength: 10
+                    text: "1"
                     floatingLabel: true
                     placeholderText: qsTr("Seeds per cell")
                     Layout.fillWidth: true
@@ -370,6 +357,5 @@ Flickable {
                 }
             }
         }
-
     }
 }
