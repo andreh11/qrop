@@ -1,2 +1,9 @@
 before_script:
   - apt-get update -yq && apt-get install -y qt5-qmake qttools5-dev-tools qtbase5-dev qtchooser pkg-config
+
+stages:
+  - build
+
+build:
+  - qmake qrop.pro
+  - make
