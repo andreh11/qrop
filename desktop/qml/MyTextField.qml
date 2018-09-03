@@ -39,7 +39,6 @@ TextField {
             select(0, 0);
     }
 
-
     Label {
         id: flatingLabel
         anchors.verticalCenter: control.top
