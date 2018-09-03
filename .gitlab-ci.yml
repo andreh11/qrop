@@ -1,4 +1,4 @@
- before_script:
+before_script:
   - apt-get update -yq && apt-get install -y qtchooser pkg-config qt5base-dev qtdeclarative5-dev qt5-qmake qt5-default qttools5-dev-tools
 
 stages:
