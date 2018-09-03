@@ -4,6 +4,9 @@ before_script:
 stages:
   - build
 
-build:
+build:stable:
+  image: "qrop:latest"
+  stage: build
+  script:
   - qmake qrop.pro
   - make
