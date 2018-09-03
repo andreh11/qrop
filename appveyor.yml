@@ -1,8 +1,5 @@
 version: 0.1_b{build}
 
-build:
-  verbosity: minimal
-
 build_script:
   - qmake -v
     && qmake qrop.pro CONFIG+=release
