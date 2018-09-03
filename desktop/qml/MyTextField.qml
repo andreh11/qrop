@@ -39,9 +39,12 @@ TextField {
             select(0, 0);
     }
 
+
     Label {
         id: flatingLabel
         anchors.verticalCenter: control.top
+        anchors.left: parent.left
+        anchors.leftMargin: parent.topPadding
         color: Material.accent
         text: placeholderText
         font.pixelSize: 14
@@ -105,5 +108,16 @@ TextField {
                 ColorAnimation { duration: 200 }
             }
         }
+    }
+
+    leftPadding: 8
+
+    Rectangle {
+        anchors.bottom: parent.background.bottom
+        height: 46
+        width: parent.width
+        z: -10
+        color: Material.color(Material.Grey, Material.Shade200)
+        radius: 4
     }
 }
