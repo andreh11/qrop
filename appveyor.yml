@@ -1,5 +1,16 @@
 version: 0.1_b{build}
 
+environment:
+  my_secret:
+    secure: +3IhWT10lCSC4GE4gGfWt8WiZdIXuMUfaImgvQUullg=
+  matrix:
+    - QTDIR: C:\Qt\5.9.5\msvc2013_64
+      TILED_ITCH_CHANNEL: windows-64bit
+    - QTDIR: C:\Qt\5.9.5\mingw53_32
+      MINGW: C:\Qt\Tools\mingw530_32
+    - QTDIR: C:\Qt\5.6\mingw49_32
+      MINGW: C:\Qt\Tools\mingw492_32
+
 build_script:
   - qmake -v
     && qmake qrop.pro CONFIG+=release
