@@ -1,4 +1,9 @@
-version: 1.0.{build}
+version: 0.1_b{build}
 
 build:
   verbosity: minimal
+
+build_script:
+  - qmake -v
+    && qmake qrop.pro CONFIG+=release
+    && mingw32-make
