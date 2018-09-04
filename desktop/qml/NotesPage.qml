@@ -27,9 +27,6 @@ Page {
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
                 parent: listView.parent
-                anchors.top: listView.top
-                anchors.left: listView.right
-                anchors.bottom: listView.bottom
             }
             //                section.property: "crop"
             //                section.criteria: ViewSection.FullString

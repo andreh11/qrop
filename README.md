@@ -35,4 +35,4 @@ conduct, and the process for submitting bug reports and merge requests to us.
 
 ## Licence
 
-This project is licensed under the GNU GPLv3 − see [LICENSE](LICENCE) for more details.
+This project is licensed under the GNU GPLv3 − see [LICENSE](LICENSE) for more details.

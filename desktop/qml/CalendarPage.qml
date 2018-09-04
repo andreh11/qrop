@@ -73,7 +73,7 @@ Page {
                     color: "black"
                     placeholderText: qsTr("Search")
                     Layout.fillWidth: true
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.alignment: Qt.AlignHCenter
 
                     Shortcut {
                         sequence: "Escape"
@@ -113,7 +113,6 @@ Page {
                 visible: !filterMode
 
                 Label {
-                    anchors.verticalCenter: parent.verticalCenter
                     text: checks + " task" + (checks > 1 ? "s" : "") + " selected"
                     leftPadding: 16
                     color: Material.color(Material.Blue)
