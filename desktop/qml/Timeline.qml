@@ -18,7 +18,6 @@ Item {
     property date endHarvestDate
 
     function coordinate(day) {
-//        console.log(day)
         if (day < 0) {
             return 0
         } else if (day > 365) {
@@ -34,7 +33,6 @@ Item {
     }
 
     function position(date) {
-        console.log(date.toLocaleString(Qt.locale(), "dd/MM: "), daysDelta(yearBegin, date));
         return coordinate(daysDelta(yearBegin, date))
     }
 
@@ -56,7 +54,7 @@ Item {
 
     Rectangle {
         id: seedingCircle
-        x: position(seedingDate) - width/2
+        x: position(seedingDate)
         visible: seedingDate < transplantingDate
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -78,9 +76,9 @@ Item {
     Rectangle {
         id: seedingLine
         visible: seedingDate < transplantingDate
-        width: daysDelta(seedingDate, transplantingDate) / 365 * 12 * monthWidth
+        width: daysDelta(seedingDate, transplantingDate) / 365 * graphWidth - seedingCircle.width / 2
         height: 1
-        anchors.left:seedingCircle.right
+        anchors.left: seedingCircle.right
         color: Material.color(Material.Green, Material.Shade200)
         anchors.verticalCenter: parent.verticalCenter
     }
