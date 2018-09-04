@@ -5,7 +5,7 @@ A crop planning and recordkeeping free software Available on GNU/Linux, Windows 
 **Warning:** this is alpha software with known bugs. It runs, and work at least
 some of the times, but use at your own risk.
 
-![Screenshot of Logimaraich](logimaraich.png)
+![Screenshot of Qrop](qrop.png)
 
 ## Features
 

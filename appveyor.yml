@@ -1,25 +1,33 @@
 version: 0.1_b{build}
+image: Visual Studio 2017
+configuration: Release
+
+branches:
+  only:
+    - master
 
 environment:
   matrix:
     # MSVC x86
     - name: win32
       platform: amd64_x86
-      qt: 5.11\msvc2015
-      suffix: msvc2015
+      qt: 5.11\mingw53_32
+      suffix: msvc2017
+      arch: x86
 
     # MSVC x64
     - name: win64
       platform: amd64
-      qt: 5.11\msvc2015_64
-      suffix: msvc2015
+      qt: 5.11\msvc2017_64
+      suffix: msvc2017
+      arch: x64
 
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+  - call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
 
 build_script:
   - cd C:\projects\qrop
   - qmake -v
-    && qmake qrop.pro CONFIG+=release
-    && mingw32-make
+  - qmake qrop.pro
+  - nmake.exe
