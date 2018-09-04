@@ -9,7 +9,9 @@ Item {
     height: parent.height
     width: gridRow.width
 
-    readonly property date yearBegin: new Date(2018, 1, 1)
+    property int year
+    readonly property date yearBegin: new Date(year, 0, 1)
+    readonly property int graphWidth: 12 * monthWidth
     property date seedingDate
     property date transplantingDate
     property date beginHarvestDate
@@ -19,14 +21,15 @@ Item {
         if (day < 0) {
             return 0
         } else if (day > 365) {
-            return 365
+            return graphWidth
         } else {
-            return day / 365 * 12 * monthWidth
+            return (day / 365.0) * graphWidth
         }
     }
 
     function daysDelta(beg, end) {
-        return (end - beg) / (1000*60*60*24)
+        var msPerDay = 1000 * 60 * 60 * 24;
+        return (end - beg) / msPerDay;
     }
 
     function position(date) {
@@ -51,7 +54,7 @@ Item {
 
     Rectangle {
         id: seedingCircle
-        x: position(seedingDate) - width/2
+        x: position(seedingDate)
         visible: seedingDate < transplantingDate
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -73,9 +76,9 @@ Item {
     Rectangle {
         id: seedingLine
         visible: seedingDate < transplantingDate
-        width: daysDelta(seedingDate, transplantingDate) / 365 * 12 * monthWidth
+        width: daysDelta(seedingDate, transplantingDate) / 365 * graphWidth - seedingCircle.width / 2
         height: 1
-        anchors.left:seedingCircle.right
+        anchors.left: seedingCircle.right
         color: Material.color(Material.Green, Material.Shade200)
         anchors.verticalCenter: parent.verticalCenter
     }
