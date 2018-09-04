@@ -1,5 +1,5 @@
 before_script:
-  - apt-get update -yq && apt-get install -y qtcreator qmlscene qt5-qmltooling-plugins qtbase5-dev-tools qtcreator-doc qtdeclarative5-dev-tools qttools5-dev-tools qttranslations5-l10n qtxmlpatterns5-dev-tools qt5-default
+  - apt-get update -yq && apt-get install -y qtcreator qmlscene qt5-qmltooling-plugins qtbase5-dev-tools qtcreator-doc qtdeclarative5-dev-tools qttools5-dev-tools qttranslations5-l10n qtxmlpatterns5-dev-tools qt5-default g++
 
 stages:
   - lint
