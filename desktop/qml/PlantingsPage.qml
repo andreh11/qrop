@@ -464,6 +464,7 @@ Page {
                         }
 
                         Timeline {
+                            year: currentYear
                             visible: showTimegraph
                             seedingDate: model.seeding_date
                             transplantingDate: model.transplanting_date

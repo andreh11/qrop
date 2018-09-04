@@ -9,27 +9,32 @@ Item {
     height: parent.height
     width: gridRow.width
 
-    readonly property date yearBegin: new Date(2018, 1, 1)
+    property int year
+    readonly property date yearBegin: new Date(year, 0, 1)
+    readonly property int graphWidth: 12 * monthWidth
     property date seedingDate
     property date transplantingDate
     property date beginHarvestDate
     property date endHarvestDate
 
     function coordinate(day) {
+//        console.log(day)
         if (day < 0) {
             return 0
         } else if (day > 365) {
-            return 365
+            return graphWidth
         } else {
-            return day / 365 * 12 * monthWidth
+            return (day / 365.0) * graphWidth
         }
     }
 
     function daysDelta(beg, end) {
-        return (end - beg) / (1000*60*60*24)
+        var msPerDay = 1000 * 60 * 60 * 24;
+        return (end - beg) / msPerDay;
     }
 
     function position(date) {
+        console.log(date.toLocaleString(Qt.locale(), "dd/MM: "), daysDelta(yearBegin, date));
         return coordinate(daysDelta(yearBegin, date))
     }
 
