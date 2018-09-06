@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QFontDatabase>
 #include <QStandardPaths>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -45,6 +46,13 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("io.qrop");
 
     QGuiApplication app(argc, argv);
+
+    int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
+    int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    int ret3 = QFontDatabase::addApplicationFont(":/fonts/RobotoCondensed-Regular.ttf");
+    int ret4 = QFontDatabase::addApplicationFont(":/fonts/fa-regular-400.ttf"); // font-awesome
+    if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1)
+        qWarning() << "Some custom fonts can't be loaded.";
 
     qmlRegisterType<SqlPlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
     qmlRegisterType<SqlTaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
