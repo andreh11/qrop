@@ -16,7 +16,9 @@ SOURCES += \
     location.cpp \
     locationdao.cpp \
     plantingmodel.cpp \
-    databasemanager.cpp
+    databasemanager.cpp \
+    familytable.cpp \
+    sqltablemodel.cpp
 
 
 HEADERS += \
@@ -29,4 +31,6 @@ HEADERS += \
     location.h \
     locationdao.h \
     plantingmodel.h \
-    databasemanager.h
+    databasemanager.h \
+    familytable.h \
+    sqltablemodel.h

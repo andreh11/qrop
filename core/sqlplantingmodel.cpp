@@ -25,8 +25,9 @@
 static const char *plantingTableName = "planting";
 
 SqlPlantingModel::SqlPlantingModel(QObject *parent)
-    : QSqlTableModel(parent)
+    : SqlTableModel(parent)
 {
+
     setTable(plantingTableName);
     for (int i = 0; i < this->record().count(); i++) {
         m_rolesIndexes.insert(record().fieldName(i).toUtf8(), i);
@@ -37,17 +38,6 @@ SqlPlantingModel::SqlPlantingModel(QObject *parent)
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
 
-}
-
-void SqlPlantingModel::setSortColumn(const QString fieldName, const QString order)
-{
-    if (!m_rolesIndexes.contains(fieldName)) {
-        qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
-        return;
-    }
-    qDebug() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
-    setSort(m_rolesIndexes[fieldName], order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    select();
 }
 
 QVariant SqlPlantingModel::data(const QModelIndex &index, int role) const
@@ -89,14 +79,4 @@ void SqlPlantingModel::setCrop(const QString &crop)
     select();
 
     emit cropChanged();
-}
-
-QHash<int, QByteArray> SqlPlantingModel::roleNames() const
-{
-    QHash<int, QByteArray> roles;
-
-    for (int i = 0; i < this->record().count(); i ++)
-        roles.insert(Qt::UserRole + i, record().fieldName(i).toUtf8());
-
-    return roles;
 }
