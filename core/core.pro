@@ -18,7 +18,8 @@ SOURCES += \
     plantingmodel.cpp \
     databasemanager.cpp \
     familytable.cpp \
-    sqltablemodel.cpp
+    sqltablemodel.cpp \
+    croptable.cpp
 
 
 HEADERS += \
@@ -33,4 +34,5 @@ HEADERS += \
     plantingmodel.h \
     databasemanager.h \
     familytable.h \
-    sqltablemodel.h
+    sqltablemodel.h \
+    croptable.h

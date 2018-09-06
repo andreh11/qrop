@@ -20,7 +20,7 @@
 #include "sqltablemodel.h"
 
 SqlTableModel::SqlTableModel(QObject *parent)
-    : QSqlTableModel(parent)
+    : QSqlRelationalTableModel(parent)
 {
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -63,6 +63,11 @@ void SqlTableModel::setSortColumn(const QString fieldName, const QString order)
     qDebug() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
     setSort(m_rolesIndexes[fieldName], order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
+}
+
+int SqlTableModel::fieldColumn(const QString &field) const
+{
+    return m_rolesIndexes[field];
 }
 
 void SqlTableModel::buildRolesIndexes()

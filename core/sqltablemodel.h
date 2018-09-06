@@ -2,11 +2,11 @@
 #define SQLTABLEMODEL_H
 
 #include <QObject>
-#include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
 #include <QHash>
 #include <QByteArray>
 
-class SqlTableModel : public QSqlTableModel
+class SqlTableModel : public QSqlRelationalTableModel
 {
     Q_OBJECT
 
@@ -17,6 +17,8 @@ public:
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
+
+    int fieldColumn(const QString &field) const;
 
 private:
     QHash<QString, int> m_rolesIndexes;
