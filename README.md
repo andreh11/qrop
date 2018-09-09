@@ -1,4 +1,5 @@
 # Qrop 
+[![Build status](https://ci.appveyor.com/api/projects/status/2ahklhb90tpoib26?svg=true)](https://ci.appveyor.com/project/John83182/qrop)
 
 A crop planning and recordkeeping free software Available on GNU/Linux, Windows and Mac.
 

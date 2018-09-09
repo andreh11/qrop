@@ -27,17 +27,18 @@ environment:
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
   - call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
+  - cd /D "%APPVEYOR_BUILD_FOLDER%"
 
 build_script:
   - cd C:\projects\qrop
-  - qmake qrop.pro PREFIX="%DEPLOY_DIR%"
+  - qmake -config release qrop.pro PREFIX="%DEPLOY_DIR%"
   - nmake.exe
 
 after_build:
   - nmake install
-  - windeployqt --release --qmldir desktop/qml "%DEPLOY_DIR%\qrop.exe"   
-  - 7z a qrop.zip "%DEPLOY_DIR%" 
+  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"  
+  - 7z a "qrop%version%-%name.zip" "desktop\%DEPLOY_DIR%" 
 
 artifacts:
-  - path: qrop.zip
+  - path: "qrop-%version%-%name.zip" 
     name: portable
