@@ -20,10 +20,12 @@
 #include <memory>
 #include <vector>
 
+#include "core_global.h"
+
 class QSqlDatabase;
 class Location;
 
-class LocationDao
+class CORESHARED_EXPORT LocationDao
 {
 public:
     LocationDao(QSqlDatabase& database);

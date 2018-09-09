@@ -15,6 +15,8 @@
  */
 
 #include <QSqlRecord>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <QDebug>
 
 #include "sqltablemodel.h"
@@ -38,6 +40,26 @@ QVariant SqlTableModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
+int SqlTableModel::fieldColumn(const QString &field) const
+{
+    return m_rolesIndexes[field];
+}
+
+QSqlRecord SqlTableModel::recordFromId(int id, QString tableName, QString idFieldName) const
+{
+    QSqlQuery query;
+    query.prepare("SELECT * FROM :table where :field = :id");
+    query.bindValue(":table", tableName);
+    query.bindValue(":field", idFieldName);
+    query.bindValue(":id", id);
+    query.exec();
+
+    if (query.next())
+        return query.record();
+    else
+        return record();
+}
+
 QHash<int, QByteArray> SqlTableModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -48,26 +70,33 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
     return roles;
 }
 
-void SqlTableModel::setTable(const QString &tableName)
-{
-    QSqlTableModel::setTable(tableName);
-    buildRolesIndexes();
-}
-
+// order must be "ascending" or "descending"
 void SqlTableModel::setSortColumn(const QString fieldName, const QString order)
 {
     if (!m_rolesIndexes.contains(fieldName)) {
         qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
         return;
     }
-    qDebug() << "New sort column: " << fieldName << m_rolesIndexes[fieldName];
-    setSort(m_rolesIndexes[fieldName], order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    setSort(m_rolesIndexes[fieldName],
+            order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
 }
 
-int SqlTableModel::fieldColumn(const QString &field) const
+void SqlTableModel::setTable(const QString &tableName)
 {
-    return m_rolesIndexes[field];
+    QSqlTableModel::setTable(tableName);
+    buildRolesIndexes();
+    select();
+}
+
+bool SqlTableModel::submitAll()
+{
+   bool ok = QSqlTableModel::submitAll();
+   if (!ok)
+       qFatal("Cannot submit pending changes to database: %s",
+              qPrintable(lastError().text()));
+
+   return ok;
 }
 
 void SqlTableModel::buildRolesIndexes()

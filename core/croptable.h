@@ -19,9 +19,10 @@
 
 #include <QObject>
 
+#include "core_global.h"
 #include "sqltablemodel.h"
 
-class CropTable : public SqlTableModel
+class CORESHARED_EXPORT CropTable : public SqlTableModel
 {
 public:
     CropTable(QObject *parent = nullptr);

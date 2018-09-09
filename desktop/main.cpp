@@ -6,8 +6,9 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 #include <QIcon>
+#include <QHash>
 
-#include "sqlplantingmodel.h"
+#include "plantingtable.h"
 #include "sqltaskmodel.h"
 #include "sqlnotemodel.h"
 
@@ -54,11 +55,21 @@ int main(int argc, char *argv[])
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1)
         qWarning() << "Some custom fonts can't be loaded.";
 
-    qmlRegisterType<SqlPlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
+    qmlRegisterType<PlantingTable>("io.croplan.components", 1, 0, "SqlPlantingModel");
     qmlRegisterType<SqlTaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
     qmlRegisterType<SqlNoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
 
     connectToDatabase();
+
+//    PlantingTable plantingTable;
+//    QHash<QString, QVariant> hash;
+//    hash["variety_id"] = 4;
+//    hash["crop"] = "TEST";
+//    hash["seeding_date"] = "2018-05-13";
+//    hash["transplanting_date"] = "2018-06-13";
+//    hash["beg_harvest_date"] = "2018-06-20";
+//    hash["end_harvest_date"] = "2018-06-30";
+//    plantingTable.add(hash);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

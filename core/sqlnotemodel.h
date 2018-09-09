@@ -4,7 +4,9 @@
 #include <QSqlTableModel>
 #include <QDate>
 
-class SqlNoteModel : public QSqlTableModel
+#include "core_global.h"
+
+class CORESHARED_EXPORT SqlNoteModel : public QSqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)

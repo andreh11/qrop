@@ -4,13 +4,15 @@
 #include <QSqlTableModel>
 #include <QDate>
 
-class SqlTaskModel : public QSqlTableModel
+#include "core_global.h"
+
+class CORESHARED_EXPORT SqlTaskModel : public QSqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
 
 public:
-    SqlTaskModel(QObject *parent = 0);
+    SqlTaskModel(QObject *parent = nullptr);
 
     QDate date() const;
     void setDate(const QDate &date);

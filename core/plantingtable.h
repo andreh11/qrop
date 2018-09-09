@@ -17,28 +17,33 @@
 #ifndef SQLPLANTINGMODEL_H
 #define SQLPLANTINGMODEL_H
 
+#include "core_global.h"
 #include "sqltablemodel.h"
 
-class SqlPlantingModel : public SqlTableModel
+class CORESHARED_EXPORT PlantingTable : public SqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QString crop READ crop WRITE setCrop NOTIFY cropChanged)
 
 public:
-    SqlPlantingModel(QObject *parent = nullptr);
+    PlantingTable(QObject *parent = nullptr);
 
     QString crop() const;
     void setCrop(const QString &crop);
 
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
+    void add(QHash<QString, QVariant> val);
 
 signals:
     void cropChanged();
 
+protected slots:
+    void createTasks(int id);
+
 private:
     QString m_crop;
-    QHash<QString, int> m_rolesIndexes;
     QHash<QModelIndex, bool> m_selected;
+
 };
 
 #endif // SQLPLANTINGMODEL_H

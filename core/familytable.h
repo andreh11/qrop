@@ -3,12 +3,14 @@
 
 #include <QObject>
 
+#include "core_global.h"
 #include "sqltablemodel.h"
 
-class FamilyTable : public SqlTableModel
+class CORESHARED_EXPORT FamilyTable : public SqlTableModel
 {
 public:
     FamilyTable(QObject *parent = nullptr);
+    void add(const QString &name, const QString &color);
 };
 
 #endif // FAMILYTABLE_H

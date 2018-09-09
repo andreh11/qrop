@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sqlplantingmodel.h"
+#include "plantingtable.h"
 
 #include <QSqlRecord>
 #include <QDebug>
@@ -24,23 +24,38 @@
 
 static const char *plantingTableName = "planting";
 
-SqlPlantingModel::SqlPlantingModel(QObject *parent)
+PlantingTable::PlantingTable(QObject *parent)
     : SqlTableModel(parent)
 {
 
+//    connect(this, SIGNAL(primeInsert(int, QSqlRecord&)),
+//            this, SLOT(createTasks(int, QSqlRecord&)));
     setTable(plantingTableName);
-    for (int i = 0; i < this->record().count(); i++) {
-        m_rolesIndexes.insert(record().fieldName(i).toUtf8(), i);
-    }
-
-//    setSort(1, Qt::AscendingOrder);
     setSortColumn("seeding_date", "ascending");
-    setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
-
 }
 
-QVariant SqlPlantingModel::data(const QModelIndex &index, int role) const
+// IMPLEMENT THIS!!
+void PlantingTable::add(QHash<QString, QVariant> hash)
+{
+    QSqlRecord rec = record();
+    foreach (const QString key, hash.keys())
+        if (key != "planting_date")
+            rec.setValue(key, hash.value(key));
+    insertRecord(-1, rec);
+    submitAll();
+
+    int id = query().lastInsertId().toInt();
+    createTasks(id);
+}
+
+// Might not be needed...
+void PlantingTable::createTasks(int id)
+{
+    qDebug() << "New planting_id: " << id;
+}
+
+QVariant PlantingTable::data(const QModelIndex &index, int role) const
 {
     QVariant value;
 
@@ -55,12 +70,12 @@ QVariant SqlPlantingModel::data(const QModelIndex &index, int role) const
         return value;
 }
 
-QString SqlPlantingModel::crop() const
+QString PlantingTable::crop() const
 {
     return m_crop;
 }
 
-void SqlPlantingModel::setCrop(const QString &crop)
+void PlantingTable::setCrop(const QString &crop)
 {
    if (crop == m_crop)
        return;

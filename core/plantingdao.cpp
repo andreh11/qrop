@@ -68,12 +68,14 @@ void PlantingDao::addPlanting(Planting& planting) const
 
 void PlantingDao::updatePlanting(const Planting& planting) const
 {
+    Q_UNUSED(planting)
     QSqlQuery query(mDatabase);
     DatabaseManager::debugQuery(query);
 }
 
 void PlantingDao::removePlanting(int id) const
 {
+    Q_UNUSED(id)
     QSqlQuery query(mDatabase);
     DatabaseManager::debugQuery(query);
 }

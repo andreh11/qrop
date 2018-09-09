@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "core_global.h"
+
 class QSqlDatabase;
 class Planting;
 class Location;
