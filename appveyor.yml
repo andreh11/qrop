@@ -1,5 +1,4 @@
 version: 0.1_b{build}
-image: Visual Studio 2017
 configuration: Release
 
 branches:
@@ -7,16 +6,19 @@ branches:
     - master
 
 environment:
+  DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
   matrix:
     # MSVC x86
     - name: win32
+      image: Visual Studio 2015
       platform: amd64_x86
-      qt: 5.11\mingw53_32
+      qt: 5.11\msvc2015
       suffix: msvc2017
       arch: x86
 
     # MSVC x64
     - name: win64
+      image: Visual Studio 2017
       platform: amd64
       qt: 5.11\msvc2017_64
       suffix: msvc2017
@@ -28,8 +30,7 @@ init:
 
 build_script:
   - cd C:\projects\qrop
-  - qmake -v
-  - qmake qrop.pro
+  - qmake qrop.pro PREFIX="%DEPLOY_DIR%"
   - nmake.exe
 
 after_build:
