@@ -31,3 +31,12 @@ build_script:
   - qmake -v
   - qmake qrop.pro
   - nmake.exe
+
+after_build:
+  - nmake install
+  - windeployqt --release --qmldir desktop/qml "%DEPLOY_DIR%\qrop.exe"   
+  - 7z a qrop.zip "%DEPLOY_DIR%" 
+
+artifacts:
+  - path: qrop.zip
+    name: portable

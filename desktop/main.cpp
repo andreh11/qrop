@@ -13,6 +13,7 @@
 #include "taskmodel.h"
 #include "notemodel.h"
 
+// TODO: move this to core
 static void connectToDatabase()
 {
     QSqlDatabase database = QSqlDatabase::database();
@@ -29,15 +30,15 @@ static void connectToDatabase()
                qPrintable(writeDir.absolutePath()));
 
     // Ensure that we have a writable location on all devices.
-    //const QString fileName = writeDir.absolutePath() + "/croplan.sqlite3";
-    const QString fileName = "/home/ah/.logimaraich/db.sqlite";
+    const QString fileName = writeDir.absolutePath() + "/qrop.db";
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
+    qDebug() << fileName;
     database.setDatabaseName(fileName);
     if (!database.open()) {
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
-    qInfo("database open!");
+    qInfo("database opened!");
 }
 
 int main(int argc, char *argv[])
@@ -61,17 +62,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
 
     connectToDatabase();
-
-    PlantingModel plantingTable;
-    QVariantMap hash;
-    hash["variety_id"] = 4;
-    hash["crop"] = "TOMATO";
-    hash["variety"] = "Cindel F1";
-    hash["seeding_date"] = "2018-05-13";
-    hash["transplanting_date"] = "2018-06-13";
-    hash["beg_harvest_date"] = "2018-06-20";
-    hash["end_harvest_date"] = "2018-06-30";
-    plantingTable.add(hash);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
