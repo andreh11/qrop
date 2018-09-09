@@ -12,20 +12,20 @@ CREATE TABLE IF NOT EXISTS crop (
 );
 
 CREATE TABLE IF NOT EXISTS variety (
-    variety_id    INTEGER PRIMARY KEY AUTOINCREMENT,
-    variety          TEXT NOT NULL,
-    crop_id       INTEGER REFERENCES crop(crop_id),
+    variety_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    variety         TEXT NOT NULL,
+    crop_id         INTEGER REFERENCES crop(crop_id),
     seed_company_id INTEGER REFERENCES seed_company(seed_company_id)
 );
 
 CREATE TABLE IF NOT EXISTS seed_company (
     seed_company_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    seed_company TEXT UNIQUE NOT NULL
+    seed_company    TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS unit (
-    unit_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    unit TEXT UNIQUE NOT NULL,
+    unit_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    unit TEXT       UNIQUE NOT NULL,
     conversion_rate FLOAT -- from unit to kilogram
 );
 
@@ -74,59 +74,59 @@ CREATE TABLE IF NOT EXISTS planting (
 );
 
 CREATE TABLE IF NOT EXISTS harvest (
-    harvest_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date       TEXT NOT NULL,
-    time       TEXT NOT NULL,
-    quantity   FLOAT NOT NULL,
-    planting_id INTEGER NOT NULL REFERENCES planting(planting_id)
+    harvest_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    date         TEXT NOT NULL,
+    time         TEXT NOT NULL,
+    quantity     FLOAT NOT NULL,
+    planting_id  INTEGER NOT NULL REFERENCES planting(planting_id)
 );
 
 CREATE TABLE IF NOT EXISTS location (
     location_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    bed_length INTEGER, -- meter
-    bed_width INTEGER, -- centimeter
-    path_width INTEGER, -- centimeter
-    surface INTEGER, -- square meter
-    parent_id INTEGER NOT NULL REFERENCES location(location_id)
+    name        TEXT NOT NULL,
+    bed_length  INTEGER, -- meter
+    bed_width   INTEGER, -- centimeter
+    path_width  INTEGER, -- centimeter
+    surface     INTEGER, -- square meter
+    parent_id   INTEGER NOT NULL REFERENCES location(location_id)
 );
 
 CREATE TABLE IF NOT EXISTS role (
     role_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role TEXT NOT NULL
+    role    TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email TEXT,
+    last_name  TEXT NOT NULL,
+    email      TEXT,
     labor_rate FLOAT,
-    role_id INTEGER NOT NULL REFERENCES role(role_id)
+    role_id    INTEGER NOT NULL REFERENCES role(role_id)
 );
 
 
 CREATE TABLE IF NOT EXISTS task_template (
     task_template_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name             TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS task (
-    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    assigned_date TEXT,
-    completed_date TEXT,
-    duration INTEGER, -- days
-    labor_time TEXT, -- HH:MM
-    description TEXT,
-    task_type_id INTEGER NOT NULL REFERENCES task_type(task_type_id),
-    task_method_id INTEGER NOT NULL REFERENCES task_method(task_method_id),
-    task_implement_id INTEGER NOT NULL REFERENCES task_implement(task_implement_id),
-    link_task_id INTEGER REFERENCES task(task_id),
-    template_days INTEGER, -- If negative, days before linked task. Otherwise,
-                           -- days after. 0 : same day.
+    task_id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    assigned_date      TEXT,
+    completed_date     TEXT,
+    duration           INTEGER, -- days
+    labor_time         TEXT, -- HH:MM
+    description        TEXT,
+    task_type_id       INTEGER NOT NULL REFERENCES task_type(task_type_id),
+    task_method_id     INTEGER NOT NULL REFERENCES task_method(task_method_id),
+    task_implement_id  INTEGER NOT NULL REFERENCES task_implement(task_implement_id),
+    link_task_id       INTEGER REFERENCES task(task_id),
+    template_days      INTEGER, -- If negative, days before linked task. Otherwise,
+                                -- days after. 0 : same day.
     template_date_type INTEGER, -- 0: Field sowing/planting, 1: GH start date,
                                 -- 2: first harvest, 3: last harvest
-    task_template_id INTEGER REFERENCES task_template(task_template_id)
+    task_template_id   INTEGER REFERENCES task_template(task_template_id)
 );
 
 CREATE TABLE IF NOT EXISTS task_type (
@@ -221,6 +221,6 @@ CREATE TABLE IF NOT EXISTS note_file (
 
 CREATE TABLE IF NOT EXISTS expense_file (
     expense_id   INTEGER NOT NULL REFERENCES expense,
-    file_id   INTEGER NOT NULL REFERENCES file,
+    file_id      INTEGER NOT NULL REFERENCES file,
     PRIMARY KEY (expense_id, file_id)
 );
