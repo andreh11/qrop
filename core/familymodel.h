@@ -10,7 +10,6 @@ class CORESHARED_EXPORT FamilyModel : public SqlTableModel
 {
 public:
     FamilyModel(QObject *parent = nullptr);
-    void add(const QString &name, const QString &color);
 };
 
 #endif // FAMILYTABLE_H

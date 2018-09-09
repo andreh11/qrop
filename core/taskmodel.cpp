@@ -19,6 +19,14 @@ TaskModel::TaskModel(QObject *parent)
     select();
 }
 
+// Might not be needed...
+void TaskModel::createTasks(int cropId)
+{
+    qDebug() << "[TaskModel] Creating tasks for crop: " << cropId;
+    // Compute dates
+    // Link 'em all to GH/field sowing date
+}
+
 QDate TaskModel::date() const
 {
     return m_filterDate;

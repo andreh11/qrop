@@ -16,6 +16,7 @@ public:
 
     QDate date() const;
     void setFilterDate(const QDate &date);
+    static void createTasks(int cropId);
 
 signals:
     void dateChanged();

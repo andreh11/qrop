@@ -14,13 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "plantingmodel.h"
-
 #include <QSqlRecord>
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDate>
+
+#include "plantingmodel.h"
+#include "taskmodel.h"
 
 static const char *plantingTableName = "planting";
 
@@ -28,14 +29,11 @@ PlantingModel::PlantingModel(QObject *parent)
     : SqlTableModel(parent)
 {
 
-//    connect(this, SIGNAL(primeInsert(int, QSqlRecord&)),
-//            this, SLOT(createTasks(int, QSqlRecord&)));
     setTable(plantingTableName);
     setSortColumn("seeding_date", "ascending");
     select();
 }
 
-// IMPLEMENT THIS!!
 void PlantingModel::add(QVariantMap map)
 {
     qDebug() << "Adding" << map;
@@ -47,14 +45,9 @@ void PlantingModel::add(QVariantMap map)
     submitAll();
 
     int id = query().lastInsertId().toInt();
-    createTasks(id);
+    TaskModel::createTasks(id);
 }
 
-// Might not be needed...
-void PlantingModel::createTasks(int id)
-{
-    qDebug() << "New planting_id: " << id;
-}
 
 QVariant PlantingModel::data(const QModelIndex &index, int role) const
 {

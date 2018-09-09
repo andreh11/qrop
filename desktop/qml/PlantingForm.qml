@@ -14,8 +14,7 @@ Flickable {
     property bool transplantBought: boughtRadio.checked
 
     property variant values:  {
-        "crop" : cropField.text,
-        "variety" : varietyField.text
+        "variety_id" : 12
     }
 
     function updateDateField(from, length, to, direction) {

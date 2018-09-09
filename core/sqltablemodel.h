@@ -32,6 +32,7 @@ class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 public:
     SqlTableModel(QObject *parent = nullptr);
 
+    Q_INVOKABLE int add(QVariantMap map);
     bool insertRecord(int row, const QSqlRecord &record);
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
     int fieldColumn(const QString &field) const;

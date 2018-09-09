@@ -37,6 +37,19 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
     return ok;
 }
 
+// return last inserted rowid
+int SqlTableModel::add(QVariantMap map)
+{
+    QSqlRecord rec = record();
+    foreach (const QString key, map.keys())
+            rec.setValue(key, map.value(key));
+    insertRecord(-1, rec);
+    submitAll();
+
+    int id = query().lastInsertId().toInt();
+    return id;
+}
+
 QVariant SqlTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;

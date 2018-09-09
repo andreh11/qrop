@@ -14,13 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlRecord>
+#ifndef VARIETYMODEL_H
+#define VARIETYMODEL_H
 
+#include <QObject>
+
+#include "core_global.h"
 #include "sqltablemodel.h"
-#include "familymodel.h"
 
-FamilyModel::FamilyModel(QObject *parent)
-    : SqlTableModel(parent)
+class CORESHARED_EXPORT VarietyModel : public SqlTableModel
 {
-    setTable("family");
-}
+    Q_OBJECT
+public:
+    explicit VarietyModel(QObject *parent = nullptr);
+};
+
+#endif // VARIETYMODEL_H

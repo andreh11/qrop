@@ -15,7 +15,8 @@ SOURCES += \
     locationmodel.cpp \
     plantingmodel.cpp \
     cropmodel.cpp \
-    familymodel.cpp
+    familymodel.cpp \
+    varietymodel.cpp
 
 
 HEADERS += \
@@ -28,4 +29,5 @@ HEADERS += \
     locationmodel.h \
     plantingmodel.h \
     cropmodel.h \
-    familymodel.h
+    familymodel.h \
+    varietymodel.h

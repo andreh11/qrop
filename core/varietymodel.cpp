@@ -14,13 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlRecord>
+#include "varietymodel.h"
 
-#include "sqltablemodel.h"
-#include "familymodel.h"
-
-FamilyModel::FamilyModel(QObject *parent)
-    : SqlTableModel(parent)
+VarietyModel::VarietyModel(QObject *parent) :
+    SqlTableModel(parent)
 {
-    setTable("family");
+    setTable("variety");
+
+    int cropColumn = fieldColumn("crop_id");
+    setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
+
+    int seedCompanyColumn = fieldColumn("seed_company_id");
+    setRelation(seedCompanyColumn, QSqlRelation("seed_company",
+                                                "seed_company_id",
+                                                "seed_company"));
 }

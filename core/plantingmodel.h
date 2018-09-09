@@ -39,8 +39,6 @@ public:
 signals:
     void cropChanged();
 
-protected slots:
-    void createTasks(int id);
 
 private:
     QString m_crop;

@@ -22,5 +22,5 @@ CropModel::CropModel(QObject *parent)
     setTable("crop");
 
     int familyColumn = fieldColumn("family_id");
-    setRelation(familyColumn, QSqlRelation("family", "id", "name"));
+    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
 }
