@@ -9,22 +9,19 @@
 class CORESHARED_EXPORT TaskModel : public QSqlTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
+    Q_PROPERTY(QDate date READ date WRITE setFilterDate NOTIFY dateChanged)
 
 public:
     TaskModel(QObject *parent = nullptr);
 
     QDate date() const;
-    void setDate(const QDate &date);
-
-    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+    void setFilterDate(const QDate &date);
 
 signals:
     void dateChanged();
 
 private:
-    QDate m_date;
+    QDate m_filterDate;
 };
 
 #endif // SQLPLANTINGMODEL_H
