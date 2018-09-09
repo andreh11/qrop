@@ -36,12 +36,13 @@ PlantingTable::PlantingTable(QObject *parent)
 }
 
 // IMPLEMENT THIS!!
-void PlantingTable::add(QHash<QString, QVariant> hash)
+void PlantingTable::add(QVariantMap map)
 {
+    qDebug() << "Adding" << map;
     QSqlRecord rec = record();
-    foreach (const QString key, hash.keys())
+    foreach (const QString key, map.keys())
         if (key != "planting_date")
-            rec.setValue(key, hash.value(key));
+            rec.setValue(key, map.value(key));
     insertRecord(-1, rec);
     submitAll();
 

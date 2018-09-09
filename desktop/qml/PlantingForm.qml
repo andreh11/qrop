@@ -13,6 +13,11 @@ Flickable {
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
 
+    property variant values:  {
+        "crop" : cropField.text,
+        "variety" : varietyField.text
+    }
+
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
             to.calendarDate = from.calendarDate;

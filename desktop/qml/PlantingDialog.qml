@@ -11,19 +11,21 @@ Dialog {
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
 
+    property var model
     property string mode: "add"
     property string plantingIds: ""
 
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
-
 
     ScrollView {
         anchors.fill: parent
         clip: true
 
         PlantingForm {
-
+            id: plantingForm
         }
     }
+
+    onAccepted: model.add(plantingForm.values)
 }
 

@@ -32,6 +32,7 @@ Page {
     property int currentYear: 2018
     property int rowHeight: 37
     property int monthWidth: 60
+    property alias model: listView.model
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
@@ -77,6 +78,7 @@ Page {
         width: parent.width / 2
         height: parent.height
         x: (parent.width - width) / 2
+        model: listView.model
     }
 
     //    Pane {

@@ -17,6 +17,8 @@
 #ifndef SQLPLANTINGMODEL_H
 #define SQLPLANTINGMODEL_H
 
+#include <QVariantMap>
+
 #include "core_global.h"
 #include "sqltablemodel.h"
 
@@ -32,7 +34,7 @@ public:
     void setCrop(const QString &crop);
 
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    void add(QHash<QString, QVariant> val);
+    Q_INVOKABLE void add(QVariantMap map);
 
 signals:
     void cropChanged();

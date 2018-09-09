@@ -32,6 +32,7 @@ class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 public:
     SqlTableModel(QObject *parent = nullptr);
 
+    bool insertRecord(int row, const QSqlRecord &record);
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
     int fieldColumn(const QString &field) const;
     QSqlRecord recordFromId(int id, QString tableName, QString idColumnName) const;

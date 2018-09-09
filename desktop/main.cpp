@@ -7,6 +7,7 @@
 #include <QtQml>
 #include <QIcon>
 #include <QHash>
+#include <QVariantMap>
 
 #include "plantingtable.h"
 #include "sqltaskmodel.h"
@@ -61,15 +62,16 @@ int main(int argc, char *argv[])
 
     connectToDatabase();
 
-//    PlantingTable plantingTable;
-//    QHash<QString, QVariant> hash;
-//    hash["variety_id"] = 4;
-//    hash["crop"] = "TEST";
-//    hash["seeding_date"] = "2018-05-13";
-//    hash["transplanting_date"] = "2018-06-13";
-//    hash["beg_harvest_date"] = "2018-06-20";
-//    hash["end_harvest_date"] = "2018-06-30";
-//    plantingTable.add(hash);
+    PlantingTable plantingTable;
+    QVariantMap hash;
+    hash["variety_id"] = 4;
+    hash["crop"] = "TOMATO";
+    hash["variety"] = "Cindel F1";
+    hash["seeding_date"] = "2018-05-13";
+    hash["transplanting_date"] = "2018-06-13";
+    hash["beg_harvest_date"] = "2018-06-20";
+    hash["end_harvest_date"] = "2018-06-30";
+    plantingTable.add(hash);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

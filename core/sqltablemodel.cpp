@@ -27,6 +27,16 @@ SqlTableModel::SqlTableModel(QObject *parent)
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
+
+bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
+{
+    bool ok = QSqlTableModel::insertRecord(row, record);
+    if (!ok)
+        qDebug() << "Couldn't insert record" << record << "in database:"
+                 << query().lastError().text();
+    return ok;
+}
+
 QVariant SqlTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
