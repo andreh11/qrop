@@ -6,13 +6,13 @@
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT SqlTaskModel : public QSqlTableModel
+class CORESHARED_EXPORT TaskModel : public QSqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
 
 public:
-    SqlTaskModel(QObject *parent = nullptr);
+    TaskModel(QObject *parent = nullptr);
 
     QDate date() const;
     void setDate(const QDate &date);

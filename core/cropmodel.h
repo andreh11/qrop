@@ -14,14 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "croptable.h"
+#ifndef CROPTABLE_H
+#define CROPTABLE_H
 
-CropTable::CropTable(QObject *parent)
-    : SqlTableModel(parent)
+#include <QObject>
+
+#include "core_global.h"
+#include "sqltablemodel.h"
+
+class CORESHARED_EXPORT CropModel : public SqlTableModel
 {
-    setTable("crop");
+public:
+    CropModel(QObject *parent = nullptr);
+};
 
-    int familyColumn = fieldColumn("family_id");
-
-    setRelation(familyColumn, QSqlRelation("family", "id", "name"));
-}
+#endif // CROPTABLE_H

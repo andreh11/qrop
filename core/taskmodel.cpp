@@ -1,4 +1,4 @@
-#include "sqltaskmodel.h"
+#include "taskmodel.h"
 
 #include <QSqlRecord>
 #include <QDebug>
@@ -7,7 +7,7 @@
 
 static const char *taskTableName = "tasks_view";
 
-SqlTaskModel::SqlTaskModel(QObject *parent)
+TaskModel::TaskModel(QObject *parent)
     : QSqlTableModel(parent)
 {
     m_date = QDate();
@@ -20,12 +20,12 @@ SqlTaskModel::SqlTaskModel(QObject *parent)
     qInfo("%d", rowCount());
 }
 
-QDate SqlTaskModel::date() const
+QDate TaskModel::date() const
 {
     return m_date;
 }
 
-void SqlTaskModel::setDate(const QDate &date)
+void TaskModel::setDate(const QDate &date)
 {
     if (date == m_date)
         return;
@@ -41,7 +41,7 @@ void SqlTaskModel::setDate(const QDate &date)
     emit dateChanged();
 }
 
-QVariant SqlTaskModel::data(const QModelIndex &index, int role) const
+QVariant TaskModel::data(const QModelIndex &index, int role) const
 {
     if (role < Qt::UserRole)
         return QSqlTableModel::data(index, role);
@@ -50,7 +50,7 @@ QVariant SqlTaskModel::data(const QModelIndex &index, int role) const
     return sqlRecord.value(role - Qt::UserRole);
 }
 
-QHash<int, QByteArray> SqlTaskModel::roleNames() const
+QHash<int, QByteArray> TaskModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
 

@@ -6,13 +6,13 @@
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT SqlNoteModel : public QSqlTableModel
+class CORESHARED_EXPORT NoteModel : public QSqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
 
 public:
-    SqlNoteModel(QObject *parent = 0);
+    NoteModel(QObject *parent = 0);
 
     QDate date() const;
     void setDate(const QDate &date);

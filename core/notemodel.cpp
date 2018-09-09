@@ -1,4 +1,4 @@
-#include "sqlnotemodel.h"
+#include "notemodel.h"
 
 #include <QDebug>
 #include <QSqlRecord>
@@ -7,7 +7,7 @@
 
 static const char *noteTableName = "comment";
 
-SqlNoteModel::SqlNoteModel(QObject *parent)
+NoteModel::NoteModel(QObject *parent)
     : QSqlTableModel(parent)
 {
     m_date = QDate();
@@ -18,12 +18,12 @@ SqlNoteModel::SqlNoteModel(QObject *parent)
     select();
 }
 
-QDate SqlNoteModel::date() const
+QDate NoteModel::date() const
 {
     return m_date;
 }
 
-void SqlNoteModel::setDate(const QDate &date)
+void NoteModel::setDate(const QDate &date)
 {
     if (date == m_date)
         return;
@@ -39,7 +39,7 @@ void SqlNoteModel::setDate(const QDate &date)
     emit dateChanged();
 }
 
-QVariant SqlNoteModel::data(const QModelIndex &index, int role) const
+QVariant NoteModel::data(const QModelIndex &index, int role) const
 {
     if (role < Qt::UserRole)
         return QSqlTableModel::data(index, role);
@@ -48,7 +48,7 @@ QVariant SqlNoteModel::data(const QModelIndex &index, int role) const
     return sqlRecord.value(role - Qt::UserRole);
 }
 
-QHash<int, QByteArray> SqlNoteModel::roleNames() const
+QHash<int, QByteArray> NoteModel::roleNames() const
 {
     QHash<int, QByteArray> names;
     names[Qt::UserRole] = "comment_id";
@@ -58,7 +58,7 @@ QHash<int, QByteArray> SqlNoteModel::roleNames() const
     return names;
 }
 
-void SqlNoteModel::addNote(const QString &content, const QDate &date)
+void NoteModel::addNote(const QString &content, const QDate &date)
 {
     QSqlRecord newRecord = record();
     newRecord.setValue("text", content);

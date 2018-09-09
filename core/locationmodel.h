@@ -14,38 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SQLPLANTINGMODEL_H
-#define SQLPLANTINGMODEL_H
+#ifndef LOCATIONMODEL_H
+#define LOCATIONMODEL_H
 
-#include <QVariantMap>
+#include <QObject>
 
 #include "core_global.h"
 #include "sqltablemodel.h"
 
-class CORESHARED_EXPORT PlantingTable : public SqlTableModel
+class CORESHARED_EXPORT LocationModel : public SqlTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString crop READ crop WRITE setCrop NOTIFY cropChanged)
-
 public:
-    PlantingTable(QObject *parent = nullptr);
-
-    QString crop() const;
-    void setCrop(const QString &crop);
-
-    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    Q_INVOKABLE void add(QVariantMap map);
-
-signals:
-    void cropChanged();
-
-protected slots:
-    void createTasks(int id);
-
-private:
-    QString m_crop;
-    QHash<QModelIndex, bool> m_selected;
-
+    explicit LocationModel(QObject *parent = nullptr);
 };
 
-#endif // SQLPLANTINGMODEL_H
+#endif // LOCATIONMODEL_H

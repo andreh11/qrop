@@ -6,10 +6,10 @@
 #include "core_global.h"
 #include "sqltablemodel.h"
 
-class CORESHARED_EXPORT FamilyTable : public SqlTableModel
+class CORESHARED_EXPORT FamilyModel : public SqlTableModel
 {
 public:
-    FamilyTable(QObject *parent = nullptr);
+    FamilyModel(QObject *parent = nullptr);
     void add(const QString &name, const QString &color);
 };
 

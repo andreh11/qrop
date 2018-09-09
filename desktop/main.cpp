@@ -9,9 +9,9 @@
 #include <QHash>
 #include <QVariantMap>
 
-#include "plantingtable.h"
-#include "sqltaskmodel.h"
-#include "sqlnotemodel.h"
+#include "plantingmodel.h"
+#include "taskmodel.h"
+#include "notemodel.h"
 
 static void connectToDatabase()
 {
@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1)
         qWarning() << "Some custom fonts can't be loaded.";
 
-    qmlRegisterType<PlantingTable>("io.croplan.components", 1, 0, "SqlPlantingModel");
-    qmlRegisterType<SqlTaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
-    qmlRegisterType<SqlNoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
+    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
+    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
+    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
 
     connectToDatabase();
 
-    PlantingTable plantingTable;
+    PlantingModel plantingTable;
     QVariantMap hash;
     hash["variety_id"] = 4;
     hash["crop"] = "TOMATO";

@@ -14,44 +14,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLANTINGMODEL_H
-#define PLANTINGMODEL_H
+#ifndef SQLPLANTINGMODEL_H
+#define SQLPLANTINGMODEL_H
 
-#include <vector>
-#include <memory>
-
-#include <QAbstractListModel>
-#include <QByteArray>
+#include <QVariantMap>
 
 #include "core_global.h"
-#include "planting.h"
-#include "databasemanager.h"
+#include "sqltablemodel.h"
 
-class CORESHARED_EXPORT PlantingModel : public QAbstractListModel
+class CORESHARED_EXPORT PlantingModel : public SqlTableModel
 {
     Q_OBJECT
-public:
-    enum Roles {
-        IdRole = Qt::UserRole + 1,
-        CropRole,
-        VarietyRole
-    };
+    Q_PROPERTY(QString crop READ crop WRITE setCrop NOTIFY cropChanged)
 
+public:
     PlantingModel(QObject *parent = nullptr);
 
-    QModelIndex addPlanting(const Planting& planting);
+    QString crop() const;
+    void setCrop(const QString &crop);
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Q_INVOKABLE bool removeRows(int row, int count,
-                                const QModelIndex& parent = QModelIndex()) override;
-    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
+    Q_INVOKABLE void add(QVariantMap map);
+
+signals:
+    void cropChanged();
+
+protected slots:
+    void createTasks(int id);
 
 private:
-    bool isIndexValid(const QModelIndex& index) const;
-    DatabaseManager& mDatabase;
-    std::unique_ptr<std::vector<std::unique_ptr<Planting>>> mPlantings;
+    QString m_crop;
+    QHash<QModelIndex, bool> m_selected;
+
 };
 
-#endif // PLANTINGMODEL_H
+#endif // SQLPLANTINGMODEL_H
