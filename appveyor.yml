@@ -10,6 +10,7 @@ environment:
   matrix:
     # MSVC x86
     - name: win32
+      job: win32
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       platform: amd64_x86
       qt: 5.11\msvc2015
@@ -17,7 +18,8 @@ environment:
       arch: x86
 
     # MSVC x64
-    - name: win64
+    - name: amd64
+      job: amd64
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: amd64
       qt: 5.11\msvc2017_64
@@ -37,8 +39,8 @@ build_script:
 after_build:
   - nmake install
   - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"  
-  - 7z a "qrop%version%-%name.zip" "desktop\%DEPLOY_DIR%" 
+  - 7z a qrop-%name%.zip "desktop\%DEPLOY_DIR%" 
 
 artifacts:
-  - path: "qrop-%version%-%name.zip" 
+  - path: qrop-%name%.zip
     name: portable
