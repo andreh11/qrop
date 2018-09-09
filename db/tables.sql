@@ -1,26 +1,26 @@
 CREATE TABLE IF NOT EXISTS family (
     family_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name      TEXT NOT NULL,
+    family      TEXT NOT NULL,
     color     TEXT
 );
 
 CREATE TABLE IF NOT EXISTS crop (
     crop_id    INTEGER PRIMARY KEY AUTOINCREMENT,
-    name       TEXT NOT NULL,
+    crop       TEXT NOT NULL,
     color      TEXT,
     family_id INTEGER REFERENCES family(family_id)
 );
 
 CREATE TABLE IF NOT EXISTS variety (
     variety_id    INTEGER PRIMARY KEY AUTOINCREMENT,
-    name          TEXT NOT NULL,
+    variety          TEXT NOT NULL,
     crop_id       INTEGER REFERENCES crop(crop_id),
     seed_company_id INTEGER REFERENCES seed_company(seed_company_id)
 );
 
 CREATE TABLE IF NOT EXISTS seed_company (
     seed_company_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL
+    seed_company TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS unit (
@@ -39,6 +39,12 @@ CREATE TABLE IF NOT EXISTS note (
     note_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     content    TEXT NOT NULL,
     date       TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS file (
+    file_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+    filename   TEXT,
+    data       BLOB
 );
 
 CREATE TABLE IF NOT EXISTS planting (
@@ -99,16 +105,28 @@ CREATE TABLE IF NOT EXISTS user (
     role_id INTEGER NOT NULL REFERENCES role(role_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS task_template (
+    task_template_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS task (
     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    assigned_date TEXT NOT NULL,
+    assigned_date TEXT,
     completed_date TEXT,
     duration INTEGER, -- days
     labor_time TEXT, -- HH:MM
     description TEXT,
     task_type_id INTEGER NOT NULL REFERENCES task_type(task_type_id),
     task_method_id INTEGER NOT NULL REFERENCES task_method(task_method_id),
-    task_implement_id INTEGER NOT NULL REFERENCES task_implement(task_implement_id)
+    task_implement_id INTEGER NOT NULL REFERENCES task_implement(task_implement_id),
+    link_task_id INTEGER REFERENCES task(task_id),
+    template_days INTEGER, -- If negative, days before linked task. Otherwise,
+                           -- days after. 0 : same day.
+    template_date_type INTEGER, -- 0: Field sowing/planting, 1: GH start date,
+                                -- 2: first harvest, 3: last harvest
+    task_template_id INTEGER REFERENCES task_template(task_template_id)
 );
 
 CREATE TABLE IF NOT EXISTS task_type (
@@ -195,3 +213,14 @@ CREATE TABLE IF NOT EXISTS task_note (
     PRIMARY KEY (task_id, note_id)
 );
 
+CREATE TABLE IF NOT EXISTS note_file (
+    note_id   INTEGER NOT NULL REFERENCES note,
+    file_id   INTEGER NOT NULL REFERENCES file,
+    PRIMARY KEY (note_id, file_id)
+);
+
+CREATE TABLE IF NOT EXISTS expense_file (
+    expense_id   INTEGER NOT NULL REFERENCES expense,
+    file_id   INTEGER NOT NULL REFERENCES file,
+    PRIMARY KEY (expense_id, file_id)
+);
