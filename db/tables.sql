@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS task (
     task_method_id     INTEGER NOT NULL REFERENCES task_method(task_method_id),
     task_implement_id  INTEGER NOT NULL REFERENCES task_implement(task_implement_id),
     link_task_id       INTEGER REFERENCES task(task_id),
-    template_days      INTEGER, -- If negative, days before linked task. Otherwise,
+    link_days          INTEGER, -- If negative, days before linked task. Otherwise,
                                 -- days after. 0 : same day.
     template_date_type INTEGER, -- 0: Field sowing/planting, 1: GH start date,
                                 -- 2: first harvest, 3: last harvest

@@ -5,10 +5,10 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-static const char *noteTableName = "comment";
+static const char *noteTableName = "note";
 
 NoteModel::NoteModel(QObject *parent)
-    : QSqlTableModel(parent)
+    : SqlTableModel(parent)
 {
     m_date = QDate();
 
@@ -31,31 +31,11 @@ void NoteModel::setDate(const QDate &date)
     m_date = date;
 
     const QString filterString = QString::fromLatin1(
-                "date_assigned = %1").arg("2018-06-16");
-//                "date_assigned = %1").arg(date.toString(Qt.ISODate));
+                "date_assigned = %1").arg(date.toString(Qt::ISODate));
     setFilter(filterString);
     select();
 
     emit dateChanged();
-}
-
-QVariant NoteModel::data(const QModelIndex &index, int role) const
-{
-    if (role < Qt::UserRole)
-        return QSqlTableModel::data(index, role);
-
-    const QSqlRecord sqlRecord = record(index.row());
-    return sqlRecord.value(role - Qt::UserRole);
-}
-
-QHash<int, QByteArray> NoteModel::roleNames() const
-{
-    QHash<int, QByteArray> names;
-    names[Qt::UserRole] = "comment_id";
-    names[Qt::UserRole + 1] = "text";
-    names[Qt::UserRole + 2] = "date_modified";
-
-    return names;
 }
 
 void NoteModel::addNote(const QString &content, const QDate &date)

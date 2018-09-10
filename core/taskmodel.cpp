@@ -8,7 +8,7 @@
 static const char *taskTableName = "tasks_view";
 
 TaskModel::TaskModel(QObject *parent)
-    : QSqlTableModel(parent)
+    : SqlTableModel(parent)
 {
     m_filterDate = QDate();
 

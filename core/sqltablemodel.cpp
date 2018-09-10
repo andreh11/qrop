@@ -27,7 +27,6 @@ SqlTableModel::SqlTableModel(QObject *parent)
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
-
 bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 {
     bool ok = QSqlTableModel::insertRecord(row, record);
@@ -37,7 +36,7 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
     return ok;
 }
 
-// return last inserted rowid
+// Return last inserted rowid.
 int SqlTableModel::add(QVariantMap map)
 {
     QSqlRecord rec = record();

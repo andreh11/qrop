@@ -1,12 +1,12 @@
 #ifndef SQLTASKGMODEL_H
 #define SQLTASKMODEL_H
 
-#include <QSqlTableModel>
 #include <QDate>
 
 #include "core_global.h"
+#include "sqltablemodel.h"
 
-class CORESHARED_EXPORT TaskModel : public QSqlTableModel
+class CORESHARED_EXPORT TaskModel : public SqlTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setFilterDate NOTIFY dateChanged)

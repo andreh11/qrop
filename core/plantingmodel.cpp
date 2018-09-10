@@ -28,7 +28,6 @@ static const char *plantingTableName = "planting";
 PlantingModel::PlantingModel(QObject *parent)
     : SqlTableModel(parent)
 {
-
     setTable(plantingTableName);
     setSortColumn("seeding_date", "ascending");
     select();
@@ -48,16 +47,13 @@ void PlantingModel::add(QVariantMap map)
     TaskModel::createTasks(id);
 }
 
-
 QVariant PlantingModel::data(const QModelIndex &index, int role) const
 {
-    QVariant value;
-
     if (role < Qt::UserRole)
         return QSqlTableModel::data(index, role);
 
-    const QSqlRecord sqlRecord = record(index.row());
-    value = sqlRecord.value(role - Qt::UserRole);
+    const QSqlRecord rec = record(index.row());
+    QVariant value = rec.value(role - Qt::UserRole);
     if ((Qt::UserRole + 9 <= role) && (role <= Qt::UserRole + 12))
         return QDate::fromString(value.toString(), Qt::ISODate);
     else
@@ -69,7 +65,7 @@ QString PlantingModel::crop() const
     return m_crop;
 }
 
-void PlantingModel::setCrop(const QString &crop)
+void PlantingModel::setFilterCrop(const QString &crop)
 {
    if (crop == m_crop)
        return;
@@ -77,7 +73,7 @@ void PlantingModel::setCrop(const QString &crop)
    m_crop = crop;
 
     if (m_crop == "") {
-        qInfo("null!");
+        qInfo("[PlantingModel] null filter");
         setFilter("");
     } else {
         const QString filterString = QString::fromLatin1(
@@ -86,6 +82,5 @@ void PlantingModel::setCrop(const QString &crop)
     }
 
     select();
-
     emit cropChanged();
 }

@@ -14,36 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SQLPLANTINGMODEL_H
-#define SQLPLANTINGMODEL_H
+#ifndef UNITMODEL_H
+#define UNITMODEL_H
 
-#include <QVariantMap>
+#include <QObject>
 
 #include "core_global.h"
 #include "sqltablemodel.h"
 
-class CORESHARED_EXPORT PlantingModel : public SqlTableModel
+class CORESHARED_EXPORT UnitModel : public SqlTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString crop READ crop WRITE setFilterCrop NOTIFY cropChanged)
 
 public:
-    PlantingModel(QObject *parent = nullptr);
-
-    QString crop() const;
-    void setFilterCrop(const QString &crop);
-
-    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    Q_INVOKABLE void add(QVariantMap map);
-
-signals:
-    void cropChanged();
-
-
-private:
-    QString m_crop;
-    QHash<QModelIndex, bool> m_selected;
-
+    UnitModel(QObject *parent = nullptr);
 };
 
-#endif // SQLPLANTINGMODEL_H
+#endif // UNITMODEL_H
