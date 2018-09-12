@@ -30,6 +30,10 @@ PlantingModel::PlantingModel(QObject *parent)
 {
     setTable(plantingTableName);
     setSortColumn("seeding_date", "ascending");
+
+    int varietyColumn = fieldColumn("variety_id");
+    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
+
     select();
 }
 

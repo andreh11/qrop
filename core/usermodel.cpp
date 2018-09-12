@@ -14,10 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
 #include "usermodel.h"
 
 UserModel::UserModel(QObject *parent)
     : SqlTableModel(parent)
 {
     setTable("user");
+
+    // BUG: create a query bug on submitAll() after insertRecord()
+//    int roleColumn = fieldColumn("role_id");
+//    qDebug() << "ROLE COLUMN" << roleColumn;
+//    setRelation(roleColumn, QSqlRelation("role", "role_id", "role"));
 }

@@ -33,6 +33,11 @@ public:
     SqlTableModel(QObject *parent = nullptr);
 
     Q_INVOKABLE int add(QVariantMap map);
+    Q_INVOKABLE void update(int id, QVariantMap map);
+    Q_INVOKABLE int duplicate(int id);
+    Q_INVOKABLE void remove(int id);
+
+    static void debugQuery(const QSqlQuery &query);
     bool insertRecord(int row, const QSqlRecord &record);
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
     int fieldColumn(const QString &field) const;

@@ -12,6 +12,8 @@
 #include "plantingmodel.h"
 #include "taskmodel.h"
 #include "notemodel.h"
+#include "usermodel.h"
+#include "rolemodel.h"
 
 // TODO: move this to core
 static void connectToDatabase()
@@ -62,6 +64,22 @@ int main(int argc, char *argv[])
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
 
     connectToDatabase();
+
+    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
+                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
+
+    UserModel userModel;
+    foreach (const QList<QVariant> &user, userList) {
+        QVariantMap userMap({{"first_name", user[0]},
+                             {"last_name", user[1]},
+                             {"email", user[2]},
+                             {"role_id", user[3]}});
+
+        int id = userModel.add(userMap);
+        int dupId = userModel.duplicate(id);
+        userModel.remove(dupId);
+        userModel.update(id, {{"last_name", "Waro"}});
+    }
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

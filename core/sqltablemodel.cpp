@@ -39,14 +39,69 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 // Return last inserted rowid.
 int SqlTableModel::add(QVariantMap map)
 {
+    qDebug() << "Adding" << map;
     QSqlRecord rec = record();
     foreach (const QString key, map.keys())
-            rec.setValue(key, map.value(key));
+        rec.setValue(key, map.value(key));
     insertRecord(-1, rec);
+    qDebug() << "Record" << rec;
     submitAll();
 
     int id = query().lastInsertId().toInt();
     return id;
+}
+
+// Return last inserted rowid.
+void SqlTableModel::update(int id, QVariantMap map)
+{
+    if (id < 0)
+        return;
+    if (tableName().isNull())
+        return;
+    if (map.isEmpty())
+        return;
+
+    QString idFieldName = tableName() + "_id";
+    QString queryString = QString("UPDATE %1 SET ").arg(tableName());
+    foreach (const QString key, map.keys())
+        queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
+    queryString.chop(1); // remove last comma
+    queryString.append(QString(" WHERE %1 = %2").arg(idFieldName).arg(id));
+
+    qDebug() << "QUERY STRING:" << queryString;
+
+    QSqlQuery query(queryString);
+    query.exec();
+    debugQuery(query);
+}
+
+// Return last inserted rowid.
+int SqlTableModel::duplicate(int id)
+{
+    if (tableName().isNull())
+        return -1;
+
+    QString idFieldName = tableName() + "_id";
+    QSqlRecord rec = recordFromId(id, tableName(), idFieldName);
+    QSqlRecord dupRecord(rec);
+    dupRecord.remove(dupRecord.indexOf(idFieldName));
+    insertRecord(-1, dupRecord);
+    qDebug() << "Dup record" << dupRecord;
+    submitAll();
+
+    select();
+    int newId = query().lastInsertId().toInt();
+    return newId;
+}
+
+void SqlTableModel::remove(int id)
+{
+    QString queryString = "DELETE FROM %1 WHERE %2 = %3";
+    QString table = tableName();
+    QString idColumnName = table + "_id";
+    QSqlQuery query(queryString.arg(table).arg(idColumnName).arg(id));
+    query.exec();
+    debugQuery(query);
 }
 
 QVariant SqlTableModel::data(const QModelIndex &index, int role) const
@@ -67,16 +122,25 @@ int SqlTableModel::fieldColumn(const QString &field) const
     return m_rolesIndexes[field];
 }
 
+void SqlTableModel::debugQuery(const QSqlQuery& query)
+{
+    if (query.lastError().type() == QSqlError::ErrorType::NoError) {
+        qDebug() << "Query OK: " << query.lastQuery();
+    } else {
+        qWarning() << "Query ERROR: " << query.lastError().text();
+        qWarning() << "Query text: " << query.lastQuery();
+    }
+}
+
 QSqlRecord SqlTableModel::recordFromId(int id, QString tableName, QString idFieldName) const
 {
-    QSqlQuery query;
-    query.prepare("SELECT * FROM :table where :field = :id");
-    query.bindValue(":table", tableName);
-    query.bindValue(":field", idFieldName);
-    query.bindValue(":id", id);
+    QString queryString("SELECT * from %1 WHERE %2 = %3");
+    QSqlQuery query(queryString.arg(tableName).arg(idFieldName).arg(id));
     query.exec();
+    debugQuery(query);
 
-    if (query.next())
+    query.next();
+    if (query.isValid())
         return query.record();
     else
         return record();

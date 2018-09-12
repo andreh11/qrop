@@ -20,4 +20,7 @@ LocationModel::LocationModel(QObject *parent)
     : SqlTableModel(parent)
 {
     setTable("location");
+
+    int parentColumn = fieldColumn("parent_id");
+    setRelation(parentColumn, QSqlRelation("location", "location_id", "name"));
 }
