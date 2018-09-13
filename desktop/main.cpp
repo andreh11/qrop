@@ -53,9 +53,12 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    QTranslator translator;
-    translator.load(":/translations/fr.qm");
-    app.installTranslator(&translator);
+    QString lang = QLocale::system().name();
+//    if (lang == "fr_FR") {
+        QTranslator translator;
+        translator.load(":/translations/fr.qm");
+        app.installTranslator(&translator);
+//    }
 
     int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");

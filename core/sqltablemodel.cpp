@@ -21,7 +21,6 @@
 
 #include "sqltablemodel.h"
 
-
 SqlTableModel::SqlTableModel(QObject *parent)
     : QSqlRelationalTableModel(parent)
 {
