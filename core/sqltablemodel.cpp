@@ -21,6 +21,7 @@
 
 #include "sqltablemodel.h"
 
+
 SqlTableModel::SqlTableModel(QObject *parent)
     : QSqlRelationalTableModel(parent)
 {
@@ -36,7 +37,12 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
     return ok;
 }
 
-// Return last inserted rowid.
+/*!
+  \fn int SqlTableModel::add(QVariantMap map)
+
+  Insert a new row in model's table using values from \a map. Returns
+  the id of the new row.
+ */
 int SqlTableModel::add(QVariantMap map)
 {
     if (tableName().isNull())
@@ -54,7 +60,10 @@ int SqlTableModel::add(QVariantMap map)
     return id;
 }
 
-// Return last inserted rowid.
+/*!
+   \fn void SqlTableModel::update(int id, QVariantMap map)
+    Update row \a id using values from \a map.
+ */
 void SqlTableModel::update(int id, QVariantMap map)
 {
     if (id < 0)
@@ -76,7 +85,11 @@ void SqlTableModel::update(int id, QVariantMap map)
     debugQuery(query);
 }
 
-// Return last inserted rowid.
+/*!
+    \fn int SqlTableModel::duplicate(int id)
+    Insert a new row in model's table duplicating values from row \a id. Returns
+    the id of the new row.
+ */
 int SqlTableModel::duplicate(int id)
 {
     if (tableName().isNull())

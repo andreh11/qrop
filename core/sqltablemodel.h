@@ -25,6 +25,9 @@
 
 #include "core_global.h"
 
+/*!
+  \class SqlTableModel
+ */
 class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 {
     Q_OBJECT
