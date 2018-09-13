@@ -30,11 +30,15 @@ class CORESHARED_EXPORT PlantingModel : public SqlTableModel
 public:
     PlantingModel(QObject *parent = nullptr);
 
+    Q_INVOKABLE int add(QVariantMap map);
+    Q_INVOKABLE void update(int id, QVariantMap map);
+    Q_INVOKABLE int duplicate(int id);
+    Q_INVOKABLE void remove(int id);
+
     QString crop() const;
     void setFilterCrop(const QString &crop);
 
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    Q_INVOKABLE void add(QVariantMap map);
 
 signals:
     void cropChanged();

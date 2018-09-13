@@ -22,6 +22,11 @@
 
 #include "plantingmodel.h"
 #include "taskmodel.h"
+#include "locationmodel.h"
+#include "notemodel.h"
+#include "keywordmodel.h"
+#include "harvestmodel.h"
+#include "expensemodel.h"
 
 static const char *plantingTableName = "planting";
 
@@ -31,24 +36,48 @@ PlantingModel::PlantingModel(QObject *parent)
     setTable(plantingTableName);
     setSortColumn("seeding_date", "ascending");
 
-    int varietyColumn = fieldColumn("variety_id");
-    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
+//    int varietyColumn = fieldColumn("variety_id");
+//    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
 
     select();
 }
 
-void PlantingModel::add(QVariantMap map)
+int PlantingModel::add(QVariantMap map)
 {
-    qDebug() << "Adding" << map;
-    QSqlRecord rec = record();
-    foreach (const QString key, map.keys())
-        if (key != "planting_date")
-            rec.setValue(key, map.value(key));
-    insertRecord(-1, rec);
-    submitAll();
+    QString plantingDateString = map.take("planting_date").toString();
+    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
 
-    int id = query().lastInsertId().toInt();
-    TaskModel::createTasks(id);
+    int id = SqlTableModel::add(map);
+    TaskModel::createTasks(id, plantingDate);
+    return id;
+}
+
+void PlantingModel::update(int id, QVariantMap map)
+{
+    QString plantingDateString = map.take("planting_date").toString();
+    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
+
+    SqlTableModel::update(id, map);
+    TaskModel::updateTaskDates(id, plantingDate);
+}
+
+int PlantingModel::duplicate(int id)
+{
+    int newId = SqlTableModel::duplicate(id);
+    TaskModel::duplicateTasks(id, newId);
+//    KeywordModel::duplicatePlantingKeywords(id, newId);
+    return newId;
+}
+
+void PlantingModel::remove(int id)
+{
+    SqlTableModel::remove(id);
+    TaskModel::removeTasks(id);
+    LocationModel::removePlantingLocations(id);
+    NoteModel::removePlantingNotes(id);
+//    KeywordModel::removePlantingKeywords(id);
+//    HarvestModel::removePlantingHarvests(id);
+//    ExpenseModel::removePlantingExpenses(id);
 }
 
 QVariant PlantingModel::data(const QModelIndex &index, int role) const

@@ -19,12 +19,34 @@ TaskModel::TaskModel(QObject *parent)
     select();
 }
 
-// Might not be needed...
-void TaskModel::createTasks(int cropId)
+void TaskModel::createTasks(int plantingId, const QDate &plantingDate)
 {
-    qDebug() << "[TaskModel] Creating tasks for crop: " << cropId;
+    qDebug() << "[TaskModel] Creating tasks for planting: " << plantingId << plantingDate;
+    // TODO
     // Compute dates
     // Link 'em all to GH/field sowing date
+}
+
+void TaskModel::updateTaskDates(int plantingId, const QDate &plantingDate)
+{
+    qDebug() << "[TaskModel] Creating tasks for planting: " << plantingId << plantingDate;
+    // TODO
+}
+
+int TaskModel::duplicateTasks(int sourcePlantingId, int newPlantingId)
+{
+    // TODO
+    qDebug() << "[TaskModel] Duplicate tasks of planting" << sourcePlantingId
+             << "for" << newPlantingId;
+    return -1;
+}
+
+void TaskModel::removeTasks(int plantingId)
+{
+    qDebug() << "[TaskModel] Removing tasks for planting: " << plantingId;
+    QString queryString("DELETE FROM planting_task WHERE planting_id = %1");
+    QSqlQuery query(queryString.arg(plantingId));
+    debugQuery(query);
 }
 
 QDate TaskModel::date() const

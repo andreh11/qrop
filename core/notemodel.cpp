@@ -18,6 +18,14 @@ NoteModel::NoteModel(QObject *parent)
     select();
 }
 
+void NoteModel::removePlantingNotes(int plantingId)
+{
+    qDebug() << "[NoteModel] Removing notes of planting" << plantingId;
+    QString queryString("DELETE FROM planting_note WHERE planting_id = %1");
+    QSqlQuery query(queryString.arg(plantingId));
+    debugQuery(query);
+}
+
 QDate NoteModel::date() const
 {
     return m_date;

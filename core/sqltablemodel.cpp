@@ -31,20 +31,23 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 {
     bool ok = QSqlTableModel::insertRecord(row, record);
     if (!ok)
-        qDebug() << "Couldn't insert record" << record << "in database:"
-                 << query().lastError().text();
+        qWarning() << "Couldn't insert record" << record << "in database:"
+                   << query().lastError().text();
     return ok;
 }
 
 // Return last inserted rowid.
 int SqlTableModel::add(QVariantMap map)
 {
-    qDebug() << "Adding" << map;
+    if (tableName().isNull())
+        return -1;
+    if (map.isEmpty())
+        return -1;
+
     QSqlRecord rec = record();
     foreach (const QString key, map.keys())
         rec.setValue(key, map.value(key));
     insertRecord(-1, rec);
-    qDebug() << "Record" << rec;
     submitAll();
 
     int id = query().lastInsertId().toInt();
@@ -67,8 +70,6 @@ void SqlTableModel::update(int id, QVariantMap map)
         queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName).arg(id));
-
-    qDebug() << "QUERY STRING:" << queryString;
 
     QSqlQuery query(queryString);
     query.exec();
@@ -94,6 +95,14 @@ int SqlTableModel::duplicate(int id)
     return newId;
 }
 
+void SqlTableModel::duplicate(QList<int> idList)
+{
+    QSqlDatabase::database().transaction();
+    foreach (int id, idList)
+        duplicate(id);
+    QSqlDatabase::database().commit();
+}
+
 void SqlTableModel::remove(int id)
 {
     QString queryString = "DELETE FROM %1 WHERE %2 = %3";
@@ -102,6 +111,14 @@ void SqlTableModel::remove(int id)
     QSqlQuery query(queryString.arg(table).arg(idColumnName).arg(id));
     query.exec();
     debugQuery(query);
+}
+
+void SqlTableModel::remove(QList<int> idList)
+{
+    QSqlDatabase::database().transaction();
+    foreach (int id, idList)
+        remove(id);
+    QSqlDatabase::database().commit();
 }
 
 QVariant SqlTableModel::data(const QModelIndex &index, int role) const
@@ -132,7 +149,8 @@ void SqlTableModel::debugQuery(const QSqlQuery& query)
     }
 }
 
-QSqlRecord SqlTableModel::recordFromId(int id, QString tableName, QString idFieldName) const
+QSqlRecord SqlTableModel::recordFromId(int id, const QString &tableName,
+                                       const QString &idFieldName) const
 {
     QString queryString("SELECT * from %1 WHERE %2 = %3");
     QSqlQuery query(queryString.arg(tableName).arg(idFieldName).arg(id));

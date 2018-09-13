@@ -65,21 +65,31 @@ int main(int argc, char *argv[])
 
     connectToDatabase();
 
-    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
-                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
+//    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
+//                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
 
-    UserModel userModel;
-    foreach (const QList<QVariant> &user, userList) {
-        QVariantMap userMap({{"first_name", user[0]},
-                             {"last_name", user[1]},
-                             {"email", user[2]},
-                             {"role_id", user[3]}});
+//    UserModel userModel;
+//    foreach (const QList<QVariant> &user, userList) {
+//        QVariantMap userMap({{"first_name", user[0]},
+//                             {"last_name", user[1]},
+//                             {"email", user[2]},
+//                             {"role_id", user[3]}});
 
-        int id = userModel.add(userMap);
-        int dupId = userModel.duplicate(id);
-        userModel.remove(dupId);
-        userModel.update(id, {{"last_name", "Waro"}});
-    }
+//        int id = userModel.add(userMap);
+//        int dupId = userModel.duplicate(id);
+//        userModel.remove(dupId);
+//        userModel.update(id, {{"last_name", "Waro"}});
+//    }
+
+//    PlantingModel plantingModel;
+//    QList<QList<QVariant>> plantingMap({{1, "2018-03-02"},
+//                                        {2, "2018-01-04"},
+//                                        {2, "2018-01-28"}});
+//    foreach (const QList<QVariant> &planting, plantingMap) {
+//        QVariantMap plantingMap({{"variety_id", planting[0]},
+//                             {"planting_date", planting[1]}});
+//        int id = plantingModel.add(plantingMap);
+//    }
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
