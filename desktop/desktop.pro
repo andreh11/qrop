@@ -30,6 +30,8 @@ else:unix: LIBS += -L$$OUT_PWD/../core/ -lcore
 INCLUDEPATH += $$PWD/../core
 DEPENDPATH += $$PWD/../core
 
+TRANSLATIONS = translations/fr.ts
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 

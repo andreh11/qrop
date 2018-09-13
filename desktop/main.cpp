@@ -8,6 +8,7 @@
 #include <QIcon>
 #include <QHash>
 #include <QVariantMap>
+#include <QTranslator>
 
 #include "plantingmodel.h"
 #include "taskmodel.h"
@@ -51,6 +52,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("io.qrop");
 
     QGuiApplication app(argc, argv);
+
+    QTranslator translator;
+    translator.load(":/translations/fr.qm");
+    app.installTranslator(&translator);
 
     int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
