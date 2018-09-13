@@ -187,6 +187,12 @@ CREATE TABLE IF NOT EXISTS planting_task (
     PRIMARY KEY (planting_id, task_id)
 );
 
+CREATE TABLE IF NOT EXISTS planting_task_template (
+    planting_id   INTEGER NOT NULL REFERENCES planting,
+    task_template_id       INTEGER NOT NULL REFERENCES task_template,
+    PRIMARY KEY (planting_id, task_template_id)
+);
+
 CREATE TABLE IF NOT EXISTS planting_location (
     planting_id   INTEGER NOT NULL REFERENCES planting(planting_id),
     location_id   INTEGER NOT NULL REFERENCES location(location_id),
