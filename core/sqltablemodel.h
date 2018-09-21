@@ -25,9 +25,7 @@
 
 #include "core_global.h"
 
-/*!
-  \class SqlTableModel
- */
+
 class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 {
     Q_OBJECT
@@ -35,22 +33,20 @@ class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 public:
     SqlTableModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE int add(QVariantMap map);
-    Q_INVOKABLE void update(int id, QVariantMap map);
-    Q_INVOKABLE int duplicate(int id);
-    Q_INVOKABLE void duplicate(QList<int> idList);
-    Q_INVOKABLE void remove(int id);
-    Q_INVOKABLE void remove(QList<int> idList);
-
-    static void debugQuery(const QSqlQuery &query);
     bool insertRecord(int row, const QSqlRecord &record);
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
     int fieldColumn(const QString &field) const;
-    QSqlRecord recordFromId(int id, const QString &tableName, const QString &idColumnName) const;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     bool submitAll();
+
+//    Q_INVOKABLE int add(QVariantMap map);
+//    Q_INVOKABLE void update(int id, QVariantMap map);
+//    Q_INVOKABLE int duplicate(int id);
+//    Q_INVOKABLE void duplicate(QList<int> idList);
+//    Q_INVOKABLE void remove(int id);
+//    Q_INVOKABLE void remove(QList<int> idList);
 
 private:
     QHash<QString, int> m_rolesIndexes;

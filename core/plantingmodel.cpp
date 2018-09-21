@@ -42,43 +42,6 @@ PlantingModel::PlantingModel(QObject *parent)
     select();
 }
 
-int PlantingModel::add(QVariantMap map)
-{
-    QString plantingDateString = map.take("planting_date").toString();
-    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-
-    int id = SqlTableModel::add(map);
-    TaskModel::createTasks(id, plantingDate);
-    return id;
-}
-
-void PlantingModel::update(int id, QVariantMap map)
-{
-    QString plantingDateString = map.take("planting_date").toString();
-    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-
-    SqlTableModel::update(id, map);
-    TaskModel::updateTaskDates(id, plantingDate);
-}
-
-int PlantingModel::duplicate(int id)
-{
-    int newId = SqlTableModel::duplicate(id);
-    TaskModel::duplicateTasks(id, newId);
-//    KeywordModel::duplicatePlantingKeywords(id, newId);
-    return newId;
-}
-
-void PlantingModel::remove(int id)
-{
-    SqlTableModel::remove(id);
-    TaskModel::removeTasks(id);
-    LocationModel::removePlantingLocations(id);
-    NoteModel::removePlantingNotes(id);
-//    KeywordModel::removePlantingKeywords(id);
-//    HarvestModel::removePlantingHarvests(id);
-//    ExpenseModel::removePlantingExpenses(id);
-}
 
 QVariant PlantingModel::data(const QModelIndex &index, int role) const
 {

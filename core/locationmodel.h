@@ -27,8 +27,6 @@ class CORESHARED_EXPORT LocationModel : public SqlTableModel
     Q_OBJECT
 public:
     explicit LocationModel(QObject *parent = nullptr);
-
-    static void removePlantingLocations(int plantingId);
 };
 
 #endif // LOCATIONMODEL_H

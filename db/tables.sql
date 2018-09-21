@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS family (
     family_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    family      TEXT NOT NULL,
+    family    TEXT NOT NULL,
     color     TEXT
 );
 
@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS crop (
     crop_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     crop       TEXT NOT NULL,
     color      TEXT,
-    family_id INTEGER REFERENCES family(family_id)
+    family_id INTEGER NOT NULL REFERENCES family ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS variety (
     variety_id      INTEGER PRIMARY KEY AUTOINCREMENT,
     variety         TEXT NOT NULL,
-    crop_id         INTEGER REFERENCES crop(crop_id),
-    seed_company_id INTEGER REFERENCES seed_company(seed_company_id)
+    crop_id         INTEGER NOT NULL REFERENCES crop ON DELETE CASCADE,
+    seed_company_id INTEGER REFERENCES seed_company
 );
 
 CREATE TABLE IF NOT EXISTS seed_company (
@@ -70,15 +70,16 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_per_gram    INTEGER,
     seeds_number      INTEGER,
     seeds_quantity    FLOAT,
-    variety_id        INTEGER NOT NULL REFERENCES variety(variety_id)
+    variety_id        INTEGER NOT NULL REFERENCES variety
 );
+
 
 CREATE TABLE IF NOT EXISTS harvest (
     harvest_id   INTEGER PRIMARY KEY AUTOINCREMENT,
     date         TEXT NOT NULL,
     time         TEXT NOT NULL,
     quantity     FLOAT NOT NULL,
-    planting_id  INTEGER NOT NULL REFERENCES planting(planting_id)
+    planting_id  INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS location (
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS location (
     bed_width   INTEGER, -- centimeter
     path_width  INTEGER, -- centimeter
     surface     INTEGER, -- square meter
-    parent_id   INTEGER NOT NULL REFERENCES location(location_id)
+    parent_id   INTEGER REFERENCES location ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS role (
@@ -102,9 +103,8 @@ CREATE TABLE IF NOT EXISTS user (
     last_name  TEXT NOT NULL,
     email      TEXT,
     labor_rate FLOAT,
-    role_id    INTEGER NOT NULL REFERENCES role(role_id)
+    role_id    INTEGER NOT NULL REFERENCES role
 );
-
 
 CREATE TABLE IF NOT EXISTS task_template (
     task_template_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,15 +118,15 @@ CREATE TABLE IF NOT EXISTS task (
     duration           INTEGER, -- days
     labor_time         TEXT, -- HH:MM
     description        TEXT,
-    task_type_id       INTEGER NOT NULL REFERENCES task_type(task_type_id),
-    task_method_id     INTEGER NOT NULL REFERENCES task_method(task_method_id),
-    task_implement_id  INTEGER NOT NULL REFERENCES task_implement(task_implement_id),
-    link_task_id       INTEGER REFERENCES task(task_id),
+    task_type_id       INTEGER NOT NULL REFERENCES task_type,
+    task_method_id     INTEGER REFERENCES task_method,
+    task_implement_id  INTEGER REFERENCES task_implement,
+    link_task_id       INTEGER REFERENCES task,
     link_days          INTEGER, -- If negative, days before linked task. Otherwise,
                                 -- days after. 0 : same day.
     template_date_type INTEGER, -- 0: Field sowing/planting, 1: GH start date,
                                 -- 2: first harvest, 3: last harvest
-    task_template_id   INTEGER REFERENCES task_template(task_template_id)
+    task_template_id   INTEGER REFERENCES task_template
 );
 
 CREATE TABLE IF NOT EXISTS task_type (
@@ -137,13 +137,13 @@ CREATE TABLE IF NOT EXISTS task_type (
 CREATE TABLE IF NOT EXISTS task_method (
     task_method_id INTEGER PRIMARY KEY AUTOINCREMENT,
     method TEXT NOT NULL,
-    task_type_id INTEGER NOT NULL REFERENCES task_type(task_type_id)
+    task_type_id INTEGER NOT NULL REFERENCES task_type ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS task_implement (
     task_implement_id INTEGER PRIMARY KEY AUTOINCREMENT,
     implement TEXT NOT NULL,
-    task_method_id INTEGER NOT NULL REFERENCES task_method(task_method_id)
+    task_method_id INTEGER NOT NULL REFERENCES task_method ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS expense_category (
@@ -162,71 +162,108 @@ CREATE TABLE IF NOT EXISTS expense (
     cost FLOAT,
     labor_cost FLOAT,
     description TEXT,
-    expense_category_id INTEGER NOT NULL REFERENCES expense_category(expense_category_id),
-    input_id INTEGER REFERENCES input(input_id),
-    task_id INTEGER REFERENCES task(task_id)
+    expense_category_id INTEGER NOT NULL REFERENCES expense_category,
+    input_id INTEGER REFERENCES input,
+    task_id INTEGER REFERENCES task
 );
 
 -- Link tables
 
 CREATE TABLE IF NOT EXISTS planting_keyword (
-    planting_id   INTEGER NOT NULL REFERENCES planting,
-    keyword_id    INTEGER NOT NULL REFERENCES keyword,
+    planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
+    keyword_id    INTEGER NOT NULL REFERENCES keyword ON DELETE CASCADE,
     PRIMARY KEY (planting_id, keyword_id)
 );
 
 CREATE TABLE IF NOT EXISTS planting_note (
-    planting_id   INTEGER NOT NULL REFERENCES planting,
-    note_id       INTEGER NOT NULL REFERENCES note,
+    planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
+    note_id       INTEGER NOT NULL REFERENCES note ON DELETE CASCADE,
     PRIMARY KEY (planting_id, note_id)
 );
 
 CREATE TABLE IF NOT EXISTS planting_task (
-    planting_id   INTEGER NOT NULL REFERENCES planting,
-    task_id       INTEGER NOT NULL REFERENCES task,
+    planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
+    task_id       INTEGER NOT NULL REFERENCES task ON DELETE CASCADE,
     PRIMARY KEY (planting_id, task_id)
 );
 
-CREATE TABLE IF NOT EXISTS planting_task_template (
-    planting_id   INTEGER NOT NULL REFERENCES planting,
-    task_template_id       INTEGER NOT NULL REFERENCES task_template,
-    PRIMARY KEY (planting_id, task_template_id)
-);
+-- A task is associated to at least 1 planting. If there is no more planting
+-- associated to a task, we delete it.
+CREATE TRIGGER planting_task_delete AFTER DELETE ON planting_task FOR EACH ROW
+WHEN (SELECT COUNT(*) FROM planting_task WHERE task_id = OLD.task_id) = 0
+BEGIN
+  DELETE FROM task
+  WHERE task_id = OLD.task_id;
+END;
 
 CREATE TABLE IF NOT EXISTS planting_location (
-    planting_id   INTEGER NOT NULL REFERENCES planting(planting_id),
-    location_id   INTEGER NOT NULL REFERENCES location(location_id),
+    planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
+    location_id   INTEGER NOT NULL REFERENCES location ON DELETE CASCADE,
     length        INTEGER,
     surface       INTEGER,
     PRIMARY KEY (planting_id, location_id)
 );
 
 CREATE TABLE IF NOT EXISTS planting_expense (
-    planting_id INTEGER NOT NULL REFERENCES planting,
-    expense_id INTEGER NOT NULL REFERENCES expense,
-    PRIMARY KEY (planting_id, expense_id)
+       planting_id INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
+       expense_id INTEGER NOT NULL REFERENCES expense ON DELETE CASCADE,
+       PRIMARY KEY (planting_id, expense_id)
+);
+
+CREATE TABLE IF NOT EXISTS location_expense (
+       location_id INTEGER NOT NULL REFERENCES location ON DELETE CASCADE,
+       expense_id INTEGER NOT NULL REFERENCES expense ON DELETE CASCADE,
+       PRIMARY KEY (location_id, expense_id)
 );
 
 CREATE TABLE IF NOT EXISTS task_assignment (
-    task_id   INTEGER NOT NULL REFERENCES task,
-    user_id   INTEGER NOT NULL REFERENCES user,
-    PRIMARY KEY (task_id, user_id)
+       task_id   INTEGER NOT NULL REFERENCES task ON DELETE CASCADE,
+       user_id   INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
+       PRIMARY KEY (task_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS task_note (
-    task_id   INTEGER NOT NULL REFERENCES task,
-    note_id   INTEGER NOT NULL REFERENCES note,
-    PRIMARY KEY (task_id, note_id)
+       task_id   INTEGER NOT NULL REFERENCES task ON DELETE CASCADE,
+       note_id   INTEGER NOT NULL REFERENCES note ON DELETE CASCADE,
+       PRIMARY KEY (task_id, note_id)
 );
 
 CREATE TABLE IF NOT EXISTS note_file (
-    note_id   INTEGER NOT NULL REFERENCES note,
-    file_id   INTEGER NOT NULL REFERENCES file,
-    PRIMARY KEY (note_id, file_id)
+       note_id   INTEGER NOT NULL REFERENCES note ON DELETE CASCADE,
+       file_id   INTEGER NOT NULL REFERENCES file ON DELETE CASCADE,
+       PRIMARY KEY (note_id, file_id)
 );
 
 CREATE TABLE IF NOT EXISTS expense_file (
-    expense_id   INTEGER NOT NULL REFERENCES expense,
-    file_id      INTEGER NOT NULL REFERENCES file,
-    PRIMARY KEY (expense_id, file_id)
+       expense_id   INTEGER NOT NULL REFERENCES expense ON DELETE CASCADE,
+       file_id      INTEGER NOT NULL REFERENCES file ON DELETE CASCADE,
+       PRIMARY KEY (expense_id, file_id)
 );
+
+insert into family (family) values ("Solanaceae");
+
+insert into crop (crop, family_id) values ("Tomato", 1);
+
+insert into variety (variety, crop_id) values ("Apéro F1", 1);
+
+insert into planting (planting_type, variety_id) values (1, 1);
+insert into planting (planting_type, variety_id) values (1, 1);
+insert into planting (planting_type, variety_id) values (1, 1);
+
+insert into task_type (type) values ("Sow");
+insert into task_type (type) values ("Transplant");
+insert into task_type (type) values ("Weed");
+
+insert into task (task_type_id) values (2);
+insert into task (task_type_id) values (3);
+insert into task (task_type_id) values (3);
+insert into task (task_type_id) values (3);
+insert into task (task_type_id) values (3);
+
+insert into planting_task values (1, 2);
+insert into planting_task values (2, 2);
+insert into planting_task values (3, 2);
+insert into planting_task values (1, 3);
+insert into planting_task values (1, 4);
+insert into planting_task values (1, 5);
+

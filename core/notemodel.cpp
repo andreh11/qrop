@@ -18,13 +18,12 @@ NoteModel::NoteModel(QObject *parent)
     select();
 }
 
-void NoteModel::removePlantingNotes(int plantingId)
-{
-    qDebug() << "[NoteModel] Removing notes of planting" << plantingId;
-    QString queryString("DELETE FROM planting_note WHERE planting_id = %1");
-    QSqlQuery query(queryString.arg(plantingId));
-    debugQuery(query);
-}
+//void NoteModel::removePlantingNotes(int plantingId)
+//{
+//    qDebug() << "[NoteModel] Removing notes of planting" << plantingId;
+//    QString queryString("DELETE FROM planting_note WHERE planting_id = %1");
+//    QSqlQuery query(queryString.arg(plantingId));
+//}
 
 QDate NoteModel::date() const
 {
@@ -46,15 +45,15 @@ void NoteModel::setDate(const QDate &date)
     emit dateChanged();
 }
 
-void NoteModel::addNote(const QString &content, const QDate &date)
-{
-    QSqlRecord newRecord = record();
-    newRecord.setValue("text", content);
-    newRecord.setValue("date_modified", date);
-    if (!insertRecord(rowCount(), newRecord)) {
-        qWarning() << "Failed to send message:" << lastError().text();
-        return;
-    }
+//void NoteModel::addNote(const QString &content, const QDate &date)
+//{
+//    QSqlRecord newRecord = record();
+//    newRecord.setValue("text", content);
+//    newRecord.setValue("date_modified", date);
+//    if (!insertRecord(rowCount(), newRecord)) {
+//        qWarning() << "Failed to send message:" << lastError().text();
+//        return;
+//    }
 
-    submitAll();
-}
+//    submitAll();
+//}

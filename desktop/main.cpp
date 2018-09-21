@@ -15,6 +15,7 @@
 #include "notemodel.h"
 #include "usermodel.h"
 #include "rolemodel.h"
+#include "db.h"
 
 // TODO: move this to core
 static void connectToDatabase()
@@ -41,7 +42,6 @@ static void connectToDatabase()
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
-    qInfo("database opened!");
 }
 
 int main(int argc, char *argv[])
@@ -89,15 +89,18 @@ int main(int argc, char *argv[])
 //        userModel.update(id, {{"last_name", "Waro"}});
 //    }
 
-//    PlantingModel plantingModel;
-//    QList<QList<QVariant>> plantingMap({{1, "2018-03-02"},
-//                                        {2, "2018-01-04"},
-//                                        {2, "2018-01-28"}});
-//    foreach (const QList<QVariant> &planting, plantingMap) {
-//        QVariantMap plantingMap({{"variety_id", planting[0]},
-//                             {"planting_date", planting[1]}});
-//        int id = plantingModel.add(plantingMap);
-//    }
+    PlantingModel plantingModel;
+    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
+                                        {2, 1, "2018-01-04"},
+                                        {2, 2, "2018-01-28"}});
+
+    foreach (const QList<QVariant> &planting, plantingMap) {
+        QVariantMap plantingMap({{"variety_id", planting[0]},
+                                 {"planting_type", planting[1]},
+                                 {"planting_date", planting[2]}});
+        int id = Planting::add(plantingMap);
+        Task::removeTasks(id);
+    }
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

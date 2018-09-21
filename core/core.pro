@@ -28,12 +28,12 @@ SOURCES += \
     taskmethodmodel.cpp \
     expensecategorymodel.cpp \
     inputmodel.cpp \
-    expensemodel.cpp
+    expensemodel.cpp \
+    db.cpp
 
 
 HEADERS += \
     core_global.h \
-    planting.h \
 #    databasemanager.h \
     sqltablemodel.h \
     taskmodel.h \
@@ -54,4 +54,5 @@ HEADERS += \
     taskmethodmodel.h \
     expensecategorymodel.h \
     inputmodel.h \
-    expensemodel.h
+    expensemodel.h \
+    db.h

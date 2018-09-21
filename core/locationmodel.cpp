@@ -27,12 +27,3 @@ LocationModel::LocationModel(QObject *parent)
 //    int parentColumn = fieldColumn("parent_id");
 //    setRelation(parentColumn, QSqlRelation("location", "location_id", "name"));
 }
-
-void LocationModel::removePlantingLocations(int plantingId)
-{
-    qDebug() << "[LocationModel] Removing planting" << plantingId
-             << "from all locations";
-    QString queryString("DELETE FROM planting_location WHERE planting_id = %1");
-    QSqlQuery query(queryString.arg(plantingId));
-    debugQuery(query);
-}

@@ -17,12 +17,6 @@ public:
     QDate date() const;
     void setFilterDate(const QDate &date);
 
-    static void createTasks(int plantingId, const QDate &plantingDate);
-    static void updateTaskDates(int plantingId, const QDate &plantingDate);
-    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
-    static void removeTasks(int plantingId);
-//    static void removeTa(int plantingId, const QDate &plantingDate);
-
 signals:
     void dateChanged();
 
