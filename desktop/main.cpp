@@ -89,18 +89,17 @@ int main(int argc, char *argv[])
 //        userModel.update(id, {{"last_name", "Waro"}});
 //    }
 
-    PlantingModel plantingModel;
-    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
-                                        {2, 1, "2018-01-04"},
-                                        {2, 2, "2018-01-28"}});
+//    PlantingModel plantingModel;
+//    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
+//                                        {2, 1, "2018-01-04"},
+//                                        {2, 2, "2018-01-28"}});
 
-    foreach (const QList<QVariant> &planting, plantingMap) {
-        QVariantMap plantingMap({{"variety_id", planting[0]},
-                                 {"planting_type", planting[1]},
-                                 {"planting_date", planting[2]}});
-        int id = Planting::add(plantingMap);
-        Task::removeTasks(id);
-    }
+//    foreach (const QList<QVariant> &planting, plantingMap) {
+//        QVariantMap plantingMap({{"variety_id", planting[0]},
+//                                 {"planting_type", planting[1]},
+//                                 {"planting_date", planting[2]}});
+//        Planting::add(plantingMap);
+//    }
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

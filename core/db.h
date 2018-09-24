@@ -45,7 +45,8 @@ public:
     void debugQuery(const QSqlQuery &query) const;
 
     QSqlRecord recordFromId(const QString &tableName, int id) const;
-    QVariantMap recordMap(const QSqlRecord &record) const;
+    QVariantMap mapFromRecord(const QSqlRecord &record) const;
+    QVariantMap mapFromId(const QString &tableName, int id) const;
 
     int add(QVariantMap map);
     void addLink(const QString &table,
@@ -77,7 +78,7 @@ public:
     static int duplicate(int id);
 //    void duplicate(const QList<int> &idList);
 
-    static void remove(int id);
+    static void remove(int id) { db.remove(id); }
 
 //    void remove(const QList<int> &idList);
 
@@ -95,11 +96,12 @@ public:
 
     static void addPlantingTask(int plantingId, int taskId);
 
-    static QList<QSqlRecord> tasks(int plantingId);
+    static QList<QSqlRecord> plantingTasks(int plantingId);
+    static QList<QSqlRecord> locationTasks(int locationId);
     static void createTasks(int plantingId, const QDate &plantingDate);
     static void updateTaskDates(int plantingId, const QDate &plantingDate);
-    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
-    static void removeTasks(int plantingId);
+//    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
+//    static void removeTasks(int plantingId);
 
     static void applyTemplate(int templateId, int plantingId);
     static void removeTemplate(int templateId, int plantingId);
@@ -113,10 +115,12 @@ class Location : public DatabaseUtility {
 public:
     static int add(QVariantMap map) { return db.add(map); }
     static void update(int id, QVariantMap map) { db.update(id, map); }
-    static int duplicate(int id) { return db.duplicate(id); }
-    static void remove(int id) { db.remove(id); } // TODO: remove from planting_task, etc
+    static int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
+    static void remove(int id) { db.remove(id); }
 
+    static QString fullname(int locationId);
     static QList<QSqlRecord> locations(int plantingId);
+    static QList<int> children(int locationId);
     static void addPlanting(int plantingId, int locationId);
     static void removePlanting(int plantingId, int locationId);
     static void removePlantingLocations(int plantingId);

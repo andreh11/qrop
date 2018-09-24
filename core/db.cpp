@@ -66,13 +66,17 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
         return QSqlRecord();
 }
 
-QVariantMap DatabaseUtility::recordMap(const QSqlRecord &record) const
+QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
 {
     QVariantMap map;
     for (int i = 0; i < record.count(); i++)
         map[record.field(i).name()] = record.field(i).value();
-
     return map;
+}
+
+QVariantMap DatabaseUtility::mapFromId(const QString &tableName, int id) const
+{
+    return mapFromRecord(recordFromId(tableName, id));
 }
 
 int DatabaseUtility::add(QVariantMap map)
@@ -136,14 +140,8 @@ int DatabaseUtility::duplicate(int id)
         return -1;
     if (table().isNull())
         return - 1;
-    if (table().isNull())
-        return -1;
 
-    QSqlRecord rec = recordFromId(table(), id);
-    if (rec.isEmpty())
-        return -1;
-
-    QVariantMap map = recordMap(rec);
+    QVariantMap map = mapFromId(table(), id);
     map.remove(idFieldName());
 
     return add(map);
@@ -229,21 +227,13 @@ void Planting::update(int id, QVariantMap map)
 
 int Planting::duplicate(int id)
 {
-    int newId = db.duplicate(id);
-    Task::duplicateTasks(id, newId);
-//    KeywordModel::duplicatePlantingKeywords(id, newId);
-    return newId;
-}
+    if (id < 0)
+        return -1;
 
-void Planting::remove(int id)
-{
-    db.remove(id);
-    Task::removeTasks(id);
-    Location::removePlantingLocations(id);
-//    NoteModel::removePlantingNotes(id);
-//    KeywordModel::removePlantingKeywords(id);
-//    HarvestModel::removePlantingHarvests(id);
-//    ExpenseModel::removePlantingExpenses(id);
+    QVariantMap map = db.mapFromId("planting", id);
+    map.remove(db.idFieldName());
+
+    return add(map);
 }
 
 // Task
@@ -303,24 +293,43 @@ void Task::createTasks(int plantingId, const QDate &plantingDate)
 void Task::updateTaskDates(int plantingId, const QDate &plantingDate)
 {
     qDebug() << "[Task] Updating tasks for planting: " << plantingId << plantingDate;
-    // TODO
-}
+    QSqlRecord plantingRecord = db.recordFromId("planting", plantingId);
 
-int Task::duplicateTasks(int sourcePlantingId, int newPlantingId)
-{
-    // TODO
-    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
-             << "for" << newPlantingId;
-    return -1;
-}
 
-void Task::removeTasks(int plantingId)
-{
-    qDebug() << "[Task] Removing tasks for planting: " << plantingId;
-    QString queryString("DELETE FROM planting_task WHERE planting_id = %1");
-    QSqlQuery query(queryString.arg(plantingId));
+    // Find planting task id.
+    QVariantMap map;
+    int plantingTaskId = -1;
+    foreach (const QSqlRecord record, tasks(plantingId)) {
+        map = db.mapFromRecord(record);
+        if (map["task_type_id"].toInt() == 4) {
+            plantingTaskId = map["task_id"].toInt();
+            break;
+        }
+    }
+
+    QString queryString = "UPDATE task SET link_days = %1, assigned_date = %2 WHERE task_id = %3";
+    int dtt = plantingRecord.value("dtt").toInt();
+    QString assignedDate = plantingDate.addDays(dtt).toString(Qt::ISODate);
+
+    QSqlQuery query(queryString.arg(dtt).arg(assignedDate).arg(plantingTaskId));
     db.debugQuery(query);
 }
+
+//int Task::duplicateTasks(int sourcePlantingId, int newPlantingId)
+//{
+//    // TODO
+//    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
+//             << "for" << newPlantingId;
+//    return -1;
+//}
+
+//void Task::removeTasks(int plantingId)
+//{
+//    qDebug() << "[Task] Removing tasks for planting: " << plantingId;
+//    QString queryString("DELETE FROM planting_task WHERE planting_id = %1");
+//    QSqlQuery query(queryString.arg(plantingId));
+//    db.debugQuery(query);
+//}
 
 void Task::applyTemplate(int templateId, int plantingId)
 {
