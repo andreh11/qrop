@@ -47,6 +47,20 @@ void DatabaseUtility::debugQuery(const QSqlQuery& query) const
     }
 }
 
+QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &idFieldName) const
+{
+    QSqlQuery query(queryString);
+    debugQuery(query);
+
+    QList<int> list;
+    int id = -1;
+    while (query.next()) {
+        id = query.value(idFieldName).toInt();
+        list.append(id);
+    }
+    return list;
+}
+
 QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 {
     if (id < 0)
@@ -240,19 +254,39 @@ int Planting::duplicate(int id)
 
 DatabaseUtility Task::db("task");
 
-QList<QSqlRecord> Task::tasks(int plantingId)
+void Task::addPlanting(int plantingId, int taskId)
 {
-    QString queryString = "SELECT * FROM planting_task WHERE planting_id = %1";
-    QSqlQuery query(queryString.arg(plantingId));
-    db.debugQuery(query);
+    db.addLink("planting_task", "planting_id", plantingId, "task_id", taskId);
+}
 
-    QList<QSqlRecord> recordList;
-    int id = -1;
-    while (query.next()) {
-        id = query.value("task_id").toInt();
-        recordList.append(db.recordFromId("task", id));
-    }
-    return recordList;
+void Task::removePlanting(int plantingId, int taskId)
+{
+    db.removeLink("planting_task", "planting_id", plantingId, "task_id", taskId);
+}
+
+void Task::addLocation(int locationId, int taskId)
+{
+    db.addLink("location_task", "location_id", locationId, "task_id", taskId);
+}
+
+void Task::removeLocation(int locationId, int taskId)
+{
+    db.removeLink("location_task", "location_id", locationId, "task_id", taskId);
+}
+
+
+QList<int> Task::plantingTasks(int plantingId)
+{
+
+    QString queryString = "SELECT * FROM planting_task WHERE planting_id = %1";
+    return db.queryIds(queryString.arg(plantingId), "task_id");
+}
+
+QList<int> Task::locationTasks(int locationId)
+{
+
+    QString queryString = "SELECT * FROM location_task WHERE location_id = %1";
+    return db.queryIds(queryString.arg(locationId), "task_id");
 }
 
 // TaskTypes: 0: DS, 1: GH sow, 2: TP
@@ -290,29 +324,69 @@ void Task::createTasks(int plantingId, const QDate &plantingDate)
     }
 }
 
-void Task::updateTaskDates(int plantingId, const QDate &plantingDate)
+QList<int> Task::sowPlantTaskIds(int plantingId)
 {
-    qDebug() << "[Task] Updating tasks for planting: " << plantingId << plantingDate;
-    QSqlRecord plantingRecord = db.recordFromId("planting", plantingId);
+    int sowTaskId = -1;
+    int transplantTaskId = -1;
+    TaskType taskType;
+    QSqlRecord record ;
+    foreach (int taskId, plantingTasks(plantingId)) {
+        record = db.recordFromId("task", taskId);
+        taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
 
-
-    // Find planting task id.
-    QVariantMap map;
-    int plantingTaskId = -1;
-    foreach (const QSqlRecord record, tasks(plantingId)) {
-        map = db.mapFromRecord(record);
-        if (map["task_type_id"].toInt() == 4) {
-            plantingTaskId = map["task_id"].toInt();
-            break;
+        if (taskType == TaskType::DirectSow) {
+            sowTaskId = taskId;
+        } else if (taskType == TaskType::GreenhouseSow) {
+            sowTaskId = taskId;
+            if (transplantTaskId > 0)
+                break;
+        } else if (taskType == TaskType::Transplant) {
+            transplantTaskId = taskId;
+            if (sowTaskId > 0)
+                break;
         }
     }
 
-    QString queryString = "UPDATE task SET link_days = %1, assigned_date = %2 WHERE task_id = %3";
-    int dtt = plantingRecord.value("dtt").toInt();
-    QString assignedDate = plantingDate.addDays(dtt).toString(Qt::ISODate);
+    return QList<int>({sowTaskId, transplantTaskId});
+}
 
-    QSqlQuery query(queryString.arg(dtt).arg(assignedDate).arg(plantingTaskId));
-    db.debugQuery(query);
+void Task::updateTaskDates(int plantingId, const QDate &plantingDate)
+{
+    qDebug() << "[Task] Updating sow & plant tasks for planting: " << plantingId << plantingDate;
+
+    QSqlRecord plantingRecord = db.recordFromId("planting", plantingId);
+    auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
+    QList<int> taskIds = sowPlantTaskIds(plantingId);
+    int sowTaskId = taskIds[0];
+    int transplantTaskId = taskIds[1];
+
+    switch (plantingType) {
+    case PlantingType::DirectSeeded: {
+        QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(sowTaskId)));
+        db.debugQuery(query);
+        break;
+    }
+    case PlantingType::TransplantRaised: {
+        int dtt = plantingRecord.value("dtt").toInt();
+        QString sowDate = plantingDate.addDays(-dtt).toString(Qt::ISODate);
+
+        QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(sowTaskId)));
+        db.debugQuery(query);
+
+        QString linkQueryString = "UPDATE task SET link_days = %1, assigned_date = %2 WHERE task_id = %3";
+        QSqlQuery linkQuery(queryString.arg(dtt).arg(plantingDate.toString(Qt::ISODate)).arg(transplantTaskId));
+        db.debugQuery(linkQuery);
+        break;
+    }
+    case PlantingType::TransplantBought: {
+        QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(transplantTaskId)));
+        db.debugQuery(query);
+        break;
+    }
+    }
 }
 
 //int Task::duplicateTasks(int sourcePlantingId, int newPlantingId)
@@ -323,18 +397,59 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate)
 //    return -1;
 //}
 
-//void Task::removeTasks(int plantingId)
-//{
-//    qDebug() << "[Task] Removing tasks for planting: " << plantingId;
-//    QString queryString("DELETE FROM planting_task WHERE planting_id = %1");
-//    QSqlQuery query(queryString.arg(plantingId));
-//    db.debugQuery(query);
-//}
+void Task::removeTasks(int plantingId)
+{
+    qDebug() << "[Task] Removing tasks for planting: " << plantingId;
+    QString queryString("DELETE FROM planting_task WHERE planting_id = %1");
+    QSqlQuery query(queryString.arg(plantingId));
+    db.debugQuery(query);
+}
+
+QList<int> Task::templateTasks(int templateId)
+{
+    QString queryString("SELECT * FROM task WHERE task_template_id = %1");
+    return db.queryIds(queryString.arg(templateId), "task_id");
+}
 
 void Task::applyTemplate(int templateId, int plantingId)
 {
-    // foreach task template in templateId
-    // create task from template, linked to plantingId and templateId
+    QSqlRecord plantingRecord = db.recordFromId("planting", plantingId);
+    auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
+
+    QVariantMap map;
+    QList<int> taskIds = sowPlantTaskIds(plantingId);
+    int sowTaskId = taskIds[0];
+    int transplantTaskId = taskIds[1];
+
+    if (sowTaskId == -1 && transplantTaskId == -1) {
+        qDebug() << Q_FUNC_INFO << "both sow task and tranplant task id are invalid";
+        return;
+    }
+
+    foreach (int taskId, templateTasks(templateId)) {
+        map = db.mapFromId("task", taskId);
+        switch (map["template_date_type"].toInt()) {
+        case TemplateDateType::FieldSowPlant:
+            map["link_task_id"] = plantingType == PlantingType::DirectSeeded ? sowTaskId
+                                                                             : transplantTaskId;
+            break;
+        case TemplateDateType::GreenhouseStart:
+            map["link_task_id"] = plantingType == PlantingType::TransplantRaised ? sowTaskId
+                                                                                 : -1;
+            break;
+        case TemplateDateType::FirstHarvest:
+            map["link_task_id"] = -1;
+            break;
+        case TemplateDateType::LastHarvest:
+            map["link_task_id"] = -1;
+            break;
+        }
+
+        if (map["link_task_id"] != -1) {
+            int id = add(map);
+            addPlanting(plantingId, id);
+        }
+    }
 }
 
 void Task::removeTemplate(int templateId, int plantingId)

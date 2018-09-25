@@ -32,9 +32,16 @@ enum PlantingType {
 };
 
 enum TaskType {
-    DirectSow,
+    DirectSow = 1,
     GreenhouseSow,
     Transplant
+};
+
+enum TemplateDateType {
+    FieldSowPlant = 1,
+    GreenhouseStart,
+    FirstHarvest,
+    LastHarvest
 };
 
 class DatabaseUtility {
@@ -44,6 +51,7 @@ public:
     QString idFieldName() const;
     void debugQuery(const QSqlQuery &query) const;
 
+    QList<int> queryIds(const QString &queryString, const QString &idFieldName) const;
     QSqlRecord recordFromId(const QString &tableName, int id) const;
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     QVariantMap mapFromId(const QString &tableName, int id) const;
@@ -92,22 +100,27 @@ public:
     static int add(QVariantMap map) { return db.add(map); }
     static void update(int id, QVariantMap map) { db.update(id, map); }
     static int duplicate(int id) { return db.duplicate(id); }
-    static void remove(int id) { db.remove(id); } // TODO: remove from planting_task, etc
+    static void remove(int id) { db.remove(id); }
 
-    static void addPlantingTask(int plantingId, int taskId);
-
-    static QList<QSqlRecord> plantingTasks(int plantingId);
-    static QList<QSqlRecord> locationTasks(int locationId);
+    static QList<int> sowPlantTaskIds(int plantingId);
+    static void addPlanting(int plantingId, int taskId);
+    static void removePlanting(int plantingId, int taskId);
     static void createTasks(int plantingId, const QDate &plantingDate);
+    static QList<int> plantingTasks(int plantingId);
     static void updateTaskDates(int plantingId, const QDate &plantingDate);
-//    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
-//    static void removeTasks(int plantingId);
+    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
+    static void removeTasks(int plantingId);
+
+    static void addLocation(int locationId, int taskId);
+    static void removeLocation(int locationId, int taskId);
+    static QList<int> locationTasks(int locationId);
 
     static void applyTemplate(int templateId, int plantingId);
     static void removeTemplate(int templateId, int plantingId);
 
 private:
     static QString m_table;
+    static QList<int> templateTasks(int templateId);
     static DatabaseUtility db;
 };
 
@@ -126,29 +139,27 @@ public:
     static void removePlantingLocations(int plantingId);
 
 private:
-    static QString m_table;
     static DatabaseUtility db;
 };
 
 class Note : public DatabaseUtility {
 private:
-    static QString m_table;
+    static DatabaseUtility db;
 };
 
 class Keyword : public DatabaseUtility {
 private:
-    static QString m_table;
+    static DatabaseUtility db;
 };
 
 class Expense : public DatabaseUtility {
 private:
-    static QString table();
+    static DatabaseUtility db;
 };
 
 class User : public DatabaseUtility {
 private:
-    static QString table();
+    static DatabaseUtility db;
 };
-
 
 #endif // DB_H
