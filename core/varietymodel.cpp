@@ -28,4 +28,5 @@ VarietyModel::VarietyModel(QObject *parent) :
     setRelation(seedCompanyColumn, QSqlRelation("seed_company",
                                                 "seed_company_id",
                                                 "seed_company"));
+    select();
 }

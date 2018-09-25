@@ -9,7 +9,7 @@ import io.croplan.components 1.0
 Page {
     title: qsTr("New Note")
 
-    property SqlNoteModel model: undefined
+    property NoteModel model: undefined
 
     function save() {
         var currentDate = new Date()

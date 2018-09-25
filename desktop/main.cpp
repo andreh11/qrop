@@ -9,12 +9,15 @@
 #include <QHash>
 #include <QVariantMap>
 #include <QTranslator>
+#include <QQuickView>
 
 #include "plantingmodel.h"
 #include "taskmodel.h"
 #include "notemodel.h"
 #include "usermodel.h"
 #include "rolemodel.h"
+#include "cropmodel.h"
+#include "varietymodel.h"
 #include "db.h"
 
 // TODO: move this to core
@@ -44,6 +47,14 @@ static void connectToDatabase()
     }
 }
 
+static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+    Planting *planting = new Planting();
+    return planting;
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -67,9 +78,20 @@ int main(int argc, char *argv[])
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1)
         qWarning() << "Some custom fonts can't be loaded.";
 
-    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "SqlPlantingModel");
-    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "SqlTaskModel");
-    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "SqlNoteModel");
+//    QQuickView view;
+//    Planting dbPlanting;
+
+//      view.rootContext()->setContextProperty("dbPlanting", &dbPlanting);
+
+    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
+    qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
+    qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
+    qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "CropModel");
+    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
+    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
+
+//    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
+    qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
 
     connectToDatabase();
 

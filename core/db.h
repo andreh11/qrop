@@ -25,28 +25,28 @@
 
 #include "core_global.h"
 
-enum PlantingType {
-    DirectSeeded,
-    TransplantRaised,
-    TransplantBought
-};
-
-enum TaskType {
-    DirectSow = 1,
-    GreenhouseSow,
-    Transplant
-};
-
-enum TemplateDateType {
-    FieldSowPlant = 1,
-    GreenhouseStart,
-    FirstHarvest,
-    LastHarvest
-};
-
-class DatabaseUtility {
+class CORESHARED_EXPORT DatabaseUtility : public QObject {
+    Q_OBJECT
 public:
-    DatabaseUtility(const QString &table);
+    enum PlantingType {
+        DirectSeeded,
+        TransplantRaised,
+        TransplantBought
+    };
+
+    enum TaskType {
+        DirectSow = 1,
+        GreenhouseSow,
+        Transplant
+    };
+
+    enum TemplateDateType {
+        FieldSowPlant = 1,
+        GreenhouseStart,
+        FirstHarvest,
+        LastHarvest
+    };
+    DatabaseUtility(QObject *parent = nullptr);
     QString table() const;
     QString idFieldName() const;
     void debugQuery(const QSqlQuery &query) const;
@@ -56,110 +56,90 @@ public:
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     QVariantMap mapFromId(const QString &tableName, int id) const;
 
-    int add(QVariantMap map);
+    int add(QVariantMap map) const;
     void addLink(const QString &table,
                  const QString &field1, int id1,
-                 const QString &field2, int id2);
+                 const QString &field2, int id2) const;
 
-    void update(int id, QVariantMap map);
+    void update(int id, QVariantMap map) const;
 //    void update(QList<int> ids, QVariantMap map);
 
-    int duplicate(int id);
-    void duplicate(const QList<int> &idList);
+    int duplicate(int id) const;
+    void duplicate(const QList<int> &idList) const;
 
-    void remove(int id);
-    void remove(const QList<int> &idList);
+    void remove(int id) const;
+    void remove(const QList<int> &idList) const;
     void removeLink(const QString &table,
                     const QString &field1, int id1,
-                    const QString &field2, int id2);
-private:
+                    const QString &field2, int id2) const;
+protected:
     QString m_table;
 };
 
-class Planting {
+class CORESHARED_EXPORT Task : public DatabaseUtility {
 public:
-    static int add(QVariantMap map);
-    static QList<int> addSuccessions(int successions, int daysBetween, QVariantMap map);
+    Task(QObject *parent = nullptr);
+    Q_INVOKABLE QList<int> sowPlantTaskIds(int plantingId) const;
+    Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
+    Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
+    Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
+    Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
+    Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
+    Q_INVOKABLE int duplicateTasks(int sourcePlantingId, int newPlantingId) const;
+    Q_INVOKABLE void removeTasks(int plantingId) const;
 
-    static void update(int id, QVariantMap map);
+    Q_INVOKABLE void addLocation(int locationId, int taskId) const;
+    Q_INVOKABLE void removeLocation(int locationId, int taskId) const;
+    Q_INVOKABLE QList<int> locationTasks(int locationId) const;
 
-    static int duplicate(int id);
+    Q_INVOKABLE void applyTemplate(int templateId, int plantingId) const;
+    Q_INVOKABLE void removeTemplate(int templateId, int plantingId) const;
+
+private:
+    QList<int> templateTasks(int templateId) const;
+};
+
+class CORESHARED_EXPORT Planting : public DatabaseUtility {
+    Q_OBJECT
+public:
+    Planting(QObject *parent = nullptr);
+    Q_INVOKABLE int add(QVariantMap map) const;
+    Q_INVOKABLE QList<int> addSuccessions(int successions, int daysBetween, QVariantMap map) const;
+    Q_INVOKABLE void update(int id, QVariantMap map) const;
+    Q_INVOKABLE int duplicate(int id) const;
+
+    // temporary: we'll use a SQLITE view
+    Q_INVOKABLE QString varietyName(int id) const;
+    Q_INVOKABLE QString cropName(int id) const;
+private:
+    Task task;
 //    void duplicate(const QList<int> &idList);
-
-    static void remove(int id) { db.remove(id); }
-
 //    void remove(const QList<int> &idList);
-
-private:
-    static QString m_table;
-    static DatabaseUtility db;
 };
 
-class Task {
+class CORESHARED_EXPORT Location : public DatabaseUtility {
 public:
-    static int add(QVariantMap map) { return db.add(map); }
-    static void update(int id, QVariantMap map) { db.update(id, map); }
-    static int duplicate(int id) { return db.duplicate(id); }
-    static void remove(int id) { db.remove(id); }
+    Location(QObject *parent = nullptr);
+//    Q_INVOKABLE int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
 
-    static QList<int> sowPlantTaskIds(int plantingId);
-    static void addPlanting(int plantingId, int taskId);
-    static void removePlanting(int plantingId, int taskId);
-    static void createTasks(int plantingId, const QDate &plantingDate);
-    static QList<int> plantingTasks(int plantingId);
-    static void updateTaskDates(int plantingId, const QDate &plantingDate);
-    static int duplicateTasks(int sourcePlantingId, int newPlantingId);
-    static void removeTasks(int plantingId);
-
-    static void addLocation(int locationId, int taskId);
-    static void removeLocation(int locationId, int taskId);
-    static QList<int> locationTasks(int locationId);
-
-    static void applyTemplate(int templateId, int plantingId);
-    static void removeTemplate(int templateId, int plantingId);
-
-private:
-    static QString m_table;
-    static QList<int> templateTasks(int templateId);
-    static DatabaseUtility db;
+    Q_INVOKABLE QString fullname(int locationId) const;
+    Q_INVOKABLE QList<QSqlRecord> locations(int plantingId) const;
+    Q_INVOKABLE QList<int> children(int locationId) const;
+    Q_INVOKABLE void addPlanting(int plantingId, int locationId) const;
+    Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
+    Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 };
 
-class Location : public DatabaseUtility {
-public:
-    static int add(QVariantMap map) { return db.add(map); }
-    static void update(int id, QVariantMap map) { db.update(id, map); }
-    static int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
-    static void remove(int id) { db.remove(id); }
-
-    static QString fullname(int locationId);
-    static QList<QSqlRecord> locations(int plantingId);
-    static QList<int> children(int locationId);
-    static void addPlanting(int plantingId, int locationId);
-    static void removePlanting(int plantingId, int locationId);
-    static void removePlantingLocations(int plantingId);
-
-private:
-    static DatabaseUtility db;
+class CORESHARED_EXPORT Note : public DatabaseUtility {
 };
 
-class Note : public DatabaseUtility {
-private:
-    static DatabaseUtility db;
+class CORESHARED_EXPORT Keyword : public DatabaseUtility {
 };
 
-class Keyword : public DatabaseUtility {
-private:
-    static DatabaseUtility db;
+class CORESHARED_EXPORT Expense : public DatabaseUtility {
 };
 
-class Expense : public DatabaseUtility {
-private:
-    static DatabaseUtility db;
-};
-
-class User : public DatabaseUtility {
-private:
-    static DatabaseUtility db;
+class CORESHARED_EXPORT User : public DatabaseUtility {
 };
 
 #endif // DB_H

@@ -25,7 +25,6 @@ Dialog {
             id: plantingForm
         }
     }
-
-    onAccepted: model.add(plantingForm.values)
+    onAccepted: Planting.add(plantingForm.values)
 }
 

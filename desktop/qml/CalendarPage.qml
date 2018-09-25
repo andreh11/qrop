@@ -203,7 +203,7 @@ Page {
                 }
             }
 
-            model: SqlTaskModel {}
+            model: TaskModel {}
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {

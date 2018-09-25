@@ -318,7 +318,7 @@ Page {
                 }
             }
 
-            model: SqlPlantingModel {
+            model: PlantingModel {
                 crop: filterField.text
             }
 
@@ -454,13 +454,13 @@ Page {
                         }
 
                         TableLabel {
-                            text: model.crop
+                            text: Planting.cropName(model.planting_id)
                             elide: Text.ElideRight
                             width: 100
                         }
 
                         TableLabel {
-                            text: model.variety
+                            text: Planting.varietyName(model.planting_id)
                             elide: Text.ElideRight
                             width: 100
                         }

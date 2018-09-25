@@ -79,20 +79,23 @@ Flickable {
             width: parent.width
             spacing: 8
 
-            MyTextField {
+            MyComboBox {
                 id: cropField
-                floatingLabel: true
-                placeholderText: qsTr("Crop")
+//                floatingLabel: true
+//                placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
                 focus: true
+                textRole: crop
+                model: CropModel { }
             }
 
-            MyTextField {
+            MyComboBox {
                 id: varietyField
-                floatingLabel: true
-                placeholderText: qsTr("Variety")
+//                floatingLabel: true
+//                placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
+                model: VarietyModel { }
             }
 
             MyTextField {
