@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
 #include "cropmodel.h"
 
 CropModel::CropModel(QObject *parent)
@@ -21,6 +22,7 @@ CropModel::CropModel(QObject *parent)
 {
     setTable("crop");
     select();
+    qDebug() << "CROP" << roleNames();
 
 //    int familyColumn = fieldColumn("family_id");
 //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));

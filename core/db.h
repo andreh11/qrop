@@ -77,6 +77,7 @@ protected:
 };
 
 class CORESHARED_EXPORT Task : public DatabaseUtility {
+    Q_OBJECT
 public:
     Task(QObject *parent = nullptr);
     Q_INVOKABLE QList<int> sowPlantTaskIds(int plantingId) const;
@@ -118,11 +119,12 @@ private:
 };
 
 class CORESHARED_EXPORT Location : public DatabaseUtility {
+    Q_OBJECT
 public:
     Location(QObject *parent = nullptr);
 //    Q_INVOKABLE int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
 
-    Q_INVOKABLE QString fullname(int locationId) const;
+    Q_INVOKABLE QString fullName(int locationId) const;
     Q_INVOKABLE QList<QSqlRecord> locations(int plantingId) const;
     Q_INVOKABLE QList<int> children(int locationId) const;
     Q_INVOKABLE void addPlanting(int plantingId, int locationId) const;
@@ -131,15 +133,24 @@ public:
 };
 
 class CORESHARED_EXPORT Note : public DatabaseUtility {
+    Q_OBJECT
+public:
+    Note(QObject *parent = nullptr);
 };
 
 class CORESHARED_EXPORT Keyword : public DatabaseUtility {
+    Q_OBJECT
+    Keyword(QObject *parent = nullptr);
 };
 
 class CORESHARED_EXPORT Expense : public DatabaseUtility {
+    Q_OBJECT
+    Expense(QObject *parent = nullptr);
 };
 
 class CORESHARED_EXPORT User : public DatabaseUtility {
+    Q_OBJECT
+    User(QObject *parent = nullptr);
 };
 
 #endif // DB_H

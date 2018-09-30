@@ -86,8 +86,10 @@ Flickable {
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
                 focus: true
-                textRole: crop
-                model: CropModel { }
+                model: CropModel { id: cropModel }
+                textRole: "crop"
+                editable: true
+                onCurrentIndexChanged: varietyModel.cropId = currentIndex
             }
 
             MyComboBox {
@@ -95,7 +97,11 @@ Flickable {
 //                floatingLabel: true
 //                placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
-                model: VarietyModel { }
+                editable: true
+                model: VarietyModel {
+                    id: varietyModel
+                }
+                textRole: "variety"
             }
 
             MyTextField {
@@ -122,12 +128,12 @@ Flickable {
                 }
                 RadioButton {
                     id: greenhouseRadio
-                    text: "Transplant, raised"
+                    text: qsTr("Transplant, raised")
                     Layout.fillWidth: true
                 }
                 RadioButton {
                     id: boughtRadio
-                    text: "Transplant, bought"
+                    text: qsTr("Transplant, bought")
                     Layout.fillWidth: true
                 }
             }

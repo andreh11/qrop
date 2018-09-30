@@ -38,7 +38,6 @@ public:
 signals:
     void cropChanged();
 
-
 private:
     QString m_crop;
     QHash<QModelIndex, bool> m_selected;

@@ -14,12 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
 #include "varietymodel.h"
 
 VarietyModel::VarietyModel(QObject *parent) :
-    SqlTableModel(parent)
+    SqlTableModel(parent),
+    m_cropId(-1)
 {
     setTable("variety");
+    setFilterCropId(1);
 
     int cropColumn = fieldColumn("crop_id");
     setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
@@ -29,4 +32,31 @@ VarietyModel::VarietyModel(QObject *parent) :
                                                 "seed_company_id",
                                                 "seed_company"));
     select();
+}
+
+int VarietyModel::cropId() const
+{
+    return m_cropId;
+}
+
+
+void VarietyModel::setFilterCropId(int cropId)
+{
+   if (cropId == m_cropId)
+       return;
+   qDebug() << "Filter CROP" << cropId;
+
+   m_cropId = cropId;
+
+    if (m_cropId < 1) {
+        qInfo("[VarietyModel] null filter");
+        setFilter("");
+    } else {
+        const QString filterString = QString::fromLatin1(
+            "crop_id = %1").arg(cropId);
+        setFilter(filterString);
+    }
+
+    select();
+    emit cropIdChanged();
 }

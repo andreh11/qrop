@@ -25,8 +25,18 @@
 class CORESHARED_EXPORT VarietyModel : public SqlTableModel
 {
     Q_OBJECT
+    Q_PROPERTY(int cropId READ cropId WRITE setFilterCropId NOTIFY cropIdChanged)
 public:
     explicit VarietyModel(QObject *parent = nullptr);
+    int cropId() const;
+    void setFilterCropId(int cropId);
+
+signals:
+    void cropIdChanged();
+
+private:
+    int m_cropId;
+
 };
 
 #endif // VARIETYMODEL_H

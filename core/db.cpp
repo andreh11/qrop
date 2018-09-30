@@ -497,6 +497,23 @@ Location::Location(QObject *parent)
       m_table = "location";
 }
 
+QString Location::fullName(int locationId) const
+{
+    if (locationId < 1)
+        return QString();
+    QSqlRecord record = recordFromId("location", locationId);
+
+    if (record.isEmpty())
+        return QString();
+
+    QString name = record.value("name").toString();
+    while (!record.value("parent_id").isNull()) {
+        record = recordFromId("location", record.value("parent_id").toInt());
+        name = record.value("name").toString() + name;
+    }
+    return name;
+}
+
 QList<QSqlRecord> Location::locations(int plantingId) const
 {
     QString queryString = "SELECT * FROM planting_location WHERE planting_id = %1";
@@ -527,4 +544,28 @@ void Location::removePlantingLocations(int plantingId) const
     QString queryString = "DELETE FROM planting_location WHERY planting_id = %1)";
     QSqlQuery query(queryString.arg(plantingId));
     debugQuery(query);
+}
+
+Note::Note(QObject *parent)
+    : DatabaseUtility(parent)
+{
+    m_table = "note";
+}
+
+Keyword::Keyword(QObject *parent)
+    : DatabaseUtility(parent)
+{
+    m_table = "keyword";
+}
+
+Expense::Expense(QObject *parent)
+    : DatabaseUtility(parent)
+{
+    m_table = "expense";
+}
+
+User::User(QObject *parent)
+    : DatabaseUtility(parent)
+{
+    m_table = "user";
 }

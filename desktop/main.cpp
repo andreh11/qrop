@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
-    qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
 
