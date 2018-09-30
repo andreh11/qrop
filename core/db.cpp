@@ -417,13 +417,13 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     }
 }
 
-//int Task::duplicateTasks(int sourcePlantingId, int newPlantingId)
-//{
-//    // TODO
-//    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
-//             << "for" << newPlantingId;
-//    return -1;
-//}
+int Task::duplicateTasks(int sourcePlantingId, int newPlantingId) const
+{
+    // TODO
+    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
+             << "for" << newPlantingId;
+    return -1;
+}
 
 void Task::removeTasks(int plantingId) const
 {
@@ -527,6 +527,12 @@ QList<QSqlRecord> Location::locations(int plantingId) const
         recordList.append(recordFromId("location", id));
     }
     return recordList;
+}
+
+QList<int> Location::children(int locationId) const
+{
+    QString queryString("SELECT * FROM location WHERE parent_id = %1");
+    return queryIds(queryString.arg(locationId), "location_id");
 }
 
 void Location::addPlanting(int plantingId, int locationId) const
