@@ -403,8 +403,10 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(sowTaskId)));
         debugQuery(query);
 
-        QString linkQueryString = "UPDATE task SET link_days = %1, assigned_date = %2 WHERE task_id = %3";
-        QSqlQuery linkQuery(queryString.arg(dtt).arg(plantingDate.toString(Qt::ISODate)).arg(transplantTaskId));
+        QString linkQueryString("UPDATE task SET link_days = %1, "
+                                "assigned_date = %2 WHERE task_id = %3");
+        QSqlQuery linkQuery(queryString.arg(dtt).arg(plantingDate.toString(Qt::ISODate))
+                            .arg(transplantTaskId));
         debugQuery(linkQuery);
         break;
     }
@@ -417,12 +419,20 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     }
 }
 
-int Task::duplicateTasks(int sourcePlantingId, int newPlantingId) const
+void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
 {
-    // TODO
     qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
              << "for" << newPlantingId;
-    return -1;
+
+    QList<int> sourceTasks = plantingTasks(sourcePlantingId);
+    QVariantMap map;
+    int newTaskId;
+    foreach (const int taskId, sourceTasks) {
+        map = mapFromId("task", taskId);
+        map.remove("task_id");
+        newTaskId = add(map);
+        addPlanting(newPlantingId, newTaskId);
+    }
 }
 
 void Task::removeTasks(int plantingId) const
