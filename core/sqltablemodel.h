@@ -41,13 +41,6 @@ public:
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     bool submitAll();
 
-//    Q_INVOKABLE int add(QVariantMap map);
-//    Q_INVOKABLE void update(int id, QVariantMap map);
-//    Q_INVOKABLE int duplicate(int id);
-//    Q_INVOKABLE void duplicate(QList<int> idList);
-//    Q_INVOKABLE void remove(int id);
-//    Q_INVOKABLE void remove(QList<int> idList);
-
 private:
     QHash<QString, int> m_rolesIndexes;
 

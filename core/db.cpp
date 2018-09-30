@@ -254,7 +254,6 @@ void Planting::update(int id, QVariantMap map) const
 {
     QString plantingDateString = map.take("planting_date").toString();
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-
     DatabaseUtility::update(id, map);
     task.updateTaskDates(id, plantingDate);
 }
@@ -302,6 +301,29 @@ void Task::removeLocation(int locationId, int taskId) const
     removeLink("location_task", "location_id", locationId, "task_id", taskId);
 }
 
+void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
+{
+    qDebug() << "[Task] Duplicate tasks of location" << sourceLocationId
+             << "for" << newLocationId;
+
+    QList<int> sourceTasks = locationTasks(sourceLocationId);
+    QVariantMap map;
+    int newTaskId;
+    foreach (const int taskId, sourceTasks) {
+        map = mapFromId("task", taskId);
+        map.remove("task_id");
+        newTaskId = add(map);
+        addLocation(newLocationId, newTaskId);
+    }
+}
+
+void Task::removeLocationTasks(int locationId) const
+{
+    qDebug() << "[Task] Removing tasks for location: " << locationId;
+    QString queryString("DELETE FROM location_task WHERE location_id = %1");
+    QSqlQuery query(queryString.arg(locationId));
+    debugQuery(query);
+}
 
 QList<int> Task::plantingTasks(int plantingId) const
 {
@@ -435,7 +457,7 @@ void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
     }
 }
 
-void Task::removeTasks(int plantingId) const
+void Task::removePlantingTasks(int plantingId) const
 {
     qDebug() << "[Task] Removing tasks for planting: " << plantingId;
     QString queryString("DELETE FROM planting_task WHERE planting_id = %1");

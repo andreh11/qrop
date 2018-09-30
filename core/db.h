@@ -87,11 +87,13 @@ public:
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const;
-    Q_INVOKABLE void removeTasks(int plantingId) const;
+    Q_INVOKABLE void removePlantingTasks(int plantingId) const;
 
     Q_INVOKABLE void addLocation(int locationId, int taskId) const;
     Q_INVOKABLE void removeLocation(int locationId, int taskId) const;
     Q_INVOKABLE QList<int> locationTasks(int locationId) const;
+    Q_INVOKABLE void duplicateLocationTasks(int sourceLocationId, int newLocationId) const;
+    Q_INVOKABLE void removeLocationTasks(int locationId) const;
 
     Q_INVOKABLE void applyTemplate(int templateId, int plantingId) const;
     Q_INVOKABLE void removeTemplate(int templateId, int plantingId) const;
@@ -114,8 +116,6 @@ public:
     Q_INVOKABLE QString cropName(int id) const;
 private:
     Task task;
-//    void duplicate(const QList<int> &idList);
-//    void remove(const QList<int> &idList);
 };
 
 class CORESHARED_EXPORT Location : public DatabaseUtility {
