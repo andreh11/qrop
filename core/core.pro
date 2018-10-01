@@ -29,7 +29,11 @@ SOURCES += \
     expensecategorymodel.cpp \
     inputmodel.cpp \
     expensemodel.cpp \
-    db.cpp
+    db.cpp \
+    databaseutility.cpp \
+    planting.cpp \
+    task.cpp \
+    location.cpp
 
 
 HEADERS += \
@@ -55,4 +59,8 @@ HEADERS += \
     expensecategorymodel.h \
     inputmodel.h \
     expensemodel.h \
-    db.h
+    db.h \
+    databaseutility.h \
+    planting.h \
+    task.h \
+    location.h

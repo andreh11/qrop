@@ -18,7 +18,7 @@
 #include "rolemodel.h"
 #include "cropmodel.h"
 #include "varietymodel.h"
-#include "db.h"
+#include "planting.h"
 
 // TODO: move this to core
 static void connectToDatabase()
