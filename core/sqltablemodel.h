@@ -35,6 +35,7 @@ public:
 
     bool insertRecord(int row, const QSqlRecord &record);
     QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &idx, const QString &role) const;
     int fieldColumn(const QString &field) const;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
@@ -43,8 +44,8 @@ public:
 
 private:
     QHash<QString, int> m_rolesIndexes;
-
     void buildRolesIndexes();
+    bool isISODate(const QString &string) const;
 };
 
 #endif // SQLTABLEMODEL_H

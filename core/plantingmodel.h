@@ -17,31 +17,48 @@
 #ifndef SQLPLANTINGMODEL_H
 #define SQLPLANTINGMODEL_H
 
+#include <QSortFilterProxyModel>
 #include <QVariantMap>
 
 #include "core_global.h"
 #include "sqltablemodel.h"
 
-class CORESHARED_EXPORT PlantingModel : public SqlTableModel
+class CORESHARED_EXPORT PlantingModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString crop READ crop WRITE setFilterCrop NOTIFY cropChanged)
+    Q_PROPERTY(QString filterString READ filterString WRITE setFilterFixedString NOTIFY filterStringChanged)
+    Q_PROPERTY(int year READ filterYear() WRITE setFilterYear NOTIFY filterYearChanged)
+    Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
 
 public:
     PlantingModel(QObject *parent = nullptr);
 
-    QString crop() const;
-    void setFilterCrop(const QString &crop);
+    QString filterString() const;
+    int filterYear() const;
+    int filterSeason() const;
 
-    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
+    Q_INVOKABLE void setFilterYear(int year);
+    Q_INVOKABLE void setFilterSeason(int season);
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 signals:
-    void cropChanged();
+    void filterStringChanged();
+    void filterYearChanged();
+    void filterSeasonChanged();
 
 private:
     QString m_crop;
+    QString m_string;
     QHash<QModelIndex, bool> m_selected;
+    SqlTableModel *m_model;
+    int m_year;
+    int m_season;
 
+    bool isDateInRange(const QDate &date) const;
+    QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
+    QVector<QDate> seasonDates() const;
 };
 
 #endif // SQLPLANTINGMODEL_H

@@ -193,7 +193,8 @@ Page {
                     Layout.fillWidth: true
                 }
 
-                MSpinBox {
+                SpinBox {
+                    id: seasonSpinBox
                     visible: checks === 0
                     from: 0
                     to: items.length - 1
@@ -319,7 +320,9 @@ Page {
             }
 
             model: PlantingModel {
-                crop: filterField.text
+                filterString: filterField.text
+                year: yearSpinBox.value
+                season: seasonSpinBox.value
             }
 
             headerPositioning: ListView.OverlayHeader

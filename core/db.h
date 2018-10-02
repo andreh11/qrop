@@ -25,6 +25,8 @@
 
 #include "core_global.h"
 
+CORESHARED_EXPORT void connectToDatabase();
+
 //class CORESHARED_EXPORT Note : public DatabaseUtility {
 //    Q_OBJECT
 //public:

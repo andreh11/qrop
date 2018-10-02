@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDate>
 #include <QSqlRecord>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -47,14 +48,25 @@ QVariant SqlTableModel::data(const QModelIndex &index, int role) const
     const QSqlRecord sqlRecord = record(index.row());
     value = sqlRecord.value(role - Qt::UserRole);
 
-    return value;
+    QDate date = QDate::fromString(value.toString(), Qt::ISODate);
+    if (date.isValid()) // fromString(string) returns invalid date if string cannot be parsed
+        return date;
+    else
+        return value;
+}
+
+QVariant SqlTableModel::data(const QModelIndex &index, const QString &role) const
+{
+    if (m_rolesIndexes.find(role) == m_rolesIndexes.end())
+        return QVariant();
+
+    return data(index, m_rolesIndexes[role]);
 }
 
 int SqlTableModel::fieldColumn(const QString &field) const
 {
     return m_rolesIndexes[field];
 }
-
 
 QHash<int, QByteArray> SqlTableModel::roleNames() const
 {
