@@ -64,3 +64,6 @@ HEADERS += \
     planting.h \
     task.h \
     location.h
+
+RESOURCES += \
+    core_resources.qrc

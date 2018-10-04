@@ -200,7 +200,7 @@ Page {
                     to: items.length - 1
                     value: 1
 
-                    property var items: ["Spring", "Summer", "Autumn", "Fall"]
+                    property var items: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
 
                     validator: RegExpValidator {
                         regExp: new RegExp("(Small|Medium|Large)", "i")
@@ -457,13 +457,13 @@ Page {
                         }
 
                         TableLabel {
-                            text: Planting.cropName(model.planting_id)
+                            text: model.crop
                             elide: Text.ElideRight
                             width: 100
                         }
 
                         TableLabel {
-                            text: Planting.varietyName(model.planting_id)
+                            text: model.variety
                             elide: Text.ElideRight
                             width: 100
                         }

@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS planting (
     planting_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     code              TEXT,
     planting_type     INTEGER NOT NULL, -- 1: DS, 2: TP raised, 3: TP bought
+    planting_date     STRING NOT NULL, -- sowing date for planting_type 1,
+                                       -- tranplanting for 2, 3
     dtt               INTEGER,
     dtm               INTEGER,
     harvest_window    INTEGER,
@@ -133,9 +135,9 @@ CREATE TABLE IF NOT EXISTS task_type (
     type TEXT NOT NULL
 );
 
-INSERT INTO task_type (type) values ("Direct sow"); -- 1
-INSERT INTO task_type (type) values ("Greenhouse sow"); -- 2
-INSERT INTO task_type (type) values ("Transplant"); -- 3
+INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
+INSERT INTO task_type (task_type_id, type) values (2, "Greenhouse sow");
+INSERT INTO task_type (task_type_id, type) values (3, "Transplant");
 
 CREATE TABLE IF NOT EXISTS task_method (
     task_method_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -190,35 +192,6 @@ CREATE TABLE IF NOT EXISTS planting_task (
     PRIMARY KEY (planting_id, task_id)
 );
 
--- A task is associated to at least 1 planting. If there is no more planting
--- associated to a task, we delete it.
-CREATE TRIGGER planting_task_delete AFTER DELETE ON planting_task FOR EACH ROW
-WHEN (SELECT COUNT(*) FROM planting_task WHERE task_id = OLD.task_id) = 0
-BEGIN
-  DELETE FROM task
-  WHERE task_id = OLD.task_id;
-END;
-
-CREATE TRIGGER planting_update_date AFTER UPDATE ON planting FOR EACH ROW
-WHEN NEW.dtt != OLD.dtt
-     AND NEW.planting_type = 2
-BEGIN
-  UPDATE task
-  SET link_days = NEW.dtt,
-      assigned_date = date(assigned_date, link_days || " days")
-  WHERE task_id in (select task_id from planting_task WHERE planting_id = NEW.planting_id)
-        AND task_type_id = 3; -- transplant
-END;
-
-CREATE TRIGGER task_update_date AFTER UPDATE on task FOR EACH ROW
-WHEN
-  NEW.assigned_date != OLD.assigned_date
-BEGIN
-  UPDATE task
-  SET assigned_date = date(NEW.assigned_date, link_days || " days")
-  WHERE link_task_id = NEW.task_id;
-END;
-
 CREATE TABLE IF NOT EXISTS planting_location (
     planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
     location_id   INTEGER NOT NULL REFERENCES location ON DELETE CASCADE,
@@ -263,28 +236,13 @@ CREATE TABLE IF NOT EXISTS expense_file (
        PRIMARY KEY (expense_id, file_id)
 );
 
-insert into family (family) values ("Solanaceae");
+-- Views
 
-insert into crop (crop, family_id) values ("Tomato", 1);
-
-insert into variety (variety, crop_id) values ("Apéro F1", 1);
-
-insert into planting (planting_type, variety_id, dtt) values (2, 1, 10);
-insert into planting (planting_type, variety_id) values (1, 1);
-insert into planting (planting_type, variety_id) values (1, 1);
-
-insert into task_type (type) values ("Weed");
-
-insert into task (task_type_id, assigned_date) values (2, "2018-03-10");
-insert into task (task_type_id, assigned_date, link_days, link_task_id) values (3, "2018-03-11", 1, 1);
-insert into task (task_type_id) values (4);
-insert into task (task_type_id) values (4);
-insert into task (task_type_id) values (4);
-
-insert into planting_task values (1, 1);
-insert into planting_task values (1, 2);
-insert into planting_task values (3, 2);
-insert into planting_task values (1, 3);
-insert into planting_task values (1, 4);
-insert into planting_task values (1, 5);
+CREATE VIEW IF NOT EXISTS planting_view AS
+SELECT crop, variety, planting.*, group_concat(location_id) as locations
+FROM planting
+LEFT JOIN planting_location using(planting_id)
+JOIN variety USING (variety_id)
+JOIN crop USING (crop_id)
+GROUP BY planting_id;
 

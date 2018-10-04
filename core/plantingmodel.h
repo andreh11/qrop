@@ -39,6 +39,7 @@ public:
 
     Q_INVOKABLE void setFilterYear(int year);
     Q_INVOKABLE void setFilterSeason(int season);
+    Q_INVOKABLE void setSortColumn(const QString &columnName, const QString &order);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -57,6 +58,7 @@ private:
     int m_season;
 
     bool isDateInRange(const QDate &date) const;
+    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
     QVector<QDate> seasonDates() const;
 };
