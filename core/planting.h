@@ -17,47 +17,27 @@
 #ifndef PLANTING_H
 #define PLANTING_H
 
-#include <QString>
-#include <QList>
-
 #include "core_global.h"
+#include "databaseutility.h"
 
 class Task;
 
-class CORESHARED_EXPORT Planting
-{
+class CORESHARED_EXPORT Planting : public DatabaseUtility {
+    Q_OBJECT
 public:
-    enum PlantingType {
-        DS,
-        TPRAISED,
-        TPBOUGHT
-    };
-    explicit Planting(const QString &crop = "");
+    Planting(QObject *parent = nullptr);
+    Q_INVOKABLE int add(const QVariantMap &map) const;
+    Q_INVOKABLE QList<int> addSuccessions(int successions,
+                                          int daysBetween,
+                                          const QVariantMap &map) const;
+    Q_INVOKABLE void update(int id, const QVariantMap &map) const;
+    Q_INVOKABLE int duplicate(int id) const;
 
-    int id () const;
-    void setId(int id);
-
-    QString crop() const;
-    void setCrop(const QString& crop);
-
-    QString variety() const;
-    void setVariety(const QString& variety);
-
-    QString family() const;
-    void setFamily(const QString& family);
-
-    QString unit() const;
-    void setUnit(const QString& unit);
-
-//    QList<Task>* generateTasks() const;
-
+    // temporary: we'll use a SQLITE view
+    Q_INVOKABLE QString varietyName(int id) const;
+    Q_INVOKABLE QString cropName(int id) const;
 private:
-    int mId;
-    QString mCrop;
-    QString mVariety;
-    QString mFamily;
-    QString mUnit;
-//    PlantingType mPlantingType;
+    Task *task;
 };
 
 #endif // PLANTING_H

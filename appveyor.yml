@@ -1,5 +1,4 @@
 version: 0.1_b{build}
-image: Visual Studio 2017
 configuration: Release
 
 branches:
@@ -7,16 +6,21 @@ branches:
     - master
 
 environment:
+  DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
   matrix:
     # MSVC x86
     - name: win32
+      job: win32
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       platform: amd64_x86
-      qt: 5.11\mingw53_32
+      qt: 5.11\msvc2015
       suffix: msvc2017
       arch: x86
 
     # MSVC x64
-    - name: win64
+    - name: amd64
+      job: amd64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: amd64
       qt: 5.11\msvc2017_64
       suffix: msvc2017
@@ -25,9 +29,18 @@ environment:
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
   - call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
+  - cd /D "%APPVEYOR_BUILD_FOLDER%"
 
 build_script:
   - cd C:\projects\qrop
-  - qmake -v
-  - qmake qrop.pro
+  - qmake -config release qrop.pro PREFIX="%DEPLOY_DIR%"
   - nmake.exe
+
+after_build:
+  - nmake install
+  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"  
+  - 7z a qrop-%name%.zip "desktop\%DEPLOY_DIR%" 
+
+artifacts:
+  - path: qrop-%name%.zip
+    name: portable

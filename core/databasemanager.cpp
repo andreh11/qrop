@@ -68,9 +68,6 @@ DatabaseManager::DatabaseManager(const QString& path) :
 
     bool openStatus = mDatabase->open();
     qDebug() << "Database connection: " << (openStatus ? "OK" : "ERROR");
-
-    plantingDao.init();
-//    locationDao.init()
 }
 
 DatabaseManager::~DatabaseManager()

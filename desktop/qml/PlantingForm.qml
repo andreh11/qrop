@@ -13,6 +13,23 @@ Flickable {
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
 
+    property int plantingType : directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
+
+    property variant values:  {
+        "variety_id" : varietyField.currentIndex + 1,
+        "unit_id" : unitCombo.currentIndex + 1,
+        "planting_type" : plantingType,
+        "length" : parseInt(plantingAmountField.text),
+        "spacing_plants" : parseInt(inRowSpacingField.text),
+        "rows" : parseInt(rowsPerBedField.text),
+        "planting_date" : "2018-02-05",
+        "dtm" : parseInt(plantingType === 1 ? sowDtm.text : plantingDtm.text),
+        "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTime.text) : 0
+    }
+
+    property int successions: parseInt(successionsField.text)
+    property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
+
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
             to.calendarDate = from.calendarDate;
@@ -75,20 +92,29 @@ Flickable {
             width: parent.width
             spacing: 8
 
-            MyTextField {
+            MyComboBox {
                 id: cropField
-                floatingLabel: true
-                placeholderText: qsTr("Crop")
+//                floatingLabel: true
+//                placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
                 focus: true
+                model: CropModel { id: cropModel }
+                textRole: "crop"
+                editable: true
+                onCurrentIndexChanged: varietyModel.cropId = currentIndex
             }
 
-            MyTextField {
+            MyComboBox {
                 id: varietyField
-                floatingLabel: true
-                placeholderText: qsTr("Variety")
+//                floatingLabel: true
+//                placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
+                editable: true
+                model: VarietyModel {
+                    id: varietyModel
+                }
+                textRole: "variety"
             }
 
             MyTextField {
@@ -100,7 +126,7 @@ Flickable {
 
             MyComboBox {
                 id: unitCombo
-                model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
+                model : UnitModel { }
             }
 
             RowLayout {
@@ -115,12 +141,12 @@ Flickable {
                 }
                 RadioButton {
                     id: greenhouseRadio
-                    text: "Transplant, raised"
+                    text: qsTr("Transplant, raised")
                     Layout.fillWidth: true
                 }
                 RadioButton {
                     id: boughtRadio
-                    text: "Transplant, bought"
+                    text: qsTr("Transplant, bought")
                     Layout.fillWidth: true
                 }
             }
@@ -149,9 +175,9 @@ Flickable {
                         id: timeBetweenSuccessionsField
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        placeholderText: qsTr("Time between")
+                        placeholderText: qsTr("Weeks between")
                         Layout.fillWidth: true
-                        suffixText: "weeks"
+//                        suffixText: "weeks"
                     }
                 }
 

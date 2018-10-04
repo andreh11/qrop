@@ -14,22 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOCATIONDAO_H
-#define LOCATIONDAO_H
+#ifndef KEYWORDMODEL_H
+#define KEYWORDMODEL_H
 
-#include <memory>
-#include <vector>
+#include <QObject>
 
-class QSqlDatabase;
-class Location;
+#include "core_global.h"
+#include "sqltablemodel.h"
 
-class LocationDao
+class KeywordModel : public SqlTableModel
 {
+    Q_OBJECT
+
 public:
-    LocationDao(QSqlDatabase& database);
-//    void init() const;
-private:
-    QSqlDatabase& mDatabase;
+    KeywordModel(QObject *parent = nullptr);
 };
 
-#endif // LOCATIONDAO_H
+#endif // KEYWORDMODEL_H

@@ -14,12 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlDatabase>
+#ifndef HARVESTMODEL_H
+#define HARVESTMODEL_H
 
-#include "locationdao.h"
+#include <QObject>
 
-LocationDao::LocationDao(QSqlDatabase &database) :
-    mDatabase(database)
+#include "core_global.h"
+#include "sqltablemodel.h"
+
+class CORESHARED_EXPORT HarvestModel : public SqlTableModel
 {
+    Q_OBJECT
 
-}
+public:
+    HarvestModel(QObject *parent = nullptr);
+};
+
+#endif // HARVESTMODEL_H

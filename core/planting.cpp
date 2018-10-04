@@ -14,79 +14,90 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include <QDate>
+#include <QDebug>
+#include <QSqlRecord>
+#include <QVariantMap>
+
 #include "planting.h"
+#include "task.h"
 
-class Task;
-
-Planting::Planting(const QString& crop) :
-    mId(-1),
-    mCrop(crop),
-    mVariety(""),
-    mFamily(""),
-    mUnit("")
+Planting::Planting(QObject *parent)
+    : DatabaseUtility(parent),
+      task(new Task(this))
 {
-
+    m_table = "planting";
 }
 
-int Planting::id() const
+QString Planting::varietyName(int id) const
 {
-    return mId;
+    QSqlRecord plantingRecord = recordFromId("planting", id);
+    int varietyId = plantingRecord.value("variety_id").toInt();
+    QSqlRecord varietyRecord = recordFromId("variety", varietyId);
+    return varietyRecord.value("variety").toString();
 }
 
-void Planting::setId(int id)
+QString Planting::cropName(int id) const
 {
-    mId = id;
+    QSqlRecord plantingRecord = recordFromId("planting", id);
+    int varietyId = plantingRecord.value("variety_id").toInt();
+    QSqlRecord varietyRecord = recordFromId("variety", varietyId);
+    int cropId = varietyRecord.value("crop_id").toInt();
+    QSqlRecord cropRecord = recordFromId("crop", cropId);
+
+    return cropRecord.value("crop").toString();
 }
 
-QString Planting::crop() const
+int Planting::add(const QVariantMap &map) const
 {
-    return mCrop;
+    QVariantMap newMap(map);
+    QString plantingDateString = newMap.take("planting_date").toString();
+    qDebug() << "PLANTING DATE" <<  plantingDateString;
+    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
+
+    int id = DatabaseUtility::add(map);
+    task->createTasks(id, plantingDate);
+    return id;
 }
 
-void Planting::setCrop(const QString& crop)
+QList<int> Planting::addSuccessions(int successions, int daysBetween, const QVariantMap &map) const
 {
-    mCrop = crop;
+    QDate date = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
+    QList<int> ids;
+    QVariantMap newMap(map);
+
+    QSqlDatabase::database().transaction();
+    for (int i = 0; i < successions; i++) {
+        newMap["planting_date"] = date.toString(Qt::ISODate);
+        ids.append(add(newMap));
+        date = date.addDays(daysBetween);
+    }
+    QSqlDatabase::database().commit();
+
+    return ids;
 }
 
-QString Planting::variety() const
+void Planting::update(int id, const QVariantMap &map) const
 {
-    return mVariety;
+    QVariantMap newMap(map);
+    QString plantingDateString = newMap.take("planting_date").toString();
+    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
+    DatabaseUtility::update(id, newMap);
+    task->updateTaskDates(id, plantingDate);
 }
 
-void Planting::setVariety(const QString& variety)
-{
-    mVariety = variety;
-}
-
-QString Planting::unit() const
-{
-    return mUnit;
-}
-
-void Planting::setUnit(const QString& unit)
-{
-    mUnit = unit;
-}
-
-//QList<Task>* Planting::generateTasks() const {
-//    QList<Task>* tasks = new QList<Task>;
-//    if (mPlantingType == PlantingType::DS) {
-//        Task* task = new Task();
-//        task->setType(TaskType::DS);
-//        tasks->pull_back(task);
-//    } else if (mPlantingType == PlantingType::TPBOUGHT) {
-//        Task* task = new Task();
-//        task->setType(TaskType::PLANT);
-//        tasks->pull_back(task);
-//    } else if (mPlantingType == PlantingType::TPRAISED) {
-//        Task* seedingTask = new Task();
-//        seedingTask->setType(TaskType::GHSEED);
-//        tasks->pull_back(seedingTask);
-
-//        Task* plantingTask = new Task();
-//        plantingTask->setType(TaskType::TRANSPLANT);
-//        tasks->pull_back(plantingTask);
-//    }
-
-//    return tasks;
+//void Planting::update(QList<int> ids, QVariantMap map)
+//{
 //}
+
+int Planting::duplicate(int id) const
+{
+    if (id < 0)
+        return -1;
+
+    QVariantMap map = mapFromId("planting", id);
+    map.remove(idFieldName());
+
+    return add(map);
+}

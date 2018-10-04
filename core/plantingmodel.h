@@ -14,44 +14,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLANTINGMODEL_H
-#define PLANTINGMODEL_H
+#ifndef SQLPLANTINGMODEL_H
+#define SQLPLANTINGMODEL_H
 
-#include <vector>
-#include <memory>
-
-#include <QAbstractListModel>
-#include <QByteArray>
+#include <QSortFilterProxyModel>
+#include <QVariantMap>
 
 #include "core_global.h"
-#include "planting.h"
-#include "databasemanager.h"
+#include "sqltablemodel.h"
 
-class CORESHARED_EXPORT PlantingModel : public QAbstractListModel
+class CORESHARED_EXPORT PlantingModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-public:
-    enum Roles {
-        IdRole = Qt::UserRole + 1,
-        CropRole,
-        VarietyRole
-    };
+    Q_PROPERTY(QString filterString READ filterString WRITE setFilterFixedString NOTIFY filterStringChanged)
+    Q_PROPERTY(int year READ filterYear() WRITE setFilterYear NOTIFY filterYearChanged)
+    Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
 
+public:
     PlantingModel(QObject *parent = nullptr);
 
-    QModelIndex addPlanting(const Planting& planting);
+    QString filterString() const;
+    int filterYear() const;
+    int filterSeason() const;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Q_INVOKABLE bool removeRows(int row, int count,
-                                const QModelIndex& parent = QModelIndex()) override;
-    QHash<int, QByteArray> roleNames() const override;
+    Q_INVOKABLE void setFilterYear(int year);
+    Q_INVOKABLE void setFilterSeason(int season);
+    Q_INVOKABLE void setSortColumn(const QString &columnName, const QString &order);
+    Q_INVOKABLE void refresh() const;
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+signals:
+    void filterStringChanged();
+    void filterYearChanged();
+    void filterSeasonChanged();
 
 private:
-    bool isIndexValid(const QModelIndex& index) const;
-    DatabaseManager& mDatabase;
-    std::unique_ptr<std::vector<std::unique_ptr<Planting>>> mPlantings;
+    QString m_crop;
+    QString m_string;
+    QHash<QModelIndex, bool> m_selected;
+    SqlTableModel *m_model;
+    int m_year;
+    int m_season;
+
+    bool isDateInRange(const QDate &date) const;
+    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
+    QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
+    QVector<QDate> seasonDates() const;
 };
 
-#endif // PLANTINGMODEL_H
+#endif // SQLPLANTINGMODEL_H

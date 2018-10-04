@@ -45,8 +45,8 @@ Page {
                     anchors.fill: parent
                     spacing: 0
                     clip: true
-                    model: SqlPlantingModel {
-                        crop: searchString
+                    model: PlantingModel {
+                        filterString: searchString
                     }
                     delegate:  Row {
                         width: parent.width

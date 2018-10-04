@@ -14,106 +14,154 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QAbstractListModel>
+#include <QSqlRecord>
+#include <QDebug>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QDate>
+#include <QVector>
 
 #include "plantingmodel.h"
+#include "taskmodel.h"
+#include "locationmodel.h"
+#include "notemodel.h"
+#include "keywordmodel.h"
+#include "harvestmodel.h"
+#include "expensemodel.h"
 
-using namespace std;
+static const char *plantingTableName = "planting_view";
 
-PlantingModel::PlantingModel(QObject* parent) :
-    QAbstractListModel(parent),
-    mDatabase(DatabaseManager::instance()),
-    mPlantings(mDatabase.plantingDao.plantings())
+PlantingModel::PlantingModel(QObject *parent)
+    : QSortFilterProxyModel(parent),
+      m_model(new SqlTableModel(this)),
+      m_year(QDate::currentDate().year()),
+      m_season(1)
 {
+    m_model->setTable(plantingTableName);
+    m_model->setSortColumn("seeding_date", "ascending");
+    m_model->select();
+
+    setSourceModel(m_model);
+
+//    int varietyColumn = fieldColumn("variety_id");
+//    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
+
+//    select();
 }
 
-QModelIndex PlantingModel::addPlanting(const Planting& planting)
+void PlantingModel::refresh() const
 {
-    int rowIndex = rowCount();
-    beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Planting> newPlanting(new Planting(planting));
-    mDatabase.plantingDao.addPlanting(*newPlanting);
-    mPlantings->push_back(move(newPlanting));
-    endInsertRows();
-
-    return index(rowIndex, 0);
+    m_model->select();
 }
 
-int PlantingModel::rowCount(const QModelIndex& parent) const
+void PlantingModel::setSortColumn(const QString &columnName, const QString &order)
 {
-    Q_UNUSED(parent);
-    return mPlantings->size();
+    m_model->setSortColumn(columnName, order);
 }
 
-QVariant PlantingModel::data(const QModelIndex& index, int role) const
+QString PlantingModel::filterString() const
 {
-    if (!isIndexValid(index))
+    return m_string;
+}
+
+int PlantingModel::filterYear() const
+{
+    return m_year;
+}
+
+int PlantingModel::filterSeason() const
+{
+    return m_season;
+}
+
+void PlantingModel::setFilterYear(int year)
+{
+    m_year = year;
+    invalidateFilter();
+}
+
+void PlantingModel::setFilterSeason(int season)
+{
+    if (0 <= season && season <= 3)
+        m_season = season;
+    else
+        m_season = 1; // default to Spring
+
+    invalidateFilter();
+}
+
+QVector<QDate> PlantingModel::seasonDates() const
+{
+    switch (m_season) {
+    case 0: // Spring
+        return {QDate(m_year-1, 10, 1), QDate(m_year, 11, 30)};
+    case 2: // Fall
+        return {QDate(m_year, 4, 1), QDate(m_year+1, 3, 31)};
+    case 3: // Winter
+        return {QDate(m_year, 7, 1), QDate(m_year+1, 6, 30)};
+    default: // Summer or invalid season
+        return {QDate(m_year, 1, 1), QDate(m_year, 12, 31)};
+    }
+}
+
+QVariant PlantingModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
+{
+    QModelIndex index = m_model->index(row, 0, parent);
+    if (!index.isValid())
         return QVariant();
 
-    const Planting& planting = *mPlantings->at(index.row());
-
-    switch (role) {
-    case Qt::DisplayRole:
-        return planting.crop() + " " + planting.variety();
-    case Roles::IdRole:
-        return planting.id();
-    case Roles::CropRole:
-        return planting.crop();
-    case Roles::VarietyRole:
-        return planting.variety();
-    default:
-        return QVariant();
-    }
+    return m_model->data(index, field).toString();
 }
 
-bool PlantingModel::setData(const QModelIndex& index, const QVariant& value, int role)
+QDate PlantingModel::fieldDate(int row, const QModelIndex &parent, const QString &field) const
 {
-    if (!isIndexValid(index)
-            || role == IdRole) {
-        return false;
-    }
+    QVariant value = rowValue(row, parent, field);
+    if (value.isNull())
+        return QDate();
 
-    Planting& planting = *mPlantings->at(index.row());
-    planting.setCrop(value.toString());
-    mDatabase.plantingDao.updatePlanting(planting);
-    emit dataChanged(index, index);
-
-    return true;
+    QString string = value.toString();
+    return QDate::fromString(string, Qt::ISODate);
 }
 
-bool PlantingModel::removeRows(int row, int count, const QModelIndex& parent)
+bool PlantingModel::isDateInRange(const QDate &date) const
 {
-    if  (row < 0
-         || row >= rowCount()
-         || count < 0
-         || (row + count) > rowCount()) {
-        return false;
-    }
+    QVector<QDate> dates = seasonDates();
+    QDate seasonBeg = dates[0];
+    QDate seasonEnd = dates[1];
 
-    beginRemoveRows(parent, row, row + count - 1);
-    int countLeft = count;
-    while (countLeft--) {
-        const Planting& planting = *mPlantings->at(row + countLeft);
-        mDatabase.plantingDao.removePlanting(planting.id());
-    }
-    mPlantings->erase(mPlantings->begin() + row,
-                      mPlantings->begin() + row + count);
-    endRemoveRows();
-
-    return true;
+    return seasonBeg <= date && date < seasonEnd;
 }
 
-QHash<int, QByteArray> PlantingModel::roleNames() const
+bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    QHash<int, QByteArray> roles;
-    roles[Roles::IdRole] = "planting_id";
-    roles[Roles::CropRole] = "crop";
-    roles[Roles::VarietyRole] = "variety";
+    QDate sowDate = fieldDate(sourceRow, sourceParent, "sow_date");
+    QDate plantDate = fieldDate(sourceRow, sourceParent, "planting_date");
+    QDate harvestBegDate = fieldDate(sourceRow, sourceParent, "harvest_beg_date");
+    QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "harvest_end_date");
 
-    return roles;
+    return (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent));
+//            && (isDateInRange(sowDate)
+//                || isDateInRange(plantDate)
+//                || isDateInRange(harvestBegDate)
+//                || isDateInRange(harvestEndDate)));
 }
 
-bool PlantingModel::isIndexValid(const QModelIndex& index) const
-{
-    return index.isValid() && (0 <= index.row() < rowCount());
-}
+//void PlantingModel::setFilterCrop(const QString &crop)
+//{
+//   if (crop == m_crop)
+//       return;
+
+//   m_crop = crop;
+
+//    if (m_crop == "") {
+//        qInfo("[PlantingModel] null filter");
+//        setFilter("");
+//    } else {
+//        const QString filterString = QString::fromLatin1(
+//            "(crop LIKE '%%%1%%')").arg(crop);
+//        setFilter(filterString);
+//    }
+
+//    select();
+//    emit cropChanged();
+//}

@@ -33,13 +33,16 @@ Page {
     property int rowHeight: 37
     property int monthWidth: 60
 
+    property alias model: listView.model
+    property alias plantingModel: plantingModel
+
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
         { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
         { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
         { name: qsTr("Seeding Date"),    columnName: "seeding_date",       width: 80 },
-        { name: qsTr("Planting Date"),   columnName: "transplanting_date", width: 80 },
+        { name: qsTr("Planting Date"),   columnName: "planting_date", width: 80 },
         { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date",   width: 80 },
         { name: qsTr("End of harvest"),  columnName: "end_harvest_date",   width: 80 }
     ]
@@ -56,6 +59,7 @@ Page {
     }
 
     function formatDate(date) {
+        console.log("formating...", date);
         var year = date.getFullYear();
         var text = week(date);
         var prefix = "";
@@ -77,6 +81,7 @@ Page {
         width: parent.width / 2
         height: parent.height
         x: (parent.width - width) / 2
+        model: listView.model
     }
 
     //    Pane {
@@ -97,7 +102,7 @@ Page {
 
         Rectangle {
             id: buttonRectangle
-//            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
+            //            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
             color: checks > 0 ? Material.accent : "white"
             visible: true
             width: parent.width
@@ -118,7 +123,7 @@ Page {
                     color: "black"
                     placeholderText: qsTr("Search")
                     Layout.fillWidth: true
-//                    anchors.verticalCenter: parent.verticalCenter
+                    //                    anchors.verticalCenter: parent.verticalCenter
 
                     Shortcut {
                         sequence: "Escape"
@@ -158,7 +163,7 @@ Page {
                 visible: !filterMode
 
                 Label {
-//                    anchors.verticalCenter: parent.verticalCenter
+                    //                    anchors.verticalCenter: parent.verticalCenter
                     text: checks + " planting" + (checks > 1 ? "s" : "") + " selected"
                     leftPadding: 16
                     color: Material.color(Material.Blue)
@@ -191,13 +196,14 @@ Page {
                     Layout.fillWidth: true
                 }
 
-                MSpinBox {
+                SpinBox {
+                    id: seasonSpinBox
                     visible: checks === 0
                     from: 0
                     to: items.length - 1
                     value: 1
 
-                    property var items: ["Spring", "Summer", "Autumn", "Fall"]
+                    property var items: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
 
                     validator: RegExpValidator {
                         regExp: new RegExp("(Small|Medium|Large)", "i")
@@ -316,8 +322,11 @@ Page {
                 }
             }
 
-            model: SqlPlantingModel {
-                crop: filterField.text
+            model: PlantingModel {
+                id: plantingModel
+                filterString: filterField.text
+                year: yearSpinBox.value
+                season: seasonSpinBox.value
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -408,6 +417,13 @@ Page {
             }
 
             delegate: Rectangle {
+                id: delegate
+                property date seedingDate: model.planting_type === 2 ? addDays(transplantingDate, -model.dtt)
+                                             : transplantingDate
+                property date transplantingDate: model.planting_date
+                property date beginHarvestDate: addDays(model.planting_date, model.dtm)
+                property date endHarvestDate: addDays(beginHarvestDate, model.harvest_window)
+
                 height: row.height
                 width: parent.width
                 color: {
@@ -466,35 +482,35 @@ Page {
                         Timeline {
                             year: currentYear
                             visible: showTimegraph
-                            seedingDate: model.seeding_date
-                            transplantingDate: model.transplanting_date
-                            beginHarvestDate: model.beg_harvest_date
-                            endHarvestDate: model.end_harvest_date
+                            seedingDate: delegate.seedingDate
+                            transplantingDate: delegate.transplantingDate
+                            beginHarvestDate: delegate.beginHarvestDate
+                            endHarvestDate: delegate.endHarvestDate
                         }
 
                         TableLabel {
-                            text: formatDate(model.seeding_date)
+                            text: formatDate(seedingDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
-                            text: formatDate(model.transplanting_date)
+                            text: formatDate(transplantingDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
-                            text: formatDate(model.beg_harvest_date)
+                            text: formatDate(beginHarvestDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80
                         }
 
                         TableLabel {
-                            text: formatDate(model.end_harvest_date)
+                            text: formatDate(endHarvestDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             width: 80

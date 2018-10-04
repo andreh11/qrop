@@ -1,59 +1,81 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <QSqlRecord>
+#include <QVariant>
+
 #include "location.h"
 
-Location::Location(const QString& name) :
-    mId(-1),
-    mName(name),
-    mLength(0),
-    mWidth(0),
-    mParentId(0)
+Location::Location(QObject *parent)
+    : DatabaseUtility(parent)
 {
+      m_table = "location";
 }
 
-int Location::id() const
+QString Location::fullName(int locationId) const
 {
-    return mId;
+    if (locationId < 1)
+        return QString();
+    QSqlRecord record = recordFromId("location", locationId);
+
+    if (record.isEmpty())
+        return QString();
+
+    QString name = record.value("name").toString();
+    while (!record.value("parent_id").isNull()) {
+        record = recordFromId("location", record.value("parent_id").toInt());
+        name = record.value("name").toString() + name;
+    }
+    return name;
 }
 
-void Location::setId(int id)
+QList<QSqlRecord> Location::locations(int plantingId) const
 {
-    mId = id;
+    QString queryString = "SELECT * FROM planting_location WHERE planting_id = %1";
+    QSqlQuery query(queryString.arg(plantingId));
+    debugQuery(query);
+
+    QList<QSqlRecord> recordList;
+    int id = -1;
+    while (query.next()) {
+        id = query.value("location_id").toInt();
+        recordList.append(recordFromId("location", id));
+    }
+    return recordList;
 }
 
-QString Location::name() const
+QList<int> Location::children(int locationId) const
 {
-    return mName;
+    QString queryString("SELECT * FROM location WHERE parent_id = %1");
+    return queryIds(queryString.arg(locationId), "location_id");
 }
 
-void Location::setName(const QString& name)
+void Location::addPlanting(int plantingId, int locationId) const
 {
-    mName = name;
+    addLink("planting_location", "planting_id", plantingId, "location_id", locationId);
 }
 
-int Location::length() const
+void Location::removePlanting(int plantingId, int locationId) const
 {
-    return mLength;
+    removeLink("planting_location", "planting_id", plantingId, "location_id", locationId);
 }
 
-void Location::setLength(int length)
+void Location::removePlantingLocations(int plantingId) const
 {
-    mLength = length;
-}
-
-int Location::width() const
-{
-    return mWidth;
-}
-
-void Location::setWidth(int width)
-{
-    mWidth = width;
-}
-int Location::parentId() const
-{
-    return mParentId;
-}
-
-void Location::setParentId(int parentId)
-{
-    mParentId = parentId;
+    QString queryString = "DELETE FROM planting_location WHERY planting_id = %1)";
+    QSqlQuery query(queryString.arg(plantingId));
+    debugQuery(query);
 }

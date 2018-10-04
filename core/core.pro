@@ -8,25 +8,62 @@ CONFIG += lib c++11
 DEFINES += CORE_LIBRARY
 
 SOURCES += \
-    sqltaskmodel.cpp \
-    sqlnotemodel.cpp \
-    sqlplantingmodel.cpp \
-    planting.cpp \
-    plantingdao.cpp \
-    location.cpp \
-    locationdao.cpp \
+#    databasemanager.cpp \
+    sqltablemodel.cpp \
+    taskmodel.cpp \
+    notemodel.cpp \
+    locationmodel.cpp \
     plantingmodel.cpp \
-    databasemanager.cpp
+    cropmodel.cpp \
+    familymodel.cpp \
+    varietymodel.cpp \
+    seedcompanymodel.cpp \
+    unitmodel.cpp \
+    keywordmodel.cpp \
+    harvestmodel.cpp \
+    rolemodel.cpp \
+    usermodel.cpp \
+    tasktemplatemodel.cpp \
+    tasktypemodel.cpp \
+    taskmethodmodel.cpp \
+    expensecategorymodel.cpp \
+    inputmodel.cpp \
+    expensemodel.cpp \
+    db.cpp \
+    databaseutility.cpp \
+    planting.cpp \
+    task.cpp \
+    location.cpp
 
 
 HEADERS += \
     core_global.h \
-    sqltaskmodel.h \
-    sqlnotemodel.h \
-    sqlplantingmodel.h \
-    planting.h \
-    plantingdao.h \
-    location.h \
-    locationdao.h \
+#    databasemanager.h \
+    sqltablemodel.h \
+    taskmodel.h \
+    notemodel.h \
+    locationmodel.h \
     plantingmodel.h \
-    databasemanager.h
+    cropmodel.h \
+    familymodel.h \
+    varietymodel.h \
+    seedcompanymodel.h \
+    unitmodel.h \
+    keywordmodel.h \
+    harvestmodel.h \
+    rolemodel.h \
+    usermodel.h \
+    tasktemplatemodel.h \
+    tasktypemodel.h \
+    taskmethodmodel.h \
+    expensecategorymodel.h \
+    inputmodel.h \
+    expensemodel.h \
+    db.h \
+    databaseutility.h \
+    planting.h \
+    task.h \
+    location.h
+
+RESOURCES += \
+    core_resources.qrc

@@ -1,0 +1,6 @@
+outputdir = ./doc/
+outputformats = HTML
+
+sourcedirs  = .
+sources.fileextensions = "*.cpp *.qml"
+headers.fileextensions = "*.h"

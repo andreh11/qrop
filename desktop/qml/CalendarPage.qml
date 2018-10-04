@@ -203,7 +203,7 @@ Page {
                 }
             }
 
-            model: SqlTaskModel {}
+            model: TaskModel {}
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {
@@ -297,13 +297,13 @@ Page {
                         }
 
                         TableLabel {
-                            text: model.planting_ids
+                            text: model.plantings
                             elide: Text.ElideRight
                             width: 150
                         }
 
                         TableLabel {
-                            text: model.place_ids
+                            text: model.locations
                             elide: Text.ElideRight
                             width: 80
                         }

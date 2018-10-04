@@ -32,7 +32,7 @@ Page {
             //                section.criteria: ViewSection.FullString
             //        section.delegate: sectionHeading
 
-            model: SqlNoteModel {
+            model: NoteModel {
                 id: sqlModel
                 //            crop: filterText
             }

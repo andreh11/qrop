@@ -4,5 +4,6 @@
         <file>fonts/RobotoCondensed-Regular.ttf</file>
         <file>fonts/Roboto-Regular.ttf</file>
         <file>fonts/fa-regular-400.ttf</file>
+        <file>translations/fr.qm</file>
     </qresource>
 </RCC>
