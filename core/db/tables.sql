@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS unit (
     conversion_rate FLOAT -- from unit to kilogram
 );
 
+INSERT INTO unit values (1, "kg", 1.0);
+INSERT INTO unit values (2, "bunch", 1.0);
+
 CREATE TABLE IF NOT EXISTS keyword (
     keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
     keyword    TEXT UNIQUE NOT NULL,
@@ -72,7 +75,8 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_per_gram    INTEGER,
     seeds_number      INTEGER,
     seeds_quantity    FLOAT,
-    variety_id        INTEGER NOT NULL REFERENCES variety
+    variety_id        INTEGER NOT NULL REFERENCES variety,
+    unit_id           INTEGER NOT NULL REFERENCES unit
 );
 
 CREATE TABLE IF NOT EXISTS harvest (
@@ -192,6 +196,12 @@ CREATE TABLE IF NOT EXISTS planting_task (
     PRIMARY KEY (planting_id, task_id)
 );
 
+CREATE TABLE IF NOT EXISTS location_task (
+    location_id   INTEGER NOT NULL REFERENCES location ON DELETE CASCADE,
+    task_id       INTEGER NOT NULL REFERENCES task ON DELETE CASCADE,
+    PRIMARY KEY (location_id, task_id)
+);
+
 CREATE TABLE IF NOT EXISTS planting_location (
     planting_id   INTEGER NOT NULL REFERENCES planting ON DELETE CASCADE,
     location_id   INTEGER NOT NULL REFERENCES location ON DELETE CASCADE,
@@ -246,3 +256,9 @@ JOIN variety USING (variety_id)
 JOIN crop USING (crop_id)
 GROUP BY planting_id;
 
+CREATE VIEW IF NOT EXISTS task_view AS
+SELECT task.*, group_concat(planting_id) as plantings, group_concat(location_id) as locations
+FROM task
+LEFT JOIN planting_task using(task_id)
+LEFT JOIN location_task using(task_id)
+GROUP BY task_id;

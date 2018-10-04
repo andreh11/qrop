@@ -5,7 +5,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-static const char *taskTableName = "tasks_view";
+static const char *taskTableName = "task_view";
 
 TaskModel::TaskModel(QObject *parent)
     : SqlTableModel(parent)

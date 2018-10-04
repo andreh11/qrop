@@ -25,6 +25,11 @@ Dialog {
             id: plantingForm
         }
     }
-    onAccepted: Planting.add(plantingForm.values)
+    onAccepted: {
+        Planting.addSuccessions(plantingForm.successions,
+                plantingForm.weeksBetween,
+                plantingForm.values);
+        plantingModel.refresh();
+    }
 }
 

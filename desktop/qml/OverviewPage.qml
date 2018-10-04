@@ -46,7 +46,7 @@ Page {
                     spacing: 0
                     clip: true
                     model: PlantingModel {
-                        crop: searchString
+                        filterString: searchString
                     }
                     delegate:  Row {
                         width: parent.width

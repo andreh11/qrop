@@ -100,7 +100,7 @@ int DatabaseUtility::add(QVariantMap map) const
     foreach (const QString key, map.keys()) {
         if (key != idFieldName()) {
             queryNameString.append(QString(" %1,").arg(key));
-            queryValueString.append(QString(" %1,").arg(map[key].toString()));
+            queryValueString.append(QString(" \"%1\",").arg(map[key].toString()));
         }
     }
 

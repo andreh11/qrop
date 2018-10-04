@@ -13,9 +13,22 @@ Flickable {
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
 
+    property int plantingType : directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
+
     property variant values:  {
-        "variety_id" : 12
+        "variety_id" : varietyField.currentIndex + 1,
+        "unit_id" : unitCombo.currentIndex + 1,
+        "planting_type" : plantingType,
+        "length" : parseInt(plantingAmountField.text),
+        "spacing_plants" : parseInt(inRowSpacingField.text),
+        "rows" : parseInt(rowsPerBedField.text),
+        "planting_date" : "2018-02-05",
+        "dtm" : parseInt(plantingType === 1 ? sowDtm.text : plantingDtm.text),
+        "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTime.text) : 0
     }
+
+    property int successions: parseInt(successionsField.text)
+    property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
 
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
@@ -113,7 +126,7 @@ Flickable {
 
             MyComboBox {
                 id: unitCombo
-                model : [qsTr("kg"), qsTr("bunch"), qsTr("pound")]
+                model : UnitModel { }
             }
 
             RowLayout {
@@ -162,9 +175,9 @@ Flickable {
                         id: timeBetweenSuccessionsField
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        placeholderText: qsTr("Time between")
+                        placeholderText: qsTr("Weeks between")
                         Layout.fillWidth: true
-                        suffixText: "weeks"
+//                        suffixText: "weeks"
                     }
                 }
 

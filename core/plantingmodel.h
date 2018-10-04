@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE void setFilterYear(int year);
     Q_INVOKABLE void setFilterSeason(int season);
     Q_INVOKABLE void setSortColumn(const QString &columnName, const QString &order);
+    Q_INVOKABLE void refresh() const;
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;

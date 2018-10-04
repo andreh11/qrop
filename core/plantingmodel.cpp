@@ -49,6 +49,11 @@ PlantingModel::PlantingModel(QObject *parent)
 //    select();
 }
 
+void PlantingModel::refresh() const
+{
+    m_model->select();
+}
+
 void PlantingModel::setSortColumn(const QString &columnName, const QString &order)
 {
     m_model->setSortColumn(columnName, order);

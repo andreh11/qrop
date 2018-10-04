@@ -16,6 +16,7 @@
 
 
 #include <QDate>
+#include <QDebug>
 #include <QSqlRecord>
 #include <QVariantMap>
 
@@ -52,9 +53,10 @@ int Planting::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
     QString plantingDateString = newMap.take("planting_date").toString();
+    qDebug() << "PLANTING DATE" <<  plantingDateString;
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
 
-    int id = DatabaseUtility::add(newMap);
+    int id = DatabaseUtility::add(map);
     task->createTasks(id, plantingDate);
     return id;
 }
