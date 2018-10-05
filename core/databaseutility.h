@@ -65,7 +65,7 @@ public:
     int duplicate(int id) const;
     void duplicate(const QList<int> &idList) const;
 
-    void remove(int id) const;
+    Q_INVOKABLE void remove(int id) const;
     void remove(const QList<int> &idList) const;
     void removeLink(const QString &table,
                     const QString &field1, int id1,

@@ -178,6 +178,14 @@ void DatabaseUtility::remove(int id) const
     debugQuery(query);
 }
 
+void DatabaseUtility::remove(const QList<int> &idList) const
+{
+    QSqlDatabase::database().transaction();
+    foreach (int id, idList)
+        remove(id);
+    QSqlDatabase::database().commit();
+}
+
 void DatabaseUtility::removeLink(const QString &table,
                                  const QString &field1, int id1,
                                  const QString &field2, int id2) const
@@ -186,12 +194,4 @@ void DatabaseUtility::removeLink(const QString &table,
     QSqlQuery query(queryString.arg(table, field1).arg(id1).arg(field2).arg(id2));
     query.exec();
     debugQuery(query);
-}
-
-void DatabaseUtility::remove(const QList<int> &idList) const
-{
-    QSqlDatabase::database().transaction();
-    foreach (int id, idList)
-        remove(id);
-    QSqlDatabase::database().commit();
 }

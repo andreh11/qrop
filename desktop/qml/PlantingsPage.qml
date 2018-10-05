@@ -67,6 +67,15 @@ Page {
         return n
     }
 
+    function removeSelected() {
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+                selectedIds[key] = false;
+                Planting.remove(key);
+            }
+        checks = numberOfTrue(selectedIds)
+    }
+
     function formatDate(date) {
         var year = date.getFullYear();
         var text = week(date);
@@ -184,6 +193,7 @@ Page {
                 }
 
                 ToolButton {
+                    id: addButton
                     font.pixelSize: fontSizeBodyAndButton
                     leftPadding: 24
                     visible: checks === 0
@@ -258,6 +268,10 @@ Page {
                     id: deleteButton
                     text: "\ue872" // delete
                     visible: checks > 0
+                    onClicked: {
+                        removeSelected();
+                        model.refresh();
+                    }
                 }
 
                 IconButton {
@@ -546,13 +560,12 @@ Page {
     }
 
     RoundButton {
-        id: addButton
         font.family: "Material Icons"
         font.pixelSize: 20
         text: "\ue145"
         width: 56
         height: width
-        // Don't want to use anchors for the y position, because it will anchor
+        // Cannot use anchors for the y position, because it will anchor
         // to the footer, leaving a large vertical gap.
         y: parent.height - height
         anchors.right: parent.right
