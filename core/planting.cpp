@@ -61,7 +61,7 @@ int Planting::add(const QVariantMap &map) const
     return id;
 }
 
-QList<int> Planting::addSuccessions(int successions, int daysBetween, const QVariantMap &map) const
+QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     QDate date = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
     QList<int> ids;
@@ -71,7 +71,7 @@ QList<int> Planting::addSuccessions(int successions, int daysBetween, const QVar
     for (int i = 0; i < successions; i++) {
         newMap["planting_date"] = date.toString(Qt::ISODate);
         ids.append(add(newMap));
-        date = date.addDays(daysBetween);
+        date = date.addDays(weeksBetween * 7);
     }
     QSqlDatabase::database().commit();
 

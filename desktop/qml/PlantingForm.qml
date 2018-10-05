@@ -22,7 +22,8 @@ Flickable {
         "length" : parseInt(plantingAmountField.text),
         "spacing_plants" : parseInt(inRowSpacingField.text),
         "rows" : parseInt(rowsPerBedField.text),
-        "planting_date" : "2018-02-05",
+        "planting_date" : plantingType === 1 ? fieldPlantingDate.isoDateString
+                                             : fieldPlantingDate.isoDateString,
         "dtm" : parseInt(plantingType === 1 ? sowDtm.text : plantingDtm.text),
         "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTime.text) : 0
     }
@@ -127,6 +128,7 @@ Flickable {
             MyComboBox {
                 id: unitCombo
                 model : UnitModel { }
+                textRole: "unit"
             }
 
             RowLayout {

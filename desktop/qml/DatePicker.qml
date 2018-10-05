@@ -28,6 +28,7 @@ Item {
     property alias placeholderText: textField.placeholderText
 
     property date calendarDate: new Date()
+    property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
     property string dateHelperText: mode === "date" ? qsTr("W") + isoWeek(calendarDate)

@@ -28,7 +28,6 @@ Page {
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
     property string filterText: ""
-    property int checks: 0
     property int currentYear: 2018
     property int rowHeight: 37
     property int monthWidth: 60
@@ -46,6 +45,8 @@ Page {
         { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date",   width: 80 },
         { name: qsTr("End of harvest"),  columnName: "end_harvest_date",   width: 80 }
     ]
+    property var selectedIds: []
+    property int checks: numberOfTrue(selectedIds)
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName;
@@ -58,8 +59,15 @@ Page {
         listView.model.setSortColumn(columnName, tableSortOrder);
     }
 
+    function numberOfTrue(array) {
+        var n = 0;
+        for (var key in array)
+            if (array[key])
+                n++;
+        return n
+    }
+
     function formatDate(date) {
-        console.log("formating...", date);
         var year = date.getFullYear();
         var text = week(date);
         var prefix = "";
@@ -458,12 +466,15 @@ Page {
                             id: checkBox
                             anchors.verticalCenter: row.verticalCenter
                             width: 24
+                            checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
                             onCheckStateChanged: {
-                                if (checked) {
-                                    checks = checks + 1
-                                } else {
-                                    checks = checks - 1
-                                }
+                                selectedIds[model.planting_id] = checked
+                                checks = numberOfTrue(selectedIds)
+//                                if (checked) {
+//                                    checks = checks + 1
+//                                } else {
+//                                    checks = checks - 1
+//                                }
                             }
                         }
 
