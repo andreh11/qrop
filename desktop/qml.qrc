@@ -30,5 +30,6 @@
         <file>qml/MSpinBox.qml</file>
         <file>qml/DatePicker.qml</file>
         <file>qml/CalendarView.qml</file>
+        <file>qml/TextCheckBox.qml</file>
     </qresource>
 </RCC>

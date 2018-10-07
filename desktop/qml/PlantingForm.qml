@@ -25,7 +25,8 @@ Flickable {
         "planting_date" : plantingType === 1 ? fieldPlantingDate.isoDateString
                                              : fieldPlantingDate.isoDateString,
         "dtm" : parseInt(plantingType === 1 ? sowDtm.text : plantingDtm.text),
-        "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTime.text) : 0
+        "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTime.text) : 0,
+        "harvest_window" : parseInt(harvestWindow.text)
     }
 
     property int successions: parseInt(successionsField.text)

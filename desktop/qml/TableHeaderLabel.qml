@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 Item {
-    id: header
+    id: control
     height: headerLabel.height
     anchors.verticalCenter: parent.verticalCenter
 
@@ -14,28 +14,53 @@ Item {
     property alias text: headerLabel.text
     property Item container
 
-    Row {
+    property int horizontalAlignment: Text.AlignLeft
+
+    RowLayout {
         id: row
         width: parent.width
+        spacing: 0
+
+        Label {
+            Layout.fillWidth: control.horizontalAlignment === Text.AlignRight
+        }
+
+        Label {
+            id: leftIconLabel
+            transformOrigin: Item.Center
+            text: "\ue5db"
+            visible: control.horizontalAlignment === Text.AlignRight && mouseArea.containsMouse
+            horizontalAlignment: control.horizontalAlignment
+            color: "black"
+            font.family: "Material Icons"
+            font.pixelSize: 16
+        }
+
         Label {
             id: headerLabel
-//            implicitWidth: parent.width - iconLabel.width
+            width: parent.width - leftIconLabel.width
             elide: Text.ElideRight
             color: Material.color(Material.Grey, Material.Shade700)
             font.family: "Roboto Condensed"
             font.pixelSize: 14
-            anchors.verticalCenter: parent.verticalCenter
+            horizontalAlignment: control.horizontalAlignment
+            maximumLineCount: 5
+//            Layout.fillWidth: true
         }
 
         Label {
-            id: iconLabel
+            id: rightIconLabel
             transformOrigin: Item.Center
             text: "\ue5db"
-            visible: mouseArea.containsMouse
+            visible: mouseArea.containsMouse && !leftIconLabel.visible
+            horizontalAlignment: control.horizontalAlignment
             color: "black"
             font.family: "Material Icons"
             font.pixelSize: 16
-            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Label {
+            Layout.fillWidth: control.horizontalAlignment === Text.AlignLeft
         }
     }
 
@@ -43,7 +68,11 @@ Item {
         State {
             name: ""
             PropertyChanges {
-                target: iconLabel
+                target: leftIconLabel
+                visible: mouseArea.containsMouse
+            }
+            PropertyChanges {
+                target: RightIconLabel
                 visible: mouseArea.containsMouse
             }
             PropertyChanges {
@@ -107,7 +136,7 @@ Item {
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
-            switch (header.state) {
+            switch (control.state) {
             case "":
                 if (page.tableSortColumn !== index) {
                     page.tableSortColumn = index

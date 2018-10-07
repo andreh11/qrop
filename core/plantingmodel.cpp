@@ -40,6 +40,7 @@ PlantingModel::PlantingModel(QObject *parent)
     m_model->setTable(plantingTableName);
     m_model->setSortColumn("seeding_date", "ascending");
     m_model->select();
+    setFilterKeyColumn(-1);
 
     setSourceModel(m_model);
 

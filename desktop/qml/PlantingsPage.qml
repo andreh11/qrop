@@ -40,13 +40,19 @@ Page {
     property var tableHeaderModel: [
         { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
         { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
-        { name: qsTr("Seeding Date"),    columnName: "seeding_date",       width: 80 },
-        { name: qsTr("Planting Date"),   columnName: "planting_date", width: 80 },
-        { name: qsTr("Beg. of harvest"), columnName: "beg_harvest_date",   width: 80 },
-        { name: qsTr("End of harvest"),  columnName: "end_harvest_date",   width: 80 }
+        { name: qsTr("Sowing"),    columnName: "seeding_date",       width: 50 },
+        { name: qsTr("Planting"),   columnName: "planting_date", width: 50 },
+        { name: qsTr("Begin"), columnName: "beg_harvest_date",   width: 50},
+        { name: qsTr("End"),  columnName: "end_harvest_date",   width: 50 }
     ]
     property var selectedIds: []
     property int checks: numberOfTrue(selectedIds)
+    property var monthsOrder : [
+        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
+        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
+    ]
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName;
@@ -65,6 +71,13 @@ Page {
             if (array[key])
                 n++;
         return n
+    }
+
+    function duplicateSelected() {
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+                Planting.duplicate(key);
+            }
     }
 
     function removeSelected() {
@@ -125,22 +138,126 @@ Page {
             width: parent.width
             height: 48
 
+//            RowLayout {
+//                id: filterRow
+//                anchors.fill: parent
+//                spacing: 0
+//                visible: filterMode
+
+////                TextField  {
+////                    id: filterField
+////                    leftPadding: 16 + largeDisplay ? 50 : 0
+////                    font.family: "Roboto Regular"
+////                    verticalAlignment: Qt.AlignVCenter
+////                    font.pixelSize: 20
+////                    color: "black"
+////                    placeholderText: qsTr("Search")
+////                    Layout.fillWidth: true
+////                    //                    anchors.verticalCenter: parent.verticalCenter
+
+////                    Shortcut {
+////                        sequence: "Escape"
+////                        onActivated: {
+////                            filterMode = false
+////                            filterField.text = ""
+////                        }
+////                    }
+
+////                    background: Rectangle {
+////                        anchors.verticalCenter: parent.verticalCenter
+////                        height: parent.height * 0.7
+////                        Label {
+////                            leftPadding: 16
+////                            color: "black"
+////                            anchors.verticalCenter: parent.verticalCenter
+////                            text: "\ue8b6" // search
+////                            font.family: "Material Icons"
+////                            font.pixelSize: 24
+////                        }
+////                    }
+////                }
+
+//                IconButton {
+//                    text: "\ue5cd" // delete
+//                    onClicked: {
+//                        filterMode = false
+//                        filterField.text = ""
+//                    }
+//                }
+//            }
+
             RowLayout {
-                id: filterRow
+                id: buttonRow
                 anchors.fill: parent
-                spacing: 0
-                visible: filterMode
+                spacing: 8
+                visible: !filterMode
+
+                Button {
+                    id: addButton
+                    flat: true
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.foreground: Material.accent
+                    font.pixelSize: fontSizeBodyAndButton
+                    visible: checks === 0
+                    text: qsTr("Add planting")
+                    onClicked: plantingDialog.open()
+
+                }
+
+                Button {
+                    id: editButton
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    flat: true
+//                    text: "\ue3c9" // edit
+                    text: qsTr("Edit")
+                    font.pixelSize: fontSizeBodyAndButton
+                    visible: checks > 0
+                    Material.foreground: "white"
+                    onClicked: {
+                        plantingDialog.mode = "edit"
+                        plantingDialog.open()
+                    }
+                }
+
+                Button {
+                    id: duplicateButton
+                    flat: true
+//                    text: "\ue14d" // content_copy
+                    text: qsTr("Duplicate")
+                    visible: checks > 0
+                    Material.foreground: "white"
+                    onClicked: {
+                        duplicateSelected();
+                        model.refresh();
+                    }
+                }
+
+                Button {
+                    id: deleteButton
+                    flat: true
+//                    text: "\ue872" // delete
+                    text: qsTr("Delete")
+                    visible: checks > 0
+                    Material.foreground: "white"
+                    onClicked: {
+                        removeSelected();
+                        model.refresh();
+                    }
+                }
+
+                Label {
+                   visible: deleteButton.visible
+                    Layout.fillWidth: true
+                }
 
                 TextField  {
                     id: filterField
-                    leftPadding: 16 + largeDisplay ? 50 : 0
+                    visible: checks === 0
+                    leftPadding: searchLogo.width + 8
                     font.family: "Roboto Regular"
-                    verticalAlignment: Qt.AlignVCenter
-                    font.pixelSize: 20
                     color: "black"
                     placeholderText: qsTr("Search")
                     Layout.fillWidth: true
-                    //                    anchors.verticalCenter: parent.verticalCenter
 
                     Shortcut {
                         sequence: "Escape"
@@ -150,68 +267,26 @@ Page {
                         }
                     }
 
-                    background: Rectangle {
+                    Label {
+                        id: searchLogo
+                        color: "black"
+                        anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height * 0.7
-                        Label {
-                            leftPadding: 16
-                            color: "black"
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "\ue8b6" // search
-                            font.family: "Material Icons"
-                            font.pixelSize: 24
-                        }
+                        text: "\ue8b6" // search
+                        font.family: "Material Icons"
+                        font.pixelSize: 24
                     }
                 }
-
-                IconButton {
-                    text: "\ue5cd" // delete
-                    onClicked: {
-                        filterMode = false
-                        filterField.text = ""
-                    }
-                }
-            }
-
-            RowLayout {
-                id: buttonRow
-                anchors.fill: parent
-                spacing: 0
-                visible: !filterMode
 
                 Label {
-                    //                    anchors.verticalCenter: parent.verticalCenter
-                    text: checks + " planting" + (checks > 1 ? "s" : "") + " selected"
-                    leftPadding: 16
-                    color: Material.color(Material.Blue)
-                    Layout.fillWidth: true
+                    text: qsTr("planting(s) selected", "", checks)
+                    color: "white"
                     visible: checks > 0
                     font.family: "Roboto Regular"
                     font.pixelSize: 16
+                    Layout.rightMargin: 16
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
-                }
-
-                ToolButton {
-                    id: addButton
-                    font.pixelSize: fontSizeBodyAndButton
-                    leftPadding: 24
-                    visible: checks === 0
-                    text: qsTr("Add planting")
-                    onClicked: plantingDialog.open()
-                }
-
-                //                Label {
-                //                    text: qsTr("Summer")
-                //                    visible: checks === 0
-                //                    leftPadding: 16
-                //                    font.family: "Roboto Regular"
-                //                    font.pixelSize: 20
-                ////                    Layout.fillWidth: true
-                //                }
-
-                Label {
-                    Layout.fillWidth: true
                 }
 
                 SpinBox {
@@ -249,32 +324,6 @@ Page {
                 }
 
                 IconButton {
-                    id: editButton
-                    text: "\ue3c9" // edit
-                    visible: checks > 0
-                    onClicked: {
-                        plantingDialog.mode = "edit"
-                        plantingDialog.open()
-                    }
-                }
-
-                IconButton {
-                    id: duplicateButton
-                    text: "\ue14d" // content_copy
-                    visible: checks > 0
-                }
-
-                IconButton {
-                    id: deleteButton
-                    text: "\ue872" // delete
-                    visible: checks > 0
-                    onClicked: {
-                        removeSelected();
-                        model.refresh();
-                    }
-                }
-
-                IconButton {
                     id: timegraphButton
                     text: "\ue0b8"
                     hoverEnabled: true
@@ -287,25 +336,20 @@ Page {
                     ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                 }
 
-                IconButton {
-                    text: "\ue152" // filter_list
-                    visible: checks === 0
-                    onClicked: {
-                        filterMode = true
-                        filterField.focus = true
-                    }
-                }
-
-                //                IconButton {
-                //                    text: "\ue145" // add
-                //                    visible: checks === 0
-                //                }
+//                IconButton {
+//                    text: "\ue152" // filter_list
+//                    visible: checks === 0
+//                    onClicked: {
+//                        filterMode = true
+//                        filterField.focus = true
+//                    }
+//                }
             }
         }
 
         ListView {
             id: listView
-            visible: true
+            visible: model.rowCount() > 0
             clip: true
             width: parent.width
             height: parent.height - buttonRectangle.height
@@ -365,7 +409,7 @@ Page {
                     Row {
                         id: headerRow
                         height: rowHeight
-                        spacing: 18
+                        spacing: 16
                         leftPadding: 16
 
                         CheckBox {
@@ -381,6 +425,7 @@ Page {
                                 text: modelData.name
                                 width: modelData.width
                                 state: page.tableSortColumn === index ? page.tableSortOrder : ""
+                                visible: index > 0
                             }
                         }
 
@@ -394,7 +439,7 @@ Page {
                                 height: parent.height
                                 spacing: 0
                                 Repeater {
-                                    model: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+                                    model: monthsOrder[seasonSpinBox.value]
                                     Item {
                                         width: monthWidth + 1
                                         height: parent.height
@@ -405,7 +450,7 @@ Page {
                                             color: Material.color(Material.Grey, Material.Shade400)
                                         }
                                         Label {
-                                            text: modelData
+                                            text: Qt.locale().monthName(modelData, Locale.ShortFormat)
                                             anchors.left: lineRectangle.right
                                             font.family: "Roboto Condensed"
                                             color: Material.color(Material.Grey, Material.Shade700)
@@ -431,6 +476,7 @@ Page {
                                 text: modelData.name
                                 width: modelData.width
                                 visible: index > 1
+                            horizontalAlignment: Text.AlignRight
                                 state: page.tableSortColumn === index ? page.tableSortOrder : ""
                             }
                         }
@@ -473,30 +519,26 @@ Page {
                     Row {
                         id: row
                         height: rowHeight
-                        spacing: 18
+                        spacing: 16
                         leftPadding: 16
 
-                        CheckBox {
+                        TextCheckBox {
                             id: checkBox
+                            text: model.crop
                             anchors.verticalCenter: row.verticalCenter
                             width: 24
                             checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
                             onCheckStateChanged: {
                                 selectedIds[model.planting_id] = checked
                                 checks = numberOfTrue(selectedIds)
-//                                if (checked) {
-//                                    checks = checks + 1
-//                                } else {
-//                                    checks = checks - 1
-//                                }
                             }
                         }
 
-                        TableLabel {
-                            text: model.crop
-                            elide: Text.ElideRight
-                            width: 100
-                        }
+//                        TableLabel {
+//                            text: model.crop
+//                            elide: Text.ElideRight
+//                            width: 100
+//                        }
 
                         TableLabel {
                             text: model.variety
@@ -514,31 +556,31 @@ Page {
                         }
 
                         TableLabel {
-                            text: formatDate(seedingDate)
+                            text: model.planting_type !== 3 ? formatDate(seedingDate) : ""
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
-                            width: 80
+                            width: 50
                         }
 
                         TableLabel {
-                            text: formatDate(transplantingDate)
+                            text: model.planting_type !== 1 ? formatDate(transplantingDate) : ""
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
-                            width: 80
+                            width: 50
                         }
 
                         TableLabel {
                             text: formatDate(beginHarvestDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
-                            width: 80
+                            width: 50
                         }
 
                         TableLabel {
                             text: formatDate(endHarvestDate)
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
-                            width: 80
+                            width: 50
                         }
                     }
                 }
