@@ -43,7 +43,7 @@ TextField {
         id: flatingLabel
         anchors.verticalCenter: control.top
         anchors.left: parent.left
-        anchors.leftMargin: parent.topPadding
+//        anchors.leftMargin: parent.topPadding
         color: Material.accent
         text: placeholderText
         font.pixelSize: 14
@@ -109,14 +109,13 @@ TextField {
         }
     }
 
-    leftPadding: 8
+//    leftPadding: 8
 
-    Rectangle {
-        anchors.bottom: parent.background.bottom
-        height: 46
-        width: parent.width
-        z: -10
-        color: Material.color(Material.Grey, Material.Shade200)
-        radius: 4
-    }
+//    Rectangle { anchors.bottom: parent.background.bottom
+//        height: 46
+//        width: parent.width
+//        z: -10
+//        color: Material.color(Material.Grey, Material.Shade100)
+//        radius: 4
+//    }
 }

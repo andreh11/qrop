@@ -63,6 +63,13 @@ ApplicationWindow {
     property int fontSizeBodyAndButton: 14 // is Default
     property int fontSizeCaption: 12
 
+    readonly property var monthsOrder : [
+        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
+        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
+    ]
+
     Settings {
         id: settings
         property alias railMode: window.railMode

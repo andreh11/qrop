@@ -27,8 +27,10 @@ Page {
 
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
+    property alias season: seasonCombo.currentIndex
     property string filterText: ""
-    property int currentYear: 2018
+    property int currentYear: yearSpinBox.value
+    property date todayDate: new Date()
     property int rowHeight: 37
     property int monthWidth: 60
 
@@ -38,21 +40,21 @@ Page {
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
-        { name: qsTr("Crop"),            columnName: "crop",               width: 100 },
-        { name: qsTr("Variety"),         columnName: "variety",            width: 100 },
-        { name: qsTr("Sowing"),    columnName: "seeding_date",       width: 50 },
-        { name: qsTr("Planting"),   columnName: "planting_date", width: 50 },
-        { name: qsTr("Begin"), columnName: "beg_harvest_date",   width: 50},
-        { name: qsTr("End"),  columnName: "end_harvest_date",   width: 50 }
+        { name: qsTr("Crop"), columnName: "crop", width: 100, visible: false },
+        { name: qsTr("Variety"), columnName: "variety", width: 100, visible: true },
+        { name: qsTr("Sowing"), columnName: "seeding_date", width: 50, visible: true },
+        { name: qsTr("Planting"), columnName: "planting_date", width: 50, visible: true },
+        { name: qsTr("Begin"), columnName: "beg_harvest_date", width: 50, visible: true },
+        { name: qsTr("End"), columnName: "end_harvest_date", width: 50, visible: true },
+        { name: qsTr("DTT"), columnName: "dtt", width: 40, visible: true },
+        { name: qsTr("DTM"), columnName: "dtm", width: 40, visible: true },
+        { name: qsTr("Harvest window"), columnName: "harvest_window", width: 40, visible: true },
+        { name: qsTr("Length"), columnName: "length", width: 40, visible: true },
+        { name: qsTr("Rows"), columnName: "rows", width: 40, visible: true },
+        { name: qsTr("Spacing"), columnName: "Spacing", width: 40, visible: true }
     ]
     property var selectedIds: []
     property int checks: numberOfTrue(selectedIds)
-    property var monthsOrder : [
-        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
-        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
-    ]
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName;
@@ -71,6 +73,23 @@ Page {
             if (array[key])
                 n++;
         return n
+    }
+
+    function currentSeason() {
+        var todayMonth = todayDate.getMonth();
+        console.log("Today:", todayDate, "month:", todayMonth)
+        if (2 <= todayMonth && todayMonth <= 4)
+            return 0;
+        else if (5 <= todayMonth && todayMonth <= 7)
+            return 1;
+        else if (8 <= todayMonth && todayMonth <= 10)
+            return 2;
+        else
+            return 3;
+    }
+
+    Component.onCompleted: {
+        console.log("Current Season:", currentSeason())
     }
 
     function duplicateSelected() {
@@ -138,53 +157,53 @@ Page {
             width: parent.width
             height: 48
 
-//            RowLayout {
-//                id: filterRow
-//                anchors.fill: parent
-//                spacing: 0
-//                visible: filterMode
+            //            RowLayout {
+            //                id: filterRow
+            //                anchors.fill: parent
+            //                spacing: 0
+            //                visible: filterMode
 
-////                TextField  {
-////                    id: filterField
-////                    leftPadding: 16 + largeDisplay ? 50 : 0
-////                    font.family: "Roboto Regular"
-////                    verticalAlignment: Qt.AlignVCenter
-////                    font.pixelSize: 20
-////                    color: "black"
-////                    placeholderText: qsTr("Search")
-////                    Layout.fillWidth: true
-////                    //                    anchors.verticalCenter: parent.verticalCenter
+            ////                TextField  {
+            ////                    id: filterField
+            ////                    leftPadding: 16 + largeDisplay ? 50 : 0
+            ////                    font.family: "Roboto Regular"
+            ////                    verticalAlignment: Qt.AlignVCenter
+            ////                    font.pixelSize: 20
+            ////                    color: "black"
+            ////                    placeholderText: qsTr("Search")
+            ////                    Layout.fillWidth: true
+            ////                    //                    anchors.verticalCenter: parent.verticalCenter
 
-////                    Shortcut {
-////                        sequence: "Escape"
-////                        onActivated: {
-////                            filterMode = false
-////                            filterField.text = ""
-////                        }
-////                    }
+            ////                    Shortcut {
+            ////                        sequence: "Escape"
+            ////                        onActivated: {
+            ////                            filterMode = false
+            ////                            filterField.text = ""
+            ////                        }
+            ////                    }
 
-////                    background: Rectangle {
-////                        anchors.verticalCenter: parent.verticalCenter
-////                        height: parent.height * 0.7
-////                        Label {
-////                            leftPadding: 16
-////                            color: "black"
-////                            anchors.verticalCenter: parent.verticalCenter
-////                            text: "\ue8b6" // search
-////                            font.family: "Material Icons"
-////                            font.pixelSize: 24
-////                        }
-////                    }
-////                }
+            ////                    background: Rectangle {
+            ////                        anchors.verticalCenter: parent.verticalCenter
+            ////                        height: parent.height * 0.7
+            ////                        Label {
+            ////                            leftPadding: 16
+            ////                            color: "black"
+            ////                            anchors.verticalCenter: parent.verticalCenter
+            ////                            text: "\ue8b6" // search
+            ////                            font.family: "Material Icons"
+            ////                            font.pixelSize: 24
+            ////                        }
+            ////                    }
+            ////                }
 
-//                IconButton {
-//                    text: "\ue5cd" // delete
-//                    onClicked: {
-//                        filterMode = false
-//                        filterField.text = ""
-//                    }
-//                }
-//            }
+            //                IconButton {
+            //                    text: "\ue5cd" // delete
+            //                    onClicked: {
+            //                        filterMode = false
+            //                        filterField.text = ""
+            //                    }
+            //                }
+            //            }
 
             RowLayout {
                 id: buttonRow
@@ -208,7 +227,7 @@ Page {
                     id: editButton
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                     flat: true
-//                    text: "\ue3c9" // edit
+                    //                    text: "\ue3c9" // edit
                     text: qsTr("Edit")
                     font.pixelSize: fontSizeBodyAndButton
                     visible: checks > 0
@@ -222,10 +241,11 @@ Page {
                 Button {
                     id: duplicateButton
                     flat: true
-//                    text: "\ue14d" // content_copy
+                    //                    text: "\ue14d" // content_copy
                     text: qsTr("Duplicate")
                     visible: checks > 0
                     Material.foreground: "white"
+                    font.pixelSize: fontSizeBodyAndButton
                     onClicked: {
                         duplicateSelected();
                         model.refresh();
@@ -235,7 +255,8 @@ Page {
                 Button {
                     id: deleteButton
                     flat: true
-//                    text: "\ue872" // delete
+                    font.pixelSize: fontSizeBodyAndButton
+                    //                    text: "\ue872" // delete
                     text: qsTr("Delete")
                     visible: checks > 0
                     Material.foreground: "white"
@@ -246,18 +267,22 @@ Page {
                 }
 
                 Label {
-                   visible: deleteButton.visible
+                    visible: deleteButton.visible
                     Layout.fillWidth: true
                 }
 
-                TextField  {
+
+                TextArea  {
                     id: filterField
                     visible: checks === 0
-                    leftPadding: searchLogo.width + 8
+            leftPadding: searchLogo.width + 16
                     font.family: "Roboto Regular"
+                    font.pixelSize: fontSizeBodyAndButton
                     color: "black"
                     placeholderText: qsTr("Search")
                     Layout.fillWidth: true
+                    padding: 8
+                    topPadding: 16
 
                     Shortcut {
                         sequence: "Escape"
@@ -267,15 +292,29 @@ Page {
                         }
                     }
 
-                    Label {
-                        id: searchLogo
-                        color: "black"
-                        anchors.left: parent.left
+                    background: Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "\ue8b6" // search
-                        font.family: "Material Icons"
-                        font.pixelSize: 24
+                        implicitWidth: 200
+            implicitHeight: 20
+//                        width: parent.width
+                        height: parent.height * 0.7
+                        color: Material.color(Material.Grey, Material.Shade400)
+                        radius: 4
+                        opacity: 0.1
                     }
+
+                Label {
+                    id: searchLogo
+//                    visible: filterField.visible
+                    color: "black"
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+                    text: "\ue8b6" // search
+                    font.family: "Material Icons"
+                    font.pixelSize: 24
+                }
+
                 }
 
                 Label {
@@ -289,38 +328,51 @@ Page {
                     verticalAlignment: Qt.AlignVCenter
                 }
 
-                SpinBox {
-                    id: seasonSpinBox
-                    visible: checks === 0
-                    from: 0
-                    to: items.length - 1
-                    value: 1
+//                CardSpinBox {
+//                    id: seasonSpinBox
+//                    visible: checks === 0
+//                    from: 0
+//                    to: items.length - 1
+//                    value: 1
+//                    width: 150
 
-                    property var items: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
+////                    up.indicator.x: down.indicator.width
+////                    contentItem.anchors.left: up.indicator.right
+////                    background.height: 0
 
-                    validator: RegExpValidator {
-                        regExp: new RegExp("(Small|Medium|Large)", "i")
-                    }
+//                    property var items: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
 
-                    textFromValue: function(value) {
-                        return items[value];
-                    }
+//                    validator: RegExpValidator {
+//                        regExp: new RegExp("(Small|Medium|Large)", "i")
+//                    }
 
-                    valueFromText: function(text) {
-                        for (var i = 0; i < items.length; ++i) {
-                            if (items[i].toLowerCase().indexOf(text.toLowerCase()) === 0)
-                                return i
-                        }
-                        return sb.value
-                    }
+//                    textFromValue: function(value) {
+//                        return items[value];
+//                    }
+
+//                    valueFromText: function(text) {
+//                        for (var i = 0; i < items.length; ++i) {
+//                            if (items[i].toLowerCase().indexOf(text.toLowerCase()) === 0)
+//                                return i
+//                        }
+//                        return sb.value
+//                    }
+//                }
+
+                ComboBox {
+                    id: seasonCombo
+                    model: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
+                    flat: true
+                    currentIndex: currentSeason()
                 }
 
-                SpinBox {
+                CardSpinBox {
                     visible: checks === 0
                     id: yearSpinBox
                     from: 2000
                     to: 2100
-                    value: 2018
+                    value: new Date().getFullYear()
+                    width: 100
                 }
 
                 IconButton {
@@ -336,15 +388,20 @@ Page {
                     ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                 }
 
-//                IconButton {
-//                    text: "\ue152" // filter_list
-//                    visible: checks === 0
-//                    onClicked: {
-//                        filterMode = true
-//                        filterField.focus = true
-//                    }
-//                }
+                //                IconButton {
+                //                    text: "\ue152" // filter_list
+                //                    visible: checks === 0
+                //                    onClicked: {
+                //                        filterMode = true
+                //                        filterField.focus = true
+                //                    }
+                //                }
             }
+        }
+
+        ThinDivider {
+            id: topDivider
+            anchors.top: buttonRectangle.bottom
         }
 
         ListView {
@@ -354,7 +411,7 @@ Page {
             width: parent.width
             height: parent.height - buttonRectangle.height
             spacing: 0
-            anchors.top: buttonRectangle.bottom
+            anchors.top: topDivider.bottom
 
             property string filterColumn: "crop"
             //            property TableHeaderLabel filterLabel: headerRow.cropLabel
@@ -392,7 +449,7 @@ Page {
                 id: plantingModel
                 filterString: filterField.text
                 year: yearSpinBox.value
-                season: seasonSpinBox.value
+                season: page.season
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -403,6 +460,7 @@ Page {
                 width: parent.width
                 color: "white"
                 z: 3
+
                 Column {
                     width: parent.width
 
@@ -425,7 +483,7 @@ Page {
                                 text: modelData.name
                                 width: modelData.width
                                 state: page.tableSortColumn === index ? page.tableSortOrder : ""
-                                visible: index > 0
+                                visible: index > 0 && tableHeaderModel[index].visible
                             }
                         }
 
@@ -439,7 +497,7 @@ Page {
                                 height: parent.height
                                 spacing: 0
                                 Repeater {
-                                    model: monthsOrder[seasonSpinBox.value]
+                                    model: monthsOrder[page.season]
                                     Item {
                                         width: monthWidth + 1
                                         height: parent.height
@@ -475,13 +533,60 @@ Page {
                             TableHeaderLabel {
                                 text: modelData.name
                                 width: modelData.width
-                                visible: index > 1
-                            horizontalAlignment: Text.AlignRight
+                                visible: index > 1 && tableHeaderModel[index].visible
+                                horizontalAlignment: Text.AlignRight
                                 state: page.tableSortColumn === index ? page.tableSortOrder : ""
                             }
                         }
                     }
                 }
+
+                MouseArea {
+                    id: headerMouseArea
+                    anchors.fill: parent
+                    acceptedButtons: Qt.RightButton
+                    onClicked: popup.open()
+
+                Popup {
+                    id: popup
+                    x: headerMouseArea.mouseX
+                    y: headerMouseArea.mouseY
+                    width: 150
+                    height: 300
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                    padding: 0
+
+                    contentItem: Rectangle {
+                        clip: true
+                        width: 150
+                        height: 300
+
+                        ListView {
+                            spacing: -16
+                            anchors.fill: parent
+                            model: tableHeaderModel
+                            delegate:  CheckBox {
+                                text: modelData.name
+                                checked: modelData.visible
+                                onCheckedChanged: {
+                                    console.log(index)
+                                    tableHeaderModel[index].visible = checked
+                                    console.log(tableHeaderModel[index].visible)
+                                }
+                            }
+                            ScrollBar.vertical: ScrollBar {
+                                visible: largeDisplay
+                                parent: parent.parent
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                            }
+
+                        }
+                    }
+                }
+                }
+
             }
 
             delegate: Rectangle {
@@ -534,11 +639,11 @@ Page {
                             }
                         }
 
-//                        TableLabel {
-//                            text: model.crop
-//                            elide: Text.ElideRight
-//                            width: 100
-//                        }
+                        //                        TableLabel {
+                        //                            text: model.crop
+                        //                            elide: Text.ElideRight
+                        //                            width: 100
+                        //                        }
 
                         TableLabel {
                             text: model.variety
@@ -586,6 +691,9 @@ Page {
                 }
             }
         }
+
+
+
     }
 
     Component {
