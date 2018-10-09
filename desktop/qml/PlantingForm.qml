@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.2
 import QtCharts 2.0
 
 import io.croplan.components 1.0
+import "date.js" as MDate
 
 Flickable {
     id: control
@@ -36,7 +37,7 @@ Flickable {
         if (length.text === "")
             to.calendarDate = from.calendarDate;
         else
-            to.calendarDate = addDays(from.calendarDate, parseInt(length.text) * direction);
+            to.calendarDate = MDate.addDays(from.calendarDate, parseInt(length.text) * direction);
     }
 
     function plantsNeeded() {
@@ -314,7 +315,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     placeholderText: qsTr("Harvest window")
-                    helperText: text === "" ? "" : qsTr("Last: ") + addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
+                    helperText: text === "" ? "" : qsTr("Last: ") + MDate.addDays(firstHarvestDate.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
                     suffixText: qsTr("days")
                 }
             }

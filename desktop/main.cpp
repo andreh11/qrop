@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QFontDatabase>
 #include <QStandardPaths>
 #include <QSqlDatabase>
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("AH");
     QCoreApplication::setOrganizationDomain("io.qrop");
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QString lang = QLocale::system().name();
 //    if (lang == "fr_FR") {

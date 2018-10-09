@@ -19,19 +19,22 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 
+import "date.js" as MDate
+
 Item {
     id: control
     height: textField.height
     implicitWidth: 200
     Layout.minimumWidth: 140
+
     property alias floatingLabel: textField.floatingLabel
     property alias placeholderText: textField.placeholderText
 
     property date calendarDate: new Date()
-    property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
+    readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: mode === "date" ? qsTr("W") + isoWeek(calendarDate)
+    property string dateHelperText: mode === "date" ? qsTr("W") + MDate.isoWeek(calendarDate)
                                                     : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
 
     signal editingFinished()
@@ -41,7 +44,7 @@ Item {
 
         width: parent.width
         implicitWidth: 100
-        text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : isoWeek(calendarDate)
+        text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : MDate.isoWeek(calendarDate)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         inputMask: mode === "date" ? "99/99/9999" : ""
         prefixText: mode === "date" ? "" : qsTr("W")
@@ -122,7 +125,6 @@ Item {
             }
         }
     }
-
 
     Rectangle {
         id: focusShade

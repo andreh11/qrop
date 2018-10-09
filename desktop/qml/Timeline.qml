@@ -4,13 +4,16 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import io.croplan.components 1.0
+import "date.js" as MDate
 
 Item {
-    height: parent.height
+    id: control
     width: gridRow.width
 
+    property int season: 1
     property int year
-    readonly property date yearBegin: new Date(year, 0, 1)
+    readonly property date seasonBegin: MDate.seasonBeginning(season, year)
+    property int monthWidth: 10
     readonly property int graphWidth: 12 * monthWidth
     property date seedingDate
     property date transplantingDate
@@ -18,13 +21,20 @@ Item {
     property date endHarvestDate
 
     function coordinate(day) {
-        if (day < 0) {
-            return 0
-        } else if (day > 365) {
-            return graphWidth
-        } else {
-            return (day / 365.0) * graphWidth
-        }
+        if (day < 0)
+            return 0;
+        else if (day > 365)
+            return graphWidth;
+        else
+            return (day / 365.0) * graphWidth;
+    }
+
+    function widthBetween(pos, date) {
+        var width = position(date) - pos;
+        if (width > 0)
+            return width;
+        else
+            return 0;
     }
 
     function daysDelta(beg, end) {
@@ -33,14 +43,14 @@ Item {
     }
 
     function position(date) {
-        return coordinate(daysDelta(yearBegin, date))
+        return coordinate(daysDelta(seasonBegin, date))
     }
 
     Row {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
-        spacing: monthWidth
+        spacing: monthWidth - 1
 
         Repeater {
             model: 13
@@ -52,10 +62,22 @@ Item {
         }
     }
 
+    Label {
+        id: seedingLabel
+        text: MDate.formatDate(seedingDate)
+        color: Material.color(Material.Grey)
+        font.family: "Roboto Condensed"
+        visible: seedingCircle.visible
+
+        anchors.right: seedingCircle.left
+        anchors.verticalCenter: seedingCircle.verticalCenter
+        anchors.rightMargin: 4
+    }
+
     Rectangle {
         id: seedingCircle
         x: position(seedingDate)
-        visible: seedingDate < transplantingDate
+        visible: seedingDate < transplantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
         height: width
@@ -63,36 +85,27 @@ Item {
         color: Material.color(Material.Green, Material.Shade200)
     }
 
-    Label {
-        text: formatDate(seedingDate)
-        color: Material.color(Material.Grey)
-        font.family: "Roboto Condensed"
-        visible: seedingCircle.visible
-        anchors.right: seedingCircle.left
-        anchors.verticalCenter: seedingCircle.verticalCenter
-        anchors.rightMargin: 4
-    }
-
     Rectangle {
         id: seedingLine
-        visible: seedingDate < transplantingDate
-        width: daysDelta(seedingDate, transplantingDate) / 365 * graphWidth - seedingCircle.width / 2
+        width: widthBetween(x, transplantingDate)
+        visible: width > 0
         height: 1
-        anchors.left: seedingCircle.right
+        x: seedingCircle.x
         color: Material.color(Material.Green, Material.Shade200)
         anchors.verticalCenter: parent.verticalCenter
     }
 
     Rectangle {
         id: growBar
-        anchors.left: seedingLine.right
-        width: daysDelta(transplantingDate, beginHarvestDate)
+        x: position(transplantingDate)
+        width: widthBetween(x, beginHarvestDate)
+        visible: width > 0
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
         color: Material.color(Material.Green, Material.Shade300)
 
         Label {
-            text: formatDate(transplantingDate)
+            text: MDate.formatDate(transplantingDate)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left
@@ -103,13 +116,14 @@ Item {
 
     Rectangle {
         id: harvestBar
-        anchors.left: growBar.right
-        width: daysDelta(beginHarvestDate, endHarvestDate) / 365 * 12 * monthWidth
+        x: position(beginHarvestDate)
+        width: widthBetween(x, endHarvestDate)
+        visible: width > 0
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
         color: Material.color(Material.Green, Material.Shade700)
         Label {
-            text: formatDate(beginHarvestDate)
+            text: MDate.formatDate(beginHarvestDate)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left

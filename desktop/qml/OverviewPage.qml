@@ -35,7 +35,6 @@ Page {
             columns: largeDisplay ? 2 : 1
 
             Pane {
-                visible: true
                 width: parent.width
                 height: parent.height
                 //        anchors.fill: parent

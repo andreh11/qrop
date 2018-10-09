@@ -31,5 +31,6 @@
         <file>qml/DatePicker.qml</file>
         <file>qml/CalendarView.qml</file>
         <file>qml/TextCheckBox.qml</file>
+        <file>qml/date.js</file>
     </qresource>
 </RCC>

@@ -45,7 +45,7 @@ MSpinBox {
         Text {
             text: "\ue315"
             font.family: "Material Icons"
-            font.pixelSize: control.font.pixelSize * 2
+            font.pixelSize: 24
             color: enabled ? control.Material.foreground : control.Material.spinBoxDisabledIconColor
             anchors.fill: parent
             //            fontSizeMode: Text.Fit
@@ -64,7 +64,7 @@ MSpinBox {
         Text {
             text: "\ue314"
             font.family: "Material Icons"
-            font.pixelSize: control.font.pixelSize * 2
+            font.pixelSize: 24
             color: enabled ? control.Material.foreground : control.Material.spinBoxDisabledIconColor
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter

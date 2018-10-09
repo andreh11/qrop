@@ -16,59 +16,36 @@ Item {
 
     property int horizontalAlignment: Text.AlignLeft
 
-    RowLayout {
-        id: row
-        width: parent.width
-        spacing: 0
+    Label {
+        id: iconLabel
+        transformOrigin: Item.Center
+        text: "\ue5db"
+        visible: mouseArea.containsMouse
+        horizontalAlignment: control.horizontalAlignment
+        color: "black"
+        font.family: "Material Icons"
+        font.pixelSize: 16
+        anchors.left: horizontalAlignment === Text.AlignLeft ? headerLabel.right : undefined
+        anchors.right: horizontalAlignment === Text.AlignRight ? headerLabel.left : undefined
+    }
 
-        Label {
-            Layout.fillWidth: control.horizontalAlignment === Text.AlignRight
-        }
-
-        Label {
-            id: leftIconLabel
-            transformOrigin: Item.Center
-            text: "\ue5db"
-            visible: control.horizontalAlignment === Text.AlignRight && mouseArea.containsMouse
-            horizontalAlignment: control.horizontalAlignment
-            color: "black"
-            font.family: "Material Icons"
-            font.pixelSize: 16
-        }
-
-        Label {
-            id: headerLabel
-            width: parent.width - leftIconLabel.width
-            elide: Text.ElideRight
-            color: Material.color(Material.Grey, Material.Shade700)
-            font.family: "Roboto Condensed"
-            font.pixelSize: 14
-            horizontalAlignment: control.horizontalAlignment
-            maximumLineCount: 5
-//            Layout.fillWidth: true
-        }
-
-        Label {
-            id: rightIconLabel
-            transformOrigin: Item.Center
-            text: "\ue5db"
-            visible: mouseArea.containsMouse && !leftIconLabel.visible
-            horizontalAlignment: control.horizontalAlignment
-            color: "black"
-            font.family: "Material Icons"
-            font.pixelSize: 16
-        }
-
-        Label {
-            Layout.fillWidth: control.horizontalAlignment === Text.AlignLeft
-        }
+    Label {
+        id: headerLabel
+        width: parent.width - iconLabel.width
+        anchors.left: horizontalAlignment === Text.AlignLeft ? parent.left : undefined
+        anchors.right: horizontalAlignment === Text.AlignRight ? parent.right : undefined
+        elide: Text.ElideRight
+        color: Material.color(Material.Grey, Material.Shade700)
+        font.family: "Roboto Condensed"
+        font.pixelSize: 14
+        horizontalAlignment: control.horizontalAlignment
     }
 
     states: [
         State {
             name: ""
             PropertyChanges {
-                target: leftIconLabel
+                target: iconLabel
                 visible: mouseArea.containsMouse
             }
             PropertyChanges {

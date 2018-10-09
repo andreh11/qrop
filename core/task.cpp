@@ -231,9 +231,11 @@ void Task::applyTemplate(int templateId, int plantingId) const
         return;
     }
 
+    TemplateDateType templateDateType;
     foreach (int taskId, templateTasks(templateId)) {
         map = mapFromId("task", taskId);
-        switch (map["template_date_type"].toInt()) {
+        templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
+        switch (templateDateType) {
         case TemplateDateType::FieldSowPlant:
             map["link_task_id"] = plantingType == PlantingType::DirectSeeded ? sowTaskId
                                                                              : transplantTaskId;

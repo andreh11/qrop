@@ -21,6 +21,7 @@ import QtQuick.Controls.Material 2.2
 import QtCharts 2.0
 
 import io.croplan.components 1.0
+import "date.js" as MDate
 
 ListView {
     id: listView
@@ -74,7 +75,7 @@ ListView {
                 font.pixelSize: fontSizeBodyAndButton
             }
             Text {
-                text: week(model.seeding_date) + " − " + week(model.end_harvest_date) + ", " + model.place_ids
+                text: MDate.week(model.seeding_date) + " − " + MDate.week(model.end_harvest_date) + ", " + model.place_ids
                 font.family: "Roboto Regular"
                 color: Material.color(Material.Grey)
                 font.pixelSize: 12

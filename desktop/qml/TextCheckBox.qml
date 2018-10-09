@@ -10,11 +10,11 @@ CheckBox {
     id: control
     checked: true
 
-    indicator:  Rectangle {
+    indicator: Rectangle {
             anchors.verticalCenter: parent.verticalCenter
-            height: 30
-            width: height
-            radius: 80
+            width: parent.width
+            height: width
+            radius: 4
             color: checked ? Material.accent
                            : Material.color(Material.Green, Material.Shade400)
             Text {
@@ -22,8 +22,8 @@ CheckBox {
                 anchors.centerIn: parent
                 text: control.text.slice(0,2)
                 color: "white"
-                font.family: "Roboto Regular"
-                font.pixelSize: 16
+                font.family: "Roboto Bold"
+                font.pixelSize: 14
             }
             Text {
                 visible: control.checked || hovered
@@ -34,25 +34,6 @@ CheckBox {
                 font.pixelSize: 16
             }
         }
-
-//    indicator: Rectangle {
-//        implicitWidth: 26
-//        implicitHeight: 26
-//        x: control.leftPadding
-//        y: parent.height / 2 - height / 2
-//        radius: 3
-//        border.color: control.down ? "#17a81a" : "#21be2b"
-
-//        Rectangle {
-//            width: 14
-//            height: 14
-//            x: 6
-//            y: 6
-//            radius: 2
-//            color: control.down ? "#17a81a" : "#21be2b"
-//            visible: control.checked
-//        }
-//    }
 
     contentItem: Text {}
 //        text: control.text
