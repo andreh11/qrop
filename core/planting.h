@@ -33,9 +33,6 @@ public:
     Q_INVOKABLE void update(int id, const QVariantMap &map) const;
     Q_INVOKABLE int duplicate(int id) const;
 
-    // temporary: we'll use a SQLITE view
-    Q_INVOKABLE QString varietyName(int id) const;
-    Q_INVOKABLE QString cropName(int id) const;
 private:
     Task *task;
 };

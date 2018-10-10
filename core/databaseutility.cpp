@@ -53,9 +53,8 @@ QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &
     debugQuery(query);
 
     QList<int> list;
-    int id = -1;
     while (query.next()) {
-        id = query.value(idFieldName).toInt();
+        int id = query.value(idFieldName).toInt();
         list.append(id);
     }
     return list;
@@ -97,8 +96,9 @@ int DatabaseUtility::add(QVariantMap map) const
 {
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
-    foreach (const QString key, map.keys()) {
-        if (key != idFieldName()) {
+    QString fieldName = idFieldName();
+    for (const QString &key : map.keys()) {
+        if (key != fieldName) {
             queryNameString.append(QString(" %1,").arg(key));
             queryValueString.append(QString(" \"%1\",").arg(map[key].toString()));
         }
@@ -138,7 +138,7 @@ void DatabaseUtility::update(int id, QVariantMap map) const
         return;
 
     QString queryString = QString("UPDATE %1 SET ").arg(table());
-    foreach (const QString key, map.keys())
+    for (auto &key : map.keys())
         queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName()).arg(id));
@@ -164,7 +164,7 @@ int DatabaseUtility::duplicate(int id) const
 void DatabaseUtility::duplicate(const QList<int> &idList) const
 {
     QSqlDatabase::database().transaction();
-    foreach (int id, idList)
+    for (int id : idList)
         duplicate(id);
     QSqlDatabase::database().commit();
 }
@@ -181,7 +181,7 @@ void DatabaseUtility::remove(int id) const
 void DatabaseUtility::remove(const QList<int> &idList) const
 {
     QSqlDatabase::database().transaction();
-    foreach (int id, idList)
+    for (int id : idList)
         remove(id);
     QSqlDatabase::database().commit();
 }

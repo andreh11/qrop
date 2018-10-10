@@ -51,13 +51,12 @@ void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
     qDebug() << "[Task] Duplicate tasks of location" << sourceLocationId
              << "for" << newLocationId;
 
-    int newTaskId;
     QList<int> sourceTasks = locationTasks(sourceLocationId);
-    QVariantMap map;
-    foreach (const int taskId, sourceTasks) {
-        map = mapFromId("task", taskId);
+    for (const int taskId : sourceTasks) {
+        QVariantMap map = mapFromId("task", taskId);
         map.remove("task_id");
-        newTaskId = add(map);
+
+        int newTaskId = add(map);
         addLocation(newLocationId, newTaskId);
     }
 }
@@ -125,7 +124,7 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
     int transplantTaskId = -1;
     TaskType taskType;
     QSqlRecord record ;
-    foreach (int taskId, plantingTasks(plantingId)) {
+    for (const int taskId : plantingTasks(plantingId)) {
         record = recordFromId("task", taskId);
         taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
 
@@ -194,7 +193,7 @@ void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
     QList<int> sourceTasks = plantingTasks(sourcePlantingId);
     QVariantMap map;
     int newTaskId;
-    foreach (const int taskId, sourceTasks) {
+    for (const int taskId : sourceTasks) {
         map = mapFromId("task", taskId);
         map.remove("task_id");
         newTaskId = add(map);
@@ -231,18 +230,16 @@ void Task::applyTemplate(int templateId, int plantingId) const
         return;
     }
 
-    TemplateDateType templateDateType;
-    foreach (int taskId, templateTasks(templateId)) {
+    for (const int taskId : templateTasks(templateId)) {
         map = mapFromId("task", taskId);
-        templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
+        auto templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
         switch (templateDateType) {
         case TemplateDateType::FieldSowPlant:
             map["link_task_id"] = plantingType == PlantingType::DirectSeeded ? sowTaskId
                                                                              : transplantTaskId;
             break;
         case TemplateDateType::GreenhouseStart:
-            map["link_task_id"] = plantingType == PlantingType::TransplantRaised ? sowTaskId
-                                                                                 : -1;
+            map["link_task_id"] = plantingType == PlantingType::TransplantRaised ? sowTaskId : -1;
             break;
         case TemplateDateType::FirstHarvest:
             map["link_task_id"] = -1;

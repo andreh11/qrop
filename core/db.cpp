@@ -64,7 +64,7 @@ void execSqlFile(const QString &fileName, const QString &separator)
     QString fileString = textStream.readAll();
     QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
     QSqlQuery query;
-    foreach (const QString &queryString, stringList) {
+    for (const QString &queryString : stringList) {
         if (queryString.isEmpty())
             continue;
 

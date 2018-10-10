@@ -30,25 +30,6 @@ Planting::Planting(QObject *parent)
     m_table = "planting";
 }
 
-QString Planting::varietyName(int id) const
-{
-    QSqlRecord plantingRecord = recordFromId("planting", id);
-    int varietyId = plantingRecord.value("variety_id").toInt();
-    QSqlRecord varietyRecord = recordFromId("variety", varietyId);
-    return varietyRecord.value("variety").toString();
-}
-
-QString Planting::cropName(int id) const
-{
-    QSqlRecord plantingRecord = recordFromId("planting", id);
-    int varietyId = plantingRecord.value("variety_id").toInt();
-    QSqlRecord varietyRecord = recordFromId("variety", varietyId);
-    int cropId = varietyRecord.value("crop_id").toInt();
-    QSqlRecord cropRecord = recordFromId("crop", cropId);
-
-    return cropRecord.value("crop").toString();
-}
-
 int Planting::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
