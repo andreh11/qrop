@@ -9,7 +9,6 @@ Label {
     id: label
     font.family: "Roboto Condensed"
     font.pixelSize: 14
-    anchors.verticalCenter: parent.verticalCenter
     ToolTip.visible: mouseArea.containsMouse
     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
     ToolTip.text: text

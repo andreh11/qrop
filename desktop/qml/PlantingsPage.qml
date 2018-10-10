@@ -28,9 +28,9 @@ Page {
 
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
-    property alias season: seasonCombo.currentIndex
+    property alias season: seasonSpinBox.season
     property string filterText: ""
-    property int currentYear: yearSpinBox.value
+    property int currentYear: seasonSpinBox.year
     property date todayDate: new Date()
     property int rowHeight: 37
     property int monthWidth: 60
@@ -57,16 +57,7 @@ Page {
     property var selectedIds: []
     property int checks: numberOfTrue(selectedIds)
 
-    onTableSortColumnChanged: {
-//        var columnName = tableHeaderModel[tableSortColumn].columnName;
-        tableSortOrder = "descending";
-//        listView.model.setSortColumn(columnName, tableSortOrder);
-    }
-
-//    onTableSortOrderChanged: {
-//        var columnName = tableHeaderModel[tableSortColumn].columnName;
-//        listView.model.setSortColumn(columnName, tableSortOrder);
-//    }
+    onTableSortColumnChanged: tableSortOrder = "descending"
 
     function numberOfTrue(array) {
         var n = 0;
@@ -79,6 +70,7 @@ Page {
     function duplicateSelected() {
         for (var key in selectedIds)
             if (selectedIds[key]) {
+                selectedIds[key] = false;
                 Planting.duplicate(key);
             }
     }
@@ -89,11 +81,19 @@ Page {
                 selectedIds[key] = false;
                 Planting.remove(key);
             }
-        checks = numberOfTrue(selectedIds)
     }
 
     title: "Plantings"
     padding: 8
+
+    PlantingModel {
+        id: plantingModel
+        filterString: filterField.text
+        year: currentYear
+        season: page.season
+        sortColumn: tableHeaderModel[tableSortColumn].columnName
+        sortOrder: tableSortOrder
+    }
 
     PlantingDialog {
         id: plantingDialog
@@ -248,8 +248,6 @@ Page {
                         XYPoint { x: 0; y: 80 }
                         XYPoint { x: 1; y: 60 }
                     }
-
-
                 }
             }
         }
@@ -262,6 +260,7 @@ Page {
 
             //                                                      : 0)
             Material.elevation: 2
+            visible: largeDisplay
 
             Rectangle {
                 id: buttonRectangle
@@ -404,23 +403,32 @@ Page {
                         verticalAlignment: Qt.AlignVCenter
                     }
 
-                    ComboBox {
-                        visible: checks === 0
-                        id: seasonCombo
-                        model: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
-                        flat: true
-                        currentIndex: MDate.season(todayDate)
-                    }
+                   SeasonSpinBox {
+                       id: seasonSpinBox
+                       visible: checks === 0
+                       season: MDate.season(todayDate)
+                       year: todayDate.getFullYear()
+                   }
 
-                    CardSpinBox {
-                        visible: checks === 0
-                        id: yearSpinBox
-                        from: 2000
-                        to: 2100
-                        value: new Date().getFullYear()
-                        width: 100
-                        Layout.rightMargin: 16
-                    }
+
+
+//                    ComboBox {
+//                        visible: checks === 0
+//                        id: seasonCombo
+//                        model: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
+//                        flat: true
+//                        currentIndex: MDate.season(todayDate)
+//                    }
+
+//                    CardSpinBox {
+//                        visible: checks === 0
+//                        id: yearSpinBox
+//                        from: 2000
+//                        to: 2100
+//                        value: new Date().getFullYear()
+//                        width: 100
+//                        Layout.rightMargin: 16
+//                    }
 
                 }
             }
@@ -445,15 +453,7 @@ Page {
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
 
-                model: PlantingModel {
-                    id: plantingModel
-                    filterString: filterField.text
-                    year: yearSpinBox.value
-                    season: page.season
-                    sortColumn: tableHeaderModel[tableSortColumn].columnName
-                    sortOrder: tableSortOrder
-//                    sortOrder:
-                }
+                model: plantingModel
 
                 ScrollBar.vertical: ScrollBar {
                     id: verticalScrollBar
@@ -481,7 +481,6 @@ Page {
                         filterField.focus = true
                     }
                 }
-
 
                 headerPositioning: ListView.OverlayHeader
 
@@ -676,6 +675,7 @@ Page {
 
                             TableLabel {
                                 text: model.variety
+    anchors.verticalCenter: parent.verticalCenter
                                 elide: Text.ElideRight
                                 width: 100
                             }
@@ -694,6 +694,7 @@ Page {
 
                             TableLabel {
                                 text: model.planting_type !== 3 ? MDate.formatDate(seedingDate, currentYear) : ""
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -701,6 +702,7 @@ Page {
 
                             TableLabel {
                                 text: model.planting_type !== 1 ? MDate.formatDate(transplantingDate, currentYear) : ""
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -708,6 +710,7 @@ Page {
 
                             TableLabel {
                                 text: MDate.formatDate(beginHarvestDate, currentYear)
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -715,6 +718,7 @@ Page {
 
                             TableLabel {
                                 text: MDate.formatDate(endHarvestDate, currentYear)
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -722,6 +726,7 @@ Page {
 
                             TableLabel {
                                 text: qsTr("%n d", "Abbreviation for day", model.dtt)
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -729,6 +734,7 @@ Page {
 
                             TableLabel {
                                 text: qsTr("%n d", "Abbreviation for day", model.dtm)
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -736,6 +742,7 @@ Page {
 
                             TableLabel {
                                 text: qsTr("%n d", "Abbreviation for day", model.harvest_window)
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -743,6 +750,7 @@ Page {
 
                             TableLabel {
                                 text: model.length + " m"
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -750,6 +758,7 @@ Page {
 
                             TableLabel {
                                 text: model.rows
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -757,6 +766,7 @@ Page {
 
                             TableLabel {
                                 text: model.spacing_plants + " cm"
+    anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
                                 width: 60
@@ -765,9 +775,6 @@ Page {
                     }
                 }
             }
-
-
-
         }
 
         Component {
@@ -778,14 +785,181 @@ Page {
                 PlantingForm {
                     anchors.fill: parent
                     anchors.margins: 16
-
                 }
             }
         }
+    }
+
+    ListView {
+        id: smallListView
+        clip: true
+        visible: !largeDisplay
+        width: parent.width
+        height: parent.height - buttonRectangle.height
+        spacing: 0
+        //                flickableDirection: Flickable.HorizontalAndVerticalFlick
+
+        property string filterColumn: "crop"
+        //            property TableHeaderLabel filterLabel: headerRow.cropLabel
+        Keys.onUpPressed: verticalScrollBar.decrease()
+        Keys.onDownPressed: verticalScrollBar.increase()
+
+        model: plantingModel
+
+        headerPositioning: ListView.OverlayHeader
+        section.property: "crop"
+        section.delegate: Rectangle {
+            width: parent.width
+            height: rowHeight
+            color: Material.color(Material.Grey, Material.Shade200)
+            Text {
+                text: section
+            }
+        }
+
+        delegate: Rectangle {
+            id: smallDelegate
+            property date seedingDate:
+                model.planting_type === 2 ? MDate.addDays(transplantingDate, -model.dtt)
+                              : transplantingDate
+            property date transplantingDate: model.planting_date
+            property date beginHarvestDate: MDate.addDays(model.planting_date, model.dtm)
+            property date endHarvestDate: MDate.addDays(beginHarvestDate, model.harvest_window)
+
+            height: smallRow.height
+            width: parent.width
+            color: {
+                if (smallCheckBox.checked) {
+                    return Material.color(Material.Grey, Material.Shade200)
+                }
+
+                /*} else if (mouseArea.containsMouse) {
+            return Material.color(Material.Grey, Material.Shade100)
+        }*/ else {
+                    return "white"
+                }
+            }
+
+            Column {
+                width: parent.width
+
+                ThinDivider {
+                }
 
 
+                RowLayout {
+                    id: smallRow
+                    height: rowHeight * 2
+                    spacing: 8
+//                    leftPadding: 16
+
+                    TextCheckBox {
+                        id: smallCheckBox
+                        text: model.crop
+//                        anchors.verticalCenter: smallRow.verticalCenter
+                        width: 24
+                        checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
+                        onCheckStateChanged: {
+                            selectedIds[model.planting_id] = checked
+                            checks = numberOfTrue(selectedIds)
+                        }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+
+                    TableLabel {
+                        text: model.variety
+                        elide: Text.ElideRight
+//                        width: 100
+                    }
+
+                    TableLabel {
+                        text: MDate.formatDate(model.planting_date) + " ⋅ " + model.locations
+                    }
+                    }
+
+                    ColumnLayout {
+
+                                        TableLabel {
+                                            text: model.planting_type !== 3 ? MDate.formatDate(seedingDate, currentYear) : ""
+                                            horizontalAlignment: Text.AlignRight
+                                            elide: Text.ElideRight
+//                                            width: 60
+                                        }
+                                        TableLabel {
+                                            text: model.length
+                                        }
+                    }
+
+                    //                    TableLabel {
+                    //                        text: model.planting_type !== 1 ? MDate.formatDate(transplantingDate, currentYear) : ""
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: MDate.formatDate(beginHarvestDate, currentYear)
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: MDate.formatDate(endHarvestDate, currentYear)
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: qsTr("%n d", "Abbreviation for day", model.dtt)
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: qsTr("%n d", "Abbreviation for day", model.dtm)
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: qsTr("%n d", "Abbreviation for day", model.harvest_window)
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: model.length + " m"
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: model.rows
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+
+                    //                    TableLabel {
+                    //                        text: model.spacing_plants + " cm"
+                    //                        horizontalAlignment: Text.AlignRight
+                    //                        elide: Text.ElideRight
+                    //                        width: 60
+                    //                    }
+                }
+            }
+        }
     }
     RoundButton {
+        id: roundAddButton
         font.family: "Material Icons"
         font.pixelSize: 20
         text: "\ue145"
@@ -795,7 +969,7 @@ Page {
         // to the footer, leaving a large vertical gap.
         y: parent.height - height
         anchors.right: parent.right
-        //        anchors.margins: 12
+    anchors.margins: 12
         visible: !largeDisplay
         highlighted: true
 

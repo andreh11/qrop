@@ -54,20 +54,21 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("io.qrop");
 
     QApplication app(argc, argv);
+    QTranslator translator;
 
-    QString lang = QLocale::system().name();
-//    if (lang == "fr_FR") {
-        QTranslator translator;
+    const QString &lang = QLocale::system().name();
+    if (lang.contains("fr")) {
         translator.load(":/translations/fr.qm");
         app.installTranslator(&translator);
-//    }
+    }
 
-    int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
-    int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
-    int ret3 = QFontDatabase::addApplicationFont(":/fonts/RobotoCondensed-Regular.ttf");
-    int ret4 = QFontDatabase::addApplicationFont(":/fonts/fa-regular-400.ttf"); // font-awesome
-    if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1)
-        qWarning() << "Some custom fonts can't be loaded.";
+    const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
+    const int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    const int ret3 = QFontDatabase::addApplicationFont(":/fonts/RobotoCondensed-Regular.ttf");
+    const int ret4 = QFontDatabase::addApplicationFont(":/fonts/fa-regular-400.ttf"); // font-awesome
+    const int ret5 = QFontDatabase::addApplicationFont(":/fonts/MaterialIcons-Regular.ttf");
+    if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1 || ret5 == -1)
+        qWarning() << "[desktop main] Some custom fonts can't be loaded.";
 
     qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");

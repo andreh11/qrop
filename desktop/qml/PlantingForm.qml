@@ -191,6 +191,7 @@ Flickable {
                         id: plantingAmountField
                         floatingLabel: true
                         placeholderText: qsTr("Length")
+                        inputMethodHints: Qt.ImhDigitsOnly
                         Layout.fillWidth: true
                         suffixText: "bed m"
                     }
@@ -199,6 +200,7 @@ Flickable {
                         id: inRowSpacingField
                         floatingLabel: true
                         placeholderText: qsTr("Spacing")
+                        inputMethodHints: Qt.ImhDigitsOnly
                         Layout.fillWidth: true
                         suffixText: "cm"
                     }
@@ -207,6 +209,7 @@ Flickable {
                         id: rowsPerBedField
                         floatingLabel: true
                         placeholderText: qsTr("Rows")
+                        inputMethodHints: Qt.ImhDigitsOnly
                         Layout.fillWidth: true
                         helperText: qsTr("Plants needed: ") + plantsNeeded()
                     }

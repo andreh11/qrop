@@ -12,6 +12,7 @@ Item {
 
     property int season: 1
     property int year
+    property date todayDate: new Date()
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
     property int monthWidth: 10
     readonly property int graphWidth: 12 * monthWidth
@@ -60,6 +61,27 @@ Item {
                 color: Material.color(Material.Grey, Material.Shade400)
             }
         }
+    }
+
+    Rectangle {
+        id: januaryLine
+        x: position(new Date(year, 0, 1))
+        visible: x != 0 && x != graphWidth
+        width: 1
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        color: Material.color(Material.Grey, Material.Shade800)
+    }
+
+    Rectangle {
+        id: todayLine
+        x: position(todayDate)
+        z: 1
+        visible: x != 0 && x != graphWidth
+        width: 1
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        color: Material.accent
     }
 
     Label {

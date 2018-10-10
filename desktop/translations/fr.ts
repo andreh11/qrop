@@ -291,12 +291,12 @@
         <translation type="vanished">Fin récolte</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="349"/>
+        <location filename="../qml/PlantingsPage.qml" line="357"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="291"/>
+        <location filename="../qml/PlantingsPage.qml" line="286"/>
         <source>Add planting</source>
         <translation>Ajouter série</translation>
     </message>
@@ -351,42 +351,42 @@
         <translation>Espacement</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="125"/>
+        <location filename="../qml/PlantingsPage.qml" line="124"/>
         <source>Revenue and Space graphs</source>
         <translation>Graphiques d&apos;occupation et de revenu</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="144"/>
+        <location filename="../qml/PlantingsPage.qml" line="143"/>
         <source>Estimated field and greenhouse space occupied this year (of X bed m.)</source>
         <translation>Estimation de l&apos;occupation au champs et sous abris pour cette année (sur X m de planche)</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="233"/>
+        <location filename="../qml/PlantingsPage.qml" line="230"/>
         <source>Field</source>
         <translation>Plein champs</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="248"/>
+        <location filename="../qml/PlantingsPage.qml" line="244"/>
         <source>Greenhouse</source>
         <translation>Sous abris</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="300"/>
+        <location filename="../qml/PlantingsPage.qml" line="308"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="313"/>
+        <location filename="../qml/PlantingsPage.qml" line="321"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="327"/>
+        <location filename="../qml/PlantingsPage.qml" line="335"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/PlantingsPage.qml" line="388"/>
+        <location filename="../qml/PlantingsPage.qml" line="396"/>
         <source>planting(s) selected</source>
         <translation>
             <numerusform>%n série sélectionnée</numerusform>
@@ -394,39 +394,35 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="401"/>
         <source>Spring</source>
-        <translation>Printemps</translation>
+        <translation type="vanished">Printemps</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="401"/>
         <source>Summer</source>
-        <translation>Été</translation>
+        <translation type="vanished">Été</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="401"/>
         <source>Fall</source>
-        <translation>Automne</translation>
+        <translation type="vanished">Automne</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="401"/>
         <source>Winter</source>
-        <translation>Hiver</translation>
+        <translation type="vanished">Hiver</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="425"/>
+        <location filename="../qml/PlantingsPage.qml" line="301"/>
         <source>Hide timegraph</source>
         <translation>Cacher le diagramme</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="425"/>
+        <location filename="../qml/PlantingsPage.qml" line="301"/>
         <source>Show timegraph</source>
         <translation>Afficher le diagrame</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/PlantingsPage.qml" line="722"/>
-        <location filename="../qml/PlantingsPage.qml" line="729"/>
+        <location filename="../qml/PlantingsPage.qml" line="728"/>
         <location filename="../qml/PlantingsPage.qml" line="736"/>
+        <location filename="../qml/PlantingsPage.qml" line="744"/>
         <source>%n d</source>
         <comment>Abbreviation for day</comment>
         <translation>
@@ -442,9 +438,52 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="775"/>
+        <location filename="../qml/PlantingsPage.qml" line="784"/>
         <source>Add plantings</source>
         <translation>Ajouter des séries</translation>
+    </message>
+</context>
+<context>
+    <name>SeasonSpinBox</name>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="16"/>
+        <source>Spring</source>
+        <translation>Printemps</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="16"/>
+        <source>Summer</source>
+        <translation>Été</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="16"/>
+        <source>Fall</source>
+        <translation>Automne</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="16"/>
+        <source>Winter</source>
+        <translation>Hiver</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="52"/>
+        <source>Previous year</source>
+        <translation>Année précédente</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="64"/>
+        <source>Previous season</source>
+        <translation>Saison précédente</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="94"/>
+        <source>Next season</source>
+        <translation>Saison suivante</translation>
+    </message>
+    <message>
+        <location filename="../qml/SeasonSpinBox.qml" line="108"/>
+        <source>Next year</source>
+        <translation>Année suivante</translation>
     </message>
 </context>
 <context>

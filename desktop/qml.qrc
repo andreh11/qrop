@@ -32,5 +32,6 @@
         <file>qml/CalendarView.qml</file>
         <file>qml/TextCheckBox.qml</file>
         <file>qml/date.js</file>
+        <file>qml/SeasonSpinBox.qml</file>
     </qresource>
 </RCC>
