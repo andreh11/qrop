@@ -8,13 +8,14 @@ import io.croplan.components 1.0
 
 CheckBox {
     id: control
-    checked: true
+
+    property bool round: false
 
     indicator: Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width
             height: width
-            radius: 4
+            radius: round ? 50 : 4
             color: checked ? Material.accent
                            : Material.color(Material.Green, Material.Shade400)
             Text {

@@ -856,8 +856,10 @@ Page {
                     TextCheckBox {
                         id: smallCheckBox
                         text: model.crop
+                        round: true
 //                        anchors.verticalCenter: smallRow.verticalCenter
-                        width: 24
+                        width: 54
+                        height: width
                         checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
                         onCheckStateChanged: {
                             selectedIds[model.planting_id] = checked
@@ -866,7 +868,7 @@ Page {
                     }
 
                     ColumnLayout {
-                        Layout.fillWidth: true
+//                        Layout.fillWidth: true
 
                     TableLabel {
                         text: model.variety

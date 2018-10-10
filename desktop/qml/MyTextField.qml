@@ -12,13 +12,14 @@ TextField {
 
     property string helperText
 
+    property string labelText: ""
     property string prefixText: ""
     property string suffixText: ""
     property bool persistentPrefix: false
     property bool persistentSuffix: false
 
     property bool floatingLabel: false
-    property bool hasError: characterLimit && length > characterLimit
+    property bool hasError: (characterLimit && length > characterLimit) || !acceptableInput
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
@@ -40,12 +41,26 @@ TextField {
     }
 
     Label {
-        id: flatingLabel
+        id: fieldLabel
+        x: control.leftPadding
+        y: control.topPadding
+        width: control.width - (control.leftPadding + control.rightPadding)
+        height: control.height - (control.topPadding + control.bottomPadding)
+        text: control.labelText
+        font: control.font
+        color: control.Material.hintTextColor
+        verticalAlignment: control.verticalAlignment
+        elide: Text.ElideRight
+        renderType: control.renderType
+        visible: !control.length
+    }
+
+    Label {
+        id: floatingLabel
         anchors.verticalCenter: control.top
         anchors.left: parent.left
-//        anchors.leftMargin: parent.topPadding
         color: Material.accent
-        text: placeholderText
+        text: labelText
         font.pixelSize: 14
         visible: control.text != ""
     }
@@ -84,7 +99,7 @@ TextField {
         Label {
             id: helperTextLabel
             visible: control.helperText
-            text: control.helperText
+            text: acceptableInput ? control.helperText : qsTr("Bad input")
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
                                     : Qt.darker(control.hintColor)

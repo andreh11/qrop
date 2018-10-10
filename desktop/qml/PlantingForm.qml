@@ -169,18 +169,22 @@ Flickable {
                     spacing: 16
                     MyTextField {
                         id: successionsField
+                        text: "1"
                         inputMethodHints: Qt.ImhDigitsOnly
                         floatingLabel: true
-                        placeholderText: qsTr("Successions")
+                        labelText: qsTr("Successions")
                         Layout.fillWidth: true
+//                        hasError: !acceptableInput
                     }
 
                     MyTextField {
                         id: timeBetweenSuccessionsField
+                        text: "1"
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        placeholderText: qsTr("Weeks between")
+                        labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
+
 //                        suffixText: "weeks"
                     }
                 }
@@ -192,6 +196,7 @@ Flickable {
                         floatingLabel: true
                         placeholderText: qsTr("Length")
                         inputMethodHints: Qt.ImhDigitsOnly
+                        validator: RegExpValidator { regExp: /[0-9]+/ }
                         Layout.fillWidth: true
                         suffixText: "bed m"
                     }
