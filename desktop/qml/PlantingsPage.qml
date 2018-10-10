@@ -58,15 +58,15 @@ Page {
     property int checks: numberOfTrue(selectedIds)
 
     onTableSortColumnChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName;
+//        var columnName = tableHeaderModel[tableSortColumn].columnName;
         tableSortOrder = "descending";
-        listView.model.setSortColumn(columnName, tableSortOrder);
+//        listView.model.setSortColumn(columnName, tableSortOrder);
     }
 
-    onTableSortOrderChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName;
-        listView.model.setSortColumn(columnName, tableSortOrder);
-    }
+//    onTableSortOrderChanged: {
+//        var columnName = tableHeaderModel[tableSortColumn].columnName;
+//        listView.model.setSortColumn(columnName, tableSortOrder);
+//    }
 
     function numberOfTrue(array) {
         var n = 0;
@@ -92,7 +92,6 @@ Page {
         checks = numberOfTrue(selectedIds)
     }
 
-
     title: "Plantings"
     padding: 8
 
@@ -112,7 +111,7 @@ Page {
         Pane {
             id: chartPane
             height: graphsButton.checked ? parent.height/4
-                                         : graphsButton.height + graphsButton.anchors.topMargin
+                             : graphsButton.height + graphsButton.anchors.topMargin
             width: parent.width
             visible: false
             //            Layout.fillWidth: true
@@ -152,81 +151,79 @@ Page {
                         max: 100
                         labelsPosition: CategoryAxis.AxisLabelsPositionOnValue
                         CategoryRange {
-                            label: endValue + "%"
+                            label: "0 %"
                             endValue: 0
                         }
                         CategoryRange {
-                            label: endValue + "%"
+                            label: "25 %"
                             endValue: 25
                         }
                         CategoryRange {
-                            label: endValue + "%"
+                            label: "50 %"
                             endValue: 50
                         }
                         CategoryRange {
-                            label: endValue + "%"
+                            label: "75 %"
                             endValue: 75
                         }
                         CategoryRange {
-                            label: endValue + "%"
+                            label: "100 %"
                             endValue: 100
                         }
                     }
-
 
                     CategoryAxis {
                         id: xValuesAxis
                         min: 0
                         max: 12
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(0, Locale.ShortFormat)
                             endValue: 1
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(1, Locale.ShortFormat)
                             endValue: 2
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(2, Locale.ShortFormat)
                             endValue: 3
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(3, Locale.ShortFormat)
                             endValue: 4
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(4, Locale.ShortFormat)
                             endValue: 5
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(5, Locale.ShortFormat)
                             endValue: 6
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(6, Locale.ShortFormat)
                             endValue: 7
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(7, Locale.ShortFormat)
                             endValue: 8
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(8, Locale.ShortFormat)
                             endValue: 9
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(9, Locale.ShortFormat)
                             endValue: 10
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(10, Locale.ShortFormat)
                             endValue: 11
                         }
                         CategoryRange {
-                            label: Qt.locale().monthName(endValue - 1, Locale.ShortFormat)
+                            label: Qt.locale().monthName(11, Locale.ShortFormat)
                             endValue: 12
                         }
-
                     }
 
                     LineSeries {
@@ -242,7 +239,6 @@ Page {
                         XYPoint { x: 3.4; y: 3.0 }
                         XYPoint { x: 4.1; y: 3.3 }
                     }
-
 
                     LineSeries {
                         name: qsTr("Greenhouse")
@@ -291,6 +287,19 @@ Page {
                         text: qsTr("Add planting")
                         onClicked: plantingDialog.open()
 
+                    }
+
+                    IconButton {
+                        id: timegraphButton
+                        text: "\ue0b8"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: true
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
                     Button {
@@ -410,20 +419,9 @@ Page {
                         to: 2100
                         value: new Date().getFullYear()
                         width: 100
+                        Layout.rightMargin: 16
                     }
 
-                    IconButton {
-                        id: timegraphButton
-                        text: "\ue0b8"
-                        hoverEnabled: true
-                        visible: largeDisplay && checks == 0
-                        checkable: true
-                        checked: true
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
-                    }
                 }
             }
 
@@ -440,33 +438,36 @@ Page {
                 height: parent.height - buttonRectangle.height
                 spacing: 0
                 anchors.top: topDivider.bottom
-//                flickableDirection: Flickable.HorizontalAndVerticalFlick
+                //                flickableDirection: Flickable.HorizontalAndVerticalFlick
 
                 property string filterColumn: "crop"
                 //            property TableHeaderLabel filterLabel: headerRow.cropLabel
                 Keys.onUpPressed: verticalScrollBar.decrease()
-        Keys.onDownPressed: verticalScrollBar.increase()
+                Keys.onDownPressed: verticalScrollBar.increase()
 
                 model: PlantingModel {
                     id: plantingModel
                     filterString: filterField.text
                     year: yearSpinBox.value
                     season: page.season
+                    sortColumn: tableHeaderModel[tableSortColumn].columnName
+                    sortOrder: tableSortOrder
+//                    sortOrder:
                 }
 
-//                ScrollBar.vertical: ScrollBar {
-//                    id: verticalScrollBar
-//                    visible: largeDisplay
-//                    parent: listView.parent
-//                    anchors.top: listView.top
-//                    anchors.right: listView.right
-//                    anchors.bottom: listView.bottom
-//                    active: horizontalScrollBar.active
-//                }
+                ScrollBar.vertical: ScrollBar {
+                    id: verticalScrollBar
+                    visible: largeDisplay
+                    parent: listView.parent
+                    anchors.top: listView.top
+                    anchors.right: listView.right
+                    anchors.bottom: listView.bottom
+                    active: horizontalScrollBar.active
+                }
 
                 ScrollBar.horizontal: ScrollBar {
                     id: horizontalScrollBar
-//                    active: verticalScrollBar.active
+                    active: verticalScrollBar.active
                     parent: listView.parent
                     anchors.centerIn: parent
                     orientation: Qt.Horizontal
@@ -604,7 +605,6 @@ Page {
                                     }
                                     ScrollBar.vertical: ScrollBar {
                                         visible: largeDisplay
-                                        parent: parent.parent
                                         anchors.top: parent.top
                                         anchors.right: parent.right
                                         anchors.bottom: parent.bottom
@@ -621,7 +621,7 @@ Page {
                     id: delegate
                     property date seedingDate:
                         model.planting_type === 2 ? MDate.addDays(transplantingDate, -model.dtt)
-                          : transplantingDate
+                                      : transplantingDate
                     property date transplantingDate: model.planting_date
                     property date beginHarvestDate: MDate.addDays(model.planting_date, model.dtm)
                     property date endHarvestDate: MDate.addDays(beginHarvestDate, model.harvest_window)

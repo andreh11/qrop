@@ -49,10 +49,6 @@ Item {
                 visible: mouseArea.containsMouse
             }
             PropertyChanges {
-                target: RightIconLabel
-                visible: mouseArea.containsMouse
-            }
-            PropertyChanges {
                 target: headerLabel
                 color: Material.color(Material.Grey, Material.Shade700)
             }

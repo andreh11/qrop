@@ -14,37 +14,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlRecord>
 #include <QDebug>
-#include <QSqlError>
-#include <QSqlQuery>
 #include <QDate>
 #include <QVector>
 
 #include "databaseutility.h"
+#include "sqltablemodel.h"
 #include "plantingmodel.h"
-#include "taskmodel.h"
-#include "locationmodel.h"
-#include "notemodel.h"
-#include "keywordmodel.h"
-#include "harvestmodel.h"
-#include "expensemodel.h"
-
-static const char *plantingTableName = "planting_view";
 
 PlantingModel::PlantingModel(QObject *parent)
     : QSortFilterProxyModel(parent),
       m_model(new SqlTableModel(this)),
+      m_string(""),
       m_year(QDate::currentDate().year()),
-      m_season(1)
+      m_season(1),
+      m_sortColumn("crop"),
+      m_sortOrder("ascending")
 {
     m_model->setTable(plantingTableName);
-    m_model->setSortColumn("seeding_date", "ascending");
     m_model->select();
+    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    setSourceModel(m_model);
+
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-    setSourceModel(m_model);
 
 //    int varietyColumn = fieldColumn("variety_id");
 //    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
@@ -55,11 +48,6 @@ PlantingModel::PlantingModel(QObject *parent)
 void PlantingModel::refresh() const
 {
     m_model->select();
-}
-
-void PlantingModel::setSortColumn(const QString &columnName, const QString &order)
-{
-    m_model->setSortColumn(columnName, order);
 }
 
 QString PlantingModel::filterString() const
@@ -77,9 +65,20 @@ int PlantingModel::filterSeason() const
     return m_season;
 }
 
+QString PlantingModel::sortColumn() const
+{
+    return m_sortColumn;
+}
+
+QString PlantingModel::sortOrder() const
+{
+    return m_sortOrder;
+}
+
 void PlantingModel::setFilterYear(int year)
 {
     m_year = year;
+    filterYearChanged();
     invalidateFilter();
 }
 
@@ -90,7 +89,22 @@ void PlantingModel::setFilterSeason(int season)
     else
         m_season = 1; // default to Spring
 
+    filterSeasonChanged();
     invalidateFilter();
+}
+
+void PlantingModel::setSortColumn(const QString &columnName)
+{
+    m_sortColumn = columnName;
+    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sortColumnChanged();
+}
+
+void PlantingModel::setSortOrder(const QString &order)
+{
+    m_sortOrder = order;
+    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sortOrderChanged();
 }
 
 QVector<QDate> PlantingModel::seasonDates() const
@@ -133,7 +147,7 @@ bool PlantingModel::isDateInRange(const QDate &date) const
     QDate seasonBeg = dates[0];
     QDate seasonEnd = dates[1];
 
-    return seasonBeg <= date && date < seasonEnd;
+    return (seasonBeg <= date) && (date < seasonEnd);
 }
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

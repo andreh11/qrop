@@ -21,7 +21,8 @@
 #include <QVariantMap>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+
+class SqlTableModel;
 
 class CORESHARED_EXPORT PlantingModel : public QSortFilterProxyModel
 {
@@ -29,6 +30,8 @@ class CORESHARED_EXPORT PlantingModel : public QSortFilterProxyModel
     Q_PROPERTY(QString filterString READ filterString WRITE setFilterFixedString NOTIFY filterStringChanged)
     Q_PROPERTY(int year READ filterYear() WRITE setFilterYear NOTIFY filterYearChanged)
     Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
+    Q_PROPERTY(QString sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
+    Q_PROPERTY(QString sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
 
 public:
     PlantingModel(QObject *parent = nullptr);
@@ -36,10 +39,13 @@ public:
     QString filterString() const;
     int filterYear() const;
     int filterSeason() const;
+    QString sortColumn() const;
+    QString sortOrder() const;
 
-    Q_INVOKABLE void setFilterYear(int year);
-    Q_INVOKABLE void setFilterSeason(int season);
-    Q_INVOKABLE void setSortColumn(const QString &columnName, const QString &order);
+    void setFilterYear(int year);
+    void setFilterSeason(int season);
+    void setSortColumn(const QString &columnName);
+    void setSortOrder(const QString &order);
     Q_INVOKABLE void refresh() const;
 
 protected:
@@ -49,14 +55,17 @@ signals:
     void filterStringChanged();
     void filterYearChanged();
     void filterSeasonChanged();
+    void sortColumnChanged();
+    void sortOrderChanged();
 
 private:
-    QString m_crop;
-    QString m_string;
-    QHash<QModelIndex, bool> m_selected;
+    const QString plantingTableName = "planting_view";
     SqlTableModel *m_model;
+    QString m_string;
     int m_year;
     int m_season;
+    QString m_sortColumn;
+    QString m_sortOrder;
 
     bool isDateInRange(const QDate &date) const;
     QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
