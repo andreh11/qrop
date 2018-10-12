@@ -76,23 +76,22 @@ Item {
             color: Material.color(Material.Grey)
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
-            anchors.right: iconLabel.right
-            anchors.rightMargin: 24
-            anchors.bottomMargin: 16
+            anchors.right: calendarButton.left
+            anchors.rightMargin: -8
+            anchors.bottomMargin: 12
             anchors.bottom: parent.bottom
         }
 
-        Label {
-            id: iconLabel
-            bottomPadding: 8
+        RoundButton {
+            id: calendarButton
+            flat: true
             anchors.right: textField.right
+            anchors.rightMargin: -16
             anchors.verticalCenter:  parent.verticalCenter
             font.family: "Font Awesome 5 Free"
             text: "\uf073" // calendar-alt
             font.pointSize: textField.font.pointSize * 1.2
 
-            MouseArea {
-                anchors.fill: parent
                 onClicked: {
                     if (largeDisplay)
                         popup.open();
@@ -102,8 +101,8 @@ Item {
 
                 Popup {
                     id: popup
-                    y: control.height - iconLabel.height/2
-                    x: -control.width + iconLabel.width*2
+                    y: control.height - calendarButton.height/2
+                    x: -control.width + calendarButton.width*2
                     width: contentItem.width
                     height: contentItem.height
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -122,7 +121,9 @@ Item {
                         }
                     }
                 }
-            }
+//            MouseArea {
+//                anchors.fill: parent
+//            }
         }
     }
 

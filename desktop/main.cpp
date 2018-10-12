@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("io.qrop");
 
     QApplication app(argc, argv);
+    app.setWindowIcon(QIcon("/home/ah/src/qrop/icon.png"));
     QTranslator translator;
 
     const QString &lang = QLocale::system().name();

@@ -249,6 +249,7 @@ Flickable {
                     id: sowDtm
                     visible: fieldSowingDate.visible
                     inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "999"
                     text: "1"
                     Layout.fillWidth: true
                     floatingLabel: true
@@ -272,6 +273,7 @@ Flickable {
                     visible: greenhouseStartDate.visible
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
                     placeholderText: qsTr("Greenhouse duration")
@@ -295,6 +297,8 @@ Flickable {
                     id: plantingDtm
                     visible: fieldPlantingDate.visible
                     text: "1"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
                     placeholderText: qsTr("Days to maturity")
@@ -320,6 +324,8 @@ Flickable {
                 MyTextField {
                     id: harvestWindow
                     text: "1"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
                     placeholderText: qsTr("Harvest window")
