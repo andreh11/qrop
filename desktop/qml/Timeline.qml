@@ -20,6 +20,7 @@ Item {
     property date transplantingDate
     property date beginHarvestDate
     property date endHarvestDate
+    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
 
     function coordinate(day) {
         if (day < 0)
@@ -104,7 +105,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         height: width
         radius: 20
-        color: Material.color(Material.Green, Material.Shade200)
+        color: current ? Material.color(Material.Green, Material.Shade200)
+                       : Material.color(Material.Grey, Material.Shade400)
     }
 
     Rectangle {
@@ -113,7 +115,8 @@ Item {
         visible: width > 0
         height: 1
         x: seedingCircle.x
-        color: Material.color(Material.Green, Material.Shade200)
+        color: current ? Material.color(Material.Green, Material.Shade200)
+                       : Material.color(Material.Grey, Material.Shade400)
         anchors.verticalCenter: parent.verticalCenter
     }
 
@@ -124,7 +127,8 @@ Item {
         visible: width > 0
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
-        color: Material.color(Material.Green, Material.Shade300)
+        color: current ? Material.color(Material.Green, Material.Shade300)
+                       : Material.color(Material.Grey, Material.Shade400)
 
         Label {
             text: MDate.formatDate(transplantingDate)
@@ -143,7 +147,8 @@ Item {
         visible: width > 0
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter
-        color: Material.color(Material.Green, Material.Shade700)
+        color: current ? Material.color(Material.Green, Material.Shade700)
+                       : Material.color(Material.Grey, Material.Shade500)
         Label {
             text: MDate.formatDate(beginHarvestDate)
             font.family: "Roboto Condensed"

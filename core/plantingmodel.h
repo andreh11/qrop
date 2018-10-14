@@ -17,60 +17,23 @@
 #ifndef SQLPLANTINGMODEL_H
 #define SQLPLANTINGMODEL_H
 
-#include <QSortFilterProxyModel>
+//#include <QSortFilterProxyModel>
 #include <QVariantMap>
 
+#include "sortfilterproxymodel.h"
 #include "core_global.h"
 
 class SqlTableModel;
 
-class CORESHARED_EXPORT PlantingModel : public QSortFilterProxyModel
+class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString filterString READ filterString WRITE setFilterFixedString NOTIFY filterStringChanged)
-    Q_PROPERTY(int year READ filterYear() WRITE setFilterYear NOTIFY filterYearChanged)
-    Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
-    Q_PROPERTY(QString sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
-    Q_PROPERTY(QString sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
 
 public:
-    PlantingModel(QObject *parent = nullptr);
-
-    QString filterString() const;
-    int filterYear() const;
-    int filterSeason() const;
-    QString sortColumn() const;
-    QString sortOrder() const;
-
-    void setFilterYear(int year);
-    void setFilterSeason(int season);
-    void setSortColumn(const QString &columnName);
-    void setSortOrder(const QString &order);
-    Q_INVOKABLE void refresh() const;
+    PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-
-signals:
-    void filterStringChanged();
-    void filterYearChanged();
-    void filterSeasonChanged();
-    void sortColumnChanged();
-    void sortOrderChanged();
-
-private:
-    const QString plantingTableName = "planting_view";
-    SqlTableModel *m_model;
-    QString m_string;
-    int m_year;
-    int m_season;
-    QString m_sortColumn;
-    QString m_sortOrder;
-
-    bool isDateInRange(const QDate &date) const;
-    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
-    QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
-    QVector<QDate> seasonDates() const;
 };
 
 #endif // SQLPLANTINGMODEL_H
