@@ -55,6 +55,7 @@ Page {
         { name: qsTr("Spacing"), columnName: "spacing_plant", width: 60, visible: true }
     ]
     property variant selectedIds: []
+    property int lastIndexClicked: -1
     property int checks: numberOfTrue(selectedIds)
 
     onTableSortColumnChanged: tableSortOrder = "descending"
@@ -67,28 +68,32 @@ Page {
         return n
     }
 
+    // UGLY HACK
+    // JS arrays don't emit changed() signal when an element is modified.
+    // Unfortunately, it seems to be no way to manually emit the
+    // selectedIdsChanged() signal. Hence when have to copy the whole
+    // array, which is a really ugly.
+    function emitSelectedIdsChanged()
+    {
+        selectedIds = selectedIds
+    }
+
     function duplicateSelected() {
-        // JS arrays don't emit changed() signal when an element is modified. Hence when have
-        // to make a copy, change it and assigns it to the original array to make bindings works...
-        var tmp = selectedIds
-        for (var key in tmp)
-            if (tmp[key]) {
-                tmp[key] = false;
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+                selectedIds[key] = false;
                 Planting.duplicate(key);
             }
-        selectedIds = tmp
+        emitSelectedIdsChanged();
     }
 
     function removeSelected() {
-        // JS arrays don't emit changed() signal when an element is modified. Hence when have
-        // to make a copy, change it and assigns it to the original array to make bindings works...
-        var tmp = selectedIds
-        for (var key in tmp)
-            if (tmp[key]) {
-                tmp[key] = false;
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+                selectedIds[key] = false;
                 Planting.remove(key);
             }
-        selectedIds = tmp
+        emitSelectedIdsChanged();
     }
 
     title: "Plantings"
@@ -353,7 +358,6 @@ Page {
                         visible: deleteButton.visible
                         Layout.fillWidth: true
                     }
-
 
                     TextArea  {
                         id: filterField
@@ -648,10 +652,26 @@ Page {
                                 text: model.crop
                                 anchors.verticalCenter: row.verticalCenter
                                 width: 24
-                                checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
-                                onCheckStateChanged: {
-                                    selectedIds[model.planting_id] = checked
-//                                    checks = numberOfTrue(selectedIds)
+                                checked: model.planting_id in selectedIds && selectedIds[model.planting_id]
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        if (mouse.button !== Qt.LeftButton)
+                                            return;
+
+                                        var beg = index
+                                        var end = index
+
+                                        ListView.data
+
+                                        if (mouse.modifiers === Qt.ShiftModifier)
+                                            console.log(model[index])
+
+                                        selectedIds[model.planting_id] = !selectedIds[model.planting_id];
+                                        lastIndexClicked = index
+
+                                        emitSelectedIdsChanged();
+                                    }
                                 }
                             }
 
@@ -802,13 +822,13 @@ Page {
             color: "transparent"
             RowLayout {
                 anchors.fill: parent
-            Label {
-                text: section
-                Layout.fillWidth: true
-            }
-            Label {
-                text: ">"
-            }
+                Label {
+                    text: section
+                    Layout.fillWidth: true
+                }
+                Label {
+                    text: ">"
+                }
 
             }
         }
@@ -830,7 +850,7 @@ Page {
                 }
 
                 /*} else if (mouseArea.containsMouse) {
-        return Material.color(Material.Grey, Material.Shade100)
+    return Material.color(Material.Grey, Material.Shade100)
     }*/ else {
                     return "white"
                 }
@@ -850,15 +870,14 @@ Page {
 
                     CheckBox {
                         id: smallCheckBox
-//                        text: model.crop
-//                        round: true
+                        //                        text: model.crop
+                        //                        round: true
                         //                        anchors.verticalCenter: smallRow.verticalCenter
                         width: 100
                         height: width
                         checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
                         onCheckStateChanged: {
                             selectedIds[model.planting_id] = checked
-                            checks = numberOfTrue(selectedIds)
                         }
                     }
 
@@ -907,7 +926,6 @@ Page {
         visible: !largeDisplay
         highlighted: true
 
-        onClicked: { stackView.push(plantingForm)
-        }
+        onClicked: stackView.push(plantingForm)
     }
 }

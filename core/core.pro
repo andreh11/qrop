@@ -33,7 +33,8 @@ SOURCES += \
     databaseutility.cpp \
     planting.cpp \
     task.cpp \
-    location.cpp
+    location.cpp \
+    sortfilterproxymodel.cpp
 
 
 HEADERS += \
@@ -63,7 +64,8 @@ HEADERS += \
     databaseutility.h \
     planting.h \
     task.h \
-    location.h
+    location.h \
+    sortfilterproxymodel.h
 
 RESOURCES += \
     core_resources.qrc
