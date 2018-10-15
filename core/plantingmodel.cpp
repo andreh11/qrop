@@ -37,7 +37,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
 {
     int dtt = rowValue(sourceRow, sourceParent, "dtt").toInt();
     int dtm = rowValue(sourceRow, sourceParent, "dtm").toInt();
-    int harvestWindow = rowValue(sourceRow, sourceParent, "dtm").toInt();
+    int harvestWindow = rowValue(sourceRow, sourceParent, "harvest_window").toInt();
     QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
     QDate harvestBeginDate = plantingDate.addDays(dtm);
     QDate harvestEndDate = harvestBeginDate.addDays(harvestWindow);
@@ -56,6 +56,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
 
     if (inRange) {
         qDebug() << "SEASON DATES: " << seasonDates();
+        qDebug() << "DTT:" << dtt << "DTM:" << dtm << "Harvest:" << harvestWindow;
         qDebug() << "Source row:" << sourceRow << rowValue(sourceRow, sourceParent, "variety").toString()
                  << seedingDate << plantingDate << harvestBeginDate << harvestEndDate;
     }
