@@ -26,7 +26,6 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("crop");
-
 //    int varietyColumn = fieldColumn("variety_id");
 //    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
 

@@ -81,7 +81,6 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
 // order must be "ascending" or "descending"
 void SqlTableModel::setSortColumn(const QString fieldName, const QString order)
 {
-    qDebug() << "SqlTableModel setSortColumn:" << fieldName << order;
     if (!m_rolesIndexes.contains(fieldName)) {
         qDebug() << "m_rolesIndexes doesn't have key" << fieldName << roleIndex(fieldName);
         return;

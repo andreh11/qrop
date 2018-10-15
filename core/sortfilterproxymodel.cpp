@@ -32,7 +32,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 {
     m_model->setTable(tableName);
     m_model->select();
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
     setSourceModel(m_model);
     setSortLocaleAware(true);
 
@@ -96,14 +95,16 @@ void SortFilterProxyModel::setFilterSeason(int season)
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
+                                                                      : Qt::DescendingOrder);
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
+                                                                      : Qt::DescendingOrder);
     sortOrderChanged();
 }
 

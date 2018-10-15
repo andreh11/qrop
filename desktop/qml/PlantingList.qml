@@ -75,7 +75,7 @@ ListView {
                 font.pixelSize: fontSizeBodyAndButton
             }
             Text {
-                text: MDate.week(model.seeding_date) + " − " + MDate.week(model.end_harvest_date) + ", " + model.place_ids
+                text: MDate.formatDate(model.sowing_date) + " − " + MDate.week(model.end_harvest_date) + ", " + model.place_ids
                 font.family: "Roboto Regular"
                 color: Material.color(Material.Grey)
                 font.pixelSize: 12
