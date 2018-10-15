@@ -41,6 +41,15 @@ Item {
         horizontalAlignment: control.horizontalAlignment
     }
 
+    ToolTip {
+        visible: mouseArea.containsMouse
+        delay: Qt.styleHints.mousePressAndHoldInterval
+        text: control.text
+        font.family: "Robo Regular"
+        x: headerLabel.width / 2
+        y: headerLabel.height + 16
+    }
+
     states: [
         State {
             name: ""
