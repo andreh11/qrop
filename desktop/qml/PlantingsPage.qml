@@ -662,11 +662,6 @@ Page {
                                         var beg = index
                                         var end = index
 
-                                        ListView.data
-
-                                        if (mouse.modifiers === Qt.ShiftModifier)
-                                            console.log(model[index])
-
                                         selectedIds[model.planting_id] = !selectedIds[model.planting_id];
                                         lastIndexClicked = index
 

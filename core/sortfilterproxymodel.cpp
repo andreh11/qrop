@@ -109,7 +109,7 @@ QVector<QDate> SortFilterProxyModel::seasonDates() const
 {
     switch (m_season) {
     case 0: // Spring
-        return {QDate(m_year-1, 10, 1), QDate(m_year, 11, 30)};
+        return {QDate(m_year-1, 10, 1), QDate(m_year, 9, 30)};
     case 2: // Fall
         return {QDate(m_year, 4, 1), QDate(m_year+1, 3, 31)};
     case 3: // Winter
