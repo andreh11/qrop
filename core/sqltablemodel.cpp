@@ -120,5 +120,4 @@ void SqlTableModel::buildRolesIndexes()
 {
     for (int i = 0; i < this->record().count(); i++)
         m_rolesIndexes.insert(record().fieldName(i).toUtf8(), Qt::UserRole + i);
-    qDebug() << "Roles indexes: " << m_rolesIndexes;
 }

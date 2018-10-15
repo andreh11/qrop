@@ -15,13 +15,17 @@ Flickable {
     property bool transplantBought: boughtRadio.checked
 
     property int plantingType : directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
+    readonly property int dtm: parseInt(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
+    readonly property  int dtt: plantingType === 2 ? parseInt(greenhouseGrowTimeField.text) : 0
+    readonly property int harvestWindow: parseInt(harvestWindowField.text)
     readonly property string sowingDate: plantingType === 1
                                          ? fieldSowingDateField.isoDateString
                                          : (plantingType === 2 ? greenhouseStartDateField.isoDateString
                                                                : fieldPlantingDateField.isoDateString)
     readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString
                                                               : fieldPlantingDateField.isoDateString
-
+    readonly property string begHarvestDate: firstHarvestDateField.isoDateString
+    readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(firstHarvestDateField.calendarDate, harvestWindow), "yyyy-MM-dd")
 
     property variant values:  {
         "variety_id" : varietyField.currentIndex + 1,
@@ -32,13 +36,11 @@ Flickable {
         "rows" : parseInt(rowsPerBedField.text),
         "sowing_date" : sowingDate,
         "planting_date" : plantingDate,
-
-        "beg_harvest_date" : firstHarvestDateField.isoDateString,
-        "end_harvest_date" : firstHarvestDateField.isoDateString,
-
-        "dtm" : parseInt(plantingType === 1 ? sowDtmField.text : plantingDtmField.text),
-        "dtt" : plantingType === 2 ? parseInt(greenhouseGrowTimeField.text) : 0,
-        "harvest_window" : parseInt(harvestWindowField.text)
+        "beg_harvest_date" : begHarvestDate,
+        "end_harvest_date" : endHarvestDate,
+        "dtm" : dtm,
+        "dtt" : dtt,
+        "harvest_window" : harvestWindow
     }
 
     property int successions: parseInt(successionsField.text)

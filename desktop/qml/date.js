@@ -4,7 +4,6 @@ function firstMonday(year) {
     var date = new Date(year, 0, 1)
     var dayn = (date.getDay() + 6) % 7;
     date.setDate(date.getDate() - dayn);
-    console.log("First monday: " + date)
     return date
 }
 

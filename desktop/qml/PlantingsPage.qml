@@ -43,7 +43,7 @@ Page {
     property var tableHeaderModel: [
         { name: qsTr("Crop"), columnName: "crop", width: 100, visible: false },
         { name: qsTr("Variety"), columnName: "variety", width: 100, visible: true },
-        { name: qsTr("Sowing"), columnName: "seeding_date", width: 60, visible: true },
+        { name: qsTr("Sowing"), columnName: "sowing_date", width: 60, visible: true },
         { name: qsTr("Planting"), columnName: "planting_date", width: 60, visible: true },
         { name: qsTr("Begin"), columnName: "beg_harvest_date", width: 60, visible: true },
         { name: qsTr("End"), columnName: "end_harvest_date", width: 60, visible: true },
@@ -52,7 +52,7 @@ Page {
         { name: qsTr("Harvest window"), columnName: "harvest_window", width: 60, visible: true },
         { name: qsTr("Length"), columnName: "length", width: 60, visible: true },
         { name: qsTr("Rows"), columnName: "rows", width: 60, visible: true },
-        { name: qsTr("Spacing"), columnName: "spacing_plant", width: 60, visible: true }
+        { name: qsTr("Spacing"), columnName: "spacing_plants", width: 60, visible: true }
     ]
     property variant selectedIds: []
     property int lastIndexClicked: -1
