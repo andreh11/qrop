@@ -15,6 +15,7 @@
  */
 
 #include <QDate>
+#include <QDebug>
 
 #include "sortfilterproxymodel.h"
 #include "sqltablemodel.h"
@@ -33,6 +34,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     m_model->select();
     m_model->setSortColumn(m_sortColumn, m_sortOrder);
     setSourceModel(m_model);
+    setSortLocaleAware(true);
 
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);

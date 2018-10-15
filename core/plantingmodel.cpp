@@ -54,12 +54,5 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             || isDateInRange(harvestBeginDate)
             || isDateInRange(harvestEndDate);
 
-    if (inRange) {
-        qDebug() << "SEASON DATES: " << seasonDates();
-        qDebug() << "DTT:" << dtt << "DTM:" << dtm << "Harvest:" << harvestWindow;
-        qDebug() << "Source row:" << sourceRow << rowValue(sourceRow, sourceParent, "variety").toString()
-                 << seedingDate << plantingDate << harvestBeginDate << harvestEndDate;
-    }
-
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

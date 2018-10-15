@@ -81,11 +81,12 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
 // order must be "ascending" or "descending"
 void SqlTableModel::setSortColumn(const QString fieldName, const QString order)
 {
+    qDebug() << "SqlTableModel setSortColumn:" << fieldName << order;
     if (!m_rolesIndexes.contains(fieldName)) {
-        qDebug() << "m_rolesIndexes doesn't have key" << fieldName;
+        qDebug() << "m_rolesIndexes doesn't have key" << fieldName << roleIndex(fieldName);
         return;
     }
-    setSort(m_rolesIndexes[fieldName],
+    setSort(roleIndex(fieldName),
             order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
 }
@@ -107,8 +108,17 @@ bool SqlTableModel::submitAll()
    return ok;
 }
 
+int SqlTableModel::roleIndex(const QString &role) const
+{
+    if (m_rolesIndexes.contains(role))
+        return m_rolesIndexes[role] - Qt::UserRole;
+    else
+        return -1;
+}
+
 void SqlTableModel::buildRolesIndexes()
 {
     for (int i = 0; i < this->record().count(); i++)
         m_rolesIndexes.insert(record().fieldName(i).toUtf8(), Qt::UserRole + i);
+    qDebug() << "Roles indexes: " << m_rolesIndexes;
 }

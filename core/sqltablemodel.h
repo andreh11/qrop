@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     bool submitAll();
+    int roleIndex(const QString &role) const;
 
 private:
     QHash<QString, int> m_rolesIndexes;
