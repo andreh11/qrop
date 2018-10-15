@@ -78,12 +78,12 @@ Flickable {
                         leftMargin: 8
                         rightMargin: leftMargin
                     }
-            PlantingList {
-                implicitHeight: 200
-                width: 180
-                height: 200
-                Layout.fillWidth: true
-            }
+//            PlantingList {
+//                implicitHeight: 200
+//                width: 180
+//                height: 200
+//                Layout.fillWidth: true
+//            }
                 }
             }
 

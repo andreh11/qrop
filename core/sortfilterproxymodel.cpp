@@ -15,6 +15,7 @@
  */
 
 #include <QDate>
+#include <QDebug>
 
 #include "sortfilterproxymodel.h"
 #include "sqltablemodel.h"
@@ -31,8 +32,8 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 {
     m_model->setTable(tableName);
     m_model->select();
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
     setSourceModel(m_model);
+    setSortLocaleAware(true);
 
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -94,14 +95,16 @@ void SortFilterProxyModel::setFilterSeason(int season)
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
+                                                                      : Qt::DescendingOrder);
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    m_model->setSortColumn(m_sortColumn, m_sortOrder);
+    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
+                                                                      : Qt::DescendingOrder);
     sortOrderChanged();
 }
 
@@ -109,7 +112,7 @@ QVector<QDate> SortFilterProxyModel::seasonDates() const
 {
     switch (m_season) {
     case 0: // Spring
-        return {QDate(m_year-1, 10, 1), QDate(m_year, 11, 30)};
+        return {QDate(m_year-1, 10, 1), QDate(m_year, 9, 30)};
     case 2: // Fall
         return {QDate(m_year, 4, 1), QDate(m_year+1, 3, 31)};
     case 3: // Winter

@@ -26,7 +26,6 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("crop");
-
 //    int varietyColumn = fieldColumn("variety_id");
 //    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
 
@@ -35,28 +34,27 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int dtt = rowValue(sourceRow, sourceParent, "dtt").toInt();
-    int dtm = rowValue(sourceRow, sourceParent, "dtm").toInt();
-    int harvestWindow = rowValue(sourceRow, sourceParent, "dtm").toInt();
+//    int dtt = rowValue(sourceRow, sourceParent, "dtt").toInt();
+//    int dtm = rowValue(sourceRow, sourceParent, "dtm").toInt();
+//    int harvestWindow = rowValue(sourceRow, sourceParent, "harvest_window").toInt();
+    QDate sowingDate = fieldDate(sourceRow, sourceParent, "sowing_date");
     QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
-    QDate harvestBeginDate = plantingDate.addDays(dtm);
-    QDate harvestEndDate = harvestBeginDate.addDays(harvestWindow);
-    QDate seedingDate;
+    QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_haverst_date");
+    QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "end_harvest_date");
+//    QDate harvestBeginDate = plantingDate.addDays(dtm);
+//    QDate harvestEndDate = harvestBeginDate.addDays(harvestWindow);
+//    QDate seedingDate;
 
-    auto plantingType = static_cast<PlantingType>(rowValue(sourceRow, sourceParent, "planting_type").toInt());
-    if (plantingType == PlantingType::TransplantRaised)
-        seedingDate = plantingDate.addDays(-dtt);
-    else
-        seedingDate = plantingDate;
+//    auto type = static_cast<PlantingType>(rowValue(sourceRow, sourceParent, "planting_type").toInt());
+//    if (type == PlantingType::TransplantRaised)
+//        seedingDate = plantingDate.addDays(-dtt);
+//    else
+//        seedingDate = plantingDate;
 
-    bool inRange = isDateInRange(seedingDate)
+    bool inRange = isDateInRange(sowingDate)
             || isDateInRange(plantingDate)
             || isDateInRange(harvestBeginDate)
             || isDateInRange(harvestEndDate);
-
-    if (inRange)
-    qDebug() << "Source row:" << sourceRow << rowValue(sourceRow, sourceParent, "variety").toString()
-         << seedingDate << plantingDate << harvestBeginDate << harvestEndDate;
 
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

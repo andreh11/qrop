@@ -44,7 +44,6 @@ void VarietyModel::setFilterCropId(int cropId)
 {
    if (cropId == m_cropId)
        return;
-   qDebug() << "Filter CROP" << cropId;
 
    m_cropId = cropId;
 
