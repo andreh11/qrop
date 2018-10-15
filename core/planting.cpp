@@ -34,7 +34,6 @@ int Planting::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
     QString plantingDateString = newMap.take("planting_date").toString();
-    qDebug() << "PLANTING DATE" <<  plantingDateString;
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
 
     int id = DatabaseUtility::add(map);
@@ -50,8 +49,6 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     QDate endHarvestDate = QDate::fromString(map["end_harvest_date"].toString(), Qt::ISODate);
     QList<int> ids;
     QVariantMap newMap(map);
-
-    qDebug() << "END:" << endHarvestDate;
 
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
