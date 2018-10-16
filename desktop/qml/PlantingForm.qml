@@ -110,6 +110,7 @@ Flickable {
 
             MyComboBox {
                 id: cropField
+                labelText: qsTr("Crop")
 //                floatingLabel: true
 //                placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
@@ -123,6 +124,7 @@ Flickable {
 
             MyComboBox {
                 id: varietyField
+                labelText: qsTr("Variety")
 //                floatingLabel: true
 //                placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
@@ -135,15 +137,18 @@ Flickable {
 
             MyTextField {
                 id: keywordsField
+                labelText: qsTr("Keywords")
                 floatingLabel: true
-                placeholderText: qsTr("Keywords")
                 Layout.fillWidth: true
             }
 
             MyComboBox {
                 id: unitCombo
+                labelText: qsTr("Unit")
+                editable: true
                 model : UnitModel { }
                 textRole: "unit"
+                Layout.fillWidth: true
             }
 
             RowLayout {
@@ -184,6 +189,7 @@ Flickable {
                         id: successionsField
                         text: "1"
                         inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "99"
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
@@ -195,6 +201,7 @@ Flickable {
                         text: "1"
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "99"
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
 
@@ -207,27 +214,29 @@ Flickable {
                     MyTextField {
                         id: plantingAmountField
                         floatingLabel: true
-                        placeholderText: qsTr("Length")
+                        labelText: qsTr("Length")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        validator: RegExpValidator { regExp: /[0-9]+/ }
+                        inputMask: "9999"
                         Layout.fillWidth: true
-                        suffixText: "bed m"
+                        suffixText: qsTr("bed m")
                     }
 
                     MyTextField {
                         id: inRowSpacingField
                         floatingLabel: true
-                        placeholderText: qsTr("Spacing")
+                        labelText: qsTr("Spacing")
                         inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "999"
                         Layout.fillWidth: true
-                        suffixText: "cm"
+                        suffixText: qsTr("cm")
                     }
 
                     MyTextField {
                         id: rowsPerBedField
                         floatingLabel: true
-                        placeholderText: qsTr("Rows")
+                        labelText: qsTr("Rows")
                         inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "99"
                         Layout.fillWidth: true
                         helperText: qsTr("Plants needed: ") + plantsNeeded()
                     }
@@ -253,7 +262,7 @@ Flickable {
                     visible: directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Field Sowing Date")
+                    labelText: qsTr("Field Sowing Date")
 
                     onEditingFinished: updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
                 }
@@ -266,7 +275,7 @@ Flickable {
                     text: "1"
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Days to maturity")
+                    labelText: qsTr("Days to maturity")
 
                     onTextChanged: updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
                 }
@@ -276,7 +285,7 @@ Flickable {
                     visible: greenhouseRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Greenhouse start date")
+                    labelText: qsTr("Greenhouse start date")
 
                     onEditingFinished: updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
                 }
@@ -289,7 +298,7 @@ Flickable {
                     inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Greenhouse duration")
+                    labelText: qsTr("Greenhouse duration")
                     suffixText: qsTr("days")
 
                     onTextChanged:  updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
@@ -300,7 +309,7 @@ Flickable {
                     visible: !directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Field planting date")
+                    labelText: qsTr("Field planting date")
 
                     onEditingFinished: updateDateField(fieldPlantingDateField, greenhouseGrowTimeField, greenhouseStartDateField, -1);
                     onCalendarDateChanged: updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
@@ -314,7 +323,7 @@ Flickable {
                     inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Days to maturity")
+                    labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
 
                     onTextChanged: updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
@@ -324,7 +333,7 @@ Flickable {
                     id: firstHarvestDateField
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("First harvest date")
+                    labelText: qsTr("First harvest date")
 
                     onEditingFinished: {
                         if (directSeeded)
@@ -341,7 +350,7 @@ Flickable {
                     inputMask: "999"
                     Layout.fillWidth: true
                     floatingLabel: true
-                    placeholderText: qsTr("Harvest window")
+                    labelText: qsTr("Harvest window")
                     helperText: text === "" ? "" : qsTr("Last: ") + MDate.addDays(firstHarvestDateField.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
                     suffixText: qsTr("days")
                 }
@@ -358,23 +367,29 @@ Flickable {
                 MyTextField {
                     id: seedsNeededField
                     floatingLabel: true
-                    placeholderText: qsTr("Seeds needed")
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99999.999"
+                    labelText: qsTr("Seeds needed")
                     Layout.fillWidth: true
                     text: seedsNeeded()
                 }
 
                 MyTextField {
                     id: seedsExtraPercentageField
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99"
                     floatingLabel: true
-                    placeholderText: qsTr("Extra %")
+                    labelText: qsTr("Extra %")
                     suffixText: "%"
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: seedsPerGramField
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99999"
                     floatingLabel: true
-                    placeholderText: qsTr("Seeds/g")
+                    labelText: qsTr("Seeds/g")
                     Layout.fillWidth: true
                 }
             }
@@ -390,24 +405,29 @@ Flickable {
                 MyTextField {
                     id: flatTypeField
                     floatingLabel: true
-                    placeholderText: qsTr("Flat type")
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "9999"
+                    labelText: qsTr("Flat type")
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: seedsPerCellField
                     inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99"
                     maximumLength: 10
                     text: "1"
                     floatingLabel: true
-                    placeholderText: qsTr("Seeds per cell")
+                    labelText: qsTr("Seeds per cell")
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: greenhouseEstimatedLossField
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99"
                     floatingLabel: true
-                    placeholderText: qsTr("Estimated loss")
+                    labelText: qsTr("Estimated loss")
                     Layout.fillWidth: true
                     suffixText: qsTr("%")
                     helperText: transplantsNeeded()
