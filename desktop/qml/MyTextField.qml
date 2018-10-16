@@ -52,7 +52,7 @@ TextField {
         verticalAlignment: control.verticalAlignment
         elide: Text.ElideRight
         renderType: control.renderType
-        visible: !control.length
+        visible: !control.text
     }
 
     Label {
@@ -92,8 +92,6 @@ TextField {
             left: parent.left
             right: parent.right
             top: control.bottom
-            //                leftMargin: 14
-            //                topMargin: 4
         }
 
         Label {

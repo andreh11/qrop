@@ -28,7 +28,7 @@ Item {
     Layout.minimumWidth: 140
 
     property alias floatingLabel: textField.floatingLabel
-    property alias placeholderText: textField.placeholderText
+    property alias labelText: textField.labelText
 
     property date calendarDate: new Date()
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")

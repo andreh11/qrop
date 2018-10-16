@@ -11,6 +11,7 @@ GroupBox {
     topPadding: title === "" ? 0 : 32
     width: parent.width
     background: Rectangle { anchors.fill: parent }
+    padding: 0
     bottomPadding: 16
     label: Label {
         y: 0
@@ -20,5 +21,4 @@ GroupBox {
         font.pixelSize: fontSizeSubheading
         color: Material.accent
     }
-    padding: 0
 }

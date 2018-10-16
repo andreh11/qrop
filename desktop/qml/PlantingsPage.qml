@@ -619,15 +619,10 @@ Page {
 
                     height: row.height
                     width: parent.width
-                    color: {
-                        if (checkBox.checked) {
-                            return Material.color(Material.Grey, Material.Shade200)
-                        } else if (mouseArea.containsMouse) {
-                            return Material.color(Material.Grey, Material.Shade100)
-                        } else {
-                            return "white"
-                        }
-                    }
+                    color: checkBox.checked ? Material.color(Material.Grey, Material.Shade200)
+                                            : (mouseArea.containsMouse
+                                               ? Material.color(Material.Grey, Material.Shade100)
+                                               : "white")
 
                     MouseArea {
                         id: mouseArea
