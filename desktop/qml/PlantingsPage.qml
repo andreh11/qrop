@@ -19,6 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtCharts 2.2
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -38,22 +39,84 @@ Page {
     property alias model: listView.model
     property alias plantingModel: plantingModel
 
+    Settings {
+        id: settings
+        property alias tableModel: page.tableHeaderModel
+    }
+
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
-    property var tableHeaderModel: [
-        { name: qsTr("Crop"), columnName: "crop", width: 100, visible: false },
-        { name: qsTr("Variety"), columnName: "variety", width: 100, visible: true },
-        { name: qsTr("Sowing"), columnName: "sowing_date", width: 60, visible: true },
-        { name: qsTr("Planting"), columnName: "planting_date", width: 60, visible: true },
-        { name: qsTr("Begin"), columnName: "beg_harvest_date", width: 60, visible: true },
-        { name: qsTr("End"), columnName: "end_harvest_date", width: 60, visible: true },
-        { name: qsTr("DTT"), columnName: "dtt", width: 60, visible: true },
-        { name: qsTr("DTM"), columnName: "dtm", width: 60, visible: true },
-        { name: qsTr("Harvest window"), columnName: "harvest_window", width: 60, visible: true },
-        { name: qsTr("Length"), columnName: "length", width: 60, visible: true },
-        { name: qsTr("Rows"), columnName: "rows", width: 60, visible: true },
-        { name: qsTr("Spacing"), columnName: "spacing_plants", width: 60, visible: true }
-    ]
+    property var tableHeaderModel: [{
+            "name": qsTr("Crop"),
+            "columnName": "crop",
+            "width": 100,
+            "visible": false
+        }, {
+            "name": qsTr("Variety"),
+            "columnName": "variety",
+            "width": 100,
+            "visible": true
+        }, {
+            "name": qsTr("Sowing"),
+            "columnName": "sowing_date",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Planting"),
+            "columnName": "planting_date",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Begin"),
+            "columnName": "beg_harvest_date",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("End"),
+            "columnName": "end_harvest_date",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("DTT"),
+            "columnName": "dtt",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("DTM"),
+            "columnName": "dtm",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Harvest Window"),
+            "columnName": "harvest_window",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Length"),
+            "columnName": "length",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Rows"),
+            "columnName": "rows",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Spacing"),
+            "columnName": "spacing_plants",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Avg. Yield"),
+            "columnName": "yield_per_row_meter",
+            "width": 60,
+            "visible": true
+        }, {
+            "name": qsTr("Avg. Price"),
+            "columnName": "avg_price",
+            "width": 60,
+            "visible": true
+        }]
     property variant selectedIds: []
     property int lastIndexClicked: -1
     property int checks: numberOfTrue(selectedIds)
@@ -61,10 +124,10 @@ Page {
     onTableSortColumnChanged: tableSortOrder = "descending"
 
     function numberOfTrue(array) {
-        var n = 0;
+        var n = 0
         for (var key in array)
             if (array[key])
-                n++;
+                n++
         return n
     }
 
@@ -73,27 +136,31 @@ Page {
     // Unfortunately, it seems to be no way to manually emit the
     // selectedIdsChanged() signal. Hence when have to copy the whole
     // array, which is a really ugly.
-    function emitSelectedIdsChanged()
-    {
+    function emitSelectedIdsChanged() {
         selectedIds = selectedIds
+    }
+
+    // Same ugly hack
+    function emitTableHeaderModelChanged() {
+        tableHeaderModel = tableHeaderModel
     }
 
     function duplicateSelected() {
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false;
-                Planting.duplicate(key);
+                selectedIds[key] = false
+                Planting.duplicate(key)
             }
-        emitSelectedIdsChanged();
+        emitSelectedIdsChanged()
     }
 
     function removeSelected() {
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false;
-                Planting.remove(key);
+                selectedIds[key] = false
+                Planting.remove(key)
             }
-        emitSelectedIdsChanged();
+        emitSelectedIdsChanged()
     }
 
     title: "Plantings"
@@ -121,157 +188,17 @@ Page {
         anchors.fill: parent
 
         spacing: 8
-        Pane {
+
+        PlantingsChartPane {
             id: chartPane
-            height: graphsButton.checked ? parent.height/4
-                             : graphsButton.height + graphsButton.anchors.topMargin
-            width: parent.width
             visible: false
-            //            Layout.fillWidth: true
-            //            Layout.fillHeight: true
-            padding: 0
-            Material.elevation: 2
-
-            Button {
-                id: graphsButton
-                text: qsTr("Revenue and Space graphs")
-                flat: true
-                checkable: true
-                checked: false
-                anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.right: parent.right
-                anchors.rightMargin: 8
-                z: 1
-
-            }
-
-            Item {
-                anchors.fill: parent
-                visible: graphsButton.checked
-                property real othersSlice: 0
-
-                ChartView {
-                    id: chart
-                    title: qsTr("Estimated field and greenhouse space occupied this year (of X bed m.)")
-                    anchors.fill: parent
-                    //        legend.alignment: Qt.AlignBottom
-                    antialiasing: true
-
-                    CategoryAxis {
-                        id: yValuesAxis
-                        min: 0
-                        max: 100
-                        labelsPosition: CategoryAxis.AxisLabelsPositionOnValue
-                        CategoryRange {
-                            label: "0 %"
-                            endValue: 0
-                        }
-                        CategoryRange {
-                            label: "25 %"
-                            endValue: 25
-                        }
-                        CategoryRange {
-                            label: "50 %"
-                            endValue: 50
-                        }
-                        CategoryRange {
-                            label: "75 %"
-                            endValue: 75
-                        }
-                        CategoryRange {
-                            label: "100 %"
-                            endValue: 100
-                        }
-                    }
-
-                    CategoryAxis {
-                        id: xValuesAxis
-                        min: 0
-                        max: 12
-                        CategoryRange {
-                            label: Qt.locale().monthName(0, Locale.ShortFormat)
-                            endValue: 1
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(1, Locale.ShortFormat)
-                            endValue: 2
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(2, Locale.ShortFormat)
-                            endValue: 3
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(3, Locale.ShortFormat)
-                            endValue: 4
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(4, Locale.ShortFormat)
-                            endValue: 5
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(5, Locale.ShortFormat)
-                            endValue: 6
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(6, Locale.ShortFormat)
-                            endValue: 7
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(7, Locale.ShortFormat)
-                            endValue: 8
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(8, Locale.ShortFormat)
-                            endValue: 9
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(9, Locale.ShortFormat)
-                            endValue: 10
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(10, Locale.ShortFormat)
-                            endValue: 11
-                        }
-                        CategoryRange {
-                            label: Qt.locale().monthName(11, Locale.ShortFormat)
-                            endValue: 12
-                        }
-                    }
-
-                    LineSeries {
-                        name: qsTr("Field")
-                        axisY: yValuesAxis
-                        axisX: xValuesAxis
-
-                        XYPoint { x: 0; y: 0 }
-                        XYPoint { x: 1.1; y: 2.1 }
-                        XYPoint { x: 1.9; y: 3.3 }
-                        XYPoint { x: 2.1; y: 2.1 }
-                        XYPoint { x: 2.9; y: 4.9 }
-                        XYPoint { x: 3.4; y: 3.0 }
-                        XYPoint { x: 4.1; y: 3.3 }
-                    }
-
-                    LineSeries {
-                        name: qsTr("Greenhouse")
-                        axisY: yValuesAxis
-                        axisX: xValuesAxis
-
-                        XYPoint { x: 0; y: 80 }
-                        XYPoint { x: 1; y: 60 }
-                    }
-                }
-            }
+            width: parent.width
         }
 
         Pane {
             width: parent.width
             padding: 0
             height: parent.height
-            //            height: parent.height - (charPane.visible ? (chartPane.height - columnLayout.spacing)
-
-            //                                                      : 0)
             Material.elevation: 2
             visible: largeDisplay
 
@@ -298,7 +225,6 @@ Page {
                         visible: checks === 0
                         text: qsTr("Add planting")
                         onClicked: plantingDialog.open()
-
                     }
 
                     IconButton {
@@ -311,7 +237,8 @@ Page {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
+                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr(
+                                                    "Show timegraph")
                     }
 
                     Button {
@@ -336,8 +263,8 @@ Page {
                         Material.foreground: "white"
                         font.pixelSize: fontSizeBodyAndButton
                         onClicked: {
-                            duplicateSelected();
-                            model.refresh();
+                            duplicateSelected()
+                            model.refresh()
                         }
                     }
 
@@ -349,8 +276,8 @@ Page {
                         visible: checks > 0
                         Material.foreground: "white"
                         onClicked: {
-                            removeSelected();
-                            model.refresh();
+                            removeSelected()
+                            model.refresh()
                         }
                     }
 
@@ -359,49 +286,9 @@ Page {
                         Layout.fillWidth: true
                     }
 
-                    TextArea  {
+                    SearchField {
                         id: filterField
-                        visible: checks === 0
-                        leftPadding: searchLogo.width + 16
-                        font.family: "Roboto Regular"
-                        font.pixelSize: fontSizeBodyAndButton
-                        color: "black"
-                        placeholderText: qsTr("Search")
                         Layout.fillWidth: true
-                        padding: 8
-                        topPadding: 16
-
-                        Shortcut {
-                            sequence: "Escape"
-                            onActivated: {
-                                filterMode = false
-                                filterField.text = ""
-                            }
-                        }
-
-                        background: Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter
-                            implicitWidth: 200
-                            implicitHeight: 20
-                            //                        width: parent.width
-                            height: parent.height * 0.7
-                            color: Material.color(Material.Grey, Material.Shade400)
-                            radius: 4
-                            opacity: 0.1
-                        }
-
-                        Label {
-                            id: searchLogo
-                            //                    visible: filterField.visible
-                            color: "black"
-                            anchors.left: parent.left
-                            anchors.leftMargin: 8
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "\ue8b6" // search
-                            font.family: "Material Icons"
-                            font.pixelSize: 24
-                        }
-
                     }
 
                     Label {
@@ -421,7 +308,6 @@ Page {
                         season: MDate.season(todayDate)
                         year: todayDate.getFullYear()
                     }
-
                 }
             }
 
@@ -438,10 +324,9 @@ Page {
                 height: parent.height - buttonRectangle.height
                 spacing: 0
                 anchors.top: topDivider.bottom
-                //                flickableDirection: Flickable.HorizontalAndVerticalFlick
 
                 property string filterColumn: "crop"
-                //            property TableHeaderLabel filterLabel: headerRow.cropLabel
+
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
 
@@ -505,7 +390,8 @@ Page {
                                     text: modelData.name
                                     width: modelData.width
                                     state: page.tableSortColumn === index ? page.tableSortOrder : ""
-                                    visible: index > 0 && tableHeaderModel[index].visible
+                                    visible: index > 0
+                                             && tableHeaderModel[index].visible
                                 }
                             }
 
@@ -527,24 +413,30 @@ Page {
                                                 id: lineRectangle
                                                 height: parent.height
                                                 width: 1
-                                                color: Material.color(Material.Grey, Material.Shade400)
+                                                color: Material.color(
+                                                           Material.Grey,
+                                                           Material.Shade400)
                                             }
                                             Label {
-                                                text: Qt.locale().monthName(modelData, Locale.ShortFormat)
+                                                text: Qt.locale().monthName(
+                                                          modelData,
+                                                          Locale.ShortFormat)
                                                 anchors.left: lineRectangle.right
                                                 font.family: "Roboto Condensed"
-                                                color: Material.color(Material.Grey, Material.Shade700)
+                                                color: Material.color(
+                                                           Material.Grey,
+                                                           Material.Shade700)
                                                 width: 60 - 1
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 horizontalAlignment: Text.AlignHCenter
-
                                             }
                                         }
                                     }
                                     Rectangle {
                                         height: parent.height
                                         width: 1
-                                        color: Material.color(Material.Grey, Material.Shade400)
+                                        color: Material.color(Material.Grey,
+                                                              Material.Shade400)
                                     }
                                 }
                             }
@@ -555,7 +447,8 @@ Page {
                                 TableHeaderLabel {
                                     text: modelData.name
                                     width: modelData.width
-                                    visible: index > 1 && tableHeaderModel[index].visible
+                                    visible: index > 1
+                                             && tableHeaderModel[index].visible
                                     horizontalAlignment: Text.AlignRight
                                     state: page.tableSortColumn === index ? page.tableSortOrder : ""
                                 }
@@ -586,12 +479,15 @@ Page {
                                 ListView {
                                     spacing: -16
                                     anchors.fill: parent
-                                    model: tableHeaderModel
-                                    delegate:  CheckBox {
+                                    model: tableHeaderModel.slice(
+                                               2) // Don't show Crop and Variety.
+                                    delegate: CheckBox {
                                         text: modelData.name
                                         checked: modelData.visible
-                                        onCheckedChanged: {
-                                            tableHeaderModel[index].visible = checked
+                                        onClicked: {
+                                            tableHeaderModel[index + 2].visible
+                                                    = !tableHeaderModel[index + 2].visible
+                                            emitTableHeaderModelChanged()
                                         }
                                     }
                                     ScrollBar.vertical: ScrollBar {
@@ -600,29 +496,31 @@ Page {
                                         anchors.right: parent.right
                                         anchors.bottom: parent.bottom
                                     }
-
                                 }
                             }
                         }
                     }
-
                 }
 
                 delegate: Rectangle {
                     id: delegate
-                    property date seedingDate:
-                        model.planting_type === 2 ? MDate.addDays(transplantingDate, -model.dtt)
-                                      : transplantingDate
+                    property date seedingDate: model.planting_type
+                                               === 2 ? MDate.addDays(
+                                                           transplantingDate,
+                                                           -model.dtt) : transplantingDate
                     property date transplantingDate: model.planting_date
-                    property date beginHarvestDate: MDate.addDays(model.planting_date, model.dtm)
-                    property date endHarvestDate: MDate.addDays(beginHarvestDate, model.harvest_window)
+                    property date beginHarvestDate: MDate.addDays(
+                                                        model.planting_date,
+                                                        model.dtm)
+                    property date endHarvestDate: MDate.addDays(
+                                                      beginHarvestDate,
+                                                      model.harvest_window)
 
                     height: row.height
                     width: parent.width
-                    color: checkBox.checked ? Material.color(Material.Grey, Material.Shade200)
-                                            : (mouseArea.containsMouse
-                                               ? Material.color(Material.Grey, Material.Shade100)
-                                               : "white")
+                    color: checkBox.checked ? Material.color(
+                                                  Material.Grey,
+                                                  Material.Shade200) : (mouseArea.containsMouse ? Material.color(Material.Grey, Material.Shade100) : "white")
 
                     MouseArea {
                         id: mouseArea
@@ -647,30 +545,32 @@ Page {
                                 text: model.crop
                                 anchors.verticalCenter: row.verticalCenter
                                 width: 24
-                                checked: model.planting_id in selectedIds && selectedIds[model.planting_id]
+                                checked: model.planting_id in selectedIds
+                                         && selectedIds[model.planting_id]
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
                                         if (mouse.button !== Qt.LeftButton)
-                                            return;
+                                            return
 
                                         var beg = index
                                         var end = index
 
-                                        selectedIds[model.planting_id] = !selectedIds[model.planting_id];
+                                        selectedIds[model.planting_id]
+                                                = !selectedIds[model.planting_id]
                                         lastIndexClicked = index
 
-                                        emitSelectedIdsChanged();
+                                        emitSelectedIdsChanged()
                                     }
                                 }
                             }
+
 
                             //                        TableLabel {
                             //                            text: model.crop
                             //                            elide: Text.ElideRight
                             //                            width: 100
                             //                        }
-
                             TableLabel {
                                 text: model.variety
                                 anchors.verticalCenter: parent.verticalCenter
@@ -691,59 +591,75 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.planting_type !== 3 ? MDate.formatDate(seedingDate, currentYear) : ""
+                                text: model.planting_type !== 3 ? MDate.formatDate(
+                                                                      seedingDate,
+                                                                      currentYear) : ""
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[2].visible
+                                width: tableHeaderModel[2].width
                             }
 
                             TableLabel {
-                                text: model.planting_type !== 1 ? MDate.formatDate(transplantingDate, currentYear) : ""
+                                text: model.planting_type !== 1 ? MDate.formatDate(
+                                                                      transplantingDate,
+                                                                      currentYear) : ""
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[3].visible
+                                width: tableHeaderModel[3].width
                             }
 
                             TableLabel {
-                                text: MDate.formatDate(beginHarvestDate, currentYear)
+                                text: MDate.formatDate(beginHarvestDate,
+                                                       currentYear)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[4].visible
+                                width: tableHeaderModel[4].width
                             }
 
                             TableLabel {
-                                text: MDate.formatDate(endHarvestDate, currentYear)
+                                text: MDate.formatDate(endHarvestDate,
+                                                       currentYear)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[5].visible
+                                width: tableHeaderModel[5].width
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day", model.dtt)
+                                text: qsTr("%n d", "Abbreviation for day",
+                                           model.dtt)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[6].visible
+                                width: tableHeaderModel[6].width
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day", model.dtm)
+                                text: qsTr("%n d", "Abbreviation for day",
+                                           model.dtm)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[7].visible
+                                width: tableHeaderModel[7].width
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day", model.harvest_window)
+                                text: qsTr("%n d", "Abbreviation for day",
+                                           model.harvest_window)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[8].visible
+                                width: tableHeaderModel[8].width
                             }
 
                             TableLabel {
@@ -751,7 +667,8 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[9].visible
+                                width: tableHeaderModel[9].width
                             }
 
                             TableLabel {
@@ -759,7 +676,8 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[10].visible
+                                width: tableHeaderModel[10].width
                             }
 
                             TableLabel {
@@ -767,7 +685,26 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                width: 60
+                                visible: tableHeaderModel[11].visible
+                                width: tableHeaderModel[11].width
+                            }
+
+                            TableLabel {
+                                text: model.yield_per_row_m + model.unit
+                                anchors.verticalCenter: parent.verticalCenter
+                                horizontalAlignment: Text.AlignRight
+                                elide: Text.ElideRight
+                                visible: tableHeaderModel[11].visible
+                                width: tableHeaderModel[11].width
+                            }
+
+                            TableLabel {
+                                text: model.avg_price
+                                anchors.verticalCenter: parent.verticalCenter
+                                horizontalAlignment: Text.AlignRight
+                                elide: Text.ElideRight
+                                visible: tableHeaderModel[11].visible
+                                width: tableHeaderModel[11].width
                             }
                         }
                     }
@@ -795,8 +732,8 @@ Page {
         width: parent.width
         height: parent.height - buttonRectangle.height
         spacing: 0
-        //                flickableDirection: Flickable.HorizontalAndVerticalFlick
 
+        //                flickableDirection: Flickable.HorizontalAndVerticalFlick
         property string filterColumn: "crop"
         //            property TableHeaderLabel filterLabel: headerRow.cropLabel
         Keys.onUpPressed: verticalScrollBar.decrease()
@@ -819,18 +756,20 @@ Page {
                 Label {
                     text: ">"
                 }
-
             }
         }
 
         delegate: Rectangle {
             id: smallDelegate
-            property date seedingDate:
-                model.planting_type === 2 ? MDate.addDays(transplantingDate, -model.dtt)
-                              : transplantingDate
+            property date seedingDate: model.planting_type
+                                       === 2 ? MDate.addDays(
+                                                   transplantingDate,
+                                                   -model.dtt) : transplantingDate
             property date transplantingDate: model.planting_date
-            property date beginHarvestDate: MDate.addDays(model.planting_date, model.dtm)
-            property date endHarvestDate: MDate.addDays(beginHarvestDate, model.harvest_window)
+            property date beginHarvestDate: MDate.addDays(model.planting_date,
+                                                          model.dtm)
+            property date endHarvestDate: MDate.addDays(beginHarvestDate,
+                                                        model.harvest_window)
 
             height: 48
             width: parent.width
@@ -856,8 +795,8 @@ Page {
                     id: smallRow
                     height: parent.height
                     spacing: 8
-                    //                    leftPadding: 16
 
+                    //                    leftPadding: 16
                     CheckBox {
                         id: smallCheckBox
                         //                        text: model.crop
@@ -865,15 +804,16 @@ Page {
                         //                        anchors.verticalCenter: smallRow.verticalCenter
                         width: 100
                         height: width
-                        checked: model.planting_id in selectedIds ? selectedIds[model.planting_id] : false
+                        checked: model.planting_id
+                        in selectedIds ? selectedIds[model.planting_id] : false
                         onCheckStateChanged: {
                             selectedIds[model.planting_id] = checked
                         }
                     }
 
                     ColumnLayout {
-                        //                        Layout.fillWidth: true
 
+                        //                        Layout.fillWidth: true
                         TableLabel {
                             text: model.variety
                             elide: Text.ElideRight
@@ -881,13 +821,16 @@ Page {
                         }
 
                         TableLabel {
-                            text: MDate.formatDate(model.planting_date) + " ⋅ " + model.locations
+                            text: MDate.formatDate(
+                                      model.planting_date) + " ⋅ " + model.locations
                         }
                     }
 
                     ColumnLayout {
                         TableLabel {
-                            text: model.planting_type !== 3 ? MDate.formatDate(seedingDate, currentYear) : ""
+                            text: model.planting_type !== 3 ? MDate.formatDate(
+                                                                  seedingDate,
+                                                                  currentYear) : ""
                             horizontalAlignment: Text.AlignRight
                             elide: Text.ElideRight
                             //                                            width: 60
@@ -896,7 +839,6 @@ Page {
                             text: model.length + " m"
                         }
                     }
-
                 }
             }
         }
