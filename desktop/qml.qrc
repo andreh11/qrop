@@ -33,5 +33,7 @@
         <file>qml/TextCheckBox.qml</file>
         <file>qml/date.js</file>
         <file>qml/SeasonSpinBox.qml</file>
+        <file>qml/PlantingsChartPane.qml</file>
+        <file>qml/SearchField.qml</file>
     </qresource>
 </RCC>

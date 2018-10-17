@@ -72,14 +72,15 @@ CREATE TABLE IF NOT EXISTS planting (
     plants_to_start   INTEGER,
     tray_size         INTEGER,
     trays_to_start    FLOAT,
-    yield_per_bed_m   FLOAT,
     yield_per_hectare FLOAT,
     seeds_per_hole    INTEGER,
     seeds_per_gram    INTEGER,
     seeds_number      INTEGER,
     seeds_quantity    FLOAT,
     variety_id        INTEGER NOT NULL REFERENCES variety,
-    unit_id           INTEGER NOT NULL REFERENCES unit
+    unit_id           INTEGER NOT NULL REFERENCES unit,
+    yield_per_row_m   FLOAT,
+    avg_price         FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS harvest (
