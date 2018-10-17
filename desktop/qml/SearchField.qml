@@ -49,4 +49,18 @@ TextArea {
         font.family: "Material Icons"
         font.pixelSize: 24
     }
+
+    RoundButton {
+        id: clearButton
+        flat: true
+        visible: filterField.text
+        //                    visible: filterField.visible
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        text: "\ue5c9" // search
+        font.family: "Material Icons"
+        font.pixelSize: 24
+        onClicked: filterField.clear()
+    }
+
 }
