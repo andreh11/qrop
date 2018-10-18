@@ -9,10 +9,12 @@ import "date.js" as MDate
 
 Flickable {
     id: control
+    focus: true
 
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
+    property alias cropField: cropField
 
     property int plantingType : directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: parseInt(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
@@ -96,7 +98,6 @@ Flickable {
 
     contentWidth: width
     contentHeight: mainColumn.height
-    focus: true
     flickableDirection: Flickable.VerticalFlick
 
     Column {
@@ -111,11 +112,11 @@ Flickable {
             MyComboBox {
                 id: cropField
                 labelText: qsTr("Crop")
+                focus: true
 //                floatingLabel: true
 //                placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
-                focus: true
                 model: CropModel { id: cropModel }
                 textRole: "crop"
                 editable: true

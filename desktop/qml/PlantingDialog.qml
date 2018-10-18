@@ -10,6 +10,7 @@ Dialog {
     id: dialog
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
+    focus: true
 
     property var model
     property string mode: "add"
@@ -23,13 +24,16 @@ Dialog {
 
         PlantingForm {
             id: plantingForm
+            anchors.fill: parent
+            focus: true
         }
     }
+
+    onOpened: plantingForm.cropField.forceActiveFocus()
+
     onAccepted: {
         Planting.addSuccessions(plantingForm.successions,
-                plantingForm.weeksBetween,
-                plantingForm.values);
-        plantingModel.refresh();
+                                plantingForm.weeksBetween, plantingForm.values)
+        plantingModel.refresh()
     }
 }
-
