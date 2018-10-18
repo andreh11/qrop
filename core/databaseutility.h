@@ -73,6 +73,7 @@ public:
                     const QString &field2, int id2) const;
 protected:
     QString m_table;
+    QString m_idColumnName;
 };
 
 #endif // DATABASEUTILITY_H

@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
  *
@@ -13,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -38,6 +39,7 @@ Page {
 
     property alias model: listView.model
     property alias plantingModel: plantingModel
+    property int rowsNumber: plantingModel.rowCount()
 
     Settings {
         id: settings
@@ -117,7 +119,9 @@ Page {
             "width": 60,
             "visible": true
         }]
-    property variant selectedIds: []
+    property var selectedIds: ({
+
+                               })
     property int lastIndexClicked: -1
     property int checks: numberOfTrue(selectedIds)
 
@@ -145,25 +149,41 @@ Page {
         tableHeaderModel = tableHeaderModel
     }
 
+    function selectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = true
+        emitSelectedIdsChanged()
+    }
+
+    function unselectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = false
+        emitSelectedIdsChanged()
+    }
+
     function duplicateSelected() {
-        var ids = [];
+        var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false;
-                ids.push(key);
+                selectedIds[key] = false
+                ids.push(key)
             }
-        Planting.duplicateList(ids);
+        Planting.duplicateList(ids)
+        plantingModel.refresh()
         emitSelectedIdsChanged()
     }
 
     function removeSelected() {
-        var ids = [];
+        var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false;
-                ids.push(key);
+                selectedIds[key] = false
+                ids.push(key)
             }
-        Planting.removeList(ids);
+        Planting.removeList(ids)
+        plantingModel.refresh()
         emitSelectedIdsChanged()
     }
 
@@ -266,10 +286,7 @@ Page {
                         visible: checks > 0
                         Material.foreground: "white"
                         font.pixelSize: fontSizeBodyAndButton
-                        onClicked: {
-                            duplicateSelected()
-                            model.refresh()
-                        }
+                        onClicked: duplicateSelected()
                     }
 
                     Button {
@@ -279,10 +296,7 @@ Page {
                         text: qsTr("Delete")
                         visible: checks > 0
                         Material.foreground: "white"
-                        onClicked: {
-                            removeSelected()
-                            model.refresh()
-                        }
+                        onClicked: removeSelected()
                     }
 
                     Label {
@@ -385,6 +399,17 @@ Page {
                                 id: headerCheckbox
                                 width: 24
                                 anchors.verticalCenter: headerRow.verticalCenter
+                                tristate: true
+                                checkState: checks == rowsNumber ? Qt.Checked : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                                nextCheckState: function () {
+                                    if (checkState == Qt.Checked) {
+                                        unselectAll()
+                                        return Qt.Unchecked
+                                    } else {
+                                        selectAll()
+                                        return Qt.Checked
+                                    }
+                                }
                             }
 
                             Repeater {
@@ -551,6 +576,7 @@ Page {
                                 width: 24
                                 checked: model.planting_id in selectedIds
                                          && selectedIds[model.planting_id]
+
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
@@ -563,12 +589,13 @@ Page {
                                         selectedIds[model.planting_id]
                                                 = !selectedIds[model.planting_id]
                                         lastIndexClicked = index
-
                                         emitSelectedIdsChanged()
+                                        console.log("All:",
+                                                    plantingModel.rowCount(
+                                                        ) === checks)
                                     }
                                 }
                             }
-
 
                             //                        TableLabel {
                             //                            text: model.crop
@@ -715,16 +742,16 @@ Page {
                 }
             }
         }
+    }
 
-        Component {
-            id: plantingForm
+    Component {
+        id: plantingForm
 
-            Page {
-                title: qsTr("Add plantings")
-                PlantingForm {
-                    anchors.fill: parent
-                    anchors.margins: 16
-                }
+        Page {
+            title: qsTr("Add plantings")
+            PlantingForm {
+                anchors.fill: parent
+                anchors.margins: 16
             }
         }
     }

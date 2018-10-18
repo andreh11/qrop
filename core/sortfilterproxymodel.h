@@ -36,6 +36,8 @@ class CORESHARED_EXPORT SortFilterProxyModel : public QSortFilterProxyModel
 public:
     SortFilterProxyModel(QObject *parent = nullptr, const QString &tableName = "");
 
+    Q_INVOKABLE QList<int> idList() const;
+
     QString filterString() const;
     int filterYear() const;
     int filterSeason() const;
@@ -61,6 +63,7 @@ signals:
     void sortColumnChanged();
     void sortOrderChanged();
     void selectionChanged();
+
 private:
     SqlTableModel *m_model;
     QString m_tableName;

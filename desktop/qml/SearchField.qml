@@ -7,7 +7,7 @@ import QtCharts 2.2
 import io.croplan.components 1.0
 import "date.js" as MDate
 
-TextArea {
+TextField {
     id: filterField
     visible: checks === 0
     leftPadding: searchLogo.width + 16
@@ -17,6 +17,7 @@ TextArea {
     placeholderText: qsTr("Search")
     padding: 8
     topPadding: 16
+    focus: true
     
     Shortcut {
         sequence: "Escape"

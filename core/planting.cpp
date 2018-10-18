@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QDate>
 #include <QDebug>
 #include <QSqlRecord>
@@ -28,6 +27,7 @@ Planting::Planting(QObject *parent)
       task(new Task(this))
 {
     m_table = "planting";
+    m_idColumnName = "planting_id";
 }
 
 int Planting::add(const QVariantMap &map) const
@@ -50,6 +50,7 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     QList<int> ids;
     QVariantMap newMap(map);
 
+    int daysBetween = weeksBetween * 7;
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
         newMap["sowing_date"] = sowingDate.toString(Qt::ISODate);
@@ -57,10 +58,11 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
         newMap["beg_harvest_date"] = begHarvestDate.toString(Qt::ISODate);
         newMap["end_harvest_date"] = endHarvestDate.toString(Qt::ISODate);
         ids.append(add(newMap));
-        sowingDate = sowingDate.addDays(weeksBetween * 7);
-        plantingDate = plantingDate.addDays(weeksBetween * 7);
-        begHarvestDate = begHarvestDate.addDays(weeksBetween * 7);
-        endHarvestDate = endHarvestDate.addDays(weeksBetween * 7);
+
+        sowingDate = sowingDate.addDays(daysBetween);
+        plantingDate = plantingDate.addDays(daysBetween);
+        begHarvestDate = begHarvestDate.addDays(daysBetween);
+        endHarvestDate = endHarvestDate.addDays(daysBetween);
     }
     QSqlDatabase::database().commit();
 
@@ -74,16 +76,4 @@ void Planting::update(int id, const QVariantMap &map) const
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     DatabaseUtility::update(id, newMap);
     task->updateTaskDates(id, plantingDate);
-}
-
-int Planting::duplicate(int id) const
-{
-    qDebug() << "Planting duplicate" << id;
-    if (id < 0)
-        return -1;
-
-    QVariantMap map = mapFromId("planting", id);
-    map.remove(idFieldName());
-
-    return add(map);
 }

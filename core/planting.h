@@ -26,12 +26,11 @@ class CORESHARED_EXPORT Planting : public DatabaseUtility {
     Q_OBJECT
 public:
     Planting(QObject *parent = nullptr);
-    virtual Q_INVOKABLE int add(const QVariantMap &map) const;
+    Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE QList<int> addSuccessions(int successions,
                                           int daysBetween,
                                           const QVariantMap &map) const;
-    virtual Q_INVOKABLE void update(int id, const QVariantMap &map) const;
-    virtual Q_INVOKABLE int duplicate(int id) const;
+    Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
 
 private:
     Task *task;

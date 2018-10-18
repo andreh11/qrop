@@ -23,7 +23,8 @@
 
 DatabaseUtility::DatabaseUtility(QObject *parent)
     : QObject(parent),
-      m_table("")
+      m_table(""),
+      m_idColumnName("")
 {
 }
 
@@ -34,7 +35,10 @@ QString DatabaseUtility::table() const
 
 QString DatabaseUtility::idFieldName() const
 {
-    return table() + "_id";
+    if (!m_idColumnName.isEmpty())
+        return m_idColumnName;
+    else
+        return table() + "_id";
 }
 
 void DatabaseUtility::debugQuery(const QSqlQuery& query) const
