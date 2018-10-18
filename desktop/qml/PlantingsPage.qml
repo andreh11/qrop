@@ -146,20 +146,24 @@ Page {
     }
 
     function duplicateSelected() {
+        var ids = [];
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false
-                Planting.duplicate(key)
+                selectedIds[key] = false;
+                ids.push(key);
             }
+        Planting.duplicateList(ids);
         emitSelectedIdsChanged()
     }
 
     function removeSelected() {
+        var ids = [];
         for (var key in selectedIds)
             if (selectedIds[key]) {
-                selectedIds[key] = false
-                Planting.remove(key)
+                selectedIds[key] = false;
+                ids.push(key);
             }
+        Planting.removeList(ids);
         emitSelectedIdsChanged()
     }
 

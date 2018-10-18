@@ -92,7 +92,7 @@ QVariantMap DatabaseUtility::mapFromId(const QString &tableName, int id) const
     return mapFromRecord(recordFromId(tableName, id));
 }
 
-int DatabaseUtility::add(QVariantMap map) const
+int DatabaseUtility::add(const QVariantMap &map) const
 {
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
@@ -128,7 +128,7 @@ void DatabaseUtility::addLink(const QString &table,
     debugQuery(query);
 }
 
-void DatabaseUtility::update(int id, QVariantMap map) const
+void DatabaseUtility::update(int id, const QVariantMap &map) const
 {
     if (id < 0)
         return;
@@ -148,6 +148,14 @@ void DatabaseUtility::update(int id, QVariantMap map) const
     debugQuery(query);
 }
 
+void DatabaseUtility::updateList(const QList<int> &idList, const QVariantMap &map) const
+{
+    QSqlDatabase::database().transaction();
+    for (const int id : idList)
+        update(id, map);
+    QSqlDatabase::database().commit();
+}
+
 int DatabaseUtility::duplicate(int id) const
 {
     if (id < 0)
@@ -161,8 +169,9 @@ int DatabaseUtility::duplicate(int id) const
     return add(map);
 }
 
-void DatabaseUtility::duplicate(const QList<int> &idList) const
+void DatabaseUtility::duplicateList(const QList<int> &idList) const
 {
+    qDebug() << "Batch duplicate:" << idList;
     QSqlDatabase::database().transaction();
     for (int id : idList)
         duplicate(id);
@@ -178,8 +187,9 @@ void DatabaseUtility::remove(int id) const
     debugQuery(query);
 }
 
-void DatabaseUtility::remove(const QList<int> &idList) const
+void DatabaseUtility::removeList(const QList<int> &idList) const
 {
+    qDebug() << "Batch remove:" << idList;
     QSqlDatabase::database().transaction();
     for (int id : idList)
         remove(id);

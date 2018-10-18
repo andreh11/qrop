@@ -76,12 +76,9 @@ void Planting::update(int id, const QVariantMap &map) const
     task->updateTaskDates(id, plantingDate);
 }
 
-//void Planting::update(QList<int> ids, QVariantMap map)
-//{
-//}
-
 int Planting::duplicate(int id) const
 {
+    qDebug() << "Planting duplicate" << id;
     if (id < 0)
         return -1;
 

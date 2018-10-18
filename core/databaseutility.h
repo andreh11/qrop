@@ -55,19 +55,19 @@ public:
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     QVariantMap mapFromId(const QString &tableName, int id) const;
 
-    int add(QVariantMap map) const;
+    virtual Q_INVOKABLE int add(const QVariantMap &map) const;
     void addLink(const QString &table,
                  const QString &field1, int id1,
                  const QString &field2, int id2) const;
 
-    void update(int id, QVariantMap map) const;
-//    void update(QList<int> ids, QVariantMap map);
+    virtual Q_INVOKABLE void update(int id, const QVariantMap &map) const;
+    Q_INVOKABLE void updateList(const QList<int> &idList, const QVariantMap &map) const;
 
-    int duplicate(int id) const;
-    void duplicate(const QList<int> &idList) const;
+    virtual Q_INVOKABLE int duplicate(int id) const;
+    Q_INVOKABLE void duplicateList(const QList<int> &idList) const;
 
-    Q_INVOKABLE void remove(int id) const;
-    void remove(const QList<int> &idList) const;
+    virtual Q_INVOKABLE void remove(int id) const;
+    Q_INVOKABLE void removeList(const QList<int> &idList) const;
     void removeLink(const QString &table,
                     const QString &field1, int id1,
                     const QString &field2, int id2) const;
