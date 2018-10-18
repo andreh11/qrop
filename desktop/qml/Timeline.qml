@@ -99,7 +99,7 @@ Item {
 
     Rectangle {
         id: seedingCircle
-        x: position(seedingDate)
+        x: position(seedingDate) - width/4
         visible: seedingDate < transplantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -112,7 +112,7 @@ Item {
     Rectangle {
         id: seedingLine
         width: widthBetween(x, transplantingDate)
-        visible: width > 0
+        visible: width > 0 && seedingDate < transplantingDate
         height: 1
         x: seedingCircle.x
         color: current ? Material.color(Material.Green, Material.Shade200)
