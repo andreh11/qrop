@@ -120,7 +120,7 @@ Flickable {
                 model: CropModel { id: cropModel }
                 textRole: "crop"
                 editable: true
-                onCurrentIndexChanged: varietyModel.cropId = currentIndex
+                onCurrentIndexChanged: varietyModel.cropId = modelData.crop_id
             }
 
             MyComboBox {
@@ -152,27 +152,35 @@ Flickable {
                 Layout.fillWidth: true
             }
 
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.topMargin: -16
+            Label {
+                text: qsTr("Planting type")
+                font.family: "Roboto Regular"
+                font.pixelSize: 14
+            }
 
-                RadioButton {
+            RowLayout {
+                id: plantingTypeLayout
+                Layout.fillWidth: true
+
+                ButtonGroup {
+                    buttons: plantingTypeLayout.children
+                }
+
+                ChoiceChip {
                     id: directSeedRadio
                     text: qsTr("Direct seed")
                     checked: true
-                    Layout.fillWidth: true
                 }
-                RadioButton {
+
+                ChoiceChip {
                     id: greenhouseRadio
                     text: qsTr("Transplant, raised")
-                    Layout.fillWidth: true
                 }
-                RadioButton {
+                ChoiceChip {
                     id: boughtRadio
                     text: qsTr("Transplant, bought")
-                    Layout.fillWidth: true
                 }
-            }
+                }
         }
 
         FormGroupBox {

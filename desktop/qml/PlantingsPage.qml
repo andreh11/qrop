@@ -189,6 +189,15 @@ Page {
     title: "Plantings"
     padding: 8
 
+    Shortcut {
+        sequence : "Ctrl+K"
+        onActivated: {
+            console.log("KEYYY")
+            filterField.clear();
+            filterField.forceActiveFocus();
+        }
+    }
+
     PlantingModel {
         id: plantingModel
         filterString: filterField.text

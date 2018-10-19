@@ -29,7 +29,10 @@ Dialog {
         }
     }
 
-    onOpened: plantingForm.cropField.forceActiveFocus()
+    onOpened: {
+        plantingForm.cropField.editText= "";
+        plantingForm.cropField.forceActiveFocus()
+    }
 
     onAccepted: {
         Planting.addSuccessions(plantingForm.successions,

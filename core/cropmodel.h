@@ -26,6 +26,7 @@ class CORESHARED_EXPORT CropModel : public SqlTableModel
 {
 public:
     CropModel(QObject *parent = nullptr);
+
 };
 
 #endif // CROPTABLE_H

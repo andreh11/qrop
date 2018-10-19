@@ -20,14 +20,14 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT VarietyModel : public SqlTableModel
+class CORESHARED_EXPORT VarietyModel : public SortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(int cropId READ cropId WRITE setFilterCropId NOTIFY cropIdChanged)
 public:
-    explicit VarietyModel(QObject *parent = nullptr);
+    explicit VarietyModel(QObject *parent = nullptr, const QString &tableName = "variety");
     int cropId() const;
     void setFilterCropId(int cropId);
 

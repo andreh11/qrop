@@ -55,7 +55,8 @@ TextField {
         id: clearButton
         flat: true
         visible: filterField.text
-        //                    visible: filterField.visible
+        Material.foreground: Material.color(Material.Grey,
+                                            Material.Shade500)
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         text: "\ue5c9" // search
