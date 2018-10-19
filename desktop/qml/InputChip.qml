@@ -23,20 +23,16 @@ Rectangle {
         hoverEnabled: true
     }
 
-    RowLayout {
-        id: rowLayout
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 0
-
-        Label {
-            id: leadingIcon
-            visible: false
-        }
+//    RowLayout {
+//        id: rowLayout
+//        anchors.fill: parent
+//        spacing: 0
 
         Label {
             id: contentLabel
-            padding: 0
-            leftPadding: 8
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
             color:  Material.color(Material.Grey, Material.Shade800)
             text: control.text
             font.family: "Roboto Regular"
@@ -46,14 +42,15 @@ Rectangle {
         RoundButton {
             id: removeButton
             flat: true
-            Layout.fillWidth: true
+            anchors.right: parent.right
+            anchors.rightMargin: -8
+            anchors.verticalCenter: parent.verticalCenter
             Material.foreground: Material.color(Material.Grey,
                                                 Material.Shade500)
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             text: "\ue5c9" // remove
             font.family: "Material Icons"
             font.pixelSize: 24
             onClicked: removeButtonClicked()
         }
-    }
+//    }
 }
