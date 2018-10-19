@@ -284,29 +284,29 @@ Page {
                             }
                         }
 
-                        TableLabel {
-                            text: model.task
-                            elide: Text.ElideRight
-                            width: 100
-                        }
+//                        TableLabel {
+//                            text: model.task
+//                            elide: Text.ElideRight
+//                            width: 100
+//                        }
 
-                        TableLabel {
-                            text: model.descr
-                            elide: Text.ElideRight
-                            width: 100
-                        }
+//                        TableLabel {
+//                            text: model.descr
+//                            elide: Text.ElideRight
+//                            width: 100
+//                        }
 
-                        TableLabel {
-                            text: model.plantings
-                            elide: Text.ElideRight
-                            width: 150
-                        }
+//                        TableLabel {
+//                            text: model.plantings
+//                            elide: Text.ElideRight
+//                            width: 150
+//                        }
 
-                        TableLabel {
-                            text: model.locations
-                            elide: Text.ElideRight
-                            width: 80
-                        }
+//                        TableLabel {
+//                            text: model.locations
+//                            elide: Text.ElideRight
+//                            width: 80
+//                        }
                     }
                 }
             }

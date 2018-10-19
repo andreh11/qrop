@@ -99,6 +99,7 @@ Flickable {
     contentWidth: width
     contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
+    Material.background: "white"
 
     Column {
         id: mainColumn
@@ -136,16 +137,31 @@ Flickable {
                 textRole: "variety"
             }
 
-            InputChip {
-                text: "paillage plastique"
+
+//            Label {
+//                text: qsTr("Planting type")
+//                font.family: "Roboto Regular"
+//                font.pixelSize: 14
+//            }
+
+
+            MyComboBox {
+                id: unitCombo
+                labelText: qsTr("Unit")
+                editable: true
+                model : UnitModel { }
+                textRole: "unit"
+                Layout.fillWidth: true
             }
 
-            MyTextField {
-                id: keywordsField
-                labelText: qsTr("Keywords")
-                floatingLabel: true
-                Layout.fillWidth: true
-                leftPadding: keywordsView.width
+            RowLayout {
+                spacing: 8
+                Label {
+                    text: qsTr("Keywords")
+                    font.family: "Roboto Regular"
+                    font.pixelSize: 14
+
+                }
 
                 ListModel {
                     id: keywordsModel
@@ -161,55 +177,28 @@ Flickable {
                 }
 
                 ListView {
-                    anchors.left: parent.left
-                    anchors.leftMargin: 8
-                    width: 100
-                    height: parent.height
                     id: keywordsView
+                    spacing: 8
+                    clip: true
+                    orientation: Qt.Horizontal
+                    model: keywordsModel
+                    width: 200
+                    height:32
+                    Layout.fillWidth: true
                     delegate: InputChip { text: name }
                 }
-            }
 
-            MyComboBox {
-                id: unitCombo
-                labelText: qsTr("Unit")
-                editable: true
-                model : UnitModel { }
-                textRole: "unit"
-                Layout.fillWidth: true
-            }
 
-            Label {
-                text: qsTr("Planting type")
-                font.family: "Roboto Regular"
-                font.pixelSize: 14
-            }
-
-            RowLayout {
-                id: plantingTypeLayout
+            TextInput {
+                id: keywordsField
+//                labelText: qsTr("Keywords")
+//                floatingLabel: true
                 Layout.fillWidth: true
 
-                ButtonGroup {
-                    buttons: plantingTypeLayout.children
-                }
+            }
+            }
 
-                ChoiceChip {
-                    id: directSeedRadio
-                    text: qsTr("Direct seed")
-                    checked: true
-                }
-
-                ChoiceChip {
-                    id: greenhouseRadio
-                    text: qsTr("Transplant, raised")
-                }
-                ChoiceChip {
-                    id: boughtRadio
-                    text: qsTr("Transplant, bought")
-                }
-                }
         }
-
         FormGroupBox {
             id: plantingAmountBox
             width: parent.width
@@ -283,6 +272,33 @@ Flickable {
         }
 
         FormGroupBox {
+            width: parent.width
+            title: qsTr("Planting Type")
+            RowLayout {
+                id: plantingTypeLayout
+                Layout.fillWidth: true
+
+                ButtonGroup {
+                    buttons: plantingTypeLayout.children
+                }
+
+                ChoiceChip {
+                    id: directSeedRadio
+                    text: qsTr("Direct seed")
+                    checked: true
+                }
+
+                ChoiceChip {
+                    id: greenhouseRadio
+                    text: qsTr("Transplant, raised")
+                }
+                ChoiceChip {
+                    id: boughtRadio
+                    text: qsTr("Transplant, bought")
+                }
+                }
+        }
+        FormGroupBox {
             id: plantingDatesBox
             title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ? qsTr("(first succession)") : "")
             width: parent.width
@@ -298,7 +314,7 @@ Flickable {
                     visible: directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    labelText: qsTr("Field Sowing Date")
+                    labelText: qsTr("Field Sowing")
 
                     onEditingFinished: updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
                 }
@@ -345,7 +361,7 @@ Flickable {
                     visible: !directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    labelText: qsTr("Field planting date")
+                    labelText: qsTr("Field planting")
 
                     onEditingFinished: updateDateField(fieldPlantingDateField, greenhouseGrowTimeField, greenhouseStartDateField, -1);
                     onCalendarDateChanged: updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
@@ -369,7 +385,7 @@ Flickable {
                     id: firstHarvestDateField
                     Layout.fillWidth: true
                     floatingLabel: true
-                    labelText: qsTr("First harvest date")
+                    labelText: qsTr("First harvest")
 
                     onEditingFinished: {
                         if (directSeeded)
@@ -405,7 +421,7 @@ Flickable {
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "99999.999"
-                    labelText: qsTr("Seeds needed")
+                    labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: seedsNeeded()
                 }
@@ -425,7 +441,7 @@ Flickable {
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "99999"
                     floatingLabel: true
-                    labelText: qsTr("Seeds/g")
+                    labelText: qsTr("Per gram")
                     Layout.fillWidth: true
                 }
             }

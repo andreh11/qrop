@@ -10,7 +10,7 @@ Rectangle {
     signal removeButtonClicked()
 
     height: 32
-    radius: 32
+    radius: 40
     implicitWidth: contentLabel.width + removeButton.width
     color:  focus ? Material.color(Material.Grey, Material.Shade500) :
                     mouseArea.hovered ? Material.color(Material.Grey, Material.Shade400) :
@@ -25,7 +25,7 @@ Rectangle {
 
     RowLayout {
         id: rowLayout
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
         spacing: 0
 
         Label {
@@ -46,11 +46,11 @@ Rectangle {
         RoundButton {
             id: removeButton
             flat: true
-            Layout.rightMargin: -8
+            Layout.fillWidth: true
             Material.foreground: Material.color(Material.Grey,
                                                 Material.Shade500)
-            Layout.alignment: Qt.AlignVCenter
-            text: "\ue5c9" // search
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            text: "\ue5c9" // remove
             font.family: "Material Icons"
             font.pixelSize: 24
             onClicked: removeButtonClicked()

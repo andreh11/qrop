@@ -19,8 +19,22 @@ Dialog {
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
     ScrollView {
+        id: scrollView
         anchors.fill: parent
         clip: true
+
+        Keys.onUpPressed: verticalScrollBar.decrease()
+        Keys.onDownPressed: verticalScrollBar.increase()
+
+        ScrollBar.vertical: ScrollBar {
+            id: verticalScrollBar
+            visible: largeDisplay
+            parent: scrollView.parent
+            anchors.top: scrollView.top
+            anchors.left: scrollView.right
+            anchors.leftMargin: 4
+            anchors.bottom: scrollView.bottom
+        }
 
         PlantingForm {
             id: plantingForm
