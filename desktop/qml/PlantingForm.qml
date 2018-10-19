@@ -136,11 +136,38 @@ Flickable {
                 textRole: "variety"
             }
 
+            InputChip {
+                text: "paillage plastique"
+            }
+
             MyTextField {
                 id: keywordsField
                 labelText: qsTr("Keywords")
                 floatingLabel: true
                 Layout.fillWidth: true
+                leftPadding: keywordsView.width
+
+                ListModel {
+                    id: keywordsModel
+                    ListElement {
+                        name: "paillage plastique"
+                    }
+                    ListElement {
+                        name: "bâche tissée"
+                    }
+                    ListElement {
+                        name: "P17"
+                    }
+                }
+
+                ListView {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 8
+                    width: 100
+                    height: parent.height
+                    id: keywordsView
+                    delegate: InputChip { text: name }
+                }
             }
 
             MyComboBox {

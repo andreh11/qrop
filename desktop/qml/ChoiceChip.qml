@@ -15,12 +15,16 @@ Button {
     padding: 6
     leftPadding: padding - 4
     rightPadding: padding - 4
+    hoverEnabled: true
     spacing: 6
 
 
     background: Rectangle {
-        color: checked ? Material.color(Material.Cyan, Material.Shade100)
-                       : Material.color(Material.Grey, Material.Shade200)
+        color: checked ? Material.color(Material.Cyan, Material.Shade100) :
+                         focus ? Material.color(Material.Grey, Material.Shade500) :
+                                 hovered ? Material.color(Material.Grey, Material.Shade400) :
+                                           Material.color(Material.Grey, Material.Shade300)
+
         radius: 32
     }
 
@@ -31,10 +35,16 @@ Button {
         bottomPadding: 0
 
         color: checked ? Material.color(Material.Blue, Material.Shade800)
-                       : Material.color(Material.Grey, Material.Shade600)
+                       : Material.color(Material.Grey, Material.Shade800)
         text: control.text
         font.family: "Roboto Regular"
         font.pixelSize: 14
+
+
+        ColorAnimation on color {
+            duration: 2000
+        }
+
     }
 
 }
