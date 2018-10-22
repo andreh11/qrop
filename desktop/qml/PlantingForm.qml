@@ -142,13 +142,12 @@ Flickable {
                 }
                 textRole: "crop"
                 editable: true
-                onActiveFocusChanged:  {
-                    if (activeFocus) {
-                        cropField.popup.open();
-                        cropField.forceActiveFocus();
-                    }
+
+                onCurrentIndexChanged: varietyField.currentIndex = 0
+
+                onAccepted: {
+                    varietyField.forceActiveFocus();
                 }
-                onEditTextChanged: varietyField.forceActiveFocus();
             }
 
             MyComboBox {
@@ -161,13 +160,7 @@ Flickable {
                     cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
-                onActiveFocusChanged:  {
-                    if (activeFocus) {
-                        varietyField.popup.open();
-                        varietyField.forceActiveFocus();
-                    }
-                }
-                onEditTextChanged: unitCombo.forceActiveFocus();
+                onAccepted: unitCombo.forceActiveFocus();
             }
 
 
@@ -184,6 +177,7 @@ Flickable {
                 }
                 textRole: "unit"
                 Layout.fillWidth: true
+                onAccepted: successionsField.forceActiveFocus();
             }
 
 //            Item {
