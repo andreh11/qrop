@@ -15,13 +15,13 @@
  */
 
 #include <QDebug>
+#include "sqltablemodel.h"
 #include "cropmodel.h"
 
-CropModel::CropModel(QObject *parent)
-    : SqlTableModel(parent)
+CropModel::CropModel(QObject *parent, const QString&tableName)
+    : SortFilterProxyModel(parent, tableName)
 {
-    setTable("crop");
-    select();
+    setSortColumn("crop");
 //    int familyColumn = fieldColumn("family_id");
 //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
 }

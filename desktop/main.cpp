@@ -37,6 +37,7 @@
 #include "cropmodel.h"
 #include "varietymodel.h"
 #include "unitmodel.h"
+#include "keywordmodel.h"
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -74,6 +75,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
+    qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
     qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");

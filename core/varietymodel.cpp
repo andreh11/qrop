@@ -15,6 +15,7 @@
  */
 
 #include <QDebug>
+#include "sqltablemodel.h"
 #include "varietymodel.h"
 
 VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
@@ -22,7 +23,8 @@ VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
       m_cropId(-1)
 {
     setFilterCropId(1);
-
+    setFilterKeyColumn(2);
+    setSortColumn("variety");
 //    int cropColumn = fieldColumn("crop_id");
 //    setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
 
@@ -38,7 +40,6 @@ int VarietyModel::cropId() const
     return m_cropId;
 }
 
-
 void VarietyModel::setFilterCropId(int cropId)
 {
    if (cropId == m_cropId)
@@ -50,8 +51,10 @@ void VarietyModel::setFilterCropId(int cropId)
         qInfo("[VarietyModel] null filter");
 
     } else {
+//        setFilterFixedString(QString(cropId));
         const QString filterString = QString::fromLatin1(
             "crop_id = %1").arg(cropId);
+        m_model->setFilter(filterString);
     }
 
     emit cropIdChanged();

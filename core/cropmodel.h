@@ -20,12 +20,12 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT CropModel : public SqlTableModel
+class CORESHARED_EXPORT CropModel : public SortFilterProxyModel
 {
 public:
-    CropModel(QObject *parent = nullptr);
+    explicit CropModel(QObject *parent = nullptr, const QString &tableName = "crop");
 
 };
 

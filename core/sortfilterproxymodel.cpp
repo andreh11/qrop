@@ -57,6 +57,15 @@ QList<int> SortFilterProxyModel::idList() const
     return list;
 }
 
+int SortFilterProxyModel::rowId(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    QModelIndex sourceIndex = mapToSource(idx);
+    int id = m_model->data(sourceIndex, Qt::UserRole).toInt();
+    return id;
+}
+
+
 void SortFilterProxyModel::refresh() const
 {
     m_model->select();

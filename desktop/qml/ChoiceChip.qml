@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.2
 Button {
     id: control
     checkable: true
+    height: 32
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                                          contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
@@ -18,17 +19,23 @@ Button {
     hoverEnabled: true
     spacing: 6
 
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: control.checked = !control.checked
+    }
 
     background: Rectangle {
+        radius: 32
         color: checked ? Material.color(Material.Cyan, Material.Shade100) :
                          focus ? Material.color(Material.Grey, Material.Shade500) :
                                  hovered ? Material.color(Material.Grey, Material.Shade400) :
                                            Material.color(Material.Grey, Material.Shade300)
-
-        radius: 32
     }
 
     contentItem: Text {
+        height: 32
         leftPadding: 12
         rightPadding: leftPadding
         topPadding: 0

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -16,33 +32,37 @@ Flickable {
     property bool transplantBought: boughtRadio.checked
     property alias cropField: cropField
 
-    property int plantingType : directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
-    readonly property int dtm: parseInt(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
-    readonly property  int dtt: plantingType === 2 ? parseInt(greenhouseGrowTimeField.text) : 0
+    property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
+    readonly property int dtm: parseInt(plantingType === 1 ? sowDtmField.text :
+                                                             plantingDtmField.text)
+    readonly property int dtt: plantingType === 2 ? parseInt(greenhouseGrowTimeField.text) : 0
     readonly property int harvestWindow: parseInt(harvestWindowField.text)
-    readonly property string sowingDate: plantingType === 1
-                                         ? fieldSowingDateField.isoDateString
-                                         : (plantingType === 2 ? greenhouseStartDateField.isoDateString
-                                                               : fieldPlantingDateField.isoDateString)
-    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString
-                                                              : fieldPlantingDateField.isoDateString
+    readonly property string sowingDate:
+        plantingType === 1 ? fieldSowingDateField.isoDateString :
+                             (plantingType === 2 ? greenhouseStartDateField.isoDateString :
+                                                   fieldPlantingDateField.isoDateString)
+    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString :
+                                                                fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
-    readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(firstHarvestDateField.calendarDate, harvestWindow), "yyyy-MM-dd")
+    readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
+                                                     firstHarvestDateField.calendarDate,
+                                                     harvestWindow),
+                                                 "yyyy-MM-dd")
 
-    property variant values:  {
-        "variety_id" : varietyField.currentIndex + 1,
-        "unit_id" : unitCombo.currentIndex + 1,
-        "planting_type" : plantingType,
-        "length" : parseInt(plantingAmountField.text),
-        "spacing_plants" : parseInt(inRowSpacingField.text),
-        "rows" : parseInt(rowsPerBedField.text),
-        "sowing_date" : sowingDate,
-        "planting_date" : plantingDate,
-        "beg_harvest_date" : begHarvestDate,
-        "end_harvest_date" : endHarvestDate,
-        "dtm" : dtm,
-        "dtt" : dtt,
-        "harvest_window" : harvestWindow
+    property variant values: {
+        "variety_id": varietyModel.rowId(varietyField.currentIndex),
+        "unit_id": unitCombo.currentIndex + 1,
+        "planting_type": plantingType,
+        "length": parseInt(plantingAmountField.text),
+        "spacing_plants": parseInt(inRowSpacingField.text),
+        "rows": parseInt(rowsPerBedField.text),
+        "sowing_date": sowingDate,
+        "planting_date": plantingDate,
+        "beg_harvest_date": begHarvestDate,
+        "end_harvest_date": endHarvestDate,
+        "dtm": dtm,
+        "dtt": dtt,
+        "harvest_window": harvestWindow
     }
 
     property int successions: parseInt(successionsField.text)
@@ -50,9 +70,10 @@ Flickable {
 
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
-            to.calendarDate = from.calendarDate;
+            to.calendarDate = from.calendarDate
         else
-            to.calendarDate = MDate.addDays(from.calendarDate, parseInt(length.text) * direction);
+            to.calendarDate = MDate.addDays(from.calendarDate,
+                                            parseInt(length.text) * direction)
     }
 
     function plantsNeeded() {
@@ -74,16 +95,16 @@ Flickable {
 
         if (seedsExtraPercentageField.text !== "")
             extraPercentage = parseInt(seedsExtraPercentageField.text)
-        if (extraPercentage === Number.NaN) {
+
+        if (extraPercentage === Number.NaN)
             extraPercentage = 0
-        }
 
         if (directSeedRadio.checked)
-            seeds = plantsNeeded() * (1 + extraPercentage/100);
+            seeds = plantsNeeded() * (1 + extraPercentage / 100)
         else if (greenhouseRadio.checked)
-            seeds = transplantsNeeded() * (1 + extraPercentage/100);
+            seeds = transplantsNeeded() * (1 + extraPercentage / 100)
         else
-            seeds = plantsNeeded();
+            seeds = plantsNeeded()
 
         return seeds
     }
@@ -114,91 +135,179 @@ Flickable {
                 id: cropField
                 labelText: qsTr("Crop")
                 focus: true
-//                floatingLabel: true
-//                placeholderText: qsTr("Crop")
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
-                model: CropModel { id: cropModel }
+                model: CropModel {
+                    id: cropModel
+                }
                 textRole: "crop"
                 editable: true
-                onCurrentIndexChanged: varietyModel.cropId = modelData.crop_id
+                onActiveFocusChanged:  {
+                    if (activeFocus) {
+                        cropField.popup.open();
+                        cropField.forceActiveFocus();
+                    }
+                }
+                onEditTextChanged: varietyField.forceActiveFocus();
             }
 
             MyComboBox {
                 id: varietyField
                 labelText: qsTr("Variety")
-//                floatingLabel: true
-//                placeholderText: qsTr("Variety")
                 Layout.fillWidth: true
                 editable: true
                 model: VarietyModel {
                     id: varietyModel
+                    cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
+                onActiveFocusChanged:  {
+                    if (activeFocus) {
+                        varietyField.popup.open();
+                        varietyField.forceActiveFocus();
+                    }
+                }
+                onEditTextChanged: unitCombo.forceActiveFocus();
             }
 
 
-//            Label {
-//                text: qsTr("Planting type")
-//                font.family: "Roboto Regular"
-//                font.pixelSize: 14
-//            }
-
-
+            //            Label {
+            //                text: qsTr("Planting type")
+            //                font.family: "Roboto Regular"
+            //                font.pixelSize: 14
+            //            }
             MyComboBox {
                 id: unitCombo
                 labelText: qsTr("Unit")
                 editable: true
-                model : UnitModel { }
+                model: UnitModel {
+                }
                 textRole: "unit"
                 Layout.fillWidth: true
             }
 
-            RowLayout {
-                spacing: 8
-                Label {
-                    text: qsTr("Keywords")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: 14
+//            Item {
+//                Layout.fillWidth: true
+//                width: parent.width
+//                height: Math.max(keywordsView.height, keywordsField.height)
 
-                }
+////                Label {
+////                    id: keywordsLabel
+////                    anchors.left: parent.left
+////                    anchors.verticalCenter: parent.verticalCenter
+////                    text: qsTr("Keywords")
+////                    font.family: "Roboto Regular"
+////                    font.pixelSize: 14
+////                }
 
-                ListModel {
-                    id: keywordsModel
-                    ListElement {
-                        name: "paillage plastique"
-                    }
-                    ListElement {
-                        name: "bâche tissée"
-                    }
-                    ListElement {
-                        name: "P17"
-                    }
-                }
-
-                ListView {
-                    id: keywordsView
-                    spacing: 8
-                    clip: true
-                    orientation: Qt.Horizontal
-                    model: keywordsModel
-                    width: 200
-                    height:32
-                    Layout.fillWidth: true
-                    delegate: InputChip { text: name }
-                }
+//                ListModel {
+//                    id: keywordsModel
+//                    ListElement {
+//                        name: "paillage plastique"
+//                    }
+//                    ListElement {
+//                        name: "bâche tissée"
+//                    }
+//                    ListElement {
+//                        name: "P17"
+//                    }
+//                }
 
 
-            TextInput {
-                id: keywordsField
-//                labelText: qsTr("Keywords")
-//                floatingLabel: true
-                Layout.fillWidth: true
+//                TextInput {
+//                    id: keywordsField
+//                    anchors.left: keywordsView.right
+//                    anchors.leftMargin: 8
+//                    anchors.right: parent.right
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    onEditingFinished: {
+//                        if (text) {
+//                            keywordsModel.append({ "name": text });
+//                            keywordsView.positionViewAtEnd();
+//                        }
+//                        clear()
+//                    }
 
-            }
-            }
+//                    onFocusChanged: {
+//                        if (focus)
+//                            popup.open();
+//                    }
 
+//                    Popup {
+//                        id: popup
+//                        y: parent.height
+//                        width: parent.width
+//                        implicitHeight: contentItem.implicitHeight
+//                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+//                        padding: 0
+
+//                        contentItem: Item {
+//                            clip: true
+////                            width: 150
+////                            height: 300
+//                            implicitHeight: contentHeight
+
+//                            ColumnLayout {
+//                                id: unitPoputLayout
+//                                anchors.fill: parent
+
+//                                ListView {
+//                                    spacing: -16
+//                                    width: parent.width
+//                                    implicitHeight: contentHeight
+//                                    model: KeywordModel {
+//                                        filterString: keywordsField.text
+//                                    }
+
+//                                    delegate: ItemDelegate {
+//                                        text: keyword
+//                                        width: parent.width
+//                                        onClicked: {
+//                                            keywordsModel.append({"name": keyword,
+//                                                                  "keyword_id": keyword_id})
+//                                            keywordsView.positionViewAtEnd()
+//                                            popup.close()
+//                                        }
+//                                    }
+
+//                                    ScrollBar.vertical: ScrollBar {
+//                                        visible: largeDisplay
+//                                        anchors.top: parent.top
+//                                        anchors.right: parent.right
+//                                        anchors.bottom: parent.bottom
+//                                    }
+//                                }
+
+//                                ItemDelegate {
+//                                    width: parent.width
+//                                    Item {
+//                                        anchors.fill: parent
+//                                    RowLayout {
+//                                        anchors.fill: parent
+//                                        anchors.leftMargin: 8
+//                                        anchors.rightMargin: 8
+//                                        Label {
+//                                            text: "\ue147"
+//                                            font.family: "Material Icons"
+//                                            color: Material.accent
+//                                            font.pixelSize: 24
+//                                        }
+
+//                                        Label {
+//                                            text: qsTr("Add Unit")
+//                                            font.family: "Roboto Regular"
+//                                            font.pixelSize: 14
+//                                        }
+//                                    }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
+
         FormGroupBox {
             id: plantingAmountBox
             width: parent.width
@@ -218,11 +327,12 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
-//                        hasError: !acceptableInput
+                        //                        hasError: !acceptableInput
                     }
 
                     MyTextField {
                         id: timeBetweenSuccessionsField
+                        enabled: successions > 1
                         text: "1"
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
@@ -230,7 +340,7 @@ Flickable {
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
 
-//                        suffixText: "weeks"
+                        //                        suffixText: "weeks"
                     }
                 }
 
@@ -266,8 +376,6 @@ Flickable {
                         helperText: qsTr("Plants needed: ") + plantsNeeded()
                     }
                 }
-
-
             }
         }
 
@@ -296,11 +404,12 @@ Flickable {
                     id: boughtRadio
                     text: qsTr("Transplant, bought")
                 }
-                }
+            }
         }
         FormGroupBox {
             id: plantingDatesBox
-            title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ? qsTr("(first succession)") : "")
+            title: qsTr("Planting dates") + (parseInt(successionsField)
+                                             > 1 ? qsTr("(first succession)") : "")
             width: parent.width
 
             GridLayout {
@@ -316,7 +425,9 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Field Sowing")
 
-                    onEditingFinished: updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
+                    onEditingFinished: updateDateField(fieldSowingDateField,
+                                                       sowDtmField,
+                                                       firstHarvestDateField, 1)
                 }
 
                 MyTextField {
@@ -329,7 +440,9 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Days to maturity")
 
-                    onTextChanged: updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
+                    onTextChanged: updateDateField(fieldSowingDateField,
+                                                   sowDtmField,
+                                                   firstHarvestDateField, 1)
                 }
 
                 DatePicker {
@@ -339,7 +452,10 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
 
-                    onEditingFinished: updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
+                    onEditingFinished: updateDateField(
+                                           greenhouseStartDateField,
+                                           greenhouseGrowTimeField,
+                                           fieldPlantingDateField, 1)
                 }
 
                 MyTextField {
@@ -353,7 +469,9 @@ Flickable {
                     labelText: qsTr("Greenhouse duration")
                     suffixText: qsTr("days")
 
-                    onTextChanged:  updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
+                    onTextChanged: updateDateField(greenhouseStartDateField,
+                                                   greenhouseGrowTimeField,
+                                                   fieldPlantingDateField, 1)
                 }
 
                 DatePicker {
@@ -363,8 +481,14 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Field planting")
 
-                    onEditingFinished: updateDateField(fieldPlantingDateField, greenhouseGrowTimeField, greenhouseStartDateField, -1);
-                    onCalendarDateChanged: updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
+                    onEditingFinished: updateDateField(
+                                           fieldPlantingDateField,
+                                           greenhouseGrowTimeField,
+                                           greenhouseStartDateField, -1)
+                    onCalendarDateChanged: updateDateField(
+                                               fieldPlantingDateField,
+                                               plantingDtmField,
+                                               firstHarvestDateField, 1)
                 }
 
                 MyTextField {
@@ -378,7 +502,9 @@ Flickable {
                     labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
 
-                    onTextChanged: updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
+                    onTextChanged: updateDateField(fieldPlantingDateField,
+                                                   plantingDtmField,
+                                                   firstHarvestDateField, 1)
                 }
 
                 DatePicker {
@@ -389,9 +515,12 @@ Flickable {
 
                     onEditingFinished: {
                         if (directSeeded)
-                            updateDateField(firstHarvestDateField, sowDtmField, fieldSowingDateField, -1);
+                            updateDateField(firstHarvestDateField, sowDtmField,
+                                            fieldSowingDateField, -1)
                         else
-                            updateDateField(firstHarvestDateField, plantingDtmField, fieldPlantingDateField, -1);
+                            updateDateField(firstHarvestDateField,
+                                            plantingDtmField,
+                                            fieldPlantingDateField, -1)
                     }
                 }
 
@@ -403,7 +532,12 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Harvest window")
-                    helperText: text === "" ? "" : qsTr("Last: ") + MDate.addDays(firstHarvestDateField.calendarDate, parseInt(text)).toLocaleString(Qt.locale(), "ddd d MMM yyyy")
+                    helperText: text === "" ? "" : qsTr(
+                                                  "Last: ") + MDate.addDays(
+                                                  firstHarvestDateField.calendarDate,
+                                                  parseInt(
+                                                      text)).toLocaleString(
+                                                  Qt.locale(), "ddd d MMM yyyy")
                     suffixText: qsTr("days")
                 }
             }
@@ -486,5 +620,36 @@ Flickable {
                 }
             }
         }
+
+        FormGroupBox {
+            width: parent.width
+            title: qsTr("Keywords")
+            Flow {
+                id: keywordsView
+                clip: true
+                anchors.fill: parent
+                spacing: 8
+
+                Repeater {
+                    model: KeywordModel { }
+                    width: parent.width
+
+                    ChoiceChip {
+                        text: keyword
+                        //                        onDeleted: keywordsModel.remove(index)
+                    }
+                }
+
+                add: Transition {
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1.0
+                        duration: 200
+                    }
+                }
+            }
+        }
+
     }
 }

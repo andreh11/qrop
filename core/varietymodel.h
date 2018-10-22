@@ -36,7 +36,6 @@ signals:
 
 private:
     int m_cropId;
-
 };
 
 #endif // VARIETYMODEL_H
