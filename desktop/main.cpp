@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon("/home/ah/src/qrop/icon.png"));
-    QTranslator translator;
+//    QTranslator translator;
 
-    const QString &lang = QLocale::system().name();
-    if (lang.contains("fr")) {
-        translator.load(":/translations/fr.qm");
-        app.installTranslator(&translator);
-    }
+//    const QString &lang = QLocale::system().name();
+//    if (lang.contains("fr")) {
+//        translator.load(":/translations/fr.qm");
+//        app.installTranslator(&translator);
+//    }
 
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     const int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");

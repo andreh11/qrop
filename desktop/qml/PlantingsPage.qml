@@ -118,9 +118,7 @@ Page {
             "width": 60,
             "visible": true
         }]
-    property var selectedIds: ({
-
-                               })
+    property var selectedIds: ({})
     property int lastIndexClicked: -1
     property int checks: numberOfTrue(selectedIds)
 
