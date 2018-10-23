@@ -179,127 +179,6 @@ Flickable {
                 Layout.fillWidth: true
                 onAccepted: successionsField.forceActiveFocus();
             }
-
-//            Item {
-//                Layout.fillWidth: true
-//                width: parent.width
-//                height: Math.max(keywordsView.height, keywordsField.height)
-
-////                Label {
-////                    id: keywordsLabel
-////                    anchors.left: parent.left
-////                    anchors.verticalCenter: parent.verticalCenter
-////                    text: qsTr("Keywords")
-////                    font.family: "Roboto Regular"
-////                    font.pixelSize: 14
-////                }
-
-//                ListModel {
-//                    id: keywordsModel
-//                    ListElement {
-//                        name: "paillage plastique"
-//                    }
-//                    ListElement {
-//                        name: "bâche tissée"
-//                    }
-//                    ListElement {
-//                        name: "P17"
-//                    }
-//                }
-
-
-//                TextInput {
-//                    id: keywordsField
-//                    anchors.left: keywordsView.right
-//                    anchors.leftMargin: 8
-//                    anchors.right: parent.right
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    onEditingFinished: {
-//                        if (text) {
-//                            keywordsModel.append({ "name": text });
-//                            keywordsView.positionViewAtEnd();
-//                        }
-//                        clear()
-//                    }
-
-//                    onFocusChanged: {
-//                        if (focus)
-//                            popup.open();
-//                    }
-
-//                    Popup {
-//                        id: popup
-//                        y: parent.height
-//                        width: parent.width
-//                        implicitHeight: contentItem.implicitHeight
-//                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-//                        padding: 0
-
-//                        contentItem: Item {
-//                            clip: true
-////                            width: 150
-////                            height: 300
-//                            implicitHeight: contentHeight
-
-//                            ColumnLayout {
-//                                id: unitPoputLayout
-//                                anchors.fill: parent
-
-//                                ListView {
-//                                    spacing: -16
-//                                    width: parent.width
-//                                    implicitHeight: contentHeight
-//                                    model: KeywordModel {
-//                                        filterString: keywordsField.text
-//                                    }
-
-//                                    delegate: ItemDelegate {
-//                                        text: keyword
-//                                        width: parent.width
-//                                        onClicked: {
-//                                            keywordsModel.append({"name": keyword,
-//                                                                  "keyword_id": keyword_id})
-//                                            keywordsView.positionViewAtEnd()
-//                                            popup.close()
-//                                        }
-//                                    }
-
-//                                    ScrollBar.vertical: ScrollBar {
-//                                        visible: largeDisplay
-//                                        anchors.top: parent.top
-//                                        anchors.right: parent.right
-//                                        anchors.bottom: parent.bottom
-//                                    }
-//                                }
-
-//                                ItemDelegate {
-//                                    width: parent.width
-//                                    Item {
-//                                        anchors.fill: parent
-//                                    RowLayout {
-//                                        anchors.fill: parent
-//                                        anchors.leftMargin: 8
-//                                        anchors.rightMargin: 8
-//                                        Label {
-//                                            text: "\ue147"
-//                                            font.family: "Material Icons"
-//                                            color: Material.accent
-//                                            font.pixelSize: 24
-//                                        }
-
-//                                        Label {
-//                                            text: qsTr("Add Unit")
-//                                            font.family: "Roboto Regular"
-//                                            font.pixelSize: 14
-//                                        }
-//                                    }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
 
         FormGroupBox {
@@ -317,11 +196,16 @@ Flickable {
                         id: successionsField
                         text: "1"
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "99"
+                        inputMask: "90"
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
-                        //                        hasError: !acceptableInput
+                        onAccepted: {
+                            if (successions > 1)
+                                timeBetweenSuccessionsField.forceActiveFocus();
+                            else
+                                plantingAmountField.forceActiveFocus();
+                        }
                     }
 
                     MyTextField {
@@ -330,7 +214,7 @@ Flickable {
                         text: "1"
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "99"
+                        inputMask: "90"
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
 
@@ -345,7 +229,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Length")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "9999"
+                        inputMask: "9000"
                         Layout.fillWidth: true
                         suffixText: qsTr("bed m")
                     }
@@ -355,7 +239,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Spacing")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "999"
+                        inputMask: "900"
                         Layout.fillWidth: true
                         suffixText: qsTr("cm")
                     }
@@ -365,7 +249,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Rows")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "99"
+                        inputMask: "90"
                         Layout.fillWidth: true
                         helperText: qsTr("Plants needed: ") + plantsNeeded()
                     }
@@ -428,7 +312,7 @@ Flickable {
                     id: sowDtmField
                     visible: fieldSowingDateField.visible
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "999"
+                    inputMask: "900"
                     text: "1"
                     Layout.fillWidth: true
                     floatingLabel: true
@@ -457,7 +341,7 @@ Flickable {
                     visible: greenhouseStartDateField.visible
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "999"
+                    inputMask: "900"
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Greenhouse duration")
@@ -490,7 +374,7 @@ Flickable {
                     visible: fieldPlantingDateField.visible
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "999"
+                    inputMask: "900"
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Days to maturity")
@@ -522,7 +406,7 @@ Flickable {
                     id: harvestWindowField
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "999"
+                    inputMask: "900"
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Harvest window")
@@ -548,7 +432,7 @@ Flickable {
                     id: seedsNeededField
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99999.999"
+                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: seedsNeeded()
@@ -557,7 +441,7 @@ Flickable {
                 MyTextField {
                     id: seedsExtraPercentageField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99"
+                    inputMask: "90"
                     floatingLabel: true
                     labelText: qsTr("Extra %")
                     suffixText: "%"
@@ -567,7 +451,7 @@ Flickable {
                 MyTextField {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99999"
+                    inputMask: "90000"
                     floatingLabel: true
                     labelText: qsTr("Per gram")
                     Layout.fillWidth: true
@@ -586,7 +470,7 @@ Flickable {
                     id: flatTypeField
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "9999"
+                    inputMask: "9000"
                     labelText: qsTr("Flat type")
                     Layout.fillWidth: true
                 }
@@ -594,7 +478,7 @@ Flickable {
                 MyTextField {
                     id: seedsPerCellField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99"
+                    inputMask: "90"
                     maximumLength: 10
                     text: "1"
                     floatingLabel: true
@@ -605,7 +489,7 @@ Flickable {
                 MyTextField {
                     id: greenhouseEstimatedLossField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99"
+                    inputMask: "90"
                     floatingLabel: true
                     labelText: qsTr("Estimated loss")
                     Layout.fillWidth: true
