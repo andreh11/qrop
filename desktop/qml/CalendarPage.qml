@@ -125,7 +125,7 @@ Page {
                 }
 
                 ToolButton {
-                    font.pixelSize: fontSizeBodyAndButton
+                    font.pixelSize: Units.fontSizeBodyAndButton
                     leftPadding: 24
                     visible: checks === 0
                     text: qsTr("Add task")

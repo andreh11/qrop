@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
-Button {
+AbstractButton {
     id: control
     checkable: true
     height: 32
@@ -13,11 +13,8 @@ Button {
                                           contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: 6
-    leftPadding: padding - 4
-    rightPadding: padding - 4
+    padding: 8
     hoverEnabled: true
-    spacing: 6
 
     MouseArea {
         anchors.fill: parent
@@ -53,5 +50,4 @@ Button {
         }
 
     }
-
 }

@@ -22,6 +22,7 @@ import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
+import io.croplan.components 1.0
 import "date.js" as MDate
 
 ApplicationWindow {
@@ -53,17 +54,6 @@ ApplicationWindow {
     property bool showSaveButton: false
     property string searchString: searchField.text
     property alias stackView: stackView
-
-    // font sizes - defaults from Google Material Design Guide
-    property int fontSizeDisplay4: 112
-    property int fontSizeDisplay3: 56
-    property int fontSizeDisplay2: 45
-    property int fontSizeDisplay1: 34
-    property int fontSizeHeadline: 24
-    property int fontSizeTitle: 20
-    property int fontSizeSubheading: 16
-    property int fontSizeBodyAndButton: 14 // is Default
-    property int fontSizeCaption: 12
 
     readonly property var monthsOrder : [
         [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -115,14 +105,14 @@ ApplicationWindow {
             Material.foreground: "white"
 
             RowLayout {
-                spacing: 20
+                spacing: Units.mediumDuration
                 anchors.fill: parent
                 Label {
                     id: backIcon
                     text: "\ue5c4" // arrow_back
                     color: Material.Grey
                     font.family: "Material Icons"
-                    font.pixelSize: 24
+                    font.pixelSize: Units.fontSizeHeadline
                 }
                 TextField {
                     placeholderText: qsTr("Search")
@@ -145,7 +135,7 @@ ApplicationWindow {
         Material.foreground: "white"
         z: 1
         RowLayout {
-            spacing: 20
+            spacing: Units.mediumSpacing
             anchors.fill: parent
 
             ToolButton {
@@ -153,7 +143,7 @@ ApplicationWindow {
                 text: stackView.depth > 1 ? "\ue5c4" : "\ue5d2"
                 visible: !largeDisplay && !searchMode
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     if (largeDisplay) {
                         railMode = !railMode
@@ -174,38 +164,18 @@ ApplicationWindow {
                 text: "\ue5c4" // arrow_back
                 Material.foreground: Material.Grey
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     searchField.clear()
                     searchMode = false
                 }
             }
 
-//            Label {
-//                id: programLabel
-//                text: "Qrop"
-//                visible: largeDisplay
-//                font.pixelSize: 20
-//                font.family: "Roboto Medium"
-//                color: "white"
-//                //                    Layout.fillWidth: true
-//                horizontalAlignment: Qt.AlignLeft
-//                verticalAlignment: Qt.AlignVCenter
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: {
-//                        railMode = !railMode
-
-//                    }
-//                }
-//            }
-
-
             Label {
                 id: titleLabel
                 text: stackView.currentItem.title
                 visible: !largeDisplay && !searchMode
-                font.pixelSize: 20
+                font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
 //                color: "white"
                 Layout.fillWidth: true
@@ -219,7 +189,7 @@ ApplicationWindow {
                 leftPadding: 16 + largeDisplay ? 50 : 0
                 font.family: "Roboto Regular"
                 verticalAlignment: Qt.AlignVCenter
-                font.pixelSize: 20
+                font.pixelSize: Units.fontSizeTitle
                 visible: largeDisplay || searchMode
                 color: "black"
                 placeholderText: qsTr("Search")
@@ -238,7 +208,7 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "\ue8b6" // search
                         font.family: "Material Icons"
-                        font.pixelSize: 24
+                        font.pixelSize: Units.fontSizeHeadline
                     }
                 }
 
@@ -257,7 +227,7 @@ ApplicationWindow {
                 text: "\ue876"
                 font.family: "Material Icons"
                 font.capitalization: Font.Capitalize
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     stackView.currentItem.save()
                     stackView.pop()
@@ -270,7 +240,7 @@ ApplicationWindow {
                 visible: !largeDisplay && !searchMode && !showSaveButton
                 text: "\ue8b6" // search
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     searchMode = true
                     searchField.focus = true

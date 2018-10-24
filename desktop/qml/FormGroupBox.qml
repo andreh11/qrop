@@ -18,7 +18,7 @@ GroupBox {
         width: greenhouseBox.leftPadding
         text: greenhouseBox.title
         font.family: "Roboto Regular"
-        font.pixelSize: fontSizeSubheading
+        font.pixelSize: Units.fontSizeSubheading
         color: Material.accent
     }
 }

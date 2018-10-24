@@ -61,7 +61,7 @@ TextField {
         anchors.left: parent.left
         color: Material.accent
         text: labelText
-        font.pixelSize: 14
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: control.text != ""
     }
 
@@ -72,7 +72,7 @@ TextField {
         anchors.leftMargin: 14
         anchors.bottomMargin: 16
         anchors.bottom: parent.bottom
-        font.pixelSize: 14
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: persistentPrefix || (control.prefixText !== "" && control.text != "")
     }
 
@@ -83,7 +83,7 @@ TextField {
         anchors.rightMargin: suffixTextAddedMargin
         anchors.bottomMargin: 16
         anchors.bottom: parent.bottom
-        font.pixelSize: 14
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: persistentSuffix || (control.suffixText !== "" && control.text != "")
     }
 

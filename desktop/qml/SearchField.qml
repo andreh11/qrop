@@ -12,7 +12,7 @@ TextField {
     visible: checks === 0
     leftPadding: searchLogo.width + 16
     font.family: "Roboto Regular"
-    font.pixelSize: fontSizeBodyAndButton
+    font.pixelSize: Units.fontSizeBodyAndButton
     color: "black"
     placeholderText: qsTr("Search")
     padding: 8

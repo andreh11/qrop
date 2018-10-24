@@ -144,10 +144,6 @@ Flickable {
                 editable: true
 
                 onCurrentIndexChanged: varietyField.currentIndex = 0
-
-                onAccepted: {
-                    varietyField.forceActiveFocus();
-                }
             }
 
             MyComboBox {
@@ -160,15 +156,8 @@ Flickable {
                     cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
-                onAccepted: unitCombo.forceActiveFocus();
             }
 
-
-            //            Label {
-            //                text: qsTr("Planting type")
-            //                font.family: "Roboto Regular"
-            //                font.pixelSize: 14
-            //            }
             MyComboBox {
                 id: unitCombo
                 labelText: qsTr("Unit")
@@ -177,7 +166,6 @@ Flickable {
                 }
                 textRole: "unit"
                 Layout.fillWidth: true
-                onAccepted: successionsField.forceActiveFocus();
             }
         }
 
@@ -200,12 +188,6 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
-                        onAccepted: {
-                            if (successions > 1)
-                                timeBetweenSuccessionsField.forceActiveFocus();
-                            else
-                                plantingAmountField.forceActiveFocus();
-                        }
                     }
 
                     MyTextField {
@@ -217,8 +199,6 @@ Flickable {
                         inputMask: "90"
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
-
-                        //                        suffixText: "weeks"
                     }
                 }
 
@@ -251,7 +231,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         inputMask: "90"
                         Layout.fillWidth: true
-                        helperText: qsTr("Plants needed: ") + plantsNeeded()
+                        helperText: qsTr("Plants needed:") + " " + plantsNeeded()
                     }
                 }
             }
@@ -260,9 +240,10 @@ Flickable {
         FormGroupBox {
             width: parent.width
             title: qsTr("Planting Type")
-            RowLayout {
+            Flow {
                 id: plantingTypeLayout
-                Layout.fillWidth: true
+                anchors.fill: parent
+                spacing: 8
 
                 ButtonGroup {
                     buttons: plantingTypeLayout.children
@@ -284,10 +265,11 @@ Flickable {
                 }
             }
         }
+
         FormGroupBox {
             id: plantingDatesBox
-            title: qsTr("Planting dates") + (parseInt(successionsField)
-                                             > 1 ? qsTr("(first succession)") : "")
+            title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ?
+                                                 qsTr("(first succession)") : "")
             width: parent.width
 
             GridLayout {
@@ -514,7 +496,6 @@ Flickable {
 
                     ChoiceChip {
                         text: keyword
-                        //                        onDeleted: keywordsModel.remove(index)
                     }
                 }
 
@@ -525,6 +506,13 @@ Flickable {
                         to: 1.0
                         duration: 200
                     }
+                }
+
+                ToolButton {
+                    text: "\ue147"
+                    font.family: "Material Icons"
+                    font.pixelSize: 26
+                    Material.foreground: Material.accent
                 }
             }
         }

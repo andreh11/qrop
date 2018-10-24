@@ -251,7 +251,7 @@ Page {
                         flat: true
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                         Material.foreground: Material.accent
-                        font.pixelSize: fontSizeBodyAndButton
+                        font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks === 0
                         text: qsTr("Add planting")
                         onClicked: plantingDialog.open()
@@ -276,7 +276,7 @@ Page {
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                         flat: true
                         text: qsTr("Edit")
-                        font.pixelSize: fontSizeBodyAndButton
+                        font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks > 0
                         Material.foreground: "white"
                         onClicked: {
@@ -291,14 +291,14 @@ Page {
                         text: qsTr("Duplicate")
                         visible: checks > 0
                         Material.foreground: "white"
-                        font.pixelSize: fontSizeBodyAndButton
+                        font.pixelSize: Units.fontSizeBodyAndButton
                         onClicked: duplicateSelected()
                     }
 
                     Button {
                         id: deleteButton
                         flat: true
-                        font.pixelSize: fontSizeBodyAndButton
+                        font.pixelSize: Units.fontSizeBodyAndButton
                         text: qsTr("Delete")
                         visible: checks > 0
                         Material.foreground: "white"
