@@ -49,21 +49,25 @@ Flickable {
                                                      harvestWindow),
                                                  "yyyy-MM-dd")
 
-    readonly property int flatType: Number(flatTypeField.text)
+    property int successions: parseInt(successionsField.text)
+    property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
+
+    readonly property int flatSize: Number(flatSizeField.text)
     readonly property int plantingAmount: Number(plantingAmountField.text)
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerCell: Number(seedsPerCellField.text)
-    readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text);
+    readonly property int seedsPerGram: Number(seedsPerGramField.text)
+    readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
+    readonly property int seedsQuantity: seedsNeeded() / seedsPerGram
+
+    readonly property int plantsToStart: flatSize * flatsNumber()
 
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
         "unit_id": unitCombo.currentIndex + 1,
         "planting_type": plantingType,
-        "length": plantingAmount ,
-        "spacing_plants": inRowSpacing,
-        "rows": rowsPerBed,
         "sowing_date": sowingDate,
         "planting_date": plantingDate,
         "beg_harvest_date": begHarvestDate,
@@ -71,12 +75,18 @@ Flickable {
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
+        "length": plantingAmount ,
+        "rows": rowsPerBed,
+        "spacing_plants": inRowSpacing,
+        "plants_needed": plantsNeeded(),
+        "estimated_gh_loss" : greenhouseEstimatedLoss,
+        "plants_to_start": plantsToStart,
+        "seeds_per_hole": seedsPerCell,
+        "seeds_per_gram": seedsPerGram,
+        "seeds_number": seedsNeeded(),
+        "seeds_quantity": seedsQuantity
     }
 
-    onPlantingAmountChanged: console.log(plantingAmount)
-
-    property int successions: parseInt(successionsField.text)
-    property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
 
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
@@ -97,18 +107,17 @@ Flickable {
         case 1: // DS
             return plantsNeeded() * (1 + seedsExtraPercentage / 100);
         case 2: // TP, raised
-            console.log("FLATS:", flatType, flatsNumber(), seedsPerCell, (1 + seedsExtraPercentage / 100))
-            return flatType * flatsNumber() * seedsPerCell * (1 + seedsExtraPercentage / 100);
+            return  plantsToStart * seedsPerCell * (1 + seedsExtraPercentage / 100);
         default: // TP, bought
             return 0;
         }
     }
 
     function flatsNumber() {
-        if (control.flatType < 1)
+        if (control.flatSize < 1)
             return 0;
 
-        return (plantsNeeded() / control.flatType) / (1.0 - greenhouseEstimatedLoss/100)
+        return (plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100)
     }
 
     contentWidth: width
@@ -152,15 +161,6 @@ Flickable {
                 textRole: "variety"
             }
 
-            MyComboBox {
-                id: unitCombo
-                labelText: qsTr("Unit")
-                editable: true
-                model: UnitModel {
-                }
-                textRole: "unit"
-                Layout.fillWidth: true
-            }
         }
 
         FormGroupBox {
@@ -398,6 +398,45 @@ Flickable {
         }
 
         FormGroupBox {
+            id: greenhouseBox
+            title: qsTr("Greenhouse details")
+            visible: greenhouseRadio.checked
+            RowLayout {
+                width: parent.width
+                spacing: 16
+                MyTextField {
+                    id: flatSizeField
+                    labelText: qsTr("Flat type")
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "9000"
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    id: seedsPerCellField
+                    labelText: qsTr("Seeds per cell")
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "90"
+                    maximumLength: 10
+                    text: "1"
+                    floatingLabel: true
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    id: greenhouseEstimatedLossField
+                    text: "0"
+                    labelText: qsTr("Estimated loss")
+                    suffixText: qsTr("%")
+                    helperText: qsTr("%n flat(s)", "", flatsNumber())
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "90"
+                    Layout.fillWidth: true
+                }
+            }
+        }
+
+        FormGroupBox {
             id: seedBox
             title: qsTr("Seeds")
             visible: !boughtRadio.checked
@@ -428,47 +467,50 @@ Flickable {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90000"
+                    text: "0"
                     floatingLabel: true
                     labelText: qsTr("Per gram")
+                    errorText: qsTr("Enter a quantity!")
+                    helperText: qsTr("%n g", "", seedsQuantity)
                     Layout.fillWidth: true
                 }
             }
         }
 
         FormGroupBox {
-            id: greenhouseBox
-            title: qsTr("Greenhouse details")
-            visible: greenhouseRadio.checked
+            width: parent.width
+            title: qsTr("Harvest & revenue rate")
+
             RowLayout {
                 width: parent.width
                 spacing: 16
-                MyTextField {
-                    id: flatTypeField
-                    labelText: qsTr("Flat type")
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "9000"
+
+                MyComboBox {
+                    id: unitCombo
+                    labelText: qsTr("Unit")
+                    editable: true
+                    model: UnitModel {
+                    }
+                    textRole: "unit"
                     Layout.fillWidth: true
                 }
-
                 MyTextField {
-                    id: seedsPerCellField
-                    labelText: qsTr("Seeds per cell")
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90"
-                    maximumLength: 10
-                    text: "1"
+                    id: yieldPerBedMeterField
                     floatingLabel: true
+                    inputMethodHints: Qt.ImhDigitsOnly
+//                    inputMask: "900000"
+                    labelText: qsTr("Needed")
                     Layout.fillWidth: true
+                    text: Math.round(seedsNeeded())
                 }
 
                 MyTextField {
-                    id: greenhouseEstimatedLossField
-                    text: "0"
-                    labelText: qsTr("Estimated loss")
-                    suffixText: qsTr("%")
-                    helperText: qsTr("%n flat(s)", "", flatsNumber())
+                    id: averagePriceField
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
+                    floatingLabel: true
+                    labelText: qsTr("Extra %")
+                    suffixText: "%"
                     Layout.fillWidth: true
                 }
             }
@@ -509,6 +551,6 @@ Flickable {
                 }
             }
         }
-
     }
+
 }

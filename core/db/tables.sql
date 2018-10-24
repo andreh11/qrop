@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS planting (
     spacing_rows      INTEGER,
     spacing_plants    INTEGER,
     plants_needed     INTEGER,
-    fudge_factor      INTEGER,
+    estimated_gh_loss INTEGER,
     plants_to_start   INTEGER,
     tray_size         INTEGER,
     trays_to_start    FLOAT,

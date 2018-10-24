@@ -15,6 +15,7 @@ TextField {
     property string labelText: ""
     property string prefixText: ""
     property string suffixText: ""
+    property string errorText: qsTr("Error")
     property bool persistentPrefix: false
     property bool persistentSuffix: false
 
@@ -97,7 +98,7 @@ TextField {
         Label {
             id: helperTextLabel
             visible: control.helperText
-            text: acceptableInput ? control.helperText : qsTr("Bad input")
+            text: acceptableInput ? control.helperText : control.errorText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
                                     : Qt.darker(control.hintColor)
