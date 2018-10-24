@@ -49,21 +49,31 @@ Flickable {
                                                      harvestWindow),
                                                  "yyyy-MM-dd")
 
+    readonly property int flatType: Number(flatTypeField.text)
+    readonly property int plantingAmount: Number(plantingAmountField.text)
+    readonly property int inRowSpacing: Number(inRowSpacingField.text)
+    readonly property int rowsPerBed: Number(rowsPerBedField.text)
+    readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
+    readonly property int seedsPerCell: Number(seedsPerCellField.text)
+    readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text);
+
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
         "unit_id": unitCombo.currentIndex + 1,
         "planting_type": plantingType,
-        "length": parseInt(plantingAmountField.text),
-        "spacing_plants": parseInt(inRowSpacingField.text),
-        "rows": parseInt(rowsPerBedField.text),
+        "length": plantingAmount ,
+        "spacing_plants": inRowSpacing,
+        "rows": rowsPerBed,
         "sowing_date": sowingDate,
         "planting_date": plantingDate,
         "beg_harvest_date": begHarvestDate,
         "end_harvest_date": endHarvestDate,
         "dtm": dtm,
         "dtt": dtt,
-        "harvest_window": harvestWindow
+        "harvest_window": harvestWindow,
     }
+
+    onPlantingAmountChanged: console.log(plantingAmount)
 
     property int successions: parseInt(successionsField.text)
     property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
@@ -77,44 +87,28 @@ Flickable {
     }
 
     function plantsNeeded() {
-        if (plantingAmountField.text === ""
-                || inRowSpacingField.text === ""
-                || rowsPerBedField.text === "") {
-            return 0
-        }
-
-        var plantingAmount = parseInt(plantingAmountField.text)
-        var inRowSpacing = parseInt(inRowSpacingField.text)
-        var rowsPerBed = parseInt(rowsPerBedField.text)
+        if (inRowSpacing === 0)
+            return 0;
         return plantingAmount / inRowSpacing * 100 * rowsPerBed
     }
 
     function seedsNeeded() {
-        var extraPercentage = 0
-        var seeds = 0
-
-        if (seedsExtraPercentageField.text !== "")
-            extraPercentage = parseInt(seedsExtraPercentageField.text)
-
-        if (extraPercentage === Number.NaN)
-            extraPercentage = 0
-
-        if (directSeedRadio.checked)
-            seeds = plantsNeeded() * (1 + extraPercentage / 100)
-        else if (greenhouseRadio.checked)
-            seeds = transplantsNeeded() * (1 + extraPercentage / 100)
-        else
-            seeds = plantsNeeded()
-
-        return seeds
+        switch (plantingType) {
+        case 1: // DS
+            return plantsNeeded() * (1 + seedsExtraPercentage / 100);
+        case 2: // TP, raised
+            console.log("FLATS:", flatType, flatsNumber(), seedsPerCell, (1 + seedsExtraPercentage / 100))
+            return flatType * flatsNumber() * seedsPerCell * (1 + seedsExtraPercentage / 100);
+        default: // TP, bought
+            return 0;
+        }
     }
 
-    function transplantsNeeded() {
-        var flatType = parseInt(flatTypeField.text)
-        var seedsPerCell = parseInt(seedsPerCellField.text)
-        var estimatedLoss = parseInt(greenhouseEstimatedLossField.text)
+    function flatsNumber() {
+        if (control.flatType < 1)
+            return 0;
 
-        return plantsNeeded() * seedsPerCell / flatType
+        return (plantsNeeded() / control.flatType) / (1.0 - greenhouseEstimatedLoss/100)
     }
 
     contentWidth: width
@@ -414,10 +408,10 @@ Flickable {
                     id: seedsNeededField
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "900000"
+//                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
-                    text: seedsNeeded()
+                    text: Math.round(seedsNeeded())
                 }
 
                 MyTextField {
@@ -450,33 +444,32 @@ Flickable {
                 spacing: 16
                 MyTextField {
                     id: flatTypeField
-                    floatingLabel: true
+                    labelText: qsTr("Flat type")
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "9000"
-                    labelText: qsTr("Flat type")
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: seedsPerCellField
+                    labelText: qsTr("Seeds per cell")
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
                     maximumLength: 10
                     text: "1"
                     floatingLabel: true
-                    labelText: qsTr("Seeds per cell")
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: greenhouseEstimatedLossField
+                    text: "0"
+                    labelText: qsTr("Estimated loss")
+                    suffixText: qsTr("%")
+                    helperText: qsTr("%n flat(s)", "", flatsNumber())
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
-                    floatingLabel: true
-                    labelText: qsTr("Estimated loss")
                     Layout.fillWidth: true
-                    suffixText: qsTr("%")
-                    helperText: transplantsNeeded()
                 }
             }
         }
