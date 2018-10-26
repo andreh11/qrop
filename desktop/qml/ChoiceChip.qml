@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
-AbstractButton {
+Button {
     id: control
     checkable: true
     height: 32
@@ -16,22 +16,20 @@ AbstractButton {
     padding: 8
     hoverEnabled: true
 
-    Component.onCompleted: mouseArea.clicked.connect(control.clicked)
-
-
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: control.checked = !control.checked
     }
 
     background: Rectangle {
         radius: 32
         color: checked ? Material.color(Material.Cyan, Material.Shade100) :
-                         focus ? Material.color(Material.Grey, Material.Shade500) :
-                                 hovered ? Material.color(Material.Grey, Material.Shade400) :
-                                           Material.color(Material.Grey, Material.Shade300)
+                         activeFocus ? Material.color(Material.Grey, Material.Shade500) :
+                                       hovered ? Material.color(Material.Grey, Material.Shade400) :
+                                                 Material.color(Material.Grey, Material.Shade300)
     }
 
     contentItem: Text {

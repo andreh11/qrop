@@ -101,12 +101,12 @@ int DatabaseUtility::add(const QVariantMap &map) const
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
     QString fieldName = idFieldName();
-    for (const QString &key : map.keys()) {
+
+    for (const auto &key : map.keys())
         if (key != fieldName) {
             queryNameString.append(QString(" %1,").arg(key));
             queryValueString.append(QString(" \"%1\",").arg(map[key].toString()));
         }
-    }
 
     // Remove last semicolons.
     queryNameString.chop(1);
@@ -142,7 +142,7 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
         return;
 
     QString queryString = QString("UPDATE %1 SET ").arg(table());
-    for (auto &key : map.keys())
+    for (const auto &key : map.keys())
         queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName()).arg(id));
@@ -177,7 +177,7 @@ void DatabaseUtility::duplicateList(const QList<int> &idList) const
 {
     qDebug() << "Batch duplicate:" << idList;
     QSqlDatabase::database().transaction();
-    for (int id : idList)
+    for (const int id : idList)
         duplicate(id);
     QSqlDatabase::database().commit();
 }
@@ -195,7 +195,7 @@ void DatabaseUtility::removeList(const QList<int> &idList) const
 {
     qDebug() << "Batch remove:" << idList;
     QSqlDatabase::database().transaction();
-    for (int id : idList)
+    for (const int id : idList)
         remove(id);
     QSqlDatabase::database().commit();
 }

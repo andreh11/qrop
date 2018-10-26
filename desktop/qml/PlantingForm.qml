@@ -65,19 +65,6 @@ Flickable {
     readonly property int plantsToStart: flatSize * flatsNumber()
     property var selectedKeywords: []
 
-    function emitSelectedKeywordsChanged() {
-        selectedKeywords = selectedKeywords;
-    }
-
-    function keywordsIdList() {
-        var idList = [];
-        for (var id in selectedKeywords)
-            if (selectedKeywords[id])
-                idList.push(id);
-        console.log("ID LIST", idList);
-        return idList;
-    }
-
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
         "unit_id": unitCombo.currentIndex + 1,
@@ -100,6 +87,18 @@ Flickable {
         "seeds_number": seedsNeeded(),
         "seeds_quantity": seedsQuantity,
         "keyword_ids": keywordsIdList()
+    }
+
+    function emitSelectedKeywordsChanged() {
+        selectedKeywords = selectedKeywords;
+    }
+
+    function keywordsIdList() {
+        var idList = [];
+        for (var id in selectedKeywords)
+            if (selectedKeywords[id])
+                idList.push(id);
+        return idList;
     }
 
     function updateDateField(from, length, to, direction) {
@@ -131,7 +130,7 @@ Flickable {
         if (control.flatSize < 1)
             return 0;
 
-        return (plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100)
+        return (plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100);
     }
 
     contentWidth: width
@@ -184,34 +183,10 @@ Flickable {
 
             ColumnLayout {
                 width: parent.width
-                spacing: 16
+                spacing: Units.mediumSpacing
 
                 RowLayout {
-                    spacing: 16
-                    MyTextField {
-                        id: successionsField
-                        text: "1"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "90"
-                        floatingLabel: true
-                        labelText: qsTr("Successions")
-                        Layout.fillWidth: true
-                    }
-
-                    MyTextField {
-                        id: timeBetweenSuccessionsField
-                        enabled: successions > 1
-                        text: "1"
-                        floatingLabel: true
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "90"
-                        labelText: qsTr("Weeks between")
-                        Layout.fillWidth: true
-                    }
-                }
-
-                RowLayout {
-                    spacing: 16
+                    spacing: Units.mediumSpacing
                     MyTextField {
                         id: plantingAmountField
                         floatingLabel: true
@@ -242,6 +217,31 @@ Flickable {
                         helperText: qsTr("Plants needed:") + " " + plantsNeeded()
                     }
                 }
+
+                RowLayout {
+                    spacing: Units.mediumSpacing
+                    MyTextField {
+                        id: successionsField
+                        text: "1"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "90"
+                        floatingLabel: true
+                        labelText: qsTr("Successions")
+                        Layout.fillWidth: true
+                    }
+
+                    MyTextField {
+                        id: timeBetweenSuccessionsField
+                        enabled: successions > 1
+                        text: "1"
+                        floatingLabel: true
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "90"
+                        labelText: qsTr("Weeks between")
+                        Layout.fillWidth: true
+                    }
+                }
+
             }
         }
 
@@ -276,8 +276,7 @@ Flickable {
 
         FormGroupBox {
             id: plantingDatesBox
-            title: qsTr("Planting dates") + (parseInt(successionsField) > 1 ?
-                                                 qsTr("(first succession)") : "")
+            title: qsTr("Planting dates") + " " + (successions > 1 ? qsTr("(first succession)") : "")
             width: parent.width
 
             GridLayout {

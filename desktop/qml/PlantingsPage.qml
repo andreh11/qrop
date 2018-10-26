@@ -786,6 +786,8 @@ Page {
             color: "transparent"
             RowLayout {
                 anchors.fill: parent
+                ThinDivider { width: parent.width }
+
                 Label {
                     text: section
                     Layout.fillWidth: true
@@ -849,6 +851,7 @@ Page {
                     }
 
                     ColumnLayout {
+                        Layout.fillWidth: true
 
                         //                        Layout.fillWidth: true
                         TableLabel {
@@ -887,11 +890,11 @@ Page {
         text: "\ue145"
         width: 56
         height: width
-        // Cannot use anchors for the y position, because it will anchor
-        // to the footer, leaving a large vertical gap.
-        y: parent.height - height
         anchors.right: parent.right
         anchors.margins: 12
+        // Cannot use anchors for the y position, because it will anchor
+        // to the footer, leaving a large vertical gap.
+        y: parent.height - height - anchors.margins
         visible: !largeDisplay
         highlighted: true
 

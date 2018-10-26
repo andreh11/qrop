@@ -85,17 +85,6 @@ ApplicationWindow {
         }
     }
 
-//    Shortcut {
-//        sequence: "Ctrl+K"
-//        context: Qt.ApplicationShortcut
-//        onActivated: {
-//            if (!largeDisplay) {
-//                searchMode = true
-//            }
-//            searchField.focus = true
-//        }
-//    }
-
     Component {
         id: searchBar
         ToolBar {
@@ -129,6 +118,7 @@ ApplicationWindow {
         visible: !largeDisplay
         leftPadding: 8 + (largeDisplay ? drawer.width : 0)
         rightPadding: 8
+        height: 56
         contentHeight: drawerButton.implicitHeight
         //            background: searchMode ? "white" : Material.color(Material.background)
         Material.background: searchMode ? "white" : Material.primary

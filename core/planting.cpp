@@ -43,7 +43,6 @@ int Planting::add(const QVariantMap &map) const
     QVariantMap newMap(map);
     QString plantingDateString = newMap["planting_date"].toString();
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-
     QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
 
     int id = DatabaseUtility::add(newMap);
@@ -53,7 +52,7 @@ int Planting::add(const QVariantMap &map) const
 
     task->createTasks(id, plantingDate);
 
-    for (QVariant keywordId : keywordIdList)
+    for (const auto &keywordId : keywordIdList)
         keyword->addPlanting(id, keywordId.toInt());
 
     return id;
