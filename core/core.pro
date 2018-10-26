@@ -34,7 +34,9 @@ SOURCES += \
     planting.cpp \
     task.cpp \
     location.cpp \
-    sortfilterproxymodel.cpp
+    sortfilterproxymodel.cpp \
+    variety.cpp \
+    keyword.cpp
 
 
 HEADERS += \
@@ -65,7 +67,9 @@ HEADERS += \
     planting.h \
     task.h \
     location.h \
-    sortfilterproxymodel.h
+    sortfilterproxymodel.h \
+    variety.h \
+    keyword.h
 
 RESOURCES += \
     core_resources.qrc

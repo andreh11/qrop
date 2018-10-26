@@ -63,6 +63,20 @@ Flickable {
     readonly property int seedsQuantity: seedsNeeded() / seedsPerGram
 
     readonly property int plantsToStart: flatSize * flatsNumber()
+    property var selectedKeywords: []
+
+    function emitSelectedKeywordsChanged() {
+        selectedKeywords = selectedKeywords;
+    }
+
+    function keywordsIdList() {
+        var idList = [];
+        for (var id in selectedKeywords)
+            if (selectedKeywords[id])
+                idList.push(id);
+        console.log("ID LIST", idList);
+        return idList;
+    }
 
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
@@ -84,9 +98,9 @@ Flickable {
         "seeds_per_hole": seedsPerCell,
         "seeds_per_gram": seedsPerGram,
         "seeds_number": seedsNeeded(),
-        "seeds_quantity": seedsQuantity
+        "seeds_quantity": seedsQuantity,
+        "keyword_ids": keywordsIdList()
     }
-
 
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
@@ -531,6 +545,14 @@ Flickable {
 
                     ChoiceChip {
                         text: keyword
+                        checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
+
+                        onClicked: {
+                            selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
+//                            selectedKeywords.changed()
+                            emitSelectedKeywordsChanged();
+                            console.log(keyword_id, selectedKeywords[keyword_id]);
+                        }
                     }
                 }
 

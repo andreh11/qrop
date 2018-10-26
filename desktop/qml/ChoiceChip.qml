@@ -16,11 +16,14 @@ AbstractButton {
     padding: 8
     hoverEnabled: true
 
+    Component.onCompleted: mouseArea.clicked.connect(control.clicked)
+
+
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-        onClicked: control.checked = !control.checked
     }
 
     background: Rectangle {

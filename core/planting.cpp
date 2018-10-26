@@ -21,48 +21,64 @@
 
 #include "planting.h"
 #include "task.h"
+#include "keyword.h"
 
 Planting::Planting(QObject *parent)
     : DatabaseUtility(parent),
-      task(new Task(this))
+      task(new Task(this)),
+      keyword(new Keyword(this))
 {
     m_table = "planting";
     m_idColumnName = "planting_id";
 }
 
+//QList<int> Planting::keywordListFromString(const QString &idString) const
+//{
+
+//}
+
+// map has planting table's fields and a "keyword_ids" field.
 int Planting::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
-    QString plantingDateString = newMap.take("planting_date").toString();
+    QString plantingDateString = newMap["planting_date"].toString();
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
 
-    int id = DatabaseUtility::add(map);
+    QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
+
+    int id = DatabaseUtility::add(newMap);
+
+    if (id < 1)
+        return -1;
+
     task->createTasks(id, plantingDate);
+
+    for (QVariant keywordId : keywordIdList)
+        keyword->addPlanting(id, keywordId.toInt());
+
     return id;
 }
 
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
+    const int daysBetween = weeksBetween * 7;
     QDate sowingDate = QDate::fromString(map["sowing_date"].toString(), Qt::ISODate);
     QDate plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
     QDate begHarvestDate = QDate::fromString(map["beg_harvest_date"].toString(), Qt::ISODate);
     QDate endHarvestDate = QDate::fromString(map["end_harvest_date"].toString(), Qt::ISODate);
-    QList<int> ids;
     QVariantMap newMap(map);
+    QList<int> ids;
 
-    int daysBetween = weeksBetween * 7;
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
-        newMap["sowing_date"] = sowingDate.toString(Qt::ISODate);
-        newMap["planting_date"] = plantingDate.toString(Qt::ISODate);
-        newMap["beg_harvest_date"] = begHarvestDate.toString(Qt::ISODate);
-        newMap["end_harvest_date"] = endHarvestDate.toString(Qt::ISODate);
-        ids.append(add(newMap));
+        int days = i * daysBetween;
+        newMap["sowing_date"] = sowingDate.addDays(days).toString(Qt::ISODate);
+        newMap["planting_date"] = plantingDate.addDays(days).toString(Qt::ISODate);
+        newMap["beg_harvest_date"] = begHarvestDate.addDays(days).toString(Qt::ISODate);
+        newMap["end_harvest_date"] = endHarvestDate.addDays(days).toString(Qt::ISODate);
 
-        sowingDate = sowingDate.addDays(daysBetween);
-        plantingDate = plantingDate.addDays(daysBetween);
-        begHarvestDate = begHarvestDate.addDays(daysBetween);
-        endHarvestDate = endHarvestDate.addDays(daysBetween);
+        int id = add(newMap);
+        ids.append(id);
     }
     QSqlDatabase::database().commit();
 

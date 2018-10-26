@@ -21,19 +21,23 @@
 #include "databaseutility.h"
 
 class Task;
+class Keyword;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility {
     Q_OBJECT
 public:
     Planting(QObject *parent = nullptr);
     Q_INVOKABLE int add(const QVariantMap &map) const override;
+    Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
+
     Q_INVOKABLE QList<int> addSuccessions(int successions,
                                           int daysBetween,
                                           const QVariantMap &map) const;
-    Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
 
 private:
     Task *task;
+    Keyword *keyword;
+//    QList<int> keywordListFromString(const QString &idString) const;
 };
 
 #endif // PLANTING_H
