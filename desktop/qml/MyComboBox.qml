@@ -31,8 +31,6 @@ ComboBox {
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
 
-    popup.closePolicy: Popup.NoAutoClose
-
     function shade(alpha) {
         return Qt.rgba(0,0,0,alpha)
     }
@@ -43,6 +41,30 @@ ComboBox {
 //        else
 //            select(0, 0);
     }
+
+//        onOpened: {
+//            x = control.x  //Set the position you want
+//            y = control.y / 2
+//        }
+
+
+//    popup: Popup {
+//              id: comboPopup
+//              clip: true
+
+//              contentItem: ListView {
+//                  id: listView
+//                  implicitHeight: contentHeight
+//                  model: control.popup.visible ? control.delegateModel : null
+//                  onModelChanged: if(model) positionViewAtIndex(control.currentIndex, ListView.Center);
+//                  ScrollIndicator.vertical: ScrollIndicator { }
+//              }
+
+//              onOpened: {
+//                  x = control.x  //Set the position you want
+//                  y = control.y + control.implicitHeight //Set the position you want
+//              }
+//          }
 
     Label {
         id: fieldLabel

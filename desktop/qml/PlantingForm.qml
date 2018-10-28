@@ -19,6 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtCharts 2.0
+import Qt.labs.platform 1.0 as Lab
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -169,13 +170,57 @@ Flickable {
                 onCurrentIndexChanged: varietyField.currentIndex = 0
                 onAccepted: {
                     if (find(editText) === -1) {
-                        var text = editText;
-                        Crop.add({"crop" : editText, "family_id" : 1});
-                        cropModel.refresh();
-                        currentIndex = find(text);
+                        addCropDialog.open()
                     }
                 }
+
+                Dialog {
+                      id: addCropDialog
+                      title: qsTr("Add New Crop:") + "" + cropField.editText
+                      standardButtons: Dialog.Ok | Dialog.Cancel
+
+                      ColumnLayout {
+                          anchors.fill: parent
+
+                          MyComboBox {
+                              id: familyField
+                              labelText: qsTr("Family")
+                              Layout.fillWidth: true
+                              editable: true
+                              model: FamilyModel {
+                                  id: familyModel
+                              }
+                              textRole: "family"
+                          }
+
+                          MyTextField {
+                              id: cropColorField
+                              floatingLabel: true
+                              labelText: qsTr("Color")
+                              Layout.fillWidth: true
+                              helperText: qsTr("Plants needed:") + " " + plantsNeeded()
+                              text: colorDialog.color
+                              onFocusChanged: if (focus) colorDialog.open();
+                          }
+
+                          Lab.ColorDialog {
+                                id: colorDialog
+                          }
+                      }
+
+                      onAccepted: {
+                        var text = cropField.editText
+                        Crop.add({"crop" : cropField.editText,
+                                  "family_id" : familyModel.rowId(familyField.currentIndex),
+                                  "color" : colorDialog.color});
+                        cropModel.refresh();
+                        cropField.currentIndex = cropField.find(text);
+                      }
+
+                      onRejected: console.log("Cancel clicked")
+                  }
             }
+
 
             MyComboBox {
                 id: varietyField
@@ -196,6 +241,9 @@ Flickable {
                     }
                 }
             }
+
+
+
         }
 
         FormGroupBox {

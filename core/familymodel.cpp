@@ -16,11 +16,9 @@
 
 #include <QSqlRecord>
 
-#include "sqltablemodel.h"
 #include "familymodel.h"
 
-FamilyModel::FamilyModel(QObject *parent)
-    : SqlTableModel(parent)
+FamilyModel::FamilyModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
 {
-    setTable("family");
 }

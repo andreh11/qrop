@@ -34,6 +34,7 @@
 #include "notemodel.h"
 #include "usermodel.h"
 #include "rolemodel.h"
+#include "familymodel.h"
 #include "cropmodel.h"
 #include "varietymodel.h"
 #include "unitmodel.h"
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
         qWarning() << "[desktop main] Some custom fonts can't be loaded.";
 
     qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
+    qmlRegisterType<FamilyModel>("io.croplan.components", 1, 0, "FamilyModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
     qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
