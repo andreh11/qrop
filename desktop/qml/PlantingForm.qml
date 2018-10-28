@@ -63,13 +63,13 @@ Flickable {
     readonly property int seedsQuantity: seedsNeeded() / seedsPerGram
     readonly property int plantsToStart: flatSize * flatsNumber()
 
-
+    readonly property double yieldPerBedMeter: Number(yieldPerBedMeterField.text)
+    readonly property double averagePrice: Number(averagePriceField.text)
 
     property var selectedKeywords: []
 
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
-        "unit_id": unitCombo.currentIndex + 1,
         "planting_type": plantingType,
         "sowing_date": sowingDate,
         "planting_date": plantingDate,
@@ -88,7 +88,10 @@ Flickable {
         "seeds_per_gram": seedsPerGram,
         "seeds_number": seedsNeeded(),
         "seeds_quantity": seedsQuantity,
-        "keyword_ids": keywordsIdList()
+        "keyword_ids": keywordsIdList(),
+        "unit_id": unitModel.rowId(unitCombo.currentIndex),
+        "yield_per_bed_meter": yieldPerBedMeter,
+        "average_price": averagePrice
     }
 
     function emitSelectedKeywordsChanged() {
@@ -505,6 +508,7 @@ Flickable {
                     labelText: qsTr("Unit")
                     editable: true
                     model: UnitModel {
+                        id: unitModel
                     }
                     textRole: "unit"
                     Layout.fillWidth: true
@@ -512,7 +516,7 @@ Flickable {
 
                 MyTextField {
                     id: yieldPerBedMeterField
-                    labelText: qsTr("Yiel per bed m")
+                    labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
 //                    inputMask: "900000"
                     Layout.fillWidth: true

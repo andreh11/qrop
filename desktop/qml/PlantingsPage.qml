@@ -109,12 +109,12 @@ Page {
             "visible": true
         }, {
             "name": qsTr("Avg. Yield"),
-            "columnName": "yield_per_row_meter",
+            "columnName": "yield_per_bed_m",
             "width": 60,
             "visible": true
         }, {
             "name": qsTr("Avg. Price"),
-            "columnName": "avg_price",
+            "columnName": "average_price",
             "width": 60,
             "visible": true
         }]
@@ -190,7 +190,6 @@ Page {
     Shortcut {
         sequence : "Ctrl+K"
         onActivated: {
-            console.log("KEYYY")
             filterField.clear();
             filterField.forceActiveFocus();
         }
@@ -553,9 +552,11 @@ Page {
 
                     height: row.height
                     width: parent.width
-                    color: checkBox.checked ? Material.color(
-                                                  Material.Grey,
-                                                  Material.Shade200) : (mouseArea.containsMouse ? Material.color(Material.Grey, Material.Shade100) : "white")
+                    color: checkBox.checked
+                           ? Material.color(Material.Grey, Material.Shade200)
+                           : (mouseArea.containsMouse
+                              ? Material.color(Material.Grey, Material.Shade100)
+                                               : "white")
 
                     MouseArea {
                         id: mouseArea
@@ -589,16 +590,11 @@ Page {
                                         if (mouse.button !== Qt.LeftButton)
                                             return
 
-                                        var beg = index
-                                        var end = index
-
                                         selectedIds[model.planting_id]
                                                 = !selectedIds[model.planting_id]
                                         lastIndexClicked = index
                                         emitSelectedIdsChanged()
-                                        console.log("All:",
-                                                    plantingModel.rowCount(
-                                                        ) === checks)
+                                        console.log("All:", plantingModel.rowCount( ) === checks)
                                     }
                                 }
                             }
