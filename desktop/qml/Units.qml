@@ -36,4 +36,7 @@ Item {
     readonly property int shortDuration: 100
     readonly property int mediumDuration: 200
     readonly property int longDuration: 400
+
+    readonly property int buttonHeight: 36
+    readonly property int chipHeight: 32
 }

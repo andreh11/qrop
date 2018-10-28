@@ -564,11 +564,12 @@ Flickable {
                     }
                 }
 
-                ToolButton {
-                    text: "\ue147"
-                    font.family: "Material Icons"
-                    font.pixelSize: 26
-                    Material.foreground: Material.accent
+                ChoiceChip {
+                    id: addKeywordChip
+                    text: "\ue234"
+                    flat: true
+                    font.family: "Material Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
                 }
             }
         }
