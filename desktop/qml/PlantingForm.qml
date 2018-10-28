@@ -61,8 +61,10 @@ Flickable {
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
     readonly property int seedsQuantity: seedsNeeded() / seedsPerGram
-
     readonly property int plantsToStart: flatSize * flatsNumber()
+
+
+
     property var selectedKeywords: []
 
     property variant values: {
@@ -507,23 +509,23 @@ Flickable {
                     textRole: "unit"
                     Layout.fillWidth: true
                 }
+
                 MyTextField {
                     id: yieldPerBedMeterField
-                    floatingLabel: true
+                    labelText: qsTr("Yiel per bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
 //                    inputMask: "900000"
-                    labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: Math.round(seedsNeeded())
                 }
 
                 MyTextField {
                     id: averagePriceField
+                    labelText: qsTr("Price/") + unitCombo.currentText
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
                     floatingLabel: true
-                    labelText: qsTr("Extra %")
-                    suffixText: "%"
+                    suffixText: "€"
                     Layout.fillWidth: true
                 }
             }
@@ -548,9 +550,7 @@ Flickable {
 
                         onClicked: {
                             selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
-//                            selectedKeywords.changed()
                             emitSelectedKeywordsChanged();
-                            console.log(keyword_id, selectedKeywords[keyword_id]);
                         }
                     }
                 }

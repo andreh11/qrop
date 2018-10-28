@@ -20,14 +20,14 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT UnitModel : public SqlTableModel
+class CORESHARED_EXPORT UnitModel : public SortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    UnitModel(QObject *parent = nullptr);
+    UnitModel(QObject *parent = nullptr, const QString &tableName = "unit");
 };
 
 #endif // UNITMODEL_H

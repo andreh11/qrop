@@ -16,8 +16,7 @@
 
 #include "unitmodel.h"
 
-UnitModel::UnitModel(QObject *parent)
-    : SqlTableModel(parent)
+UnitModel::UnitModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
 {
-    setTable("unit");
 }
