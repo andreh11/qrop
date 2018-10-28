@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_quantity    FLOAT,
     variety_id        INTEGER NOT NULL REFERENCES variety,
     unit_id           INTEGER NOT NULL REFERENCES unit,
-    yield_per_bed_m   FLOAT,
+    yield_per_bed_meter   FLOAT,
     average_price     FLOAT
 );
 

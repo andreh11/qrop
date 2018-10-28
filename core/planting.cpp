@@ -29,7 +29,7 @@ Planting::Planting(QObject *parent)
       keyword(new Keyword(this))
 {
     m_table = "planting";
-    m_idColumnName = "planting_id";
+    m_idFieldName = "planting_id";
 }
 
 //QList<int> Planting::keywordListFromString(const QString &idString) const

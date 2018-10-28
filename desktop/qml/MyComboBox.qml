@@ -31,6 +31,8 @@ ComboBox {
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
 
+    popup.closePolicy: Popup.NoAutoClose
+
     function shade(alpha) {
         return Qt.rgba(0,0,0,alpha)
     }

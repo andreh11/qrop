@@ -210,6 +210,7 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
+        plantingIds: selectedIds
     }
 
     Column {
@@ -723,7 +724,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.yield_per_row_m + model.unit
+                                text: model.yield_per_bed_meter + model.unit
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
@@ -732,7 +733,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.avg_price
+                                text: model.average_price
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight

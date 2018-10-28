@@ -27,16 +27,18 @@ Flickable {
     id: control
     focus: true
 
+    property bool accepted: varietyField.acceptableInput
+
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
     property alias cropField: cropField
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
-    readonly property int dtm: parseInt(plantingType === 1 ? sowDtmField.text :
-                                                             plantingDtmField.text)
-    readonly property int dtt: plantingType === 2 ? parseInt(greenhouseGrowTimeField.text) : 0
-    readonly property int harvestWindow: parseInt(harvestWindowField.text)
+    readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text :
+                                                           plantingDtmField.text)
+    readonly property int dtt: plantingType === 2 ? Number(greenhouseGrowTimeField.text) : 0
+    readonly property int harvestWindow: Number(harvestWindowField.text)
     readonly property string sowingDate:
         plantingType === 1 ? fieldSowingDateField.isoDateString :
                              (plantingType === 2 ? greenhouseStartDateField.isoDateString :
@@ -45,12 +47,12 @@ Flickable {
                                                                 fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
-                                                     firstHarvestDateField.calendarDate,
-                                                     harvestWindow),
-                                                 "yyyy-MM-dd")
+                                                               firstHarvestDateField.calendarDate,
+                                                               harvestWindow),
+                                                           "yyyy-MM-dd")
 
-    property int successions: parseInt(successionsField.text)
-    property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
+    property int successions: Number(successionsField.text)
+    property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int flatSize: Number(flatSizeField.text)
     readonly property int plantingAmount: Number(plantingAmountField.text)
@@ -70,28 +72,28 @@ Flickable {
 
     property variant values: {
         "variety_id": varietyModel.rowId(varietyField.currentIndex),
-        "planting_type": plantingType,
-        "sowing_date": sowingDate,
-        "planting_date": plantingDate,
-        "beg_harvest_date": begHarvestDate,
-        "end_harvest_date": endHarvestDate,
-        "dtm": dtm,
-        "dtt": dtt,
-        "harvest_window": harvestWindow,
-        "length": plantingAmount ,
-        "rows": rowsPerBed,
-        "spacing_plants": inRowSpacing,
-        "plants_needed": plantsNeeded(),
-        "estimated_gh_loss" : greenhouseEstimatedLoss,
-        "plants_to_start": plantsToStart,
-        "seeds_per_hole": seedsPerCell,
-        "seeds_per_gram": seedsPerGram,
-        "seeds_number": seedsNeeded(),
-        "seeds_quantity": seedsQuantity,
-        "keyword_ids": keywordsIdList(),
-        "unit_id": unitModel.rowId(unitCombo.currentIndex),
-        "yield_per_bed_meter": yieldPerBedMeter,
-        "average_price": averagePrice
+                "planting_type": plantingType,
+                "sowing_date": sowingDate,
+                "planting_date": plantingDate,
+                "beg_harvest_date": begHarvestDate,
+                "end_harvest_date": endHarvestDate,
+                "dtm": dtm,
+                "dtt": dtt,
+                "harvest_window": harvestWindow,
+                "length": plantingAmount ,
+                "rows": rowsPerBed,
+                "spacing_plants": inRowSpacing,
+                "plants_needed": plantsNeeded(),
+                "estimated_gh_loss" : greenhouseEstimatedLoss,
+                "plants_to_start": plantsToStart,
+                "seeds_per_hole": seedsPerCell,
+                "seeds_per_gram": seedsPerGram,
+                "seeds_number": seedsNeeded(),
+                "seeds_quantity": seedsQuantity,
+                "keyword_ids": keywordsIdList(),
+                "unit_id": unitModel.rowId(unitCombo.currentIndex),
+                "yield_per_bed_meter": yieldPerBedMeter,
+                "average_price": averagePrice
     }
 
     function emitSelectedKeywordsChanged() {
@@ -111,7 +113,7 @@ Flickable {
             to.calendarDate = from.calendarDate
         else
             to.calendarDate = MDate.addDays(from.calendarDate,
-                                            parseInt(length.text) * direction)
+                                            Number(length.text) * direction)
     }
 
     function plantsNeeded() {
@@ -165,6 +167,14 @@ Flickable {
                 editable: true
 
                 onCurrentIndexChanged: varietyField.currentIndex = 0
+                onAccepted: {
+                    if (find(editText) === -1) {
+                        var text = editText;
+                        Crop.add({"crop" : editText, "family_id" : 1});
+                        cropModel.refresh();
+                        currentIndex = find(text);
+                    }
+                }
             }
 
             MyComboBox {
@@ -177,8 +187,15 @@ Flickable {
                     cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
+                onAccepted: {
+                    if (find(editText) === -1) {
+                        var text = editText;
+                        Variety.add({"variety" : editText, "crop_id" : varietyModel.cropId});
+                        varietyModel.refresh();
+                        currentIndex = find(text);
+                    }
+                }
             }
-
         }
 
         FormGroupBox {
@@ -238,15 +255,14 @@ Flickable {
                     MyTextField {
                         id: timeBetweenSuccessionsField
                         enabled: successions > 1
-                        text: "1"
+                        text: successions > 1 ? "1" : qsTr("Single planting")
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "90"
+                        inputMask: successions > 1 ?  "90" : ""
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
                     }
                 }
-
             }
         }
 
@@ -407,8 +423,7 @@ Flickable {
                     helperText: text === "" ? "" : qsTr(
                                                   "Last: ") + MDate.addDays(
                                                   firstHarvestDateField.calendarDate,
-                                                  parseInt(
-                                                      text)).toLocaleString(
+                                                  Number(text)).toLocaleString(
                                                   Qt.locale(), "ddd d MMM yyyy")
                     suffixText: qsTr("days")
                 }
@@ -465,7 +480,7 @@ Flickable {
                     id: seedsNeededField
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
-//                    inputMask: "900000"
+                    //                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: Math.round(seedsNeeded())
@@ -518,9 +533,8 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
-//                    inputMask: "900000"
+                    //                    inputMask: "900000"
                     Layout.fillWidth: true
-                    text: Math.round(seedsNeeded())
                 }
 
                 MyTextField {

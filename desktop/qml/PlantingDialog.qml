@@ -9,14 +9,39 @@ import io.croplan.components 1.0
 Dialog {
     id: dialog
     modal: true
-    standardButtons: Dialog.Ok | Dialog.Cancel
     focus: true
 
     property var model
     property string mode: "add"
     property string plantingIds: ""
+    property bool formAccepted: plantingForm.accepted
 
     title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
+
+    footer: Item {
+        width: parent.width
+        height: childrenRect.height
+        Button {
+            id: cancelButton
+            flat: true
+            text: qsTr("Cancel")
+            anchors.right: applyButton.left
+            anchors.rightMargin: Units.smallSpacing
+            onClicked: dialog.reject();
+            Material.foreground: Material.accent
+        }
+
+        Button {
+            id: applyButton
+            Material.foreground: Material.accent
+            anchors.right: parent.right
+            anchors.rightMargin: Units.smallSpacing
+            flat: true
+            text: mode === "add" ? qsTr("Add") : qsTr("Edit")
+            enabled: formAccepted
+            onClicked: dialog.accept();
+        }
+    }
 
     ScrollView {
         id: scrollView
@@ -45,7 +70,9 @@ Dialog {
 
     onOpened: {
         plantingForm.cropField.editText= "";
-        plantingForm.cropField.forceActiveFocus()
+        plantingForm.cropField.popup.open()
+
+        plantingForm.cropField.contentItem.forceActiveFocus()
     }
 
     onAccepted: {

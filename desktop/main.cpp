@@ -83,6 +83,28 @@ int main(int argc, char *argv[])
 //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        DatabaseUtility *crop = new DatabaseUtility();
+        crop->setTable("crop");
+        return crop;
+    }
+    );
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Variety",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        DatabaseUtility *variety = new DatabaseUtility();
+        variety->setTable("variety");
+        return variety;
+    }
+    );
+
     connectToDatabase();
 //    createDatabase();
 

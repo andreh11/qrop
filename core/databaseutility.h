@@ -46,8 +46,13 @@ class CORESHARED_EXPORT DatabaseUtility : public QObject {
     Q_OBJECT
 public:
     DatabaseUtility(QObject *parent = nullptr);
+
     QString table() const;
+    void setTable(const QString &table);
+
     QString idFieldName() const;
+    void setIdFieldName(const QString &fieldName);
+
     void debugQuery(const QSqlQuery &query) const;
 
     QList<int> queryIds(const QString &queryString, const QString &idFieldName) const;
@@ -73,7 +78,7 @@ public:
                     const QString &field2, int id2) const;
 protected:
     QString m_table;
-    QString m_idColumnName;
+    QString m_idFieldName;
 };
 
 #endif // DATABASEUTILITY_H
