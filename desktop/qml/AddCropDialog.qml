@@ -22,6 +22,8 @@ Dialog {
 
     ColumnLayout {
         Keys.onReturnPressed: addCropDialog.accept();
+        Keys.onEscapePressed: addCropDialog.reject()
+        Keys.onBackPressed: addCropDialog.reject() // especially necessary on Android
         anchors.fill: parent
         spacing: Units.mediumSpacing
         

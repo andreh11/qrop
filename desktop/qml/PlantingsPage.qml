@@ -38,7 +38,7 @@ Page {
 
     property alias model: listView.model
     property alias plantingModel: plantingModel
-    property int rowsNumber: plantingModel.rowCount()
+    property int rowsNumber: plantingModel.count
 
     Settings {
         id: settings
@@ -210,6 +210,7 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
+        onAccepted: plantingModel.refresh()
     }
 
     Column {
@@ -336,9 +337,24 @@ Page {
                 anchors.top: buttonRectangle.bottom
             }
 
+            Label {
+                text: qsTr('Click on "Add Crop" to begin planning!')
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeHeadline
+                color: Qt.rgba(0, 0, 0, 0.8)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.top: topDivider.bottom
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                visible: !plantingModel.count
+            }
+
+
             ListView {
                 id: listView
-                visible: model.rowCount() > 0
+                visible: plantingModel.count
                 clip: true
                 width: parent.width
                 height: parent.height - buttonRectangle.height

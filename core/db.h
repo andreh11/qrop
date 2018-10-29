@@ -26,8 +26,10 @@
 #include "core_global.h"
 
 CORESHARED_EXPORT void connectToDatabase();
-void execSqlFile(const QString &fileName, const QString &separator = ";");
+CORESHARED_EXPORT void execSqlFile(const QString &fileName, const QString &separator = ";");
 CORESHARED_EXPORT void createDatabase();
+CORESHARED_EXPORT void deleteDatabase();
+
 
 //class CORESHARED_EXPORT Note : public DatabaseUtility {
 //    Q_OBJECT

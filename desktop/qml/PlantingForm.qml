@@ -222,6 +222,9 @@ Flickable {
                     ColumnLayout {
                         anchors.fill: parent
                         Keys.onReturnPressed: if (varietyNameField.text) addVarietyDialog.accept();
+                        Keys.onEscapePressed: addVarietyDialog.reject()
+                        Keys.onBackPressed: addVarietyDialog.reject() // especially necessary on Android
+
                         spacing: Units.mediumSpacing
 
                         MyTextField {

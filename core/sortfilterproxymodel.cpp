@@ -69,6 +69,7 @@ int SortFilterProxyModel::rowId(int row) const
 void SortFilterProxyModel::refresh() const
 {
     m_model->select();
+    countChanged();
 }
 
 QString SortFilterProxyModel::filterString() const
