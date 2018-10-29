@@ -18,6 +18,7 @@ TextField {
     property string errorText: qsTr("Error")
     property bool persistentPrefix: false
     property bool persistentSuffix: false
+    property bool floatMode: false
 
     property bool floatingLabel: false
     property bool hasError: (characterLimit && length > characterLimit) || !acceptableInput
@@ -34,12 +35,17 @@ TextField {
         return Qt.rgba(0,0,0,alpha)
     }
 
+    activeFocusOnTab: true
+    activeFocusOnPress: true
     onActiveFocusChanged: {
         if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
             selectAll();
         else
             select(0, 0);
     }
+
+    onTextEdited: floatMode = true
+    onEditingFinished: nextItemInFocusChain().forceActiveFocus()
 
     Label {
         id: fieldLabel
@@ -53,7 +59,7 @@ TextField {
         verticalAlignment: control.verticalAlignment
         elide: Text.ElideRight
         renderType: control.renderType
-        visible: !control.text
+        visible: !control.text && !activeFocus
     }
 
     Label {
@@ -63,7 +69,7 @@ TextField {
         color: Material.accent
         text: labelText
         font.pixelSize: Units.fontSizeBodyAndButton
-        visible: control.text != ""
+        visible: control.text != "" || focus
     }
 
     Label {

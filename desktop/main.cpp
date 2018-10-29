@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     );
 
     connectToDatabase();
-//    createDatabase();
+    createDatabase();
 
 //    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
 //                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});

@@ -19,7 +19,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtCharts 2.0
-import Qt.labs.platform 1.0 as Lab
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -167,39 +166,25 @@ Flickable {
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
                 model: cropModel
                 textRole: "crop"
-                editable: true
+                editable: false
                 showAddItem: true
                 addItemText: qsTr("Add Crop")
 
-                onAddItemClicked: {
-                    addCropDialog.open()
-                    addCropDialog.cropName = cropField.editText
-                }
-
+                onAddItemClicked: addCropDialog.open()
                 onCurrentIndexChanged: varietyField.currentIndex = 0
-
-//                onEditTextChanged: {
-//                    if (editText && find(editText) === -1) {
-//                    console.log("CHANGED")
-////                        addCropPopup.open()
-//                    } else {
-////                        addCropPopup.close();
-//                    }
-
-//                }
-
-                onAccepted: {
-                        console.log("ACCEPTED", editText, currentText, editText.length)
-                    if (find(editText) === -1) {
-                        addCropDialog.open()
-                        addCropDialog.cropName = editText
-                    } else {
-                        varietyField.forceActiveFocus();
-                    }
-                }
+                onActivated: varietyField.forceActiveFocus()
+                onActiveFocusChanged: if (activeFocus) popup.open();
 
                 AddCropDialog {
                     id: addCropDialog
+                    onAccepted: {
+                        Crop.add({"crop" : cropName,
+                                  "family_id" : familyId,
+                                  "color" : color});
+                        cropModel.refresh();
+                        cropField.currentIndex = cropField.find(cropName);
+                        varietyField.forceActiveFocus()
+                    }
                 }
             }
 
@@ -208,7 +193,7 @@ Flickable {
                 id: varietyField
                 labelText: qsTr("Variety")
                 Layout.fillWidth: true
-                editable: true
+                editable: false
                 showAddItem: true
                 addItemText: qsTr("Add Variety")
                 model: VarietyModel {
@@ -216,18 +201,48 @@ Flickable {
                     cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
-                onAccepted: {
-                    if (find(editText) === -1) {
-                        var text = editText;
-                        Variety.add({"variety" : editText, "crop_id" : varietyModel.cropId});
+//                onAccepted: {
+//                    if (find(editText) === -1) {
+//                        var text = editText;
+//                        Variety.add({"variety" : editText, "crop_id" : varietyModel.cropId});
+//                        varietyModel.refresh();
+//                        currentIndex = find(text);
+//                    }
+//                }
+
+                onActiveFocusChanged: if (activeFocus) popup.open();
+                onAddItemClicked: addVarietyDialog.open();
+                onActivated: plantingAmountField.forceActiveFocus()
+
+                Dialog {
+                    id: addVarietyDialog
+                    title: qsTr("Add New Variety")
+                    standardButtons: Dialog.Ok | Dialog.Cancel
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        Keys.onReturnPressed: if (varietyNameField.text) addVarietyDialog.accept();
+                        spacing: Units.mediumSpacing
+
+                        MyTextField {
+                            id: varietyNameField
+                            labelText: qsTr("Variety")
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 100
+                        }
+                    }
+
+                    onOpened: varietyNameField.forceActiveFocus()
+
+                    onAccepted: {
+                        var name = varietyNameField.text
+                        Variety.add({"variety" : name, "crop_id" : varietyModel.cropId});
                         varietyModel.refresh();
-                        currentIndex = find(text);
+                        varietyField.currentIndex = varietyField.find(name);
+                        plantingAmountField.forceActiveFocus()
                     }
                 }
             }
-
-
-
         }
 
         FormGroupBox {

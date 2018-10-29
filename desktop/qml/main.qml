@@ -18,7 +18,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
-import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
@@ -39,10 +38,10 @@ ApplicationWindow {
         { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
         { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" },
-        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
-        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
-        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
+//        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+//        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
+//        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
+//        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
         { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
     ]
     property int navigationIndex: 0

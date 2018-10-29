@@ -77,9 +77,6 @@ Dialog {
     }
 
     onOpened: {
-        plantingForm.cropField.editText= "";
-        plantingForm.cropField.popup.open()
-
         plantingForm.cropField.contentItem.forceActiveFocus()
     }
 

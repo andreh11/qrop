@@ -14,8 +14,14 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
     
     property alias cropName: cropNameField.text
-    
+    property int familyId: familyModel.rowId(familyField.currentIndex)
+    property alias color: colorDialog.color
+
+    onOpened: cropNameField.forceActiveFocus();
+
+
     ColumnLayout {
+        Keys.onReturnPressed: addCropDialog.accept();
         anchors.fill: parent
         spacing: Units.mediumSpacing
         
@@ -31,7 +37,7 @@ Dialog {
             labelText: qsTr("Family")
             Layout.minimumWidth: 150
             Layout.fillWidth: true
-            editable: true
+            editable: false
             model: FamilyModel {
                 id: familyModel
             }
@@ -74,12 +80,4 @@ Dialog {
         }
     }
     
-    onAccepted: {
-        var name = cropNameField.text
-        Crop.add({"crop" : name,
-                     "family_id" : familyModel.rowId(familyField.currentIndex),
-                     "color" : colorDialog.color});
-        cropModel.refresh();
-        cropField.currentIndex = cropField.find(name);
-    }
 }

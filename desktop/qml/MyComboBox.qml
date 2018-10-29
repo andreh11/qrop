@@ -42,7 +42,7 @@ ComboBox {
     }
 
     onActiveFocusChanged: {
-        if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
+        if (editable && activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
             selectAll();
 //        else
 //            select(0, 0);
@@ -78,7 +78,16 @@ ComboBox {
             NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
         }
 
+
+        onOpened: {
+            if (listView.model.count === 0) {
+                // Ensure footer is visible
+                listView.contentY = listView.contentHeight
+            }
+        }
+
         contentItem: ListView {
+            id: listView
             clip: true
             implicitHeight: contentHeight
             model: control.delegateModel
@@ -87,8 +96,10 @@ ComboBox {
 
             ScrollIndicator.vertical: ScrollIndicator { }
             footerPositioning: ListView.OverlayHeader
-            footer:  ItemDelegate {
+
+            Component {
                 id: addItemDelegate
+                ItemDelegate {
                 text: control.addItemText
                 width: parent.width
                 leftPadding: addItemIcon.width + Units.smallSpacing
@@ -103,43 +114,13 @@ ComboBox {
                     font.pixelSize: Units.fontSizeHeadline
                     Material.foreground: Material.accent
                 }
-
                 onClicked: addItemClicked()
+                }
+            }
+
+            footer: showAddItem ? addItemDelegate : null
             }
         }
-
-    }
-
-
-//    popup: Popup {
-
-//              id: comboPopup
-//              clip: true
-//              y: control.height - 1
-//              width: control.width
-//              implicitHeight: contentItem.implicitHeight
-//              padding: 0
-//              topPadding: 4
-//              bottomPadding: topPadding
-
-//              contentItem: ListView {
-//                  id: listView
-//                  clip: true
-//                  implicitHeight: contentHeight
-//                  model: control.popup.visible ? control.delegateModel : null
-//                  onModelChanged: if(model) positionViewAtIndex(control.currentIndex, ListView.Center);
-//                  currentIndex: control.highlightedIndex
-
-//                  ScrollIndicator.vertical: ScrollIndicator { }
-//                  Keys.onPressed: control.forceActiveFocus();
-//              }
-
-
-//              onOpened: {
-//                  x = control.x  //Set the position you want
-//                  y = control.y + control.height //Set the position you want
-//              }
-//          }
 
     Label {
         id: fieldLabel
