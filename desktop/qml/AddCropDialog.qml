@@ -10,7 +10,7 @@ import "date.js" as MDate
 
 Dialog {
     id: addCropDialog
-    title: qsTr("Add New Crop:") + " " + cropField.editText
+    title: qsTr("Add New Crop")
     standardButtons: Dialog.Ok | Dialog.Cancel
     
     property alias cropName: cropNameField.text
@@ -23,11 +23,13 @@ Dialog {
             id: cropNameField
             labelText: qsTr("Crop")
             Layout.fillWidth: true
+            Layout.minimumWidth: 100
         }
         
         MyComboBox {
             id: familyField
             labelText: qsTr("Family")
+            Layout.minimumWidth: 150
             Layout.fillWidth: true
             editable: true
             model: FamilyModel {

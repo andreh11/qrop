@@ -107,6 +107,8 @@ Item {
                     height: contentItem.height
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                     padding: 0
+                    topMargin: 0
+                    bottomMargin: 0
 
                     contentItem: CalendarView {
                         clip: true

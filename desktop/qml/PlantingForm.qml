@@ -146,6 +146,10 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     Material.background: "white"
 
+    CropModel {
+        id: cropModel
+    }
+
     Column {
         id: mainColumn
         width: parent.width
@@ -161,59 +165,36 @@ Flickable {
                 focus: true
                 Layout.fillWidth: true
                 Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
-                model: CropModel {
-                    id: cropModel
-                }
+                model: cropModel
                 textRole: "crop"
                 editable: true
+                showAddItem: true
+                addItemText: qsTr("Add Crop")
+
+                onAddItemClicked: {
+                    addCropDialog.open()
+                    addCropDialog.cropName = cropField.editText
+                }
 
                 onCurrentIndexChanged: varietyField.currentIndex = 0
 
-                onEditTextChanged: {
-                    if (editText && find(editText) === -1) {
-                        addCropPopup.open()
-                    } else {
-                        addCropPopup.close();
-                    }
+//                onEditTextChanged: {
+//                    if (editText && find(editText) === -1) {
+//                    console.log("CHANGED")
+////                        addCropPopup.open()
+//                    } else {
+////                        addCropPopup.close();
+//                    }
 
-                }
+//                }
 
                 onAccepted: {
+                        console.log("ACCEPTED", editText, currentText, editText.length)
                     if (find(editText) === -1) {
-                        addCropPopup.close();
                         addCropDialog.open()
                         addCropDialog.cropName = editText
                     } else {
                         varietyField.forceActiveFocus();
-                    }
-                }
-
-                Popup {
-                    id: addCropPopup
-                    x: parent.x
-                    y: parent.height
-                    width: parent.width
-                    padding: 0
-                    ItemDelegate {
-                        width: parent.width
-                        text: qsTr("Add Crop")
-                        leftPadding: addCropIcon.width + Units.smallSpacing
-
-                        Label {
-                            id: addCropIcon
-                            leftPadding: Units.smallSpacing
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "\ue147"
-                            font.family: "Material Icons"
-                            font.pixelSize: Units.fontSizeHeadline
-                            Material.foreground: Material.accent
-                        }
-
-                        onClicked: {
-                            addCropDialog.open()
-                            addCropDialog.cropName = cropField.editText
-                        }
-
                     }
                 }
 
@@ -228,6 +209,8 @@ Flickable {
                 labelText: qsTr("Variety")
                 Layout.fillWidth: true
                 editable: true
+                showAddItem: true
+                addItemText: qsTr("Add Variety")
                 model: VarietyModel {
                     id: varietyModel
                     cropId: cropModel.rowId(cropField.currentIndex)
@@ -285,7 +268,6 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         inputMask: "90"
                         Layout.fillWidth: true
-                        helperText: qsTr("Plants needed:") + " " + plantsNeeded()
                     }
                 }
 

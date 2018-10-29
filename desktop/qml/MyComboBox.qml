@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtCharts 2.0
+import QtQuick.Window 2.11
 
 import io.croplan.components 1.0
 
@@ -20,6 +21,9 @@ ComboBox {
     property bool persistentPrefix: false
     property bool persistentSuffix: false
 
+    property bool showAddItem: false
+    property string addItemText: qsTr("Add Item")
+
     property bool floatingLabel: false
     property bool hasError: (characterLimit && length > characterLimit) || !acceptableInput
     property int characterLimit
@@ -30,6 +34,8 @@ ComboBox {
     property color color: Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
+
+    signal addItemClicked()
 
     function shade(alpha) {
         return Qt.rgba(0,0,0,alpha)
@@ -47,22 +53,91 @@ ComboBox {
 //            y = control.y / 2
 //        }
 
+    popup:  Popup {
+        y: control.editable ? control.height - 5 : 0
+        width: control.width
+        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
+        transformOrigin: Item.Top
+        topMargin: 12
+        bottomMargin: 12
+        padding: 0
+
+        Material.theme: control.Material.theme
+        Material.accent: control.Material.accent
+        Material.primary: control.Material.primary
+
+        enter: Transition {
+            // grow_fade_in
+            NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
+        }
+
+        exit: Transition {
+            // shrink_fade_out
+            NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
+        }
+
+        contentItem: ListView {
+            clip: true
+            implicitHeight: contentHeight
+            model: control.delegateModel
+            currentIndex: control.highlightedIndex
+            highlightMoveDuration: 0
+
+            ScrollIndicator.vertical: ScrollIndicator { }
+            footerPositioning: ListView.OverlayHeader
+            footer:  ItemDelegate {
+                id: addItemDelegate
+                text: control.addItemText
+                width: parent.width
+                leftPadding: addItemIcon.width + Units.smallSpacing
+                z: 3
+
+                Label {
+                    id: addItemIcon
+                    leftPadding: Units.smallSpacing
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "\ue147"
+                    font.family: "Material Icons"
+                    font.pixelSize: Units.fontSizeHeadline
+                    Material.foreground: Material.accent
+                }
+
+                onClicked: addItemClicked()
+            }
+        }
+
+    }
+
 
 //    popup: Popup {
+
 //              id: comboPopup
 //              clip: true
+//              y: control.height - 1
+//              width: control.width
+//              implicitHeight: contentItem.implicitHeight
+//              padding: 0
+//              topPadding: 4
+//              bottomPadding: topPadding
 
 //              contentItem: ListView {
 //                  id: listView
+//                  clip: true
 //                  implicitHeight: contentHeight
 //                  model: control.popup.visible ? control.delegateModel : null
 //                  onModelChanged: if(model) positionViewAtIndex(control.currentIndex, ListView.Center);
+//                  currentIndex: control.highlightedIndex
+
 //                  ScrollIndicator.vertical: ScrollIndicator { }
+//                  Keys.onPressed: control.forceActiveFocus();
 //              }
+
 
 //              onOpened: {
 //                  x = control.x  //Set the position you want
-//                  y = control.y + control.implicitHeight //Set the position you want
+//                  y = control.y + control.height //Set the position you want
 //              }
 //          }
 
