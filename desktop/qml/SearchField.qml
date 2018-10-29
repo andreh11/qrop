@@ -9,7 +9,6 @@ import "date.js" as MDate
 
 TextField {
     id: filterField
-    visible: checks === 0
     leftPadding: searchLogo.width + 16
     font.family: "Roboto Regular"
     font.pixelSize: Units.fontSizeBodyAndButton

@@ -43,7 +43,7 @@ Item {
         id: textField
 
         width: parent.width
-        implicitWidth: 100
+        implicitWidth: 80
         text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : MDate.isoWeek(calendarDate)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         inputMask: mode === "date" ? "99/99/9999" : ""

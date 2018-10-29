@@ -42,10 +42,13 @@ ComboBox {
     }
 
     onActiveFocusChanged: {
-        if (editable && activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
-            selectAll();
-//        else
-//            select(0, 0);
+        if (activeFocus && (focusReason === Qt.TabFocusReason
+                            || focusReason === Qt.BacktabFocusReason)) {
+            if (editable)
+                selectAll();
+            else
+            popup.open();
+        }
     }
 
 //        onOpened: {

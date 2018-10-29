@@ -210,7 +210,9 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
-        onAccepted: plantingModel.refresh()
+        onAccepted: {
+            console.log(plantingModel.count)
+        }
     }
 
     Column {
@@ -261,7 +263,7 @@ Page {
                         id: timegraphButton
                         text: "\ue0b8"
                         hoverEnabled: true
-                        visible: largeDisplay && checks == 0
+                        visible: largeDisplay && checks == 0 && rowsNumber
                         checkable: true
                         checked: true
 
@@ -310,6 +312,7 @@ Page {
                     SearchField {
                         id: filterField
                         Layout.fillWidth: true
+                        visible: !checks && rowsNumber
                     }
 
                     Label {
@@ -325,7 +328,7 @@ Page {
 
                     SeasonSpinBox {
                         id: seasonSpinBox
-                        visible: checks === 0
+                        visible: checks === 0 && rowsNumber
                         season: MDate.season(todayDate)
                         year: todayDate.getFullYear()
                     }

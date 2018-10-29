@@ -173,7 +173,6 @@ Flickable {
                 onAddItemClicked: addCropDialog.open()
                 onCurrentIndexChanged: varietyField.currentIndex = 0
                 onActivated: varietyField.forceActiveFocus()
-                onActiveFocusChanged: if (activeFocus) popup.open();
 
                 AddCropDialog {
                     id: addCropDialog
@@ -201,16 +200,7 @@ Flickable {
                     cropId: cropModel.rowId(cropField.currentIndex)
                 }
                 textRole: "variety"
-//                onAccepted: {
-//                    if (find(editText) === -1) {
-//                        var text = editText;
-//                        Variety.add({"variety" : editText, "crop_id" : varietyModel.cropId});
-//                        varietyModel.refresh();
-//                        currentIndex = find(text);
-//                    }
-//                }
 
-                onActiveFocusChanged: if (activeFocus) popup.open();
                 onAddItemClicked: addVarietyDialog.open();
                 onActivated: plantingAmountField.forceActiveFocus()
 
@@ -299,6 +289,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
+                        onActiveFocusChanged: if (!activeFocus && text === "") text = "1"
                     }
 
                     MyTextField {
