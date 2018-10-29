@@ -168,57 +168,58 @@ Flickable {
                 editable: true
 
                 onCurrentIndexChanged: varietyField.currentIndex = 0
+
+                onEditTextChanged: {
+                    if (editText && find(editText) === -1) {
+                        addCropPopup.open()
+                    } else {
+                        addCropPopup.close();
+                    }
+
+                }
+
                 onAccepted: {
                     if (find(editText) === -1) {
+                        addCropPopup.close();
                         addCropDialog.open()
+                        addCropDialog.cropName = editText
+                    } else {
+                        varietyField.forceActiveFocus();
                     }
                 }
 
-                Dialog {
-                      id: addCropDialog
-                      title: qsTr("Add New Crop:") + "" + cropField.editText
-                      standardButtons: Dialog.Ok | Dialog.Cancel
+                Popup {
+                    id: addCropPopup
+                    x: parent.x
+                    y: parent.height
+                    width: parent.width
+                    padding: 0
+                    ItemDelegate {
+                        width: parent.width
+                        text: qsTr("Add Crop")
+                        leftPadding: addCropIcon.width + Units.smallSpacing
 
-                      ColumnLayout {
-                          anchors.fill: parent
+                        Label {
+                            id: addCropIcon
+                            leftPadding: Units.smallSpacing
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "\ue147"
+                            font.family: "Material Icons"
+                            font.pixelSize: Units.fontSizeHeadline
+                            Material.foreground: Material.accent
+                        }
 
-                          MyComboBox {
-                              id: familyField
-                              labelText: qsTr("Family")
-                              Layout.fillWidth: true
-                              editable: true
-                              model: FamilyModel {
-                                  id: familyModel
-                              }
-                              textRole: "family"
-                          }
+                        onClicked: {
+                            addCropDialog.open()
+                            addCropDialog.cropName = cropField.editText
+                        }
 
-                          MyTextField {
-                              id: cropColorField
-                              floatingLabel: true
-                              labelText: qsTr("Color")
-                              Layout.fillWidth: true
-                              helperText: qsTr("Plants needed:") + " " + plantsNeeded()
-                              text: colorDialog.color
-                              onFocusChanged: if (focus) colorDialog.open();
-                          }
+                    }
+                }
 
-                          Lab.ColorDialog {
-                                id: colorDialog
-                          }
-                      }
-
-                      onAccepted: {
-                        var text = cropField.editText
-                        Crop.add({"crop" : cropField.editText,
-                                  "family_id" : familyModel.rowId(familyField.currentIndex),
-                                  "color" : colorDialog.color});
-                        cropModel.refresh();
-                        cropField.currentIndex = cropField.find(text);
-                      }
-
-                      onRejected: console.log("Cancel clicked")
-                  }
+                AddCropDialog {
+                    id: addCropDialog
+                }
             }
 
 
@@ -322,23 +323,23 @@ Flickable {
                 anchors.fill: parent
                 spacing: 8
 
-                ButtonGroup {
-                    buttons: plantingTypeLayout.children
-                }
-
                 ChoiceChip {
                     id: directSeedRadio
                     text: qsTr("Direct seed")
                     checked: true
+                    autoExclusive: true
                 }
 
                 ChoiceChip {
                     id: greenhouseRadio
                     text: qsTr("Transplant, raised")
+                    autoExclusive: true
                 }
+
                 ChoiceChip {
                     id: boughtRadio
                     text: qsTr("Transplant, bought")
+                    autoExclusive: true
                 }
             }
         }

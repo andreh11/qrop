@@ -16,7 +16,15 @@ Dialog {
     property string plantingIds: ""
     property bool formAccepted: plantingForm.accepted
 
-    title: mode == "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
+    function createPlanting() {
+        dialog.title = qsTr("Add planting(s)")
+        dialog.open()
+    }
+
+    function editPlantings(plantingIds) {
+        dialog.title = qsTr("Edit planting(s)")
+        dialog.open()
+    }
 
     footer: Item {
         width: parent.width

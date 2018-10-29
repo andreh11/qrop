@@ -10,9 +10,16 @@ CheckBox {
     id: control
 
     property bool round: false
+    property bool selectionMode: false
 
-    indicator: Rectangle {
+    indicator.visible: hovered || selectionMode
+    indicator.x: textBox.x + textBox.width / 2 - indicator.width / 2
+
+    Rectangle {
+        id: textBox
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            visible: !hovered && !selectionMode
             width: parent.width
             height: width
             radius: round ? 50 : 4
@@ -24,7 +31,7 @@ CheckBox {
                 text: control.text.slice(0,2)
                 color: "white"
                 font.family: "Roboto Bold"
-                font.pixelSize: 14
+                font.pixelSize: Units.fontSizeBodyAndButton
             }
             Text {
                 visible: control.checked || hovered

@@ -210,7 +210,6 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
-        plantingIds: selectedIds
     }
 
     Column {
@@ -248,13 +247,13 @@ Page {
 
                     Button {
                         id: addButton
+                        text: qsTr("Add planting")
                         flat: true
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                         Material.foreground: Material.accent
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks === 0
-                        text: qsTr("Add planting")
-                        onClicked: plantingDialog.open()
+                        onClicked: plantingDialog.createPlanting()
                     }
 
                     IconButton {
@@ -279,10 +278,7 @@ Page {
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks > 0
                         Material.foreground: "white"
-                        onClicked: {
-                            plantingDialog.mode = "edit"
-                            plantingDialog.open()
-                        }
+                        onClicked: plantingDialog.editPlantings(selectedIds)
                     }
 
                     Button {
@@ -580,6 +576,7 @@ Page {
                             TextCheckBox {
                                 id: checkBox
                                 text: model.crop
+                                selectionMode: checks > 0
                                 anchors.verticalCenter: row.verticalCenter
                                 width: 24
                                 checked: model.planting_id in selectedIds

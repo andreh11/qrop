@@ -39,5 +39,6 @@
         <file>qml/InputChip.qml</file>
         <file>qml/Units.qml</file>
         <file>qml/qmldir</file>
+        <file>qml/AddCropDialog.qml</file>
     </qresource>
 </RCC>
