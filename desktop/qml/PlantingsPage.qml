@@ -210,9 +210,9 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
-        onAccepted: {
-            snackbar.open();
-        }
+//        onAccepted: {
+//            snackbar.open();
+//        }
     }
 
     Snackbar {

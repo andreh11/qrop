@@ -61,6 +61,9 @@ void connectToDatabase()
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
+
+    QSqlQuery query("PRAGMA foreign_keys = ON");
+    query.exec();
 }
 
 void execSqlFile(const QString &fileName, const QString &separator)

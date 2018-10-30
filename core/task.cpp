@@ -95,16 +95,16 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     switch(type) {
     case PlantingType::DirectSeeded: {
         int id = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                      {"task_type_id", 0}});
+                      {"task_type_id", 1}});
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
     case PlantingType::TransplantRaised: {
         QDate sowDate = plantingDate.addDays(-dtt);
         int sowId = add({{"assigned_date", sowDate.toString(Qt::ISODate)},
-                         {"task_type_id", 1}});
+                         {"task_type_id", 2}});
         int plantId = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                           {"task_type_id", 2},
+                           {"task_type_id", 3},
                            {"link_task_id", sowId}});
         addLink("planting_task", "planting_id", plantingId, "task_id", sowId);
         addLink("planting_task", "planting_id", plantingId, "task_id", plantId);
