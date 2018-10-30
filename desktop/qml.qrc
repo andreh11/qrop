@@ -40,5 +40,6 @@
         <file>qml/Units.qml</file>
         <file>qml/qmldir</file>
         <file>qml/AddCropDialog.qml</file>
+        <file>qml/Snackbar.qml</file>
     </qresource>
 </RCC>

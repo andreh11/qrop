@@ -30,7 +30,6 @@ CORESHARED_EXPORT void execSqlFile(const QString &fileName, const QString &separ
 CORESHARED_EXPORT void createDatabase();
 CORESHARED_EXPORT void deleteDatabase();
 
-
 //class CORESHARED_EXPORT Note : public DatabaseUtility {
 //    Q_OBJECT
 //public:

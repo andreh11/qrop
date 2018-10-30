@@ -35,17 +35,16 @@ TextField {
         return Qt.rgba(0,0,0,alpha)
     }
 
-    activeFocusOnTab: true
-    activeFocusOnPress: true
     onActiveFocusChanged: {
-        if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
+        if (activeFocus)
             selectAll();
         else
             select(0, 0);
     }
 
     onTextEdited: floatMode = true
-    onEditingFinished: nextItemInFocusChain().forceActiveFocus()
+
+    onAccepted: nextItemInFocusChain().forceActiveFocus()
 
     Label {
         id: fieldLabel

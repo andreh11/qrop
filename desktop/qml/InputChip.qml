@@ -28,7 +28,9 @@ Rectangle {
     height: 32
     radius: 40
     implicitWidth: contentLabel.width + deleteButton.width
-    color:  mouseArea.hovered ? Material.color(Material, Material.Shade400) :
+    color:  control.activeFocus
+            ? Material.color(Material, Material.Shade500)
+            : mouseArea.hovered ? Material.color(Material, Material.Shade400) :
                                 Material.color(Material.Grey, Material.Shade300)
 
     MouseArea {

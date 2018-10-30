@@ -211,7 +211,21 @@ Page {
         x: (parent.width - width) / 2
         model: listView.model
         onAccepted: {
-            console.log(plantingModel.count)
+            snackbar.open();
+        }
+    }
+
+    Snackbar {
+        id: snackbar
+        z: 2
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 8
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: qsTr("Added %n plantings", "", 3)
+        visible: false
+        onClicked: {
+            Planting.rollback();
+            plantingModel.refresh();
         }
     }
 
@@ -250,7 +264,7 @@ Page {
 
                     Button {
                         id: addButton
-                        text: qsTr("Add planting")
+                        text: qsTr("Add plantings")
                         flat: true
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                         Material.foreground: Material.accent
@@ -341,7 +355,8 @@ Page {
             }
 
             Label {
-                text: qsTr('Click on "Add Crop" to begin planning!')
+                id: emptyStateLabel
+                text: qsTr('Click on "Add Plantings" to begin planning!')
                 font.family: "Roboto Regular"
                 font.pixelSize: Units.fontSizeHeadline
                 color: Qt.rgba(0, 0, 0, 0.8)

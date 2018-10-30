@@ -28,6 +28,14 @@ DatabaseUtility::DatabaseUtility(QObject *parent)
 {
 }
 
+void DatabaseUtility::rollback() const
+{
+    qDebug() << "Rolling back...";
+    QSqlDatabase::database().rollback();
+    qDebug() << QSqlDatabase::database().lastError().text();
+
+}
+
 QString DatabaseUtility::table() const
 {
     return m_table;

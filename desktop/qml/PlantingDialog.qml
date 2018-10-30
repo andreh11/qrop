@@ -78,12 +78,13 @@ Dialog {
     }
 
     onOpened: {
-        plantingForm.cropField.contentItem.forceActiveFocus()
+        plantingForm.cropField.contentItem.forceActiveFocus();
+        plantingForm.cropField.popup.open();
     }
 
     onAccepted: {
         Planting.addSuccessions(plantingForm.successions,
-                                plantingForm.weeksBetween, plantingForm.values)
-        model.refresh()
+                                plantingForm.weeksBetween, plantingForm.values);
+        model.refresh();
     }
 }

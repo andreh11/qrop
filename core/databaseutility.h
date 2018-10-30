@@ -76,6 +76,8 @@ public:
     void removeLink(const QString &table,
                     const QString &field1, int id1,
                     const QString &field2, int id2) const;
+    Q_INVOKABLE void rollback() const;
+
 protected:
     QString m_table;
     QString m_idFieldName;
