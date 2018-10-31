@@ -172,7 +172,10 @@ Flickable {
 
                 onAddItemClicked: addCropDialog.open()
                 onCurrentIndexChanged: varietyField.currentIndex = 0
-                onActivated: varietyField.forceActiveFocus()
+                onActivated: {
+                    varietyField.forceActiveFocus()
+                    varietyField.popup.open();
+                }
 
                 AddCropDialog {
                     id: addCropDialog
@@ -182,11 +185,11 @@ Flickable {
                                   "color" : color});
                         cropModel.refresh();
                         cropField.currentIndex = cropField.find(cropName);
-                        varietyField.forceActiveFocus()
+                        varietyField.forceActiveFocus();
+                        addVarietyDialog.open();
                     }
                 }
             }
-
 
             MyComboBox {
                 id: varietyField
@@ -204,34 +207,12 @@ Flickable {
                 onAddItemClicked: addVarietyDialog.open();
                 onActivated: plantingAmountField.forceActiveFocus()
 
-                Dialog {
+                AddVarietyDialog {
                     id: addVarietyDialog
-                    title: qsTr("Add New Variety")
-                    standardButtons: Dialog.Ok | Dialog.Cancel
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        Keys.onReturnPressed: if (varietyNameField.text) addVarietyDialog.accept();
-                        Keys.onEscapePressed: addVarietyDialog.reject()
-                        Keys.onBackPressed: addVarietyDialog.reject() // especially necessary on Android
-
-                        spacing: Units.mediumSpacing
-
-                        MyTextField {
-                            id: varietyNameField
-                            labelText: qsTr("Variety")
-                            Layout.fillWidth: true
-                            Layout.minimumWidth: 100
-                        }
-                    }
-
-                    onOpened: varietyNameField.forceActiveFocus()
-
                     onAccepted: {
-                        var name = varietyNameField.text
-                        Variety.add({"variety" : name, "crop_id" : varietyModel.cropId});
+                        Variety.add({"variety" : varietyName, "crop_id" : varietyModel.cropId});
                         varietyModel.refresh();
-                        varietyField.currentIndex = varietyField.find(name);
+                        varietyField.currentIndex = varietyField.find(varietyName);
                         plantingAmountField.forceActiveFocus()
                     }
                 }
@@ -573,6 +554,7 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
+                    suffixText: unitCombo.currentText
                     //                    inputMask: "900000"
                     Layout.fillWidth: true
                 }

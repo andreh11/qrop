@@ -11,13 +11,14 @@ ComboBox {
     id: control
     Material.elevation: 0
     width: parent.width
-//    height: 56
+    //    height: 56
     padding: 0
 
     property string labelText: ""
     property string helperText: ""
     property string prefixText: ""
     property string suffixText: ""
+    property string errorText: qsTr("Bad input")
     property bool persistentPrefix: false
     property bool persistentSuffix: false
 
@@ -47,14 +48,9 @@ ComboBox {
             if (editable)
                 selectAll();
             else
-            popup.open();
+                popup.open();
         }
     }
-
-//        onOpened: {
-//            x = control.x  //Set the position you want
-//            y = control.y / 2
-//        }
 
     popup:  Popup {
         y: control.editable ? control.height - 5 : 0
@@ -81,9 +77,8 @@ ComboBox {
             NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
         }
 
-
         onOpened: {
-            if (listView.model.count === 0) {
+            if (listView.model.count === 0 && showAddItem) {
                 // Ensure footer is visible
                 listView.contentY = listView.contentHeight
             }
@@ -103,27 +98,28 @@ ComboBox {
             Component {
                 id: addItemDelegate
                 ItemDelegate {
-                text: control.addItemText
-                width: parent.width
-                leftPadding: addItemIcon.width + Units.smallSpacing
-                z: 3
+                    text: control.addItemText
+                    width: parent.width
+                    leftPadding: addItemIcon.width + Units.smallSpacing
+                    z: 3
+                    focus: true
 
-                Label {
-                    id: addItemIcon
-                    leftPadding: Units.smallSpacing
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "\ue147"
-                    font.family: "Material Icons"
-                    font.pixelSize: Units.fontSizeHeadline
-                    Material.foreground: Material.accent
-                }
-                onClicked: addItemClicked()
+                    Label {
+                        id: addItemIcon
+                        leftPadding: Units.smallSpacing
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "\ue147"
+                        font.family: "Material Icons"
+                        font.pixelSize: Units.fontSizeHeadline
+                        Material.foreground: Material.accent
+                    }
+                    onClicked: addItemClicked()
                 }
             }
 
             footer: showAddItem ? addItemDelegate : null
-            }
         }
+    }
 
     Label {
         id: fieldLabel
@@ -160,7 +156,7 @@ ComboBox {
         Label {
             id: helperTextLabel
             visible: control.helperText
-            text: acceptableInput ? control.helperText : qsTr("Bad input")
+            text: acceptableInput ? control.helperText : control.errorText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
                                     : Qt.darker(control.hintColor)

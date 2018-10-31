@@ -210,17 +210,16 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
-//        onAccepted: {
-//            snackbar.open();
-//        }
+        onAccepted: {
+            snackbar.open();
+        }
     }
 
     Snackbar {
         id: snackbar
         z: 2
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 8
-        anchors.horizontalCenter: parent.horizontalCenter
+        x: (parent.width - width) / 2
+        y: parent.height - 8 - height
         text: qsTr("Added %n plantings", "", 3)
         visible: false
         onClicked: {

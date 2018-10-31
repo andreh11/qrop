@@ -19,4 +19,5 @@
 UnitModel::UnitModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
+    setSortColumn("unit");
 }

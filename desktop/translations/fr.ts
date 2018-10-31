@@ -342,7 +342,7 @@
         <location filename="../qml/PlantingForm.qml" line="369"/>
         <location filename="../qml/PlantingForm.qml" line="430"/>
         <source>Days to maturity</source>
-        <translation>Durée de croissances</translation>
+        <translation>Durée de croissance</translation>
     </message>
     <message>
         <location filename="../qml/PlantingForm.qml" line="381"/>

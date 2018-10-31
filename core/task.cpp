@@ -112,7 +112,7 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     }
     case PlantingType::TransplantBought:
         int id = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                  {"task_type_id", 2}});
+                      {"task_type_id", 3}});
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }

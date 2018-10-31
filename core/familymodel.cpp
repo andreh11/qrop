@@ -21,4 +21,5 @@
 FamilyModel::FamilyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
+    setSortColumn("family");
 }
