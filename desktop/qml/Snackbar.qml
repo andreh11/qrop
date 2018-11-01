@@ -13,6 +13,7 @@ Popup {
     implicitWidth: 344
     padding: 0
     Material.elevation: 6
+    closePolicy: Popup.NoAutoClose
 
     signal clicked()
 

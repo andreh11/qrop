@@ -17,6 +17,8 @@ Dialog {
     property bool formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
 
+    signal plantingsAdded(int successions)
+
     function createPlanting() {
         dialog.title = qsTr("Add planting(s)")
         dialog.open()
@@ -85,6 +87,7 @@ Dialog {
     onAccepted: {
         Planting.addSuccessions(plantingForm.successions,
                                 plantingForm.weeksBetween, plantingForm.values);
+        dialog.plantingsAdded(plantingForm.successions)
         model.refresh();
     }
 }

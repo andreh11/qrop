@@ -133,11 +133,16 @@ Flickable {
         }
     }
 
+    function toPrecision(x, decimals) {
+        return Math.round(x * (10^decimals)) / (10^decimals);
+    }
+
     function flatsNumber() {
         if (control.flatSize < 1)
             return 0;
 
-        return (plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100);
+        return toPrecision((plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100),
+                           2);
     }
 
     contentWidth: width
@@ -482,7 +487,7 @@ Flickable {
                     text: "0"
                     labelText: qsTr("Estimated loss")
                     suffixText: qsTr("%")
-                    helperText: qsTr("%n flat(s)", "", flatsNumber())
+                    helperText: qsTr("%L1 flat(s)", "", flatsNumber()).arg(flatsNumber())
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
                     Layout.fillWidth: true

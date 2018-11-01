@@ -210,17 +210,19 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
-        onAccepted: {
-            snackbar.open();
+        onPlantingsAdded: {
+            addPlantingSnackbar.successions = successions
+            addPlantingSnackbar.open();
         }
     }
 
     Snackbar {
-        id: snackbar
+        id: addPlantingSnackbar
         z: 2
         x: (parent.width - width) / 2
         y: parent.height - 8 - height
-        text: qsTr("Added %n plantings", "", 3)
+        property int successions: 0
+        text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
         visible: false
         onClicked: {
             Planting.rollback();
