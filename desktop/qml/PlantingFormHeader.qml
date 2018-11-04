@@ -25,10 +25,14 @@ import io.croplan.components 1.0
 Rectangle {
     id: control
 
-    property int estimatedYield
-    property int estimatedRevenue
-    property string unitText
+    property int estimatedYield: 0
+    property int estimatedRevenue: 0
+    property string unitText: ""
     property alias currentIndex: cropField.currentIndex
+    property alias cropField: cropField
+
+    signal newCropAdded(string cropName)
+    signal cropSelected()
 
     color: Material.color(Material.Grey, Material.Shade200)
     radius: 2
@@ -44,11 +48,13 @@ Rectangle {
         id: rowLayout
         anchors.fill: parent
         spacing: Units.mediumSpacing
-        anchors.leftMargin: Units.mediumSpacing
-        anchors.rightMargin: anchors.leftMargin
-        anchors.topMargin: Units.smallSpacing
-        anchors.bottomMargin: anchors.topMargin
-        
+        anchors {
+            leftMargin: Units.mediumSpacing
+            rightMargin: anchors.leftMargin
+            topMargin: Units.smallSpacing
+            bottomMargin: anchors.topMargin
+        }
+
         Rectangle {
             id: textIcon
             //                Layout.verticalCenter: parent.verticalCenter
@@ -56,7 +62,7 @@ Rectangle {
             width: height
             radius: 80
             color: Material.color(Material.Green, Material.Shade400)
-            
+
             Text {
                 anchors.centerIn: parent
                 text: cropField.currentText.slice(0,2)
@@ -65,7 +71,7 @@ Rectangle {
                 font.pixelSize: 24
             }
         }
-        
+
         MyComboBox {
             id: cropField
             focus: true
@@ -75,13 +81,22 @@ Rectangle {
             editable: false
             showAddItem: true
             addItemText: qsTr("Add Crop")
-            
-            //                onAddItemClicked: addCropDialog.open()
-            //                onCurrentIndexChanged: varietyField.currentIndex = 0
-            //                onActivated: {
-            //                    varietyField.forceActiveFocus()
-            //                    varietyField.popup.open();
-            //                }
+
+            onActivated: control.cropSelected()
+            onAddItemClicked: addCropDialog.open()
+
+            AddCropDialog {
+                id: addCropDialog
+                width: parent.width
+                onAccepted: {
+                    Crop.add({"crop" : cropName,
+                                 "family_id" : familyId,
+                                 "color" : color});
+                    cropModel.refresh();
+                    cropField.currentIndex = cropField.find(cropName);
+                    control.newCropAdded(cropName)
+                }
+            }
         }
         
         ColumnLayout {

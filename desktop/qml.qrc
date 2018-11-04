@@ -42,5 +42,6 @@
         <file>qml/Snackbar.qml</file>
         <file>qml/AddVarietyDialog.qml</file>
         <file>qml/PlantingFormHeader.qml</file>
+        <file>qml/MobilePlantingForm.qml</file>
     </qresource>
 </RCC>

@@ -27,7 +27,7 @@ Dialog {
     property var model
     property string mode: "add"
     property string plantingIds: ""
-    property bool formAccepted: plantingForm.accepted
+    property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
 
     signal plantingsAdded(int successions)
@@ -53,6 +53,16 @@ Dialog {
         estimatedRevenue: plantingForm.estimatedRevenue
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
+
+        onCropSelected: {
+            plantingForm.varietyField.forceActiveFocus();
+            plantingForm.varietyField.popup.open()
+        }
+
+        onNewCropAdded: {
+            plantingForm.varietyField.forceActiveFocus();
+            plantingForm.addVarietyDialog.open();
+        }
     }
 
     footer: Item {
@@ -92,10 +102,12 @@ Dialog {
             id: verticalScrollBar
             visible: largeDisplay
             parent: scrollView.parent
-            anchors.top: scrollView.top
-            anchors.left: scrollView.right
-            anchors.leftMargin: 4
-            anchors.bottom: scrollView.bottom
+            anchors {
+                top: scrollView.top
+                left: scrollView.right
+                leftMargin: 4
+                bottom: scrollView.bottom
+            }
         }
 
         PlantingForm {
@@ -107,8 +119,8 @@ Dialog {
     }
 
     onOpened: {
-        plantingForm.cropField.contentItem.forceActiveFocus();
-        plantingForm.cropField.popup.open();
+        plantingFormHeader.cropField.contentItem.forceActiveFocus();
+        plantingFormHeader.cropField.popup.open();
     }
 
     onAccepted: {

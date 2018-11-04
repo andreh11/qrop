@@ -32,6 +32,8 @@ Flickable {
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
     property alias cropField: cropField
+    property alias varietyField: varietyField
+    property alias addVarietyDialog: addVarietyDialog
     property int cropFieldIndex: 0
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
@@ -166,9 +168,10 @@ Flickable {
         if (control.flatSize < 1)
             return 0;
 
-        return toPrecision((plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100),
-                           2);
+        return toPrecision((plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
     }
+
+    onCropFieldChanged: varietyField.currentIndex = 0
 
     focus: true
     contentWidth: width

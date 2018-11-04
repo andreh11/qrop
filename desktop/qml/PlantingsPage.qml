@@ -909,23 +909,6 @@ Page {
         }
     }
 
-    Component {
-        id: plantingForm
-
-        Page {
-            title: qsTr("Add plantings")
-            header: PlantingFormHeader {
-                estimatedYield: mobilePlantingForm.estimatedYield
-                estimatedRevenue: mobilePlantingForm.estimatedRevenue
-            }
-            PlantingForm {
-                id: mobilePlantingForm
-                anchors.fill: parent
-                anchors.margins: 16
-            }
-        }
-    }
-
     RoundButton {
         id: roundAddButton
         font.family: "Material Icons"
@@ -941,6 +924,10 @@ Page {
         visible: !largeDisplay
         highlighted: true
 
-        onClicked: stackView.push(plantingForm)
+        onClicked: {
+            var item = stackView.push("MobilePlantingForm.qml");
+            item.setFocus();
+//            mobilePlantingForm.setFocus();
+        }
     }
 }
