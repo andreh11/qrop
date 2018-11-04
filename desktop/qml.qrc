@@ -8,7 +8,6 @@
         <file>qml/OverviewPage.qml</file>
         <file>qml/MapPage.qml</file>
         <file>qml/SettingsPage.qml</file>
-        <file>qml/CPTabButton.qml</file>
         <file>qml/DrawerItemDelegate.qml</file>
         <file>qml/Timeline.qml</file>
         <file>qml/Card.qml</file>
@@ -42,5 +41,6 @@
         <file>qml/AddCropDialog.qml</file>
         <file>qml/Snackbar.qml</file>
         <file>qml/AddVarietyDialog.qml</file>
+        <file>qml/PlantingFormHeader.qml</file>
     </qresource>
 </RCC>

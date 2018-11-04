@@ -44,7 +44,7 @@ static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
-    Planting *planting = new Planting();
+    auto *planting = new Planting();
     return planting;
 }
 
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        DatabaseUtility *crop = new DatabaseUtility();
+        auto *crop = new DatabaseUtility();
         crop->setTable("crop");
         return crop;
     }
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        DatabaseUtility *variety = new DatabaseUtility();
+        auto *variety = new DatabaseUtility();
         variety->setTable("variety");
         return variety;
     }

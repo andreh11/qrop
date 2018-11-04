@@ -25,7 +25,7 @@ Rectangle {
     property string text
     signal deleted()
 
-    height: 32
+    implicitHeight: 32
     radius: 40
     implicitWidth: contentLabel.width + deleteButton.width
     color:  control.activeFocus

@@ -122,9 +122,9 @@ Page {
     property int lastIndexClicked: -1
     property int checks: numberOfTrue(selectedIds)
 
-    onTableSortColumnChanged: tableSortOrder = "descending"
 
-    function numberOfTrue(array) {
+    function numberOfTrue(array)
+    {
         var n = 0
         for (var key in array)
             if (array[key])
@@ -137,30 +137,35 @@ Page {
     // Unfortunately, it seems to be no way to manually emit the
     // selectedIdsChanged() signal. Hence when have to copy the whole
     // array, which is a really ugly.
-    function emitSelectedIdsChanged() {
+    function emitSelectedIdsChanged()
+    {
         selectedIds = selectedIds
     }
 
     // Same ugly hack
-    function emitTableHeaderModelChanged() {
+    function emitTableHeaderModelChanged()
+    {
         tableHeaderModel = tableHeaderModel
     }
 
-    function selectAll() {
+    function selectAll()
+    {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = true
         emitSelectedIdsChanged()
     }
 
-    function unselectAll() {
+    function unselectAll()
+    {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = false
         emitSelectedIdsChanged()
     }
 
-    function duplicateSelected() {
+    function duplicateSelected()
+    {
         var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {
@@ -172,7 +177,8 @@ Page {
         emitSelectedIdsChanged()
     }
 
-    function removeSelected() {
+    function removeSelected()
+    {
         var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {
@@ -186,6 +192,8 @@ Page {
 
     title: "Plantings"
     padding: 8
+
+    onTableSortColumnChanged: tableSortOrder = "descending"
 
     Shortcut {
         sequence : "Ctrl+K"
@@ -218,12 +226,15 @@ Page {
 
     Snackbar {
         id: addPlantingSnackbar
+
+        property int successions: 0
+
         z: 2
         x: (parent.width - width) / 2
         y: parent.height - 8 - height
-        property int successions: 0
         text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
         visible: false
+
         onClicked: {
             Planting.rollback();
             plantingModel.refresh();
@@ -284,8 +295,7 @@ Page {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr(
-                                                    "Show timegraph")
+                        ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
                     Button {
@@ -353,34 +363,36 @@ Page {
             ThinDivider {
                 id: topDivider
                 anchors.top: buttonRectangle.bottom
+                width: parent.width
             }
 
             Label {
                 id: emptyStateLabel
                 text: qsTr('Click on "Add Plantings" to begin planning!')
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeHeadline
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeHeadline }
                 color: Qt.rgba(0, 0, 0, 0.8)
+                anchors {
+                    top: topDivider.bottom;
+                    bottom: parent.bottom;
+                    left: parent.left;
+                    right: parent.right
+                }
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                anchors.top: topDivider.bottom
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
                 visible: !plantingModel.count
             }
 
-
             ListView {
                 id: listView
+
+                property string filterColumn: "crop"
+
                 visible: plantingModel.count
                 clip: true
                 width: parent.width
                 height: parent.height - buttonRectangle.height
                 spacing: 0
                 anchors.top: topDivider.bottom
-
-                property string filterColumn: "crop"
 
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
@@ -391,9 +403,7 @@ Page {
                     id: verticalScrollBar
                     visible: largeDisplay
                     parent: listView.parent
-                    anchors.top: listView.top
-                    anchors.right: listView.right
-                    anchors.bottom: listView.bottom
+                    anchors { top: listView.top; right: listView.right; bottom: listView.bottom }
                     active: horizontalScrollBar.active
                 }
 
@@ -470,23 +480,24 @@ Page {
                                     anchors.verticalCenter: parent.verticalCenter
                                     height: parent.height
                                     spacing: 0
+
                                     Repeater {
                                         model: monthsOrder[page.season]
                                         Item {
                                             width: monthWidth
                                             height: parent.height
+
                                             Rectangle {
                                                 id: lineRectangle
                                                 height: parent.height
                                                 width: 1
-                                                color: Material.color(
-                                                           Material.Grey,
-                                                           Material.Shade400)
+                                                color: Material.color(Material.Grey,
+                                                                      Material.Shade400)
                                             }
+
                                             Label {
-                                                text: Qt.locale().monthName(
-                                                          modelData,
-                                                          Locale.ShortFormat)
+                                                text: Qt.locale().monthName(modelData,
+                                                                            Locale.ShortFormat)
                                                 anchors.left: lineRectangle.right
                                                 font.family: "Roboto Condensed"
                                                 color: Material.color(
@@ -498,11 +509,11 @@ Page {
                                             }
                                         }
                                     }
+
                                     Rectangle {
                                         height: parent.height
                                         width: 1
-                                        color: Material.color(Material.Grey,
-                                                              Material.Shade400)
+                                        color: Material.color(Material.Grey, Material.Shade400)
                                     }
                                 }
                             }
@@ -526,10 +537,10 @@ Page {
                         id: headerMouseArea
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
-                        onClicked: popup.open()
+                        onClicked: columnPopup.open()
 
                         Popup {
-                            id: popup
+                            id: columnPopup
                             x: headerMouseArea.mouseX
                             y: headerMouseArea.mouseY
                             width: 150
@@ -545,8 +556,7 @@ Page {
                                 ListView {
                                     spacing: -16
                                     anchors.fill: parent
-                                    model: tableHeaderModel.slice(
-                                               2) // Don't show Crop and Variety.
+                                    model: tableHeaderModel.slice( 2) // Don't show Crop and Variety.
                                     delegate: CheckBox {
                                         text: modelData.name
                                         checked: modelData.visible
@@ -570,25 +580,28 @@ Page {
 
                 delegate: Rectangle {
                     id: delegate
-                    property date seedingDate: model.planting_type
-                                               === 2 ? MDate.addDays(
-                                                           transplantingDate,
-                                                           -model.dtt) : transplantingDate
+
+                    property date seedingDate: {
+                        if (model.planting_type === 2)
+                             MDate.addDays(transplantingDate, -model.dtt);
+                        else
+                            transplantingDate;
+                    }
                     property date transplantingDate: model.planting_date
-                    property date beginHarvestDate: MDate.addDays(
-                                                        model.planting_date,
-                                                        model.dtm)
-                    property date endHarvestDate: MDate.addDays(
-                                                      beginHarvestDate,
-                                                      model.harvest_window)
+                    property date beginHarvestDate: MDate.addDays(model.planting_date, model.dtm)
+                    property date endHarvestDate: MDate.addDays(beginHarvestDate,
+                                                                model.harvest_window)
 
                     height: row.height
                     width: parent.width
-                    color: checkBox.checked
-                           ? Material.color(Material.Grey, Material.Shade200)
-                           : (mouseArea.containsMouse
-                              ? Material.color(Material.Grey, Material.Shade100)
-                                               : "white")
+                    color: {
+                       if (checkBox.checked)
+                           Material.color(Material.Grey, Material.Shade200);
+                       else if (mouseArea.containsMouse)
+                           Material.color(Material.Grey, Material.Shade100);
+                       else
+                           "white";
+                    }
 
                     MouseArea {
                         id: mouseArea
@@ -600,6 +613,7 @@ Page {
                         width: parent.width
 
                         ThinDivider {
+                            width: parent.width
                         }
 
                         Row {
@@ -632,11 +646,6 @@ Page {
                                 }
                             }
 
-                            //                        TableLabel {
-                            //                            text: model.crop
-                            //                            elide: Text.ElideRight
-                            //                            width: 100
-                            //                        }
                             TableLabel {
                                 text: model.variety
                                 anchors.verticalCenter: parent.verticalCenter
@@ -699,8 +708,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day",
-                                           model.dtt)
+                                text: qsTr("%n d", "Abbreviation for day", model.dtt)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
@@ -709,8 +717,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day",
-                                           model.dtm)
+                                text: qsTr("%n d", "Abbreviation for day", model.dtm)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
@@ -719,8 +726,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: qsTr("%n d", "Abbreviation for day",
-                                           model.harvest_window)
+                                text: qsTr("%n d", "Abbreviation for day", model.harvest_window)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
@@ -760,8 +766,8 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                visible: tableHeaderModel[11].visible
-                                width: tableHeaderModel[11].width
+                                visible: tableHeaderModel[12].visible
+                                width: tableHeaderModel[12].width
                             }
 
                             TableLabel {
@@ -769,8 +775,8 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
-                                visible: tableHeaderModel[11].visible
-                                width: tableHeaderModel[11].width
+                                visible: tableHeaderModel[13].visible
+                                width: tableHeaderModel[13].width
                             }
                         }
                     }
@@ -779,17 +785,6 @@ Page {
         }
     }
 
-    Component {
-        id: plantingForm
-
-        Page {
-            title: qsTr("Add plantings")
-            PlantingForm {
-                anchors.fill: parent
-                anchors.margins: 16
-            }
-        }
-    }
 
     ListView {
         id: smallListView
@@ -857,6 +852,7 @@ Page {
                 anchors.fill: parent
 
                 ThinDivider {
+                    width: parent.width
                 }
 
                 RowLayout {
@@ -912,6 +908,24 @@ Page {
             }
         }
     }
+
+    Component {
+        id: plantingForm
+
+        Page {
+            title: qsTr("Add plantings")
+            header: PlantingFormHeader {
+                estimatedYield: mobilePlantingForm.estimatedYield
+                estimatedRevenue: mobilePlantingForm.estimatedRevenue
+            }
+            PlantingForm {
+                id: mobilePlantingForm
+                anchors.fill: parent
+                anchors.margins: 16
+            }
+        }
+    }
+
     RoundButton {
         id: roundAddButton
         font.family: "Material Icons"

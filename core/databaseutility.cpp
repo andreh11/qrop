@@ -50,8 +50,7 @@ QString DatabaseUtility::idFieldName() const
 {
     if (!m_idFieldName.isEmpty())
         return m_idFieldName;
-    else
-        return table() + "_id";
+    return table() + "_id";
 }
 
 void DatabaseUtility::setIdFieldName(const QString &name)
@@ -97,8 +96,8 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     query.next();
     if (query.isValid())
         return query.record();
-    else
-        return QSqlRecord();
+
+    return QSqlRecord();
 }
 
 QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const

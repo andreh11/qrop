@@ -51,8 +51,7 @@ QVariant SqlTableModel::data(const QModelIndex &index, int role) const
     QDate date = QDate::fromString(value.toString(), Qt::ISODate);
     if (date.isValid()) // fromString(string) returns invalid date if string cannot be parsed
         return date;
-    else
-        return value;
+    return value;
 }
 
 QVariant SqlTableModel::data(const QModelIndex &index, const QString &role) const
@@ -79,7 +78,7 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
 }
 
 // order must be "ascending" or "descending"
-void SqlTableModel::setSortColumn(const QString fieldName, const QString order)
+void SqlTableModel::setSortColumn(const QString &fieldName, const QString &order)
 {
     if (!m_rolesIndexes.contains(fieldName)) {
         qDebug() << "m_rolesIndexes doesn't have key" << fieldName << roleIndex(fieldName);
@@ -109,10 +108,9 @@ bool SqlTableModel::submitAll()
 
 int SqlTableModel::roleIndex(const QString &role) const
 {
-    if (m_rolesIndexes.contains(role))
-        return m_rolesIndexes[role] - Qt::UserRole;
-    else
+    if (!m_rolesIndexes.contains(role))
         return -1;
+    return m_rolesIndexes[role] - Qt::UserRole;
 }
 
 void SqlTableModel::buildRolesIndexes()

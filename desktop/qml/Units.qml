@@ -15,7 +15,7 @@
  */
 
 pragma Singleton
-import QtQuick 2.10
+import QtQuick 2.0
 
 Item {
     // font sizes - defaults from Google Material Design Guide

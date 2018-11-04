@@ -25,7 +25,6 @@ import "date.js" as MDate
 
 Flickable {
     id: control
-    focus: true
 
     property bool accepted: varietyField.acceptableInput
 
@@ -33,16 +32,21 @@ Flickable {
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
     property alias cropField: cropField
+    property int cropFieldIndex: 0
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text :
                                                            plantingDtmField.text)
     readonly property int dtt: plantingType === 2 ? Number(greenhouseGrowTimeField.text) : 0
     readonly property int harvestWindow: Number(harvestWindowField.text)
-    readonly property string sowingDate:
-        plantingType === 1 ? fieldSowingDateField.isoDateString :
-                             (plantingType === 2 ? greenhouseStartDateField.isoDateString :
-                                                   fieldPlantingDateField.isoDateString)
+    readonly property string sowingDate: {
+        if (plantingType === 1)
+            fieldSowingDateField.isoDateString;
+        else if (plantingType === 2)
+            greenhouseStartDateField.isoDateString;
+        else
+            fieldPlantingDateField.isoDateString;
+        }
     readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString :
                                                                 fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
@@ -62,11 +66,14 @@ Flickable {
     readonly property int seedsPerCell: Number(seedsPerCellField.text)
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
-    readonly property int seedsQuantity: seedsNeeded() / seedsPerGram
+    readonly property int seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded() / seedsPerGram, 2) : 0
     readonly property int plantsToStart: flatSize * flatsNumber()
 
-    readonly property double yieldPerBedMeter: Number(yieldPerBedMeterField.text)
-    readonly property double averagePrice: Number(averagePriceField.text)
+    readonly property alias unitText: unitCombo.currentText
+    readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
+    readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
+    readonly property real averagePrice: Number(averagePriceField.text)
+    readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: []
 
@@ -96,11 +103,24 @@ Flickable {
                 "average_price": averagePrice
     }
 
-    function emitSelectedKeywordsChanged() {
+    function clearAll()
+    {
+        cropField.currentIndex = 0;
+        varietyField.currentIndex = 0;
+        plantingAmountField.clear();
+        inRowSpacingField.clear();
+        rowsPerBedField.clear()
+        successionsField.text = "1"
+        directSeedRadio.checked = true
+    }
+
+    function emitSelectedKeywordsChanged()
+    {
         selectedKeywords = selectedKeywords;
     }
 
-    function keywordsIdList() {
+    function keywordsIdList()
+    {
         var idList = [];
         for (var id in selectedKeywords)
             if (selectedKeywords[id])
@@ -108,7 +128,8 @@ Flickable {
         return idList;
     }
 
-    function updateDateField(from, length, to, direction) {
+    function updateDateField(from, length, to, direction)
+    {
         if (length.text === "")
             to.calendarDate = from.calendarDate
         else
@@ -116,13 +137,15 @@ Flickable {
                                             Number(length.text) * direction)
     }
 
-    function plantsNeeded() {
+    function plantsNeeded()
+    {
         if (inRowSpacing === 0)
             return 0;
         return plantingAmount / inRowSpacing * 100 * rowsPerBed
     }
 
-    function seedsNeeded() {
+    function seedsNeeded()
+    {
         switch (plantingType) {
         case 1: // DS
             return plantsNeeded() * (1 + seedsExtraPercentage / 100);
@@ -133,11 +156,13 @@ Flickable {
         }
     }
 
-    function toPrecision(x, decimals) {
+    function toPrecision(x, decimals)
+    {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
-    function flatsNumber() {
+    function flatsNumber()
+    {
         if (control.flatSize < 1)
             return 0;
 
@@ -145,6 +170,7 @@ Flickable {
                            2);
     }
 
+    focus: true
     contentWidth: width
     contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
@@ -174,6 +200,7 @@ Flickable {
                 editable: false
                 showAddItem: true
                 addItemText: qsTr("Add Crop")
+                visible: false
 
                 onAddItemClicked: addCropDialog.open()
                 onCurrentIndexChanged: varietyField.currentIndex = 0
@@ -205,7 +232,7 @@ Flickable {
                 addItemText: qsTr("Add Variety")
                 model: VarietyModel {
                     id: varietyModel
-                    cropId: cropModel.rowId(cropField.currentIndex)
+                    cropId: cropModel.rowId(cropFieldIndex)
                 }
                 textRole: "variety"
 
@@ -530,7 +557,7 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Per gram")
                     errorText: qsTr("Enter a quantity!")
-                    helperText: qsTr("%n g", "", seedsQuantity)
+                    helperText: qsTr("%L1 g", "", seedsQuantity).arg(seedsQuantity)
                     Layout.fillWidth: true
                 }
             }
@@ -547,7 +574,7 @@ Flickable {
                 MyComboBox {
                     id: unitCombo
                     labelText: qsTr("Unit")
-                    editable: true
+                    currentIndex: find("kg")
                     model: UnitModel {
                         id: unitModel
                     }
@@ -600,6 +627,14 @@ Flickable {
                     }
                 }
 
+                ChoiceChip {
+                    id: addKeywordChip
+                    text: "\ue234"
+                    flat: true
+                    font.family: "Material Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                }
+
                 add: Transition {
                     NumberAnimation {
                         property: "opacity"
@@ -608,16 +643,8 @@ Flickable {
                         duration: 200
                     }
                 }
-
-                ChoiceChip {
-                    id: addKeywordChip
-                    text: "\ue234"
-                    flat: true
-                    font.family: "Material Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                }
             }
         }
     }
-
 }
+

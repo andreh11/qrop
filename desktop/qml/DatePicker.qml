@@ -23,9 +23,6 @@ import "date.js" as MDate
 
 Item {
     id: control
-    height: textField.height
-    implicitWidth: 200
-    Layout.minimumWidth: 140
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
@@ -34,10 +31,18 @@ Item {
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: mode === "date" ? qsTr("W") + MDate.isoWeek(calendarDate)
-                                                    : calendarDate.getDate() + "/" + (calendarDate.getMonth()+1) + "/" + calendarDate.getFullYear()
+    property string dateHelperText: {
+        if (mode === "date")
+            qsTr("W") + MDate.isoWeek(calendarDate)
+        else
+            qsTr("%1/%2/%3").arg(calendarDate.getDate()).arg(calendarDate.getMonth()+1).arg(calendarDate.getFullYear())
+    }
 
     signal editingFinished()
+
+    height: textField.height
+    implicitWidth: 200
+    Layout.minimumWidth: 140
 
     MyTextField {
         id: textField
@@ -123,9 +128,6 @@ Item {
                         }
                     }
                 }
-//            MouseArea {
-//                anchors.fill: parent
-//            }
         }
     }
 

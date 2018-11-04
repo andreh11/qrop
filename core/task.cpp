@@ -171,7 +171,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
 
         QString linkQueryString("UPDATE task SET link_days = %1, "
                                 "assigned_date = %2 WHERE task_id = %3");
-        QSqlQuery linkQuery(queryString.arg(dtt).arg(plantingDate.toString(Qt::ISODate))
+        QSqlQuery linkQuery(linkQueryString.arg(dtt).arg(plantingDate.toString(Qt::ISODate))
                             .arg(transplantTaskId));
         debugQuery(linkQuery);
         break;

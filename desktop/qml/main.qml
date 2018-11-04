@@ -26,26 +26,18 @@ import "date.js" as MDate
 
 ApplicationWindow {
     id: window
-    title: "Qrop"
-    visible: true
-    width: 1024
-    height: 768
-
-    Material.primary: Material.Teal
-    Material.accent: Material.Cyan
 
     property var navigationModel: [
         { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
-        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" },
+        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" }
 //        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
 //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
-        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
+//        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
     ]
     property int navigationIndex: 0
-    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
     readonly property bool largeDisplay: width > 800
     property bool railMode: true
@@ -60,6 +52,16 @@ ApplicationWindow {
         [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
         [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
     ]
+
+    title: "Qrop"
+    visible: true
+    width: 1024
+    height: 768
+
+    Material.primary: Material.Teal
+    Material.accent: Material.Cyan
+
+    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
     Settings {
         id: settings
