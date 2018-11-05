@@ -36,6 +36,7 @@ Rectangle {
     signal cropSelected()
 
     color: Material.color(Material.Grey, Material.Shade200)
+    Material.elevation: 2
     radius: 2
     clip: true
 //    height: textIcon.height + 2 * Units.smallSpacing

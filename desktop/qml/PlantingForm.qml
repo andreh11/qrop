@@ -84,7 +84,7 @@ Flickable {
                                         ? 0
                                         : toPrecision((plantsNeeded / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
 
-    readonly property alias unitText: unitCombo.currentText
+    readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
     readonly property real averagePrice: {
@@ -118,7 +118,7 @@ Flickable {
                 "seeds_number": seedsNeeded,
                 "seeds_quantity": seedsQuantity,
                 "keyword_ids": keywordsIdList(),
-                "unit_id": unitModel.rowId(unitCombo.currentIndex),
+                "unit_id": unitModel.rowId(unitField.currentIndex),
                 "yield_per_bed_meter": yieldPerBedMeter,
                 "average_price": averagePrice
     }
@@ -228,7 +228,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Length")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "9000"
+                        validator: IntValidator { bottom: 0; top: 999 }
                         Layout.fillWidth: true
                         suffixText: qsTr("bed m")
                     }
@@ -238,7 +238,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Spacing")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "900"
+                        validator: IntValidator { bottom: 1; top: 999 }
                         Layout.fillWidth: true
                         suffixText: qsTr("cm")
                     }
@@ -248,7 +248,7 @@ Flickable {
                         floatingLabel: true
                         labelText: qsTr("Rows")
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "90"
+                        validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
                     }
                 }
@@ -259,7 +259,7 @@ Flickable {
                         id: successionsField
                         text: "1"
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "90"
+                        validator: IntValidator { bottom: 1; top: 99 }
                         floatingLabel: true
                         labelText: qsTr("Successions")
                         Layout.fillWidth: true
@@ -272,7 +272,7 @@ Flickable {
                         text: successions > 1 ? "1" : qsTr("Single planting")
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: successions > 1 ?  "90" : ""
+                        validator: IntValidator { bottom: 1; top: 99 }
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
                     }
@@ -336,7 +336,7 @@ Flickable {
                     id: sowDtmField
                     visible: fieldSowingDateField.visible
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "900"
+                    validator: IntValidator { bottom: 1; top: 999 }
                     text: "1"
                     Layout.fillWidth: true
                     floatingLabel: true
@@ -365,7 +365,7 @@ Flickable {
                     visible: greenhouseStartDateField.visible
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "900"
+                    validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Greenhouse duration")
@@ -398,7 +398,7 @@ Flickable {
                     visible: fieldPlantingDateField.visible
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "900"
+                    validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Days to maturity")
@@ -430,7 +430,7 @@ Flickable {
                     id: harvestWindowField
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "900"
+                    validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Harvest window")
@@ -455,7 +455,7 @@ Flickable {
                     id: flatSizeField
                     labelText: qsTr("Flat type")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "9000"
+                    validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
                 }
 
@@ -463,7 +463,7 @@ Flickable {
                     id: seedsPerCellField
                     labelText: qsTr("Seeds per cell")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90"
+                    validator: IntValidator { bottom: 1; top: 99 }
                     maximumLength: 10
                     text: "1"
                     floatingLabel: true
@@ -477,7 +477,7 @@ Flickable {
                     suffixText: qsTr("%")
                     helperText: qsTr("%L1 flat(s)", "", flatsNumber).arg(flatsNumber)
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90"
+                    validator: IntValidator { bottom: 1; top: 99 }
                     Layout.fillWidth: true
                 }
             }
@@ -503,7 +503,7 @@ Flickable {
                 MyTextField {
                     id: seedsExtraPercentageField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90"
+                    validator: IntValidator { bottom: 1; top: 99 }
                     floatingLabel: true
                     labelText: qsTr("Extra %")
                     suffixText: "%"
@@ -513,7 +513,7 @@ Flickable {
                 MyTextField {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90000"
+                    validator: IntValidator { bottom: 1; top: 99999 }
                     text: "0"
                     floatingLabel: true
                     labelText: qsTr("Per gram")
@@ -533,28 +533,44 @@ Flickable {
                 spacing: 16
 
                 MyComboBox {
-                    id: unitCombo
+                    id: unitField
                     labelText: qsTr("Unit")
                     currentIndex: find("kg")
+                    addItemText: qsTr("Add Unit")
+                    showAddItem: true
                     model: UnitModel {
                         id: unitModel
                     }
-                    textRole: "unit"
+                    textRole: "abbreviation"
                     Layout.fillWidth: true
+
+                    onAddItemClicked: addUnitDialog.open();
+//                    onActivated: plantingAmountField.forceActiveFocus()
+
+                    AddUnitDialog {
+                        id: addUnitDialog
+                        onAccepted: {
+                            Unit.add({"fullname" : unitName,
+                                         "abbreviation": unitAbbreviation});
+                            unitModel.refresh();
+                            unitField.currentIndex = unitField.find(unitAbbreviation);
+//                            plantingAmountField.forceActiveFocus()
+                        }
+                    }
                 }
 
                 MyTextField {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    suffixText: unitCombo.currentText
+                    suffixText: unitField.currentText
                     //                    inputMask: "900000"
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: averagePriceField
-                    labelText: qsTr("Price/") + unitCombo.currentText
+                    labelText: qsTr("Price/") + unitField.currentText
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
                     validator: TextFieldDoubleValidator {
                         bottom: 0

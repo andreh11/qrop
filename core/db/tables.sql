@@ -25,12 +25,13 @@ CREATE TABLE IF NOT EXISTS seed_company (
 
 CREATE TABLE IF NOT EXISTS unit (
     unit_id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    unit TEXT       UNIQUE NOT NULL,
+    fullname TEXT       UNIQUE NOT NULL,
+    abbreviation TEXT       UNIQUE NOT NULL,
     conversion_rate FLOAT -- from unit to kilogram
 );
 
-INSERT INTO unit values (1, "kg", 1.0);
-INSERT INTO unit values (2, "bunch", 1.0);
+INSERT INTO unit values (1, "kilogram", "kg", 1.0);
+INSERT INTO unit values (2, "bunch", "bn", 1.0);
 
 CREATE TABLE IF NOT EXISTS keyword (
     keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -253,11 +254,12 @@ CREATE TABLE IF NOT EXISTS expense_file (
 -- Views
 
 CREATE VIEW IF NOT EXISTS planting_view AS
-SELECT crop, variety, crop.color as crop_color, planting.*, group_concat(location_id) as locations
+SELECT crop, variety, crop.color as crop_color, planting.*, unit, group_concat(location_id) as locations
 FROM planting
 LEFT JOIN planting_location using(planting_id)
-JOIN variety USING (variety_id)
-JOIN crop USING (crop_id)
+LEFT JOIN variety USING (variety_id)
+LEFT JOIN crop USING (crop_id)
+LEFT JOIN unit USING (unit_id)
 GROUP BY planting_id;
 
 CREATE VIEW IF NOT EXISTS variety_view AS

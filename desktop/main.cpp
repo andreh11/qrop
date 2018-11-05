@@ -129,6 +129,17 @@ int main(int argc, char *argv[])
     }
     );
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Unit",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *unit = new DatabaseUtility();
+        unit->setTable("unit");
+        return unit;
+    }
+    );
+
     deleteDatabase();
     connectToDatabase();
     createDatabase();
