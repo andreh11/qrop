@@ -70,7 +70,7 @@ Flickable {
         if (plantingType === 1) // DS
             plantsNeeded * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
-            plantsToStart * seedsPerCell * (seedsExtraPercentage / 100);
+            plantsToStart * seedsPerCell * (1 + seedsExtraPercentage / 100);
         else
             return 0;
     }
@@ -87,7 +87,7 @@ Flickable {
     readonly property alias unitText: unitCombo.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
-    readonly property real averagePrice: Number(averagePriceField.text)
+    readonly property real averagePrice: Number.fromLocaleString(Qt.locale(), averagePriceField.text)
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: []
@@ -551,11 +551,14 @@ Flickable {
                 MyTextField {
                     id: averagePriceField
                     labelText: qsTr("Price/") + unitCombo.currentText
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "90"
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    validator: TextFieldDoubleValidator { bottom: 0; decimals: 2; top: 999 }
                     floatingLabel: true
                     suffixText: "€"
                     Layout.fillWidth: true
+                    onTextEdited: {
+                        console.log(getText(length-1, length))
+                    }
                 }
             }
         }

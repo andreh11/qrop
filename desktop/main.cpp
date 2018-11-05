@@ -43,6 +43,8 @@
 #include "usermodel.h"
 #include "varietymodel.h"
 
+#include <QDoubleValidator>
+
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -50,6 +52,21 @@ static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
     auto *planting = new Planting();
     return planting;
 }
+
+// A subclass of QDoubleValidator which always "." as a decimalPoint.
+class TextFieldDoubleValidator : public QDoubleValidator {
+public:
+    TextFieldDoubleValidator (QObject *parent = nullptr) : QDoubleValidator(parent) {}
+    TextFieldDoubleValidator (double bottom, double top, int decimals, QObject * parent) :
+    QDoubleValidator(bottom, top, decimals, parent) {}
+    const QLocale locale;
+
+    QValidator::State validate(QString &input, int &pos) const {
+        const QString decimalPoint = locale.decimalPoint();
+        input.replace(".", decimalPoint);
+        return QDoubleValidator::validate(input, pos);
+    }
+};
 
 int main(int argc, char *argv[])
 {
@@ -85,6 +102,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
+    qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
 
 //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
