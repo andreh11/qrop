@@ -123,8 +123,7 @@ Flickable {
                 "average_price": averagePrice
     }
 
-    function clearAll()
-    {
+    function clearAll() {
         varietyField.currentIndex = 0;
         plantingAmountField.clear();
         inRowSpacingField.clear();
@@ -133,13 +132,11 @@ Flickable {
         directSeedRadio.checked = true
     }
 
-    function emitSelectedKeywordsChanged()
-    {
+    function emitSelectedKeywordsChanged() {
         selectedKeywords = selectedKeywords;
     }
 
-    function keywordsIdList()
-    {
+    function keywordsIdList() {
         var idList = [];
         for (var id in selectedKeywords)
             if (selectedKeywords[id])
@@ -147,8 +144,7 @@ Flickable {
         return idList;
     }
 
-    function updateDateField(from, length, to, direction)
-    {
+    function updateDateField(from, length, to, direction) {
         if (length.text === "")
             to.calendarDate = from.calendarDate
         else
@@ -156,8 +152,7 @@ Flickable {
                                             Number(length.text) * direction)
     }
 
-    function toPrecision(x, decimals)
-    {
+    function toPrecision(x, decimals) {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
@@ -513,7 +508,7 @@ Flickable {
                 MyTextField {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 99999 }
+                    validator: IntValidator { bottom: 0; top: 99999 }
                     text: "0"
                     floatingLabel: true
                     labelText: qsTr("Per gram")
@@ -551,7 +546,7 @@ Flickable {
                         id: addUnitDialog
                         onAccepted: {
                             Unit.add({"fullname" : unitName,
-                                         "abbreviation": unitAbbreviation});
+                                      "abbreviation": unitAbbreviation});
                             unitModel.refresh();
                             unitField.currentIndex = unitField.find(unitAbbreviation);
 //                            plantingAmountField.forceActiveFocus()
