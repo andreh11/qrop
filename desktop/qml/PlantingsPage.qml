@@ -628,6 +628,7 @@ Page {
                                 selectionMode: checks > 0
                                 anchors.verticalCenter: row.verticalCenter
                                 width: 24
+                                color: model.crop_color
                                 checked: model.planting_id in selectedIds
                                          && selectedIds[model.planting_id]
 

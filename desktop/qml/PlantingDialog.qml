@@ -55,11 +55,13 @@ Dialog {
         unitText: plantingForm.unitText
 
         onCropSelected: {
+            plantingForm.cropId = cropId;
             plantingForm.varietyField.forceActiveFocus();
-            plantingForm.varietyField.popup.open()
+            plantingForm.varietyField.popup.open();
         }
 
         onNewCropAdded: {
+            plantingForm.cropId = newCropId;
             plantingForm.varietyField.forceActiveFocus();
             plantingForm.addVarietyDialog.open();
         }
@@ -114,7 +116,7 @@ Dialog {
             id: plantingForm
             anchors.fill: parent
             focus: true
-            cropFieldIndex: plantingFormHeader.currentIndex
+            cropId: plantingFormHeader.cropId
         }
     }
 

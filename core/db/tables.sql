@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS family (
     family_id INTEGER PRIMARY KEY AUTOINCREMENT,
     family    TEXT NOT NULL,
-    color     TEXT
+    color     TEXT DEFAULT '#000000' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS crop (
     crop_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     crop       TEXT NOT NULL,
-    color      TEXT,
-    family_id INTEGER NOT NULL REFERENCES family ON DELETE CASCADE
+    color      TEXT DEFAULT '#000000' NOT NULL,
+    family_id  INTEGER NOT NULL REFERENCES family ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS variety (
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS location (
 
 CREATE TABLE IF NOT EXISTS role (
     role_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role    TEXT NOT NULL
+    role    TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user (
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS task_template (
 
 CREATE TABLE IF NOT EXISTS task (
     task_id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    assigned_date      TEXT,
+    assigned_date      TEXT NOT NULL,
     completed_date     TEXT,
     duration           INTEGER, -- days
     labor_time         TEXT, -- HH:MM
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS task_type (
     task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT NOT NULL
+    type TEXT UNIQUE NOT NULL
 );
 
 INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
@@ -161,12 +161,12 @@ CREATE TABLE IF NOT EXISTS task_implement (
 
 CREATE TABLE IF NOT EXISTS expense_category (
     expense_category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category TEXT NOT NULL
+    category TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS input (
     input_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    input TEXT NOT NULL
+    input TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS expense (
@@ -253,12 +253,17 @@ CREATE TABLE IF NOT EXISTS expense_file (
 -- Views
 
 CREATE VIEW IF NOT EXISTS planting_view AS
-SELECT crop, variety, planting.*, group_concat(location_id) as locations
+SELECT crop, variety, crop.color as crop_color, planting.*, group_concat(location_id) as locations
 FROM planting
 LEFT JOIN planting_location using(planting_id)
 JOIN variety USING (variety_id)
 JOIN crop USING (crop_id)
 GROUP BY planting_id;
+
+CREATE VIEW IF NOT EXISTS variety_view AS
+SELECT variety.*, seed_company, variety || ' (' || seed_company || ')' as variety_and_company
+FROM variety
+LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
 SELECT task.*, group_concat(planting_id) as plantings, group_concat(location_id) as locations

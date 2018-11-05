@@ -16,8 +16,8 @@
 
 #include "seedcompanymodel.h"
 
-SeedCompanyModel::SeedCompanyModel(QObject *parent)
-    : SqlTableModel(parent)
+SeedCompanyModel::SeedCompanyModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
 {
-    setTable("seed_company");
+    setSortColumn("seed_company");
 }

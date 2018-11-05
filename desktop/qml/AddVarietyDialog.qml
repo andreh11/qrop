@@ -18,35 +18,55 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtCharts 2.0
 
 import io.croplan.components 1.0
 import "date.js" as MDate
 
 Dialog {
-    id: addVarietyDialog
+    id: control
 
     property alias varietyName: varietyNameField.text
+    property int seedCompanyId: seedCompanyModel.rowId(seedCompanyField.currentIndex)
 
     title: qsTr("Add New Variety")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    MyTextField {
-        id: varietyNameField
-        anchors.centerIn: parent
-        width: parent.width
-        
+    onOpened: {
+        varietyNameField.clear();
+        seedCompanyField.currentIndex = 0;
+        varietyNameField.forceActiveFocus();
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: Units.mediumSpacing
+
         Keys.onReturnPressed: {
             if (varietyNameField.text)
-                addVarietyDialog.accept();
+                control.accept();
         }
-        Keys.onEscapePressed: addVarietyDialog.reject()
-        Keys.onBackPressed: addVarietyDialog.reject() // especially necessary on Android
-        
-        labelText: qsTr("Variety")
-        Layout.fillWidth: true
-        Layout.minimumWidth: 100
+        Keys.onEscapePressed: control.reject()
+        Keys.onBackPressed: control.reject() // especially necessary on Android
+
+        MyTextField {
+            id: varietyNameField
+            width: parent.width
+
+            labelText: qsTr("Variety")
+            Layout.fillWidth: true
+            Layout.minimumWidth: 100
+        }
+
+        MyComboBox {
+            id: seedCompanyField
+            labelText: qsTr("Seed Company")
+            Layout.minimumWidth: 150
+            Layout.fillWidth: true
+            editable: false
+            model: SeedCompanyModel {
+                id: seedCompanyModel
+            }
+            textRole: "seed_company"
+        }
     }
-    
-    onOpened: varietyNameField.forceActiveFocus()
 }

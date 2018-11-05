@@ -23,6 +23,7 @@ CheckBox {
 
     property bool round: false
     property bool selectionMode: false
+    property alias color: textBox.color
 
     indicator.visible: hovered || selectionMode
     indicator.x: textBox.x + textBox.width / 2 - indicator.width / 2
@@ -35,8 +36,7 @@ CheckBox {
             width: parent.width
             height: width
             radius: round ? 50 : 4
-            color: checked ? Material.accent
-                           : Material.color(Material.Green, Material.Shade400)
+            color:  Material.color(Material.Green, Material.Shade400)
             Text {
                 visible: !control.checked && !hovered
                 anchors.centerIn: parent

@@ -21,25 +21,26 @@ Page {
     
     header: PlantingFormHeader {
         id: plantingFormHeader
-        estimatedRevenue: mobilePlantingForm.estimatedRevenue
-        estimatedYield: mobilePlantingForm.estimatedYield
-        unitText: mobilePlantingForm.unitText
-        
+        estimatedRevenue: plantingForm.estimatedRevenue
+        estimatedYield: plantingForm.estimatedYield
+        unitText: plantingForm.unitText
         onCropSelected: {
-            mobilePlantingForm.varietyField.forceActiveFocus();
-            mobilePlantingForm.varietyField.popup.open()
+            plantingForm.varietyField.forceActiveFocus();
+            plantingForm.cropId = cropId;
+            plantingForm.varietyField.popup.open();
         }
-        
+
         onNewCropAdded: {
-            mobilePlantingForm.varietyField.forceActiveFocus();
-            mobilePlantingForm.addVarietyDialog.open();
+            plantingForm.cropId = newCropId;
+            plantingForm.varietyField.forceActiveFocus();
+            plantingForm.addVarietyDialog.open();
         }
     }
 
     PlantingForm {
-        id: mobilePlantingForm
+        id: plantingForm
         anchors.fill: parent
         anchors.margins: 16
-        cropFieldIndex: plantingFormHeader.currentIndex
+        cropId: plantingFormHeader.cropId
     }
 }

@@ -3,11 +3,20 @@ insert into family (family) values ("Apiaceae");
 insert into family (family) values ("Asteraceae");
 insert into family (family) values ("Brassicaceae");
 insert into family (family) values ("Chenopodiaceae");
+insert into family (family) values ("Valerianaceae");
+
 
 insert into crop (crop, family_id) values ("Tomato", 1);
 insert into crop (crop, family_id) values ("Pepper", 1);
 insert into crop (crop, family_id) values ("Potato", 1);
 insert into crop (crop, family_id) values ("Eggplant", 1);
+
+insert into seed_company (seed_company) values ("Unknown company");
+insert into seed_company (seed_company) values ("Agrosemens");
+insert into seed_company (seed_company) values ("Essembio");
+insert into seed_company (seed_company) values ("Voltz");
+insert into seed_company (seed_company) values ("Gautier");
+insert into seed_company (seed_company) values ("Sativa");
 
 insert into variety (variety, crop_id) values ("Apéro F1", 1);
 insert into variety (variety, crop_id) values ("Cindel F1", 1);

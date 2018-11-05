@@ -31,10 +31,9 @@ Flickable {
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
-    property alias cropField: cropField
     property alias varietyField: varietyField
     property alias addVarietyDialog: addVarietyDialog
-    property int cropFieldIndex: 0
+    property alias cropId: varietyModel.cropId
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text :
@@ -67,9 +66,23 @@ Flickable {
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerCell: Number(seedsPerCellField.text)
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
+    readonly property real seedsNeeded:  {
+        if (plantingType === 1) // DS
+            plantsNeeded * (1 + seedsExtraPercentage / 100);
+        else if (plantingType === 2) // TP, raised
+            plantsToStart * seedsPerCell * (seedsExtraPercentage / 100);
+        else
+            return 0;
+    }
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
-    readonly property int seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded() / seedsPerGram, 2) : 0
-    readonly property int plantsToStart: flatSize * flatsNumber()
+    readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2) : 0
+    readonly property int plantsToStart: flatSize * flatsNumber
+    readonly property int plantsNeeded: inRowSpacing === 0
+                                        ? 0
+                                        : plantingAmount / inRowSpacing * 100 * rowsPerBed
+    readonly property real flatsNumber: control.flatSize < 1
+                                        ? 0
+                                        : toPrecision((plantsNeeded / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
 
     readonly property alias unitText: unitCombo.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
@@ -92,12 +105,12 @@ Flickable {
                 "length": plantingAmount ,
                 "rows": rowsPerBed,
                 "spacing_plants": inRowSpacing,
-                "plants_needed": plantsNeeded(),
+                "plants_needed": plantsNeeded,
                 "estimated_gh_loss" : greenhouseEstimatedLoss,
                 "plants_to_start": plantsToStart,
                 "seeds_per_hole": seedsPerCell,
                 "seeds_per_gram": seedsPerGram,
-                "seeds_number": seedsNeeded(),
+                "seeds_number": seedsNeeded,
                 "seeds_quantity": seedsQuantity,
                 "keyword_ids": keywordsIdList(),
                 "unit_id": unitModel.rowId(unitCombo.currentIndex),
@@ -107,7 +120,6 @@ Flickable {
 
     function clearAll()
     {
-        cropField.currentIndex = 0;
         varietyField.currentIndex = 0;
         plantingAmountField.clear();
         inRowSpacingField.clear();
@@ -139,49 +151,18 @@ Flickable {
                                             Number(length.text) * direction)
     }
 
-    function plantsNeeded()
-    {
-        if (inRowSpacing === 0)
-            return 0;
-        return plantingAmount / inRowSpacing * 100 * rowsPerBed
-    }
-
-    function seedsNeeded()
-    {
-        switch (plantingType) {
-        case 1: // DS
-            return plantsNeeded() * (1 + seedsExtraPercentage / 100);
-        case 2: // TP, raised
-            return  plantsToStart * seedsPerCell * (1 + seedsExtraPercentage / 100);
-        default: // TP, bought
-            return 0;
-        }
-    }
-
     function toPrecision(x, decimals)
     {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
-    function flatsNumber()
-    {
-        if (control.flatSize < 1)
-            return 0;
-
-        return toPrecision((plantsNeeded() / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
-    }
-
-    onCropFieldChanged: varietyField.currentIndex = 0
+    onCropIdChanged: varietyField.currentIndex = 0
 
     focus: true
     contentWidth: width
     contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     Material.background: "white"
-
-    CropModel {
-        id: cropModel
-    }
 
     Column {
         id: mainColumn
@@ -193,40 +174,6 @@ Flickable {
             spacing: 8
 
             MyComboBox {
-                id: cropField
-                labelText: qsTr("Crop")
-                focus: true
-                Layout.fillWidth: true
-                Layout.topMargin: largeDisplay ? 8 : 0 // avoid clipping of floatingLabel
-                model: cropModel
-                textRole: "crop"
-                editable: false
-                showAddItem: true
-                addItemText: qsTr("Add Crop")
-                visible: false
-
-                onAddItemClicked: addCropDialog.open()
-                onCurrentIndexChanged: varietyField.currentIndex = 0
-                onActivated: {
-                    varietyField.forceActiveFocus()
-                    varietyField.popup.open();
-                }
-
-                AddCropDialog {
-                    id: addCropDialog
-                    onAccepted: {
-                        Crop.add({"crop" : cropName,
-                                  "family_id" : familyId,
-                                  "color" : color});
-                        cropModel.refresh();
-                        cropField.currentIndex = cropField.find(cropName);
-                        varietyField.forceActiveFocus();
-                        addVarietyDialog.open();
-                    }
-                }
-            }
-
-            MyComboBox {
                 id: varietyField
                 labelText: qsTr("Variety")
                 Layout.fillWidth: true
@@ -235,7 +182,7 @@ Flickable {
                 addItemText: qsTr("Add Variety")
                 model: VarietyModel {
                     id: varietyModel
-                    cropId: cropModel.rowId(cropFieldIndex)
+                    onCropIdChanged: console.log("new crop ID:", cropId)
                 }
                 textRole: "variety"
 
@@ -245,7 +192,14 @@ Flickable {
                 AddVarietyDialog {
                     id: addVarietyDialog
                     onAccepted: {
-                        Variety.add({"variety" : varietyName, "crop_id" : varietyModel.cropId});
+                        if (seedCompanyId > 0)
+                            Variety.add({"variety" : varietyName,
+                                            "crop_id" : varietyModel.cropId,
+                                            "seed_company_id" : seedCompanyId});
+                        else
+                            Variety.add({"variety" : varietyName,
+                                            "crop_id" : varietyModel.cropId});
+
                         varietyModel.refresh();
                         varietyField.currentIndex = varietyField.find(varietyName);
                         plantingAmountField.forceActiveFocus()
@@ -517,7 +471,7 @@ Flickable {
                     text: "0"
                     labelText: qsTr("Estimated loss")
                     suffixText: qsTr("%")
-                    helperText: qsTr("%L1 flat(s)", "", flatsNumber()).arg(flatsNumber())
+                    helperText: qsTr("%L1 flat(s)", "", flatsNumber).arg(flatsNumber)
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "90"
                     Layout.fillWidth: true
@@ -539,7 +493,7 @@ Flickable {
                     //                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
-                    text: Math.round(seedsNeeded())
+                    text: Math.round(seedsNeeded)
                 }
 
                 MyTextField {
@@ -650,4 +604,3 @@ Flickable {
         }
     }
 }
-

@@ -94,10 +94,8 @@ ComboBox {
         }
 
         onOpened: {
-            if (listView.model.count === 0 && showAddItem) {
-                // Ensure footer is visible
-                listView.contentY = listView.contentHeight
-            }
+            if (listView.model.count === 0 && showAddItem)
+                listView.contentY = listView.contentHeight; // Ensure footer is visible
         }
 
         contentItem: ListView {

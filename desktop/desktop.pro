@@ -1,6 +1,7 @@
 TEMPLATE = app
 
 QT += charts qml quick sql
+android: QT += androidextras
 
 CONFIG += c++14
 

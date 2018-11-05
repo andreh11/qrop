@@ -30,14 +30,16 @@ Rectangle {
     property string unitText: ""
     property alias currentIndex: cropField.currentIndex
     property alias cropField: cropField
+    property int cropId: cropModel.rowId(cropField.currentIndex)
 
-    signal newCropAdded(string cropName)
+    signal newCropAdded(int newCropId)
     signal cropSelected()
 
     color: Material.color(Material.Grey, Material.Shade200)
     radius: 2
     clip: true
-    height: textIcon.height + 2 * Units.smallSpacing
+//    height: textIcon.height + 2 * Units.smallSpacing
+    implicitHeight: 60
     width: parent.width
 
     CropModel {
@@ -57,7 +59,7 @@ Rectangle {
 
         Rectangle {
             id: textIcon
-            //                Layout.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
             height: 40
             width: height
             radius: 80
@@ -90,11 +92,12 @@ Rectangle {
                 width: parent.width
                 onAccepted: {
                     Crop.add({"crop" : cropName,
-                                 "family_id" : familyId,
-                                 "color" : color});
+                              "family_id" : familyId,
+                               "color" : color});
                     cropModel.refresh();
                     cropField.currentIndex = cropField.find(cropName);
-                    control.newCropAdded(cropName)
+                    var newCropId = cropModel.rowId(cropField.currentIndex)
+                    control.newCropAdded(newCropId)
                 }
             }
         }
