@@ -87,7 +87,12 @@ Flickable {
     readonly property alias unitText: unitCombo.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
-    readonly property real averagePrice: Number.fromLocaleString(Qt.locale(), averagePriceField.text)
+    readonly property real averagePrice: {
+        if (averagePriceField.acceptableInput)
+            Number.fromLocaleString(Qt.locale(), averagePriceField.text);
+        else
+            0;
+    }
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: []
@@ -182,7 +187,6 @@ Flickable {
                 addItemText: qsTr("Add Variety")
                 model: VarietyModel {
                     id: varietyModel
-                    onCropIdChanged: console.log("new crop ID:", cropId)
                 }
                 textRole: "variety"
 
@@ -552,13 +556,15 @@ Flickable {
                     id: averagePriceField
                     labelText: qsTr("Price/") + unitCombo.currentText
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    validator: TextFieldDoubleValidator { bottom: 0; decimals: 2; top: 999 }
+                    validator: TextFieldDoubleValidator {
+                        bottom: 0
+                        decimals: 2
+                        top: 999
+                        notation:  DoubleValidator.StandardNotation
+                    }
                     floatingLabel: true
                     suffixText: "€"
                     Layout.fillWidth: true
-                    onTextEdited: {
-                        console.log(getText(length-1, length))
-                    }
                 }
             }
         }
