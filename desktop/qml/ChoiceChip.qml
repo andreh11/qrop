@@ -26,6 +26,9 @@ Button {
     property color hoveredColor: Material.color(Material.Grey, Material.Shade400)
     property color defaultColor: Material.color(Material.Grey, Material.Shade300)
 
+    activeFocusOnTab: true
+    onActiveFocusChanged: if (activeFocus) console.log("Got focus!")
+
     checkable: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                                          contentItem.implicitWidth + leftPadding + rightPadding)

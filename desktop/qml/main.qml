@@ -63,6 +63,12 @@ ApplicationWindow {
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
+    Shortcut {
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
+    }
+
     Settings {
         id: settings
         property alias railMode: window.railMode

@@ -26,16 +26,20 @@ import "date.js" as MDate
 
 Dialog {
     id: addCropDialog
-    
+
     readonly property string cropName: cropNameField.text.trim()
     property alias color: colorPicker.color
     property int familyId: familyModel.rowId(familyField.currentIndex)
-    property alias acceptableForm: cropNameField.acceptableInput
+    property bool acceptableForm: cropNameField.acceptableInput && familyField.currentIndex >= 0
 
     title: qsTr("Add New Crop")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    onOpened: cropNameField.forceActiveFocus();
+    onOpened: {
+        cropNameField.text = ""
+        familyField.currentIndex = -1
+        cropNameField.forceActiveFocus();
+    }
 
     footer: AddDialogButtonBox {
         width: parent.width
@@ -50,7 +54,7 @@ Dialog {
         Keys.onBackPressed: addCropDialog.reject() // especially necessary on Android
         anchors.fill: parent
         spacing: Units.mediumSpacing
-        
+
         MyTextField {
             id: cropNameField
             labelText: qsTr("Crop")
@@ -58,7 +62,7 @@ Dialog {
             Layout.fillWidth: true
             Layout.minimumWidth: 100
         }
-        
+
         MyComboBox {
             id: familyField
             labelText: qsTr("Family")
@@ -71,25 +75,25 @@ Dialog {
             textRole: "family"
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
         }
-        
+
         ColumnLayout {
             Layout.fillWidth: true
             implicitHeight: contentHeight
             spacing: 4
-            
+
             Label {
                 text: qsTr("Color")
                 font.family: "Roboto Regular"
                 font.pixelSize: Units.fontSizeCaption
                 Material.foreground: Material.accent
             }
-            
+
             ColorPicker {
                 id: colorPicker
                 Layout.fillWidth: true
                 implicitWidth: parent.width
             }
-            }
+        }
     }
-    
+
 }

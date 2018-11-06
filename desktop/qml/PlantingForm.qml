@@ -631,7 +631,6 @@ Flickable {
                     ChoiceChip {
                         text: keyword
                         checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
-                        checkedColor: color
 
                         onClicked: {
                             selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
