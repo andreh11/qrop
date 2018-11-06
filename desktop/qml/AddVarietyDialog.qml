@@ -20,12 +20,11 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import io.croplan.components 1.0
-import "date.js" as MDate
 
 Dialog {
     id: dialog
 
-    property alias varietyName: varietyNameField.text
+    readonly property string varietyName: varietyNameField.text.trim()
     property int seedCompanyId: seedCompanyModel.rowId(seedCompanyField.currentIndex)
     property alias acceptableForm: varietyNameField.acceptableInput
 
@@ -60,7 +59,7 @@ Dialog {
         MyTextField {
             id: varietyNameField
             width: parent.width
-            validator: RegExpValidator { regExp: /[A-Za-z]+[A-Za-z0-9 ]*/ }
+            validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
 
             labelText: qsTr("Variety")
             Layout.fillWidth: true

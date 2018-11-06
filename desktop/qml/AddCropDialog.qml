@@ -27,17 +27,25 @@ import "date.js" as MDate
 Dialog {
     id: addCropDialog
     
-    property alias cropName: cropNameField.text
-    property alias color: colorDialog.color
+    readonly property string cropName: cropNameField.text.trim()
+    property alias color: colorPicker.color
     property int familyId: familyModel.rowId(familyField.currentIndex)
+    property alias acceptableForm: cropNameField.acceptableInput
 
     title: qsTr("Add New Crop")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onOpened: cropNameField.forceActiveFocus();
 
+    footer: AddDialogButtonBox {
+        width: parent.width
+        onAccept: addCropDialog.accept()
+        onReject: addCropDialog.reject()
+        acceptableInput: acceptableForm
+    }
+
     ColumnLayout {
-        Keys.onReturnPressed: addCropDialog.accept();
+        Keys.onReturnPressed: if (acceptableForm) addCropDialog.accept();
         Keys.onEscapePressed: addCropDialog.reject()
         Keys.onBackPressed: addCropDialog.reject() // especially necessary on Android
         anchors.fill: parent
@@ -46,7 +54,7 @@ Dialog {
         MyTextField {
             id: cropNameField
             labelText: qsTr("Crop")
-            validator: RegExpValidator { regExp: /[A-Za-z]+[A-Za-z0-9 ]*/ }
+            validator: RegExpValidator { regExp: /\w[\w ]*/ }
             Layout.fillWidth: true
             Layout.minimumWidth: 100
         }
@@ -61,12 +69,13 @@ Dialog {
                 id: familyModel
             }
             textRole: "family"
+            Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
         }
         
         ColumnLayout {
             Layout.fillWidth: true
             implicitHeight: contentHeight
-            spacing: 0
+            spacing: 4
             
             Label {
                 text: qsTr("Color")
@@ -75,28 +84,12 @@ Dialog {
                 Material.foreground: Material.accent
             }
             
-            Button {
-                id: buttonColor
-                flat: true
+            ColorPicker {
+                id: colorPicker
                 Layout.fillWidth: true
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
-                onClicked: colorDialog.open()
-                Material.background: colorDialog.color
-                
-                MouseArea {
-                    id: colorMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    onClicked: buttonColor.clicked()
-                }
+                implicitWidth: parent.width
             }
-        }
-        
-        Lab.ColorDialog {
-            id: colorDialog
-        }
+            }
     }
     
 }

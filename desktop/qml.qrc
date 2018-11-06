@@ -45,5 +45,6 @@
         <file>qml/MobilePlantingForm.qml</file>
         <file>qml/AddUnitDialog.qml</file>
         <file>qml/AddDialogButtonBox.qml</file>
+        <file>qml/ColorPicker.qml</file>
     </qresource>
 </RCC>
