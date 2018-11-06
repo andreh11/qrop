@@ -38,7 +38,7 @@ TextField {
         sequence: "Escape"
         onActivated: {
             filterMode = false
-            filterField.text = ""
+            filterField.clear()
         }
     }
     

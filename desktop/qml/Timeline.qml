@@ -76,7 +76,7 @@ Item {
             Rectangle {
                 height: parent.height
                 width: 1
-                color: Material.color(Material.Grey, Material.Shade400)
+                color: Qt.rgba(0, 0, 0, 0.12)
             }
         }
     }

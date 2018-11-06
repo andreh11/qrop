@@ -394,6 +394,9 @@ Page {
                 height: parent.height - buttonRectangle.height
                 spacing: 0
                 anchors.top: topDivider.bottom
+                boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.HorizontalAndVerticalFlick
+                contentWidth: 1800
 
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
@@ -406,14 +409,16 @@ Page {
                     parent: listView.parent
                     anchors { top: listView.top; right: listView.right; bottom: listView.bottom }
                     active: horizontalScrollBar.active
+                    policy: ScrollBar.AlwaysOn
                 }
 
                 ScrollBar.horizontal: ScrollBar {
                     id: horizontalScrollBar
                     active: verticalScrollBar.active
                     parent: listView.parent
-                    anchors.centerIn: parent
+                    anchors { bottom : parent.bottom; left: parent.left; right: parent.right }
                     orientation: Qt.Horizontal
+                    policy: ScrollBar.AlwaysOn
                     z: 3
                 }
 
@@ -421,21 +426,20 @@ Page {
                     sequence: "Ctrl+K"
                     onActivated: {
                         filterMode = true
-                        filterField.focus = true
+                        filterField.forceActiveFocus();
                     }
                 }
 
                 headerPositioning: ListView.OverlayHeader
 
-                header: Rectangle {
-                    id: headerRectangle
-                    height: headerRow.height
-                    width: parent.width
-                    color: "white"
-                    z: 3
-
-                    Column {
+                Component {
+                    id: headerDelegate
+                    Rectangle {
+                        id: headerRectangle
+                        height: headerRow.height
                         width: parent.width
+                        color: "white"
+                        z: 5
 
                         Row {
                             id: headerRow
@@ -448,7 +452,8 @@ Page {
                                 width: 24
                                 anchors.verticalCenter: headerRow.verticalCenter
                                 tristate: true
-                                checkState: checks == rowsNumber ? Qt.Checked : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                                checkState: checks == rowsNumber ? Qt.Checked
+                                                                 : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                                 nextCheckState: function () {
                                     if (checkState == Qt.Checked) {
                                         unselectAll()
@@ -467,8 +472,7 @@ Page {
                                     text: modelData.name
                                     width: modelData.width
                                     state: page.tableSortColumn === index ? page.tableSortOrder : ""
-                                    visible: index > 0
-                                             && tableHeaderModel[index].visible
+                                    visible: index > 0 && tableHeaderModel[index].visible
                                 }
                             }
 
@@ -492,8 +496,7 @@ Page {
                                                 id: lineRectangle
                                                 height: parent.height
                                                 width: 1
-                                                color: Material.color(Material.Grey,
-                                                                      Material.Shade400)
+                                                color: Qt.rgba(0, 0, 0, 0.12)
                                             }
 
                                             Label {
@@ -532,46 +535,47 @@ Page {
                                 }
                             }
                         }
-                    }
 
-                    MouseArea {
-                        id: headerMouseArea
-                        anchors.fill: parent
-                        acceptedButtons: Qt.RightButton
-                        onClicked: columnPopup.open()
+                        MouseArea {
+                            id: headerMouseArea
+                            anchors.fill: parent
+                            acceptedButtons: Qt.RightButton
+                            onClicked: columnPopup.open()
 
-                        Popup {
-                            id: columnPopup
-                            x: headerMouseArea.mouseX
-                            y: headerMouseArea.mouseY
-                            width: 150
-                            height: 300
-                            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-                            padding: 0
-
-                            contentItem: Rectangle {
-                                clip: true
-                                width: 150
+                            Popup {
+                                id: columnPopup
+                                x: headerMouseArea.mouseX
+                                y: headerMouseArea.mouseY
+                                width: 180
                                 height: 300
+                                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                                padding: 0
 
-                                ListView {
-                                    spacing: -16
-                                    anchors.fill: parent
-                                    model: tableHeaderModel.slice( 2) // Don't show Crop and Variety.
-                                    delegate: CheckBox {
-                                        text: modelData.name
-                                        checked: modelData.visible
-                                        onClicked: {
-                                            tableHeaderModel[index + 2].visible
-                                                    = !tableHeaderModel[index + 2].visible
-                                            emitTableHeaderModelChanged()
+                                contentItem: Rectangle {
+                                    clip: true
+                                    width: 150
+                                    height: 300
+
+                                    ListView {
+                                        spacing: -16
+                                        anchors.fill: parent
+                                        model: tableHeaderModel.slice( 2) // Don't show Crop and Variety.
+                                        delegate: CheckBox {
+                                            text: modelData.name
+                                            checked: modelData.visible
+                                            onClicked: {
+                                                tableHeaderModel[index + 2].visible
+                                                        = !tableHeaderModel[index + 2].visible
+                                                emitTableHeaderModelChanged()
+                                            }
                                         }
-                                    }
-                                    ScrollBar.vertical: ScrollBar {
-                                        visible: largeDisplay
-                                        anchors.top: parent.top
-                                        anchors.right: parent.right
-                                        anchors.bottom: parent.bottom
+                                        ScrollBar.vertical: ScrollBar {
+                                            visible: largeDisplay
+                                            anchors.top: parent.top
+                                            anchors.right: parent.right
+                                            anchors.bottom: parent.bottom
+                                            policy: ScrollBar.AlwaysOn
+                                        }
                                     }
                                 }
                             }
@@ -579,12 +583,14 @@ Page {
                     }
                 }
 
+
+                header: headerDelegate
                 delegate: Rectangle {
                     id: delegate
 
                     property date seedingDate: {
                         if (model.planting_type === 2)
-                             MDate.addDays(transplantingDate, -model.dtt);
+                            MDate.addDays(transplantingDate, -model.dtt);
                         else
                             transplantingDate;
                     }
@@ -594,14 +600,14 @@ Page {
                                                                 model.harvest_window)
 
                     height: row.height
-                    width: parent.width
+                    width: headerColumn.width
                     color: {
-                       if (checkBox.checked)
-                           Material.color(Material.Grey, Material.Shade200);
-                       else if (mouseArea.containsMouse)
-                           Material.color(Material.Grey, Material.Shade100);
-                       else
-                           "white";
+                        if (checkBox.checked)
+                            Material.color(Material.Grey, Material.Shade200);
+                        else if (mouseArea.containsMouse)
+                            Material.color(Material.Grey, Material.Shade100);
+                        else
+                            "white";
                     }
 
                     MouseArea {
@@ -611,7 +617,8 @@ Page {
                     }
 
                     Column {
-                        width: parent.width
+                        id: headerColumn
+                        width: row.width
 
                         ThinDivider {
                             width: parent.width
@@ -783,6 +790,7 @@ Page {
                         }
                     }
                 }
+
             }
         }
     }
@@ -929,7 +937,7 @@ Page {
         onClicked: {
             var item = stackView.push("MobilePlantingForm.qml");
             item.setFocus();
-//            mobilePlantingForm.setFocus();
+            //            mobilePlantingForm.setFocus();
         }
     }
 }

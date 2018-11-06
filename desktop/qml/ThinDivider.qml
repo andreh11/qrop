@@ -19,5 +19,5 @@ import QtQuick.Controls 2.2
 
 Rectangle {
     height: 1
-    color: Qt.rgba(0, 0, 0, 0.12)
+    color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
 }

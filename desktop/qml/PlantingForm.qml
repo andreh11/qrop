@@ -639,58 +639,6 @@ Flickable {
                     }
                 }
 
-                //                TextField {
-                //                    id: unitAddField
-                //                    implicitWidth: 50
-
-                //                    Dialog {
-                //                        id: unitColorDialog
-
-                //                        title: qsTr("Select Color")
-                //                        standardButtons: Dialog.Ok | Dialog.Cancel
-
-                //                        Lab.ColorDialog {
-                //                            id: nativeColorDialog
-                //                        }
-                //                        Button {
-                //                            id: buttonColor
-                //                            flat: true
-                //                            Layout.fillWidth: true
-                //                            font.family: "Roboto Regular"
-                //                            font.pixelSize: Units.fontSizeBodyAndButton
-                //                            onClicked: nativeColorDialog.open()
-                //                            Material.background: nativeColorDialog.color
-
-                //                            MouseArea {
-                //                                id: colorMouseArea
-                //                                anchors.fill: parent
-                //                                hoverEnabled: true
-                //                                cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-                //                                onClicked: buttonColor.clicked()
-                //                            }
-                //                        }
-                //                        onAccepted: {
-                //                            Keyword.add({"keyword": unitAddField.text,
-                //                                            "color": nativeColorDialog.color});
-                //                            unitAddField.clear();
-                //                            keywordModel.refresh();
-                //                        }
-                //                    }
-
-                //                    onEditingFinished: {
-                //                        Keyword.add({"keyword": unitAddField.text,
-                //                        unitColorDialog.open()
-                //                    }
-                //                }
-
-                //                ChoiceChip {
-                //                    id: addKeywordChip
-                //                    text: "\ue145"
-                //                    flat: true
-                //                    font.family: "Material Icons"
-                //                    font.pixelSize: Units.fontSizeBodyAndButton
-                //                }
-
                 add: Transition {
                     NumberAnimation {
                         property: "opacity"
