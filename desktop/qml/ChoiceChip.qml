@@ -22,12 +22,24 @@ Button {
     id: control
 
     property color checkedColor: Material.color(Material.Cyan, Material.Shade100)
+    property color focusCheckedColor: Material.color(Material.Cyan, Material.Shade300)
     property color activeFocusColor: Material.color(Material.Grey, Material.Shade500)
     property color hoveredColor: Material.color(Material.Grey, Material.Shade400)
     property color defaultColor: Material.color(Material.Grey, Material.Shade300)
 
+    property bool hasFocus: false
+
     activeFocusOnTab: true
-    onActiveFocusChanged: if (activeFocus) console.log("Got focus!")
+    Keys.onEnterPressed:  if (!checked || !autoExclusive) control.toggle()
+    Keys.onReturnPressed:  if (!checked || !autoExclusive) control.toggle()
+
+    // Strangely, we need to do this, because color will not change with activeFocus.
+    onActiveFocusChanged: {
+        if (activeFocus)
+            hasFocus = true
+        else
+            hasFocus = false
+    }
 
     checkable: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
@@ -39,13 +51,12 @@ Button {
     hoverEnabled: true
     font { family: "Roboto Regular"; pixelSize: 14; capitalization: Font.MixedCase }
 
-
     background: Rectangle {
         implicitHeight: Units.chipHeight
         anchors.verticalCenter: parent.verticalCenter
         radius: 32
-        color: checked ? checkedColor
-                       : activeFocus ? activeFocusColor
+        color: checked ? (hasFocus ? focusCheckedColor : checkedColor)
+                       : hasFocus ? activeFocusColor
                                      : hovered ? hoveredColor
                                                : defaultColor
         ColorAnimation on color {
