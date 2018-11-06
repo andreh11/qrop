@@ -40,9 +40,10 @@ Dialog {
     ColumnLayout {
         anchors.fill: parent
         spacing: Units.mediumSpacing
+        focus: true
 
         Keys.onReturnPressed: {
-            if (varietyNameField.text)
+            if (varietyNameField.acceptableInput)
                 control.accept();
         }
         Keys.onEscapePressed: control.reject()
@@ -51,10 +52,18 @@ Dialog {
         MyTextField {
             id: varietyNameField
             width: parent.width
+            validator: RegExpValidator { regExp: /[A-Za-z]+[A-Za-z0-9 ]*/ }
 
             labelText: qsTr("Variety")
             Layout.fillWidth: true
             Layout.minimumWidth: 100
+
+            Keys.onReturnPressed: {
+                if (varietyNameField.acceptableInput)
+                    control.accept();
+            }
+            Keys.onEscapePressed: control.reject()
+            Keys.onBackPressed: control.reject() // especially necessary on Android
         }
 
         MyComboBox {

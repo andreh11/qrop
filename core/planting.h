@@ -17,6 +17,8 @@
 #ifndef PLANTING_H
 #define PLANTING_H
 
+#include <QVariantMap>
+
 #include "core_global.h"
 #include "databaseutility.h"
 
@@ -33,6 +35,8 @@ public:
     Q_INVOKABLE QList<int> addSuccessions(int successions,
                                           int daysBetween,
                                           const QVariantMap &map) const;
+    Q_INVOKABLE QVariantMap lastCropValues(const int cropId) const;
+    Q_INVOKABLE QVariantMap lastVarietyValues(const int varietyId, const int cropId) const;
 
 private:
     Task *task;

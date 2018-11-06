@@ -33,7 +33,7 @@ TextField {
     padding: 8
     topPadding: 16
     focus: true
-    
+
     Shortcut {
         sequence: "Escape"
         onActivated: {
@@ -52,6 +52,13 @@ TextField {
                               Material.Shade400)
         radius: 4
         opacity: 0.1
+        //    MouseArea {
+        //        id: mouseArea
+        //        anchors.fill: parent
+        //        hoverEnabled: true
+        //        cursorShape: containsMouse ? Qt.IBeamCursor : Qt.ArrowCursor
+        //        onClicked: filterField.clicked()
+        //    }
     }
     
     Label {
@@ -79,5 +86,14 @@ TextField {
         font.pixelSize: 24
         onClicked: filterField.clear()
     }
+
+//    MouseArea {
+//        id: mouseArea
+//        anchors.fill: parent
+//        hoverEnabled: true
+//        cursorShape: containsMouse ? Qt.IBeamCursor : Qt.ArrowCursor
+//        onClicked: filterField.clicked()
+//    }
+
 
 }

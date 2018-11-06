@@ -337,6 +337,7 @@ Page {
                     SearchField {
                         id: filterField
                         Layout.fillWidth: true
+                        inputMethodHints: Qt.ImhPreferLowercase
                         visible: !checks && rowsNumber
                     }
 

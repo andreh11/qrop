@@ -20,6 +20,12 @@ import QtQuick.Controls.Material 2.2
 
 Button {
     id: control
+
+    property color checkedColor: Material.color(Material.Cyan, Material.Shade100)
+    property color activeFocusColor: Material.color(Material.Grey, Material.Shade500)
+    property color hoveredColor: Material.color(Material.Grey, Material.Shade400)
+    property color defaultColor: Material.color(Material.Grey, Material.Shade300)
+
     checkable: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                                          contentItem.implicitWidth + leftPadding + rightPadding)
@@ -28,15 +34,20 @@ Button {
     baselineOffset: contentItem.y + contentItem.baselineOffset
     padding: 8
     hoverEnabled: true
+    font { family: "Roboto Regular"; pixelSize: 14; capitalization: Font.MixedCase }
+
 
     background: Rectangle {
         implicitHeight: Units.chipHeight
         anchors.verticalCenter: parent.verticalCenter
         radius: 32
-        color: checked ? Material.color(Material.Cyan, Material.Shade100) :
-                         activeFocus ? Material.color(Material.Grey, Material.Shade500) :
-                                       hovered ? Material.color(Material.Grey, Material.Shade400) :
-                                                 Material.color(Material.Grey, Material.Shade300)
+        color: checked ? checkedColor
+                       : activeFocus ? activeFocusColor
+                                     : hovered ? hoveredColor
+                                               : defaultColor
+        ColorAnimation on color {
+            duration: 2000
+        }
     }
 
     contentItem: Text {
@@ -46,8 +57,7 @@ Button {
         color: checked ? Material.color(Material.Blue, Material.Shade800)
                        : Material.color(Material.Grey, Material.Shade800)
         text: control.text
-        font.family: "Roboto Regular"
-        font.pixelSize: 14
+        font: control.font
 
         ColorAnimation on color {
             duration: 2000

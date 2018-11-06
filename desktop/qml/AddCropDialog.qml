@@ -46,6 +46,7 @@ Dialog {
         MyTextField {
             id: cropNameField
             labelText: qsTr("Crop")
+            validator: RegExpValidator { regExp: /[A-Za-z]+[A-Za-z0-9 ]*/ }
             Layout.fillWidth: true
             Layout.minimumWidth: 100
         }

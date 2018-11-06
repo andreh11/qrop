@@ -36,7 +36,7 @@ INSERT INTO unit values (2, "bunch", "bn", 1.0);
 CREATE TABLE IF NOT EXISTS keyword (
     keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
     keyword    TEXT UNIQUE NOT NULL,
-    color      TEXT NOT NULL
+    color      TEXT
 );
 
 CREATE TABLE IF NOT EXISTS note (
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS expense_file (
 -- Views
 
 CREATE VIEW IF NOT EXISTS planting_view AS
-SELECT crop, variety, crop.color as crop_color, planting.*, unit.abbreviation as unit, group_concat(location_id) as locations
+SELECT crop, variety, crop_id, crop.color as crop_color, planting.*, unit.abbreviation as unit, group_concat(location_id) as locations
 FROM planting
 LEFT JOIN planting_location using(planting_id)
 LEFT JOIN variety USING (variety_id)

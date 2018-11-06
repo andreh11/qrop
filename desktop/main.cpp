@@ -30,6 +30,7 @@
 
 #include "db.h"
 #include "planting.h"
+#include "keyword.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -137,6 +138,15 @@ int main(int argc, char *argv[])
         auto *unit = new DatabaseUtility();
         unit->setTable("unit");
         return unit;
+    }
+    );
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Keyword", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *keyword = new Keyword();
+        return keyword;
     }
     );
 

@@ -18,7 +18,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtCharts 2.0
+import Qt.labs.platform 1.0 as Lab
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -28,6 +28,7 @@ Flickable {
 
     property bool accepted: varietyField.acceptableInput
 
+    readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
@@ -47,7 +48,7 @@ Flickable {
             greenhouseStartDateField.isoDateString;
         else
             fieldPlantingDateField.isoDateString;
-        }
+    }
     readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString :
                                                                 fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
@@ -98,38 +99,63 @@ Flickable {
     property var selectedKeywords: []
 
     property variant values: {
-        "variety_id": varietyModel.rowId(varietyField.currentIndex),
-                "planting_type": plantingType,
-                "sowing_date": sowingDate,
-                "planting_date": plantingDate,
-                "beg_harvest_date": begHarvestDate,
-                "end_harvest_date": endHarvestDate,
-                "dtm": dtm,
-                "dtt": dtt,
-                "harvest_window": harvestWindow,
-                "length": plantingAmount ,
-                "rows": rowsPerBed,
-                "spacing_plants": inRowSpacing,
-                "plants_needed": plantsNeeded,
-                "estimated_gh_loss" : greenhouseEstimatedLoss,
-                "plants_to_start": plantsToStart,
-                "seeds_per_hole": seedsPerCell,
-                "seeds_per_gram": seedsPerGram,
-                "seeds_number": seedsNeeded,
-                "seeds_quantity": seedsQuantity,
-                "keyword_ids": keywordsIdList(),
-                "unit_id": unitModel.rowId(unitField.currentIndex),
-                "yield_per_bed_meter": yieldPerBedMeter,
-                "average_price": averagePrice
+        "variety_id": varietyId,
+        "planting_type": plantingType,
+        "sowing_date": sowingDate,
+        "planting_date": plantingDate,
+        "beg_harvest_date": begHarvestDate,
+        "end_harvest_date": endHarvestDate,
+        "dtm": dtm,
+        "dtt": dtt,
+        "harvest_window": harvestWindow,
+        "length": plantingAmount ,
+        "rows": rowsPerBed,
+        "spacing_plants": inRowSpacing,
+        "plants_needed": plantsNeeded,
+        "estimated_gh_loss" : greenhouseEstimatedLoss,
+        "plants_to_start": plantsToStart,
+        "seeds_per_hole": seedsPerCell,
+        "seeds_per_gram": seedsPerGram,
+        "seeds_number": seedsNeeded,
+        "seeds_quantity": seedsQuantity,
+        "keyword_ids": keywordsIdList(),
+        "unit_id": unitModel.rowId(unitField.currentIndex),
+        "yield_per_bed_meter": yieldPerBedMeter,
+        "average_price": averagePrice
     }
 
     function clearAll() {
-        varietyField.currentIndex = 0;
+        varietyField.currentIndex = -1;
         plantingAmountField.clear();
         inRowSpacingField.clear();
         rowsPerBedField.clear()
         successionsField.text = "1"
         directSeedRadio.checked = true
+    }
+
+    function setFormValues(val) {
+        plantingAmountField.text = val['length'];
+        inRowSpacingField.text = val['spacing_plants']
+        rowsPerBedField.text = val['rows']
+
+        switch (val['planting_type']) {
+        case 1:
+            directSeedRadio.checked = true;
+            sowDtmField.text = val['dtm']
+//            fieldSowingDateField.calendarDate = Date.fromLocaleString(Qt.locale(), val['planting_date'], "yyyy-MM-dd")
+            break;
+        case 2:
+            greenhouseRadio.checked = true;
+            greenhouseGrowTimeField.text = val['dtt']
+            plantingDtmField.text = val['dtm']
+            break;
+        default:
+            plantingDtmField.text = val['dtm']
+            boughtRadio.checked = true;
+        }
+
+        harvestWindowField.text = val['harvest_window']
+
     }
 
     function emitSelectedKeywordsChanged() {
@@ -156,7 +182,13 @@ Flickable {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
-    onCropIdChanged: varietyField.currentIndex = 0
+
+    onCropIdChanged: varietyField.currentIndex = -1
+    onVarietyIdChanged: {
+        var val = Planting.lastVarietyValues(varietyId, cropId);;
+        if (val.length)
+            setFormValues(val);
+    }
 
     focus: true
     contentWidth: width
@@ -540,16 +572,16 @@ Flickable {
                     Layout.fillWidth: true
 
                     onAddItemClicked: addUnitDialog.open();
-//                    onActivated: plantingAmountField.forceActiveFocus()
+                    //                    onActivated: plantingAmountField.forceActiveFocus()
 
                     AddUnitDialog {
                         id: addUnitDialog
                         onAccepted: {
                             Unit.add({"fullname" : unitName,
-                                      "abbreviation": unitAbbreviation});
+                                         "abbreviation": unitAbbreviation});
                             unitModel.refresh();
                             unitField.currentIndex = unitField.find(unitAbbreviation);
-//                            plantingAmountField.forceActiveFocus()
+                            //                            plantingAmountField.forceActiveFocus()
                         }
                     }
                 }
@@ -590,12 +622,16 @@ Flickable {
                 spacing: 8
 
                 Repeater {
-                    model: KeywordModel { }
+                    model: KeywordModel {
+                        id: keywordModel
+                    }
+
                     width: parent.width
 
                     ChoiceChip {
                         text: keyword
                         checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
+                        checkedColor: color
 
                         onClicked: {
                             selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
@@ -604,13 +640,57 @@ Flickable {
                     }
                 }
 
-                ChoiceChip {
-                    id: addKeywordChip
-                    text: "\ue234"
-                    flat: true
-                    font.family: "Material Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                }
+                //                TextField {
+                //                    id: unitAddField
+                //                    implicitWidth: 50
+
+                //                    Dialog {
+                //                        id: unitColorDialog
+
+                //                        title: qsTr("Select Color")
+                //                        standardButtons: Dialog.Ok | Dialog.Cancel
+
+                //                        Lab.ColorDialog {
+                //                            id: nativeColorDialog
+                //                        }
+                //                        Button {
+                //                            id: buttonColor
+                //                            flat: true
+                //                            Layout.fillWidth: true
+                //                            font.family: "Roboto Regular"
+                //                            font.pixelSize: Units.fontSizeBodyAndButton
+                //                            onClicked: nativeColorDialog.open()
+                //                            Material.background: nativeColorDialog.color
+
+                //                            MouseArea {
+                //                                id: colorMouseArea
+                //                                anchors.fill: parent
+                //                                hoverEnabled: true
+                //                                cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+                //                                onClicked: buttonColor.clicked()
+                //                            }
+                //                        }
+                //                        onAccepted: {
+                //                            Keyword.add({"keyword": unitAddField.text,
+                //                                            "color": nativeColorDialog.color});
+                //                            unitAddField.clear();
+                //                            keywordModel.refresh();
+                //                        }
+                //                    }
+
+                //                    onEditingFinished: {
+                //                        Keyword.add({"keyword": unitAddField.text,
+                //                        unitColorDialog.open()
+                //                    }
+                //                }
+
+                //                ChoiceChip {
+                //                    id: addKeywordChip
+                //                    text: "\ue145"
+                //                    flat: true
+                //                    font.family: "Material Icons"
+                //                    font.pixelSize: Units.fontSizeBodyAndButton
+                //                }
 
                 add: Transition {
                     NumberAnimation {

@@ -84,6 +84,47 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     return ids;
 }
 
+QVariantMap Planting::lastCropValues(const int cropId) const
+{
+    const QString queryString("SELECT planting_id FROM planting_view WHERE crop_id = %1 ORDER BY planting_id DESC");
+    QSqlQuery query(queryString.arg(cropId));
+    query.exec();
+    debugQuery(query);
+
+    if (!query.first()) {
+        qDebug() << query.record();
+        qDebug() << "lastCropValues: cannot find planting for " << cropId;
+        return QVariantMap();
+    }
+
+    int plantingId = query.record().value("planting_id").toInt();
+    if (plantingId < 1)
+        return QVariantMap();
+
+    return mapFromId("planting", plantingId);
+}
+
+QVariantMap Planting::lastVarietyValues(const int varietyId, const int cropId) const
+{
+    const QString queryString("SELECT planting_id FROM planting_view WHERE variety_id = %1 ORDER BY planting_id DESC");
+    QSqlQuery query(queryString.arg(varietyId));
+    query.exec();
+    debugQuery(query);
+
+    if (!query.first()) {
+        qDebug() << query.record();
+        qDebug() << "lastCropValues: cannot find planting for " << varietyId;
+        qDebug() << "trying with crop ";
+        return lastCropValues(cropId);
+    }
+
+    int plantingId = query.record().value("planting_id").toInt();
+    if (plantingId < 1)
+        return QVariantMap();
+
+    return mapFromId("planting", plantingId);
+}
+
 void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
