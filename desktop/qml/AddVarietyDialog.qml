@@ -23,10 +23,11 @@ import io.croplan.components 1.0
 import "date.js" as MDate
 
 Dialog {
-    id: control
+    id: dialog
 
     property alias varietyName: varietyNameField.text
     property int seedCompanyId: seedCompanyModel.rowId(seedCompanyField.currentIndex)
+    property alias acceptableForm: varietyNameField.acceptableInput
 
     title: qsTr("Add New Variety")
     standardButtons: Dialog.Ok | Dialog.Cancel
@@ -37,6 +38,13 @@ Dialog {
         varietyNameField.forceActiveFocus();
     }
 
+    footer: AddDialogButtonBox {
+        width: parent.width
+        onAccept: dialog.accept()
+        onReject: dialog.reject()
+        acceptableInput: acceptableForm
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: Units.mediumSpacing
@@ -44,10 +52,10 @@ Dialog {
 
         Keys.onReturnPressed: {
             if (varietyNameField.acceptableInput)
-                control.accept();
+                dialog.accept();
         }
-        Keys.onEscapePressed: control.reject()
-        Keys.onBackPressed: control.reject() // especially necessary on Android
+        Keys.onEscapePressed: dialog.reject()
+        Keys.onBackPressed: dialog.reject() // especially necessary on Android
 
         MyTextField {
             id: varietyNameField
@@ -57,13 +65,6 @@ Dialog {
             labelText: qsTr("Variety")
             Layout.fillWidth: true
             Layout.minimumWidth: 100
-
-            Keys.onReturnPressed: {
-                if (varietyNameField.acceptableInput)
-                    control.accept();
-            }
-            Keys.onEscapePressed: control.reject()
-            Keys.onBackPressed: control.reject() // especially necessary on Android
         }
 
         MyComboBox {
@@ -76,6 +77,11 @@ Dialog {
                 id: seedCompanyModel
             }
             textRole: "seed_company"
+
+            Keys.onReturnPressed: {
+                if (varietyNameField.acceptableInput && !popup.opened)
+                    dialog.accept();
+            }
         }
     }
 }
