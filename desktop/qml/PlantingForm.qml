@@ -504,7 +504,7 @@ Flickable {
                     suffixText: qsTr("%")
                     helperText: qsTr("%L1 flat(s)", "", flatsNumber).arg(flatsNumber)
                     inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 99 }
+                    validator: IntValidator { bottom: 0; top: 99 }
                     Layout.fillWidth: true
                 }
             }

@@ -33,9 +33,10 @@ TextField {
     property bool persistentPrefix: false
     property bool persistentSuffix: false
     property bool floatMode: false
+    property bool showError: false
 
     property bool floatingLabel: false
-    property bool hasError: (characterLimit && length > characterLimit) || !acceptableInput
+    property bool hasError: showError && ((characterLimit && length > characterLimit) || !acceptableInput)
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
@@ -117,7 +118,7 @@ TextField {
         Label {
             id: helperTextLabel
             visible: control.helperText
-            text: acceptableInput ? control.helperText : control.errorText
+            text: hasError ? control.errorText : control.helperText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
                                     : Qt.darker(control.hintColor)
