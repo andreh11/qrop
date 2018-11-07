@@ -150,9 +150,9 @@ int main(int argc, char *argv[])
     }
     );
 
-    deleteDatabase();
+//    deleteDatabase();
     connectToDatabase();
-    createDatabase();
+//    createDatabase();
 
 //    QtAndroid::runOnAndroidThread([=]()
 //    {

@@ -396,7 +396,10 @@ Page {
                 anchors.top: topDivider.bottom
                 boundsBehavior: Flickable.StopAtBounds
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
-                contentWidth: 1800
+                contentWidth: contentItem.childrenRect.width + Units.smallSpacing
+                contentHeight: contentItem.childrenRect.height + Units.smallSpacing
+                rightMargin: verticalScrollBar.width
+                bottomMargin: horizontalScrollBar.height
 
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
@@ -405,21 +408,21 @@ Page {
 
                 ScrollBar.vertical: ScrollBar {
                     id: verticalScrollBar
-                    visible: largeDisplay
+                    visible: largeDisplay && plantingModel.count
                     parent: listView.parent
-                    anchors { top: listView.top; right: listView.right; bottom: listView.bottom }
+                    anchors { top: listView.top; right: listView.right; bottom: horizontalScrollBar.top }
                     active: horizontalScrollBar.active
                     policy: ScrollBar.AlwaysOn
                 }
 
                 ScrollBar.horizontal: ScrollBar {
                     id: horizontalScrollBar
+                    visible: verticalScrollBar.visible
                     active: verticalScrollBar.active
                     parent: listView.parent
-                    anchors { bottom : parent.bottom; left: parent.left; right: parent.right }
+                    anchors { bottom : parent.bottom; left: parent.left; right: verticalScrollBar.left }
                     orientation: Qt.Horizontal
                     policy: ScrollBar.AlwaysOn
-                    z: 3
                 }
 
                 Shortcut {
@@ -437,7 +440,7 @@ Page {
                     Rectangle {
                         id: headerRectangle
                         height: headerRow.height
-                        width: parent.width
+                        implicitWidth: headerRow.width
                         color: "white"
                         z: 5
 
