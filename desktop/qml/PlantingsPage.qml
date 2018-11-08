@@ -520,7 +520,7 @@ Page {
                                     Rectangle {
                                         height: parent.height
                                         width: 1
-                                        color: Material.color(Material.Grey, Material.Shade400)
+                                        color: Qt.rgba(0, 0, 0, 0.12)
                                     }
                                 }
                             }
@@ -553,6 +553,7 @@ Page {
                                 height: 300
                                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
                                 padding: 0
+                                margins: 0
 
                                 contentItem: Rectangle {
                                     clip: true

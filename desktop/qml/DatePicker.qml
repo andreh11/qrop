@@ -97,37 +97,36 @@ Item {
             text: "\uf073" // calendar-alt
             font.pointSize: textField.font.pointSize * 1.2
 
-                onClicked: {
-                    if (largeDisplay)
-                        popup.open();
-                    else
-                        calendar.visible = true;
-                }
+            onClicked: {
+                if (largeDisplay)
+                    popup.open();
+                else
+                    calendar.visible = true;
+            }
 
-                Popup {
-                    id: popup
-                    y: control.height - calendarButton.height/2
-                    x: -control.width + calendarButton.width*2
-                    width: contentItem.width
-                    height: contentItem.height
-                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                    padding: 0
-                    topMargin: 0
-                    bottomMargin: 0
+            Popup {
+                id: popup
+                y: control.height - calendarButton.height/2
+                x: -control.width + calendarButton.width*2
+                width: contentItem.width
+                height: contentItem.height
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                padding: 0
+                margins: 0
 
-                    contentItem: CalendarView {
-                        clip: true
-                        month: calendarDate.getMonth()
-                        year: calendarDate.getFullYear()
-                        date: calendarDate
+                contentItem: CalendarView {
+                    clip: true
+                    month: calendarDate.getMonth()
+                    year: calendarDate.getFullYear()
+                    date: calendarDate
 
-                        onDateChanged: {
-                            calendarDate = date;
-                            popup.close();
-                            control.editingFinished()
-                        }
+                    onDateChanged: {
+                        calendarDate = date;
+                        popup.close();
+                        control.editingFinished()
                     }
                 }
+            }
         }
     }
 
@@ -153,8 +152,8 @@ Item {
     Rectangle {
         id: calendar
         parent: window.contentItem
-//        anchors.top: control.bottom
-//        parent: window.contentItem
+        //        anchors.top: control.bottom
+        //        parent: window.contentItem
         visible: false
         focus: true
         z: 10

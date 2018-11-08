@@ -67,13 +67,13 @@ Flickable {
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerCell: Number(seedsPerCellField.text)
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
-    readonly property real seedsNeeded:  {
+    readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
             plantsNeeded * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
             plantsToStart * seedsPerCell * (1 + seedsExtraPercentage / 100);
-        else
-            return 0;
+        else // TP, bought
+            0;
     }
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
     readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2) : 0
@@ -85,7 +85,7 @@ Flickable {
                                         ? 0
                                         : toPrecision((plantsNeeded / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
 
-    readonly property alias unitText: unitField.currentText
+    readonly property alias unitText: unitCombo.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
     readonly property real averagePrice: {
@@ -97,7 +97,6 @@ Flickable {
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: []
-
     property variant values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
@@ -119,18 +118,33 @@ Flickable {
         "seeds_number": seedsNeeded,
         "seeds_quantity": seedsQuantity,
         "keyword_ids": keywordsIdList(),
-        "unit_id": unitModel.rowId(unitField.currentIndex),
+        "unit_id": unitModel.rowId(unitCombo.currentIndex),
         "yield_per_bed_meter": yieldPerBedMeter,
-        "average_price": averagePrice
+        "average_price": averagePrice,
+        "tray_size" : flatSize,
+        "flats_to_start": flatsNumber
     }
 
     function clearAll() {
         varietyField.currentIndex = -1;
         plantingAmountField.clear();
         inRowSpacingField.clear();
-        rowsPerBedField.clear()
-        successionsField.text = "1"
-        directSeedRadio.checked = true
+        rowsPerBedField.clear();
+        successionsField.text = "1";
+        directSeedRadio.checked = true;
+        sowDtmField.clear();
+        greenhouseGrowTimeField.clear();
+        plantingDtmField.clear();
+        harvestWindowField.clear();
+        flatSizeField.clear();
+        seedsPerCellField.clear();
+        greenhouseEstimatedLossField.clear();
+        seedsNeededField.clear();
+        seedsExtraPercentageField.text = "0"
+        seedsPerGramField.clear();
+        unitCombo.currentIndex = -1;
+        yieldPerBedMeterField.clear();
+        averagePriceField.clear();
     }
 
     function setFormValues(val) {
@@ -153,9 +167,20 @@ Flickable {
             plantingDtmField.text = val['dtm']
             boughtRadio.checked = true;
         }
-
         harvestWindowField.text = val['harvest_window']
 
+        flatSizeField.text = val['tray_size']
+        seedsPerCellField.text = val['seeds_per_hole']
+        greenhouseEstimatedLossField.text = val['estimated_gh_loss']
+
+        seedsNeededField.text = val['seeds_number']
+        // TODO: seedsExtraPercentageField.text
+        seedsPerGramField.text = val['seeds_per_gram']
+        // TODO: unitCombo
+        yieldPerBedMeterField.text = val['yield_per_bed_meter']
+        averagePriceField.text = val['average_price']
+
+        // TODO: keywords
     }
 
     function emitSelectedKeywordsChanged() {
@@ -172,20 +197,19 @@ Flickable {
 
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
-            to.calendarDate = from.calendarDate
+            to.calendarDate = from.calendarDate;
         else
             to.calendarDate = MDate.addDays(from.calendarDate,
-                                            Number(length.text) * direction)
+                                            Number(length.text) * direction);
     }
 
     function toPrecision(x, decimals) {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
-
     onCropIdChanged: varietyField.currentIndex = -1
     onVarietyIdChanged: {
-        var val = Planting.lastVarietyValues(varietyId, cropId);;
+        var val = Planting.lastVarietyValues(varietyId, cropId);
         if (val.length)
             setFormValues(val);
     }
@@ -217,7 +241,7 @@ Flickable {
                 }
                 textRole: "variety"
 
-                onAddItemClicked: addVarietyDialog.open();
+                onAddItemClicked: addVarietyDialog.open()
                 onActivated: plantingAmountField.forceActiveFocus()
 
                 AddVarietyDialog {
@@ -225,11 +249,11 @@ Flickable {
                     onAccepted: {
                         if (seedCompanyId > 0)
                             Variety.add({"variety" : varietyName,
-                                            "crop_id" : varietyModel.cropId,
-                                            "seed_company_id" : seedCompanyId});
+                                         "crop_id" : varietyModel.cropId,
+                                         "seed_company_id" : seedCompanyId});
                         else
                             Variety.add({"variety" : varietyName,
-                                            "crop_id" : varietyModel.cropId});
+                                         "crop_id" : varietyModel.cropId});
 
                         varietyModel.refresh();
                         varietyField.currentIndex = varietyField.find(varietyName);
@@ -250,6 +274,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
+
                     MyTextField {
                         id: plantingAmountField
                         floatingLabel: true
@@ -282,6 +307,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
+
                     MyTextField {
                         id: successionsField
                         text: "1"
@@ -381,10 +407,9 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
 
-                    onEditingFinished: updateDateField(
-                                           greenhouseStartDateField,
-                                           greenhouseGrowTimeField,
-                                           fieldPlantingDateField, 1)
+                    onEditingFinished: updateDateField(greenhouseStartDateField,
+                                                       greenhouseGrowTimeField,
+                                                       fieldPlantingDateField, 1)
                 }
 
                 MyTextField {
@@ -410,14 +435,12 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Field planting")
 
-                    onEditingFinished: updateDateField(
-                                           fieldPlantingDateField,
-                                           greenhouseGrowTimeField,
-                                           greenhouseStartDateField, -1)
-                    onCalendarDateChanged: updateDateField(
-                                               fieldPlantingDateField,
-                                               plantingDtmField,
-                                               firstHarvestDateField, 1)
+                    onEditingFinished: updateDateField(fieldPlantingDateField,
+                                                       greenhouseGrowTimeField,
+                                                       greenhouseStartDateField, -1)
+                    onCalendarDateChanged: updateDateField(fieldPlantingDateField,
+                                                           plantingDtmField,
+                                                           firstHarvestDateField, 1)
                 }
 
                 MyTextField {
@@ -461,11 +484,12 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Harvest window")
-                    helperText: text === "" ? "" : qsTr(
-                                                  "Last: ") + MDate.addDays(
-                                                  firstHarvestDateField.calendarDate,
+                    helperText: !text
+                                ? ""
+                                : qsTr( "Last: ")
+                                  + MDate.addDays(firstHarvestDateField.calendarDate,
                                                   Number(text)).toLocaleString(
-                                                  Qt.locale(), "ddd d MMM yyyy")
+                                      Qt.locale(), "dd/MM/yyyy")
                     suffixText: qsTr("days")
                 }
             }
@@ -524,7 +548,7 @@ Flickable {
                     //                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
-                    text: Math.round(seedsNeeded)
+                    text: "%L1".arg(Math.round(seedsNeeded))
                 }
 
                 MyTextField {
@@ -560,7 +584,7 @@ Flickable {
                 spacing: 16
 
                 MyComboBox {
-                    id: unitField
+                    id: unitCombo
                     labelText: qsTr("Unit")
                     currentIndex: find("kg")
                     addItemText: qsTr("Add Unit")
@@ -580,7 +604,7 @@ Flickable {
                             Unit.add({"fullname" : unitName,
                                          "abbreviation": unitAbbreviation});
                             unitModel.refresh();
-                            unitField.currentIndex = unitField.find(unitAbbreviation);
+                            unitCombo.currentIndex = unitCombo.find(unitAbbreviation);
                             //                            plantingAmountField.forceActiveFocus()
                         }
                     }
@@ -590,14 +614,14 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    suffixText: unitField.currentText
+                    suffixText: unitCombo.currentText
                     //                    inputMask: "900000"
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: averagePriceField
-                    labelText: qsTr("Price/") + unitField.currentText
+                    labelText: qsTr("Price/") + unitCombo.currentText
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
                     validator: TextFieldDoubleValidator {
                         bottom: 0
