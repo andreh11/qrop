@@ -104,7 +104,7 @@ Item {
 
     Label {
         id: seedingLabel
-        text: MDate.formatDate(seedingDate)
+        text: NDate.formatDate(seedingDate, year)
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         visible: seedingCircle.visible
@@ -148,7 +148,7 @@ Item {
                        : Material.color(Material.Grey, Material.Shade400)
 
         Label {
-            text: MDate.formatDate(transplantingDate)
+            text: NDate.formatDate(transplantingDate, year)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left
@@ -167,7 +167,7 @@ Item {
         color: current ? Material.color(Material.Green, Material.Shade700)
                        : Material.color(Material.Grey, Material.Shade500)
         Label {
-            text: MDate.formatDate(beginHarvestDate)
+            text: NDate.formatDate(beginHarvestDate, year)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left

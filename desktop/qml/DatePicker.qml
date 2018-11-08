@@ -18,6 +18,9 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
+import Qt.labs.settings 1.0
+
+import io.croplan.components 1.0
 
 import "date.js" as MDate
 
@@ -26,6 +29,7 @@ Item {
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
+    readonly property int currentYear: new Date().getFullYear()
 
     property date calendarDate: new Date()
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
@@ -40,6 +44,12 @@ Item {
 
     signal editingFinished()
 
+
+    Settings {
+        id: settings
+        property alias dateType: control.mode
+    }
+
     height: textField.height
     implicitWidth: 200
     Layout.minimumWidth: 140
@@ -49,23 +59,28 @@ Item {
 
         width: parent.width
         implicitWidth: 80
-        text: mode === "date" ? Qt.formatDate(calendarDate, "dd/MM/yyyy") : MDate.isoWeek(calendarDate)
+        text: NDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
-        inputMask: mode === "date" ? "99/99/9999" : ""
-        prefixText: mode === "date" ? "" : qsTr("W")
+//        inputMask: mode === "date" ? "99/99/9999" : "90"
+        validator: RegExpValidator {
+            regExp: mode === "date" ? /^(0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ]20\d\d){,1}$/
+                                    : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
+        }
 
         onEditingFinished: {
-            var newDate = new Date();
-            if (mode === "date") {
-                newDate.setDate(text.substr(0, 2));
-                newDate.setMonth(text.substr(3, 2) - 1);
-                newDate.setFullYear(text.substr(6, 4));
+            var newDate
+            if (mode === "date")
+                newDate = NDate.dateFromDateString(text);
+            else
+                newDate = NDate.dateFromWeekString(text);
 
+            if (newDate.toLocaleString(Qt.locale())) {
                 calendarDate = newDate;
             } else {
-                var week = text.substr(0, 2);
-
-                calendarDate = mondayOfWeek(week, 2018);
+                // Trigger changed() signal assigning twice...
+                var goodDate = calendarDate;
+                calendarDate = newDate;
+                calendarDate = goodDate;
             }
 
             control.editingFinished();
@@ -75,27 +90,28 @@ Item {
             id: dateHelper
             visible: showDateHelper
             text: dateHelperText
-            font.family: "Roboto Regular"
-            font.italic: true
-            font.pointSize: textField.font.pointSize - 1
+            font { family: "Roboto Regular"; italic: true; pointSize: textField.font.pointSize - 1 }
             color: Material.color(Material.Grey)
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
-            anchors.right: calendarButton.left
-            anchors.rightMargin: -8
-            anchors.bottomMargin: 12
-            anchors.bottom: parent.bottom
+            anchors {
+                right: calendarButton.left
+                rightMargin: -8
+                bottomMargin: 12
+                bottom: parent.bottom
+            }
         }
 
         RoundButton {
             id: calendarButton
             flat: true
-            anchors.right: textField.right
-            anchors.rightMargin: -16
-            anchors.verticalCenter:  parent.verticalCenter
-            font.family: "Font Awesome 5 Free"
             text: "\uf073" // calendar-alt
-            font.pointSize: textField.font.pointSize * 1.2
+            font { pointSize: textField.font.pointSize * 1.2; family: "Font Awesome 5 Free" }
+            anchors {
+                right: textField.right
+                rightMargin: -16
+                verticalCenter:  parent.verticalCenter
+            }
 
             onClicked: {
                 if (largeDisplay)
@@ -123,7 +139,7 @@ Item {
                     onDateChanged: {
                         calendarDate = date;
                         popup.close();
-                        control.editingFinished()
+                        control.editingFinished();
                     }
                 }
             }
@@ -136,11 +152,6 @@ Item {
         anchors.fill: parent
         opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
         color: "black"
-
-        Behavior on opacity {
-            NumberAnimation {
-            }
-        }
 
         MouseArea {
             anchors.fill: parent
@@ -171,9 +182,9 @@ Item {
             month: calendarDate.getMonth()
             year: calendarDate.getFullYear()
             onDateChanged: {
-                calendarDate = date
-                parent.visible = false
-                control.editingFinished()
+                calendarDate = date;
+                parent.visible = false;
+                control.editingFinished();
             }
         }
     }

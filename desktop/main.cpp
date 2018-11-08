@@ -28,6 +28,7 @@
 //#include <QAndroidJniObject>
 //#include <QtAndroid>
 
+#include "mdate.h"
 #include "db.h"
 #include "planting.h"
 #include "keyword.h"
@@ -150,6 +151,14 @@ int main(int argc, char *argv[])
     }
     );
 
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *mdate = new MDate();
+        return mdate;
+    }
+    );
 //    deleteDatabase();
     connectToDatabase();
 //    createDatabase();

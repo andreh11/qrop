@@ -122,7 +122,7 @@ Flickable {
         "yield_per_bed_meter": yieldPerBedMeter,
         "average_price": averagePrice,
         "tray_size" : flatSize,
-        "flats_to_start": flatsNumber
+        "trays_to_start": flatsNumber
     }
 
     function clearAll() {

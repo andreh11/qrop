@@ -89,12 +89,14 @@ TextField {
     Label {
         id: prefixText
         text: control.prefixText
-        anchors.left: parent.left
-        anchors.leftMargin: 14
-        anchors.bottomMargin: 16
-        anchors.bottom: parent.bottom
         font.pixelSize: Units.fontSizeBodyAndButton
         visible: persistentPrefix || (control.prefixText !== "" && control.text != "")
+        anchors {
+            left: parent.left
+            leftMargin: 0
+            bottomMargin: 16
+            bottom: parent.bottom
+        }
     }
 
     Label {

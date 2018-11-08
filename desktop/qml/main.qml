@@ -273,7 +273,8 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
+//        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
+//        width: childrenRect.width
         height: window.height
 //        height: window.height - toolBar.height
 //        y: toolBar.height
@@ -289,11 +290,12 @@ ApplicationWindow {
 //            color: "green"
 //        }
 
-        Column {
+        ColumnLayout {
             anchors.fill: parent
 
             Label {
                 id: programLabel
+                visible: false
                 height: toolBar.height
                 text: "Qrop"
                 color: "white"
@@ -315,11 +317,14 @@ ApplicationWindow {
                 model: navigationModel
 
                 DrawerItemDelegate {
+                    Layout.fillWidth: true
                     text: modelData.name
                     iconText: modelData.iconText
                 }
 
             }
+
+            Item { Layout.fillHeight: true }
         }
     }
 

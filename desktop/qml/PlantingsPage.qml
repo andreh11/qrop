@@ -679,7 +679,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.planting_type !== 3 ? MDate.formatDate(
+                                text: model.planting_type !== 3 ? NDate.formatDate(
                                                                       seedingDate,
                                                                       currentYear) : ""
                                 anchors.verticalCenter: parent.verticalCenter
@@ -690,7 +690,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.planting_type !== 1 ? MDate.formatDate(
+                                text: model.planting_type !== 1 ? NDate.formatDate(
                                                                       transplantingDate,
                                                                       currentYear) : ""
                                 anchors.verticalCenter: parent.verticalCenter
@@ -701,7 +701,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: MDate.formatDate(beginHarvestDate,
+                                text: NDate.formatDate(beginHarvestDate,
                                                        currentYear)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
@@ -711,7 +711,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: MDate.formatDate(endHarvestDate,
+                                text: NDate.formatDate(endHarvestDate,
                                                        currentYear)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
@@ -900,14 +900,14 @@ Page {
                         }
 
                         TableLabel {
-                            text: MDate.formatDate(
-                                      model.planting_date) + " ⋅ " + model.locations
+                            text: NDate.formatDate(
+                                      model.planting_date, currentYear) + " ⋅ " + model.locations
                         }
                     }
 
                     ColumnLayout {
                         TableLabel {
-                            text: model.planting_type !== 3 ? MDate.formatDate(
+                            text: model.planting_type !== 3 ? NDate.formatDate(
                                                                   seedingDate,
                                                                   currentYear) : ""
                             horizontalAlignment: Text.AlignRight
