@@ -173,7 +173,7 @@ Flickable {
         seedsPerCellField.text = val['seeds_per_hole']
         greenhouseEstimatedLossField.text = val['estimated_gh_loss']
 
-        seedsNeededField.text = val['seeds_number']
+//        seedsNeededField.text = val['seeds_number']
         // TODO: seedsExtraPercentageField.text
         seedsPerGramField.text = val['seeds_per_gram']
         // TODO: unitCombo
@@ -220,6 +220,17 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     Material.background: "white"
 
+    function ensureVisible(focus, y, height) {
+        console.log("CALLED", y, height, control.contentY, control.height)
+        if (!focus)
+            return;
+        if (y < control.contentY) {
+            control.contentY = y
+        } else if ((y+height) > (control.contentY + control.height)) {
+            control.contentY = y + height - control.height
+        }
+    }
+
     Column {
         id: mainColumn
         width: parent.width
@@ -243,6 +254,7 @@ Flickable {
 
                 onAddItemClicked: addVarietyDialog.open()
                 onActivated: plantingAmountField.forceActiveFocus()
+                onActiveFocusChanged: ensureVisible(activeFocus, y, height)
 
                 AddVarietyDialog {
                     id: addVarietyDialog
@@ -283,6 +295,7 @@ Flickable {
                         validator: IntValidator { bottom: 0; top: 999 }
                         Layout.fillWidth: true
                         suffixText: qsTr("bed m")
+                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
 
                     MyTextField {
@@ -293,6 +306,7 @@ Flickable {
                         validator: IntValidator { bottom: 1; top: 999 }
                         Layout.fillWidth: true
                         suffixText: qsTr("cm")
+                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
 
                     MyTextField {
@@ -302,6 +316,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
+                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
                 }
 
@@ -334,6 +349,7 @@ Flickable {
         }
 
         FormGroupBox {
+            id: plantingTypeBox
             width: parent.width
             title: qsTr("Planting Type")
             Flow {
@@ -346,18 +362,21 @@ Flickable {
                     text: qsTr("Direct seed")
                     checked: true
                     autoExclusive: true
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
                 }
 
                 ChoiceChip {
                     id: greenhouseRadio
                     text: qsTr("Transplant, raised")
                     autoExclusive: true
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
                 }
 
                 ChoiceChip {
                     id: boughtRadio
                     text: qsTr("Transplant, bought")
                     autoExclusive: true
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
                 }
             }
         }
@@ -384,6 +403,7 @@ Flickable {
                     onEditingFinished: updateDateField(fieldSowingDateField,
                                                        sowDtmField,
                                                        firstHarvestDateField, 1)
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
                 }
 
                 MyTextField {
@@ -428,6 +448,15 @@ Flickable {
                     onTextChanged: updateDateField(greenhouseStartDateField,
                                                    greenhouseGrowTimeField,
                                                    fieldPlantingDateField, 1)
+                    onActiveFocusChanged: {
+//                        if (!activeFocus)
+//                            return;
+                        console.log("Scrolling...")
+                        if (y < control.contentY)
+                            control.contentY = controlY - y
+                        else if (y > control.contentY + control.height)
+                            control.contentY = control.contentY + y
+                    }
                 }
 
                 DatePicker {
@@ -544,6 +573,7 @@ Flickable {
                     id: seedsNeededField
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: 0; top: 999999}
                     //                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true

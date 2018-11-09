@@ -25,7 +25,6 @@ TextField {
     id: control
 
     property string helperText
-
     property string labelText: ""
     property string prefixText: ""
     property string suffixText: ""
@@ -34,7 +33,6 @@ TextField {
     property bool persistentSuffix: false
     property bool floatMode: false
     property bool showError: false
-
     property bool floatingLabel: false
     property bool hasError: showError && ((characterLimit && length > characterLimit) || !acceptableInput)
     property int characterLimit
@@ -50,15 +48,16 @@ TextField {
         return Qt.rgba(0,0,0,alpha)
     }
 
+    activeFocusOnPress: true
+    activeFocusOnTab: true
+
     onActiveFocusChanged: {
         if (activeFocus)
             selectAll();
         else
             select(0, 0);
     }
-
     onTextEdited: floatMode = true
-
     onAccepted: nextItemInFocusChain().forceActiveFocus()
 
     Label {
