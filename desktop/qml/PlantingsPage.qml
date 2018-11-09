@@ -39,11 +39,6 @@ Page {
     property alias model: listView.model
     property alias plantingModel: plantingModel
 
-    Settings {
-        id: settings
-        property alias tableModel: page.tableHeaderModel
-    }
-
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [{
@@ -117,11 +112,12 @@ Page {
             "width": 60,
             "visible": true
         }]
-    property variant selectedIds: []
-    property int lastIndexClicked: -1
-    property int checks: numberOfTrue(selectedIds)
 
-    onTableSortColumnChanged: tableSortOrder = "descending"
+    // Ids of selected plantings
+    property variant selectedIds: []
+    // Number of selected plantings
+    property int checks: numberOfTrue(selectedIds)
+    property int lastIndexClicked: -1
 
     function numberOfTrue(array) {
         var n = 0
@@ -130,21 +126,6 @@ Page {
                 n++
         return n
     }
-
-    // UGLY HACK
-    // JS arrays don't emit changed() signal when an element is modified.
-    // Unfortunately, it seems to be no way to manually emit the
-    // selectedIdsChanged() signal. Hence when have to copy the whole
-    // array, which is a really ugly.
-//    function selectedIdsChanged() {
-////        selectedIds = selectedIds
-//        selectedIdsChanged();
-//    }
-
-//    // Same ugly hack
-//    function tableHeaderModelChanged() {
-//        tableHeaderModel = tableHeaderModel
-//    }
 
     function duplicateSelected() {
         for (var key in selectedIds)
@@ -166,6 +147,13 @@ Page {
 
     title: "Plantings"
     padding: 8
+
+    onTableSortColumnChanged: tableSortOrder = "descending"
+
+    Settings {
+        id: settings
+        property alias tableModel: page.tableHeaderModel
+    }
 
     PlantingModel {
         id: plantingModel
