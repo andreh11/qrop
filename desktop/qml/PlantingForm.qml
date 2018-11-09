@@ -46,6 +46,7 @@ Flickable {
     property int successions: parseInt(successionsField.text)
     property int weeksBetween: parseInt(timeBetweenSuccessionsField.text)
 
+
     function updateDateField(from, length, to, direction) {
         if (length.text === "")
             to.calendarDate = from.calendarDate;

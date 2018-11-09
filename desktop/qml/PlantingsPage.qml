@@ -136,14 +136,15 @@ Page {
     // Unfortunately, it seems to be no way to manually emit the
     // selectedIdsChanged() signal. Hence when have to copy the whole
     // array, which is a really ugly.
-    function emitSelectedIdsChanged() {
-        selectedIds = selectedIds
-    }
+//    function selectedIdsChanged() {
+////        selectedIds = selectedIds
+//        selectedIdsChanged();
+//    }
 
-    // Same ugly hack
-    function emitTableHeaderModelChanged() {
-        tableHeaderModel = tableHeaderModel
-    }
+//    // Same ugly hack
+//    function tableHeaderModelChanged() {
+//        tableHeaderModel = tableHeaderModel
+//    }
 
     function duplicateSelected() {
         for (var key in selectedIds)
@@ -151,7 +152,7 @@ Page {
                 selectedIds[key] = false
                 Planting.duplicate(key)
             }
-        emitSelectedIdsChanged()
+        selectedIdsChanged()
     }
 
     function removeSelected() {
@@ -160,7 +161,7 @@ Page {
                 selectedIds[key] = false
                 Planting.remove(key)
             }
-        emitSelectedIdsChanged()
+        selectedIdsChanged()
     }
 
     title: "Plantings"
@@ -487,7 +488,7 @@ Page {
                                         onClicked: {
                                             tableHeaderModel[index + 2].visible
                                                     = !tableHeaderModel[index + 2].visible
-                                            emitTableHeaderModelChanged()
+                                            tableHeaderModelChanged()
                                         }
                                     }
                                     ScrollBar.vertical: ScrollBar {
@@ -560,7 +561,7 @@ Page {
                                                 = !selectedIds[model.planting_id]
                                         lastIndexClicked = index
 
-                                        emitSelectedIdsChanged()
+                                        selectedIdsChanged()
                                     }
                                 }
                             }
@@ -699,7 +700,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.avg_price
+                                text: model.average_price
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight
