@@ -29,7 +29,7 @@ Item {
     property int year
     property date todayDate: new Date()
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
-    property int monthWidth: 10
+    property int monthWidth: Units.monthWidth
     readonly property int graphWidth: 12 * monthWidth
     property date seedingDate
     property date transplantingDate

@@ -48,14 +48,16 @@ QDate MDate::mondayOfWeek(const int week, const int year)
 }
 
 // Format date according to preferred format.
-QString MDate::formatDate(const QDate &date, const int currentYear)
+QString MDate::formatDate(const QDate &date, const int currentYear, const QString &type)
 {
     QSettings settings;
     QString dateType = settings.value("dateType", "week").toString();
 
+    if (!type.isEmpty())
+        dateType = type;
+
     int year;
-    int week = date.weekNumber(&year);
-    qDebug() << "DATE TYPE" << dateType;
+    const int week = date.weekNumber(&year);
     if (dateType == "week") {
         if (year == currentYear)
             return QString::number(week);
@@ -65,7 +67,7 @@ QString MDate::formatDate(const QDate &date, const int currentYear)
         if (year == currentYear)
             return date.toString("dd/MM");
         else
-            return date.toString("dd/MM/yy");
+            return date.toString("dd/MM/yyyy");
     }
 }
 
@@ -79,7 +81,6 @@ QDate MDate::dateFromWeekString(const QString &s)
     const QString prefix = list[1];
     const int week = list[2].toInt();
     int year;
-    qDebug() << "PREFX:" << prefix;
     if (prefix == "<")
         year = currentYear - 1;
     else if (prefix == ">")
@@ -97,7 +98,6 @@ QDate MDate::dateFromDateString(const QString &s)
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
     int day = list[1].toInt();
-    qDebug() << "STRING:" << s << "LIST: " << list;
     int month = list[2].toInt();
     int year;
     if (list[4].isEmpty())
@@ -111,5 +111,3 @@ QDate MDate::dateFromDateString(const QString &s)
 
     return date;
 }
-
-

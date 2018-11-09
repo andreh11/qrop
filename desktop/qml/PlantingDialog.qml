@@ -29,6 +29,7 @@ Dialog {
     property string plantingIds: ""
     property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
+    property alias currentYear: plantingForm.currentYear
 
     signal plantingsAdded(int successions)
 

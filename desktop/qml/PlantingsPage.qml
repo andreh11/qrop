@@ -33,8 +33,6 @@ Page {
     property string filterText: ""
     property int currentYear: seasonSpinBox.year
     property date todayDate: new Date()
-    property int rowHeight: 37
-    property int monthWidth: 60
 
     property alias model: listView.model
     property alias plantingModel: plantingModel
@@ -218,6 +216,7 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         model: listView.model
+        currentYear: page.currentYear
         onPlantingsAdded: {
             addPlantingSnackbar.successions = successions
             addPlantingSnackbar.open();
@@ -446,7 +445,7 @@ Page {
 
                         Row {
                             id: headerRow
-                            height: rowHeight
+                            height: Units.rowHeight
                             spacing: 8
                             leftPadding: 16
 
@@ -492,7 +491,7 @@ Page {
                                     Repeater {
                                         model: monthsOrder[page.season]
                                         Item {
-                                            width: monthWidth
+                                            width: Units.monthWidth
                                             height: parent.height
 
                                             Rectangle {
@@ -630,8 +629,8 @@ Page {
 
                         Row {
                             id: row
-                            height: rowHeight
-                            spacing: 8
+                            height: Units.rowHeight
+                            spacing: Units.smallSpacing
                             leftPadding: 16
 
                             TextCheckBox {
@@ -671,7 +670,6 @@ Page {
                                 year: currentYear
                                 season: page.season
                                 visible: showTimegraph
-                                monthWidth: page.monthWidth
                                 seedingDate: delegate.seedingDate
                                 transplantingDate: delegate.transplantingDate
                                 beginHarvestDate: delegate.beginHarvestDate

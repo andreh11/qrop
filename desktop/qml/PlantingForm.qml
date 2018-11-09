@@ -25,7 +25,7 @@ import "date.js" as MDate
 
 Flickable {
     id: control
-
+    property int currentYear
     property bool accepted: varietyField.acceptableInput
 
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
@@ -379,6 +379,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Field Sowing")
+                    currentYear: control.currentYear
 
                     onEditingFinished: updateDateField(fieldSowingDateField,
                                                        sowDtmField,
@@ -406,6 +407,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
+                    currentYear: control.currentYear
 
                     onEditingFinished: updateDateField(greenhouseStartDateField,
                                                        greenhouseGrowTimeField,
@@ -434,6 +436,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Field planting")
+                    currentYear: control.currentYear
 
                     onEditingFinished: updateDateField(fieldPlantingDateField,
                                                        greenhouseGrowTimeField,
@@ -464,6 +467,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("First harvest")
+                    currentYear: control.currentYear
 
                     onEditingFinished: {
                         if (directSeeded)
@@ -484,12 +488,7 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Harvest window")
-                    helperText: !text
-                                ? ""
-                                : qsTr( "Last: ")
-                                  + MDate.addDays(firstHarvestDateField.calendarDate,
-                                                  Number(text)).toLocaleString(
-                                      Qt.locale(), "dd/MM/yyyy")
+                    helperText: text ? NDate.formatDate(endHarvestDate, currentYear) : ""
                     suffixText: qsTr("days")
                 }
             }

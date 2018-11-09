@@ -32,7 +32,9 @@ public:
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
     static QDate firstMondayOfYear(const int year);
     static QDate mondayOfWeek(const int week, const int year);
-    Q_INVOKABLE static QString formatDate(const QDate &date, const int currentYear);
+    Q_INVOKABLE static QString formatDate(const QDate &date,
+                                          const int currentYear,
+                                          const QString &type = "");
 };
 
 #endif // MDATE_H

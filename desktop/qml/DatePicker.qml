@@ -29,21 +29,17 @@ Item {
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
-    readonly property int currentYear: new Date().getFullYear()
+    property int currentYear: new Date().getFullYear()
 
     property date calendarDate: new Date()
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: {
-        if (mode === "date")
-            qsTr("W") + MDate.isoWeek(calendarDate)
-        else
-            qsTr("%1/%2/%3").arg(calendarDate.getDate()).arg(calendarDate.getMonth()+1).arg(calendarDate.getFullYear())
-    }
+    property string dateHelperText: NDate.formatDate(calendarDate,
+                                                     currentYear,
+                                                     mode === "date" ? "week" : date)
 
     signal editingFinished()
-
 
     Settings {
         id: settings
@@ -61,28 +57,19 @@ Item {
         implicitWidth: 80
         text: NDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
-//        inputMask: mode === "date" ? "99/99/9999" : "90"
         validator: RegExpValidator {
             regExp: mode === "date" ? /^(0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ]20\d\d){,1}$/
                                     : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
         onEditingFinished: {
-            var newDate
-            if (mode === "date")
-                newDate = NDate.dateFromDateString(text);
-            else
-                newDate = NDate.dateFromWeekString(text);
+            var newDate = mode === "date" ? NDate.dateFromDateString(text)
+                                          : NDate.dateFromWeekString(text);
 
-            if (newDate.toLocaleString(Qt.locale())) {
+            if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
-            } else {
-                // Trigger changed() signal assigning twice...
-                var goodDate = calendarDate;
-                calendarDate = newDate;
-                calendarDate = goodDate;
-            }
 
+            calendarDateChanged();
             control.editingFinished();
         }
 
@@ -114,10 +101,13 @@ Item {
             }
 
             onClicked: {
-                if (largeDisplay)
+                if (largeDisplay) {
+                    calendarView.resetBindings();
                     popup.open();
-                else
+                } else {
+                    mobileCalendarView.resetBindings();
                     calendar.visible = true;
+                }
             }
 
             Popup {
@@ -131,13 +121,15 @@ Item {
                 margins: 0
 
                 contentItem: CalendarView {
+                    id: calendarView
+
                     clip: true
                     month: calendarDate.getMonth()
                     year: calendarDate.getFullYear()
                     date: calendarDate
 
-                    onDateChanged: {
-                        calendarDate = date;
+                    onDateSelect: {
+                        calendarDate = newDate;
                         popup.close();
                         control.editingFinished();
                     }
@@ -178,11 +170,12 @@ Item {
         }
 
         CalendarView {
-            id: calView
+            id: mobileCalendarView
             month: calendarDate.getMonth()
             year: calendarDate.getFullYear()
-            onDateChanged: {
-                calendarDate = date;
+            date: calendarDate
+            onDateSelect: {
+                calendarDate = newDate;
                 parent.visible = false;
                 control.editingFinished();
             }

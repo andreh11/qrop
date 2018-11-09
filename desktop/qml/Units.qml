@@ -26,7 +26,7 @@ Item {
     readonly property int fontSizeHeadline: 24
     readonly property int fontSizeTitle: 20
     readonly property int fontSizeSubheading: 16
-    readonly property int fontSizeBodyAndButton: 14 // is Default
+    readonly property int fontSizeBodyAndButton: 14 // default
     readonly property int fontSizeCaption: 12
 
     readonly property int smallSpacing: 8
@@ -39,4 +39,9 @@ Item {
 
     readonly property int buttonHeight: 36
     readonly property int chipHeight: 32
+
+    // Height of rows in tables.
+    readonly property int rowHeight: 37
+    // Width of a month in a timeline.
+    readonly property int monthWidth: 60
 }
