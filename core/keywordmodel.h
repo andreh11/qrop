@@ -22,7 +22,7 @@
 #include "core_global.h"
 #include "sortfilterproxymodel.h"
 
-class KeywordModel : public SortFilterProxyModel
+class CORESHARED_EXPORT KeywordModel : public SortFilterProxyModel
 {
     Q_OBJECT
 

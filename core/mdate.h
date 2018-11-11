@@ -22,7 +22,6 @@
 
 #include "core_global.h"
 
-
 class CORESHARED_EXPORT MDate : public QObject
 {
     Q_OBJECT
