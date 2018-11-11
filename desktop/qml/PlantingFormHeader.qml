@@ -87,6 +87,11 @@ Rectangle {
 
             onActivated: control.cropSelected()
             onAddItemClicked: addCropDialog.open()
+            onCurrentIndexChanged: {
+                var cropId = cropModel.rowId(cropField.currentIndex)
+                var map = Crop.mapFromId("crop", cropId);
+                textIcon.color = map['color']
+            }
 
             AddCropDialog {
                 id: addCropDialog
@@ -94,7 +99,7 @@ Rectangle {
                 onAccepted: {
                     Crop.add({"crop" : cropName,
                               "family_id" : familyId,
-                               "color" : color});
+                              "color" : color});
                     cropModel.refresh();
                     cropField.currentIndex = cropField.find(cropName);
                     var newCropId = cropModel.rowId(cropField.currentIndex)

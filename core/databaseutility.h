@@ -20,6 +20,7 @@
 #include <QObject>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QVariantMap>
 
 #include "core_global.h"
 
@@ -60,7 +61,7 @@ public:
     QList<QSqlRecord> recordListFromIdList(const QString &tableName,
                                            const QList<int> &idList) const;
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
-    QVariantMap mapFromId(const QString &tableName, int id) const;
+    Q_INVOKABLE QVariantMap mapFromId(const QString &tableName, int id) const;
     QList<QVariantMap> mapListFromIdList(const QString &tableName,
                                          const QList<int> &idList) const;
 
