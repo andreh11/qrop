@@ -32,6 +32,7 @@
 #include "db.h"
 #include "planting.h"
 #include "keyword.h"
+#include "variety.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -125,7 +126,7 @@ int main(int argc, char *argv[])
     {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        auto *variety = new DatabaseUtility();
+        auto *variety = new Variety();
         variety->setTable("variety");
         return variety;
     }
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
         return mdate;
     }
     );
+
 //    deleteDatabase();
     connectToDatabase();
 //    createDatabase();

@@ -35,9 +35,8 @@ Item {
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: NDate.formatDate(calendarDate,
-                                                     currentYear,
-                                                     mode === "date" ? "week" : date)
+    property string dateHelperText: NDate.formatDate(calendarDate, currentYear,
+                                                     mode === "date" ? "week" : "date")
 
     signal editingFinished()
 

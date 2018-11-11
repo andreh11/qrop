@@ -83,9 +83,10 @@ Flickable {
                                         : plantingAmount / inRowSpacing * 100 * rowsPerBed
     readonly property real flatsNumber: control.flatSize < 1
                                         ? 0
-                                        : toPrecision((plantsNeeded / flatSize) / (1.0 - greenhouseEstimatedLoss/100), 2);
+                                        : toPrecision((plantsNeeded / flatSize)
+                                                      / (1.0 - greenhouseEstimatedLoss/100), 2);
 
-    readonly property alias unitText: unitCombo.currentText
+    readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
     readonly property real averagePrice: {
@@ -117,8 +118,9 @@ Flickable {
         "seeds_per_gram": seedsPerGram,
         "seeds_number": seedsNeeded,
         "seeds_quantity": seedsQuantity,
+        "seeds_percentage": seedsExtraPercentage,
         "keyword_ids": keywordsIdList(),
-        "unit_id": unitModel.rowId(unitCombo.currentIndex),
+        "unit_id": unitModel.rowId(unitField.currentIndex),
         "yield_per_bed_meter": yieldPerBedMeter,
         "average_price": averagePrice,
         "tray_size" : flatSize,
@@ -142,15 +144,23 @@ Flickable {
         seedsNeededField.clear();
         seedsExtraPercentageField.text = "0"
         seedsPerGramField.clear();
-        unitCombo.currentIndex = -1;
+        unitField.currentIndex = -1;
         yieldPerBedMeterField.clear();
         averagePriceField.clear();
     }
 
     function setFormValues(val) {
-        plantingAmountField.text = val['length'];
-        inRowSpacingField.text = val['spacing_plants']
-        rowsPerBedField.text = val['rows']
+        if ('variety_id' in val) {
+            var varietyId = Number(val['variety_id'])
+            cropId = Variety.cropId(varietyId)
+            console.log("varietyId", varietyId, "cropId", cropId)
+            varietyModel.refresh();
+            varietyField.setRowId(varietyId);
+        }
+
+        if ('length' in val) plantingAmountField.text = val['length'];
+        if ('spacing_plants' in val) inRowSpacingField.text = val['spacing_plants']
+        if ('rows' in val) rowsPerBedField.text = val['rows'];
 
         switch (val['planting_type']) {
         case 1:
@@ -164,8 +174,8 @@ Flickable {
             plantingDtmField.text = val['dtm']
             break;
         default:
-            plantingDtmField.text = val['dtm']
             boughtRadio.checked = true;
+            plantingDtmField.text = val['dtm']
         }
         harvestWindowField.text = val['harvest_window']
 
@@ -174,9 +184,9 @@ Flickable {
         greenhouseEstimatedLossField.text = val['estimated_gh_loss']
 
 //        seedsNeededField.text = val['seeds_number']
-        // TODO: seedsExtraPercentageField.text
+        seedsExtraPercentageField.text = val['seeds_percentage'];
         seedsPerGramField.text = val['seeds_per_gram']
-        // TODO: unitCombo
+        unitField.setRowId(Number(val['unit_id']))
         yieldPerBedMeterField.text = val['yield_per_bed_meter']
         averagePriceField.text = val['average_price']
 
@@ -207,6 +217,17 @@ Flickable {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
+    function ensureVisible(focus, y, height) {
+        console.log("CALLED", y, height, control.contentY, control.height)
+        if (!focus)
+            return;
+        if (y < control.contentY) {
+            control.contentY = y
+        } else if ((y+height) > (control.contentY + control.height)) {
+            control.contentY = y + height - control.height
+        }
+    }
+
     onCropIdChanged: varietyField.currentIndex = -1
     onVarietyIdChanged: {
         var val = Planting.lastVarietyValues(varietyId, cropId);
@@ -219,17 +240,6 @@ Flickable {
     contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     Material.background: "white"
-
-    function ensureVisible(focus, y, height) {
-        console.log("CALLED", y, height, control.contentY, control.height)
-        if (!focus)
-            return;
-        if (y < control.contentY) {
-            control.contentY = y
-        } else if ((y+height) > (control.contentY + control.height)) {
-            control.contentY = y + height - control.height
-        }
-    }
 
     Column {
         id: mainColumn
@@ -613,7 +623,7 @@ Flickable {
                 spacing: 16
 
                 MyComboBox {
-                    id: unitCombo
+                    id: unitField
                     labelText: qsTr("Unit")
                     currentIndex: find("kg")
                     addItemText: qsTr("Add Unit")
@@ -633,7 +643,7 @@ Flickable {
                             Unit.add({"fullname" : unitName,
                                          "abbreviation": unitAbbreviation});
                             unitModel.refresh();
-                            unitCombo.currentIndex = unitCombo.find(unitAbbreviation);
+                            unitField.currentIndex = unitField.find(unitAbbreviation);
                             //                            plantingAmountField.forceActiveFocus()
                         }
                     }
@@ -643,14 +653,14 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    suffixText: unitCombo.currentText
+                    suffixText: unitField.currentText
                     //                    inputMask: "900000"
                     Layout.fillWidth: true
                 }
 
                 MyTextField {
                     id: averagePriceField
-                    labelText: qsTr("Price/") + unitCombo.currentText
+                    labelText: qsTr("Price/") + unitField.currentText
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
                     validator: TextFieldDoubleValidator {
                         bottom: 0

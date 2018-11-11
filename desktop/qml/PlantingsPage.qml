@@ -146,6 +146,16 @@ Page {
         tableHeaderModel = tableHeaderModel
     }
 
+    function selectedIdList() {
+        var idList = []
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+                selectedIds[key] = false
+                idList.push(key)
+            }
+        return idList;
+    }
+
     function selectAll()
     {
         var list = plantingModel.idList()
@@ -164,13 +174,8 @@ Page {
 
     function duplicateSelected()
     {
-        var ids = []
-        for (var key in selectedIds)
-            if (selectedIds[key]) {
-                selectedIds[key] = false
-                ids.push(key)
-            }
-        Planting.duplicateList(ids)
+        var idList = selectedIdList();
+        Planting.duplicateList(idList)
         plantingModel.refresh()
         emitSelectedIdsChanged()
     }
@@ -190,6 +195,7 @@ Page {
 
     title: "Plantings"
     padding: 8
+    Material.background: "white"
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
@@ -221,6 +227,7 @@ Page {
             addPlantingSnackbar.successions = successions
             addPlantingSnackbar.open();
         }
+        onRejected: unselectAll();
     }
 
     Snackbar {
@@ -229,10 +236,18 @@ Page {
         property int successions: 0
 
         z: 2
-        x: (parent.width - width) / 2
-        y: parent.height - 8 - height
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing - horizontalScrollBar.height
         text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
         visible: false
+
+//        Behavior on y {
+//              NumberAnimation {
+//                  easing.type: Easing.OutQuad;
+//                  easing.amplitude: 1.0;
+//                  easing.period: 1.0;
+//                  duration: 300 }
+//          }
 
         onClicked: {
             Planting.rollback();
@@ -266,6 +281,10 @@ Page {
                 visible: true
                 width: parent.width
                 height: 48
+
+                Behavior on color {
+                    ColorAnimation { duration: 150 }
+                }
 
                 RowLayout {
                     id: buttonRow
@@ -305,7 +324,8 @@ Page {
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks > 0
                         Material.foreground: "white"
-                        onClicked: plantingDialog.editPlantings(selectedIds)
+                        onClicked: plantingDialog.editPlantings(selectedIdList())
+
                     }
 
                     Button {
@@ -389,19 +409,21 @@ Page {
 
                 visible: plantingModel.count
                 clip: true
-                width: parent.width
+                width: parent.width - verticalScrollBar.width
                 height: parent.height - buttonRectangle.height
                 spacing: 0
                 anchors.top: topDivider.bottom
                 boundsBehavior: Flickable.StopAtBounds
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
-                contentWidth: contentItem.childrenRect.width + Units.smallSpacing
-                contentHeight: contentItem.childrenRect.height + Units.smallSpacing
                 rightMargin: verticalScrollBar.width
                 bottomMargin: horizontalScrollBar.height
+                contentWidth: contentItem.childrenRect.width + Units.smallSpacing
+                contentHeight: contentItem.childrenRect.height + Units.smallSpacing
 
                 Keys.onUpPressed: verticalScrollBar.decrease()
                 Keys.onDownPressed: verticalScrollBar.increase()
+                Keys.onRightPressed: horizontalScrollBar.increase()
+                Keys.onLeftPressed: horizontalScrollBar.decrease()
 
                 model: plantingModel
 
@@ -409,7 +431,11 @@ Page {
                     id: verticalScrollBar
                     visible: largeDisplay && plantingModel.count
                     parent: listView.parent
-                    anchors { top: listView.top; right: listView.right; bottom: horizontalScrollBar.top }
+                    anchors {
+                        top: listView.top
+                        left: listView.right
+                        bottom: horizontalScrollBar.top
+                    }
                     active: horizontalScrollBar.active
                     policy: ScrollBar.AlwaysOn
                 }
@@ -419,7 +445,11 @@ Page {
                     visible: verticalScrollBar.visible
                     active: verticalScrollBar.active
                     parent: listView.parent
-                    anchors { bottom : parent.bottom; left: parent.left; right: verticalScrollBar.left }
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: verticalScrollBar.left
+                    }
                     orientation: Qt.Horizontal
                     policy: ScrollBar.AlwaysOn
                 }
@@ -451,7 +481,8 @@ Page {
 
                             CheckBox {
                                 id: headerCheckbox
-                                width: 24
+                                width: parent.height * 0.8
+//                                width: 24
                                 anchors.verticalCenter: headerRow.verticalCenter
                                 tristate: true
                                 checkState: checks == rowsNumber ? Qt.Checked
@@ -506,9 +537,8 @@ Page {
                                                                             Locale.ShortFormat)
                                                 anchors.left: lineRectangle.right
                                                 font.family: "Roboto Condensed"
-                                                color: Material.color(
-                                                           Material.Grey,
-                                                           Material.Shade700)
+                                                color: Material.color(Material.Grey,
+                                                                      Material.Shade700)
                                                 width: 60 - 1
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 horizontalAlignment: Text.AlignHCenter
@@ -562,7 +592,7 @@ Page {
                                     ListView {
                                         spacing: -16
                                         anchors.fill: parent
-                                        model: tableHeaderModel.slice( 2) // Don't show Crop and Variety.
+                                        model: tableHeaderModel.slice(2) // Don't show Crop and Variety.
                                         delegate: CheckBox {
                                             text: modelData.name
                                             checked: modelData.visible
@@ -572,11 +602,14 @@ Page {
                                                 emitTableHeaderModelChanged()
                                             }
                                         }
+
                                         ScrollBar.vertical: ScrollBar {
                                             visible: largeDisplay
-                                            anchors.top: parent.top
-                                            anchors.right: parent.right
-                                            anchors.bottom: parent.bottom
+                                            anchors {
+                                                top: parent.top
+                                                right: parent.right
+                                                bottom: parent.bottom
+                                            }
                                             policy: ScrollBar.AlwaysOn
                                         }
                                     }
@@ -623,9 +656,7 @@ Page {
                         id: headerColumn
                         width: row.width
 
-                        ThinDivider {
-                            width: parent.width
-                        }
+                        ThinDivider { width: parent.width }
 
                         Row {
                             id: row
@@ -638,7 +669,9 @@ Page {
                                 text: model.crop
                                 selectionMode: checks > 0
                                 anchors.verticalCenter: row.verticalCenter
-                                width: 24
+//                                width: 24
+                                width: parent.height * 0.8
+                                round: true
                                 color: model.crop_color
                                 checked: model.planting_id in selectedIds
                                          && selectedIds[model.planting_id]
@@ -660,6 +693,7 @@ Page {
 
                             TableLabel {
                                 text: model.variety
+                                showToolTip: true
                                 anchors.verticalCenter: parent.verticalCenter
                                 elide: Text.ElideRight
                                 width: 100
@@ -773,7 +807,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.yield_per_bed_meter + model.unit
+                                text: model.yield_per_bed_meter + " " + model.unit
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight

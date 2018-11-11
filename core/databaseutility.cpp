@@ -100,6 +100,35 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     return QSqlRecord();
 }
 
+QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
+                                                        const QList<int> &idList) const
+{
+    if (idList.length() < 1)
+        return QList<QSqlRecord>();
+    if (tableName.isNull())
+        return QList<QSqlRecord>();
+
+    QString queryString("SELECT * FROM %1 WHERE %2 in %3");
+    QString ids = "(";
+    int i;
+    for (i = 0; i < idList.length() - 1; i++) {
+        ids.append(QString::number(idList[i]) + ", ");
+    }
+    ids.append(QString::number(idList[i]) + ")");
+
+    QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
+    query.exec();
+    debugQuery(query);
+
+    QList<QSqlRecord> recordList;
+
+    while (query.next())
+        if (query.isValid())
+            recordList.push_back(query.record());
+
+    return recordList;
+}
+
 QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
 {
     QVariantMap map;
@@ -111,6 +140,18 @@ QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
 QVariantMap DatabaseUtility::mapFromId(const QString &tableName, int id) const
 {
     return mapFromRecord(recordFromId(tableName, id));
+}
+
+QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
+                                                      const QList<int> &idList) const
+{
+    QList<QVariantMap> mapList;
+    QList<QSqlRecord> recordList = recordListFromIdList(tableName, idList);
+
+    for (auto &record : recordList)
+        if (!record.isEmpty())
+            mapList.push_back(mapFromRecord(record));
+    return mapList;
 }
 
 int DatabaseUtility::add(const QVariantMap &map) const

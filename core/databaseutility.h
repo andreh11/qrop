@@ -57,8 +57,12 @@ public:
 
     QList<int> queryIds(const QString &queryString, const QString &idFieldName) const;
     QSqlRecord recordFromId(const QString &tableName, int id) const;
+    QList<QSqlRecord> recordListFromIdList(const QString &tableName,
+                                           const QList<int> &idList) const;
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     QVariantMap mapFromId(const QString &tableName, int id) const;
+    QList<QVariantMap> mapListFromIdList(const QString &tableName,
+                                         const QList<int> &idList) const;
 
     virtual Q_INVOKABLE int add(const QVariantMap &map) const;
     void addLink(const QString &table,

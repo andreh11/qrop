@@ -30,17 +30,24 @@ Dialog {
     property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
     property alias currentYear: plantingForm.currentYear
+    property variant editPlantingIdList
+    property variant editPlantingValueMap
 
     signal plantingsAdded(int successions)
+    signal plantingsModified(int successions)
 
     function createPlanting() {
+        mode = "add";
         plantingForm.clearAll();
         dialog.title = qsTr("Add planting(s)")
         dialog.open()
     }
 
     function editPlantings(plantingIds) {
-        plantingForm.clearAll();
+        mode = "edit";
+        dialog.editPlantingIdList = plantingIds;
+        editPlantingValueMap = Planting.commonValues(plantingIds);
+        plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
         dialog.open()
     }
@@ -51,6 +58,7 @@ Dialog {
 
     header: PlantingFormHeader {
         id: plantingFormHeader
+        visible: mode === "add"
         estimatedRevenue: plantingForm.estimatedRevenue
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
@@ -122,15 +130,24 @@ Dialog {
     }
 
     onOpened: {
-        plantingFormHeader.cropField.contentItem.forceActiveFocus();
-        plantingFormHeader.cropField.popup.open();
+        if (mode === "add") {
+            plantingFormHeader.cropField.contentItem.forceActiveFocus();
+            plantingFormHeader.cropField.popup.open();
+        }
     }
 
     onAccepted: {
-        Planting.addSuccessions(plantingForm.successions,
-                                plantingForm.weeksBetween,
+        if (mode === "add") {
+            Planting.addSuccessions(plantingForm.successions,
+                                    plantingForm.weeksBetween,
+                                    plantingForm.values);
+            dialog.plantingsAdded(plantingForm.successions)
+        } else {
+            Planting.updateList(dialog.editPlantingIdList,
                                 plantingForm.values);
-        dialog.plantingsAdded(plantingForm.successions)
+            dialog.plantingsModified();
+        }
+
         model.refresh();
     }
 }

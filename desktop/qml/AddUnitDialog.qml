@@ -30,6 +30,7 @@ Dialog {
 
     title: qsTr("Add Unit")
     standardButtons: Dialog.Ok | Dialog.Cancel
+    margins: 0
 
     onOpened: {
         unitNameField.clear();

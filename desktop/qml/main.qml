@@ -28,7 +28,7 @@ ApplicationWindow {
     id: window
 
     property var navigationModel: [
-        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
+//        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
         { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" }
 //        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },

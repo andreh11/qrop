@@ -53,6 +53,14 @@ ComboBox {
         return Qt.rgba(0,0,0,alpha)
     }
 
+    function setRowId(rowId) {
+        var i = 0;
+        while (model.rowId(i) !== rowId && i < model.count)
+            i++;
+       if (i < model.count)
+           currentIndex = i;
+    }
+
     Material.elevation: 0
     width: parent.width
     //    height: 56

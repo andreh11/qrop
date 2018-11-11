@@ -86,7 +86,8 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
 
 QVariantMap Planting::lastCropValues(const int cropId) const
 {
-    const QString queryString("SELECT planting_id FROM planting_view WHERE crop_id = %1 ORDER BY planting_id DESC");
+    const QString queryString("SELECT planting_id FROM planting_view"
+                              " WHERE crop_id = %1 ORDER BY planting_id DESC");
     QSqlQuery query(queryString.arg(cropId));
     query.exec();
     debugQuery(query);
@@ -106,7 +107,8 @@ QVariantMap Planting::lastCropValues(const int cropId) const
 
 QVariantMap Planting::lastVarietyValues(const int varietyId, const int cropId) const
 {
-    const QString queryString("SELECT planting_id FROM planting_view WHERE variety_id = %1 ORDER BY planting_id DESC");
+    const QString queryString("SELECT planting_id FROM planting_view"
+                              " WHERE variety_id = %1 ORDER BY planting_id DESC");
     QSqlQuery query(queryString.arg(varietyId));
     query.exec();
     debugQuery(query);
@@ -123,6 +125,30 @@ QVariantMap Planting::lastVarietyValues(const int varietyId, const int cropId) c
         return QVariantMap();
 
     return mapFromId("planting", plantingId);
+}
+
+QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
+{
+    if (plantingIdList.length() < 1)
+        return QVariantMap();
+
+    QList<QVariantMap> list = mapListFromIdList("planting", plantingIdList);
+    QVariantMap common = list[0];
+
+    if (list.length() == 1)
+        return common;
+
+    for (auto &key : common.keys()) {
+        int i;
+        for (i = 1; i < list.length(); i ++)
+            if (list[i].value(key) != common.value(key))
+                break;
+        if (i != list.length())
+            common.remove(key);
+    }
+
+    qDebug() << "COMMON" << common;
+    return common;
 }
 
 void Planting::update(int id, const QVariantMap &map) const

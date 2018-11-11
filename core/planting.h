@@ -37,6 +37,7 @@ public:
                                           const QVariantMap &map) const;
     Q_INVOKABLE QVariantMap lastCropValues(const int cropId) const;
     Q_INVOKABLE QVariantMap lastVarietyValues(const int varietyId, const int cropId) const;
+    Q_INVOKABLE QVariantMap commonValues(const QList<int> &plantingIdList) const;
 
 private:
     Task *task;

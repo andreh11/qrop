@@ -26,3 +26,9 @@ Variety::Variety(QObject *parent)
     : DatabaseUtility(parent)
 {
 }
+
+int Variety::cropId(int varietyId) const
+{
+    QVariantMap map = mapFromId("variety", varietyId);
+    return map["crop_id"].toInt();
+}

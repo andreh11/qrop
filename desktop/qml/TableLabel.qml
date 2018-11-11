@@ -21,11 +21,14 @@ import QtQuick.Controls.Material 2.2
 
 Label {
     id: label
+
+    property bool showToolTip: false
+
     font.family: "Roboto Condensed"
-    font.pixelSize: 14
+    font.pixelSize: Units.fontSizeBodyAndButton
 
     ToolTip {
-        visible: mouseArea.containsMouse
+        visible: showToolTip && mouseArea.containsMouse
         delay: Qt.styleHints.mousePressAndHoldInterval
         text: label.text
         font.family: "Robo Regular"

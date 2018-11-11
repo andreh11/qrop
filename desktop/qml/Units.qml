@@ -41,7 +41,7 @@ Item {
     readonly property int chipHeight: 32
 
     // Height of rows in tables.
-    readonly property int rowHeight: 37
+    readonly property int rowHeight: 36
     // Width of a month in a timeline.
     readonly property int monthWidth: 60
 }

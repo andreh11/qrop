@@ -20,12 +20,11 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class Task;
-
 class CORESHARED_EXPORT Variety : public DatabaseUtility {
     Q_OBJECT
 public:
     Variety(QObject *parent = nullptr);
+    Q_INVOKABLE int cropId(int varietyId) const;
 
 };
 

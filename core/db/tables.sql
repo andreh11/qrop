@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_per_gram    INTEGER,
     seeds_number      INTEGER,
     seeds_quantity    FLOAT,
+    seeds_percentage  INTEGER,
     variety_id        INTEGER NOT NULL REFERENCES variety,
     unit_id           INTEGER NOT NULL REFERENCES unit,
     yield_per_bed_meter   FLOAT,
