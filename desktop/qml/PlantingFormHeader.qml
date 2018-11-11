@@ -70,8 +70,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: cropField.currentText.slice(0,2)
                 color: "white"
-                font.family: "Roboto Regular"
-                font.pixelSize: 24
+                font { family: "Roboto Regular"; pixelSize: 24 }
             }
         }
 
@@ -112,16 +111,14 @@ Rectangle {
             Label {
                 text: qsTr("Yield")
                 Layout.alignment: Qt.AlignRight
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeCaption
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
                 color: Qt.rgba(0,0,0, 0.50)
             }
             Label {
                 id: estimatedYieldLabel
                 text: "%L1 %2".arg(estimatedYield).arg(unitText)
                 Layout.alignment: Qt.AlignRight
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton; }
                 color: Qt.rgba(0,0,0, 0.87)
             }
         }
@@ -129,8 +126,7 @@ Rectangle {
         ColumnLayout {
             Label {
                 text: qsTr("Revenue")
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeCaption
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
                 color: Qt.rgba(0,0,0, 0.50)
                 Layout.alignment: Qt.AlignRight
             }
@@ -138,8 +134,7 @@ Rectangle {
                 id: estimatedRevenueLabel
                 text: "%L1 €".arg(estimatedRevenue)
                 horizontalAlignment: Text.AlignHCenter
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
                 color: Qt.rgba(0,0,0, 0.87)
                 Layout.alignment: Qt.AlignRight
             }

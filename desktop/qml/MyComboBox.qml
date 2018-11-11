@@ -117,6 +117,13 @@ ComboBox {
             ScrollIndicator.vertical: ScrollIndicator { }
             footerPositioning: ListView.OverlayHeader
 
+            delegate: ItemDelegate {
+                text: modelData
+                font.pixelSize: Units.fontSizeBodyAndButton
+                font.family: "Robo Regular"
+                width: parent.width
+            }
+
             Component {
                 id: addItemDelegate
                 ItemDelegate {
