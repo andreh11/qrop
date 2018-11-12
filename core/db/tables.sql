@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS planting (
     planting_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     code              TEXT,
     planting_type     INTEGER NOT NULL, -- 1: DS, 2: TP raised, 3: TP bought
+    in_greenhouse     INTEGER NOT NULL CHECK (in_greenhouse IN (0, 1)),
     sowing_date       STRING NOT NULL,
     planting_date     STRING NOT NULL, -- sowing date for planting_type 1,
                                        -- tranplanting for 2, 3

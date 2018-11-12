@@ -29,6 +29,7 @@ Flickable {
     property bool accepted: varietyField.acceptableInput
 
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
+    property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
@@ -101,6 +102,7 @@ Flickable {
     property variant values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
+        "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
         "sowing_date": sowingDate,
         "planting_date": plantingDate,
         "beg_harvest_date": begHarvestDate,
@@ -129,6 +131,7 @@ Flickable {
 
     function clearAll() {
         varietyField.currentIndex = -1;
+        inGreenhouse.checked = false
         plantingAmountField.clear();
         inRowSpacingField.clear();
         rowsPerBedField.clear();
@@ -161,6 +164,8 @@ Flickable {
         if ('length' in val) plantingAmountField.text = val['length'];
         if ('spacing_plants' in val) inRowSpacingField.text = val['spacing_plants']
         if ('rows' in val) rowsPerBedField.text = val['rows'];
+        if ('in_greenhouse' in val)
+            inGreenhouseCheckBox.checked = val['in_greenhouse'] === 0 ? false : true
 
         switch (val['planting_type']) {
         case 1:
@@ -247,37 +252,45 @@ Flickable {
         width: parent.width
         spacing: Units.formSpacing
 
-        MyComboBox {
-            id: varietyField
-            labelText: qsTr("Variety")
-            Layout.fillWidth: true
-            editable: false
-            showAddItem: true
-            addItemText: qsTr("Add Variety")
-            model: VarietyModel {
-                id: varietyModel
-            }
-            textRole: "variety"
-
-            onAddItemClicked: addVarietyDialog.open()
-            onActivated: plantingAmountField.forceActiveFocus()
-            onActiveFocusChanged: ensureVisible(activeFocus, y, height)
-
-            AddVarietyDialog {
-                id: addVarietyDialog
-                onAccepted: {
-                    if (seedCompanyId > 0)
-                        Variety.add({"variety" : varietyName,
-                                        "crop_id" : varietyModel.cropId,
-                                        "seed_company_id" : seedCompanyId});
-                    else
-                        Variety.add({"variety" : varietyName,
-                                        "crop_id" : varietyModel.cropId});
-
-                    varietyModel.refresh();
-                    varietyField.currentIndex = varietyField.find(varietyName);
-                    plantingAmountField.forceActiveFocus()
+        RowLayout {
+            width: parent.width
+            spacing: Units.mediumSpacing
+            MyComboBox {
+                id: varietyField
+                labelText: qsTr("Variety")
+                Layout.fillWidth: true
+                editable: false
+                showAddItem: true
+                addItemText: qsTr("Add Variety")
+                model: VarietyModel {
+                    id: varietyModel
                 }
+                textRole: "variety"
+
+                onAddItemClicked: addVarietyDialog.open()
+                onActivated: plantingAmountField.forceActiveFocus()
+                onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+
+                AddVarietyDialog {
+                    id: addVarietyDialog
+                    onAccepted: {
+                        if (seedCompanyId > 0)
+                            Variety.add({"variety" : varietyName,
+                                            "crop_id" : varietyModel.cropId,
+                                            "seed_company_id" : seedCompanyId});
+                        else
+                            Variety.add({"variety" : varietyName,
+                                            "crop_id" : varietyModel.cropId});
+
+                        varietyModel.refresh();
+                        varietyField.currentIndex = varietyField.find(varietyName);
+                        plantingAmountField.forceActiveFocus()
+                    }
+                }
+            }
+            CheckBox {
+                id: inGreenhouseCheckBox
+                text: qsTr("In Greenhouse")
             }
         }
 
@@ -387,6 +400,7 @@ Flickable {
                     autoExclusive: true
                     onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
                 }
+
             }
 //        }
 
