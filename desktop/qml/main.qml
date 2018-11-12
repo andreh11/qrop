@@ -40,6 +40,7 @@ ApplicationWindow {
     property int navigationIndex: 0
 
     readonly property bool largeDisplay: width > 800
+    readonly property bool smallDisplay: width < 500
     property bool railMode: true
     property bool searchMode: false
     property bool showSaveButton: false

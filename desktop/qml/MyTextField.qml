@@ -59,6 +59,7 @@ TextField {
     }
     onTextEdited: floatMode = true
     onAccepted: nextItemInFocusChain().forceActiveFocus()
+    background.anchors.bottomMargin: 0
 
     Label {
         id: fieldLabel
@@ -114,6 +115,7 @@ TextField {
             left: parent.left
             right: parent.right
             top: control.bottom
+            topMargin: -6
         }
 
         Label {

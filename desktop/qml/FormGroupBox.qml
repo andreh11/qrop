@@ -19,18 +19,28 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 
 GroupBox {
-    id: greenhouseBox
-    padding: 0
-    topPadding: title === "" ? 0 : 32
-    bottomPadding: 16
+    id: control
+
+
+    padding: Units.formSpacing
+//    topPadding: padding + 8
+//    topPadding: title === "" ? 0 : 32
     width: parent.width
-    background: Rectangle { anchors.fill: parent }
+
+    background: Rectangle {
+        anchors.fill: parent
+        radius: 4
+        anchors.topMargin: control.title ? label.height : 0
+        border.color: Material.color(Material.Grey, Material.Shade300)
+    }
+
     label: Label {
-        y: 0
-        width: greenhouseBox.leftPadding
-        text: greenhouseBox.title
+        x: control.leftPadding
+        width: control.availableWidth
+        text: control.title
         font.family: "Roboto Regular"
-        font.pixelSize: Units.fontSizeSubheading
-        color: Material.accent
+        font.pixelSize: Units.fontSizeBodyAndButton
+        color: Material.primary
+
     }
 }

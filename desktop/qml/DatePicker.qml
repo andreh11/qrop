@@ -46,8 +46,8 @@ Item {
     }
 
     height: textField.height
-    implicitWidth: 200
-    Layout.minimumWidth: 140
+    implicitWidth: 150
+    Layout.minimumWidth: 150
 
     MyTextField {
         id: textField

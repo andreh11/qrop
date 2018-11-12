@@ -17,8 +17,8 @@ Page {
     }
     
     title: qsTr("Add plantings")
-    Material.background: "white"
-    
+    Material.background: Material.color(Material.Grey, Material.Shade100)
+
     header: PlantingFormHeader {
         id: plantingFormHeader
         estimatedRevenue: plantingForm.estimatedRevenue

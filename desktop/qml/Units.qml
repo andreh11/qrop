@@ -30,6 +30,7 @@ Item {
     readonly property int fontSizeCaption: 12
 
     readonly property int smallSpacing: 8
+    readonly property int formSpacing: 16
     readonly property int mediumSpacing: 20
     readonly property int largeSpacing: 24
 

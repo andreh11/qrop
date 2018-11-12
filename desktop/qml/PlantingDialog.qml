@@ -55,6 +55,7 @@ Dialog {
     modal: true
     focus: true
     closePolicy: Popup.NoAutoClose
+    Material.background: Material.color(Material.Grey, Material.Shade100)
 
     header: PlantingFormHeader {
         id: plantingFormHeader

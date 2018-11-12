@@ -65,7 +65,7 @@ Flickable {
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
-    readonly property int seedsPerCell: Number(seedsPerCellField.text)
+    readonly property int seedsPerCell: Number(seedsPerHoleField.text)
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
     readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
@@ -139,7 +139,7 @@ Flickable {
         plantingDtmField.clear();
         harvestWindowField.clear();
         flatSizeField.clear();
-        seedsPerCellField.clear();
+        seedsPerHoleField.clear();
         greenhouseEstimatedLossField.clear();
         seedsNeededField.clear();
         seedsExtraPercentageField.text = "0"
@@ -180,7 +180,7 @@ Flickable {
         harvestWindowField.text = val['harvest_window']
 
         flatSizeField.text = val['tray_size']
-        seedsPerCellField.text = val['seeds_per_hole']
+        seedsPerHoleField.text = val['seeds_per_hole']
         greenhouseEstimatedLossField.text = val['estimated_gh_loss']
 
 //        seedsNeededField.text = val['seeds_number']
@@ -239,48 +239,44 @@ Flickable {
     contentWidth: width
     contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
+    boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
     Column {
         id: mainColumn
         width: parent.width
-        spacing: 8
+        spacing: Units.formSpacing
 
-        ColumnLayout {
-            width: parent.width
-            spacing: 8
+        MyComboBox {
+            id: varietyField
+            labelText: qsTr("Variety")
+            Layout.fillWidth: true
+            editable: false
+            showAddItem: true
+            addItemText: qsTr("Add Variety")
+            model: VarietyModel {
+                id: varietyModel
+            }
+            textRole: "variety"
 
-            MyComboBox {
-                id: varietyField
-                labelText: qsTr("Variety")
-                Layout.fillWidth: true
-                editable: false
-                showAddItem: true
-                addItemText: qsTr("Add Variety")
-                model: VarietyModel {
-                    id: varietyModel
-                }
-                textRole: "variety"
+            onAddItemClicked: addVarietyDialog.open()
+            onActivated: plantingAmountField.forceActiveFocus()
+            onActiveFocusChanged: ensureVisible(activeFocus, y, height)
 
-                onAddItemClicked: addVarietyDialog.open()
-                onActivated: plantingAmountField.forceActiveFocus()
-                onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+            AddVarietyDialog {
+                id: addVarietyDialog
+                onAccepted: {
+                    if (seedCompanyId > 0)
+                        Variety.add({"variety" : varietyName,
+                                        "crop_id" : varietyModel.cropId,
+                                        "seed_company_id" : seedCompanyId});
+                    else
+                        Variety.add({"variety" : varietyName,
+                                        "crop_id" : varietyModel.cropId});
 
-                AddVarietyDialog {
-                    id: addVarietyDialog
-                    onAccepted: {
-                        if (seedCompanyId > 0)
-                            Variety.add({"variety" : varietyName,
-                                         "crop_id" : varietyModel.cropId,
-                                         "seed_company_id" : seedCompanyId});
-                        else
-                            Variety.add({"variety" : varietyName,
-                                         "crop_id" : varietyModel.cropId});
-
-                        varietyModel.refresh();
-                        varietyField.currentIndex = varietyField.find(varietyName);
-                        plantingAmountField.forceActiveFocus()
-                    }
+                    varietyModel.refresh();
+                    varietyField.currentIndex = varietyField.find(varietyName);
+                    plantingAmountField.forceActiveFocus()
                 }
             }
         }
@@ -288,7 +284,7 @@ Flickable {
         FormGroupBox {
             id: plantingAmountBox
             width: parent.width
-            title: qsTr("Amounts")
+//            title: qsTr("Amounts")
 
             ColumnLayout {
                 width: parent.width
@@ -358,13 +354,16 @@ Flickable {
             }
         }
 
-        FormGroupBox {
-            id: plantingTypeBox
-            width: parent.width
-            title: qsTr("Planting Type")
+//        FormGroupBox {
+//            id: plantingTypeBox
+//            width: parent.width
+//            title: qsTr("Planting Type")
             Flow {
                 id: plantingTypeLayout
-                anchors.fill: parent
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                width: parent.width
+//                Layout.fillWidth: true
+//                anchors.fill: parent
                 spacing: 8
 
                 ChoiceChip {
@@ -389,7 +388,7 @@ Flickable {
                     onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
                 }
             }
-        }
+//        }
 
         FormGroupBox {
             id: plantingDatesBox
@@ -398,7 +397,7 @@ Flickable {
 
             GridLayout {
                 width: parent.width
-                columns: 2
+                columns: smallDisplay ? 1 : (plantingType === 2 ? 3 : 2)
                 rowSpacing: 16
                 columnSpacing: 16
 
@@ -416,21 +415,6 @@ Flickable {
                     onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
                 }
 
-                MyTextField {
-                    id: sowDtmField
-                    visible: fieldSowingDateField.visible
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 999 }
-                    text: "1"
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Days to maturity")
-
-                    onTextChanged: updateDateField(fieldSowingDateField,
-                                                   sowDtmField,
-                                                   firstHarvestDateField, 1)
-                }
-
                 DatePicker {
                     id: greenhouseStartDateField
                     visible: greenhouseRadio.checked
@@ -442,31 +426,6 @@ Flickable {
                     onEditingFinished: updateDateField(greenhouseStartDateField,
                                                        greenhouseGrowTimeField,
                                                        fieldPlantingDateField, 1)
-                }
-
-                MyTextField {
-                    id: greenhouseGrowTimeField
-                    visible: greenhouseStartDateField.visible
-                    text: "1"
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 999 }
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Greenhouse duration")
-                    suffixText: qsTr("days")
-
-                    onTextChanged: updateDateField(greenhouseStartDateField,
-                                                   greenhouseGrowTimeField,
-                                                   fieldPlantingDateField, 1)
-                    onActiveFocusChanged: {
-//                        if (!activeFocus)
-//                            return;
-                        console.log("Scrolling...")
-                        if (y < control.contentY)
-                            control.contentY = controlY - y
-                        else if (y > control.contentY + control.height)
-                            control.contentY = control.contentY + y
-                    }
                 }
 
                 DatePicker {
@@ -483,22 +442,6 @@ Flickable {
                     onCalendarDateChanged: updateDateField(fieldPlantingDateField,
                                                            plantingDtmField,
                                                            firstHarvestDateField, 1)
-                }
-
-                MyTextField {
-                    id: plantingDtmField
-                    visible: fieldPlantingDateField.visible
-                    text: "1"
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 999 }
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Days to maturity")
-                    suffixText: qsTr("days")
-
-                    onTextChanged: updateDateField(fieldPlantingDateField,
-                                                   plantingDtmField,
-                                                   firstHarvestDateField, 1)
                 }
 
                 DatePicker {
@@ -520,6 +463,65 @@ Flickable {
                 }
 
                 MyTextField {
+                    id: sowDtmField
+                    visible: fieldSowingDateField.visible
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: 1; top: 999 }
+                    text: "1"
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Days to maturity")
+
+                    onTextChanged: updateDateField(fieldSowingDateField,
+                                                   sowDtmField,
+                                                   firstHarvestDateField, 1)
+                }
+
+
+                MyTextField {
+                    id: greenhouseGrowTimeField
+                    visible: greenhouseStartDateField.visible
+                    text: "1"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: 1; top: 999 }
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Greenhouse duration")
+                    suffixText: qsTr("days")
+
+                    onTextChanged: updateDateField(greenhouseStartDateField,
+                                                   greenhouseGrowTimeField,
+                                                   fieldPlantingDateField, 1)
+                    onActiveFocusChanged: {
+//                        if (!activeFocus)
+//                            return;
+                        console.log("Scrolling...")
+                        if (y < control.contentY)
+                            control.contentY = control.contentY - y
+                        else if (y > control.contentY + control.height)
+                            control.contentY = control.contentY + y
+                    }
+                }
+
+
+                MyTextField {
+                    id: plantingDtmField
+                    visible: fieldPlantingDateField.visible
+                    text: "1"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: 1; top: 999 }
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Days to maturity")
+                    suffixText: qsTr("days")
+
+                    onTextChanged: updateDateField(fieldPlantingDateField,
+                                                   plantingDtmField,
+                                                   firstHarvestDateField, 1)
+                }
+
+
+                MyTextField {
                     id: harvestWindowField
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -539,7 +541,7 @@ Flickable {
             visible: greenhouseRadio.checked
             RowLayout {
                 width: parent.width
-                spacing: 16
+                spacing: Units.formSpacing
                 MyTextField {
                     id: flatSizeField
                     labelText: qsTr("Flat type")
@@ -548,16 +550,16 @@ Flickable {
                     Layout.fillWidth: true
                 }
 
-                MyTextField {
-                    id: seedsPerCellField
-                    labelText: qsTr("Seeds per cell")
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 1; top: 99 }
-                    maximumLength: 10
-                    text: "1"
-                    floatingLabel: true
-                    Layout.fillWidth: true
-                }
+//                MyTextField {
+//                    id: seedsPerHoleField
+//                    labelText: qsTr("Seeds per hole")
+//                    inputMethodHints: Qt.ImhDigitsOnly
+//                    validator: IntValidator { bottom: 1; top: 99 }
+//                    maximumLength: 10
+//                    text: "1"
+//                    floatingLabel: true
+//                    Layout.fillWidth: true
+//                }
 
                 MyTextField {
                     id: greenhouseEstimatedLossField
@@ -576,9 +578,23 @@ Flickable {
             id: seedBox
             title: qsTr("Seeds")
             visible: !boughtRadio.checked
-            RowLayout {
+            GridLayout {
                 width: parent.width
-                spacing: 16
+                columns: 2
+                rowSpacing: 16
+                columnSpacing: 16
+
+                MyTextField {
+                    id: seedsPerHoleField
+                    labelText: qsTr("Seeds per hole")
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: 1; top: 99 }
+                    maximumLength: 10
+                    text: "1"
+                    floatingLabel: true
+                    Layout.fillWidth: true
+                }
+
                 MyTextField {
                     id: seedsNeededField
                     floatingLabel: true
@@ -675,13 +691,13 @@ Flickable {
             }
         }
 
-        FormGroupBox {
-            width: parent.width
-            title: qsTr("Keywords")
+//        FormGroupBox {
+//            width: parent.width
+//            title: qsTr("Keywords")
             Flow {
                 id: keywordsView
                 clip: true
-                anchors.fill: parent
+                width: parent.width
                 spacing: 8
 
                 Repeater {
@@ -713,4 +729,4 @@ Flickable {
             }
         }
     }
-}
+//}
