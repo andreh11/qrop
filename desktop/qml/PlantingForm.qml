@@ -131,29 +131,49 @@ Flickable {
 
     function clearAll() {
         varietyField.currentIndex = -1;
-        inGreenhouse.checked = false
-        plantingAmountField.clear();
-        inRowSpacingField.clear();
-        rowsPerBedField.clear();
+        inGreenhouseCheckBox.checked = false;
+        inGreenhouseCheckBox.manuallyModified = false;
+        plantingAmountField.reset();
+        inRowSpacingField.reset();
+        rowsPerBedField.reset();
+        successionsField.reset();
         successionsField.text = "1";
+        directSeedRadio.reset();
         directSeedRadio.checked = true;
-        sowDtmField.clear();
-        greenhouseGrowTimeField.clear();
-        plantingDtmField.clear();
-        harvestWindowField.clear();
-        flatSizeField.clear();
-        seedsPerHoleField.clear();
-        greenhouseEstimatedLossField.clear();
-        seedsNeededField.clear();
+        boughtRadio.reset();
+        greenhouseRadio.reset();
+        sowDtmField.reset();
+        greenhouseGrowTimeField.reset();
+        plantingDtmField.reset();
+        harvestWindowField.reset();
+        flatSizeField.reset();
+        seedsPerHoleField.reset();
+        greenhouseEstimatedLossField.reset();
+        seedsNeededField.reset();
+        seedsExtraPercentageField.reset();
         seedsExtraPercentageField.text = "0"
-        seedsPerGramField.clear();
-        unitField.currentIndex = -1;
-        yieldPerBedMeterField.clear();
-        averagePriceField.clear();
+        seedsPerGramField.reset();
+        unitField.reset();
+        yieldPerBedMeterField.reset();
+        averagePriceField.reset();
     }
 
-    function setFormValues(val) {
-        if ('variety_id' in val) {
+    // Set item to value only if item has not been manually modified by
+    // the user. To do this, we use the manuallyModified boolean value.
+    function setFieldValue(item, value) {
+//        console.log(item, value, item.manuallyModified)
+        if (!item.manuallyModified) {
+            if (item instanceof MyTextField)
+                item.text = value;
+            else if (item instanceof CheckBox || item instanceof ChoiceChip)
+                item.checked = value;
+            else if (item instanceof MyComboBox)
+                item.setRowId(value);
+        }
+    }
+
+    function setFormValues(val, editMode) {
+        if (editMode && 'variety_id' in val) {
             var varietyId = Number(val['variety_id'])
             cropId = Variety.cropId(varietyId)
             console.log("varietyId", varietyId, "cropId", cropId)
@@ -161,41 +181,42 @@ Flickable {
             varietyField.setRowId(varietyId);
         }
 
-        if ('length' in val) plantingAmountField.text = val['length'];
-        if ('spacing_plants' in val) inRowSpacingField.text = val['spacing_plants']
-        if ('rows' in val) rowsPerBedField.text = val['rows'];
-        if ('in_greenhouse' in val)
-            inGreenhouseCheckBox.checked = val['in_greenhouse'] === 0 ? false : true
+        setFieldValue(inRowSpacingField, val['spacing_plants']);
+        setFieldValue(rowsPerBedField, val['rows']);
+        setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
 
         switch (val['planting_type']) {
         case 1:
-            directSeedRadio.checked = true;
-            sowDtmField.text = val['dtm']
-//            fieldSowingDateField.calendarDate = Date.fromLocaleString(Qt.locale(), val['planting_date'], "yyyy-MM-dd")
+            setFieldValue(directSeedRadio, true);
+            setFieldValue(sowDtmField, val['dtm']);
             break;
         case 2:
-            greenhouseRadio.checked = true;
-            greenhouseGrowTimeField.text = val['dtt']
-            plantingDtmField.text = val['dtm']
+            setFieldValue(greenhouseRadio, true);
+            setFieldValue(greenhouseGrowTimeField, val['dtt']);
+            setFieldValue(plantingDtmField, val['dtm']);
             break;
         default:
-            boughtRadio.checked = true;
-            plantingDtmField.text = val['dtm']
+            setFieldValue(boughtRadio, true);
+            setFieldValue(plantingDtmField, val['dtm']);
         }
-        harvestWindowField.text = val['harvest_window']
+        setFieldValue(harvestWindowField, val['harvest_window']);
 
-        flatSizeField.text = val['tray_size']
-        seedsPerHoleField.text = val['seeds_per_hole']
-        greenhouseEstimatedLossField.text = val['estimated_gh_loss']
-
-//        seedsNeededField.text = val['seeds_number']
-        seedsExtraPercentageField.text = val['seeds_percentage'];
-        seedsPerGramField.text = val['seeds_per_gram']
-        unitField.setRowId(Number(val['unit_id']))
-        yieldPerBedMeterField.text = val['yield_per_bed_meter']
-        averagePriceField.text = val['average_price']
+        setFieldValue(flatSizeField, val['tray_size']);
+        setFieldValue(seedsPerHoleField, val['seeds_per_hole']);
+        setFieldValue(greenhouseEstimatedLossField, val['estimated_gh_loss']);
+        setFieldValue(seedsExtraPercentageField, val['seeds_percentage']);
+        setFieldValue(seedsPerGramField, val['seeds_per_gram']);
+        setFieldValue(unitField, Number(val['unit_id']));
+        setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
+        setFieldValue(averagePriceField, val['average_price']);
 
         // TODO: keywords
+    }
+
+    function preFillForm(editMode) {
+        var val = Planting.lastValues(varietyId, cropId, plantingType, inGreenhouse);
+        if (val.length)
+            setFormValues(val, editMode);
     }
 
     function emitSelectedKeywordsChanged() {
@@ -233,12 +254,10 @@ Flickable {
         }
     }
 
-    onCropIdChanged: varietyField.currentIndex = -1
-    onVarietyIdChanged: {
-        var val = Planting.lastVarietyValues(varietyId, cropId);
-        if (val.length)
-            setFormValues(val);
-    }
+    onCropIdChanged: varietyField.currentIndex = -1;
+    onVarietyIdChanged: preFillForm(false);
+    onPlantingTypeChanged: preFillForm(false);
+    onInGreenhouseChanged: preFillForm(false);
 
     focus: true
     contentWidth: width
@@ -246,6 +265,10 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
+
+    KeywordModel {
+        id: keywordModel
+    }
 
     Column {
         id: mainColumn
@@ -290,7 +313,9 @@ Flickable {
             }
             CheckBox {
                 id: inGreenhouseCheckBox
+                property bool manuallyModified
                 text: qsTr("In Greenhouse")
+                onPressed: manuallyModified = true
             }
         }
 
@@ -715,10 +740,7 @@ Flickable {
                 spacing: 8
 
                 Repeater {
-                    model: KeywordModel {
-                        id: keywordModel
-                    }
-
+                    model: keywordModel
                     width: parent.width
 
                     ChoiceChip {

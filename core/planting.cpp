@@ -84,47 +84,57 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     return ids;
 }
 
-QVariantMap Planting::lastCropValues(const int cropId) const
+QVariantMap Planting::lastValues(const int varietyId,
+                                 const int cropId,
+                                 const int plantingType,
+                                 const bool inGreenhouse) const
 {
-    const QString queryString("SELECT planting_id FROM planting_view"
-                              " WHERE crop_id = %1 ORDER BY planting_id DESC");
-    QSqlQuery query(queryString.arg(cropId));
-    query.exec();
-    debugQuery(query);
+    const QString cropQueryString("SELECT planting_id FROM planting_view"
+                                  " WHERE crop_id = %1 ORDER BY planting_id DESC");
+    const QString varietyQueryString("SELECT planting_id FROM planting_view"
+                                 " WHERE variety_id = %1 ORDER BY planting_id DESC");
+    const QString plantingTypeQueryString("SELECT planting_id FROM planting_view"
+                                      " WHERE variety_id = %1"
+                                      " AND planting_type = %2"
+                                      " ORDER BY planting_id DESC");
+    const QString inGhQueryString("SELECT planting_id FROM planting_view"
+                              " WHERE variety_id = %1"
+                              " AND planting_type = %2"
+                              " AND in_greenhouse = %3"
+                              " ORDER BY planting_id DESC");
 
-    if (!query.first()) {
-        qDebug() << query.record();
-        qDebug() << "lastCropValues: cannot find planting for " << cropId;
-        return QVariantMap();
+    QSqlQuery query1(inGhQueryString.arg(varietyId).arg(plantingType).arg(inGreenhouse ? 1 : 0));
+    QSqlQuery query2(plantingTypeQueryString.arg(varietyId).arg(plantingType));
+    QSqlQuery query3(varietyQueryString.arg(varietyId));
+    QSqlQuery query4(cropQueryString.arg(cropId));
+
+    QList<QSqlQuery> queryList;
+    queryList.push_back(query1);
+    queryList.push_back(query2);
+    queryList.push_back(query3);
+    queryList.push_back(query4);
+
+    for (int i = 0; i < queryList.length(); i++) {
+        qDebug() << "HERE";
+        QSqlQuery query(queryList[i]);
+        query.exec();
+        debugQuery(query);
+
+
+        if (query.first()) {
+            int plantingId = query.record().value("planting_id").toInt();
+            if (plantingId >= 1)
+                return mapFromId("planting", plantingId);
+        }
+
+        qDebug() << "lastCropValues: cannot find planting in/not in GH %1 " << varietyId;
+        qDebug() << "trying with less constraints...";
+
     }
 
-    int plantingId = query.record().value("planting_id").toInt();
-    if (plantingId < 1)
-        return QVariantMap();
+    qDebug() << "Couldn't find prefill values!";
 
-    return mapFromId("planting", plantingId);
-}
-
-QVariantMap Planting::lastVarietyValues(const int varietyId, const int cropId) const
-{
-    const QString queryString("SELECT planting_id FROM planting_view"
-                              " WHERE variety_id = %1 ORDER BY planting_id DESC");
-    QSqlQuery query(queryString.arg(varietyId));
-    query.exec();
-    debugQuery(query);
-
-    if (!query.first()) {
-        qDebug() << query.record();
-        qDebug() << "lastCropValues: cannot find planting for " << varietyId;
-        qDebug() << "trying with crop ";
-        return lastCropValues(cropId);
-    }
-
-    int plantingId = query.record().value("planting_id").toInt();
-    if (plantingId < 1)
-        return QVariantMap();
-
-    return mapFromId("planting", plantingId);
+    return QVariantMap();
 }
 
 QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const

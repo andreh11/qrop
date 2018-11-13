@@ -21,6 +21,7 @@ import QtQuick.Controls.Material 2.2
 Button {
     id: control
 
+    property bool manuallyModified: false
     property color checkedColor: Material.color(Material.Cyan, Material.Shade100)
     property color focusCheckedColor: Material.color(Material.Cyan, Material.Shade300)
     property color activeFocusColor: Material.color(Material.Grey, Material.Shade500)
@@ -28,6 +29,10 @@ Button {
     property color defaultColor: Material.color(Material.Grey, Material.Shade300)
 
     property bool hasFocus: false
+
+    function reset() {
+        manuallyModified = false;
+    }
 
     activeFocusOnTab: true
     Keys.onEnterPressed:  if (!checked || !autoExclusive) control.toggle()
@@ -40,6 +45,7 @@ Button {
         else
             hasFocus = false
     }
+    onPressed: manuallyModified = true
 
     checkable: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0,

@@ -25,6 +25,8 @@ import io.croplan.components 1.0
 ComboBox {
     id: control
 
+    property bool manuallyModified
+
     property string labelText: ""
     property string helperText: ""
     property string prefixText: ""
@@ -53,6 +55,11 @@ ComboBox {
         return Qt.rgba(0,0,0,alpha)
     }
 
+    function reset() {
+        manuallyModified = false;
+        currentIndex = -1;
+    }
+
     function setRowId(rowId) {
         var i = 0;
         while (model.rowId(i) !== rowId && i < model.count)
@@ -66,6 +73,7 @@ ComboBox {
     //    height: 56
     padding: 0
 
+    onPressedChanged: manuallyModified = true
     onActiveFocusChanged: {
         if (activeFocus && (focusReason === Qt.TabFocusReason
                             || focusReason === Qt.BacktabFocusReason)) {

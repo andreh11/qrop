@@ -24,6 +24,8 @@ import io.croplan.components 1.0
 TextField {
     id: control
 
+    property bool manuallyModified: false
+
     property string helperText
     property string labelText: ""
     property string prefixText: ""
@@ -40,12 +42,17 @@ TextField {
     property color placeholderTextColor
     property int suffixTextAddedMargin: 0
 
-    property color color: Material.accent
+    property color color: manuallyModified ? "red" : Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
 
     function shade(alpha) {
         return Qt.rgba(0,0,0,alpha)
+    }
+
+    function reset() {
+        clear();
+        manuallyModified = false;
     }
 
     activeFocusOnPress: true
@@ -57,7 +64,11 @@ TextField {
         else
             select(0, 0);
     }
-    onTextEdited: floatMode = true
+    onTextEdited: {
+        floatMode = true
+        manuallyModified = true
+        console.log("TEXT MANUALLY MODIFIED")
+    }
     onAccepted: nextItemInFocusChain().forceActiveFocus()
     background.anchors.bottomMargin: 0
 

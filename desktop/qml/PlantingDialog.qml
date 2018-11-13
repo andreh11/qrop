@@ -47,7 +47,7 @@ Dialog {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
         editPlantingValueMap = Planting.commonValues(plantingIds);
-        plantingForm.setFormValues(editPlantingValueMap);
+        plantingForm.setFormValues(editPlantingValueMap, true);
         dialog.title = qsTr("Edit planting(s)")
         dialog.open()
     }
