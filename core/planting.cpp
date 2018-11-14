@@ -115,23 +115,17 @@ QVariantMap Planting::lastValues(const int varietyId,
     queryList.push_back(query4);
 
     for (int i = 0; i < queryList.length(); i++) {
-        qDebug() << "HERE";
         QSqlQuery query(queryList[i]);
         query.exec();
         debugQuery(query);
-
 
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
             if (plantingId >= 1)
                 return mapFromId("planting", plantingId);
         }
-
-        qDebug() << "lastCropValues: cannot find planting in/not in GH %1 " << varietyId;
-        qDebug() << "trying with less constraints...";
-
+        qDebug() << "lastValues: trying with less constraints...";
     }
-
     qDebug() << "Couldn't find prefill values!";
 
     return QVariantMap();
@@ -157,7 +151,6 @@ QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
             common.remove(key);
     }
 
-    qDebug() << "COMMON" << common;
     return common;
 }
 

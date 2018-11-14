@@ -15,6 +15,7 @@
  */
 
 #include <QApplication>
+#include <QDoubleValidator>
 #include <QFontDatabase>
 #include <QHash>
 #include <QIcon>
@@ -28,10 +29,10 @@
 //#include <QAndroidJniObject>
 //#include <QtAndroid>
 
-#include "mdate.h"
 #include "db.h"
-#include "planting.h"
 #include "keyword.h"
+#include "mdate.h"
+#include "planting.h"
 #include "variety.h"
 
 #include "cropmodel.h"
@@ -46,7 +47,6 @@
 #include "usermodel.h"
 #include "varietymodel.h"
 
-#include <QDoubleValidator>
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -56,7 +56,7 @@ static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
     return planting;
 }
 
-// A subclass of QDoubleValidator which always "." as a decimalPoint.
+// A subclass of QDoubleValidator which always use "." as a decimalPoint.
 class TextFieldDoubleValidator : public QDoubleValidator {
 public:
     TextFieldDoubleValidator (QObject *parent = nullptr) : QDoubleValidator(parent) {}

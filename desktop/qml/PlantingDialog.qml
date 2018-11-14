@@ -30,8 +30,8 @@ Dialog {
     property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
     property alias currentYear: plantingForm.currentYear
-    property variant editPlantingIdList
-    property variant editPlantingValueMap
+    property var editPlantingIdList
+    property var editPlantingValueMap
 
     signal plantingsAdded(int successions)
     signal plantingsModified(int successions)

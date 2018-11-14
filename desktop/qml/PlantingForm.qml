@@ -99,7 +99,7 @@ Flickable {
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: []
-    property variant values: {
+    property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
@@ -161,7 +161,6 @@ Flickable {
     // Set item to value only if item has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.
     function setFieldValue(item, value) {
-//        console.log(item, value, item.manuallyModified)
         if (!item.manuallyModified) {
             if (item instanceof MyTextField)
                 item.text = value;
@@ -176,7 +175,6 @@ Flickable {
         if (editMode && 'variety_id' in val) {
             var varietyId = Number(val['variety_id'])
             cropId = Variety.cropId(varietyId)
-            console.log("varietyId", varietyId, "cropId", cropId)
             varietyModel.refresh();
             varietyField.setRowId(varietyId);
         }
@@ -247,17 +245,13 @@ Flickable {
         console.log("CALLED", y, height, control.contentY, control.height)
         if (!focus)
             return;
+
         if (y < control.contentY) {
             control.contentY = y
         } else if ((y+height) > (control.contentY + control.height)) {
             control.contentY = y + height - control.height
         }
     }
-
-    onCropIdChanged: varietyField.currentIndex = -1;
-    onVarietyIdChanged: preFillForm(false);
-    onPlantingTypeChanged: preFillForm(false);
-    onInGreenhouseChanged: preFillForm(false);
 
     focus: true
     contentWidth: width
@@ -266,9 +260,12 @@ Flickable {
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
-    KeywordModel {
-        id: keywordModel
-    }
+    onCropIdChanged: varietyField.reset()
+    onVarietyIdChanged: preFillForm(false)
+    onPlantingTypeChanged: preFillForm(false)
+    onInGreenhouseChanged: preFillForm(false)
+
+    KeywordModel { id: keywordModel }
 
     Column {
         id: mainColumn
@@ -278,6 +275,7 @@ Flickable {
         RowLayout {
             width: parent.width
             spacing: Units.mediumSpacing
+
             MyComboBox {
                 id: varietyField
                 labelText: qsTr("Variety")
@@ -285,9 +283,7 @@ Flickable {
                 editable: false
                 showAddItem: true
                 addItemText: qsTr("Add Variety")
-                model: VarietyModel {
-                    id: varietyModel
-                }
+                model: VarietyModel { id: varietyModel }
                 textRole: "variety"
 
                 onAddItemClicked: addVarietyDialog.open()
@@ -322,7 +318,6 @@ Flickable {
         FormGroupBox {
             id: plantingAmountBox
             width: parent.width
-//            title: qsTr("Amounts")
 
             ColumnLayout {
                 width: parent.width
@@ -392,42 +387,34 @@ Flickable {
             }
         }
 
-//        FormGroupBox {
-//            id: plantingTypeBox
-//            width: parent.width
-//            title: qsTr("Planting Type")
-            Flow {
-                id: plantingTypeLayout
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                width: parent.width
-//                Layout.fillWidth: true
-//                anchors.fill: parent
-                spacing: 8
+        Flow {
+            id: plantingTypeLayout
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            spacing: 8
 
-                ChoiceChip {
-                    id: directSeedRadio
-                    text: qsTr("Direct seed")
-                    checked: true
-                    autoExclusive: true
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
-                }
-
-                ChoiceChip {
-                    id: greenhouseRadio
-                    text: qsTr("Transplant, raised")
-                    autoExclusive: true
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
-                }
-
-                ChoiceChip {
-                    id: boughtRadio
-                    text: qsTr("Transplant, bought")
-                    autoExclusive: true
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
-                }
-
+            ChoiceChip {
+                id: directSeedRadio
+                text: qsTr("Direct seed")
+                checked: true
+                autoExclusive: true
+                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
             }
-//        }
+
+            ChoiceChip {
+                id: greenhouseRadio
+                text: qsTr("Transplant, raised")
+                autoExclusive: true
+                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
+            }
+
+            ChoiceChip {
+                id: boughtRadio
+                text: qsTr("Transplant, bought")
+                autoExclusive: true
+                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeBox.y+height, height)
+            }
+
+        }
 
         FormGroupBox {
             id: plantingDatesBox
@@ -532,8 +519,8 @@ Flickable {
                                                    greenhouseGrowTimeField,
                                                    fieldPlantingDateField, 1)
                     onActiveFocusChanged: {
-//                        if (!activeFocus)
-//                            return;
+                        //                        if (!activeFocus)
+                        //                            return;
                         console.log("Scrolling...")
                         if (y < control.contentY)
                             control.contentY = control.contentY - y
@@ -588,17 +575,6 @@ Flickable {
                     validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
                 }
-
-//                MyTextField {
-//                    id: seedsPerHoleField
-//                    labelText: qsTr("Seeds per hole")
-//                    inputMethodHints: Qt.ImhDigitsOnly
-//                    validator: IntValidator { bottom: 1; top: 99 }
-//                    maximumLength: 10
-//                    text: "1"
-//                    floatingLabel: true
-//                    Layout.fillWidth: true
-//                }
 
                 MyTextField {
                     id: greenhouseEstimatedLossField
@@ -730,39 +706,35 @@ Flickable {
             }
         }
 
-//        FormGroupBox {
-//            width: parent.width
-//            title: qsTr("Keywords")
-            Flow {
-                id: keywordsView
-                clip: true
+        Flow {
+            id: keywordsView
+            clip: true
+            width: parent.width
+            spacing: 8
+
+            Repeater {
+                model: keywordModel
                 width: parent.width
-                spacing: 8
 
-                Repeater {
-                    model: keywordModel
-                    width: parent.width
+                ChoiceChip {
+                    text: keyword
+                    checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
 
-                    ChoiceChip {
-                        text: keyword
-                        checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
-
-                        onClicked: {
-                            selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
-                            emitSelectedKeywordsChanged();
-                        }
+                    onClicked: {
+                        selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
+                        emitSelectedKeywordsChanged();
                     }
                 }
+            }
 
-                add: Transition {
-                    NumberAnimation {
-                        property: "opacity"
-                        from: 0
-                        to: 1.0
-                        duration: 200
-                    }
+            add: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1.0
+                    duration: 200
                 }
             }
         }
     }
-//}
+}
