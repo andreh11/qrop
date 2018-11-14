@@ -98,7 +98,7 @@ Flickable {
     }
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
-    property var selectedKeywords: []
+    property var selectedKeywords: [] // List of ids of the selected keywords.
     property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
@@ -156,6 +156,7 @@ Flickable {
         unitField.reset();
         yieldPerBedMeterField.reset();
         averagePriceField.reset();
+        selectedKeywords = []
     }
 
     // Set item to value only if item has not been manually modified by
@@ -208,17 +209,19 @@ Flickable {
         setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
         setFieldValue(averagePriceField, val['average_price']);
 
-        // TODO: keywords
+        if ('planting_id' in val) {
+            var keywordIdList = Keyword.keywordIdList(val['planting_id'])
+            for (var i in keywordIdList) {
+                selectedKeywords[keywordIdList[i]] = true;
+            }
+            selectedKeywordsChanged();
+        }
     }
 
     function preFillForm(editMode) {
         var val = Planting.lastValues(varietyId, cropId, plantingType, inGreenhouse);
         if (val.length)
             setFormValues(val, editMode);
-    }
-
-    function emitSelectedKeywordsChanged() {
-        selectedKeywords = selectedKeywords;
     }
 
     function keywordsIdList() {
@@ -722,17 +725,8 @@ Flickable {
 
                     onClicked: {
                         selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
-                        emitSelectedKeywordsChanged();
+                        selectedKeywordsChanged();
                     }
-                }
-            }
-
-            add: Transition {
-                NumberAnimation {
-                    property: "opacity"
-                    from: 0
-                    to: 1.0
-                    duration: 200
                 }
             }
         }

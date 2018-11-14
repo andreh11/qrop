@@ -94,7 +94,7 @@ TextField {
         color: Material.accent
         text: labelText
         font.pixelSize: Units.fontSizeBodyAndButton
-        visible: control.text != "" || focus
+        visible: control.text != "" || activeFocus
     }
 
     Label {

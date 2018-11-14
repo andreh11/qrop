@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     }
     );
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Variety",
+    qmlRegisterSingletonType<Variety>("io.croplan.components", 1, 0, "Variety",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
     {
         Q_UNUSED(engine)
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     }
     );
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Keyword", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
     {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)

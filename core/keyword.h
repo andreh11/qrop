@@ -20,8 +20,6 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class Task;
-
 class CORESHARED_EXPORT Keyword : public DatabaseUtility {
     Q_OBJECT
 public:

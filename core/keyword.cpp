@@ -30,7 +30,7 @@ Keyword::Keyword(QObject *parent)
 QList<int> Keyword::keywordIdList(int plantingId) const
 {
     QString queryString("SELECT * FROM planting_keyword WHERE planting_id = %1");
-    return queryIds(queryString.arg(plantingId), "location_id");
+    return queryIds(queryString.arg(plantingId), "keyword_id");
 }
 
 void Keyword::addPlanting(int plantingId, int keywordId) const
