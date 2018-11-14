@@ -1,4 +1,3 @@
-
 -- Triggers
 
 -- A task is associated to at least 1 planting. If there is no more planting
@@ -18,7 +17,7 @@ BEGIN
   UPDATE task
   SET assigned_date = NEW.planting_date
   WHERE task_id in (select task_id from planting_task WHERE planting_id = NEW.planting_id)
-        AND task_type_id in (1, 2, 3); -- planting tasks
+  AND task_type_id in (1, 2, 3); -- planting tasks
 END;
 
 -- If the dtt of TP, raised planting if modified, update linked transplant task.
@@ -30,11 +29,11 @@ BEGIN
   SET link_days = NEW.dtt,
       assigned_date = date(assigned_date, link_days || " days")
   WHERE task_id in (select task_id from planting_task WHERE planting_id = NEW.planting_id)
-        AND task_type_id = 3; -- transplant
+  AND task_type_id = 3; -- transplant
 END;
 
 CREATE TRIGGER task_update_planting_date AFTER UPDATE on task FOR EACH ROW
-WHEN task_type_id in (1, 3)
+WHEN NEW.task_type_id in (1, 3)
 AND NEW.assigned_date != OLD.assigned_date
 BEGIN
   UPDATE planting

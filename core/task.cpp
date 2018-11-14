@@ -157,7 +157,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     switch (plantingType) {
     case PlantingType::DirectSeeded: {
         QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
-        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(sowTaskId)));
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate)).arg(sowTaskId));
         debugQuery(query);
         break;
     }
@@ -166,7 +166,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         QString sowDate = plantingDate.addDays(-dtt).toString(Qt::ISODate);
 
         QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
-        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(sowTaskId)));
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate)).arg(sowTaskId));
         debugQuery(query);
 
         QString linkQueryString("UPDATE task SET link_days = %1, "
@@ -178,7 +178,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     }
     case PlantingType::TransplantBought: {
         QString queryString = "UPDATE task SET assigned_date = %2 WHERE task_id = %3";
-        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate).arg(transplantTaskId)));
+        QSqlQuery query(queryString.arg(plantingDate.toString(Qt::ISODate)).arg(transplantTaskId));
         debugQuery(query);
         break;
     }

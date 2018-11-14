@@ -201,7 +201,7 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
 
     QString queryString = QString("UPDATE %1 SET ").arg(table());
     for (const auto &key : map.keys())
-        queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
+        queryString.append(QString(" %1 = \"%2\",").arg(key).arg(map[key].toString()));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName()).arg(id));
 

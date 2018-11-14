@@ -158,6 +158,7 @@ void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
     QString plantingDateString = newMap.take("planting_date").toString();
+    QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList(); // TODO: update keyword
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     DatabaseUtility::update(id, newMap);
     task->updateTaskDates(id, plantingDate);

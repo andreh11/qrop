@@ -28,6 +28,7 @@ Flickable {
     property int currentYear
     property bool accepted: varietyField.acceptableInput
 
+    property string mode: "add" // add or edit
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
     property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
@@ -172,14 +173,15 @@ Flickable {
         }
     }
 
-    function setFormValues(val, editMode) {
-        if (editMode && 'variety_id' in val) {
+    function setFormValues(val) {
+        if (mode === "edit" && 'variety_id' in val) {
             var varietyId = Number(val['variety_id'])
             cropId = Variety.cropId(varietyId)
             varietyModel.refresh();
             varietyField.setRowId(varietyId);
         }
 
+        if (mode === "edit") setFieldValue(plantingAmountField, val['length']);
         setFieldValue(inRowSpacingField, val['spacing_plants']);
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
@@ -211,17 +213,16 @@ Flickable {
 
         if ('planting_id' in val) {
             var keywordIdList = Keyword.keywordIdList(val['planting_id'])
-            for (var i in keywordIdList) {
+            for (var i in keywordIdList)
                 selectedKeywords[keywordIdList[i]] = true;
-            }
             selectedKeywordsChanged();
         }
     }
 
-    function preFillForm(editMode) {
+    function preFillForm() {
         var val = Planting.lastValues(varietyId, cropId, plantingType, inGreenhouse);
         if (val.length)
-            setFormValues(val, editMode);
+            setFormValues(val);
     }
 
     function keywordsIdList() {
@@ -264,9 +265,9 @@ Flickable {
     Material.background: "white"
 
     onCropIdChanged: varietyField.reset()
-    onVarietyIdChanged: preFillForm(false)
-    onPlantingTypeChanged: preFillForm(false)
-    onInGreenhouseChanged: preFillForm(false)
+    onVarietyIdChanged: preFillForm()
+    onPlantingTypeChanged: preFillForm()
+    onInGreenhouseChanged: preFillForm()
 
     KeywordModel { id: keywordModel }
 

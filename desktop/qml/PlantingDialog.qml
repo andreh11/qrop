@@ -47,7 +47,7 @@ Dialog {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
         editPlantingValueMap = Planting.commonValues(plantingIds);
-        plantingForm.setFormValues(editPlantingValueMap, true);
+        plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
         dialog.open()
     }
@@ -126,6 +126,7 @@ Dialog {
             id: plantingForm
             anchors.fill: parent
             focus: true
+            mode: dialog.mode
             cropId: plantingFormHeader.cropId
         }
     }
@@ -146,7 +147,7 @@ Dialog {
         } else {
             Planting.updateList(dialog.editPlantingIdList,
                                 plantingForm.values);
-            dialog.plantingsModified();
+            dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
         model.refresh();
