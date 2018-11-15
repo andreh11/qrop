@@ -56,11 +56,6 @@ CREATE TABLE IF NOT EXISTS planting (
     code              TEXT,
     planting_type     INTEGER NOT NULL, -- 1: DS, 2: TP raised, 3: TP bought
     in_greenhouse     INTEGER NOT NULL CHECK (in_greenhouse IN (0, 1)),
-    sowing_date       STRING NOT NULL,
-    planting_date     STRING NOT NULL, -- sowing date for planting_type 1,
-                                       -- tranplanting for 2, 3
-    beg_harvest_date  STRING NOT NULL,
-    end_harvest_date  STRING NOT NULL,
     dtt               INTEGER,
     dtm               INTEGER,
     harvest_window    INTEGER,
@@ -256,12 +251,24 @@ CREATE TABLE IF NOT EXISTS expense_file (
 -- Views
 
 CREATE VIEW IF NOT EXISTS planting_view AS
-SELECT crop, variety, crop_id, crop.color as crop_color, planting.*, unit.abbreviation as unit, group_concat(location_id) as locations
+SELECT planting_id as planting_view_id,
+       crop, variety, crop_id,
+       crop.color as crop_color,
+       planting.*,
+       unit.abbreviation as unit,
+       group_concat(location_id) as locations,
+       task.assigned_date as planting_date,
+       date(task.assigned_date, "-" || dtt || " days") as sowing_date,
+       date(task.assigned_date, dtm || " days") as beg_harvest_date,
+       date(task.assigned_date, (dtm + harvest_window) || " days") as end_harvest_date
 FROM planting
 LEFT JOIN planting_location using(planting_id)
 LEFT JOIN variety USING (variety_id)
 LEFT JOIN crop USING (crop_id)
 LEFT JOIN unit USING (unit_id)
+LEFT JOIN planting_task USING (planting_id)
+LEFT JOIN task USING (task_id)
+WHERE (planting_type == 1 and task_type_id == 1) OR (planting_type != 1 AND task_type_id == 3)
 GROUP BY planting_id;
 
 CREATE VIEW IF NOT EXISTS variety_view AS
@@ -275,3 +282,4 @@ FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)
 GROUP BY task_id;
+

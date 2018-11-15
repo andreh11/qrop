@@ -31,30 +31,31 @@ CheckBox {
 
     Rectangle {
         id: textBox
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            visible: !control.indicator.visible
-            width: parent.width
-            height: width
-            radius: round ? 50 : 4
-            color:  Material.color(Material.Green, Material.Shade400)
-            Text {
-                visible: !control.checked && !hovered
-                anchors.centerIn: parent
-                text: control.text.slice(0,2)
-                color: "white"
-                font.family: "Roboto Bold"
-                font.pixelSize: Units.fontSizeSubheading
-            }
-            Text {
-                visible: control.checked || hovered
-                anchors.centerIn: parent
-                text: "\ue876"
-                color: "white"
-                font.family: "Material Icons"
-                font.pixelSize: 16
-            }
+        antialiasing: true
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        visible: !control.indicator.visible
+        width: parent.width
+        height: width
+        radius: round ? 50 : 4
+        color:  Material.color(Material.Green, Material.Shade400)
+        Text {
+            visible: !control.checked && !hovered
+            anchors.centerIn: parent
+            text: control.text.slice(0,2)
+            color: "white"
+            font.family: "Roboto Bold"
+            font.pixelSize: Units.fontSizeSubheading
         }
+        Text {
+            visible: control.checked || hovered
+            anchors.centerIn: parent
+            text: "\ue876"
+            color: "white"
+            font.family: "Material Icons"
+            font.pixelSize: 16
+        }
+    }
 
     contentItem: Text {}
 //        text: control.text

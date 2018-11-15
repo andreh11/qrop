@@ -104,10 +104,10 @@ Flickable {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
-        "sowing_date": sowingDate,
+//        "sowing_date": sowingDate,
         "planting_date": plantingDate,
-        "beg_harvest_date": begHarvestDate,
-        "end_harvest_date": endHarvestDate,
+//        "beg_harvest_date": begHarvestDate,
+//        "end_harvest_date": endHarvestDate,
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
@@ -186,19 +186,29 @@ Flickable {
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
 
+
         switch (val['planting_type']) {
         case 1:
             setFieldValue(directSeedRadio, true);
             setFieldValue(sowDtmField, val['dtm']);
+            fieldSowingDateField.calendarDate = Date.fromLocaleString(Qt.locale(),
+                                                                      val["planting_date"],
+                                                                      "yyyy-MM-dd");
             break;
         case 2:
             setFieldValue(greenhouseRadio, true);
             setFieldValue(greenhouseGrowTimeField, val['dtt']);
             setFieldValue(plantingDtmField, val['dtm']);
+            fieldPlantingDateField.calendarDate = Date.fromLocaleString(Qt.locale(),
+                                                                        val["planting_date"],
+                                                                        "yyyy-MM-dd");
             break;
         default:
             setFieldValue(boughtRadio, true);
             setFieldValue(plantingDtmField, val['dtm']);
+            fieldPlantingDateField.calendarDate = Date.fromLocaleString(Qt.locale(),
+                                                                        val["planting_date"],
+                                                                        "yyyy-MM-dd");
         }
         setFieldValue(harvestWindowField, val['harvest_window']);
 

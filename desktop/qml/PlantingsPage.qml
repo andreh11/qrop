@@ -227,6 +227,13 @@ Page {
             addPlantingSnackbar.successions = successions
             addPlantingSnackbar.open();
         }
+
+        onPlantingsModified: {
+            editPlantingsSnackBar.successions = successions
+            editPlantingsSnackBar.open()
+            unselectAll();
+        }
+
         onRejected: unselectAll();
     }
 
@@ -239,6 +246,31 @@ Page {
         x: Units.mediumSpacing
         y: parent.height - height - Units.mediumSpacing - horizontalScrollBar.height
         text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
+        visible: false
+
+//        Behavior on y {
+//              NumberAnimation {
+//                  easing.type: Easing.OutQuad;
+//                  easing.amplitude: 1.0;
+//                  easing.period: 1.0;
+//                  duration: 300 }
+//          }
+
+        onClicked: {
+            Planting.rollback();
+            plantingModel.refresh();
+        }
+    }
+
+    Snackbar {
+        id: editPlantingsSnackBar
+
+        property int successions: 0
+
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing - horizontalScrollBar.height
+        text: qsTr("Modified %L1 planting(s)", "", successions).arg(successions)
         visible: false
 
 //        Behavior on y {
@@ -816,7 +848,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: model.average_price
+                                text: "%L1 €".arg(model.average_price)
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                                 elide: Text.ElideRight

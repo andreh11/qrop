@@ -31,6 +31,7 @@ public:
     Planting(QObject *parent = nullptr);
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
+    Q_INVOKABLE int duplicate(int id) const override;
 
     Q_INVOKABLE QList<int> addSuccessions(int successions,
                                           int daysBetween,

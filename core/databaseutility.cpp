@@ -104,16 +104,15 @@ QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName
                                                         const QList<int> &idList) const
 {
     if (idList.length() < 1)
-        return QList<QSqlRecord>();
+        return {};
     if (tableName.isNull())
-        return QList<QSqlRecord>();
+        return {};
 
     QString queryString("SELECT * FROM %1 WHERE %2 in %3");
     QString ids = "(";
     int i;
-    for (i = 0; i < idList.length() - 1; i++) {
+    for (i = 0; i < idList.length() - 1; i++)
         ids.append(QString::number(idList[i]) + ", ");
-    }
     ids.append(QString::number(idList[i]) + ")");
 
     QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
@@ -121,7 +120,6 @@ QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName
     debugQuery(query);
 
     QList<QSqlRecord> recordList;
-
     while (query.next())
         if (query.isValid())
             recordList.push_back(query.record());
@@ -163,7 +161,7 @@ int DatabaseUtility::add(const QVariantMap &map) const
     for (const auto &key : map.keys())
         if (key != fieldName) {
             queryNameString.append(QString(" %1,").arg(key));
-            queryValueString.append(QString(" \"%1\",").arg(map[key].toString()));
+            queryValueString.append(QString(" :%1,").arg(key));
         }
 
     // Remove last semicolons.
@@ -173,7 +171,15 @@ int DatabaseUtility::add(const QVariantMap &map) const
     queryNameString.append(")");
     queryValueString.append(")");
 
-    QSqlQuery query(queryNameString + queryValueString);
+    QString queryString = queryNameString + queryValueString;
+
+    QSqlQuery query;
+    query.prepare(queryString) ;
+
+    for (const auto &key : map.keys())
+        query.bindValue(QString(":%1").arg(key), map[key]);
+
+    query.exec();
     debugQuery(query);
 
     int newId = query.lastInsertId().toInt();
@@ -201,11 +207,18 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
 
     QString queryString = QString("UPDATE %1 SET ").arg(table());
     for (const auto &key : map.keys())
-        queryString.append(QString(" %1 = \"%2\",").arg(key).arg(map[key].toString()));
+        queryString.append(QString(" %1 = :%1,").arg(key));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName()).arg(id));
 
-    QSqlQuery query(queryString);
+    QSqlQuery query;
+    query.setForwardOnly(true);
+    query.prepare(queryString);
+    for (const auto &key : map.keys())
+        query.bindValue(QString(":%1").arg(key), map[key]);
+    qDebug() << "QUERY STRING:" << queryString;
+    qDebug() << "boundValues:"  << query.boundValues();
+
     query.exec();
     debugQuery(query);
 }
