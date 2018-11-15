@@ -174,7 +174,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
                               "WHERE task_id = :task_id";
         QSqlQuery query;
         query.prepare(queryString);
-        query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
+        query.bindValue(":assigned_date", sowDate);
         query.bindValue(":task_id", sowTaskId);
         query.exec();
         debugQuery(query);
@@ -184,9 +184,10 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
                                 "WHERE task_id = :task_id");
 
         QSqlQuery linkQuery;
-        query.bindValue(":link_days", dtt);
-        query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
-        query.bindValue(":task_id", transplantTaskId);
+        linkQuery.prepare(linkQueryString);
+        linkQuery.bindValue(":link_days", dtt);
+        linkQuery.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
+        linkQuery.bindValue(":task_id", transplantTaskId);
         linkQuery.exec();
         debugQuery(linkQuery);
         break;
@@ -195,6 +196,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         QString queryString = "UPDATE task SET assigned_date = :assigned_date"
                               " WHERE task_id = :task_id";
         QSqlQuery query;
+        query.prepare(queryString);
         query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
         query.bindValue(":task_id", transplantTaskId);
         query.exec();

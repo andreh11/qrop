@@ -113,8 +113,7 @@ QVariantMap Planting::lastValues(const int varietyId,
     queryList.push_back(query3);
     queryList.push_back(query4);
 
-    for (int i = 0; i < queryList.length(); i++) {
-        QSqlQuery query(queryList[i]);
+    for (auto query : queryList) {
         query.exec();
         debugQuery(query);
 

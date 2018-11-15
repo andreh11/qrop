@@ -64,7 +64,7 @@ public:
     QDoubleValidator(bottom, top, decimals, parent) {}
     const QLocale locale;
 
-    QValidator::State validate(QString &input, int &pos) const {
+    QValidator::State validate(QString &input, int &pos) const override {
         const QString decimalPoint = locale.decimalPoint();
         input.replace(".", decimalPoint);
         return QDoubleValidator::validate(input, pos);

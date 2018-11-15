@@ -42,7 +42,7 @@ QDate MDate::mondayOfWeek(const int week, const int year)
 {
     QDate first = firstMondayOfYear(year);
     if (!first.isValid())
-        return QDate();
+        return {};
 
     return first.addDays((week - 1) * 7);
 }
@@ -61,13 +61,11 @@ QString MDate::formatDate(const QDate &date, const int currentYear, const QStrin
     if (dateType == "week") {
         if (year == currentYear)
             return QString::number(week);
-        else
-            return QString("%1%2").arg(year < currentYear ? "<" : ">").arg(week);
+        return QString("%1%2").arg(year < currentYear ? "<" : ">").arg(week);
     } else {
         if (year == currentYear)
             return date.toString("dd/MM");
-        else
-            return date.toString("dd/MM/yyyy");
+        return date.toString("dd/MM/yyyy");
     }
 }
 
@@ -91,7 +89,6 @@ QDate MDate::dateFromWeekString(const QString &s)
     return mondayOfWeek(week, year);
 }
 
-
 QDate MDate::dateFromDateString(const QString &s)
 {
     QRegExp regexp("(0{,1}[1-9]|[12]\\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ](20\\d\\d)){,1}");
@@ -105,9 +102,9 @@ QDate MDate::dateFromDateString(const QString &s)
     else
         year = list[4].toInt();
 
-   QDate date(year, month, day);
-   if (!date.isValid())
-       return QDate();
+    QDate date(year, month, day);
+    if (!date.isValid())
+        return {};
 
     return date;
 }

@@ -84,11 +84,10 @@ void execSqlFile(const QString &fileName, const QString &separator)
         if (queryString.isEmpty())
             continue;
 
-        if (!query.exec(queryString + separator)) {
+        if (!query.exec(queryString + separator))
             qDebug() << "createDatabase: cannot execute query"
                      << query.lastError().text()
                      <<	query.lastQuery();
-        }
     }
 }
 
@@ -97,5 +96,5 @@ void createDatabase()
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
-    qDebug() << "Database successfully created";
+    qInfo() << "Database successfully created";
 }

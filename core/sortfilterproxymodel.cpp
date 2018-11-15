@@ -159,7 +159,7 @@ QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const 
 {
     QVariant value = rowValue(row, parent, field);
     if (value.isNull())
-        return QDate();
+        return {};
 
     QString string = value.toString();
     return QDate::fromString(string, Qt::ISODate);
