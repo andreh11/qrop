@@ -20,13 +20,13 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT SeedCompanyModel : public SqlTableModel
+class CORESHARED_EXPORT SeedCompanyModel : public SortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit SeedCompanyModel(QObject *parent = nullptr);
+    explicit SeedCompanyModel(QObject *parent = nullptr, const QString &tableName = "seed_company");
 };
 
 #endif // SEEDCOMPANYMODEL_H

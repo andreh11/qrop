@@ -29,8 +29,16 @@ Item {
     property bool dateSelected: false
     property bool mobileMode: false
 
+    // Own signal emitted to preserve date binding.
+    signal dateSelect(date newDate)
+
     width: gridLayout.width + 24
     height: dayBox.height + buttonLayout.height + gridLayout.height + 16
+
+    function resetBindings() {
+        month = date.getMonth();
+        year = date.getFullYear();
+    }
 
     function sameDates(date1, date2) {
         return (date1.getDate() === date2.getDate())
@@ -70,191 +78,195 @@ Item {
         anchors.fill: parent
         height: childrenRect.height
 
-    Rectangle {
-        id: dayBox
-        width: parent.width
-        height: visible ? childrenRect.height : 0
-        color: Material.primary
-        visible: !largeDisplay
+        Rectangle {
+            id: dayBox
+            width: parent.width
+            height: visible ? childrenRect.height : 0
+            color: Material.primary
+            visible: !largeDisplay
 
-        Column {
-            spacing: 0
-            topPadding: 16
-            bottomPadding: topPadding
-            leftPadding: weekNumberColumn.width * 1
+            Column {
+                spacing: 0
+                topPadding: 16
+                bottomPadding: topPadding
+                leftPadding: weekNumberColumn.width * 1
 
-            Label {
-                text: date.getFullYear()
-                color: Material.color(Material.Grey, Material.Shade200)
-                font.pixelSize: 12
-                font.bold: true
-                font.family: "Roboto Regular"
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
-            }
+                Label {
+                    text: date.getFullYear()
+                    color: Material.color(Material.Grey, Material.Shade200)
+                    font.pixelSize: 12
+                    font.bold: true
+                    font.family: "Roboto Regular"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                }
 
-            Label {
-                text: date.toLocaleString(Qt.locale(), "ddd d MMMM")
-                color: "white"
-                font.pixelSize: 20
-                font.bold: true
-                font.family: "Roboto Regular"
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-    }
-
-    RowLayout {
-        id: buttonLayout
-        width: parent.width
-
-        RoundButton {
-            id: backwardButton
-            text: "\ue314"
-            font.family: "Material Icons"
-            font.pointSize: 20
-            padding: 0
-            onClicked: goBackward()
-            flat: true
-
-        }
-
-        Label {
-            text: monthName(month)
-            font.bold: true
-            font.family: "Roboto Condensed"
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        RoundButton {
-            id: forwardButton
-            text: "\ue315"
-            font.family: "Material Icons"
-            onClicked: goForward()
-            font.pointSize: 20
-            flat: true
-        }
-
-        RoundButton {
-            text: "\ue314"
-            font.family: "Material Icons"
-            font.pointSize: 20
-            padding: 0
-            onClicked: year--
-            flat: true
-
-        }
-
-        Label {
-            text: year
-            font.bold: true
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        RoundButton {
-            text: "\ue315"
-            font.family: "Material Icons"
-            font.pointSize: 20
-            flat: true
-            onClicked: year++
-        }
-    }
-
-    GridLayout {
-        id: gridLayout
-        columns: 2
-        rowSpacing: 0
-        columnSpacing: rowSpacing
-
-        Item { width: weekNumberColumn.width; height: width}
-
-        DayOfWeekRow {
-            Layout.fillWidth: true
-            spacing: grid.spacing
-            locale: grid.locale
-            delegate: Text {
-                font.family: "Roboto Condensed"
-                text: model.narrowName
-                color: Material.color(Material.Grey, Material.Shade600)
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        WeekNumberColumn {
-            id: weekNumberColumn
-            month: grid.month
-            year: grid.year
-            locale: grid.locale
-            Layout.fillHeight: true
-            spacing: grid.spacing
-            delegate: Text {
-                text: model.weekNumber
-                color: Material.accent
-                font.family: "Roboto Condensed"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
+                Label {
+                    text: date.toLocaleString(Qt.locale(), "ddd d MMMM")
+                    color: "white"
+                    font.pixelSize: 20
+                    font.bold: true
+                    font.family: "Roboto Regular"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
                 }
             }
         }
 
-        MonthGrid {
-            id: grid
-            month: control.month
-            year: control.year
-            Layout.fillHeight: true
-            spacing: -16
-            delegate: RoundButton {
-                property bool isSelectedDate: sameDates(control.date, model.date)
-                anchors.margins: 0
-                text: model.day
-                font.family: "Roboto Condensed"
-                height: width
-                checkable: true
-                checked: isSelectedDate
-                flat: true
-                Material.background: checked ? Material.accent : "transparent"
+        RowLayout {
+            id: buttonLayout
+            width: gridLayout.width - 8
 
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    color: {
-                        if (parent.checked)
-                            return "white";
-                        else if (model.today)
-                            return Material.accent
-                        else if (model.date.getMonth() !== control.month)
-                            return Material.color(Material.Grey, Material.Shade400)
-                        else
-                            return "black";
-                    }
+            RoundButton {
+                id: backwardButton
+                text: "\ue314"
+                font.family: "Material Icons"
+                font.pointSize: 20
+                padding: 0
+                onClicked: goBackward()
+                flat: true
+
+            }
+
+            Label {
+                text: monthName(month)
+                font.bold: true
+                font.family: "Roboto Condensed"
+                width: 50
+                Layout.preferredWidth: width
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            RoundButton {
+                id: forwardButton
+                text: "\ue315"
+                font.family: "Material Icons"
+                onClicked: goForward()
+                font.pointSize: 20
+                flat: true
+            }
+
+            RoundButton {
+                text: "\ue314"
+                font.family: "Material Icons"
+                font.pointSize: 20
+                padding: 0
+                onClicked: year--
+                flat: true
+
+            }
+
+            Label {
+                text: year
+                font.bold: true
+                width: 30
+                Layout.preferredWidth: width
+//                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            RoundButton {
+                text: "\ue315"
+                font.family: "Material Icons"
+                font.pointSize: 20
+                flat: true
+                onClicked: year++
+            }
+        }
+
+        GridLayout {
+            id: gridLayout
+            columns: 2
+            rowSpacing: 0
+            columnSpacing: rowSpacing
+
+            Item { width: weekNumberColumn.width; height: width}
+
+            DayOfWeekRow {
+                Layout.fillWidth: true
+                spacing: grid.spacing
+                locale: grid.locale
+                delegate: Text {
+                    font.family: "Roboto Condensed"
+                    text: model.narrowName
+                    color: Material.color(Material.Grey, Material.Shade600)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
                 }
+            }
 
-                onClicked: {
-                    if (isSelectedDate) {
-                        dateSelected = false;
-                    } else {
-                        control.date = model.date;
-                        dateSelected = true;
+            WeekNumberColumn {
+                id: weekNumberColumn
+                month: grid.month
+                year: grid.year
+                locale: grid.locale
+                Layout.fillHeight: true
+                spacing: grid.spacing
+                delegate: Text {
+                    text: model.weekNumber
+                    color: Material.accent
+                    font.family: "Roboto Condensed"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+                }
+            }
+
+            MonthGrid {
+                id: grid
+                month: control.month
+                year: control.year
+                Layout.fillHeight: true
+                spacing: 0
+                delegate: Rectangle {
+                    property bool checked: sameDates(control.date, model.date)
+                    width: 36
+                    height: width
+                    anchors.margins: 0
+                    radius: 30
+                    color: checked ? Material.accent : "transparent"
+
+                    Label {
+                        anchors.centerIn: parent
+                        text: model.day
+                        font.family: "Roboto Condensed"
+                        height: width
+                        color: {
+                            if (parent.checked)
+                                return "white";
+                            else if (model.today)
+                                return Material.accent
+                            else if (model.date.getMonth() !== control.month)
+                                return Material.color(Material.Grey, Material.Shade400)
+                            else
+                                return "black";
+                        }
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                    onClicked: {
+//                        if (isSelectedDate) {
+//                            dateSelected = false;
+//                        } else {
+                        if (!checked) {
+                            control.dateSelect(model.date)
+                            dateSelected = true;
+                        }
+                    }
                     }
                 }
             }
         }
     }
 }
-
-    }

@@ -18,14 +18,42 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
-import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
+import io.croplan.components 1.0
 import "date.js" as MDate
 
 ApplicationWindow {
     id: window
+
+    property var navigationModel: [
+//        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
+        { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
+        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" }
+//        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+//        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
+//        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
+//        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
+//        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
+    ]
+    property int navigationIndex: 0
+
+    readonly property bool largeDisplay: width > 800
+    readonly property bool smallDisplay: width < 500
+    property bool railMode: true
+    property bool searchMode: false
+    property bool showSaveButton: false
+    property string searchString: searchField.text
+    property alias stackView: stackView
+
+    readonly property var monthsOrder : [
+        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
+        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
+    ]
+
     title: "Qrop"
     visible: true
     width: 1024
@@ -34,43 +62,13 @@ ApplicationWindow {
     Material.primary: Material.Teal
     Material.accent: Material.Cyan
 
-    property var navigationModel: [
-        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
-        { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
-        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" },
-        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
-        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
-        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
-        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
-    ]
-    property int navigationIndex: 0
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
-    readonly property bool largeDisplay: width > 800
-    property bool railMode: true
-    property bool searchMode: false
-    property bool showSaveButton: false
-    property string searchString: searchField.text
-    property alias stackView: stackView
-
-    // font sizes - defaults from Google Material Design Guide
-    property int fontSizeDisplay4: 112
-    property int fontSizeDisplay3: 56
-    property int fontSizeDisplay2: 45
-    property int fontSizeDisplay1: 34
-    property int fontSizeHeadline: 24
-    property int fontSizeTitle: 20
-    property int fontSizeSubheading: 16
-    property int fontSizeBodyAndButton: 14 // is Default
-    property int fontSizeCaption: 12
-
-    readonly property var monthsOrder : [
-        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
-        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
-    ]
+    Shortcut {
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
+    }
 
     Settings {
         id: settings
@@ -95,17 +93,6 @@ ApplicationWindow {
         }
     }
 
-//    Shortcut {
-//        sequence: "Ctrl+K"
-//        context: Qt.ApplicationShortcut
-//        onActivated: {
-//            if (!largeDisplay) {
-//                searchMode = true
-//            }
-//            searchField.focus = true
-//        }
-//    }
-
     Component {
         id: searchBar
         ToolBar {
@@ -115,14 +102,14 @@ ApplicationWindow {
             Material.foreground: "white"
 
             RowLayout {
-                spacing: 20
+                spacing: Units.mediumDuration
                 anchors.fill: parent
                 Label {
                     id: backIcon
                     text: "\ue5c4" // arrow_back
                     color: Material.Grey
                     font.family: "Material Icons"
-                    font.pixelSize: 24
+                    font.pixelSize: Units.fontSizeHeadline
                 }
                 TextField {
                     placeholderText: qsTr("Search")
@@ -139,13 +126,14 @@ ApplicationWindow {
         visible: !largeDisplay
         leftPadding: 8 + (largeDisplay ? drawer.width : 0)
         rightPadding: 8
+        height: 56
         contentHeight: drawerButton.implicitHeight
         //            background: searchMode ? "white" : Material.color(Material.background)
         Material.background: searchMode ? "white" : Material.primary
         Material.foreground: "white"
         z: 1
         RowLayout {
-            spacing: 20
+            spacing: Units.mediumSpacing
             anchors.fill: parent
 
             ToolButton {
@@ -153,7 +141,7 @@ ApplicationWindow {
                 text: stackView.depth > 1 ? "\ue5c4" : "\ue5d2"
                 visible: !largeDisplay && !searchMode
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     if (largeDisplay) {
                         railMode = !railMode
@@ -174,38 +162,18 @@ ApplicationWindow {
                 text: "\ue5c4" // arrow_back
                 Material.foreground: Material.Grey
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     searchField.clear()
                     searchMode = false
                 }
             }
 
-//            Label {
-//                id: programLabel
-//                text: "Qrop"
-//                visible: largeDisplay
-//                font.pixelSize: 20
-//                font.family: "Roboto Medium"
-//                color: "white"
-//                //                    Layout.fillWidth: true
-//                horizontalAlignment: Qt.AlignLeft
-//                verticalAlignment: Qt.AlignVCenter
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: {
-//                        railMode = !railMode
-
-//                    }
-//                }
-//            }
-
-
             Label {
                 id: titleLabel
                 text: stackView.currentItem.title
                 visible: !largeDisplay && !searchMode
-                font.pixelSize: 20
+                font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
 //                color: "white"
                 Layout.fillWidth: true
@@ -219,7 +187,7 @@ ApplicationWindow {
                 leftPadding: 16 + largeDisplay ? 50 : 0
                 font.family: "Roboto Regular"
                 verticalAlignment: Qt.AlignVCenter
-                font.pixelSize: 20
+                font.pixelSize: Units.fontSizeTitle
                 visible: largeDisplay || searchMode
                 color: "black"
                 placeholderText: qsTr("Search")
@@ -238,7 +206,7 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "\ue8b6" // search
                         font.family: "Material Icons"
-                        font.pixelSize: 24
+                        font.pixelSize: Units.fontSizeHeadline
                     }
                 }
 
@@ -257,7 +225,7 @@ ApplicationWindow {
                 text: "\ue876"
                 font.family: "Material Icons"
                 font.capitalization: Font.Capitalize
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     stackView.currentItem.save()
                     stackView.pop()
@@ -270,7 +238,7 @@ ApplicationWindow {
                 visible: !largeDisplay && !searchMode && !showSaveButton
                 text: "\ue8b6" // search
                 font.family: "Material Icons"
-                font.pixelSize: 24
+                font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
                     searchMode = true
                     searchField.focus = true
@@ -306,7 +274,8 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
+//        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
+//        width: childrenRect.width
         height: window.height
 //        height: window.height - toolBar.height
 //        y: toolBar.height
@@ -322,11 +291,12 @@ ApplicationWindow {
 //            color: "green"
 //        }
 
-        Column {
+        ColumnLayout {
             anchors.fill: parent
 
             Label {
                 id: programLabel
+                visible: false
                 height: toolBar.height
                 text: "Qrop"
                 color: "white"
@@ -348,11 +318,14 @@ ApplicationWindow {
                 model: navigationModel
 
                 DrawerItemDelegate {
+                    Layout.fillWidth: true
                     text: modelData.name
                     iconText: modelData.iconText
                 }
 
             }
+
+            Item { Layout.fillHeight: true }
         }
     }
 

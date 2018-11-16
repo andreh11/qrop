@@ -16,8 +16,8 @@
 
 #include "keywordmodel.h"
 
-KeywordModel::KeywordModel(QObject *parent)
-    : SqlTableModel (parent)
+KeywordModel::KeywordModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
 {
-    setTable("keyword");
+    setSortColumn("keyword");
 }

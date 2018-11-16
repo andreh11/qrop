@@ -1,31 +1,48 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtQuick.Controls.Styles 1.4
-import QtCharts 2.0
 
 import io.croplan.components 1.0
 
 TextField {
     id: control
 
-    property string helperText
+    property bool manuallyModified: false
 
+    property string helperText
     property string labelText: ""
     property string prefixText: ""
     property string suffixText: ""
+    property string errorText: qsTr("Error")
     property bool persistentPrefix: false
     property bool persistentSuffix: false
-
+    property bool floatMode: false
+    property bool showError: false
     property bool floatingLabel: false
-    property bool hasError: (characterLimit && length > characterLimit) || !acceptableInput
+    property bool hasError: showError && ((characterLimit && length > characterLimit) || !acceptableInput)
     property int characterLimit
     property bool showBorder: true
     property color placeholderTextColor
     property int suffixTextAddedMargin: 0
 
-    property color color: Material.accent
+    property color color: manuallyModified ? "red" : Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
 
@@ -33,12 +50,27 @@ TextField {
         return Qt.rgba(0,0,0,alpha)
     }
 
+    function reset() {
+        clear();
+        manuallyModified = false;
+    }
+
+    activeFocusOnPress: true
+    activeFocusOnTab: true
+
     onActiveFocusChanged: {
-        if (activeFocus && (focusReason === Qt.TabFocusReason | Qt.BacktabFocusReason))
+        if (activeFocus)
             selectAll();
         else
             select(0, 0);
     }
+    onTextEdited: {
+        floatMode = true
+        manuallyModified = true
+        console.log("TEXT MANUALLY MODIFIED")
+    }
+    onAccepted: nextItemInFocusChain().forceActiveFocus()
+    background.anchors.bottomMargin: 0
 
     Label {
         id: fieldLabel
@@ -52,7 +84,7 @@ TextField {
         verticalAlignment: control.verticalAlignment
         elide: Text.ElideRight
         renderType: control.renderType
-        visible: !control.text
+        visible: !control.text && !activeFocus
     }
 
     Label {
@@ -61,19 +93,21 @@ TextField {
         anchors.left: parent.left
         color: Material.accent
         text: labelText
-        font.pixelSize: 14
-        visible: control.text != ""
+        font.pixelSize: Units.fontSizeBodyAndButton
+        visible: control.text != "" || activeFocus
     }
 
     Label {
         id: prefixText
         text: control.prefixText
-        anchors.left: parent.left
-        anchors.leftMargin: 14
-        anchors.bottomMargin: 16
-        anchors.bottom: parent.bottom
-        font.pixelSize: 14
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: persistentPrefix || (control.prefixText !== "" && control.text != "")
+        anchors {
+            left: parent.left
+            leftMargin: 0
+            bottomMargin: 16
+            bottom: parent.bottom
+        }
     }
 
     Label {
@@ -83,7 +117,7 @@ TextField {
         anchors.rightMargin: suffixTextAddedMargin
         anchors.bottomMargin: 16
         anchors.bottom: parent.bottom
-        font.pixelSize: 14
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: persistentSuffix || (control.suffixText !== "" && control.text != "")
     }
 
@@ -92,12 +126,13 @@ TextField {
             left: parent.left
             right: parent.right
             top: control.bottom
+            topMargin: -6
         }
 
         Label {
             id: helperTextLabel
             visible: control.helperText
-            text: acceptableInput ? control.helperText : qsTr("Bad input")
+            text: hasError ? control.errorText : control.helperText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
                                     : Qt.darker(control.hintColor)

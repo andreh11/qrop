@@ -32,9 +32,13 @@ class CORESHARED_EXPORT SortFilterProxyModel : public QSortFilterProxyModel
     Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
     Q_PROPERTY(QString sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
     Q_PROPERTY(QString sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
+    Q_PROPERTY(int count READ rowCount() NOTIFY countChanged)
 
 public:
     SortFilterProxyModel(QObject *parent = nullptr, const QString &tableName = "");
+
+    Q_INVOKABLE QList<int> idList() const;
+    Q_INVOKABLE int rowId(int row) const;
 
     QString filterString() const;
     int filterYear() const;
@@ -49,6 +53,7 @@ public:
     Q_INVOKABLE void refresh() const;
 
 protected:
+    SqlTableModel *m_model;
     bool isDateInRange(const QDate &date) const;
     QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
@@ -61,8 +66,9 @@ signals:
     void sortColumnChanged();
     void sortOrderChanged();
     void selectionChanged();
+    void countChanged() const;
+
 private:
-    SqlTableModel *m_model;
     QString m_tableName;
     QString m_string;
     int m_year;

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.11
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
@@ -6,14 +22,14 @@ import QtQuick.Layouts 1.3
 Item {
     id: control
 
-    implicitHeight: buttonLayout.implicitHeight
-    implicitWidth: buttonLayout.implicitWidth
-    height: implicitHeight
-    width: implicitWidth
-
     property int season: 0
     property int year: 2018
-    readonly property var seasonNames: [qsTr("Spring"), qsTr("Summer"), qsTr("Fall"), qsTr("Winter")]
+    readonly property var seasonNames: [
+        qsTr("Spring"),
+        qsTr("Summer"),
+        qsTr("Fall"),
+        qsTr("Winter")
+    ]
 
     function previousSeason() {
         if (season == 0) {
@@ -33,10 +49,15 @@ Item {
         }
     }
 
+    implicitHeight: buttonLayout.implicitHeight
+    implicitWidth: buttonLayout.implicitWidth
+    height: implicitHeight
+    width: implicitWidth
+
     RowLayout {
         id: buttonLayout
         anchors.fill: parent
-        spacing: 8
+        spacing: Units.smallSpacing
 
         RoundButton {
             id: previousYearButton
@@ -49,7 +70,7 @@ Item {
             onClicked: year--
             flat: true
             ToolTip.visible: hovered
-        ToolTip.text: qsTr("Previous year")
+            ToolTip.text: qsTr("Previous year")
         }
 
         RoundButton {
@@ -91,7 +112,7 @@ Item {
             flat: true
             onClicked: nextSeason()
             ToolTip.visible: hovered
-        ToolTip.text: qsTr("Next season")
+            ToolTip.text: qsTr("Next season")
         }
 
         RoundButton {

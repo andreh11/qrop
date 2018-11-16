@@ -44,9 +44,32 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 //    select();
 }
 
+QList<int> SortFilterProxyModel::idList() const
+{
+    QList<int> list;
+    for (int row = 0; row < rowCount(); row++) {
+        QModelIndex idx = index(row, 0);
+        QModelIndex sourceIndex = mapToSource(idx);
+        int id = m_model->data(sourceIndex, "planting_id").toInt();
+        list.append(id);
+    }
+    qDebug() << "idList:" << list;
+    return list;
+}
+
+int SortFilterProxyModel::rowId(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    QModelIndex sourceIndex = mapToSource(idx);
+    int id = m_model->data(sourceIndex, Qt::UserRole).toInt();
+    return id;
+}
+
+
 void SortFilterProxyModel::refresh() const
 {
     m_model->select();
+    countChanged();
 }
 
 QString SortFilterProxyModel::filterString() const
@@ -136,7 +159,7 @@ QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const 
 {
     QVariant value = rowValue(row, parent, field);
     if (value.isNull())
-        return QDate();
+        return {};
 
     QString string = value.toString();
     return QDate::fromString(string, Qt::ISODate);

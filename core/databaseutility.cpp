@@ -23,8 +23,17 @@
 
 DatabaseUtility::DatabaseUtility(QObject *parent)
     : QObject(parent),
-      m_table("")
+      m_table(""),
+      m_idFieldName("")
 {
+}
+
+void DatabaseUtility::rollback() const
+{
+    qDebug() << "Rolling back...";
+    QSqlDatabase::database().rollback();
+    qDebug() << QSqlDatabase::database().lastError().text();
+
 }
 
 QString DatabaseUtility::table() const
@@ -32,9 +41,21 @@ QString DatabaseUtility::table() const
     return m_table;
 }
 
+void DatabaseUtility::setTable(const QString &table)
+{
+    m_table = table;
+}
+
 QString DatabaseUtility::idFieldName() const
 {
+    if (!m_idFieldName.isEmpty())
+        return m_idFieldName;
     return table() + "_id";
+}
+
+void DatabaseUtility::setIdFieldName(const QString &name)
+{
+    m_idFieldName = name;
 }
 
 void DatabaseUtility::debugQuery(const QSqlQuery& query) const
@@ -75,8 +96,35 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     query.next();
     if (query.isValid())
         return query.record();
-    else
-        return QSqlRecord();
+
+    return QSqlRecord();
+}
+
+QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
+                                                        const QList<int> &idList) const
+{
+    if (idList.length() < 1)
+        return {};
+    if (tableName.isNull())
+        return {};
+
+    QString queryString("SELECT * FROM %1 WHERE %2 in %3");
+    QString ids = "(";
+    int i;
+    for (i = 0; i < idList.length() - 1; i++)
+        ids.append(QString::number(idList[i]) + ", ");
+    ids.append(QString::number(idList[i]) + ")");
+
+    QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
+    query.exec();
+    debugQuery(query);
+
+    QList<QSqlRecord> recordList;
+    while (query.next())
+        if (query.isValid())
+            recordList.push_back(query.record());
+
+    return recordList;
 }
 
 QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
@@ -92,17 +140,29 @@ QVariantMap DatabaseUtility::mapFromId(const QString &tableName, int id) const
     return mapFromRecord(recordFromId(tableName, id));
 }
 
-int DatabaseUtility::add(QVariantMap map) const
+QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
+                                                      const QList<int> &idList) const
+{
+    QList<QVariantMap> mapList;
+    QList<QSqlRecord> recordList = recordListFromIdList(tableName, idList);
+
+    for (auto &record : recordList)
+        if (!record.isEmpty())
+            mapList.push_back(mapFromRecord(record));
+    return mapList;
+}
+
+int DatabaseUtility::add(const QVariantMap &map) const
 {
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
     QString fieldName = idFieldName();
-    for (const QString &key : map.keys()) {
+
+    for (const auto &key : map.keys())
         if (key != fieldName) {
             queryNameString.append(QString(" %1,").arg(key));
-            queryValueString.append(QString(" \"%1\",").arg(map[key].toString()));
+            queryValueString.append(QString(" :%1,").arg(key));
         }
-    }
 
     // Remove last semicolons.
     queryNameString.chop(1);
@@ -111,7 +171,15 @@ int DatabaseUtility::add(QVariantMap map) const
     queryNameString.append(")");
     queryValueString.append(")");
 
-    QSqlQuery query(queryNameString + queryValueString);
+    QString queryString = queryNameString + queryValueString;
+
+    QSqlQuery query;
+    query.prepare(queryString) ;
+
+    for (const auto &key : map.keys())
+        query.bindValue(QString(":%1").arg(key), map[key]);
+
+    query.exec();
     debugQuery(query);
 
     int newId = query.lastInsertId().toInt();
@@ -128,7 +196,7 @@ void DatabaseUtility::addLink(const QString &table,
     debugQuery(query);
 }
 
-void DatabaseUtility::update(int id, QVariantMap map) const
+void DatabaseUtility::update(int id, const QVariantMap &map) const
 {
     if (id < 0)
         return;
@@ -138,14 +206,27 @@ void DatabaseUtility::update(int id, QVariantMap map) const
         return;
 
     QString queryString = QString("UPDATE %1 SET ").arg(table());
-    for (auto &key : map.keys())
-        queryString.append(QString("%1 = \"%2\",").arg(key).arg(map[key].toString()));
+    for (const auto &key : map.keys())
+        queryString.append(QString(" %1 = :%1,").arg(key));
     queryString.chop(1); // remove last comma
     queryString.append(QString(" WHERE %1 = %2").arg(idFieldName()).arg(id));
 
-    QSqlQuery query(queryString);
+    QSqlQuery query;
+    query.setForwardOnly(true);
+    query.prepare(queryString);
+    for (const auto &key : map.keys())
+        query.bindValue(QString(":%1").arg(key), map[key]);
+
     query.exec();
     debugQuery(query);
+}
+
+void DatabaseUtility::updateList(const QList<int> &idList, const QVariantMap &map) const
+{
+    QSqlDatabase::database().transaction();
+    for (const int id : idList)
+        update(id, map);
+    QSqlDatabase::database().commit();
 }
 
 int DatabaseUtility::duplicate(int id) const
@@ -161,10 +242,11 @@ int DatabaseUtility::duplicate(int id) const
     return add(map);
 }
 
-void DatabaseUtility::duplicate(const QList<int> &idList) const
+void DatabaseUtility::duplicateList(const QList<int> &idList) const
 {
+    qDebug() << "Batch duplicate:" << idList;
     QSqlDatabase::database().transaction();
-    for (int id : idList)
+    for (const int id : idList)
         duplicate(id);
     QSqlDatabase::database().commit();
 }
@@ -178,10 +260,11 @@ void DatabaseUtility::remove(int id) const
     debugQuery(query);
 }
 
-void DatabaseUtility::remove(const QList<int> &idList) const
+void DatabaseUtility::removeList(const QList<int> &idList) const
 {
+    qDebug() << "Batch remove:" << idList;
     QSqlDatabase::database().transaction();
-    for (int id : idList)
+    for (const int id : idList)
         remove(id);
     QSqlDatabase::database().commit();
 }

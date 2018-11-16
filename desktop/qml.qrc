@@ -8,7 +8,6 @@
         <file>qml/OverviewPage.qml</file>
         <file>qml/MapPage.qml</file>
         <file>qml/SettingsPage.qml</file>
-        <file>qml/CPTabButton.qml</file>
         <file>qml/DrawerItemDelegate.qml</file>
         <file>qml/Timeline.qml</file>
         <file>qml/Card.qml</file>
@@ -35,5 +34,17 @@
         <file>qml/SeasonSpinBox.qml</file>
         <file>qml/PlantingsChartPane.qml</file>
         <file>qml/SearchField.qml</file>
+        <file>qml/ChoiceChip.qml</file>
+        <file>qml/InputChip.qml</file>
+        <file>qml/Units.qml</file>
+        <file>qml/qmldir</file>
+        <file>qml/AddCropDialog.qml</file>
+        <file>qml/Snackbar.qml</file>
+        <file>qml/AddVarietyDialog.qml</file>
+        <file>qml/PlantingFormHeader.qml</file>
+        <file>qml/MobilePlantingForm.qml</file>
+        <file>qml/AddUnitDialog.qml</file>
+        <file>qml/AddDialogButtonBox.qml</file>
+        <file>qml/ColorPicker.qml</file>
     </qresource>
 </RCC>

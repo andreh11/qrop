@@ -20,14 +20,14 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class KeywordModel : public SqlTableModel
+class CORESHARED_EXPORT KeywordModel : public SortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    KeywordModel(QObject *parent = nullptr);
+    KeywordModel(QObject *parent = nullptr, const QString &tableName = "keyword");
 };
 
 #endif // KEYWORDMODEL_H

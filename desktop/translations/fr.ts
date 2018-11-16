@@ -2,6 +2,42 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr" sourcelanguage="en">
 <context>
+    <name>AddCropDialog</name>
+    <message>
+        <location filename="../qml/AddCropDialog.qml" line="13"/>
+        <source>Add New Crop</source>
+        <translation>Ajouter une nouvelle espèce</translation>
+    </message>
+    <message>
+        <location filename="../qml/AddCropDialog.qml" line="32"/>
+        <source>Crop</source>
+        <translation>Espèce</translation>
+    </message>
+    <message>
+        <location filename="../qml/AddCropDialog.qml" line="39"/>
+        <source>Family</source>
+        <translation>Famille</translation>
+    </message>
+    <message>
+        <location filename="../qml/AddCropDialog.qml" line="55"/>
+        <source>Color</source>
+        <translation>Couleur</translation>
+    </message>
+</context>
+<context>
+    <name>AddVarietyDialog</name>
+    <message>
+        <location filename="../qml/AddVarietyDialog.qml" line="12"/>
+        <source>Add New Variety</source>
+        <translation>Ajouter une variété</translation>
+    </message>
+    <message>
+        <location filename="../qml/AddVarietyDialog.qml" line="29"/>
+        <source>Variety</source>
+        <translation>Variété</translation>
+    </message>
+</context>
+<context>
     <name>CalendarPage</name>
     <message>
         <location filename="../qml/CalendarPage.qml" line="19"/>
@@ -52,6 +88,31 @@
     </message>
 </context>
 <context>
+    <name>MyComboBox</name>
+    <message>
+        <location filename="../qml/MyComboBox.qml" line="26"/>
+        <source>Add Item</source>
+        <translation>Ajouter un élément</translation>
+    </message>
+    <message>
+        <location filename="../qml/MyComboBox.qml" line="21"/>
+        <source>Bad input</source>
+        <translation>Erreur</translation>
+    </message>
+</context>
+<context>
+    <name>MyTextField</name>
+    <message>
+        <source>Bad input</source>
+        <translation type="vanished">Erreur</translation>
+    </message>
+    <message>
+        <location filename="../qml/MyTextField.qml" line="18"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+</context>
+<context>
     <name>NotesEditPage</name>
     <message>
         <location filename="../qml/NotesEditPage.qml" line="10"/>
@@ -67,28 +128,115 @@
 <context>
     <name>PlantingDialog</name>
     <message>
-        <location filename="../qml/PlantingDialog.qml" line="18"/>
+        <location filename="../qml/PlantingDialog.qml" line="23"/>
         <source>Add planting(s)</source>
         <translation>Ajouter des séries</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingDialog.qml" line="18"/>
+        <location filename="../qml/PlantingDialog.qml" line="28"/>
         <source>Edit planting(s)</source>
         <translation>Éditer des séries</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingDialog.qml" line="38"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingDialog.qml" line="51"/>
+        <source>Add</source>
+        <translation>Ajouter</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingDialog.qml" line="51"/>
+        <source>Edit</source>
+        <translation>Éditer</translation>
     </message>
 </context>
 <context>
     <name>PlantingForm</name>
     <message>
+        <location filename="../qml/PlantingForm.qml" line="168"/>
         <source>Crop</source>
-        <translation type="vanished">Espèce</translation>
+        <translation>Espèce</translation>
     </message>
     <message>
+        <location filename="../qml/PlantingForm.qml" line="201"/>
         <source>Variety</source>
-        <translation type="vanished">Variété</translation>
+        <translation>Variété</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="126"/>
+        <location filename="../qml/PlantingForm.qml" line="284"/>
+        <source>Single planting</source>
+        <translation>Série unique</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="297"/>
+        <source>Planting Type</source>
+        <translation>Type de série</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="340"/>
+        <source>Field Sowing</source>
+        <translation>Semis plein champs</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="396"/>
+        <source>Field planting</source>
+        <translation>Plantation</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="428"/>
+        <source>First harvest</source>
+        <translation>Première récolte</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n flat(s)</source>
+        <translation type="vanished">
+            <numerusform>%n plaque</numerusform>
+            <numerusform>%n plaques</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="510"/>
+        <source>Needed</source>
+        <translation>Nécessaires</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="531"/>
+        <source>Per gram</source>
+        <translation>Par gramme</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="532"/>
+        <source>Enter a quantity!</source>
+        <translation>Entrez une quantité</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/PlantingForm.qml" line="533"/>
+        <source>%n g</source>
+        <translation>
+            <numerusform>%n g</numerusform>
+            <numerusform>%n g</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="541"/>
+        <source>Harvest &amp; revenue rate</source>
+        <translation>Rendements et produits</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="560"/>
+        <source>Yield/bed m</source>
+        <translation>Rendement/m planche</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="569"/>
+        <source>Price/</source>
+        <translation>Prix/</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="581"/>
         <source>Keywords</source>
         <translation>Mots-clef</translation>
     </message>
@@ -105,27 +253,27 @@
         <translation type="vanished">livre</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="142"/>
+        <location filename="../qml/PlantingForm.qml" line="305"/>
         <source>Direct seed</source>
         <translation>Semis direct</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="148"/>
+        <location filename="../qml/PlantingForm.qml" line="312"/>
         <source>Transplant, raised</source>
         <translation>Plant, fait</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="153"/>
+        <location filename="../qml/PlantingForm.qml" line="318"/>
         <source>Transplant, bought</source>
         <translation>Plant, acheté</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="162"/>
+        <location filename="../qml/PlantingForm.qml" line="230"/>
         <source>Amounts</source>
         <translation>Quantités</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="174"/>
+        <location filename="../qml/PlantingForm.qml" line="276"/>
         <source>Successions</source>
         <translation>Séries</translation>
     </message>
@@ -134,143 +282,197 @@
         <translation type="vanished">Intervalle</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="182"/>
+        <location filename="../qml/PlantingForm.qml" line="549"/>
+        <source>Unit</source>
+        <translation>Unité</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="288"/>
         <source>Weeks between</source>
         <translation>Semaines d&apos;intervalle</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="193"/>
+        <location filename="../qml/PlantingForm.qml" line="176"/>
+        <source>Add Crop</source>
+        <translation>Ajouter une espèce</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="205"/>
+        <source>Add Variety</source>
+        <translation>Ajouter une variété</translation>
+    </message>
+    <message>
+        <source>Add New Variety</source>
+        <translation type="vanished">Ajouter une variété</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="241"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="201"/>
+        <location filename="../qml/PlantingForm.qml" line="245"/>
+        <source>bed m</source>
+        <translation>m planche</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="251"/>
         <source>Spacing</source>
         <translation>Espacement</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="209"/>
+        <location filename="../qml/PlantingForm.qml" line="255"/>
+        <source>cm</source>
+        <translation>cm</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingForm.qml" line="261"/>
         <source>Rows</source>
         <translation>Rangs</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="211"/>
         <source>Plants needed: </source>
-        <translation>Plants nécessaires : </translation>
+        <translation type="vanished">Plants nécessaires : </translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="221"/>
+        <location filename="../qml/PlantingForm.qml" line="326"/>
         <source>Planting dates</source>
         <translation>Dates</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="221"/>
+        <location filename="../qml/PlantingForm.qml" line="326"/>
         <source>(first succession)</source>
         <translation>(première série)</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="235"/>
         <source>Field Sowing Date</source>
-        <translation>Semis plein champs</translation>
+        <translation type="vanished">Semis plein champs</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="247"/>
-        <location filename="../qml/PlantingForm.qml" line="292"/>
+        <location filename="../qml/PlantingForm.qml" line="355"/>
+        <location filename="../qml/PlantingForm.qml" line="416"/>
         <source>Days to maturity</source>
-        <translation>Durée de croissances</translation>
+        <translation>Durée de croissance</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="257"/>
+        <location filename="../qml/PlantingForm.qml" line="367"/>
         <source>Greenhouse start date</source>
         <translation>Semis plant</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="269"/>
+        <location filename="../qml/PlantingForm.qml" line="383"/>
         <source>Greenhouse duration</source>
         <translation>Durée pépinière</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="270"/>
-        <location filename="../qml/PlantingForm.qml" line="293"/>
-        <location filename="../qml/PlantingForm.qml" line="319"/>
+        <location filename="../qml/PlantingForm.qml" line="384"/>
+        <location filename="../qml/PlantingForm.qml" line="417"/>
+        <location filename="../qml/PlantingForm.qml" line="454"/>
         <source>days</source>
         <translation>jours</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="280"/>
         <source>Field planting date</source>
-        <translation>Plantation</translation>
+        <translation type="vanished">Plantation</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="302"/>
         <source>First harvest date</source>
-        <translation>Première récolte</translation>
+        <translation type="vanished">Première récolte</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="317"/>
+        <location filename="../qml/PlantingForm.qml" line="448"/>
         <source>Harvest window</source>
         <translation>Durée de récolte</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="318"/>
+        <location filename="../qml/PlantingForm.qml" line="449"/>
         <source>Last: </source>
         <translation>Dernière : </translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/PlantingForm.qml" line="490"/>
+        <source>%L1 flat(s)</source>
+        <translation>
+            <numerusform>%L1 plaque</numerusform>
+            <numerusform>%L1 plaques</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="326"/>
+        <location filename="../qml/PlantingForm.qml" line="500"/>
         <source>Seeds</source>
         <translation>Semences</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="334"/>
         <source>Seeds needed</source>
-        <translation>Semences nécessaires</translation>
+        <translation type="vanished">Semences nécessaires</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="342"/>
+        <location filename="../qml/PlantingForm.qml" line="520"/>
         <source>Extra %</source>
         <translation>% supplémentaire</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="350"/>
         <source>Seeds/g</source>
-        <translation>Graines/g</translation>
+        <translation type="vanished">Graines/g</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="358"/>
+        <location filename="../qml/PlantingForm.qml" line="461"/>
         <source>Greenhouse details</source>
         <translation>Serre</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="366"/>
+        <location filename="../qml/PlantingForm.qml" line="468"/>
         <source>Flat type</source>
         <translation>Type de plaque</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="376"/>
+        <location filename="../qml/PlantingForm.qml" line="476"/>
         <source>Seeds per cell</source>
         <translation>Graine par trou</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="383"/>
+        <location filename="../qml/PlantingForm.qml" line="488"/>
         <source>Estimated loss</source>
         <translation>Perte estimée</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingForm.qml" line="385"/>
+        <location filename="../qml/PlantingForm.qml" line="489"/>
         <source>%</source>
         <translation>%</translation>
     </message>
 </context>
 <context>
+    <name>PlantingsChartPane</name>
+    <message>
+        <location filename="../qml/PlantingsChartPane.qml" line="21"/>
+        <source>Revenue and Space graphs</source>
+        <translation>Graphiques d&apos;occupation et de revenu</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsChartPane.qml" line="39"/>
+        <source>Estimated field and greenhouse space occupied this year (of X bed m.)</source>
+        <translation>Estimation de l&apos;occupation au champs et sous abris pour cette année (sur X m de planche)</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsChartPane.qml" line="126"/>
+        <source>Field</source>
+        <translation>Plein champs</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsChartPane.qml" line="161"/>
+        <source>Greenhouse</source>
+        <translation>Sous abris</translation>
+    </message>
+</context>
+<context>
     <name>PlantingsPage</name>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="44"/>
+        <location filename="../qml/PlantingsPage.qml" line="51"/>
         <source>Crop</source>
         <translation>Espèce</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="45"/>
+        <location filename="../qml/PlantingsPage.qml" line="56"/>
         <source>Variety</source>
         <translation>Variété</translation>
     </message>
@@ -291,102 +493,123 @@
         <translation type="vanished">Fin récolte</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="357"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation type="vanished">Rechercher</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="286"/>
         <source>Add planting</source>
-        <translation>Ajouter série</translation>
+        <translation type="vanished">Ajouter une série</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="46"/>
+        <location filename="../qml/PlantingsPage.qml" line="61"/>
         <source>Sowing</source>
         <translation>Semis</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="47"/>
+        <location filename="../qml/PlantingsPage.qml" line="66"/>
         <source>Planting</source>
         <translation>Plantation</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="48"/>
+        <location filename="../qml/PlantingsPage.qml" line="71"/>
         <source>Begin</source>
         <translation>Début</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="49"/>
+        <location filename="../qml/PlantingsPage.qml" line="76"/>
         <source>End</source>
         <translation>Fin</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="50"/>
+        <location filename="../qml/PlantingsPage.qml" line="81"/>
         <source>DTT</source>
         <translation>Durée pépinière</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="51"/>
+        <location filename="../qml/PlantingsPage.qml" line="86"/>
         <source>DTM</source>
         <translation>Durée croissance</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="52"/>
-        <source>Harvest window</source>
-        <translation>Durée de récolte</translation>
+        <location filename="../qml/PlantingsPage.qml" line="91"/>
+        <source>Harvest Window</source>
+        <translation>Récolte</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="53"/>
+        <location filename="../qml/PlantingsPage.qml" line="111"/>
+        <source>Avg. Yield</source>
+        <translation>Rendement moyen</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsPage.qml" line="116"/>
+        <source>Avg. Price</source>
+        <translation>Prix moyen</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/PlantingsPage.qml" line="225"/>
+        <source>Added %L1 planting(s)</source>
+        <translation>
+            <numerusform>%L1 série ajoutée</numerusform>
+            <numerusform>%L1 séries ajoutées</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsPage.qml" line="360"/>
+        <source>Click on &quot;Add Plantings&quot; to begin planning!</source>
+        <translation>Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation>
+    </message>
+    <message>
+        <source>Harvest window</source>
+        <translation type="vanished">Durée de récolte</translation>
+    </message>
+    <message>
+        <location filename="../qml/PlantingsPage.qml" line="96"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="54"/>
+        <location filename="../qml/PlantingsPage.qml" line="101"/>
         <source>Rows</source>
         <translation>Rangs</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="55"/>
+        <location filename="../qml/PlantingsPage.qml" line="106"/>
         <source>Spacing</source>
         <translation>Espacement</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="124"/>
         <source>Revenue and Space graphs</source>
-        <translation>Graphiques d&apos;occupation et de revenu</translation>
+        <translation type="vanished">Graphiques d&apos;occupation et de revenu</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="143"/>
         <source>Estimated field and greenhouse space occupied this year (of X bed m.)</source>
-        <translation>Estimation de l&apos;occupation au champs et sous abris pour cette année (sur X m de planche)</translation>
+        <translation type="vanished">Estimation de l&apos;occupation au champs et sous abris pour cette année (sur X m de planche)</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="230"/>
         <source>Field</source>
-        <translation>Plein champs</translation>
+        <translation type="vanished">Plein champs</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="244"/>
         <source>Greenhouse</source>
-        <translation>Sous abris</translation>
+        <translation type="vanished">Sous abris</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="308"/>
+        <location filename="../qml/PlantingsPage.qml" line="295"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="321"/>
+        <location filename="../qml/PlantingsPage.qml" line="305"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="335"/>
+        <location filename="../qml/PlantingsPage.qml" line="316"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/PlantingsPage.qml" line="396"/>
+        <location filename="../qml/PlantingsPage.qml" line="334"/>
         <source>planting(s) selected</source>
         <translation>
             <numerusform>%n série sélectionnée</numerusform>
@@ -410,19 +633,23 @@
         <translation type="vanished">Hiver</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="301"/>
+        <location filename="../qml/PlantingsPage.qml" line="287"/>
         <source>Hide timegraph</source>
         <translation>Cacher le diagramme</translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="301"/>
+        <location filename="../qml/PlantingsPage.qml" line="287"/>
         <source>Show timegraph</source>
         <translation>Afficher le diagrame</translation>
     </message>
+    <message>
+        <source>Click on &quot;Add Crop&quot; to begin planning!</source>
+        <translation type="vanished">Cliquez sur « Ajouter une série » pour commencer à planifier vos cultures !</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../qml/PlantingsPage.qml" line="728"/>
-        <location filename="../qml/PlantingsPage.qml" line="736"/>
-        <location filename="../qml/PlantingsPage.qml" line="744"/>
+        <location filename="../qml/PlantingsPage.qml" line="702"/>
+        <location filename="../qml/PlantingsPage.qml" line="712"/>
+        <location filename="../qml/PlantingsPage.qml" line="722"/>
         <source>%n d</source>
         <comment>Abbreviation for day</comment>
         <translation>
@@ -438,9 +665,18 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/PlantingsPage.qml" line="784"/>
+        <location filename="../qml/PlantingsPage.qml" line="268"/>
+        <location filename="../qml/PlantingsPage.qml" line="786"/>
         <source>Add plantings</source>
         <translation>Ajouter des séries</translation>
+    </message>
+</context>
+<context>
+    <name>SearchField</name>
+    <message>
+        <location filename="../qml/SearchField.qml" line="16"/>
+        <source>Search</source>
+        <translation>Rechercher</translation>
     </message>
 </context>
 <context>
@@ -535,24 +771,20 @@
         <translation>Tâches</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="41"/>
         <source>Crop Map</source>
-        <translation>Plan de culture</translation>
+        <translation type="vanished">Plan de culture</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="42"/>
         <source>Harvests</source>
-        <translation>Récoltes</translation>
+        <translation type="vanished">Récoltes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="43"/>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="44"/>
         <source>Charts</source>
-        <translation>Graphiques</translation>
+        <translation type="vanished">Graphiques</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="45"/>
@@ -560,18 +792,18 @@
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="89"/>
+        <location filename="../qml/main.qml" line="78"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="93"/>
+        <location filename="../qml/main.qml" line="82"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="128"/>
-        <location filename="../qml/main.qml" line="225"/>
+        <location filename="../qml/main.qml" line="106"/>
+        <location filename="../qml/main.qml" line="184"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>

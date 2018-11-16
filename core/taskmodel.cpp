@@ -15,7 +15,7 @@ TaskModel::TaskModel(QObject *parent)
     setTable(taskTableName);
     setSort(2, Qt::AscendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
-    setFilterDate(QDate::currentDate());
+//    setFilterDate(QDate::currentDate());
     select();
 }
 

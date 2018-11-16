@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -8,13 +24,12 @@ import "date.js" as MDate
 
 Item {
     id: control
-    width: gridRow.width
 
     property int season: 1
     property int year
     property date todayDate: new Date()
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
-    property int monthWidth: 10
+    property int monthWidth: Units.monthWidth
     readonly property int graphWidth: 12 * monthWidth
     property date seedingDate
     property date transplantingDate
@@ -48,6 +63,8 @@ Item {
         return coordinate(daysDelta(seasonBegin, date))
     }
 
+    implicitWidth: gridRow.width
+
     Row {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
@@ -59,7 +76,7 @@ Item {
             Rectangle {
                 height: parent.height
                 width: 1
-                color: Material.color(Material.Grey, Material.Shade400)
+                color: Qt.rgba(0, 0, 0, 0.12)
             }
         }
     }
@@ -87,7 +104,7 @@ Item {
 
     Label {
         id: seedingLabel
-        text: MDate.formatDate(seedingDate)
+        text: NDate.formatDate(seedingDate, year)
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         visible: seedingCircle.visible
@@ -99,7 +116,7 @@ Item {
 
     Rectangle {
         id: seedingCircle
-        x: position(seedingDate)
+        x: position(seedingDate) - width/4
         visible: seedingDate < transplantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -112,7 +129,7 @@ Item {
     Rectangle {
         id: seedingLine
         width: widthBetween(x, transplantingDate)
-        visible: width > 0
+        visible: width > 0 && seedingDate < transplantingDate
         height: 1
         x: seedingCircle.x
         color: current ? Material.color(Material.Green, Material.Shade200)
@@ -131,7 +148,7 @@ Item {
                        : Material.color(Material.Grey, Material.Shade400)
 
         Label {
-            text: MDate.formatDate(transplantingDate)
+            text: NDate.formatDate(transplantingDate, year)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left
@@ -150,7 +167,7 @@ Item {
         color: current ? Material.color(Material.Green, Material.Shade700)
                        : Material.color(Material.Grey, Material.Shade500)
         Label {
-            text: MDate.formatDate(beginHarvestDate)
+            text: NDate.formatDate(beginHarvestDate, year)
             font.family: "Roboto Condensed"
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left

@@ -25,7 +25,6 @@
 
 #include "core_global.h"
 
-
 class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
 {
     Q_OBJECT
@@ -38,7 +37,7 @@ public:
     QVariant data(const QModelIndex &idx, const QString &role) const;
     int fieldColumn(const QString &field) const;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
-    Q_INVOKABLE void setSortColumn(const QString fieldName, const QString order);
+    Q_INVOKABLE void setSortColumn(const QString &fieldName, const QString &order);
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     bool submitAll();
     int roleIndex(const QString &role) const;

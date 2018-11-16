@@ -15,30 +15,30 @@
  */
 
 #include <QDebug>
+#include "sqltablemodel.h"
 #include "varietymodel.h"
 
-VarietyModel::VarietyModel(QObject *parent) :
-    SqlTableModel(parent),
-    m_cropId(-1)
+VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName),
+      m_cropId(-1)
 {
-    setTable("variety");
     setFilterCropId(1);
+    setFilterKeyColumn(2);
+    setSortColumn("variety");
+//    int cropColumn = fieldColumn("crop_id");
+//    setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
 
-    int cropColumn = fieldColumn("crop_id");
-    setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
-
-    int seedCompanyColumn = fieldColumn("seed_company_id");
-    setRelation(seedCompanyColumn, QSqlRelation("seed_company",
-                                                "seed_company_id",
-                                                "seed_company"));
-    select();
+//    int seedCompanyColumn = fieldColumn("seed_company_id");
+//    setRelation(seedCompanyColumn, QSqlRelation("seed_company",
+//                                                "seed_company_id",
+//                                                "seed_company"));
+//    select();
 }
 
 int VarietyModel::cropId() const
 {
     return m_cropId;
 }
-
 
 void VarietyModel::setFilterCropId(int cropId)
 {
@@ -49,13 +49,13 @@ void VarietyModel::setFilterCropId(int cropId)
 
     if (m_cropId < 1) {
         qInfo("[VarietyModel] null filter");
-        setFilter("");
+
     } else {
+//        setFilterFixedString(QString(cropId));
         const QString filterString = QString::fromLatin1(
             "crop_id = %1").arg(cropId);
-        setFilter(filterString);
+        m_model->setFilter(filterString);
     }
 
-    select();
     emit cropIdChanged();
 }

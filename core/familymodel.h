@@ -4,12 +4,12 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT FamilyModel : public SqlTableModel
+class CORESHARED_EXPORT FamilyModel : public SortFilterProxyModel
 {
 public:
-    FamilyModel(QObject *parent = nullptr);
+    FamilyModel(QObject *parent = nullptr, const QString &tableName = "family");
 };
 
 #endif // FAMILYTABLE_H

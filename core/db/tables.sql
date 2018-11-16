@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS family (
     family_id INTEGER PRIMARY KEY AUTOINCREMENT,
     family    TEXT NOT NULL,
-    color     TEXT
+    color     TEXT DEFAULT '#000000' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS crop (
     crop_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     crop       TEXT NOT NULL,
-    color      TEXT,
-    family_id INTEGER NOT NULL REFERENCES family ON DELETE CASCADE
+    color      TEXT DEFAULT '#000000' NOT NULL,
+    family_id  INTEGER NOT NULL REFERENCES family ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS variety (
@@ -25,17 +25,18 @@ CREATE TABLE IF NOT EXISTS seed_company (
 
 CREATE TABLE IF NOT EXISTS unit (
     unit_id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    unit TEXT       UNIQUE NOT NULL,
+    fullname TEXT       UNIQUE NOT NULL,
+    abbreviation TEXT       UNIQUE NOT NULL,
     conversion_rate FLOAT -- from unit to kilogram
 );
 
-INSERT INTO unit values (1, "kg", 1.0);
-INSERT INTO unit values (2, "bunch", 1.0);
+INSERT INTO unit values (1, "kilogram", "kg", 1.0);
+INSERT INTO unit values (2, "bunch", "bn", 1.0);
 
 CREATE TABLE IF NOT EXISTS keyword (
     keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
     keyword    TEXT UNIQUE NOT NULL,
-    color      TEXT NOT NULL
+    color      TEXT
 );
 
 CREATE TABLE IF NOT EXISTS note (
@@ -54,11 +55,7 @@ CREATE TABLE IF NOT EXISTS planting (
     planting_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     code              TEXT,
     planting_type     INTEGER NOT NULL, -- 1: DS, 2: TP raised, 3: TP bought
-    sowing_date       STRING NOT NULL,
-    planting_date     STRING NOT NULL, -- sowing date for planting_type 1,
-                                       -- tranplanting for 2, 3
-    beg_harvest_date  STRING NOT NULL,
-    end_harvest_date  STRING NOT NULL,
+    in_greenhouse     INTEGER NOT NULL CHECK (in_greenhouse IN (0, 1)),
     dtt               INTEGER,
     dtm               INTEGER,
     harvest_window    INTEGER,
@@ -68,7 +65,7 @@ CREATE TABLE IF NOT EXISTS planting (
     spacing_rows      INTEGER,
     spacing_plants    INTEGER,
     plants_needed     INTEGER,
-    fudge_factor      INTEGER,
+    estimated_gh_loss INTEGER,
     plants_to_start   INTEGER,
     tray_size         INTEGER,
     trays_to_start    FLOAT,
@@ -77,10 +74,11 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_per_gram    INTEGER,
     seeds_number      INTEGER,
     seeds_quantity    FLOAT,
+    seeds_percentage  INTEGER,
     variety_id        INTEGER NOT NULL REFERENCES variety,
     unit_id           INTEGER NOT NULL REFERENCES unit,
-    yield_per_row_m   FLOAT,
-    avg_price         FLOAT
+    yield_per_bed_meter   FLOAT,
+    average_price     FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS harvest (
@@ -103,7 +101,7 @@ CREATE TABLE IF NOT EXISTS location (
 
 CREATE TABLE IF NOT EXISTS role (
     role_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role    TEXT NOT NULL
+    role    TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user (
@@ -122,7 +120,7 @@ CREATE TABLE IF NOT EXISTS task_template (
 
 CREATE TABLE IF NOT EXISTS task (
     task_id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    assigned_date      TEXT,
+    assigned_date      TEXT NOT NULL,
     completed_date     TEXT,
     duration           INTEGER, -- days
     labor_time         TEXT, -- HH:MM
@@ -140,7 +138,7 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS task_type (
     task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT NOT NULL
+    type TEXT UNIQUE NOT NULL
 );
 
 INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
@@ -161,12 +159,12 @@ CREATE TABLE IF NOT EXISTS task_implement (
 
 CREATE TABLE IF NOT EXISTS expense_category (
     expense_category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category TEXT NOT NULL
+    category TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS input (
     input_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    input TEXT NOT NULL
+    input TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS expense (
@@ -253,12 +251,30 @@ CREATE TABLE IF NOT EXISTS expense_file (
 -- Views
 
 CREATE VIEW IF NOT EXISTS planting_view AS
-SELECT crop, variety, planting.*, group_concat(location_id) as locations
+SELECT planting_id as planting_view_id,
+       crop, variety, crop_id,
+       crop.color as crop_color,
+       planting.*,
+       unit.abbreviation as unit,
+       group_concat(location_id) as locations,
+       task.assigned_date as planting_date,
+       date(task.assigned_date, "-" || dtt || " days") as sowing_date,
+       date(task.assigned_date, dtm || " days") as beg_harvest_date,
+       date(task.assigned_date, (dtm + harvest_window) || " days") as end_harvest_date
 FROM planting
 LEFT JOIN planting_location using(planting_id)
-JOIN variety USING (variety_id)
-JOIN crop USING (crop_id)
+LEFT JOIN variety USING (variety_id)
+LEFT JOIN crop USING (crop_id)
+LEFT JOIN unit USING (unit_id)
+LEFT JOIN planting_task USING (planting_id)
+LEFT JOIN task USING (task_id)
+WHERE (planting_type == 1 and task_type_id == 1) OR (planting_type != 1 AND task_type_id == 3)
 GROUP BY planting_id;
+
+CREATE VIEW IF NOT EXISTS variety_view AS
+SELECT variety.*, seed_company, variety || ' (' || seed_company || ')' as variety_and_company
+FROM variety
+LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
 SELECT task.*, group_concat(planting_id) as plantings, group_concat(location_id) as locations
@@ -266,3 +282,4 @@ FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)
 GROUP BY task_id;
+

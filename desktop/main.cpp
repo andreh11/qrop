@@ -15,36 +15,61 @@
  */
 
 #include <QApplication>
+#include <QDoubleValidator>
 #include <QFontDatabase>
-#include <QStandardPaths>
+#include <QHash>
+#include <QIcon>
+#include <QQmlApplicationEngine>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QQmlApplicationEngine>
-#include <QtQml>
-#include <QIcon>
-#include <QHash>
-#include <QVariantMap>
+#include <QStandardPaths>
 #include <QTranslator>
+#include <QVariantMap>
+#include <QtQml>
+//#include <QAndroidJniObject>
+//#include <QtAndroid>
 
 #include "db.h"
+#include "keyword.h"
+#include "mdate.h"
 #include "planting.h"
+#include "variety.h"
 
-#include "plantingmodel.h"
-#include "taskmodel.h"
-#include "notemodel.h"
-#include "usermodel.h"
-#include "rolemodel.h"
 #include "cropmodel.h"
-#include "varietymodel.h"
+#include "familymodel.h"
+#include "keywordmodel.h"
+#include "notemodel.h"
+#include "plantingmodel.h"
+#include "rolemodel.h"
+#include "seedcompanymodel.h"
+#include "taskmodel.h"
 #include "unitmodel.h"
+#include "usermodel.h"
+#include "varietymodel.h"
+
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
-    Planting *planting = new Planting();
+    auto *planting = new Planting();
     return planting;
 }
+
+// A subclass of QDoubleValidator which always use "." as a decimalPoint.
+class TextFieldDoubleValidator : public QDoubleValidator {
+public:
+    TextFieldDoubleValidator (QObject *parent = nullptr) : QDoubleValidator(parent) {}
+    TextFieldDoubleValidator (double bottom, double top, int decimals, QObject * parent) :
+    QDoubleValidator(bottom, top, decimals, parent) {}
+    const QLocale locale;
+
+    QValidator::State validate(QString &input, int &pos) const override {
+        const QString decimalPoint = locale.decimalPoint();
+        input.replace(".", decimalPoint);
+        return QDoubleValidator::validate(input, pos);
+    }
+};
 
 int main(int argc, char *argv[])
 {
@@ -71,18 +96,82 @@ int main(int argc, char *argv[])
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1 || ret5 == -1)
         qWarning() << "[desktop main] Some custom fonts can't be loaded.";
 
-    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
+    qmlRegisterType<FamilyModel>("io.croplan.components", 1, 0, "FamilyModel");
+    qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
+    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
+    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
+    qmlRegisterType<SeedCompanyModel>("io.croplan.components", 1, 0, "SeedCompanyModel");
+    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
-    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
-    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
+    qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
 
 //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *crop = new DatabaseUtility();
+        crop->setTable("crop");
+        return crop;
+    }
+    );
+
+    qmlRegisterSingletonType<Variety>("io.croplan.components", 1, 0, "Variety",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *variety = new Variety();
+        variety->setTable("variety");
+        return variety;
+    }
+    );
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Unit",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *unit = new DatabaseUtility();
+        unit->setTable("unit");
+        return unit;
+    }
+    );
+
+    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *keyword = new Keyword();
+        return keyword;
+    }
+    );
+
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *mdate = new MDate();
+        return mdate;
+    }
+    );
+
+//    deleteDatabase();
     connectToDatabase();
 //    createDatabase();
+
+//    QtAndroid::runOnAndroidThread([=]()
+//    {
+//        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+//        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+//        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+//        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
+//    });
 
 //    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
 //                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});

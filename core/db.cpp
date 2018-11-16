@@ -24,6 +24,24 @@
 
 #include "db.h"
 
+QString databasePath()
+{
+    const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (!writeDir.mkpath("."))
+        qFatal("Failed to create writable directory at %s", qPrintable(writeDir.absolutePath()));
+
+    // Ensure that we have a writable location on all devices.
+    const QString fileName = writeDir.absolutePath() + "/qrop.db";
+
+    return fileName;
+}
+
+void deleteDatabase()
+{
+    QString fileName = databasePath();
+    QFile::remove(fileName);
+}
+
 void connectToDatabase()
 {
     QSqlDatabase database = QSqlDatabase::database();
@@ -34,12 +52,7 @@ void connectToDatabase()
                    qPrintable(database.lastError().text()));
     }
 
-    const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    if (!writeDir.mkpath("."))
-        qFatal("Failed to create writable directory at %s", qPrintable(writeDir.absolutePath()));
-
-    // Ensure that we have a writable location on all devices.
-    const QString fileName = writeDir.absolutePath() + "/qrop.db";
+    QString fileName = databasePath();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     qDebug() << fileName;
@@ -48,6 +61,9 @@ void connectToDatabase()
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
+
+    QSqlQuery query("PRAGMA foreign_keys = ON");
+    query.exec();
 }
 
 void execSqlFile(const QString &fileName, const QString &separator)
@@ -68,11 +84,10 @@ void execSqlFile(const QString &fileName, const QString &separator)
         if (queryString.isEmpty())
             continue;
 
-        if (!query.exec(queryString + separator)) {
+        if (!query.exec(queryString + separator))
             qDebug() << "createDatabase: cannot execute query"
                      << query.lastError().text()
                      <<	query.lastQuery();
-        }
     }
 }
 
@@ -81,29 +96,5 @@ void createDatabase()
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
-    qDebug() << "Database successfully created";
+    qInfo() << "Database successfully created";
 }
-
-//Note::Note(QObject *parent)
-//    : DatabaseUtility(parent)
-//{
-//    m_table = "note";
-//}
-
-//Keyword::Keyword(QObject *parent)
-//    : DatabaseUtility(parent)
-//{
-//    m_table = "keyword";
-//}
-
-//Expense::Expense(QObject *parent)
-//    : DatabaseUtility(parent)
-//{
-//    m_table = "expense";
-//}
-
-//User::User(QObject *parent)
-//    : DatabaseUtility(parent)
-//{
-//    m_table = "user";
-//}

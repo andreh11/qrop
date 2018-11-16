@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -7,8 +23,6 @@ import io.croplan.components 1.0
 
 Page {
     id: page
-    title: "Calendar"
-    padding: 8
 
     property int rowHeight: 47
     property bool filterMode: false
@@ -24,6 +38,9 @@ Page {
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
+
+    title: "Calendar"
+    padding: 8
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName
@@ -125,7 +142,7 @@ Page {
                 }
 
                 ToolButton {
-                    font.pixelSize: fontSizeBodyAndButton
+                    font.pixelSize: Units.fontSizeBodyAndButton
                     leftPadding: 24
                     visible: checks === 0
                     text: qsTr("Add task")
@@ -263,6 +280,7 @@ Page {
                     width: parent.width
 
                     ThinDivider {
+                       width: parent.width
                     }
 
                     Row {
@@ -284,29 +302,29 @@ Page {
                             }
                         }
 
-                        TableLabel {
-                            text: model.task
-                            elide: Text.ElideRight
-                            width: 100
-                        }
+//                        TableLabel {
+//                            text: model.task
+//                            elide: Text.ElideRight
+//                            width: 100
+//                        }
 
-                        TableLabel {
-                            text: model.descr
-                            elide: Text.ElideRight
-                            width: 100
-                        }
+//                        TableLabel {
+//                            text: model.descr
+//                            elide: Text.ElideRight
+//                            width: 100
+//                        }
 
-                        TableLabel {
-                            text: model.plantings
-                            elide: Text.ElideRight
-                            width: 150
-                        }
+//                        TableLabel {
+//                            text: model.plantings
+//                            elide: Text.ElideRight
+//                            width: 150
+//                        }
 
-                        TableLabel {
-                            text: model.locations
-                            elide: Text.ElideRight
-                            width: 80
-                        }
+//                        TableLabel {
+//                            text: model.locations
+//                            elide: Text.ElideRight
+//                            width: 80
+//                        }
                     }
                 }
             }
