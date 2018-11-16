@@ -120,29 +120,30 @@ QVariantMap Planting::lastValues(const int varietyId,
 
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
-            if (plantingId >= 1) {
+            if (plantingId >= 1)
                 return mapFromId("planting_view", plantingId);
-            }
         }
         qDebug() << "lastValues: trying with less constraints...";
     }
     qDebug() << "Couldn't find prefill values!";
 
-    return QVariantMap();
+    return {};
 }
 
 QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
 {
     if (plantingIdList.length() < 1)
-        return QVariantMap();
+        return {};
 
     QList<QVariantMap> list = mapListFromIdList("planting_view", plantingIdList);
-    QVariantMap common = list[0];
+    if (list.isEmpty())
+        return {};
 
+    QVariantMap common = list[0];
     if (list.length() == 1)
         return common;
 
-    for (auto &key : common.keys()) {
+    for (const auto &key : common.keys()) {
         int i;
         for (i = 1; i < list.length(); i ++)
             if (list[i].value(key) != common.value(key))

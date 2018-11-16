@@ -172,7 +172,6 @@ Flickable {
         return map;
     }
 
-
     function clearAll() {
         varietyField.reset();
         inGreenhouseCheckBox.checked = false;
@@ -206,6 +205,8 @@ Flickable {
     // Set item to value only if it has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.
     function setFieldValue(item, value) {
+        if (!value)
+            return;
         if (!item.manuallyModified) {
             if (item instanceof MyTextField)
                 item.text = value;
