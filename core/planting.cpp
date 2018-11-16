@@ -76,7 +76,8 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
 //        newMap["end_harvest_date"] = endHarvestDate.addDays(days).toString(Qt::ISODate);
 
         int id = add(newMap);
-        ids.append(id);
+        if (id > 0)
+            ids.append(id);
     }
     QSqlDatabase::database().commit();
 
@@ -120,7 +121,6 @@ QVariantMap Planting::lastValues(const int varietyId,
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
             if (plantingId >= 1) {
-                qDebug() << mapFromId("planting_view", plantingId);
                 return mapFromId("planting_view", plantingId);
             }
         }
@@ -157,11 +157,17 @@ QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
 void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
-    QString plantingDateString = newMap.take("planting_date").toString();
-    QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList(); // TODO: update keyword
-    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     DatabaseUtility::update(id, newMap);
-    task->updateTaskDates(id, plantingDate);
+
+    if (newMap.contains("planting_date")) {
+        QString plantingDateString = newMap.take("planting_date").toString();
+        QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
+        task->updateTaskDates(id, plantingDate);
+    }
+
+    if (newMap.contains("keyword_ids")) {
+        QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList(); // TODO: update keyword
+    }
 }
 
 int Planting::duplicate(int id) const

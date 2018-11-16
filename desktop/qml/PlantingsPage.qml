@@ -888,15 +888,17 @@ Page {
             color: "transparent"
             RowLayout {
                 anchors.fill: parent
-                ThinDivider { width: parent.width }
+//                ThinDivider { width: parent.width }
 
                 Label {
                     text: section
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.fillWidth: true
                 }
-                Label {
-                    text: ">"
-                }
+//                Label {
+//                    text: ">"
+//                }
             }
         }
 
@@ -954,23 +956,27 @@ Page {
                     }
 
                     ColumnLayout {
-                        Layout.fillWidth: true
 
                         //                        Layout.fillWidth: true
                         TableLabel {
                             text: model.variety
+                            font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             //                        width: 100
                         }
 
                         TableLabel {
+                            font.family: "Roboto Regular"
                             text: NDate.formatDate(
                                       model.planting_date, currentYear) + " ⋅ " + model.locations
                         }
                     }
 
+                    Item { Layout.fillWidth: true }
+
                     ColumnLayout {
                         TableLabel {
+                            font.family: "Roboto Regular"
                             text: model.planting_type !== 3 ? NDate.formatDate(
                                                                   seedingDate,
                                                                   currentYear) : ""
@@ -979,6 +985,7 @@ Page {
                             //                                            width: 60
                         }
                         TableLabel {
+                            font.family: "Roboto Regular"
                             text: model.length + " m"
                         }
                     }

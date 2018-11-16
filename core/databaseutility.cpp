@@ -216,8 +216,6 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
     query.prepare(queryString);
     for (const auto &key : map.keys())
         query.bindValue(QString(":%1").arg(key), map[key]);
-    qDebug() << "QUERY STRING:" << queryString;
-    qDebug() << "boundValues:"  << query.boundValues();
 
     query.exec();
     debugQuery(query);

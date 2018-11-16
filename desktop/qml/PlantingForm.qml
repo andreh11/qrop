@@ -62,30 +62,31 @@ Flickable {
     property int successions: Number(successionsField.text)
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
-    readonly property int flatSize: Number(flatSizeField.text)
+    readonly property int traySize: Number(traySizeField.text)
     readonly property int plantingAmount: Number(plantingAmountField.text)
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
-    readonly property int seedsPerCell: Number(seedsPerHoleField.text)
+    readonly property int seedsPerHole: Number(seedsPerHoleField.text)
     readonly property int seedsPerGram: Number(seedsPerGramField.text)
     readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
             plantsNeeded * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
-            plantsToStart * seedsPerCell * (1 + seedsExtraPercentage / 100);
+            plantsToStart * seedsPerHole * (1 + seedsExtraPercentage / 100);
         else // TP, bought
             0;
     }
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
-    readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2) : 0
-    readonly property int plantsToStart: flatSize * flatsNumber
+    readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2)
+                                                       : 0
+    readonly property int plantsToStart: traySize * traysNumber
     readonly property int plantsNeeded: inRowSpacing === 0
                                         ? 0
                                         : plantingAmount / inRowSpacing * 100 * rowsPerBed
-    readonly property real flatsNumber: control.flatSize < 1
+    readonly property real traysNumber: control.traySize < 1
                                         ? 0
-                                        : toPrecision((plantsNeeded / flatSize)
+                                        : toPrecision((plantsNeeded / traySize)
                                                       / (1.0 - greenhouseEstimatedLoss/100), 2);
 
     readonly property alias unitText: unitField.currentText
@@ -104,10 +105,7 @@ Flickable {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
-//        "sowing_date": sowingDate,
         "planting_date": plantingDate,
-//        "beg_harvest_date": begHarvestDate,
-//        "end_harvest_date": endHarvestDate,
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
@@ -117,7 +115,7 @@ Flickable {
         "plants_needed": plantsNeeded,
         "estimated_gh_loss" : greenhouseEstimatedLoss,
         "plants_to_start": plantsToStart,
-        "seeds_per_hole": seedsPerCell,
+        "seeds_per_hole": seedsPerHole,
         "seeds_per_gram": seedsPerGram,
         "seeds_number": seedsNeeded,
         "seeds_quantity": seedsQuantity,
@@ -126,12 +124,57 @@ Flickable {
         "unit_id": unitModel.rowId(unitField.currentIndex),
         "yield_per_bed_meter": yieldPerBedMeter,
         "average_price": averagePrice,
-        "tray_size" : flatSize,
-        "trays_to_start": flatsNumber
+        "tray_size" : traySize,
+        "trays_to_start": traysNumber
     }
 
+    readonly property var widgetField: [
+        [varietyField, "variety_id", varietyId],
+        [directSeedRadio, "planting_type", plantingType],
+        [greenhouseRadio, "planting_type", plantingType],
+        [boughtRadio, "planting_type", plantingType],
+        [inGreenhouseCheckBox, "in_greenhouse", inGreenhouse],
+        [fieldSowingDateField, "planting_date", plantingDate],
+        [fieldPlantingDateField, "planting_date", plantingDate],
+        [sowDtmField, "dtm", dtm],
+        [plantingDtmField, "dtm", dtm],
+        [greenhouseGrowTimeField, "dtt", dtt],
+        [harvestWindowField, "harvest_window", harvestWindow],
+        [plantingAmountField, "length", plantingAmount],
+        [rowsPerBedField, "rows", rowsPerBed],
+        [inRowSpacingField, "spacing_plants", inRowSpacing],
+        // TODO: plants needed
+        [greenhouseEstimatedLossField, "estimated_gh_loss", greenhouseEstimatedLoss],
+        [seedsPerHoleField, "seeds_per_hole", seedsPerHole],
+        [seedsPerGramField, "seeds_per_gram", seedsPerGram],
+        // TODO: seeds needed
+        [seedsExtraPercentageField, "seeds_percentage", seedsExtraPercentage],
+        // TODO: keywords
+        [unitField, "unit_id", unitModel.rowId(unitField.currentIndex)],
+        [yieldPerBedMeterField, "yield_per_bed_meter", yieldPerBedMeter],
+        [averagePriceField, "average_price", averagePrice],
+        [traySizeField, "tray_size", traySize],
+        // TODO: trays to start
+    ]
+
+    function editedValues() {
+        var map = {};
+
+        for (var i in widgetField) {
+            var widget = widgetField[i][0]
+            var name = widgetField[i][1]
+            var value = widgetField[i][2]
+
+            if (widget.manuallyModified) {
+                map[name] = value;
+            }
+        }
+        return map;
+    }
+
+
     function clearAll() {
-        varietyField.currentIndex = -1;
+        varietyField.reset();
         inGreenhouseCheckBox.checked = false;
         inGreenhouseCheckBox.manuallyModified = false;
         plantingAmountField.reset();
@@ -147,7 +190,7 @@ Flickable {
         greenhouseGrowTimeField.reset();
         plantingDtmField.reset();
         harvestWindowField.reset();
-        flatSizeField.reset();
+        traySizeField.reset();
         seedsPerHoleField.reset();
         greenhouseEstimatedLossField.reset();
         seedsNeededField.reset();
@@ -160,7 +203,7 @@ Flickable {
         selectedKeywords = []
     }
 
-    // Set item to value only if item has not been manually modified by
+    // Set item to value only if it has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.
     function setFieldValue(item, value) {
         if (!item.manuallyModified) {
@@ -185,7 +228,6 @@ Flickable {
         setFieldValue(inRowSpacingField, val['spacing_plants']);
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
-
 
         switch (val['planting_type']) {
         case 1:
@@ -212,7 +254,7 @@ Flickable {
         }
         setFieldValue(harvestWindowField, val['harvest_window']);
 
-        setFieldValue(flatSizeField, val['tray_size']);
+        setFieldValue(traySizeField, val['tray_size']);
         setFieldValue(seedsPerHoleField, val['seeds_per_hole']);
         setFieldValue(greenhouseEstimatedLossField, val['estimated_gh_loss']);
         setFieldValue(seedsExtraPercentageField, val['seeds_percentage']);
@@ -342,23 +384,23 @@ Flickable {
 
                     MyTextField {
                         id: plantingAmountField
-                        floatingLabel: true
                         labelText: qsTr("Length")
+                        suffixText: qsTr("bed m")
+                        floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 0; top: 999 }
                         Layout.fillWidth: true
-                        suffixText: qsTr("bed m")
                         onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
 
                     MyTextField {
                         id: inRowSpacingField
-                        floatingLabel: true
                         labelText: qsTr("Spacing")
+                        suffixText: qsTr("cm")
+                        floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 999 }
                         Layout.fillWidth: true
-                        suffixText: qsTr("cm")
                         onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
 
@@ -375,6 +417,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
+                    visible: mode === "add"
 
                     MyTextField {
                         id: successionsField
@@ -404,7 +447,7 @@ Flickable {
         Flow {
             id: plantingTypeLayout
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-            spacing: 8
+            spacing: Units.smallSpacing
 
             ChoiceChip {
                 id: directSeedRadio
@@ -583,7 +626,7 @@ Flickable {
                 width: parent.width
                 spacing: Units.formSpacing
                 MyTextField {
-                    id: flatSizeField
+                    id: traySizeField
                     labelText: qsTr("Flat type")
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -595,7 +638,7 @@ Flickable {
                     text: "0"
                     labelText: qsTr("Estimated loss")
                     suffixText: qsTr("%")
-                    helperText: qsTr("%L1 flat(s)", "", flatsNumber).arg(flatsNumber)
+                    helperText: qsTr("%L1 flat(s)", "", traysNumber).arg(traysNumber)
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0; top: 99 }
                     Layout.fillWidth: true

@@ -46,6 +46,8 @@ Dialog {
     function editPlantings(plantingIds) {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
+        plantingForm.clearAll();
+        // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
         plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
@@ -140,13 +142,18 @@ Dialog {
 
     onAccepted: {
         if (mode === "add") {
-            Planting.addSuccessions(plantingForm.successions,
-                                    plantingForm.weeksBetween,
-                                    plantingForm.values);
-            dialog.plantingsAdded(plantingForm.successions)
+            var idList = Planting.addSuccessions(plantingForm.successions,
+                                                 plantingForm.weeksBetween,
+                                                 plantingForm.values);
+            if (idList.length)
+                dialog.plantingsAdded(plantingForm.successions)
         } else {
+            console.log("EDIT VALUES:")
+//            var map = plantingForm.editedValues()
+//            for (var key in map)
+//                console.log(key, map[key])
             Planting.updateList(dialog.editPlantingIdList,
-                                plantingForm.values);
+                                plantingForm.editedValues());
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
