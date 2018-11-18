@@ -307,7 +307,7 @@ Page {
                 RowLayout {
                     id: buttonRow
                     anchors.fill: parent
-                    spacing: 8
+                    spacing: Units.smallSpacing
                     visible: !filterMode
 
                     Button {

@@ -24,7 +24,7 @@ MDate::MDate(QObject *parent) : QObject(parent)
 {
 }
 
-QDate MDate::firstMondayOfYear(const int year)
+QDate MDate::firstMondayOfYear(int year)
 {
     if (year < 1)
         return QDate();
@@ -38,7 +38,7 @@ QDate MDate::firstMondayOfYear(const int year)
     return date;
 }
 
-QDate MDate::mondayOfWeek(const int week, const int year)
+QDate MDate::mondayOfWeek(int week, int year)
 {
     QDate first = firstMondayOfYear(year);
     if (!first.isValid())
@@ -47,8 +47,14 @@ QDate MDate::mondayOfWeek(const int week, const int year)
     return first.addDays((week - 1) * 7);
 }
 
+QList<QDate> MDate::weekDates(int week, int year)
+{
+    QDate monday = mondayOfWeek(week, year);
+    return {monday, monday.addDays(6)};
+}
+
 // Format date according to preferred format.
-QString MDate::formatDate(const QDate &date, const int currentYear, const QString &type)
+QString MDate::formatDate(const QDate &date, int currentYear, const QString &type)
 {
     QSettings settings;
     QString dateType = settings.value("dateType", "week").toString();
@@ -57,7 +63,7 @@ QString MDate::formatDate(const QDate &date, const int currentYear, const QStrin
         dateType = type;
 
     int year;
-    const int week = date.weekNumber(&year);
+    int week = date.weekNumber(&year);
     if (dateType == "week") {
         if (year == currentYear)
             return QString::number(week);
@@ -71,13 +77,13 @@ QString MDate::formatDate(const QDate &date, const int currentYear, const QStrin
 
 QDate MDate::dateFromWeekString(const QString &s)
 {
-    const int currentYear = QDate::currentDate().year();
+    int currentYear = QDate::currentDate().year();
     QRegExp regexp("([><]{0,1})([1-9]|[0-4]\\d|5[0-3])");
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
 
     const QString prefix = list[1];
-    const int week = list[2].toInt();
+    int week = list[2].toInt();
     int year;
     if (prefix == "<")
         year = currentYear - 1;

@@ -101,7 +101,7 @@ Flickable {
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
-    property var values: {
+    readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type

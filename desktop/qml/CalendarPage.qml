@@ -24,23 +24,34 @@ import io.croplan.components 1.0
 Page {
     id: page
 
-    property int rowHeight: 47
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
 
     property var tableHeaderModel: [
-        { name: qsTr("Task"),        columnName: "task",    width: 100 },
-        { name: qsTr("Description"), columnName: "descr", width: 100 },
-        { name: qsTr("Plantings"),   columnName: "planting_ids", width: 150 },
-        { name: qsTr("Locations"),   columnName: "place_ids", width: 80 }
+        { name: qsTr("Task"),        columnName: "task",    width: 150},
+        { name: qsTr("Description"), columnName: "descr", width: 150 },
+        { name: qsTr("Plantings"),   columnName: "plantings", width: 150 },
+        { name: qsTr("Locations"),   columnName: "locations", width: 150 },
+        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
     ]
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
 
+    function cropName(id) {
+        var map = Planting.mapFromId("planting_view", id);
+        return map['crop']
+    }
+
+    function varietyName(id) {
+        var map = Planting.mapFromId("planting_view", id);
+        return map['variety']
+    }
+
     title: "Calendar"
     padding: 8
+    Material.background: "white"
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName
@@ -60,7 +71,6 @@ Page {
         x: (parent.width - width) / 2
     }
 
-
     Pane {
         width: parent.width
         height: parent.height
@@ -76,61 +86,13 @@ Page {
             height: 48
 
             RowLayout {
-                id: filterRow
-                anchors.fill: parent
-                spacing: 0
-                visible: filterMode
-
-                TextField  {
-                    id: filterField
-                    leftPadding: 16 + largeDisplay ? 50 : 0
-                    font.family: "Roboto Regular"
-                    verticalAlignment: Qt.AlignVCenter
-                    font.pixelSize: 20
-                    color: "black"
-                    placeholderText: qsTr("Search")
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter
-
-                    Shortcut {
-                        sequence: "Escape"
-                        onActivated: {
-                            filterMode = false
-                            filterField.text = ""
-                        }
-                    }
-
-                    background: Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height * 0.7
-                        Label {
-                            leftPadding: 16
-                            color: "black"
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "\ue8b6" // search
-                            font.family: "Material Icons"
-                            font.pixelSize: 24
-                        }
-                    }
-                }
-
-                IconButton {
-                    text: "\ue5cd" // delete
-                    onClicked: {
-                        filterMode = false
-                        filterField.text = ""
-                    }
-                }
-            }
-
-            RowLayout {
                 id: buttonRow
                 anchors.fill: parent
-                spacing: 0
+                spacing: Units.smallSpacing
                 visible: !filterMode
 
                 Label {
-                    text: checks + " task" + (checks > 1 ? "s" : "") + " selected"
+                    text: qsTr("%L1 task(s) selected", "", checks).arg(checks)
                     leftPadding: 16
                     color: Material.color(Material.Blue)
                     Layout.fillWidth: true
@@ -141,32 +103,27 @@ Page {
                     verticalAlignment: Qt.AlignVCenter
                 }
 
-                ToolButton {
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    leftPadding: 24
-                    visible: checks === 0
+                Button {
+                    id: addButton
                     text: qsTr("Add task")
+                    flat: true
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.foreground: Material.accent
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    visible: checks === 0
                     onClicked: taskDialog.open()
                 }
 
-                Label {
+                SearchField {
+                    id: filterField
+                    placeholderText: qsTr("Search Tasks")
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhPreferLowercase
+                    visible: !checks && rowsNumber
                 }
 
-                SpinBox {
-                    visible: checks === 0
+                WeekSpinBox {
                     id: weekSpinBox
-                    from: 1
-                    to: 52
-                    value: 34
-                }
-
-                SpinBox {
-                    visible: checks === 0
-                    id: yearSpinBox
-                    from: 2000
-                    to: 2100
-                    value: 2018
                 }
 
                 IconButton {
@@ -183,16 +140,13 @@ Page {
                     text: "\ue872" // delete
                     visible: checks > 0
                 }
-
-                IconButton {
-                    text: "\ue152" // filter_list
-                    visible: checks === 0
-                    onClicked: {
-                        filterMode = true
-                        filterField.focus = true
-                    }
-                }
             }
+        }
+
+        ThinDivider {
+            id: topDivider
+            anchors.top: buttonRectangle.bottom
+            width: parent.width
         }
 
         ListView {
@@ -202,7 +156,7 @@ Page {
             width: parent.width
             height: parent.height - buttonRectangle.height
             spacing: 0
-            anchors.top: buttonRectangle.bottom
+            anchors.top: topDivider.bottom
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
@@ -220,7 +174,11 @@ Page {
                 }
             }
 
-            model: TaskModel {}
+            model: TaskModel {
+                id: taskModel
+                year: weekSpinBox.year
+                week: weekSpinBox.week
+            }
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {
@@ -234,14 +192,14 @@ Page {
 
                     Row {
                         id: headerRow
-                        height: rowHeight
-                        spacing: 18
+                        height: Units.rowHeight
+                        spacing: Units.smallSpacing
                         leftPadding: 16
 
                         CheckBox {
                             id: headerCheckbox
-                            width: 24
                             anchors.verticalCenter: headerRow.verticalCenter
+                            width: parent.height * 0.8
                         }
 
                         Repeater {
@@ -258,8 +216,6 @@ Page {
             }
 
             delegate: Rectangle {
-                height: row.height
-                width: parent.width
                 color: {
                     if (checkBox.checked) {
                         return Material.color(Material.primary, Material.Shade100)
@@ -270,6 +226,9 @@ Page {
                     }
                 }
 
+                height: row.height
+                width: mainColumn.width
+
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
@@ -277,61 +236,82 @@ Page {
                 }
 
                 Column {
+                    id: mainColumn
                     width: parent.width
 
-                    ThinDivider {
-                       width: parent.width
-                    }
+                    ThinDivider { width: parent.width }
 
                     Row {
                         id: row
-                        height: rowHeight
-                        spacing: 18
+                        height: Units.rowHeight
+                        spacing: Units.smallSpacing
                         leftPadding: 16
 
-                        CheckBox {
+                        TextCheckBox {
                             id: checkBox
+                            text: model.type
+                            selectionMode: checks > 0
                             anchors.verticalCenter: row.verticalCenter
-                            width: 24
-                            onCheckStateChanged: {
-                                if (checked) {
-                                    checks = checks + 1
-                                } else {
-                                    checks = checks - 1
-                                }
-                            }
+                            //                                width: 24
+                            width: parent.height * 0.8
+                            round: true
+                            color: "green"
+//                            checked: model.planting_id in selectedIds
+//                                     && selectedIds[model.planting_id]
+
+//                            MouseArea {
+//                                anchors.fill: parent
+////                                onClicked: {
+////                                    if (mouse.button !== Qt.LeftButton)
+////                                        return
+
+////                                    selectedIds[model.planting_id]
+////                                            = !selectedIds[model.planting_id]
+////                                    lastIndexClicked = index
+
+////                                    selectedIdsChanged()
+////                                    console.log("All:", plantingModel.rowCount( ) === checks)
+////                                }
+//                            }
                         }
 
-//                        TableLabel {
-//                            text: model.task
-//                            elide: Text.ElideRight
-//                            width: 100
-//                        }
+                        TableLabel {
+                            text: model.type
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[0].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
-//                        TableLabel {
-//                            text: model.descr
-//                            elide: Text.ElideRight
-//                            width: 100
-//                        }
+                        TableLabel {
+                            text: model.description
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[1].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
-//                        TableLabel {
-//                            text: model.plantings
-//                            elide: Text.ElideRight
-//                            width: 150
-//                        }
+                        TableLabel {
+                            text: cropName(model.plantings) + " <i>" + varietyName(model.plantings) + "</i>"
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[2].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
-//                        TableLabel {
-//                            text: model.locations
-//                            elide: Text.ElideRight
-//                            width: 80
-//                        }
+                        TableLabel {
+                            text: model.locations
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[3].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        TableLabel {
+                            text: model.assigned_date
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[4].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
             }
         }
     }
 }
-
-
-
-//            anchors.top: buttonRectangle.bottom

@@ -31,40 +31,42 @@ Flickable {
             spacing: 16
             
             MyComboBox {
-                id: taskField
-                editable: true
+                id: typeField
+                editable: false
                 Layout.fillWidth: true
-                model: ListModel {
-                    id: model
-                    ListElement { text: "Cultivation \& Tillage"}
-                    ListElement { text: "Fertilize \& Amend"}
-                    ListElement { text: "Greenhouse Activaty"}
-                    ListElement { text: "Irrigate"}
-                    ListElement { text: "Maintenance"}
-                    ListElement { text: "Pest \& Disease"}
-                    ListElement { text: "Prune"}
-                    ListElement { text: "Row Cover \& Mulch"}
-                    ListElement { text: "Thin"}
-                    ListElement { text: "Treillis"}
-                    ListElement { text: "Weed"}
-                }
+                model: TaskTypeModel {
+                    id: taskTypeModel
 
+                }
+                textRole: "type"
                 onAccepted: if (find(editText) === -1)
                                  model.append({text: editText})
             }
 
-            MyTextField {
-                id: varietyField
-                floatingLabel: true
-                placeholderText: qsTr("Method")
+            MyComboBox {
+                id: methodField
+                editable: false
                 Layout.fillWidth: true
+                model: TaskMethodModel {
+                    id: taskMethodModel
+
+                }
+                textRole: "method"
+                onAccepted: if (find(editText) === -1)
+                                 model.append({text: editText})
             }
-            
-            MyTextField {
-                id: familyField
-                floatingLabel: true
-                placeholderText: qsTr("Description")
+
+            MyComboBox {
+                id: implementField
+                editable: false
                 Layout.fillWidth: true
+//                model: TaskImplementModel {
+//                    id: taskImplementModel
+
+//                }
+//                textRole: "implement"
+                onAccepted: if (find(editText) === -1)
+                                 model.append({text: editText})
             }
 
             Row {

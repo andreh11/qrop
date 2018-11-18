@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <QDate>
+#include <QList>
 
 #include "core_global.h"
 
@@ -29,10 +30,11 @@ public:
     explicit MDate(QObject *parent = nullptr);
     Q_INVOKABLE static QDate dateFromWeekString(const QString &s);
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
-    static QDate firstMondayOfYear(const int year);
-    static QDate mondayOfWeek(const int week, const int year);
+    static QDate firstMondayOfYear(int year);
+    static QDate mondayOfWeek(int week, int year);
+    static QList<QDate> weekDates(int week, int year);
     Q_INVOKABLE static QString formatDate(const QDate &date,
-                                          const int currentYear,
+                                          int currentYear,
                                           const QString &type = "");
 };
 
