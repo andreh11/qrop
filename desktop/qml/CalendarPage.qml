@@ -96,6 +96,32 @@ Page {
         }
     }
 
+    Popup {
+        id: popup
+        //                                y: control.height
+        //                                x: -control.width
+        width: contentItem.width
+        height: contentItem.height
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        padding: 0
+        margins: 0
+
+        contentItem: CalendarView {
+            id: calendarView
+
+            clip: true
+            //                                    month: calendarDate.getMonth()
+            //                                    year: calendarDate.getFullYear()
+            //                                    date: calendarDate
+
+            onDateSelect: {
+                //                                        calendarDate = newDate;
+                popup.close();
+                //                                        control.editingFinished();
+            }
+        }
+    }
+
     Pane {
         width: parent.width
         height: parent.height
@@ -207,6 +233,13 @@ Page {
 //                rightMargin: leftMargin
             }
 
+            add: Transition {
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
+            }
+            remove: Transition {
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 200 }
+            }
+
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.HorizontalAndVerticalFlick
 
@@ -289,17 +322,60 @@ Page {
 //                        return "white"
 //                    }
 //                }
+//                color: model.overdue ? Material.color(Material.Red, Material.Shade100)
+////                                     : model.done ? Material.color(Material.Blue, Material.Shade100)
                 color: "white"
-                radius: 4
+                radius: 2
 
                 height: row.height
                 width: parent.width
 
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                }
+//                Rectangle {
+//                    anchors {
+//                        top: parent.top
+//                        bottom: parent.bottom
+//                        left: parent.left
+//                    }
+//                    width: 8
+//                    radius: 4
+//                    color: Material.color(Material.red, Material.Shade200)
+//                    visible: model.overdue
+//                }
+
+//                Rectangle {
+//                    height: parent.height
+//                    width: childrenRect.width
+//                    color: "white"
+//                    visible: mouseArea.containsMouse
+//                    z: 4
+//                    anchors {
+//                        top: parent.top
+//                        bottom: parent.bottom
+//                        right: parent.right
+//                    }
+
+//                    Row {
+//                        ToolButton {
+//                            text: "A"
+//                            anchors.verticalCenter: parent.verticalCenter
+
+//                        }
+//                        ToolButton {
+//                            text: "B"
+//                            anchors.verticalCenter: parent.verticalCenter
+//                        }
+//                        ToolButton {
+//                            text: "C"
+//                            anchors.verticalCenter: parent.verticalCenter
+//                        }
+//                    }
+ //                }
+//                MouseArea {
+//                    id: mouseArea
+//                    anchors.fill: parent
+//                    hoverEnabled: true
+//                    z: 2
+//                }
 
                 Column {
                     id: mainColumn
@@ -313,6 +389,7 @@ Page {
 
                         ToolButton {
                             id: completeButton
+                            checked: model.done
 //                            flat: true
                             checkable: true
                             width: parent.height
@@ -321,14 +398,30 @@ Page {
 
                             Text {
                                 anchors.fill: parent
-                                text: "\ue86c"
+                                text: model.overdue ? "\ue924" : "\ue86c"
                                 font.family: "Material Icons"
                                 font.pixelSize: 30
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 color: parent.checked ? Material.color(Material.Green)
-                                                      : Material.color(Material.Grey,
+                                                      : model.overdue
+                                                        ? Material.color(Material.Red)
+                                                        : Material.color(Material.Grey,
                                                                        Material.Shade300)
+                            }
+
+                            onPressAndHold: {
+                                popup.x = completeButton.x
+                                popup.y = completeButton.y
+                                popup.open()
+                            }
+
+                            onClicked: {
+                                if (model.done)
+                                    Task.uncompleteTask(model.task_id);
+                                else
+                                    Task.completeTask(model.task_id);
+                                taskModel.refresh();
                             }
                         }
 
@@ -389,7 +482,10 @@ Page {
                                     return map["length"] + " m @ " + map['rows'] + " x " + map['spacing_plants'] + " cm"
                                 } else if (task_type_id === 2) {
                                     return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+                                } else {
+                                    return qsTr("%1 with %2").arg(model.method).arg(model.implement)
                                 }
+
                             }
 
 

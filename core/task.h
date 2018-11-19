@@ -17,6 +17,8 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include <QDate>
+
 #include "core_global.h"
 #include "databaseutility.h"
 
@@ -28,6 +30,9 @@ public:
     Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
+    Q_INVOKABLE void completeTask(int taskId, const QDate &date) const;
+    Q_INVOKABLE void completeTask(int taskId) const { completeTask(taskId, QDate::currentDate()); }
+    Q_INVOKABLE void uncompleteTask(int taskId) const { update(taskId, {{"completed_date", ""}}); }
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const;

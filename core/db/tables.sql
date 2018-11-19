@@ -283,5 +283,7 @@ FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)
 LEFT JOIN task_type using(task_type_id)
+LEFT JOIN task_method using (task_method_id)
+LEFT JOIN task_implement using (task_implement_id)
 GROUP BY task_id;
 

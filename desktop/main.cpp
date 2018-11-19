@@ -33,6 +33,7 @@
 #include "keyword.h"
 #include "mdate.h"
 #include "planting.h"
+#include "task.h"
 #include "variety.h"
 
 #include "cropmodel.h"
@@ -153,6 +154,15 @@ int main(int argc, char *argv[])
         Q_UNUSED(scriptEngine)
         auto *keyword = new Keyword();
         return keyword;
+    }
+    );
+
+    qmlRegisterSingletonType<Task>("io.croplan.components", 1, 0, "Task", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto *task = new Task();
+        return task;
     }
     );
 

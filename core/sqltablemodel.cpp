@@ -85,7 +85,7 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
 
-    for (int i = 0; i < this->record().count(); i ++)
+    for (int i = 0; i < this->record().count(); i++)
         roles.insert(Qt::UserRole + i, record().fieldName(i).toUtf8());
 
     return roles;

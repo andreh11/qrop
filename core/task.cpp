@@ -118,6 +118,11 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     }
 }
 
+void Task::completeTask(int taskId, const QDate &date) const
+{
+    update(taskId, {{"completed_date", date.toString(Qt::ISODate)}});
+}
+
 QList<int> Task::sowPlantTaskIds(int plantingId) const
 {
     int sowTaskId = -1;

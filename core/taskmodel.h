@@ -34,6 +34,9 @@ class CORESHARED_EXPORT TaskModel : public SortFilterProxyModel
 
 public:
     TaskModel(QObject *parent = nullptr, const QString &tableName = "task_view");
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+    QVariant data(const QModelIndex &idx, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     QDate date() const;
     void setFilterDate(const QDate &date);
@@ -73,7 +76,11 @@ private:
     bool m_showDone;
     bool m_showDue;
     bool m_showOverdue;
+
     void updateWeekDates();
+    bool isDone(int row, const QModelIndex &parent) const;
+    bool isDue(int row, const QModelIndex &parent) const;
+    bool isOverdue(int row, const QModelIndex &parent) const;
 };
 
 #endif // SQLPLANTINGMODEL_H
