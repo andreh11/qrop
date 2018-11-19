@@ -175,7 +175,7 @@ Page {
     }
 
     title: "Plantings"
-    padding: 8
+    padding: 0
     Material.background: "white"
 
     onTableSortColumnChanged: tableSortOrder = "descending"

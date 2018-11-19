@@ -66,20 +66,24 @@ Item {
         }
         
         TextInput {
+            id: weekInput
             text: week
             font.family: "Roboto Regular"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            width: 40
+            width: 20
             Layout.preferredWidth: width
+            onAccepted: week = Number(text)
         }
         
         TextInput {
+            id: yearInput
             text: year
+            width: 30
             font.family: "Roboto Regular"
-            //            Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            onAccepted: year = Number(text)
         }
         
         RoundButton {

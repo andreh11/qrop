@@ -91,6 +91,16 @@ ApplicationWindow {
                 text: qsTr("Quit")
             }
         }
+        Platform.Menu {
+            id: helpMenu
+            objectName: "helpMenu"
+            title: qsTr("Help")
+
+            Platform.MenuItem {
+                objectName: "aboutMenuButton"
+                text: qsTr("About...")
+            }
+        }
     }
 
     Component {

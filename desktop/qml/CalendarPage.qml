@@ -24,16 +24,18 @@ import io.croplan.components 1.0
 Page {
     id: page
 
+    property alias week: weekSpinBox.week
+    property alias year: weekSpinBox.year
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
 
     property var tableHeaderModel: [
-        { name: qsTr("Task"),        columnName: "task",    width: 150},
-        { name: qsTr("Description"), columnName: "descr", width: 150 },
-        { name: qsTr("Plantings"),   columnName: "plantings", width: 150 },
-        { name: qsTr("Locations"),   columnName: "locations", width: 150 },
-        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
+        { name: qsTr("Task"),        columnName: "task",    width: 200},
+        { name: qsTr("Description"), columnName: "descr", width: 200 },
+        { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
+        { name: qsTr("Locations"),   columnName: "locations", width: 200 }
+//        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
     ]
 
     property int tableSortColumn: 0
@@ -50,7 +52,7 @@ Page {
     }
 
     title: "Calendar"
-    padding: 8
+    padding: 0
     Material.background: "white"
 
     onTableSortColumnChanged: {
@@ -120,6 +122,19 @@ Page {
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
                     visible: !checks && rowsNumber
+                }
+
+                CheckBox {
+                    text: qsTr("Done")
+                }
+
+                CheckBox {
+                    checked: true
+                    text: qsTr("Due")
+                }
+
+                CheckBox {
+                    text: qsTr("Overdue")
                 }
 
                 WeekSpinBox {
@@ -196,10 +211,12 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: 16
 
-                        CheckBox {
+                        Item {
+                            visible: true
                             id: headerCheckbox
                             anchors.verticalCenter: headerRow.verticalCenter
-                            width: parent.height * 0.8
+                            width: parent.height
+                            height: width
                         }
 
                         Repeater {
@@ -207,6 +224,7 @@ Page {
 
                             TableHeaderLabel {
                                 text: modelData.name
+                                anchors.verticalCenter: headerRow.verticalCenter
                                 width: modelData.width
                                 state: page.tableSortColumn === index ? page.tableSortOrder : ""
                             }
@@ -216,15 +234,16 @@ Page {
             }
 
             delegate: Rectangle {
-                color: {
-                    if (checkBox.checked) {
-                        return Material.color(Material.primary, Material.Shade100)
-                    } else if (mouseArea.containsMouse) {
-                        return Material.color(Material.Grey, Material.Shade100)
-                    } else {
-                        return "white"
-                    }
-                }
+//                color: {
+//                    if (checkBox.checked) {
+//                        return Material.color(Material.primary, Material.Shade100)
+//                    } else if (mouseArea.containsMouse) {
+//                        return Material.color(Material.Grey, Material.Shade100)
+//                    } else {
+//                        return "white"
+//                    }
+//                }
+                color: "white"
 
                 height: row.height
                 width: mainColumn.width
@@ -247,33 +266,55 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: 16
 
-                        TextCheckBox {
-                            id: checkBox
-                            text: model.type
-                            selectionMode: checks > 0
-                            anchors.verticalCenter: row.verticalCenter
-                            //                                width: 24
-                            width: parent.height * 0.8
-                            round: true
-                            color: "green"
-//                            checked: model.planting_id in selectedIds
-//                                     && selectedIds[model.planting_id]
+                        ToolButton {
+                            id: completeButton
+                            padding: -8
+//                            flat: true
+                            checkable: true
+                            width: parent.height
+                            height: width
+                            anchors.verticalCenter: parent.verticalCenter
 
-//                            MouseArea {
-//                                anchors.fill: parent
-////                                onClicked: {
-////                                    if (mouse.button !== Qt.LeftButton)
-////                                        return
-
-////                                    selectedIds[model.planting_id]
-////                                            = !selectedIds[model.planting_id]
-////                                    lastIndexClicked = index
-
-////                                    selectedIdsChanged()
-////                                    console.log("All:", plantingModel.rowCount( ) === checks)
-////                                }
-//                            }
+                            Text {
+                                anchors.fill: parent
+                                text: "\ue86c"
+                                font.family: "Material Icons"
+                                font.pixelSize: 30
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                                color: parent.checked ? Material.color(Material.Green)
+                                                      : Material.color(Material.Grey,
+                                                                       Material.Shade300)
+                            }
                         }
+
+//                        TextCheckBox {
+//                            id: checkBox
+//                            text: model.type
+//                            selectionMode: checks > 0
+//                            anchors.verticalCenter: row.verticalCenter
+//                            //                                width: 24
+//                            width: parent.height * 0.8
+//                            round: true
+//                            color: "green"
+////                            checked: model.planting_id in selectedIds
+////                                     && selectedIds[model.planting_id]
+
+////                            MouseArea {
+////                                anchors.fill: parent
+//////                                onClicked: {
+//////                                    if (mouse.button !== Qt.LeftButton)
+//////                                        return
+
+//////                                    selectedIds[model.planting_id]
+//////                                            = !selectedIds[model.planting_id]
+//////                                    lastIndexClicked = index
+
+//////                                    selectedIdsChanged()
+//////                                    console.log("All:", plantingModel.rowCount( ) === checks)
+//////                                }
+////                            }
+//                        }
 
                         TableLabel {
                             text: model.type
@@ -303,12 +344,12 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        TableLabel {
-                            text: model.assigned_date
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[4].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+//                        TableLabel {
+//                            text: model.assigned_date
+//                            elide: Text.ElideRight
+//                            width: tableHeaderModel[4].width
+//                            anchors.verticalCenter: parent.verticalCenter
+//                        }
                     }
                 }
             }
