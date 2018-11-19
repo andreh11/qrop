@@ -29,6 +29,20 @@ SqlTableModel::SqlTableModel(QObject *parent)
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
+bool SqlTableModel::select()
+{
+    bool status = QSqlTableModel::select();
+
+    if (!status)
+        return status;
+
+    // Fetch as much as possible.
+    while (canFetchMore())
+        fetchMore();
+
+    return status;
+}
+
 bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 {
     bool ok = QSqlTableModel::insertRecord(row, record);

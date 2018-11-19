@@ -31,11 +31,11 @@ Page {
     property int checks: 0
 
     property var tableHeaderModel: [
-        { name: qsTr("Task"),        columnName: "task",    width: 200},
-        { name: qsTr("Description"), columnName: "descr", width: 200 },
+//        { name: qsTr("Task"),        columnName: "task",    width: 200},
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
-        { name: qsTr("Locations"),   columnName: "locations", width: 200 }
-//        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
+        { name: qsTr("Locations"),   columnName: "locations", width: 200 },
+        { name: qsTr("Description"), columnName: "descr", width: 200 },
+        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
     ]
 
     property int tableSortColumn: 0
@@ -53,7 +53,7 @@ Page {
 
     title: "Calendar"
     padding: 0
-    Material.background: "white"
+    Material.background: Material.color(Material.Grey, Material.Shade100)
 
     onTableSortColumnChanged: {
         var columnName = tableHeaderModel[tableSortColumn].columnName
@@ -71,6 +71,29 @@ Page {
         width: parent.width / 2
         height: parent.height
         x: (parent.width - width) / 2
+    }
+
+    Component {
+        id: sectionHeading
+        Rectangle {
+            width: parent.width
+            height: Units.rowHeight * 1.2
+//            color: Material.color(Material.Green, Material.Shade200)
+            color: Material.color(Material.Grey, Material.Shade100)
+            radius: 4
+
+            anchors.topMargin: 2
+
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+//                leftPadding: 16
+                text: section
+                color: Material.accent
+                font.bold: true
+                font.pixelSize: Units.fontSizeTitle
+                font.family: "Roboto Regular"
+            }
+        }
     }
 
     Pane {
@@ -125,15 +148,18 @@ Page {
                 }
 
                 CheckBox {
+                    id: showDoneCheckBox
                     text: qsTr("Done")
                 }
 
                 CheckBox {
+                    id: showDueCheckBox
                     checked: true
                     text: qsTr("Due")
                 }
 
                 CheckBox {
+                    id: showOverdueCheckBox
                     text: qsTr("Overdue")
                 }
 
@@ -166,12 +192,23 @@ Page {
 
         ListView {
             id: listView
-            visible: true
             clip: true
-            width: parent.width
-            height: parent.height - buttonRectangle.height
-            spacing: 0
-            anchors.top: topDivider.bottom
+            spacing: 4
+            anchors {
+                top: topDivider.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                topMargin: Units.smallSpacing
+                bottomMargin: Units.smallSpacing
+                leftMargin: 80
+                rightMargin: 80
+//                leftMargin: Units.smallSpacing
+//                rightMargin: leftMargin
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
@@ -189,10 +226,19 @@ Page {
                 }
             }
 
+            section.property: "type"
+            section.criteria: ViewSection.FullString
+            section.delegate: sectionHeading
+            section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
+
             model: TaskModel {
                 id: taskModel
                 year: weekSpinBox.year
                 week: weekSpinBox.week
+                showDone: showDoneCheckBox.checked
+                showDue: showDueCheckBox.checked
+                showOverdue: showOverdueCheckBox.checked
+//                sortColumn: "assigned_date"
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -200,7 +246,7 @@ Page {
                 id: headerRectangle
                 height: headerRow.height
                 width: parent.width
-                color: "white"
+                color: Material.color(Material.Grey, Material.Shade100)
                 z: 3
                 Column {
                     width: parent.width
@@ -244,9 +290,10 @@ Page {
 //                    }
 //                }
                 color: "white"
+                radius: 4
 
                 height: row.height
-                width: mainColumn.width
+                width: parent.width
 
                 MouseArea {
                     id: mouseArea
@@ -258,8 +305,6 @@ Page {
                     id: mainColumn
                     width: parent.width
 
-                    ThinDivider { width: parent.width }
-
                     Row {
                         id: row
                         height: Units.rowHeight
@@ -268,7 +313,6 @@ Page {
 
                         ToolButton {
                             id: completeButton
-                            padding: -8
 //                            flat: true
                             checkable: true
                             width: parent.height
@@ -315,41 +359,53 @@ Page {
 //////                                }
 ////                            }
 //                        }
-
                         TableLabel {
-                            text: model.type
+                            text: cropName(model.plantings) + " <i>" + varietyName(model.plantings) + "</i>"
                             elide: Text.ElideRight
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         TableLabel {
-                            text: model.description
+                            text: model.locations
                             elide: Text.ElideRight
                             width: tableHeaderModel[1].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
+//                        TableLabel {
+//                            text: model.type
+//                            elide: Text.ElideRight
+//                            width: tableHeaderModel[0].width
+//                            anchors.verticalCenter: parent.verticalCenter
+//                        }
+
                         TableLabel {
-                            text: cropName(model.plantings) + " <i>" + varietyName(model.plantings) + "</i>"
+                            text: {
+                                var planting_ids = model.plantings.split(',')
+                                var planting_id = Number(planting_ids[0])
+                                var map = Planting.mapFromId("planting_view", planting_id);
+                                if (task_type_id === 1 || task_type_id === 3) {
+                                    return map["length"] + " m @ " + map['rows'] + " x " + map['spacing_plants'] + " cm"
+                                } else if (task_type_id === 2) {
+                                    return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+                                }
+                            }
+
+
                             elide: Text.ElideRight
                             width: tableHeaderModel[2].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
+
                         TableLabel {
-                            text: model.locations
+                            text: NDate.formatDate(model.assigned_date, year, "")
                             elide: Text.ElideRight
                             width: tableHeaderModel[3].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-//                        TableLabel {
-//                            text: model.assigned_date
-//                            elide: Text.ElideRight
-//                            width: tableHeaderModel[4].width
-//                            anchors.verticalCenter: parent.verticalCenter
-//                        }
                     }
                 }
             }

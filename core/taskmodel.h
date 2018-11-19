@@ -28,6 +28,9 @@ class CORESHARED_EXPORT TaskModel : public SortFilterProxyModel
     Q_PROPERTY(QDate date READ date WRITE setFilterDate NOTIFY dateChanged)
     Q_PROPERTY(int week READ week WRITE setWeek NOTIFY weekChanged)
     Q_PROPERTY(int year READ year WRITE setYear NOTIFY yearChanged)
+    Q_PROPERTY(bool showDone READ showDone WRITE setShowDone NOTIFY showDoneChanged)
+    Q_PROPERTY(bool showDue READ showDue WRITE setShowDue NOTIFY showDueChanged)
+    Q_PROPERTY(bool showOverdue READ showOverdue WRITE setShowOverdue NOTIFY showOverdueChanged)
 
 public:
     TaskModel(QObject *parent = nullptr, const QString &tableName = "task_view");
@@ -41,10 +44,22 @@ public:
     int year() const;
     void setYear(int year);
 
+    bool showDone() const;
+    void setShowDone(bool showDone);
+
+    bool showDue() const;
+    void setShowDue(bool showDue);
+
+    bool showOverdue() const;
+    void setShowOverdue(bool showOverdue);
+
 signals:
     void dateChanged();
     void weekChanged();
     void yearChanged();
+    void showDoneChanged();
+    void showDueChanged();
+    void showOverdueChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -55,6 +70,9 @@ private:
     int m_week;
     QDate m_mondayDate;
     QDate m_sundayDate;
+    bool m_showDone;
+    bool m_showDue;
+    bool m_showOverdue;
     void updateWeekDates();
 };
 

@@ -79,6 +79,48 @@ void TaskModel::setWeek(int week)
     emit weekChanged();
 }
 
+bool TaskModel::showDone() const
+{
+    return m_showDone;
+}
+
+void TaskModel::setShowDone(bool showDone)
+{
+    if (m_showDone == showDone)
+        return;
+    m_showDone = showDone;
+    invalidateFilter();
+    showDoneChanged();
+}
+
+bool TaskModel::showDue() const
+{
+    return m_showDue;
+}
+
+void TaskModel::setShowDue(bool showDue)
+{
+    if (m_showDue == showDue)
+        return;
+    m_showDue = showDue;
+    invalidateFilter();
+    showDueChanged();
+}
+
+bool TaskModel::showOverdue() const
+{
+    return m_showOverdue;
+}
+
+void TaskModel::setShowOverdue(bool showOverdue)
+{
+    if (m_showOverdue == showOverdue)
+        return;
+    m_showOverdue = showOverdue;
+    invalidateFilter();
+    showOverdueChanged();
+}
+
 void TaskModel::updateWeekDates()
 {
     QList<QDate> weekDates = MDate::weekDates(m_week, m_year);
@@ -89,6 +131,10 @@ void TaskModel::updateWeekDates()
 bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QDate assignedDate = fieldDate(sourceRow, sourceParent, "assigned_date");
-    bool inRange = m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
+    bool completed = !rowValue(sourceRow, sourceParent, "completed_date").toString().isEmpty();
+
+    bool inRange = (m_showOverdue && !completed && assignedDate < m_mondayDate)
+            || (m_showDue && !completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate)
+            || (m_showDone && completed);
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

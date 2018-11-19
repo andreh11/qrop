@@ -69,21 +69,25 @@ Item {
             id: weekInput
             text: week
             font.family: "Roboto Regular"
+            inputMethodHints: Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: 1; top: 53 }
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: 20
             Layout.preferredWidth: width
-            onAccepted: week = Number(text)
+            onTextChanged: week = Number(text)
         }
         
         TextInput {
             id: yearInput
             text: year
             width: 30
+            inputMethodHints: Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: 1; top: 53 }
             font.family: "Roboto Regular"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            onAccepted: year = Number(text)
+            onTextChanged: year = Number(text)
         }
         
         RoundButton {

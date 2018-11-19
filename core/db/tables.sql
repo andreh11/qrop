@@ -138,7 +138,8 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS task_type (
     task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT UNIQUE NOT NULL
+    type         TEXT UNIQUE NOT NULL,
+    color        TEXT DEFAULT '#000000' NOT NULL,
 );
 
 INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
@@ -277,7 +278,7 @@ FROM variety
 LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
-SELECT task.*, task_type.type, group_concat(planting_id) as plantings, group_concat(location_id) as locations
+SELECT task.*, task_type.type, task_type.color, group_concat(planting_id) as plantings, group_concat(location_id) as locations
 FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)
