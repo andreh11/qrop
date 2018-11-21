@@ -29,8 +29,8 @@ ApplicationWindow {
 
     property var navigationModel: [
 //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
-        { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
-        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" }
+        { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ueb4c" },
+        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue876" }
 //        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
@@ -63,6 +63,14 @@ ApplicationWindow {
     Material.accent: Material.Cyan
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
+
+    PlantingsPage {
+        id: plantingsPage
+    }
+
+    CalendarPage {
+        id: calendarPage
+    }
 
     Shortcut {
         sequence: StandardKey.Quit
@@ -339,16 +347,16 @@ ApplicationWindow {
         }
     }
 
-    Repeater {
-        id: pages
-        model: navigationModel
+//    Repeater {
+//        id: pages
+//        model: navigationModel
 
-        Loader {
-            property string title
-            source: modelData.source
-            onLoaded: title = item.title
-        }
-    }
+//        Loader {
+//            property string title
+//            source: modelData.source
+//            onLoaded: title = item.title
+//        }
+//    }
 
     StackView {
         id: stackView
@@ -359,15 +367,24 @@ ApplicationWindow {
         rightPadding: 20
         bottomPadding: 20
 
+        initialItem: plantingsPage
 
         function activatePage(index) {
-            if (index < pages.count) {
-                var item = pages.itemAt(index)
-                stackView.replace(item)
+            if (index === 0) {
+                stackView.replace(plantingsPage)
+                plantingsPage.refresh();
             }
+            else if (index === 1) {
+                stackView.replace(calendarPage)
+                calendarPage.refresh();
+            }
+//            if (index < pages.count) {
+//                var item = pages.itemAt(index)
+//                stackView.replace(item)
+//            }
         }
 
-        Component.onCompleted: stackView.push(pages.itemAt(0))
+//        Component.onCompleted: stackView.push(pages.itemAt(0))
     }
 
     Dialog {
@@ -386,7 +403,7 @@ ApplicationWindow {
 
             Label {
                 width: aboutDialog.availableWidth
-                text: "Logimaraich"
+                text: "Qrop"
                 font.family: "Roboto Medium"
                 wrapMode: Label.Wrap
                 font.pixelSize: 22
