@@ -361,8 +361,10 @@ ApplicationWindow {
 
 
         function activatePage(index) {
-            if (index < pages.count)
-                stackView.replace(pages.itemAt(index))
+            if (index < pages.count) {
+                var item = pages.itemAt(index)
+                stackView.replace(item)
+            }
         }
 
         Component.onCompleted: stackView.push(pages.itemAt(0))

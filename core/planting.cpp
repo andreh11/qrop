@@ -123,9 +123,9 @@ QVariantMap Planting::lastValues(const int varietyId,
             if (plantingId >= 1)
                 return mapFromId("planting_view", plantingId);
         }
-        qDebug() << "lastValues: trying with less constraints...";
+//        qDebug() << "lastValues: trying with less constraints...";
     }
-    qDebug() << "Couldn't find prefill values!";
+//    qDebug() << "Couldn't find prefill values!";
 
     return {};
 }

@@ -118,8 +118,11 @@ Page {
     property int checks: numberOfTrue(selectedIds)
     property int lastIndexClicked: -1
 
-    function numberOfTrue(array)
-    {
+    function refresh()  {
+       plantingModel.refresh();
+    }
+
+    function numberOfTrue(array) {
         var n = 0
         for (var key in array)
             if (array[key])
@@ -137,32 +140,28 @@ Page {
         return idList;
     }
 
-    function selectAll()
-    {
+    function selectAll() {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = true;
         selectedIdsChanged();
     }
 
-    function unselectAll()
-    {
+    function unselectAll() {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = false
         selectedIdsChanged();
     }
 
-    function duplicateSelected()
-    {
+    function duplicateSelected() {
         var idList = selectedIdList();
         Planting.duplicateList(idList)
         plantingModel.refresh()
         selectedIdsChanged();
     }
 
-    function removeSelected()
-    {
+    function removeSelected() {
         var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {

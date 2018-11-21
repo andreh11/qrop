@@ -36,7 +36,6 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
     QDate leftDate = fieldDate(left.row(), left.parent(), "assigned_date");
     QDate rightDate = fieldDate(right.row(), right.parent(), "assigned_date");
 
-    qDebug() << "Left:" << leftType << "Right: " << rightType;
     return (leftType < rightType) || (leftType == rightType && leftDate < rightDate);
 }
 
@@ -57,7 +56,7 @@ QVariant TaskModel::data(const QModelIndex &idx, int role) const
 
 QHash<int, QByteArray> TaskModel::roleNames() const
 {
-    QHash<int, QByteArray> roles = SortFilterProxyModel::roleNames();
+    QHash<int, QByteArray> roles = SortFilterProxyModel::roleNames(); 
     roles.insert(Qt::UserRole + 100, "overdue");
     roles.insert(Qt::UserRole + 101, "due");
     roles.insert(Qt::UserRole + 102, "done");
@@ -89,12 +88,11 @@ int TaskModel::year() const
 
 void TaskModel::setYear(int year)
 {
-    if (year < 0)
+    if (year < 0 || m_year == year)
         return;
 
     m_year = year;
     updateWeekDates();
-    invalidateFilter();
     emit yearChanged();
 }
 
@@ -105,12 +103,11 @@ int TaskModel::week() const
 
 void TaskModel::setWeek(int week)
 {
-    if (week < 0)
+    if (week < 0 || m_week == week)
         return;
 
     m_week = week;
     updateWeekDates();
-    invalidateFilter();
     emit weekChanged();
 }
 
@@ -123,8 +120,9 @@ void TaskModel::setShowDone(bool showDone)
 {
     if (m_showDone == showDone)
         return;
+
     m_showDone = showDone;
-    invalidateFilter();
+    invalidate();
     showDoneChanged();
 }
 
@@ -138,7 +136,7 @@ void TaskModel::setShowDue(bool showDue)
     if (m_showDue == showDue)
         return;
     m_showDue = showDue;
-    invalidateFilter();
+    invalidate();
     showDueChanged();
 }
 
@@ -151,8 +149,9 @@ void TaskModel::setShowOverdue(bool showOverdue)
 {
     if (m_showOverdue == showOverdue)
         return;
+
     m_showOverdue = showOverdue;
-    invalidateFilter();
+    invalidate();
     showOverdueChanged();
 }
 
@@ -161,12 +160,14 @@ void TaskModel::updateWeekDates()
     QList<QDate> weekDates = MDate::weekDates(m_week, m_year);
     m_mondayDate = weekDates[0];
     m_sundayDate = weekDates[1];
+    invalidate();
 }
 
 bool TaskModel::isDone(int row, const QModelIndex &parent) const
 {
+    QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
-    return completed;
+    return completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
 }
 
 bool TaskModel::isDue(int row, const QModelIndex &parent) const

@@ -26,16 +26,18 @@ Page {
 
     property alias week: weekSpinBox.week
     property alias year: weekSpinBox.year
+    property alias rowsNumber: taskModel.count
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
+    property alias listView: listView
 
     property var tableHeaderModel: [
 //        { name: qsTr("Task"),        columnName: "task",    width: 200},
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
         { name: qsTr("Locations"),   columnName: "locations", width: 200 },
         { name: qsTr("Description"), columnName: "descr", width: 200 },
-        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 80 }
+        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 100}
     ]
 
     property int tableSortColumn: 0
@@ -49,6 +51,10 @@ Page {
     function varietyName(id) {
         var map = Planting.mapFromId("planting_view", id);
         return map['variety']
+    }
+
+    function refresh() {
+        taskModel.refresh();
     }
 
     title: "Calendar"
@@ -77,12 +83,10 @@ Page {
         id: sectionHeading
         Rectangle {
             width: parent.width
-            height: Units.rowHeight * 1.2
+            height: Units.rowHeight
 //            color: Material.color(Material.Green, Material.Shade200)
             color: Material.color(Material.Grey, Material.Shade100)
             radius: 4
-
-            anchors.topMargin: 2
 
             Text {
                 anchors.verticalCenter: parent.verticalCenter
@@ -170,7 +174,7 @@ Page {
                     placeholderText: qsTr("Search Tasks")
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
-                    visible: !checks && rowsNumber
+                    visible: !checks
                 }
 
                 CheckBox {
@@ -191,6 +195,8 @@ Page {
 
                 WeekSpinBox {
                     id: weekSpinBox
+                    week: NDate.currentWeek();
+                    year: NDate.currentYear();
                 }
 
                 IconButton {
@@ -342,34 +348,42 @@ Page {
 //                    visible: model.overdue
 //                }
 
-//                Rectangle {
-//                    height: parent.height
-//                    width: childrenRect.width
-//                    color: "white"
-//                    visible: mouseArea.containsMouse
-//                    z: 4
-//                    anchors {
-//                        top: parent.top
-//                        bottom: parent.bottom
-//                        right: parent.right
-//                    }
+                Rectangle {
+                    height: parent.height
+                    width: childrenRect.width
+                    color: "white"
+                    visible: !model.done
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        right: parent.right
+                    }
 
-//                    Row {
-//                        ToolButton {
-//                            text: "A"
-//                            anchors.verticalCenter: parent.verticalCenter
+                    Row {
+                        spacing: -16
+                        anchors.verticalCenter: parent.verticalCenter
+                        ToolButton {
+                            text: "-7"
+                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
+                            font.family: "Roboto Condensed"
+                            anchors.verticalCenter: parent.verticalCenter
 
-//                        }
-//                        ToolButton {
-//                            text: "B"
-//                            anchors.verticalCenter: parent.verticalCenter
-//                        }
-//                        ToolButton {
-//                            text: "C"
-//                            anchors.verticalCenter: parent.verticalCenter
-//                        }
-//                    }
- //                }
+                        }
+                        ToolButton {
+                            text: "+7"
+                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
+                            font.family: "Roboto Condensed"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        ToolButton {
+                            text: "\ue872"
+                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
+                            font.family: "Material Icons"
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 22
+                        }
+                    }
+                 }
 //                MouseArea {
 //                    id: mouseArea
 //                    anchors.fill: parent
