@@ -16,12 +16,10 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtCharts 2.0
+import QtQuick.Layouts 1.3
 
 import io.croplan.components 1.0
-import "date.js" as MDate
 
 ListView {
     id: listView
@@ -42,12 +40,7 @@ ListView {
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
         visible: largeDisplay && plantingModel.count
-        parent: listView.parent
-//        anchors {
-//            top: listView.top
-//            left: listView.right
-//            bottom: listView.bottom
-//        }
+        height: listView.height
         policy: ScrollBar.AlwaysOn
     }
 

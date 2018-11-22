@@ -24,7 +24,6 @@ TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName
       m_methodId(-1)
 {
    int col = m_model->record().indexOf("task_method_id");
-   qDebug() << "COL" << col << m_model->record();
    setFilterKeyColumn(col);
    setSortColumn("implement");
 }
@@ -41,6 +40,5 @@ void TaskImplementModel::setMethodId(int methodId)
 
    m_methodId = methodId;
    setFilterFixedString(QString::number(m_methodId));
-   qDebug() << "method id:" << methodId << "row count: " << rowCount();
    methodIdChanged();
 }

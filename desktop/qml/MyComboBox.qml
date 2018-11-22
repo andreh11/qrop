@@ -169,6 +169,7 @@ ComboBox {
         elide: Text.ElideRight
         renderType: control.contentItem.renderType
         visible: !control.contentItem.length
+        leftPadding: 10
     }
 
     Label {

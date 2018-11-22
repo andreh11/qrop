@@ -26,7 +26,6 @@ TaskMethodModel::TaskMethodModel(QObject *parent, const QString &tableName)
    int col = m_model->record().indexOf("task_type_id");
    setFilterKeyColumn(col);
    setSortColumn("method");
-   qDebug() << "METHOD RECORD" << m_model->record();
 }
 
 int TaskMethodModel::typeId() const

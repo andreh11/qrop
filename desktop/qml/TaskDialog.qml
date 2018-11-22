@@ -29,9 +29,11 @@ Dialog {
     property alias formAccepted: taskForm.accepted
     property alias year: taskForm.year
 
+    title: qsTr("Add Task")
     modal: true
-    title: "Add task"
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    focus: true
+    closePolicy: Popup.NoAutoClose
+    Material.background: Material.color(Material.Grey, Material.Shade100)
 
     header:  TaskDialogHeader {
         id: taskDialogHeader
@@ -42,6 +44,15 @@ Dialog {
         id: taskForm
         anchors.fill: parent
         taskTypeId: taskDialogHeader.taskTypeId
+    }
+
+    footer: AddEditDialogFooter {
+        height: childrenRect.height
+        width: parent.width
+        enabled: formAccepted
+        onRejected: dialog.reject();
+        onAccepted: dialog.accept();
+        mode: mode
     }
 }
 

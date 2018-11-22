@@ -49,5 +49,6 @@
         <file>qml/WeekSpinBox.qml</file>
         <file>qml/TaskCompleteButton.qml</file>
         <file>qml/TaskDialogHeader.qml</file>
+        <file>qml/AddEditDialogFooter.qml</file>
     </qresource>
 </RCC>

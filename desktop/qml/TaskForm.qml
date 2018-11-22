@@ -39,14 +39,16 @@ Flickable {
 
     focus: true
     contentWidth: width
-    contentHeight: mainColumn.height
+//    contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
-    Column {
+    ColumnLayout {
         id: mainColumn
-        width: parent.width
+        anchors.fill: parent
+//        width: parent.width
+//        height: parent.height
         spacing: Units.formSpacing
 
         ColumnLayout {
@@ -87,39 +89,45 @@ Flickable {
             }
         }
 
-        RowLayout {
-            spacing: Units.formSpacing
+        FormGroupBox {
+            id: datesGroupBox
             width: parent.width
+            Layout.fillWidth: true
 
-            DatePicker {
-                id: dueDatepicker
-                labelText: qsTr("Due Date")
-                floatingLabel: true
-                Layout.minimumWidth: 100
-                Layout.fillWidth: true
-            }
+            RowLayout {
+                spacing: Units.formSpacing
+                width: parent.width
 
-            MyTextField {
-                id: durationField
-                text: "0"
-                suffixText: qsTr("days")
-                labelText: qsTr("Duration")
-                floatingLabel: true
-                validator: IntValidator { bottom: 0; top: 999 }
-                Layout.minimumWidth: 80
-                Layout.fillWidth: true
-            }
+                DatePicker {
+                    id: dueDatepicker
+                    labelText: qsTr("Due Date")
+                    floatingLabel: true
+                    Layout.minimumWidth: 100
+                    Layout.fillWidth: true
+                }
 
-            MyTextField {
-                id: laborTimeField
-                labelText: qsTr("Labor Time")
-                floatingLabel: true
-                Layout.minimumWidth: 80
-                inputMethodHints: Qt.ImhDigitsOnly
-                inputMask: "99:99"
-                text: "00:00"
-                suffixText: qsTr("h", "Abbreviaton for hour")
-                Layout.fillWidth: true
+                MyTextField {
+                    id: durationField
+                    text: "0"
+                    suffixText: qsTr("days")
+                    labelText: qsTr("Duration")
+                    floatingLabel: true
+                    validator: IntValidator { bottom: 0; top: 999 }
+                    Layout.minimumWidth: 80
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    id: laborTimeField
+                    labelText: qsTr("Labor Time")
+                    floatingLabel: true
+                    Layout.minimumWidth: 80
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99:99"
+                    text: "00:00"
+                    suffixText: qsTr("h", "Abbreviaton for hour")
+                    Layout.fillWidth: true
+                }
             }
         }
 
@@ -127,6 +135,7 @@ Flickable {
             id: radioRow
             width: parent.width
             spacing: Units.smallSpacing
+            Layout.fillWidth: true
 
             ChoiceChip {
                 id: plantingRadioButton
@@ -142,17 +151,16 @@ Flickable {
             }
         }
 
-        Rectangle {
-            width: parent.width
-            height: childrenRect.height
-            border.width: 0
-            border.color: Material.color(Material.Grey, Material.Shade400)
-
+        FormGroupBox {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            topPadding: Units.smallSpacing
+            bottomPadding: Units.smallSpacing
 
             ColumnLayout {
-                Layout.fillHeight: true
+                anchors.fill: parent
                 visible: plantingRadioButton.checked
-                width: parent.width
+                spacing: 0
                 //            anchors {
                 //                fill: parent
                 //                leftMargin: 8
@@ -169,9 +177,9 @@ Flickable {
                     id: plantingList
                     filterString: plantingSearchField.text
                     width: parent.widh
-                    implicitHeight: 200
-                    Layout.minimumHeight: 300
-                    Layout.minimumWidth: 200
+                    implicitHeight: 30
+                    Layout.minimumHeight: 30
+                    Layout.minimumWidth: 100
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }

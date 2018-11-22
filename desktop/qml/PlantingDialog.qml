@@ -79,29 +79,13 @@ Dialog {
         }
     }
 
-    footer: Item {
-        width: parent.width
+    footer: AddEditDialogFooter {
         height: childrenRect.height
-        Button {
-            id: cancelButton
-            flat: true
-            text: qsTr("Cancel")
-            anchors.right: applyButton.left
-            anchors.rightMargin: Units.smallSpacing
-            onClicked: dialog.reject();
-            Material.foreground: Material.accent
-        }
-
-        Button {
-            id: applyButton
-            Material.foreground: Material.accent
-            anchors.right: parent.right
-            anchors.rightMargin: Units.smallSpacing
-            flat: true
-            text: mode === "add" ? qsTr("Add") : qsTr("Edit")
-            enabled: formAccepted
-            onClicked: dialog.accept();
-        }
+        width: parent.width
+        enabled: formAccepted
+        onRejected: dialog.reject();
+        onAccepted: dialog.accept();
+        mode: mode
     }
 
     ScrollView {
