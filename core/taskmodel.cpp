@@ -190,5 +190,5 @@ bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
     bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
             || (m_showDue && isDue(sourceRow, sourceParent))
             || (m_showDone && isDone(sourceRow, sourceParent));
-    return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
+    return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

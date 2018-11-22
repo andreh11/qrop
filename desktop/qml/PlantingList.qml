@@ -25,46 +25,50 @@ import "date.js" as MDate
 
 ListView {
     id: listView
-    model: PlantingModel { }
+
+    property alias filterString: plantingModel.filterString
+
+    implicitHeight: childrenRect.height
+    model: PlantingModel {
+        id: plantingModel
+    }
+    spacing: 0
+    clip: true
+    boundsBehavior: Flickable.StopAtBounds
+    flickableDirection: Flickable.HorizontalAndVerticalFlick
+    Keys.onUpPressed: verticalScrollBar.decrease()
+    Keys.onDownPressed: verticalScrollBar.increase()
+
+    ScrollBar.vertical: ScrollBar {
+        id: verticalScrollBar
+        visible: largeDisplay && plantingModel.count
+        parent: listView.parent
+        anchors {
+            top: listView.top
+            left: listView.right
+            bottom: listView.bottom
+        }
+        policy: ScrollBar.AlwaysOn
+    }
 
     delegate: Row {
         id: rowDelegate
-        height: 64
+        height: 40
         spacing: 16
-        leftPadding: 16
-        topPadding: 16
 
         // This won't work because we don't control creation/deletion of delegates...
         property bool checked: false
 
-        Rectangle {
+        TextCheckBox {
+            width: parent.height * 0.8
+            visible: !rowDelegate.checked
+            selectionMode: false
+            text: model.crop
+            color: model.crop_color
+            round: true
             anchors.verticalCenter: parent.verticalCenter
-            height: 40
-            width: height
-            radius: 80
-            color: Material.color(Material.Green, Material.Shade400)
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: checked = !checked
-            }
-
-            Text {
-                visible: !rowDelegate.checked
-                anchors.centerIn: parent
-                text: model.crop.slice(0,2)
-                color: "white"
-                font.family: "Roboto Regular"
-                font.pixelSize: 24
-            }
-            Text {
-                visible: rowDelegate.checked
-                anchors.centerIn: parent
-                text: "\ue876"
-                color: "white"
-                font.family: "Material Icons"
-                font.pixelSize: 24
-            }
+            //                font.family: "Roboto Regular"
+            //                font.pixelSize: 22
         }
 
         Column {
@@ -72,10 +76,10 @@ ListView {
             Text {
                 text: model.crop + ", " + model.variety
                 font.family: "Roboto Regular"
-                font.pixelSize: fontSizeBodyAndButton
+                font.pixelSize: Units.fontSizeBodyAndButton
             }
             Text {
-                text: MDate.formatDate(model.sowing_date) + " − " + MDate.week(model.end_harvest_date) + ", " + model.place_ids
+                text: NDate.formatDate(model.sowing_date, 2018) + " − " + NDate.formatDate(model.end_harvest_date, 2018) + ", " + model.locations
                 font.family: "Roboto Regular"
                 color: Material.color(Material.Grey)
                 font.pixelSize: 12

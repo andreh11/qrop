@@ -47,5 +47,7 @@
         <file>qml/AddDialogButtonBox.qml</file>
         <file>qml/ColorPicker.qml</file>
         <file>qml/WeekSpinBox.qml</file>
+        <file>qml/TaskCompleteButton.qml</file>
+        <file>qml/TaskDialogHeader.qml</file>
     </qresource>
 </RCC>

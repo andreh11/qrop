@@ -1,0 +1,89 @@
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.2
+
+import io.croplan.components 1.0
+
+Rectangle {
+    id: control
+    
+    
+    color: Material.color(Material.Grey, Material.Shade200)
+    Material.elevation: 2
+    radius: 2
+    clip: true
+    //    height: textIcon.height + 2 * Units.smallSpacing
+    implicitHeight: 60
+    RowLayout {
+        id: rowLayout
+        anchors.fill: parent
+        spacing: Units.smallSpacing
+        anchors {
+            leftMargin: Units.mediumSpacing
+            rightMargin: anchors.leftMargin
+            topMargin: Units.smallSpacing
+            bottomMargin: anchors.topMargin
+        }
+        
+        Rectangle {
+            id: textIcon
+            Layout.alignment: Qt.AlignVCenter
+            height: 40
+            width: height
+            radius: 80
+            border.width: 2
+            border.color: Material.color(Material.Green, Material.Shade400)
+            
+            Text {
+                anchors.centerIn: parent
+                text: {
+                    var stringList =  typeField.currentText.split(" ");
+                    if (stringList.length > 1)
+                        return stringList[0][0] + stringList[1][0].toString().toUpperCase()
+                    else
+                        return stringList[0][0]
+                }
+                color: "black"
+                font { family: "Roboto Regular"; pixelSize: 20 }
+            }
+        }
+        
+        MyComboBox {
+            id: typeField
+            labelText: qsTr("Type")
+            floatingLabel: true
+            editable: false
+            Layout.fillWidth: true
+            model: TaskTypeModel {
+                id: taskTypeModel
+                showPlantingTasks: false
+            }
+
+            textRole: "type"
+            onAccepted: if (find(editText) === -1)
+                            model.append({text: editText})
+        }
+        
+        TaskCompleteButton {
+            id: taskCompleteButton
+        }
+        
+        //        ColumnLayout {
+        //            Label {
+        //                text: qsTr("Revenue")
+        //                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
+        //                color: Qt.rgba(0,0,0, 0.50)
+        //                Layout.alignment: Qt.AlignRight
+        //            }
+        //            Label {
+        //                id: estimatedRevenueLabel
+        //                text: "%L1 €".arg(estimatedRevenue)
+        //                horizontalAlignment: Text.AlignHCenter
+        //                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
+        //                color: Qt.rgba(0,0,0, 0.87)
+        //                Layout.alignment: Qt.AlignRight
+        //            }
+        //        }
+    }
+}

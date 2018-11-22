@@ -22,95 +22,150 @@ import QtQuick.Controls.Material 2.2
 import io.croplan.components 1.0
 
 Flickable {
+    focus: true
+    contentWidth: width
+    contentHeight: mainColumn.height
+    flickableDirection: Flickable.VerticalFlick
+    boundsBehavior: Flickable.StopAtBounds
+    Material.background: "white"
+
     Column {
-        anchors.fill: parent
-        spacing: 16
-        
-        ColumnLayout {
-            width: parent.width
-            spacing: 16
-            
-            MyComboBox {
-                id: typeField
-                editable: false
-                Layout.fillWidth: true
-                model: TaskTypeModel {
-                    id: taskTypeModel
+        id: mainColumn
+        width: parent.width
+        spacing: Units.formSpacing
 
-                }
-                textRole: "type"
-                onAccepted: if (find(editText) === -1)
-                                 model.append({text: editText})
-            }
-
-            MyComboBox {
-                id: methodField
-                editable: false
-                Layout.fillWidth: true
-                model: TaskMethodModel {
-                    id: taskMethodModel
-
-                }
-                textRole: "method"
-                onAccepted: if (find(editText) === -1)
-                                 model.append({text: editText})
-            }
-
-            MyComboBox {
-                id: implementField
-                editable: false
-                Layout.fillWidth: true
-//                model: TaskImplementModel {
-//                    id: taskImplementModel
-
-//                }
-//                textRole: "implement"
-                onAccepted: if (find(editText) === -1)
-                                 model.append({text: editText})
-            }
-
-            Row {
-                id: rowLayout
+            ColumnLayout {
                 width: parent.width
-                RadioButton {
-                    id: plantingRadioButton
-                    checked: true
-                    text: qsTr("Plantings")
-                }
-                RadioButton {
-                    id: locationRadioButton
-                    text: qsTr("Locations")
-                }
+                spacing: 0
+        MyComboBox {
+            id: methodField
+            labelText: qsTr("Method")
+            floatingLabel: true
+            editable: false
+            Layout.fillWidth: true
+            model: TaskMethodModel {
+                id: taskMethodModel
+
+            }
+            textRole: "method"
+            onAccepted: if (find(editText) === -1)
+                            model.append({text: editText})
+        }
+
+        MyComboBox {
+            id: implementField
+            labelText: qsTr("Implement")
+            floatingLabel: true
+            editable: false
+            Layout.fillWidth: true
+            //                model: TaskImplementModel {
+            //                    id: taskImplementModel
+
+            //                }
+            //                textRole: "implement"
+            onAccepted: if (find(editText) === -1)
+                            model.append({text: editText})
+        }
             }
 
-            Rectangle {
-                visible: plantingRadioButton.checked
+        RowLayout {
+            spacing: Units.formSpacing
+            width: parent.width
+
+            DatePicker {
+                id: dueDatepicker
+                labelText: qsTr("Due Date")
+                floatingLabel: true
+                Layout.minimumWidth: 150
+                Layout.fillWidth: true
+            }
+
+            MyTextField {
+                id: durationField
+                text: "0"
+                suffixText: qsTr("days")
+                labelText: qsTr("Duration")
+                floatingLabel: true
+                validator: IntValidator { bottom: 0; top: 999 }
+                Layout.minimumWidth: 100
+                Layout.fillWidth: true
+            }
+
+            MyTextField {
+                id: laborTimeField
+                labelText: qsTr("Labor Time")
+                floatingLabel: true
+                Layout.minimumWidth: 100
+                inputMethodHints: Qt.ImhDigitsOnly
+                inputMask: "99:99"
+                text: "00:00"
+                suffixText: qsTr("h", "Abbreviaton for hour")
+                Layout.fillWidth: true
+            }
+        }
+
+        Row {
+            id: rowLayout
+            width: parent.width
+            spacing: Units.smallSpacing
+
+            ChoiceChip {
+                id: plantingRadioButton
+                autoExclusive: true
+                checked: true
+                text: qsTr("Plantings")
+            }
+
+            ChoiceChip {
+                id: locationRadioButton
+                text: qsTr("Locations")
+                autoExclusive: true
+            }
+        }
+
+        Rectangle {
+            width: parent.width
+            height: childrenRect.height
+            border.width: 0
+            border.color: Material.color(Material.Grey, Material.Shade400)
+
+
+        ColumnLayout {
+            Layout.fillHeight: true
+            visible: plantingRadioButton.checked
+            width: parent.width
+//            anchors {
+//                fill: parent
+//                leftMargin: 8
+//                rightMargin: leftMargin
+//            }
+
+            SearchField {
+                id: plantingSearchField
+                width: parent.width
+                Layout.fillWidth: true
+            }
+
+            PlantingList {
+                id: plantingList
+                filterString: plantingSearchField.text
+                width: parent.widh
+                implicitHeight: 200
+                Layout.minimumHeight: 200
+                Layout.minimumWidth: 200
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                radius: 4
-                border.color: Material.color(Material.Grey)
-                Column {
-                    anchors {
-                        fill: parent
-                        leftMargin: 8
-                        rightMargin: leftMargin
-                    }
-//            PlantingList {
-//                implicitHeight: 200
-//                width: 180
-//                height: 200
-//                Layout.fillWidth: true
-//            }
-                }
             }
+        }
+        }
+        //            }
 
 
-            MyComboBox {
-                id: locationField
-                visible: locationRadioButton.checked
-                Layout.fillWidth: true
-                model: ["A", "B", "C"]
-            }
+        MyComboBox {
+            id: locationField
+            visible: locationRadioButton.checked
+            Layout.fillWidth: true
+            model: ["A", "B", "C"]
         }
     }
 }

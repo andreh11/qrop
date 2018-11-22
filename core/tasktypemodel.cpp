@@ -16,8 +16,31 @@
 
 #include "tasktypemodel.h"
 
-TaskTypeModel::TaskTypeModel(QObject *parent)
-    : SqlTableModel(parent)
+TaskTypeModel::TaskTypeModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName),
+      m_showPlantingTasks(true)
 {
-    setTable("task_type");
+}
+
+bool TaskTypeModel::showPlantingTasks() const
+{
+    return m_showPlantingTasks;
+}
+
+void TaskTypeModel::setShowPlantingTasks(bool show)
+{
+    if (m_showPlantingTasks == show)
+        return;
+
+    m_showPlantingTasks = show;
+    invalidateFilter();
+    showPlantingTasksChanged();
+}
+
+bool TaskTypeModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    int taskTypeId = rowValue(sourceRow, sourceParent, "task_type_id").toInt();
+    bool isPlantingTask = taskTypeId <= 3;
+    return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)
+            && (m_showPlantingTasks || !isPlantingTask);
 }

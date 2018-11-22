@@ -399,37 +399,16 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: 16
 
-                        ToolButton {
+                        TaskCompleteButton {
                             id: completeButton
-                            checked: model.done
-//                            flat: true
-                            checkable: true
-                            width: parent.height
-                            height: width
                             anchors.verticalCenter: parent.verticalCenter
-
-                            Text {
-                                anchors.fill: parent
-                                text: model.overdue ? "\ue924" : "\ue86c"
-                                font.family: "Material Icons"
-                                font.pixelSize: 30
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                color: parent.checked ? Material.color(Material.Green)
-                                                      : model.overdue
-                                                        ? Material.color(Material.Red)
-                                                        : Material.color(Material.Grey,
-                                                                       Material.Shade300)
-                            }
-
-                            onPressAndHold: {
-                                popup.x = completeButton.x
-                                popup.y = completeButton.y
-                                popup.open()
-                            }
-
+                            height: width
+                            width: parent.height
+                            overdue: model.overdue
+                            done: model.done
+                            due: model.due
                             onClicked: {
-                                if (model.done)
+                                if (done)
                                     Task.uncompleteTask(model.task_id);
                                 else
                                     Task.completeTask(model.task_id);
