@@ -25,10 +25,17 @@ Flickable {
     id: control
 
     property int year
-    property bool accepted: true
     property int taskTypeId: -1
+
     property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
     property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
+
+    readonly property bool accepted: true
+    readonly property alias dueDate: dueDatepicker.calendarDate
+    readonly property int duration: Number(durationField.text)
+    readonly property alias laborTimeString: laborTimeField.text
+    readonly property alias plantingTask: plantingRadioButton.checked
+    readonly property alias locationTask: locationRadioButton.checked
 
     focus: true
     contentWidth: width
