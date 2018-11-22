@@ -61,7 +61,8 @@ void DatabaseUtility::setIdFieldName(const QString &name)
 void DatabaseUtility::debugQuery(const QSqlQuery& query) const
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
-        qDebug() << "Query OK: " << query.lastQuery();
+        return;
+//        qDebug() << "Query OK: " << query.lastQuery();
     } else {
         qWarning() << "Query ERROR: " << query.lastError().text();
         qWarning() << "Query text: " << query.lastQuery();

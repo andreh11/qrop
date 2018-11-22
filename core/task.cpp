@@ -105,6 +105,7 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
                          {"task_type_id", 2}});
         int plantId = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
                            {"task_type_id", 3},
+                           {"link_days", dtt},
                            {"link_task_id", sowId}});
         addLink("planting_task", "planting_id", plantingId, "task_id", sowId);
         addLink("planting_task", "planting_id", plantingId, "task_id", plantId);
@@ -121,6 +122,20 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
 void Task::completeTask(int taskId, const QDate &date) const
 {
     update(taskId, {{"completed_date", date.toString(Qt::ISODate)}});
+}
+
+void Task::delay(int taskId, int weeks)
+{
+    if (taskId < 0)
+        return;
+
+    QVariantMap map = mapFromId("task", taskId);
+    if (!map.contains("assigned_date"))
+        return;
+
+    QDate assignedDate = QDate::fromString(map.value("assigned_date").toString(), Qt::ISODate);
+    QString newDateString = assignedDate.addDays(weeks * 7).toString(Qt::ISODate);
+    update(taskId, {{"assigned_date", newDateString}});
 }
 
 QList<int> Task::sowPlantTaskIds(int plantingId) const

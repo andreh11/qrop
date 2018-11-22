@@ -122,7 +122,7 @@ void TaskModel::setShowDone(bool showDone)
         return;
 
     m_showDone = showDone;
-    invalidate();
+    invalidateFilter();
     showDoneChanged();
 }
 
@@ -136,7 +136,7 @@ void TaskModel::setShowDue(bool showDue)
     if (m_showDue == showDue)
         return;
     m_showDue = showDue;
-    invalidate();
+    invalidateFilter();
     showDueChanged();
 }
 
@@ -151,7 +151,7 @@ void TaskModel::setShowOverdue(bool showOverdue)
         return;
 
     m_showOverdue = showOverdue;
-    invalidate();
+    invalidateFilter();
     showOverdueChanged();
 }
 

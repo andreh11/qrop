@@ -370,21 +370,17 @@ ApplicationWindow {
         initialItem: plantingsPage
 
         function activatePage(index) {
-            if (index === 0) {
+            switch (index) {
+            case 0:
                 stackView.replace(plantingsPage)
                 plantingsPage.refresh();
-            }
-            else if (index === 1) {
+                break;
+            case 1:
                 stackView.replace(calendarPage)
                 calendarPage.refresh();
+                break
             }
-//            if (index < pages.count) {
-//                var item = pages.itemAt(index)
-//                stackView.replace(item)
-//            }
         }
-
-//        Component.onCompleted: stackView.push(pages.itemAt(0))
     }
 
     Dialog {

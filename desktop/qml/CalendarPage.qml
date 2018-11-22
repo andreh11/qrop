@@ -170,7 +170,7 @@ Page {
                 }
 
                 SearchField {
-                    id: filterField
+                    id: searchField
                     placeholderText: qsTr("Search Tasks")
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
@@ -277,6 +277,7 @@ Page {
                 showDone: showDoneCheckBox.checked
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
+                filterString: searchField.text
 //                sortColumn: "assigned_date"
             }
 
@@ -319,40 +320,24 @@ Page {
             }
 
             delegate: Rectangle {
-//                color: {
-//                    if (checkBox.checked) {
-//                        return Material.color(Material.primary, Material.Shade100)
-//                    } else if (mouseArea.containsMouse) {
-//                        return Material.color(Material.Grey, Material.Shade100)
-//                    } else {
-//                        return "white"
-//                    }
-//                }
-//                color: model.overdue ? Material.color(Material.Red, Material.Shade100)
-////                                     : model.done ? Material.color(Material.Blue, Material.Shade100)
                 color: "white"
                 radius: 2
 
                 height: row.height
                 width: parent.width
 
-//                Rectangle {
-//                    anchors {
-//                        top: parent.top
-//                        bottom: parent.bottom
-//                        left: parent.left
-//                    }
-//                    width: 8
-//                    radius: 4
-//                    color: Material.color(Material.red, Material.Shade200)
-//                    visible: model.overdue
-//                }
+                MouseArea {
+                    id: mouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
 
                 Rectangle {
+                    id: taskButtonRectangle
                     height: parent.height
                     width: childrenRect.width
                     color: "white"
-                    visible: !model.done
+                    visible: !model.done && mouseArea.containsMouse
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -367,29 +352,42 @@ Page {
                             Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             font.family: "Roboto Condensed"
                             anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                Task.delay(model.task_id, -1);
+                                refresh();
+                            }
 
                         }
+
                         ToolButton {
                             text: "+7"
                             Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             font.family: "Roboto Condensed"
                             anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                Task.delay(model.task_id, 1);
+                                refresh();
+                            }
                         }
+
                         ToolButton {
                             text: "\ue872"
                             Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             font.family: "Material Icons"
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: 22
+                            enabled: model.task_type_id > 3
+                            hoverEnabled: true
+                            onClicked: {
+                                Task.remove(taskId);
+                                refresh();
+                            }
+
+                            ToolTip.text: qsTr("Cannot remove a sow/plant task. Switch to crop plan to remove the related planting.")
+                            ToolTip.visible: hovered && !enabled
                         }
                     }
                  }
-//                MouseArea {
-//                    id: mouseArea
-//                    anchors.fill: parent
-//                    hoverEnabled: true
-//                    z: 2
-//                }
 
                 Column {
                     id: mainColumn
@@ -439,33 +437,6 @@ Page {
                             }
                         }
 
-//                        TextCheckBox {
-//                            id: checkBox
-//                            text: model.type
-//                            selectionMode: checks > 0
-//                            anchors.verticalCenter: row.verticalCenter
-//                            //                                width: 24
-//                            width: parent.height * 0.8
-//                            round: true
-//                            color: "green"
-////                            checked: model.planting_id in selectedIds
-////                                     && selectedIds[model.planting_id]
-
-////                            MouseArea {
-////                                anchors.fill: parent
-//////                                onClicked: {
-//////                                    if (mouse.button !== Qt.LeftButton)
-//////                                        return
-
-//////                                    selectedIds[model.planting_id]
-//////                                            = !selectedIds[model.planting_id]
-//////                                    lastIndexClicked = index
-
-//////                                    selectedIdsChanged()
-//////                                    console.log("All:", plantingModel.rowCount( ) === checks)
-//////                                }
-////                            }
-//                        }
                         TableLabel {
                             text: cropName(model.plantings) + " <i>" + varietyName(model.plantings) + "</i>"
                             elide: Text.ElideRight
@@ -501,7 +472,6 @@ Page {
                                 }
 
                             }
-
 
                             elide: Text.ElideRight
                             width: tableHeaderModel[2].width
