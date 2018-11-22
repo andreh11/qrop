@@ -7,14 +7,21 @@ import io.croplan.components 1.0
 
 Rectangle {
     id: control
-    
+
+    property int taskTypeId: taskTypeModel.rowId(typeField.currentIndex)
     
     color: Material.color(Material.Grey, Material.Shade200)
     Material.elevation: 2
     radius: 2
     clip: true
     //    height: textIcon.height + 2 * Units.smallSpacing
-    implicitHeight: 60
+   implicitHeight: 60
+
+   TaskTypeModel {
+       id: taskTypeModel
+       showPlantingTasks: false
+   }
+
     RowLayout {
         id: rowLayout
         anchors.fill: parent
@@ -55,10 +62,10 @@ Rectangle {
             floatingLabel: true
             editable: false
             Layout.fillWidth: true
-            model: TaskTypeModel {
-                id: taskTypeModel
-                showPlantingTasks: false
-            }
+            model: taskTypeModel
+            showAddItem: true
+
+            addItemText: qsTr("Add Type")
 
             textRole: "type"
             onAccepted: if (find(editText) === -1)

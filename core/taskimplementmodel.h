@@ -14,32 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
+#ifndef TASKIMPLEMENTMODEL_H
+#define TASKIMPLEMENTMODEL_H
 
-#include "taskmethodmodel.h"
-#include "sqltablemodel.h"
+#include <QObject>
 
-TaskMethodModel::TaskMethodModel(QObject *parent, const QString &tableName)
-    : SortFilterProxyModel(parent, tableName),
-      m_typeId(-1)
-{
-   int col = m_model->record().indexOf("task_type_id");
-   setFilterKeyColumn(col);
-   setSortColumn("method");
-   qDebug() << "METHOD RECORD" << m_model->record();
-}
+#include "core_global.h"
+#include "sortfilterproxymodel.h"
 
-int TaskMethodModel::typeId() const
-{
-    return m_typeId;
-}
+class CORESHARED_EXPORT TaskImplementModel : public SortFilterProxyModel {
+    Q_OBJECT
+    Q_PROPERTY(int methodId READ methodId WRITE setMethodId NOTIFY methodIdChanged)
 
-void TaskMethodModel::setTypeId(int typeId)
-{
-   if (m_typeId == typeId)
-       return;
+public:
+    TaskImplementModel(QObject *parent = nullptr, const QString &tableName = "task_implement");
 
-   m_typeId = typeId;
-   setFilterFixedString(QString::number(m_typeId));
-   typeIdChanged();
-}
+    int methodId() const;
+    void setMethodId(int methodId);
+
+private:
+    int m_methodId;
+
+signals:
+    void methodIdChanged();
+};
+
+#endif // TASKIMPLEMENTMODEL_H

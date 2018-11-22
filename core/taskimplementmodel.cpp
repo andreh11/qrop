@@ -16,30 +16,31 @@
 
 #include <QDebug>
 
-#include "taskmethodmodel.h"
+#include "taskimplementmodel.h"
 #include "sqltablemodel.h"
 
-TaskMethodModel::TaskMethodModel(QObject *parent, const QString &tableName)
+TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName),
-      m_typeId(-1)
+      m_methodId(-1)
 {
-   int col = m_model->record().indexOf("task_type_id");
+   int col = m_model->record().indexOf("task_method_id");
+   qDebug() << "COL" << col << m_model->record();
    setFilterKeyColumn(col);
-   setSortColumn("method");
-   qDebug() << "METHOD RECORD" << m_model->record();
+   setSortColumn("implement");
 }
 
-int TaskMethodModel::typeId() const
+int TaskImplementModel::methodId() const
 {
-    return m_typeId;
+    return m_methodId;
 }
 
-void TaskMethodModel::setTypeId(int typeId)
+void TaskImplementModel::setMethodId(int methodId)
 {
-   if (m_typeId == typeId)
+   if (m_methodId == methodId)
        return;
 
-   m_typeId = typeId;
-   setFilterFixedString(QString::number(m_typeId));
-   typeIdChanged();
+   m_methodId = methodId;
+   setFilterFixedString(QString::number(m_methodId));
+   qDebug() << "method id:" << methodId << "row count: " << rowCount();
+   methodIdChanged();
 }

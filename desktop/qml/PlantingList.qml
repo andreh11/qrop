@@ -43,11 +43,11 @@ ListView {
         id: verticalScrollBar
         visible: largeDisplay && plantingModel.count
         parent: listView.parent
-        anchors {
-            top: listView.top
-            left: listView.right
-            bottom: listView.bottom
-        }
+//        anchors {
+//            top: listView.top
+//            left: listView.right
+//            bottom: listView.bottom
+//        }
         policy: ScrollBar.AlwaysOn
     }
 
@@ -79,7 +79,7 @@ ListView {
                 font.pixelSize: Units.fontSizeBodyAndButton
             }
             Text {
-                text: NDate.formatDate(model.sowing_date, 2018) + " − " + NDate.formatDate(model.end_harvest_date, 2018) + ", " + model.locations
+                text: qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(model.sowing_date, 2018)).arg(NDate.formatDate(model.end_harvest_date, 2018)).arg(model.length).arg(model.locations)
                 font.family: "Roboto Regular"
                 color: Material.color(Material.Grey)
                 font.pixelSize: 12

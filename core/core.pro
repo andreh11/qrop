@@ -37,7 +37,8 @@ SOURCES += \
     sortfilterproxymodel.cpp \
     variety.cpp \
     keyword.cpp \
-    mdate.cpp
+    mdate.cpp \
+    taskimplementmodel.cpp
 
 
 HEADERS += \
@@ -71,7 +72,8 @@ HEADERS += \
     sortfilterproxymodel.h \
     variety.h \
     keyword.h \
-    mdate.h
+    mdate.h \
+    taskimplementmodel.h
 
 RESOURCES += \
     core_resources.qrc

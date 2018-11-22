@@ -43,8 +43,9 @@
 #include "plantingmodel.h"
 #include "rolemodel.h"
 #include "seedcompanymodel.h"
-#include "taskmodel.h"
+#include "taskimplementmodel.h"
 #include "taskmethodmodel.h"
+#include "taskmodel.h"
 #include "tasktypemodel.h"
 #include "unitmodel.h"
 #include "usermodel.h"
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
     qmlRegisterType<TaskTypeModel>("io.croplan.components", 1, 0, "TaskTypeModel");
     qmlRegisterType<TaskMethodModel>("io.croplan.components", 1, 0, "TaskMethodModel");
+    qmlRegisterType<TaskImplementModel>("io.croplan.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
 
 //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");

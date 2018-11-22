@@ -23,17 +23,25 @@ import io.croplan.components 1.0
 
 Dialog {
     id: dialog
+
+    property string mode: "add"
+    property alias form: taskForm
+    property alias formAccepted: taskForm.accepted
+    property alias year: taskForm.year
+
     modal: true
     title: "Add task"
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     header:  TaskDialogHeader {
-        id: control
+        id: taskDialogHeader
         width: parent.width
     }
 
     TaskForm {
+        id: taskForm
         anchors.fill: parent
+        taskTypeId: taskDialogHeader.taskTypeId
     }
 }
 

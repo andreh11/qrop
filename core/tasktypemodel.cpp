@@ -20,6 +20,7 @@ TaskTypeModel::TaskTypeModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName),
       m_showPlantingTasks(true)
 {
+    setSortColumn("type");
 }
 
 bool TaskTypeModel::showPlantingTasks() const

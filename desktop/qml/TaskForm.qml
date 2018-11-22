@@ -22,6 +22,14 @@ import QtQuick.Controls.Material 2.2
 import io.croplan.components 1.0
 
 Flickable {
+    id: control
+
+    property int year
+    property bool accepted: true
+    property int taskTypeId: -1
+    property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
+    property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
+
     focus: true
     contentWidth: width
     contentHeight: mainColumn.height
@@ -34,39 +42,43 @@ Flickable {
         width: parent.width
         spacing: Units.formSpacing
 
-            ColumnLayout {
-                width: parent.width
-                spacing: 0
-        MyComboBox {
-            id: methodField
-            labelText: qsTr("Method")
-            floatingLabel: true
-            editable: false
-            Layout.fillWidth: true
-            model: TaskMethodModel {
-                id: taskMethodModel
+        ColumnLayout {
+            width: parent.width
+            spacing: 0
 
+            MyComboBox {
+                id: methodField
+                labelText: qsTr("Method")
+                floatingLabel: true
+                editable: false
+                showAddItem: true
+                addItemText: qsTr("Add Method")
+                model: TaskMethodModel {
+                    id: taskMethodModel
+                    typeId: control.taskTypeId
+                }
+                textRole: "method"
+
+                Layout.fillWidth: true
             }
-            textRole: "method"
-            onAccepted: if (find(editText) === -1)
-                            model.append({text: editText})
-        }
 
-        MyComboBox {
-            id: implementField
-            labelText: qsTr("Implement")
-            floatingLabel: true
-            editable: false
-            Layout.fillWidth: true
-            //                model: TaskImplementModel {
-            //                    id: taskImplementModel
+            MyComboBox {
+                id: implementField
+                labelText: qsTr("Implement")
+                showAddItem: true
+                addItemText: qsTr("Add Implement")
+                floatingLabel: true
+                editable: false
 
-            //                }
-            //                textRole: "implement"
-            onAccepted: if (find(editText) === -1)
-                            model.append({text: editText})
-        }
+                model: TaskImplementModel {
+                    id: taskImplementModel
+                    methodId: control.taskMethodId
+                }
+                textRole: "implement"
+
+                Layout.fillWidth: true
             }
+        }
 
         RowLayout {
             spacing: Units.formSpacing
@@ -76,7 +88,7 @@ Flickable {
                 id: dueDatepicker
                 labelText: qsTr("Due Date")
                 floatingLabel: true
-                Layout.minimumWidth: 150
+                Layout.minimumWidth: 100
                 Layout.fillWidth: true
             }
 
@@ -87,7 +99,7 @@ Flickable {
                 labelText: qsTr("Duration")
                 floatingLabel: true
                 validator: IntValidator { bottom: 0; top: 999 }
-                Layout.minimumWidth: 100
+                Layout.minimumWidth: 80
                 Layout.fillWidth: true
             }
 
@@ -95,7 +107,7 @@ Flickable {
                 id: laborTimeField
                 labelText: qsTr("Labor Time")
                 floatingLabel: true
-                Layout.minimumWidth: 100
+                Layout.minimumWidth: 80
                 inputMethodHints: Qt.ImhDigitsOnly
                 inputMask: "99:99"
                 text: "00:00"
@@ -105,7 +117,7 @@ Flickable {
         }
 
         Row {
-            id: rowLayout
+            id: radioRow
             width: parent.width
             spacing: Units.smallSpacing
 
@@ -130,33 +142,33 @@ Flickable {
             border.color: Material.color(Material.Grey, Material.Shade400)
 
 
-        ColumnLayout {
-            Layout.fillHeight: true
-            visible: plantingRadioButton.checked
-            width: parent.width
-//            anchors {
-//                fill: parent
-//                leftMargin: 8
-//                rightMargin: leftMargin
-//            }
-
-            SearchField {
-                id: plantingSearchField
-                width: parent.width
-                Layout.fillWidth: true
-            }
-
-            PlantingList {
-                id: plantingList
-                filterString: plantingSearchField.text
-                width: parent.widh
-                implicitHeight: 200
-                Layout.minimumHeight: 200
-                Layout.minimumWidth: 200
-                Layout.fillWidth: true
+            ColumnLayout {
                 Layout.fillHeight: true
+                visible: plantingRadioButton.checked
+                width: parent.width
+                //            anchors {
+                //                fill: parent
+                //                leftMargin: 8
+                //                rightMargin: leftMargin
+                //            }
+
+                SearchField {
+                    id: plantingSearchField
+                    width: parent.width
+                    Layout.fillWidth: true
+                }
+
+                PlantingList {
+                    id: plantingList
+                    filterString: plantingSearchField.text
+                    width: parent.widh
+                    implicitHeight: 200
+                    Layout.minimumHeight: 300
+                    Layout.minimumWidth: 200
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
             }
-        }
         }
         //            }
 
