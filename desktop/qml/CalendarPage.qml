@@ -43,6 +43,7 @@ Page {
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
 
+
     function cropName(id) {
         var map = Planting.mapFromId("planting_view", id);
         return map['crop']
@@ -61,22 +62,14 @@ Page {
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
-    onTableSortColumnChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName
-        tableSortOrder = "descending"
-        listView.model.setSortColumn(columnName, tableSortOrder)
-    }
-
-    onTableSortOrderChanged: {
-        var columnName = tableHeaderModel[tableSortColumn].columnName
-        listView.model.setSortColumn(columnName, tableSortOrder)
-    }
+    onTableSortColumnChanged: tableSortOrder = "descending"
 
     TaskDialog {
         id: taskDialog
         width: parent.width / 2
         height: parent.height
         x: (parent.width - width) / 2
+        onAccepted: refresh()
     }
 
     Component {
@@ -278,7 +271,8 @@ Page {
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
                 filterString: searchField.text
-//                sortColumn: "assigned_date"
+                sortColumn: tableHeaderModel[tableSortColumn].columnName
+                sortOrder: tableSortOrder
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -337,7 +331,7 @@ Page {
                     height: parent.height
                     width: childrenRect.width
                     color: "white"
-                    visible: !model.done && mouseArea.containsMouse
+                    visible: !model.done
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -379,7 +373,7 @@ Page {
                             enabled: model.task_type_id > 3
                             hoverEnabled: true
                             onClicked: {
-                                Task.remove(taskId);
+                                Task.remove(model.task_id);
                                 refresh();
                             }
 

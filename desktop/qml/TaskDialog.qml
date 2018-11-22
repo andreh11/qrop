@@ -46,6 +46,16 @@ Dialog {
         taskTypeId: taskDialogHeader.taskTypeId
     }
 
+    onOpened: taskForm.reset()
+
+    onAccepted: {
+        if (mode === "add") {
+            var id = Task.add(taskForm.values)
+            if (id)
+                console.log("Added task", id)
+        }
+    }
+
     footer: AddEditDialogFooter {
         height: childrenRect.height
         width: parent.width

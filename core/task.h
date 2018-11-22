@@ -27,6 +27,7 @@ class CORESHARED_EXPORT Task : public DatabaseUtility {
 public:
     Task(QObject *parent = nullptr);
     Q_INVOKABLE QList<int> sowPlantTaskIds(int plantingId) const;
+    Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;

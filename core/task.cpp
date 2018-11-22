@@ -26,6 +26,31 @@ Task::Task(QObject *parent)
       m_table = "task";
 }
 
+int Task::add(const QVariantMap &map) const
+{
+    QVariantMap newMap(map);
+
+    QList<QVariant> plantingIdList = newMap.take("planting_ids").toList();
+    int methodId = newMap.value("task_method_id").toInt();
+    if (methodId < 1)
+        newMap.take("task_method_id");
+
+    int implementId = newMap.value("task_implement_id").toInt();
+    if (implementId < 1)
+        newMap.take("task_implement_id");
+
+    int id = DatabaseUtility::add(newMap);
+    if (id < 1)
+        return -1;
+
+    for (const auto &idString : plantingIdList) {
+        int plantingId = idString.toInt();
+        addPlanting(plantingId, id);
+    }
+
+    return id;
+}
+
 void Task::addPlanting(int plantingId, int taskId) const
 {
     addLink("planting_task", "planting_id", plantingId, "task_id", taskId);

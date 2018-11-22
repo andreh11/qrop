@@ -155,6 +155,7 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
 
 int DatabaseUtility::add(const QVariantMap &map) const
 {
+    qDebug() << "MAP:" << map;
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
     QString fieldName = idFieldName();

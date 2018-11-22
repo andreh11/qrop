@@ -31,11 +31,28 @@ Flickable {
     property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
 
     readonly property bool accepted: true
-    readonly property alias dueDate: dueDatepicker.calendarDate
+    readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
     readonly property alias laborTimeString: laborTimeField.text
     readonly property alias plantingTask: plantingRadioButton.checked
     readonly property alias locationTask: locationRadioButton.checked
+    readonly property alias plantingIdList: plantingList.plantingIdList
+    onPlantingIdListChanged: console.log(plantingIdList)
+
+    readonly property var values: {
+        "assigned_date": dueDateString,
+        "completed_date": "",
+        "duration": duration,
+        "labor_time": laborTimeString,
+        "task_type_id": taskTypeId,
+        "task_method_id": taskMethodId,
+        "task_implement_id": taskImplementId,
+        "planting_ids": plantingIdList
+    }
+
+    function reset() {
+        plantingList.reset();
+    }
 
     focus: true
     contentWidth: width

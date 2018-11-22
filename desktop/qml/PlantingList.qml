@@ -26,6 +26,39 @@ ListView {
 
     property alias filterString: plantingModel.filterString
 
+    // Ids of selected plantings
+    property var selectedIds: ({})
+    property var plantingIdList: selectedIdList()
+    // Number of selected plantings
+    property int checks: numberOfTrue(selectedIds)
+    property int lastIndexClicked: -1
+
+    function selectedIdList() {
+        var idList = []
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+//                selectedIds[key] = false
+                idList.push(key)
+            }
+        return idList;
+    }
+
+    function refresh()  {
+       plantingModel.refresh();
+    }
+
+    function numberOfTrue(array) {
+        var n = 0
+        for (var key in array)
+            if (array[key])
+                n++
+        return n
+    }
+
+    function reset() {
+        selectedIds = ({})
+    }
+
     implicitHeight: childrenRect.height
     model: PlantingModel {
         id: plantingModel
@@ -55,11 +88,28 @@ ListView {
         TextCheckBox {
             width: parent.height * 0.8
             visible: !rowDelegate.checked
-            selectionMode: false
+            selectionMode: checks > 0
             text: model.crop
             color: model.crop_color
             round: true
             anchors.verticalCenter: parent.verticalCenter
+            checked: model.planting_id in selectedIds
+                     && selectedIds[model.planting_id]
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (mouse.button !== Qt.LeftButton)
+                        return
+
+                    selectedIds[model.planting_id]
+                            = !selectedIds[model.planting_id]
+                    lastIndexClicked = index
+
+                    selectedIdsChanged()
+                    console.log("All:", plantingModel.rowCount( ) === checks)
+                }
+            }
             //                font.family: "Roboto Regular"
             //                font.pixelSize: 22
         }
