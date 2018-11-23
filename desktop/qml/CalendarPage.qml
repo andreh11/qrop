@@ -289,7 +289,7 @@ Page {
                         id: headerRow
                         height: Units.rowHeight
                         spacing: Units.smallSpacing
-                        leftPadding: 16
+                        leftPadding: Units.smallSpacing
 
                         Item {
                             visible: true
@@ -365,7 +365,7 @@ Page {
                         }
 
                         ToolButton {
-                            text: "\ue872"
+                            text: enabled ? "\ue872" : ""
                             Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             font.family: "Material Icons"
                             anchors.verticalCenter: parent.verticalCenter
@@ -391,7 +391,7 @@ Page {
                         id: row
                         height: Units.rowHeight
                         spacing: Units.smallSpacing
-                        leftPadding: 16
+                        leftPadding: Units.smallSpacing
 
                         TaskCompleteButton {
                             id: completeButton
@@ -411,7 +411,12 @@ Page {
                         }
 
                         TableLabel {
-                            text: cropName(model.plantings) + " <i>" + varietyName(model.plantings) + "</i>"
+                            text: {
+                                var idList = model.plantings.split(",")
+                                var firstId = Number(idList[0])
+                                "%1 − %2%3".arg(cropName(firstId)).arg(varietyName(firstId)).arg(idList.length > 1 ? " ⋅⋅⋅" : "")
+                            }
+
                             elide: Text.ElideRight
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter

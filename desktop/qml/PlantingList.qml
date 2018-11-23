@@ -25,13 +25,12 @@ ListView {
     id: listView
 
     property alias filterString: plantingModel.filterString
+    property alias count: plantingModel.count // Number of plantings currently filtered.
 
-    // Ids of selected plantings
-    property var selectedIds: ({})
-    property var plantingIdList: selectedIdList()
-    // Number of selected plantings
-    property int checks: numberOfTrue(selectedIds)
-    property int lastIndexClicked: -1
+    property var selectedIds: ({}) // Map of the ids of the selected plantings
+    property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
+    property int checks: numberOfTrue(selectedIds) // Number of selected plantings
+    property int lastIndexClicked: -1 // TODO: fors shift selection
 
     function selectedIdList() {
         var idList = []
@@ -41,6 +40,20 @@ ListView {
                 idList.push(key)
             }
         return idList;
+    }
+
+    function selectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = true;
+        selectedIdsChanged();
+    }
+
+    function unselectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = false
+        selectedIdsChanged();
     }
 
     function refresh()  {
@@ -56,17 +69,20 @@ ListView {
     }
 
     function reset() {
+        // TODO: reset all
         selectedIds = ({})
     }
 
+    clip: true
     implicitHeight: childrenRect.height
+    spacing: Units.smallSpacing
+    boundsBehavior: Flickable.StopAtBounds
+    flickableDirection: Flickable.HorizontalAndVerticalFlick
+
     model: PlantingModel {
         id: plantingModel
     }
-    spacing: 0
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
-    flickableDirection: Flickable.HorizontalAndVerticalFlick
+
     Keys.onUpPressed: verticalScrollBar.decrease()
     Keys.onDownPressed: verticalScrollBar.increase()
 
@@ -79,17 +95,17 @@ ListView {
 
     delegate: Row {
         id: rowDelegate
-        height: 40
-        spacing: 16
+        height: Units.rowHeight
+        spacing: Units.formSpacing
 
-        // This won't work because we don't control creation/deletion of delegates...
         property bool checked: false
 
         TextCheckBox {
-            width: parent.height * 0.8
+            width: parent.height
             visible: !rowDelegate.checked
             selectionMode: checks > 0
             text: model.crop
+            font.pixelSize: 26
             color: model.crop_color
             round: true
             anchors.verticalCenter: parent.verticalCenter
@@ -102,30 +118,25 @@ ListView {
                     if (mouse.button !== Qt.LeftButton)
                         return
 
-                    selectedIds[model.planting_id]
-                            = !selectedIds[model.planting_id]
+                    selectedIds[model.planting_id] = !selectedIds[model.planting_id]
                     lastIndexClicked = index
-
                     selectedIdsChanged()
-                    console.log("All:", plantingModel.rowCount( ) === checks)
                 }
             }
-            //                font.family: "Roboto Regular"
-            //                font.pixelSize: 22
         }
 
         Column {
             anchors.verticalCenter: parent.verticalCenter
             Text {
-                text: model.crop + ", " + model.variety
+                text: "%1, %2".arg(model.crop).arg(model.variety)
                 font.family: "Roboto Regular"
                 font.pixelSize: Units.fontSizeBodyAndButton
             }
             Text {
                 text: qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(model.sowing_date, 2018)).arg(NDate.formatDate(model.end_harvest_date, 2018)).arg(model.length).arg(model.locations)
                 font.family: "Roboto Regular"
-                color: Material.color(Material.Grey)
-                font.pixelSize: 12
+                color: Material.color(Material.Grey, Material.Shade600)
+                font.pixelSize: Units.fontSizeCaption
             }
         }
     }

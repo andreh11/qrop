@@ -178,17 +178,38 @@ Flickable {
                 anchors.fill: parent
                 visible: plantingRadioButton.checked
                 spacing: 0
-                //            anchors {
-                //                fill: parent
-                //                leftMargin: 8
-                //                rightMargin: leftMargin
-                //            }
 
-                SearchField {
-                    id: plantingSearchField
-                    width: parent.width
+                RowLayout {
+                    height: Units.rowHeight
                     Layout.fillWidth: true
+                    CheckBox {
+                        id: headerCheckbox
+                        width: parent.height
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        tristate: true
+                        checkState: plantingList.checks == plantingList.count ? Qt.Checked
+                                                         : (plantingList.checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                        nextCheckState: function () {
+                            if (checkState == Qt.Checked) {
+                                plantingList.unselectAll()
+                                return Qt.Unchecked
+                            } else {
+                                plantingList.selectAll()
+                                return Qt.Checked
+                            }
+                        }
+                        ToolTip.text: checkState == Qt.Checked ? qsTr("Unelect all plantings")
+                                                               : qsTr("Select all plantings")
+                        ToolTip.visible: hovered
+                    }
+
+                    SearchField {
+                        id: plantingSearchField
+                        width: parent.width
+                        Layout.fillWidth: true
+                    }
                 }
+
 
                 PlantingList {
                     id: plantingList

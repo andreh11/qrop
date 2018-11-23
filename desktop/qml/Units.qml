@@ -17,7 +17,7 @@
 pragma Singleton
 import QtQuick 2.0
 
-Item {
+QtObject {
     // font sizes - defaults from Google Material Design Guide
     readonly property int fontSizeDisplay4: 112
     readonly property int fontSizeDisplay3: 56
@@ -41,8 +41,6 @@ Item {
     readonly property int buttonHeight: 36
     readonly property int chipHeight: 32
 
-    // Height of rows in tables.
-    readonly property int rowHeight: 36
-    // Width of a month in a timeline.
-    readonly property int monthWidth: 60
+    readonly property int rowHeight: 40 // Height of rows in tables.
+    readonly property int monthWidth: 60 // Width of a month in a timeline.
 }
