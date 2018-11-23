@@ -30,6 +30,11 @@ Dialog {
     property int week
     property int year
 
+    function reset() {
+        taskDialogHeader.reset();
+        taskForm.reset();
+    }
+
     title: qsTr("Add Task")
     modal: true
     focus: true
@@ -61,7 +66,6 @@ Dialog {
         mode: mode
     }
 
-    onOpened: taskForm.reset()
     onAccepted: {
         if (mode === "add") {
             var id = Task.add(taskForm.values)

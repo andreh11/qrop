@@ -54,6 +54,12 @@ Flickable {
 
     function reset() {
         plantingList.reset();
+        methodField.currentIndex = -1
+        implementField.currentIndex = -1
+        durationField.text = "0"
+        laborTimeField.text = "00:00"
+        plantingRadioButton.checked = true
+        locationRadioButton.checked = false
     }
 
     focus: true

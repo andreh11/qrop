@@ -14,13 +14,16 @@ Rectangle {
     property int week
     property int year
 
-    onCompletedChanged: console.log(completedDate)
+    function reset() {
+        typeField.currentIndex = 0
+        taskCompleteButton.checked = false
+    }
+
 
     color: Material.color(Material.Grey, Material.Shade200)
     Material.elevation: 2
     radius: 2
     clip: true
-    //    height: textIcon.height + 2 * Units.smallSpacing
     implicitHeight: 60
 
    TaskTypeModel {

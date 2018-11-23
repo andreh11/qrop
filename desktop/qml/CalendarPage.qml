@@ -164,7 +164,10 @@ Page {
                     Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
-                    onClicked: taskDialog.open()
+                    onClicked: {
+                        taskDialog.reset()
+                        taskDialog.open()
+                    }
                     MouseArea {
                           id: mouseArea
                           cursorShape: Qt.PointingHandCursor
