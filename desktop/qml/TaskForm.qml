@@ -31,7 +31,7 @@ Flickable {
     property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
     property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
 
-    readonly property bool accepted: true
+    readonly property bool accepted: plantingTask && plantingIdList.length
     readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
     readonly property alias laborTimeString: laborTimeField.text
@@ -57,7 +57,6 @@ Flickable {
 
     focus: true
     contentWidth: width
-//    contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
@@ -65,8 +64,6 @@ Flickable {
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
-//        width: parent.width
-//        height: parent.height
         spacing: Units.formSpacing
 
         ColumnLayout {
@@ -164,20 +161,22 @@ Flickable {
 
             ChoiceChip {
                 id: locationRadioButton
+                visible: false // Location handling is not implemented yet
                 text: qsTr("Locations")
                 autoExclusive: true
             }
         }
 
         FormGroupBox {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            visible: plantingRadioButton.checked
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
 
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
             ColumnLayout {
                 anchors.fill: parent
-                visible: plantingRadioButton.checked
                 spacing: 0
 
                 RowLayout {

@@ -24,10 +24,10 @@ Item {
     
     Button {
         id: applyButton
-        Material.foreground: Material.accent
+        Material.background: Material.accent
+        Material.foreground: "white"
         anchors.right: parent.right
-        anchors.rightMargin: Units.smallSpacing
-        flat: true
+        anchors.rightMargin: Units.mediumSpacing
         text: mode === "add" ? qsTr("Add") : qsTr("Edit")
         onClicked: accepted()
     }

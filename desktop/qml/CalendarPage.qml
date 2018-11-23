@@ -165,6 +165,12 @@ Page {
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
                     onClicked: taskDialog.open()
+                    MouseArea {
+                          id: mouseArea
+                          cursorShape: Qt.PointingHandCursor
+                          anchors.fill: parent
+                          onPressed:  mouse.accepted = false
+                    }
                 }
 
                 SearchField {
@@ -231,10 +237,8 @@ Page {
                 bottom: parent.bottom
                 topMargin: Units.smallSpacing
                 bottomMargin: Units.smallSpacing
-                leftMargin: 80
-                rightMargin: 80
-//                leftMargin: Units.smallSpacing
-//                rightMargin: leftMargin
+                leftMargin: parent.width * 0.1
+                rightMargin: parent.width * 0.1
             }
 
             add: Transition {

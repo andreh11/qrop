@@ -50,6 +50,15 @@ Dialog {
         completedDate: taskDialogHeader.completedDate
     }
 
+    footer: AddEditDialogFooter {
+        height: childrenRect.height
+        width: parent.width
+        applyEnabled: formAccepted
+        onRejected: dialog.reject();
+        onAccepted: dialog.accept();
+        mode: mode
+    }
+
     onOpened: taskForm.reset()
     onAccepted: {
         if (mode === "add") {
@@ -59,12 +68,4 @@ Dialog {
         }
     }
 
-    footer: AddEditDialogFooter {
-        height: childrenRect.height
-        width: parent.width
-        enabled: formAccepted
-        onRejected: dialog.reject();
-        onAccepted: dialog.accept();
-        mode: mode
-    }
 }

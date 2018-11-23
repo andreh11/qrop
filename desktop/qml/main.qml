@@ -60,7 +60,7 @@ ApplicationWindow {
     height: 768
 
     Material.primary: Material.Teal
-    Material.accent: Material.Cyan
+    Material.accent: Material.Indigo
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 

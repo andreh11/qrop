@@ -21,7 +21,7 @@ Rectangle {
     radius: 2
     clip: true
     //    height: textIcon.height + 2 * Units.smallSpacing
-   implicitHeight: 60
+    implicitHeight: 60
 
    TaskTypeModel {
        id: taskTypeModel
