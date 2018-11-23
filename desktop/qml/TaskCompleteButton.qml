@@ -29,10 +29,5 @@ ToolButton {
                                                  Material.Shade300)
     }
     
-    onPressAndHold: {
-        popup.x = completeButton.x
-        popup.y = completeButton.y
-        popup.open()
-    }
     
 }

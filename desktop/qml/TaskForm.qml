@@ -24,6 +24,7 @@ import io.croplan.components 1.0
 Flickable {
     id: control
 
+    property int week
     property int year
     property int taskTypeId: -1
 
@@ -37,11 +38,11 @@ Flickable {
     readonly property alias plantingTask: plantingRadioButton.checked
     readonly property alias locationTask: locationRadioButton.checked
     readonly property alias plantingIdList: plantingList.plantingIdList
-    onPlantingIdListChanged: console.log(plantingIdList)
+    property string completedDate: ""
 
     readonly property var values: {
         "assigned_date": dueDateString,
-        "completed_date": "",
+        "completed_date": completedDate,
         "duration": duration,
         "labor_time": laborTimeString,
         "task_type_id": taskTypeId,

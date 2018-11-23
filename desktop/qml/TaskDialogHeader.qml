@@ -8,8 +8,14 @@ import io.croplan.components 1.0
 Rectangle {
     id: control
 
-    property int taskTypeId: taskTypeModel.rowId(typeField.currentIndex)
+    readonly property int taskTypeId: taskTypeModel.rowId(typeField.currentIndex)
+    readonly property alias completed: taskCompleteButton.checked
+    property string completedDate: ""
+    property int week
+    property int year
     
+    onCompletedChanged: console.log(completedDate)
+
     color: Material.color(Material.Grey, Material.Shade200)
     Material.elevation: 2
     radius: 2
@@ -74,6 +80,12 @@ Rectangle {
         
         TaskCompleteButton {
             id: taskCompleteButton
+            onCheckedChanged: {
+                if (checked)
+                    control.completedDate = new Date().toLocaleDateString(Qt.locale(), "yyyy-MM-dd");
+                else
+                    control.completedDate = ""
+            }
         }
         
         //        ColumnLayout {

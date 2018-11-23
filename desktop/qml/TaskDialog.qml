@@ -27,6 +27,7 @@ Dialog {
     property string mode: "add"
     property alias form: taskForm
     property alias formAccepted: taskForm.accepted
+    property alias week: taskForm.week
     property alias year: taskForm.year
 
     title: qsTr("Add Task")
@@ -38,21 +39,23 @@ Dialog {
     header:  TaskDialogHeader {
         id: taskDialogHeader
         width: parent.width
+        week: week
+        year: year
     }
 
     TaskForm {
         id: taskForm
         anchors.fill: parent
         taskTypeId: taskDialogHeader.taskTypeId
+        completedDate: taskDialogHeader.completedDate
     }
 
     onOpened: taskForm.reset()
-
     onAccepted: {
         if (mode === "add") {
             var id = Task.add(taskForm.values)
-            if (id)
-                console.log("Added task", id)
+        } else {
+            //TODO: task update
         }
     }
 
@@ -65,4 +68,3 @@ Dialog {
         mode: mode
     }
 }
-

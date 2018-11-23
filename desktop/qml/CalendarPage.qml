@@ -70,6 +70,8 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         onAccepted: refresh()
+        week: week
+        year: year
     }
 
     Component {
@@ -107,6 +109,9 @@ Page {
             id: calendarView
 
             clip: true
+            year: year
+            month: (new Date()).getMonth()
+            date: new Date()
             //                                    month: calendarDate.getMonth()
             //                                    year: calendarDate.getFullYear()
             //                                    date: calendarDate
@@ -233,10 +238,10 @@ Page {
             }
 
             add: Transition {
-                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
             }
             remove: Transition {
-                NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 200 }
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -331,7 +336,7 @@ Page {
                     height: parent.height
                     width: childrenRect.width
                     color: "white"
-                    visible: !model.done
+//                    visible: !model.done
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -343,9 +348,10 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         ToolButton {
                             text: "-7"
-                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
+                            visible: !model.done
                             font.family: "Roboto Condensed"
                             anchors.verticalCenter: parent.verticalCenter
+                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             onClicked: {
                                 Task.delay(model.task_id, -1);
                                 refresh();
@@ -355,9 +361,10 @@ Page {
 
                         ToolButton {
                             text: "+7"
-                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
+                            visible: !model.done
                             font.family: "Roboto Condensed"
                             anchors.verticalCenter: parent.verticalCenter
+                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
                             onClicked: {
                                 Task.delay(model.task_id, 1);
                                 refresh();
@@ -407,6 +414,11 @@ Page {
                                 else
                                     Task.completeTask(model.task_id);
                                 taskModel.refresh();
+                            }
+                            onPressAndHold: {
+                                popup.x = completeButton.x
+                                popup.y = completeButton.y
+                                popup.open()
                             }
                         }
 
