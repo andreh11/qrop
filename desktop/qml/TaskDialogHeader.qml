@@ -19,12 +19,11 @@ Rectangle {
         taskCompleteButton.checked = false
     }
 
-
+    implicitHeight: 60
     color: Material.color(Material.Grey, Material.Shade200)
-    Material.elevation: 2
     radius: 2
     clip: true
-    implicitHeight: 60
+    Material.elevation: 2
 
    TaskTypeModel {
        id: taskTypeModel
@@ -48,7 +47,7 @@ Rectangle {
             height: 40
             width: height
             radius: 80
-            border.width: 2
+            border.width: 4
             border.color: Material.color(Material.Green, Material.Shade400)
             
             Text {

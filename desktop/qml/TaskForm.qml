@@ -40,7 +40,6 @@ Flickable {
     readonly property alias plantingIdList: plantingList.plantingIdList
     property string completedDate: ""
 
-
     readonly property var values: {
         "assigned_date": dueDateString,
         "completed_date": completedDate,

@@ -326,27 +326,25 @@ Page {
             }
 
             delegate: Rectangle {
+                id: delegate
                 color: "white"
                 radius: 2
 
-                height: row.height
-                width: parent.width
+                onStateChanged: console.log(state)
 
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                }
+                property var idList: model.plantings.split(",")
+                property int firstId: Number(idList[0])
+
+                height: summaryRow.height + detailsRow.height
+                width: parent.width
 
                 Rectangle {
                     id: taskButtonRectangle
-                    height: parent.height
+                    height: Units.rowHeight
                     width: childrenRect.width
                     color: "white"
-//                    visible: !model.done
                     anchors {
                         top: parent.top
-                        bottom: parent.bottom
                         right: parent.right
                     }
 
@@ -402,7 +400,7 @@ Page {
                     width: parent.width
 
                     Row {
-                        id: row
+                        id: summaryRow
                         height: Units.rowHeight
                         spacing: Units.smallSpacing
                         leftPadding: Units.smallSpacing
@@ -429,16 +427,25 @@ Page {
                             }
                         }
 
-                        TableLabel {
-                            text: {
-                                var idList = model.plantings.split(",")
-                                var firstId = Number(idList[0])
-                                "%1 − %2%3".arg(cropName(firstId)).arg(varietyName(firstId)).arg(idList.length > 1 ? " ⋅⋅⋅" : "")
-                            }
-
-                            elide: Text.ElideRight
+                        Row {
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
+                            TableLabel {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text:  "%1 − %2".arg(cropName(firstId)).arg(varietyName(firstId))
+                                elide: Text.ElideRight
+                            }
+
+                            ToolButton {
+                                id: detailsButton
+                                text: "⋅⋅⋅"
+//                                flat: true
+                                checkable: true
+                                visible: idList.length > 1
+                                ToolTip.visible: hovered
+                                ToolTip.text: checked ? qsTr("Hide plantings and locations details")
+                                                      : qsTr("Show plantings and locations details")
+                            }
                         }
 
                         TableLabel {
@@ -475,7 +482,6 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-
                         TableLabel {
                             text: NDate.formatDate(model.assigned_date, year, "")
                             elide: Text.ElideRight
@@ -483,6 +489,32 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
+                    }
+
+                    Column {
+                        id: detailsRow
+                        visible: detailsButton.checked
+                        width: parent.width
+                        height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
+                        Repeater {
+                            model: idList.slice(1)
+
+                            Row {
+                                height: Units.rowHeight
+                                spacing: Units.smallSpacing
+                                leftPadding: Units.smallSpacing
+                                Item { width: parent.height; height: width }
+                                TableLabel {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: {
+                                        var id = Number(modelData)
+
+                                        "%1 − %2".arg(cropName(id)).arg(varietyName(id))
+                                    }
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
                     }
                 }
             }
