@@ -13,7 +13,7 @@ Rectangle {
     property string completedDate: ""
     property int week
     property int year
-    
+
     onCompletedChanged: console.log(completedDate)
 
     color: Material.color(Material.Grey, Material.Shade200)

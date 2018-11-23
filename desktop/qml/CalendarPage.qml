@@ -70,8 +70,8 @@ Page {
         height: parent.height
         x: (parent.width - width) / 2
         onAccepted: refresh()
-        week: week
-        year: year
+        week: page.week
+        year: page.year
     }
 
     Component {

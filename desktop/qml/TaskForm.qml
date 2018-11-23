@@ -40,6 +40,7 @@ Flickable {
     readonly property alias plantingIdList: plantingList.plantingIdList
     property string completedDate: ""
 
+
     readonly property var values: {
         "assigned_date": dueDateString,
         "completed_date": completedDate,
@@ -119,6 +120,7 @@ Flickable {
                     floatingLabel: true
                     Layout.minimumWidth: 100
                     Layout.fillWidth: true
+                    calendarDate: NDate.dateFromWeekString(week)
                 }
 
                 MyTextField {

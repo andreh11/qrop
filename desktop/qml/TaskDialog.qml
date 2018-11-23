@@ -27,8 +27,8 @@ Dialog {
     property string mode: "add"
     property alias form: taskForm
     property alias formAccepted: taskForm.accepted
-    property alias week: taskForm.week
-    property alias year: taskForm.year
+    property int week
+    property int year
 
     title: qsTr("Add Task")
     modal: true
@@ -39,8 +39,8 @@ Dialog {
     header:  TaskDialogHeader {
         id: taskDialogHeader
         width: parent.width
-        week: week
-        year: year
+        week: dialog.week
+        year: dialog.year
     }
 
     TaskForm {
@@ -48,6 +48,8 @@ Dialog {
         anchors.fill: parent
         taskTypeId: taskDialogHeader.taskTypeId
         completedDate: taskDialogHeader.completedDate
+        week: dialog.week
+        year: dialog.year
     }
 
     footer: AddEditDialogFooter {
