@@ -32,6 +32,7 @@ Item {
     property int currentYear: new Date().getFullYear()
 
     property date calendarDate: new Date()
+    readonly property int week: MDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true

@@ -28,12 +28,28 @@ class SqlTableModel;
 class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int week READ week WRITE setWeek NOTIFY weekChanged)
+    Q_PROPERTY(bool showActivePlantings READ showActivePlantings WRITE setShowActivePlantings NOTIFY showActivePlantingsChanged)
 
 public:
     PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
 
+    int week() const;
+    void setWeek(int week);
+
+    bool showActivePlantings() const;
+    void setShowActivePlantings(bool show);
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    int m_week;
+    bool m_showActivePlantings;
+
+signals:
+    void weekChanged();
+    void showActivePlantingsChanged();
 };
 
 #endif // SQLPLANTINGMODEL_H

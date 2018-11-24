@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     const int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
     const int ret3 = QFontDatabase::addApplicationFont(":/fonts/RobotoCondensed-Regular.ttf");
-    const int ret4 = QFontDatabase::addApplicationFont(":/fonts/fa-regular-400.ttf"); // font-awesome
+    const int ret4 = QFontDatabase::addApplicationFont(":/fonts/FontAwesome.otf"); // font-awesome
     const int ret5 = QFontDatabase::addApplicationFont(":/fonts/MaterialIcons-Regular.ttf");
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1 || ret5 == -1)
         qWarning() << "[desktop main] Some custom fonts can't be loaded.";

@@ -50,5 +50,6 @@
         <file>qml/TaskCompleteButton.qml</file>
         <file>qml/TaskDialogHeader.qml</file>
         <file>qml/AddEditDialogFooter.qml</file>
+        <file>qml/PlantingLabel.qml</file>
     </qresource>
 </RCC>

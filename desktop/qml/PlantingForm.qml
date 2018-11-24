@@ -485,67 +485,6 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                DatePicker {
-                    id: fieldSowingDateField
-                    visible: directSeedRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Field Sowing")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(fieldSowingDateField,
-                                                       sowDtmField,
-                                                       firstHarvestDateField, 1)
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
-                }
-
-                DatePicker {
-                    id: greenhouseStartDateField
-                    visible: greenhouseRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Greenhouse start date")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(greenhouseStartDateField,
-                                                       greenhouseGrowTimeField,
-                                                       fieldPlantingDateField, 1)
-                }
-
-                DatePicker {
-                    id: fieldPlantingDateField
-                    visible: !directSeedRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Field planting")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(fieldPlantingDateField,
-                                                       greenhouseGrowTimeField,
-                                                       greenhouseStartDateField, -1)
-                    onCalendarDateChanged: updateDateField(fieldPlantingDateField,
-                                                           plantingDtmField,
-                                                           firstHarvestDateField, 1)
-                }
-
-                DatePicker {
-                    id: firstHarvestDateField
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("First harvest")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: {
-                        if (directSeeded)
-                            updateDateField(firstHarvestDateField, sowDtmField,
-                                            fieldSowingDateField, -1)
-                        else
-                            updateDateField(firstHarvestDateField,
-                                            plantingDtmField,
-                                            fieldPlantingDateField, -1)
-                    }
-                }
-
                 MyTextField {
                     id: sowDtmField
                     visible: fieldSowingDateField.visible
@@ -616,6 +555,68 @@ Flickable {
                     helperText: text ? NDate.formatDate(endHarvestDate, currentYear) : ""
                     suffixText: qsTr("days")
                 }
+
+                DatePicker {
+                    id: fieldSowingDateField
+                    visible: directSeedRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Field Sowing")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(fieldSowingDateField,
+                                                       sowDtmField,
+                                                       firstHarvestDateField, 1)
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
+                }
+
+                DatePicker {
+                    id: greenhouseStartDateField
+                    visible: greenhouseRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Greenhouse start date")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(greenhouseStartDateField,
+                                                       greenhouseGrowTimeField,
+                                                       fieldPlantingDateField, 1)
+                }
+
+                DatePicker {
+                    id: fieldPlantingDateField
+                    visible: !directSeedRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Field planting")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(fieldPlantingDateField,
+                                                       greenhouseGrowTimeField,
+                                                       greenhouseStartDateField, -1)
+                    onCalendarDateChanged: updateDateField(fieldPlantingDateField,
+                                                           plantingDtmField,
+                                                           firstHarvestDateField, 1)
+                }
+
+                DatePicker {
+                    id: firstHarvestDateField
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("First harvest")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: {
+                        if (directSeeded)
+                            updateDateField(firstHarvestDateField, sowDtmField,
+                                            fieldSowingDateField, -1)
+                        else
+                            updateDateField(firstHarvestDateField,
+                                            plantingDtmField,
+                                            fieldPlantingDateField, -1)
+                    }
+                }
+
             }
         }
 

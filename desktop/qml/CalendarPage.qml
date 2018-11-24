@@ -44,16 +44,6 @@ Page {
     property string tableSortOrder: "descending"
 
 
-    function cropName(id) {
-        var map = Planting.mapFromId("planting_view", id);
-        return map['crop']
-    }
-
-    function varietyName(id) {
-        var map = Planting.mapFromId("planting_view", id);
-        return map['variety']
-    }
-
     function refresh() {
         taskModel.refresh();
     }
@@ -430,10 +420,11 @@ Page {
                         Row {
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
-                            TableLabel {
+                            PlantingLabel {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text:  "%1 − %2".arg(cropName(firstId)).arg(varietyName(firstId))
-                                elide: Text.ElideRight
+                                plantingId: firstId
+//                                text:  "%1 − %2".arg(cropName(firstId)).arg(varietyName(firstId))
+//                                elide: Text.ElideRight
                             }
 
                             ToolButton {
@@ -472,7 +463,7 @@ Page {
                                 } else if (task_type_id === 2) {
                                     return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
                                 } else {
-                                    return qsTr("%1 with %2").arg(model.method).arg(model.implement)
+                                    return qsTr("%1%2%3").arg(model.method).arg(model.implement ? qsTr(" with ") : "").arg(model.implement)
                                 }
 
                             }
@@ -504,14 +495,9 @@ Page {
                                 spacing: Units.smallSpacing
                                 leftPadding: Units.smallSpacing
                                 Item { width: parent.height; height: width }
-                                TableLabel {
+                                PlantingLabel {
                                     anchors.verticalCenter: parent.verticalCenter
-                                    text: {
-                                        var id = Number(modelData)
-
-                                        "%1 − %2".arg(cropName(id)).arg(varietyName(id))
-                                    }
-                                    elide: Text.ElideRight
+                                    plantingId: Number(modelData)
                                 }
                             }
                         }

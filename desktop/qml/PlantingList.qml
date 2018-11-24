@@ -24,8 +24,11 @@ import io.croplan.components 1.0
 ListView {
     id: listView
 
+    property int year
     property alias filterString: plantingModel.filterString
     property alias count: plantingModel.count // Number of plantings currently filtered.
+    property alias showActivePlantings: plantingModel.showActivePlantings
+    property alias week: plantingModel.week
 
     property var selectedIds: ({}) // Map of the ids of the selected plantings
     property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
@@ -70,7 +73,8 @@ ListView {
 
     function reset() {
         // TODO: reset all
-        selectedIds = ({})
+        selectedIds = ({});
+        plantingModel.refresh();
     }
 
     clip: true
@@ -125,19 +129,15 @@ ListView {
             }
         }
 
-        Column {
+        PlantingLabel {
             anchors.verticalCenter: parent.verticalCenter
-            Text {
-                text: "%1, %2".arg(model.crop).arg(model.variety)
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
-            }
-            Text {
-                text: qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(model.sowing_date, 2018)).arg(NDate.formatDate(model.end_harvest_date, 2018)).arg(model.length).arg(model.locations)
-                font.family: "Roboto Regular"
-                color: Material.color(Material.Grey, Material.Shade600)
-                font.pixelSize: Units.fontSizeCaption
-            }
+            plantingId: model.planting_id
+            sowingDate: model.sowing_date
+            endHarvestDate: model.end_harvest_date
+            year: listView.year
+            length: model.length
+            locations: model.locations
+
         }
     }
 }

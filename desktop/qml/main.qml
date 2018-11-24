@@ -29,8 +29,8 @@ ApplicationWindow {
 
     property var navigationModel: [
 //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
-        { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ueb4c" },
-        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue876" }
+        { source: plantingsPage, name: qsTr("Plantings"), iconText: "\uf299" },
+        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\uf274" }
 //        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },

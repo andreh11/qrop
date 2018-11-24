@@ -53,12 +53,13 @@ Flickable {
 
     function reset() {
         plantingList.reset();
-        methodField.currentIndex = -1
-        implementField.currentIndex = -1
-        durationField.text = "0"
-        laborTimeField.text = "00:00"
-        plantingRadioButton.checked = true
-        locationRadioButton.checked = false
+        methodField.currentIndex = -1;
+        implementField.currentIndex = -1;
+        dueDatepicker.calendarDate = NDate.dateFromWeekString(control.week);
+        durationField.text = "0";
+        laborTimeField.text = "00:00";
+        plantingRadioButton.checked = true;
+        locationRadioButton.checked = false;
     }
 
     focus: true
@@ -125,7 +126,7 @@ Flickable {
                     floatingLabel: true
                     Layout.minimumWidth: 100
                     Layout.fillWidth: true
-                    calendarDate: NDate.dateFromWeekString(week)
+                    calendarDate: NDate.dateFromWeekString(control.week)
                 }
 
                 MyTextField {
@@ -215,14 +216,24 @@ Flickable {
                         width: parent.width
                         Layout.fillWidth: true
                     }
+
+                    CheckBox {
+                        id: currentPlantingsCheckbox
+                        text: qsTr("Current plantings")
+                        checked: true
+                    }
                 }
 
 
                 PlantingList {
                     id: plantingList
+                    week: dueDatepicker.week
+                    year: year
                     filterString: plantingSearchField.text
                     width: parent.widh
                     implicitHeight: 30
+                    showActivePlantings: currentPlantingsCheckbox.checked
+
                     Layout.minimumHeight: 30
                     Layout.minimumWidth: 100
                     Layout.fillWidth: true
