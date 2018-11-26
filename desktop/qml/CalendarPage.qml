@@ -425,6 +425,15 @@ Page {
                                 sowingDate: Planting.sowingDate(plantingId)
                                 endHarvestDate: Planting.endHarvestDate(plantingId)
                                 year: page.year
+
+                                MouseArea {
+                                    id: rowMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: console.log("EDIT!")
+                                }
+
                             }
 
                             ToolButton {
@@ -458,8 +467,12 @@ Page {
                                 var planting_ids = model.plantings.split(',')
                                 var planting_id = Number(planting_ids[0])
                                 var map = Planting.mapFromId("planting_view", planting_id);
+                                var length = map['length']
+                                var rows = map['rows']
+                                var spacingPlants = map['spacing_plants']
+
                                 if (task_type_id === 1 || task_type_id === 3) {
-                                    return map["length"] + " m @ " + map['rows'] + " x " + map['spacing_plants'] + " cm"
+                                    return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
                                 } else if (task_type_id === 2) {
                                     return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
                                 } else {

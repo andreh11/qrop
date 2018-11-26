@@ -20,19 +20,18 @@
 //#include <QSortFilterProxyModel>
 #include <QVariantMap>
 
-#include "sortfilterproxymodel.h"
 #include "core_global.h"
+#include "sortfilterproxymodel.h"
 
 class SqlTableModel;
 
-class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
-{
+class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel {
     Q_OBJECT
     Q_PROPERTY(int week READ week WRITE setWeek NOTIFY weekChanged)
     Q_PROPERTY(bool showActivePlantings READ showActivePlantings WRITE setShowActivePlantings NOTIFY showActivePlantingsChanged)
 
 public:
-    PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
+    PlantingModel(QObject* parent = nullptr, const QString& tableName = "planting_view");
 
     int week() const;
     void setWeek(int week);
@@ -41,7 +40,7 @@ public:
     void setShowActivePlantings(bool show);
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
 private:
     int m_week;

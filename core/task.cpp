@@ -20,10 +20,9 @@
 
 #include "task.h"
 
-Task::Task(QObject *parent)
-    : DatabaseUtility(parent)
+Task::Task(QObject *parent) : DatabaseUtility(parent)
 {
-      m_table = "task";
+    m_table = "task";
 }
 
 int Task::add(const QVariantMap &map) const
@@ -73,8 +72,7 @@ void Task::removeLocation(int locationId, int taskId) const
 
 void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
 {
-    qDebug() << "[Task] Duplicate tasks of location" << sourceLocationId
-             << "for" << newLocationId;
+    qDebug() << "[Task] Duplicate tasks of location" << sourceLocationId << "for" << newLocationId;
 
     QList<int> sourceTasks = locationTasks(sourceLocationId);
     for (const int taskId : sourceTasks) {
@@ -117,28 +115,25 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     auto type = static_cast<PlantingType>(rec.value("planting_type").toInt());
     int dtt = rec.value("dtt").toInt();
 
-    switch(type) {
+    switch (type) {
     case PlantingType::DirectSeeded: {
-        int id = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                      {"task_type_id", 1}});
+        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) }, { "task_type_id", 1 } });
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
     case PlantingType::TransplantRaised: {
         QDate sowDate = plantingDate.addDays(-dtt);
-        int sowId = add({{"assigned_date", sowDate.toString(Qt::ISODate)},
-                         {"task_type_id", 2}});
-        int plantId = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                           {"task_type_id", 3},
-                           {"link_days", dtt},
-                           {"link_task_id", sowId}});
+        int sowId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) }, { "task_type_id", 2 } });
+        int plantId = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                            { "task_type_id", 3 },
+                            { "link_days", dtt },
+                            { "link_task_id", sowId } });
         addLink("planting_task", "planting_id", plantingId, "task_id", sowId);
         addLink("planting_task", "planting_id", plantingId, "task_id", plantId);
         break;
     }
     case PlantingType::TransplantBought:
-        int id = add({{"assigned_date", plantingDate.toString(Qt::ISODate)},
-                      {"task_type_id", 3}});
+        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) }, { "task_type_id", 3 } });
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
@@ -146,7 +141,7 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
 
 void Task::completeTask(int taskId, const QDate &date) const
 {
-    update(taskId, {{"completed_date", date.toString(Qt::ISODate)}});
+    update(taskId, { { "completed_date", date.toString(Qt::ISODate) } });
 }
 
 void Task::delay(int taskId, int weeks)
@@ -160,7 +155,7 @@ void Task::delay(int taskId, int weeks)
 
     QDate assignedDate = QDate::fromString(map.value("assigned_date").toString(), Qt::ISODate);
     QString newDateString = assignedDate.addDays(weeks * 7).toString(Qt::ISODate);
-    update(taskId, {{"assigned_date", newDateString}});
+    update(taskId, { { "assigned_date", newDateString } });
 }
 
 QList<int> Task::sowPlantTaskIds(int plantingId) const
@@ -168,7 +163,7 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
     int sowTaskId = -1;
     int transplantTaskId = -1;
     TaskType taskType;
-    QSqlRecord record ;
+    QSqlRecord record;
     for (const int taskId : plantingTasks(plantingId)) {
         record = recordFromId("task", taskId);
         taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
@@ -186,7 +181,7 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
         }
     }
 
-    return QList<int>({sowTaskId, transplantTaskId});
+    return QList<int>({ sowTaskId, transplantTaskId });
 }
 
 void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
@@ -253,8 +248,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
 
 void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
 {
-    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId
-             << "for" << newPlantingId;
+    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId << "for" << newPlantingId;
 
     QList<int> sourceTasks = plantingTasks(sourcePlantingId);
     QVariantMap map;
@@ -301,8 +295,8 @@ void Task::applyTemplate(int templateId, int plantingId) const
         auto templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
         switch (templateDateType) {
         case TemplateDateType::FieldSowPlant:
-            map["link_task_id"] = plantingType == PlantingType::DirectSeeded ? sowTaskId
-                                                                             : transplantTaskId;
+            map["link_task_id"] =
+                    plantingType == PlantingType::DirectSeeded ? sowTaskId : transplantTaskId;
             break;
         case TemplateDateType::GreenhouseStart:
             map["link_task_id"] = plantingType == PlantingType::TransplantRaised ? sowTaskId : -1;

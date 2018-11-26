@@ -14,15 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlRecord>
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlRecord>
 
 #include "mdate.h"
 #include "taskmodel.h"
 
-TaskModel::TaskModel(QObject *parent, const QString &tableName)
+TaskModel::TaskModel(QObject* parent, const QString& tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("assigned_date");
@@ -30,7 +30,8 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
     setDynamicSortFilter(true);
 }
 
-bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
+bool TaskModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+{
     int leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
     int rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
     QDate leftDate = fieldDate(left.row(), left.parent(), "assigned_date");
@@ -39,7 +40,7 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
     return (leftType < rightType) || (leftType == rightType && leftDate < rightDate);
 }
 
-QVariant TaskModel::data(const QModelIndex &idx, int role) const
+QVariant TaskModel::data(const QModelIndex& idx, int role) const
 {
     QModelIndex sourceIndex = mapToSource(idx);
     switch (role) {
@@ -56,7 +57,7 @@ QVariant TaskModel::data(const QModelIndex &idx, int role) const
 
 QHash<int, QByteArray> TaskModel::roleNames() const
 {
-    QHash<int, QByteArray> roles = SortFilterProxyModel::roleNames(); 
+    QHash<int, QByteArray> roles = SortFilterProxyModel::roleNames();
     roles.insert(Qt::UserRole + 100, "overdue");
     roles.insert(Qt::UserRole + 101, "due");
     roles.insert(Qt::UserRole + 102, "done");
@@ -68,7 +69,7 @@ QDate TaskModel::date() const
     return m_filterDate;
 }
 
-void TaskModel::setFilterDate(const QDate &date)
+void TaskModel::setFilterDate(const QDate& date)
 {
     if (date == m_filterDate)
         return;
@@ -76,7 +77,8 @@ void TaskModel::setFilterDate(const QDate &date)
     m_filterDate = date;
 
     const QString filterString = QString::fromLatin1(
-                "date_assigned = %1").arg(date.toString(Qt::ISODate));
+        "date_assigned = %1")
+                                     .arg(date.toString(Qt::ISODate));
 
     emit dateChanged();
 }
@@ -163,32 +165,32 @@ void TaskModel::updateWeekDates()
     invalidate();
 }
 
-bool TaskModel::isDone(int row, const QModelIndex &parent) const
+bool TaskModel::isDone(int row, const QModelIndex& parent) const
 {
     QDate completedDate = fieldDate(row, parent, "completed_date");
     bool completed = completedDate.isValid();
     return completed && m_mondayDate <= completedDate && completedDate <= m_sundayDate;
 }
 
-bool TaskModel::isDue(int row, const QModelIndex &parent) const
+bool TaskModel::isDue(int row, const QModelIndex& parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
     return !completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
 }
 
-bool TaskModel::isOverdue(int row, const QModelIndex &parent) const
+bool TaskModel::isOverdue(int row, const QModelIndex& parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
     return !completed && assignedDate < m_mondayDate;
 }
 
-bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
 
     bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
-            || (m_showDue && isDue(sourceRow, sourceParent))
-            || (m_showDone && isDone(sourceRow, sourceParent));
+        || (m_showDue && isDue(sourceRow, sourceParent))
+        || (m_showDone && isDone(sourceRow, sourceParent));
     return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }
