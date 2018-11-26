@@ -220,16 +220,18 @@ Flickable {
 
                     CheckBox {
                         id: currentPlantingsCheckbox
-                        text: qsTr("Current plantings")
+                        text: qsTr("Active plantings")
                         checked: true
+                        ToolTip.visible: hovered
+                        ToolTip.text: checked ? qsTr("Show only active plantings for due date")
+                                              : qsTr("Show all plantings")
                     }
                 }
-
 
                 PlantingList {
                     id: plantingList
                     week: dueDatepicker.week
-                    year: year
+                    year: control.year
                     filterString: plantingSearchField.text
                     width: parent.widh
                     implicitHeight: 30

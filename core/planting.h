@@ -17,6 +17,7 @@
 #ifndef PLANTING_H
 #define PLANTING_H
 
+#include <QDate>
 #include <QVariantMap>
 
 #include "core_global.h"
@@ -32,6 +33,11 @@ public:
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE int duplicate(int id) const override;
+
+    Q_INVOKABLE QDate sowingDate(int plantingId) const;
+    Q_INVOKABLE QDate plantingDate(int plantingId) const;
+    Q_INVOKABLE QDate begHarvestDate(int plantingId) const;
+    Q_INVOKABLE QDate endHarvestDate(int plantingId) const;
 
     Q_INVOKABLE QList<int> addSuccessions(int successions,
                                           int daysBetween,

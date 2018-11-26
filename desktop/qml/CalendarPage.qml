@@ -273,8 +273,8 @@ Page {
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
                 filterString: searchField.text
-                sortColumn: tableHeaderModel[tableSortColumn].columnName
-                sortOrder: tableSortOrder
+//                sortColumn: tableHeaderModel[tableSortColumn].columnName
+//                sortOrder: tableSortOrder
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -421,8 +421,10 @@ Page {
                             PlantingLabel {
                                 anchors.verticalCenter: parent.verticalCenter
                                 plantingId: firstId
-//                                text:  "%1 − %2".arg(cropName(firstId)).arg(varietyName(firstId))
-//                                elide: Text.ElideRight
+                                showOnlyDates: true
+                                sowingDate: Planting.sowingDate(plantingId)
+                                endHarvestDate: Planting.endHarvestDate(plantingId)
+                                year: page.year
                             }
 
                             ToolButton {
@@ -461,7 +463,7 @@ Page {
                                 } else if (task_type_id === 2) {
                                     return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
                                 } else {
-                                    return qsTr("%1%2%3").arg(model.method).arg(model.implement ? qsTr(" with ") : "").arg(model.implement)
+                                    return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
                                 }
 
                             }
@@ -494,8 +496,12 @@ Page {
                                 leftPadding: Units.smallSpacing
                                 Item { width: parent.height; height: width }
                                 PlantingLabel {
-                                    anchors.verticalCenter: parent.verticalCenter
                                     plantingId: Number(modelData)
+                                    year: page.year
+                                    sowingDate: Planting.sowingDate(plantingId)
+                                    endHarvestDate: Planting.endHarvestDate(plantingId)
+                                    showOnlyDates: true
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                             }
                         }

@@ -177,3 +177,40 @@ int Planting::duplicate(int id) const
     task->duplicatePlantingTasks(id, newId);
     return newId;
 }
+
+QDate Planting::sowingDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("sowing_date").toString(), Qt::ISODate);
+}
+
+
+QDate Planting::plantingDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("planting_date").toString(), Qt::ISODate);
+}
+
+QDate Planting::begHarvestDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("beg_harvest_date").toString(), Qt::ISODate);
+}
+
+QDate Planting::endHarvestDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("end_harvest_date").toString(), Qt::ISODate);
+}

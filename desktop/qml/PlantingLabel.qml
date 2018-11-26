@@ -16,6 +16,7 @@ Item {
     property int year
     property int length
     property var locations
+    property bool showOnlyDates: false
 
     implicitHeight: childrenRect.height
     implicitWidth: childrenRect.width
@@ -38,7 +39,8 @@ Item {
             font.pixelSize: Units.fontSizeBodyAndButton
         }
         Text {
-            text: qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(locations)
+            text: showOnlyDates ? qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year))
+                                : qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(locations)
             font.family: "Roboto Regular"
             color: Material.color(Material.Grey, Material.Shade600)
             font.pixelSize: Units.fontSizeCaption
