@@ -719,7 +719,6 @@ Page {
                                         lastIndexClicked = index
 
                                         selectedIdsChanged()
-                                        console.log("All:", plantingModel.rowCount( ) === checks)
                                     }
                                 }
                             }

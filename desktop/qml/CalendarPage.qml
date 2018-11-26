@@ -320,8 +320,6 @@ Page {
                 color: "white"
                 radius: 2
 
-                onStateChanged: console.log(state)
-
                 property var idList: model.plantings.split(",")
                 property int firstId: Number(idList[0])
 

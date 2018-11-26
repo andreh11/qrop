@@ -195,8 +195,9 @@ Flickable {
                         width: parent.height
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         tristate: true
-                        checkState: plantingList.checks == plantingList.count ? Qt.Checked
-                                                         : (plantingList.checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                        checkState: (plantingList.count && plantingList.checks == plantingList.count)
+                                    ? Qt.Checked
+                                    : (plantingList.checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                         nextCheckState: function () {
                             if (checkState == Qt.Checked) {
                                 plantingList.unselectAll()

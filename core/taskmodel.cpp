@@ -165,9 +165,9 @@ void TaskModel::updateWeekDates()
 
 bool TaskModel::isDone(int row, const QModelIndex &parent) const
 {
-    QDate assignedDate = fieldDate(row, parent, "assigned_date");
-    bool completed = rowValue(row, parent, "completed_date").toString() != "";
-    return completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
+    QDate completedDate = fieldDate(row, parent, "completed_date");
+    bool completed = completedDate.isValid();
+    return completed && m_mondayDate <= completedDate && completedDate <= m_sundayDate;
 }
 
 bool TaskModel::isDue(int row, const QModelIndex &parent) const
@@ -190,5 +190,5 @@ bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
     bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
             || (m_showDue && isDue(sourceRow, sourceParent))
             || (m_showDone && isDone(sourceRow, sourceParent));
-    return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
+    return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

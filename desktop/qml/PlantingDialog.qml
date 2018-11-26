@@ -132,7 +132,6 @@ Dialog {
             if (idList.length)
                 dialog.plantingsAdded(plantingForm.successions)
         } else {
-            console.log("EDIT VALUES:")
 //            var map = plantingForm.editedValues()
 //            for (var key in map)
 //                console.log(key, map[key])
