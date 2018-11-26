@@ -20,7 +20,8 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class CORESHARED_EXPORT Keyword : public DatabaseUtility {
+class CORESHARED_EXPORT Keyword : public DatabaseUtility
+{
     Q_OBJECT
 public:
     Keyword(QObject *parent = nullptr);

@@ -20,7 +20,8 @@
 
 #include "task.h"
 
-Task::Task(QObject *parent) : DatabaseUtility(parent)
+Task::Task(QObject *parent)
+    : DatabaseUtility(parent)
 {
     m_table = "task";
 }

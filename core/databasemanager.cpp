@@ -23,8 +23,7 @@
 #include <QFile>
 #include <QStandardPaths>
 
-
-void DatabaseManager::debugQuery(const QSqlQuery& query)
+void DatabaseManager::debugQuery(const QSqlQuery &query)
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
         qDebug() << "Query OK: " << query.lastQuery();
@@ -34,12 +33,12 @@ void DatabaseManager::debugQuery(const QSqlQuery& query)
     }
 }
 
-DatabaseManager& DatabaseManager::instance()
+DatabaseManager &DatabaseManager::instance()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     QFile assetDbFile(":/database/" + DATABASE_FILENAME);
     QString destinationDbFile = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)
-                    .append("/" + DATABASE_FILENAME);
+                                        .append("/" + DATABASE_FILENAME);
 
     qDebug() << "Assets file" << assetDbFile.fileName();
     qDebug() << "Database file" << destinationDbFile;
@@ -59,10 +58,10 @@ DatabaseManager& DatabaseManager::instance()
     return singleton;
 }
 
-DatabaseManager::DatabaseManager(const QString& path) :
-    mDatabase(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
-    plantingDao(*mDatabase),
-    locationDao(*mDatabase)
+DatabaseManager::DatabaseManager(const QString &path)
+    : mDatabase(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE")))
+    , plantingDao(*mDatabase)
+    , locationDao(*mDatabase)
 {
     mDatabase->setDatabaseName(path);
 

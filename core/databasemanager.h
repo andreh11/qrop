@@ -32,14 +32,14 @@ const QString DATABASE_FILENAME = "qrop.db";
 class DatabaseManager
 {
 public:
-    static void debugQuery(const QSqlQuery& query);
+    static void debugQuery(const QSqlQuery &query);
 
-    static DatabaseManager& instance();
+    static DatabaseManager &instance();
     ~DatabaseManager();
 
 protected:
-    DatabaseManager(const QString& path = DATABASE_FILENAME);
-    DatabaseManager& operator=(const DatabaseManager& rhs);
+    DatabaseManager(const QString &path = DATABASE_FILENAME);
+    DatabaseManager &operator=(const DatabaseManager &rhs);
 
 private:
     std::unique_ptr<QSqlDatabase> mDatabase;

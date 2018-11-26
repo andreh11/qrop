@@ -48,8 +48,7 @@ void connectToDatabase()
     if (!database.isValid()) {
         database = QSqlDatabase::addDatabase("QSQLITE");
         if (!database.isValid())
-            qFatal("Cannot add database: %s",
-                   qPrintable(database.lastError().text()));
+            qFatal("Cannot add database: %s", qPrintable(database.lastError().text()));
     }
 
     QString fileName = databasePath();
@@ -85,9 +84,8 @@ void execSqlFile(const QString &fileName, const QString &separator)
             continue;
 
         if (!query.exec(queryString + separator))
-            qDebug() << "createDatabase: cannot execute query"
-                     << query.lastError().text()
-                     <<	query.lastQuery();
+            qDebug() << "createDatabase: cannot execute query" << query.lastError().text()
+                     << query.lastQuery();
     }
 }
 

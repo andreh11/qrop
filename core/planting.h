@@ -26,7 +26,8 @@
 class Task;
 class Keyword;
 
-class CORESHARED_EXPORT Planting : public DatabaseUtility {
+class CORESHARED_EXPORT Planting : public DatabaseUtility
+{
     Q_OBJECT
 public:
     Planting(QObject *parent = nullptr);
@@ -39,19 +40,15 @@ public:
     Q_INVOKABLE QDate begHarvestDate(int plantingId) const;
     Q_INVOKABLE QDate endHarvestDate(int plantingId) const;
 
-    Q_INVOKABLE QList<int> addSuccessions(int successions,
-                                          int daysBetween,
-                                          const QVariantMap &map) const;
-    Q_INVOKABLE QVariantMap lastValues(const int varietyId,
-                                       const int cropId,
-                                       const int plantingType,
-                                       const bool inGreenhouse) const;
+    Q_INVOKABLE QList<int> addSuccessions(int successions, int daysBetween, const QVariantMap &map) const;
+    Q_INVOKABLE QVariantMap lastValues(const int varietyId, const int cropId,
+                                       const int plantingType, const bool inGreenhouse) const;
     Q_INVOKABLE QVariantMap commonValues(const QList<int> &plantingIdList) const;
 
 private:
     Task *task;
     Keyword *keyword;
-//    QList<int> keywordListFromString(const QString &idString) const;
+    //    QList<int> keywordListFromString(const QString &idString) const;
 };
 
 #endif // PLANTING_H

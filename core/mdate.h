@@ -35,9 +35,7 @@ public:
     static QList<QDate> weekDates(int week, int year);
     Q_INVOKABLE static int currentWeek() { return QDate::currentDate().weekNumber(); }
     Q_INVOKABLE static int currentYear() { return QDate::currentDate().year(); }
-    Q_INVOKABLE static QString formatDate(const QDate &date,
-                                          int currentYear,
-                                          const QString &type = "");
+    Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear, const QString &type = "");
 };
 
 #endif // MDATE_H

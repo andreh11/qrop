@@ -20,7 +20,8 @@
 
 #include "mdate.h"
 
-MDate::MDate(QObject *parent) : QObject(parent)
+MDate::MDate(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -50,7 +51,7 @@ QDate MDate::mondayOfWeek(int week, int year)
 QList<QDate> MDate::weekDates(int week, int year)
 {
     QDate monday = mondayOfWeek(week, year);
-    return {monday, monday.addDays(6)};
+    return { monday, monday.addDays(6) };
 }
 
 // Format date according to preferred format.

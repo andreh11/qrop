@@ -18,7 +18,7 @@ NoteModel::NoteModel(QObject *parent)
     select();
 }
 
-//void NoteModel::removePlantingNotes(int plantingId)
+// void NoteModel::removePlantingNotes(int plantingId)
 //{
 //    qDebug() << "[NoteModel] Removing notes of planting" << plantingId;
 //    QString queryString("DELETE FROM planting_note WHERE planting_id = %1");
@@ -37,15 +37,15 @@ void NoteModel::setDate(const QDate &date)
 
     m_date = date;
 
-    const QString filterString = QString::fromLatin1(
-                "date_assigned = %1").arg(date.toString(Qt::ISODate));
+    const QString filterString =
+            QString::fromLatin1("date_assigned = %1").arg(date.toString(Qt::ISODate));
     setFilter(filterString);
     select();
 
     emit dateChanged();
 }
 
-//void NoteModel::addNote(const QString &content, const QDate &date)
+// void NoteModel::addNote(const QString &content, const QDate &date)
 //{
 //    QSqlRecord newRecord = record();
 //    newRecord.setValue("text", content);

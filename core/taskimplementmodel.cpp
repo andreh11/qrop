@@ -20,12 +20,12 @@
 #include "sqltablemodel.h"
 
 TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName)
-    : SortFilterProxyModel(parent, tableName),
-      m_methodId(-1)
+    : SortFilterProxyModel(parent, tableName)
+    , m_methodId(-1)
 {
-   int col = m_model->record().indexOf("task_method_id");
-   setFilterKeyColumn(col);
-   setSortColumn("implement");
+    int col = m_model->record().indexOf("task_method_id");
+    setFilterKeyColumn(col);
+    setSortColumn("implement");
 }
 
 int TaskImplementModel::methodId() const
@@ -35,10 +35,10 @@ int TaskImplementModel::methodId() const
 
 void TaskImplementModel::setMethodId(int methodId)
 {
-   if (m_methodId == methodId)
-       return;
+    if (m_methodId == methodId)
+        return;
 
-   m_methodId = methodId;
-   setFilterFixedString(QString::number(m_methodId));
-   methodIdChanged();
+    m_methodId = methodId;
+    setFilterFixedString(QString::number(m_methodId));
+    methodIdChanged();
 }

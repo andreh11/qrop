@@ -22,7 +22,8 @@
 #include "core_global.h"
 #include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT TaskImplementModel : public SortFilterProxyModel {
+class CORESHARED_EXPORT TaskImplementModel : public SortFilterProxyModel
+{
     Q_OBJECT
     Q_PROPERTY(int methodId READ methodId WRITE setMethodId NOTIFY methodIdChanged)
 

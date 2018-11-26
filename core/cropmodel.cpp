@@ -18,10 +18,10 @@
 #include "sqltablemodel.h"
 #include "cropmodel.h"
 
-CropModel::CropModel(QObject *parent, const QString&tableName)
+CropModel::CropModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("crop");
-//    int familyColumn = fieldColumn("family_id");
-//    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
+    //    int familyColumn = fieldColumn("family_id");
+    //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
 }

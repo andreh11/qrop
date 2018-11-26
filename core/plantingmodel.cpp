@@ -22,7 +22,7 @@
 #include "plantingmodel.h"
 #include "sqltablemodel.h"
 
-PlantingModel::PlantingModel(QObject* parent, const QString& tableName)
+PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
     , m_week(-1)
     , m_showActivePlantings(false)
@@ -60,19 +60,17 @@ void PlantingModel::setShowActivePlantings(bool show)
     emit showActivePlantingsChanged();
 }
 
-bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QDate sowingDate = fieldDate(sourceRow, sourceParent, "sowing_date");
     QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
     QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_haverst_date");
     QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "end_harvest_date");
 
-    bool inRange = (isDateInRange(sowingDate)
-                       || isDateInRange(plantingDate)
-                       || isDateInRange(harvestBeginDate)
-                       || isDateInRange(harvestEndDate))
-        && (!m_showActivePlantings
-               || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()));
+    bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
+                    || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
+            && (!m_showActivePlantings
+                || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()));
 
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

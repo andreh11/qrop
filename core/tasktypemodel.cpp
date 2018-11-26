@@ -17,8 +17,8 @@
 #include "tasktypemodel.h"
 
 TaskTypeModel::TaskTypeModel(QObject *parent, const QString &tableName)
-    : SortFilterProxyModel(parent, tableName),
-      m_showPlantingTasks(true)
+    : SortFilterProxyModel(parent, tableName)
+    , m_showPlantingTasks(true)
 {
     setSortColumn("type");
 }

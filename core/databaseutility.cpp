@@ -21,7 +21,10 @@
 
 #include "databaseutility.h"
 
-DatabaseUtility::DatabaseUtility(QObject *parent) : QObject(parent), m_table(""), m_idFieldName("")
+DatabaseUtility::DatabaseUtility(QObject *parent)
+    : QObject(parent)
+    , m_table("")
+    , m_idFieldName("")
 {
 }
 

@@ -22,7 +22,8 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class CORESHARED_EXPORT Task : public DatabaseUtility {
+class CORESHARED_EXPORT Task : public DatabaseUtility
+{
     Q_OBJECT
 public:
     Task(QObject *parent = nullptr);
@@ -33,7 +34,10 @@ public:
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void completeTask(int taskId, const QDate &date) const;
     Q_INVOKABLE void completeTask(int taskId) const { completeTask(taskId, QDate::currentDate()); }
-    Q_INVOKABLE void uncompleteTask(int taskId) const { update(taskId, {{"completed_date", ""}}); }
+    Q_INVOKABLE void uncompleteTask(int taskId) const
+    {
+        update(taskId, { { "completed_date", "" } });
+    }
     Q_INVOKABLE void delay(int taskId, int weeks);
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;

@@ -22,7 +22,7 @@
 Location::Location(QObject *parent)
     : DatabaseUtility(parent)
 {
-      m_table = "location";
+    m_table = "location";
 }
 
 QString Location::fullName(int locationId) const

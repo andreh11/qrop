@@ -22,7 +22,8 @@
 #include "core_global.h"
 #include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT TaskMethodModel : public SortFilterProxyModel {
+class CORESHARED_EXPORT TaskMethodModel : public SortFilterProxyModel
+{
     Q_OBJECT
     Q_PROPERTY(int typeId READ typeId WRITE setTypeId NOTIFY typeIdChanged)
 

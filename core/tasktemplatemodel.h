@@ -28,8 +28,8 @@ class CORESHARED_EXPORT TaskTemplateModel : public SqlTableModel
 
 public:
     TaskTemplateModel(QObject *parent = nullptr);
-//    Q_INVOKABLE void applyTemplate(int templateId, int plantingId);
-//    Q_INVOKABLE void removeTemplate(int templateId, int plantingId);
+    //    Q_INVOKABLE void applyTemplate(int templateId, int plantingId);
+    //    Q_INVOKABLE void removeTemplate(int templateId, int plantingId);
 };
 
 #endif // TASKTEMPLATEMODEL_H

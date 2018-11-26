@@ -30,23 +30,23 @@ CORESHARED_EXPORT void execSqlFile(const QString &fileName, const QString &separ
 CORESHARED_EXPORT void createDatabase();
 CORESHARED_EXPORT void deleteDatabase();
 
-//class CORESHARED_EXPORT Note : public DatabaseUtility {
+// class CORESHARED_EXPORT Note : public DatabaseUtility {
 //    Q_OBJECT
-//public:
+// public:
 //    Note(QObject *parent = nullptr);
 //};
 
-//class CORESHARED_EXPORT Keyword : public DatabaseUtility {
+// class CORESHARED_EXPORT Keyword : public DatabaseUtility {
 //    Q_OBJECT
 //    Keyword(QObject *parent = nullptr);
 //};
 
-//class CORESHARED_EXPORT Expense : public DatabaseUtility {
+// class CORESHARED_EXPORT Expense : public DatabaseUtility {
 //    Q_OBJECT
 //    Expense(QObject *parent = nullptr);
 //};
 
-//class CORESHARED_EXPORT User : public DatabaseUtility {
+// class CORESHARED_EXPORT User : public DatabaseUtility {
 //    Q_OBJECT
 //    User(QObject *parent = nullptr);
 //};

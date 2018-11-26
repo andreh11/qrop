@@ -23,7 +23,7 @@ UserModel::UserModel(QObject *parent)
     setTable("user");
 
     // BUG: create a query bug on submitAll() after insertRecord()
-//    int roleColumn = fieldColumn("role_id");
-//    qDebug() << "ROLE COLUMN" << roleColumn;
-//    setRelation(roleColumn, QSqlRelation("role", "role_id", "role"));
+    //    int roleColumn = fieldColumn("role_id");
+    //    qDebug() << "ROLE COLUMN" << roleColumn;
+    //    setRelation(roleColumn, QSqlRelation("role", "role_id", "role"));
 }

@@ -26,7 +26,6 @@ class CORESHARED_EXPORT CropModel : public SortFilterProxyModel
 {
 public:
     explicit CropModel(QObject *parent = nullptr, const QString &tableName = "crop");
-
 };
 
 #endif // CROPTABLE_H
