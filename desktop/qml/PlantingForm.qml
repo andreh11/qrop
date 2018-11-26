@@ -26,7 +26,7 @@ import "date.js" as MDate
 Flickable {
     id: control
     property int currentYear
-    property bool accepted: varietyField.acceptableInput
+    property bool accepted: varietyField.currentIndex >= 0
 
     property string mode: "add" // add or edit
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)

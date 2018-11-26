@@ -8,6 +8,7 @@ Item {
 
     property alias applyEnabled: applyButton.enabled
     property string mode: "add"
+    property string rejectToolTip: ""
 
     signal rejected()
     signal accepted()
@@ -30,5 +31,8 @@ Item {
         anchors.rightMargin: Units.mediumSpacing
         text: mode === "add" ? qsTr("Add") : qsTr("Edit")
         onClicked: accepted()
+
+        ToolTip.text: control.rejectToolTip
+        ToolTip.visible: ToolTip.text && hovered && !enabled
     }
 }

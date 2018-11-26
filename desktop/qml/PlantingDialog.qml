@@ -47,6 +47,7 @@ Dialog {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
         plantingForm.clearAll();
+
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
         plantingForm.setFormValues(editPlantingValueMap);
@@ -82,10 +83,11 @@ Dialog {
     footer: AddEditDialogFooter {
         height: childrenRect.height
         width: parent.width
-        enabled: formAccepted
+        applyEnabled: plantingForm.accepted
         onRejected: dialog.reject();
         onAccepted: dialog.accept();
-        mode: mode
+        rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
+        mode: dialog.mode
     }
 
     ScrollView {
