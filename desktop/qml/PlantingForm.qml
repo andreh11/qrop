@@ -205,16 +205,15 @@ Flickable {
     // Set item to value only if it has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.
     function setFieldValue(item, value) {
-        if (!value)
+        if (!value || item.manuallyModified)
             return;
-        if (!item.manuallyModified) {
-            if (item instanceof MyTextField)
-                item.text = value;
-            else if (item instanceof CheckBox || item instanceof ChoiceChip)
-                item.checked = value;
-            else if (item instanceof MyComboBox)
-                item.setRowId(value);
-        }
+
+        if (item instanceof MyTextField)
+            item.text = value;
+        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+            item.checked = value;
+        else if (item instanceof MyComboBox)
+            item.setRowId(value);
     }
 
     function setFormValues(val) {

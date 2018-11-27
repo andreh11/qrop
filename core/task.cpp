@@ -51,6 +51,39 @@ int Task::add(const QVariantMap &map) const
     return id;
 }
 
+void Task::update(int id, const QVariantMap &map) const
+{
+    QVariantMap newMap(map);
+    // Set NULL values to prevent SQL foreign key error
+    if (newMap.contains("task_method_id") && newMap.value("task_method_id").toInt() < 1)
+        newMap["task_method_id"] = QVariant(QVariant::Int);
+    if (newMap.contains("task_implement_id") && newMap.value("task_implement_id").toInt() < 1)
+        newMap["task_implement_id"] = QVariant(QVariant::Int);
+
+    if (map.contains("planting_ids")) {
+        const auto &plantingIdList = newMap.take("planting_ids").toList();
+        QList<int> oldPlantingIdList = taskPlantings(id);
+        QList<int> toAdd;
+        QList<int> toRemove;
+
+        for (auto &newid : plantingIdList)
+            if (!oldPlantingIdList.contains(newid.toInt()))
+                toAdd.push_back(newid.toInt());
+
+        for (auto &oldid : oldPlantingIdList)
+            if (!plantingIdList.contains(oldid))
+                toRemove.push_back(oldid);
+
+        for (int plantingId : toAdd)
+            addPlanting(plantingId, id);
+
+        for (int plantingId : toRemove)
+            removePlanting(plantingId, id);
+    }
+
+    DatabaseUtility::update(id, newMap);
+}
+
 void Task::addPlanting(int plantingId, int taskId) const
 {
     addLink("planting_task", "planting_id", plantingId, "task_id", taskId);
@@ -95,9 +128,15 @@ void Task::removeLocationTasks(int locationId) const
 
 QList<int> Task::plantingTasks(int plantingId) const
 {
-
     QString queryString = "SELECT * FROM planting_task WHERE planting_id = %1";
     return queryIds(queryString.arg(plantingId), "task_id");
+}
+
+QList<int> Task::taskPlantings(int taskId) const
+{
+
+    QString queryString = "SELECT * FROM planting_task WHERE task_id = %1";
+    return queryIds(queryString.arg(taskId), "planting_id");
 }
 
 QList<int> Task::locationTasks(int locationId) const

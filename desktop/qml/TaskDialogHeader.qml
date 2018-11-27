@@ -8,14 +8,17 @@ import io.croplan.components 1.0
 Rectangle {
     id: control
 
-    readonly property int taskTypeId: taskTypeModel.rowId(typeField.currentIndex)
-    readonly property alias completed: taskCompleteButton.checked
+    readonly property int taskTypeId: taskTypeModel.rowId(typeComboBox.currentIndex)
     property string completedDate: ""
+    readonly property bool completed: completedDate
+    property alias typeField: typeComboBox
     property int week
     property int year
 
+    onCompletedDateChanged: console.log(completedDate)
+
     function reset() {
-        typeField.currentIndex = 0
+        typeComboBox.currentIndex = 0
         taskCompleteButton.checked = false
     }
 
@@ -25,10 +28,10 @@ Rectangle {
     clip: true
     Material.elevation: 2
 
-   TaskTypeModel {
-       id: taskTypeModel
-       showPlantingTasks: false
-   }
+    TaskTypeModel {
+        id: taskTypeModel
+        showPlantingTasks: false
+    }
 
     RowLayout {
         id: rowLayout
@@ -40,7 +43,7 @@ Rectangle {
             topMargin: Units.smallSpacing
             bottomMargin: anchors.topMargin
         }
-        
+
         Rectangle {
             id: textIcon
             Layout.alignment: Qt.AlignVCenter
@@ -49,11 +52,11 @@ Rectangle {
             radius: 80
             border.width: 4
             border.color: Material.color(Material.Green, Material.Shade400)
-            
+
             Text {
                 anchors.centerIn: parent
                 text: {
-                    var stringList =  typeField.currentText.split(" ");
+                    var stringList =  typeComboBox.currentText.split(" ");
                     if (stringList.length > 1)
                         return stringList[0][0] + stringList[1][0].toString().toUpperCase()
                     else
@@ -63,9 +66,9 @@ Rectangle {
                 font { family: "Roboto Regular"; pixelSize: 20 }
             }
         }
-        
+
         MyComboBox {
-            id: typeField
+            id: typeComboBox
             labelText: qsTr("Type")
             floatingLabel: true
             editable: false
@@ -79,9 +82,10 @@ Rectangle {
             onAccepted: if (find(editText) === -1)
                             model.append({text: editText})
         }
-        
+
         TaskCompleteButton {
             id: taskCompleteButton
+            done: control.completedDate
             onCheckedChanged: {
                 if (checked)
                     control.completedDate = new Date().toLocaleDateString(Qt.locale(), "yyyy-MM-dd");
@@ -89,7 +93,7 @@ Rectangle {
                     control.completedDate = ""
             }
         }
-        
+
         //        ColumnLayout {
         //            Label {
         //                text: qsTr("Revenue")

@@ -62,10 +62,12 @@ Item {
                                     : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
-        onEditingFinished: {
+        onTextEdited: {
+            if (!textField.acceptableInput)
+                return;
+
             var newDate = mode === "date" ? NDate.dateFromDateString(text)
                                           : NDate.dateFromWeekString(text);
-
             if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
 

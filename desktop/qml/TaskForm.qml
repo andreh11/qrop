@@ -24,8 +24,11 @@ import io.croplan.components 1.0
 Flickable {
     id: control
 
+    property string mode: "add" // add or edit
     property int week
     property int year
+    property int taskId
+    property var taskValueMap
     property int taskTypeId: -1
 
     property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
@@ -49,6 +52,34 @@ Flickable {
         "task_method_id": taskMethodId,
         "task_implement_id": taskImplementId,
         "planting_ids": plantingIdList
+    }
+
+    function setFieldValue(item, value) {
+        if (!value)
+            return;
+
+        if (item instanceof MyTextField)
+            item.text = value;
+        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+            item.checked = value;
+        else if (item instanceof MyComboBox)
+            item.setRowId(value);
+    }
+
+    function setFormValues(val) {
+        if ("assigned_date" in val)
+            dueDatepicker.calendarDate = Date.fromLocaleString(Qt.locale(), val['assigned_date'],
+                                                               "yyyy-MM-dd")
+        if ("duration" in val) durationField.text = val["duration"]
+        if ("labor_time" in val) laborTimeField.text = val["labor_time"]
+        if ("task_method_id" in val) methodField.setRowId(Number(val["task_method_id"]))
+        if ("task_implement_id" in val) implementField.setRowId(Number(val["task_implement_id"]))
+        if ("plantings" in val) {
+            var idList = val["plantings"].split(",")
+            for (var i = 0; i < idList.length; i++)
+                plantingList.selectedIds[idList[i]] = true
+            plantingList.selectedIdsChanged();
+        }
     }
 
     function reset() {

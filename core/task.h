@@ -29,6 +29,7 @@ public:
     Task(QObject *parent = nullptr);
     Q_INVOKABLE QList<int> sowPlantTaskIds(int plantingId) const;
     Q_INVOKABLE int add(const QVariantMap &map) const override;
+    Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
@@ -40,6 +41,7 @@ public:
     }
     Q_INVOKABLE void delay(int taskId, int weeks);
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
+    Q_INVOKABLE QList<int> taskPlantings(int taskId) const;
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const;
     Q_INVOKABLE void removePlantingTasks(int plantingId) const;

@@ -64,8 +64,10 @@ ComboBox {
         var i = 0;
         while (model.rowId(i) !== rowId && i < model.count)
             i++;
-       if (i < model.count)
-           currentIndex = i;
+        if (i < model.count)
+            currentIndex = i;
+        else
+            console.log(rowId, "NOT FOUND!")
     }
 
     Material.elevation: 0

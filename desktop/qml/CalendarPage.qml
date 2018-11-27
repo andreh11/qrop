@@ -59,7 +59,7 @@ Page {
         width: parent.width / 2
         height: parent.height
         x: (parent.width - width) / 2
-        onAccepted: refresh()
+        onAccepted: page.refresh()
         week: page.week
         year: page.year
     }
@@ -154,10 +154,7 @@ Page {
                     Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
-                    onClicked: {
-                        taskDialog.reset()
-                        taskDialog.open()
-                    }
+                    onClicked:  taskDialog.addTask()
                     MouseArea {
                           id: mouseArea
                           cursorShape: Qt.PointingHandCursor
@@ -431,7 +428,10 @@ Page {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    onClicked: console.log("EDIT!")
+                                    onClicked: {
+                                        if (model.task_type_id > 3)
+                                            taskDialog.editTask(model.task_id)
+                                    }
                                 }
 
                             }
@@ -470,11 +470,12 @@ Page {
                                 var length = map['length']
                                 var rows = map['rows']
                                 var spacingPlants = map['spacing_plants']
+                                var seedsPerHole = map['seeds_per_hole']
 
                                 if (task_type_id === 1 || task_type_id === 3) {
                                     return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
                                 } else if (task_type_id === 2) {
-                                    return qsTr("%L1 trays of  %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+                                    return qsTr("%L1 x %L2, %3 seed(s) per cell", "", seedsPerHole).arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
                                 } else {
                                     return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
                                 }

@@ -84,9 +84,9 @@ QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &
 QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 {
     if (id < 0)
-        return QSqlRecord();
+        return {};
     if (tableName.isNull())
-        return QSqlRecord();
+        return {};
 
     QString queryString("SELECT * FROM %1 WHERE %2 = %3");
     QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(id));
@@ -97,7 +97,7 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     if (query.isValid())
         return query.record();
 
-    return QSqlRecord();
+    return {};
 }
 
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
@@ -173,7 +173,6 @@ int DatabaseUtility::add(const QVariantMap &map) const
     queryValueString.append(")");
 
     QString queryString = queryNameString + queryValueString;
-
     QSqlQuery query;
     query.prepare(queryString);
 

@@ -278,7 +278,7 @@ FROM variety
 LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
-SELECT task.*, task_type.type, task_method.method, task_implement.implement, group_concat(planting_id) as plantings, group_concat(location_id) as locations
+SELECT task.task_id as task_view_id, task.*, task_type.type, task_method.method, task_implement.implement, group_concat(planting_id) as plantings, group_concat(location_id) as locations
 FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)

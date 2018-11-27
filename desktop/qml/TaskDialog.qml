@@ -24,24 +24,49 @@ import io.croplan.components 1.0
 Dialog {
     id: dialog
 
+    property int taskId: -1
+    property int week
+    property int year
     property string mode: "add"
     property alias form: taskForm
     property alias formAccepted: taskForm.accepted
-    property int week
-    property int year
+    property var taskValueMap: Task.mapFromId("task_view", taskId)
+    property int taskTypeId: Number(taskValueMap['task_type_id'])
 
     function reset() {
         taskDialogHeader.reset();
         taskForm.reset();
     }
 
-    title: qsTr("Add Task")
+    function addTask() {
+        mode = "add";
+        dialog.taskId = -1
+        taskDialogHeader.reset();
+        taskForm.reset()
+        dialog.open()
+    }
+
+    function editTask(taskId) {
+        mode = "edit";
+        dialog.taskId = taskId;
+        taskIdChanged(); // To update taskValueMap
+        taskDialogHeader.reset();
+        taskDialogHeader.typeField.setRowId(taskTypeId)
+        taskDialogHeader.completedDate = Date.fromLocaleDateString(Qt.locale(),
+                                                                   taskValueMap['completed_date'],
+                                                                   "yyyy-MM-dd")
+        taskForm.reset();
+        taskForm.setFormValues(taskValueMap)
+        dialog.open()
+    }
+
+    title: mode === "add" ? qsTr("Add Task") : qsTr("Edit Task")
     modal: true
     focus: true
     closePolicy: Popup.NoAutoClose
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
-    header:  TaskDialogHeader {
+    header: TaskDialogHeader {
         id: taskDialogHeader
         width: parent.width
         week: dialog.week
@@ -52,9 +77,11 @@ Dialog {
         id: taskForm
         anchors.fill: parent
         taskTypeId: taskDialogHeader.taskTypeId
+        taskValueMap: dialog.taskValueMap
         completedDate: taskDialogHeader.completedDate
         week: dialog.week
         year: dialog.year
+        taskId: dialog.taskId
     }
 
     footer: AddEditDialogFooter {
@@ -63,15 +90,15 @@ Dialog {
         applyEnabled: formAccepted
         onRejected: dialog.reject();
         onAccepted: dialog.accept();
-        mode: mode
+        mode: dialog.mode
     }
 
     onAccepted: {
         if (mode === "add") {
             var id = Task.add(taskForm.values)
         } else {
+            var id = Task.update(dialog.taskId, taskForm.values)
             //TODO: task update
         }
     }
-
 }
