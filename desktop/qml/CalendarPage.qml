@@ -90,9 +90,11 @@ Page {
     }
 
     Popup {
-        id: popup
-        y: page.activeCompleteButton.y
-        x: page.activeCompleteButton.x
+        id: calendarPopup
+        property int taskId: -1
+
+        y: page.activeCompleteButton ? page.activeCompleteButton.y : 0
+        x: page.activeCompleteButton ? page.activeCompleteButton.x : 0
         width: contentItem.width
         height: contentItem.height
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -107,7 +109,9 @@ Page {
             month: (new Date()).getMonth()
 
             onDateSelect: {
-                popup.close();
+                calendarPopup.close();
+                Task.completeTask(calendarPopup.taskId, newDate)
+                page.refresh();
             }
         }
     }
@@ -430,6 +434,10 @@ Page {
                                 overdue: model.overdue
                                 done: model.done
                                 due: model.due
+
+                                ToolTip.text: qsTr("Click to complete task. Hold to select date.")
+                                ToolTip.visible: hovered
+
                                 onClicked: {
                                     if (done)
                                         Task.uncompleteTask(model.task_id);
@@ -439,7 +447,8 @@ Page {
                                 }
                                 onPressAndHold: {
                                     listView.currentIndex = index
-                                    popup.open()
+                                    calendarPopup.taskId = model.task_id
+                                    calendarPopup.open()
                                 }
                             }
 

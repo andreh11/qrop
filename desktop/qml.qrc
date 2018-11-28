@@ -51,7 +51,6 @@
         <file>qml/TaskDialogHeader.qml</file>
         <file>qml/AddEditDialogFooter.qml</file>
         <file>qml/PlantingLabel.qml</file>
-        <file>qml/TaskRowDelegate.qml</file>
         <file>qml/MyToolButton.qml</file>
     </qresource>
 </RCC>

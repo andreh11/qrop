@@ -212,14 +212,14 @@ Page {
         model: listView.model
         currentYear: page.currentYear
         onPlantingsAdded: {
-            addPlantingSnackbar.successions = successions
+            addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
             page.refresh();
         }
 
         onPlantingsModified: {
-            editPlantingsSnackBar.successions = successions
-            editPlantingsSnackBar.open()
+            editPlantingsSnackBar.successions = successions;
+            editPlantingsSnackBar.open();
             unselectAll();
             page.refresh();
         }

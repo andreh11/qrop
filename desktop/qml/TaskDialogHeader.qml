@@ -8,6 +8,7 @@ import io.croplan.components 1.0
 Rectangle {
     id: control
 
+    property int taskId: -1
     readonly property int taskTypeId: taskTypeModel.rowId(typeComboBox.currentIndex)
     property string completedDate: ""
     readonly property bool completed: completedDate
@@ -86,13 +87,46 @@ Rectangle {
         TaskCompleteButton {
             id: taskCompleteButton
             done: control.completedDate
+
+            ToolTip.text: qsTr("Click to complete task. Hold to select date.")
+            ToolTip.visible: hovered
+
             onClicked: {
                 if (checked)
                     control.completedDate = new Date().toLocaleDateString(Qt.locale(), "yyyy-MM-dd");
                 else
                     control.completedDate = ""
             }
+
+            onPressAndHold: calendarPopup.open();
+
+            Popup {
+                id: calendarPopup
+
+                width: contentItem.width
+                height: contentItem.height
+                y: parent.width - calendarView.height
+                x: parent.height - calendarView.width
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                padding: 0
+                margins: 0
+
+                contentItem: CalendarView {
+                    id: calendarView
+
+                    clip: true
+                    year: page.year
+                    month: (new Date()).getMonth()
+
+                    onDateSelect: {
+                        completedDate = newDate.toLocaleDateString(Qt.locale(), "yyyy-MM-dd");
+                        calendarPopup.close();
+                    }
+                }
+            }
         }
+
+
 
         //        ColumnLayout {
         //            Label {
