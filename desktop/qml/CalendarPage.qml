@@ -43,7 +43,13 @@ Page {
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
 
-    function refresh() { taskModel.refresh(); }
+    function refresh() {
+        // Save current position, for refreshing the model will cause reloading,
+        // and view position will be reset.
+        var currentY = listView.contentY
+        taskModel.refresh();
+        listView.contentY = currentY
+    }
 
     title: "Calendar"
     focus: true
@@ -371,7 +377,7 @@ Page {
                                 text: "-7"
                                 onClicked: {
                                     Task.delay(model.task_id, -1);
-                                    refresh();
+                                    page.refresh();
                                 }
                                 ToolTip.text: qsTr("Move to previous week")
                                 ToolTip.visible: hovered
@@ -384,7 +390,7 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 onClicked: {
                                     Task.delay(model.task_id, 1);
-                                    refresh();
+                                    page.refresh();
                                 }
                                 ToolTip.text: qsTr("Move to next week")
                                 ToolTip.visible: hovered
@@ -398,7 +404,7 @@ Page {
                                 enabled: model.task_type_id > 3
                                 onClicked: {
                                     Task.remove(model.task_id);
-                                    refresh();
+                                    page.refresh();
                                 }
                                 ToolTip.text: qsTr("Remove")
                                 ToolTip.visible: hovered
@@ -429,7 +435,7 @@ Page {
                                         Task.uncompleteTask(model.task_id);
                                     else
                                         Task.completeTask(model.task_id);
-                                    taskModel.refresh();
+                                    page.refresh();
                                 }
                                 onPressAndHold: {
                                     listView.currentIndex = index

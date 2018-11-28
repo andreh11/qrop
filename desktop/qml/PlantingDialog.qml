@@ -142,6 +142,5 @@ Dialog {
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
-        model.refresh();
     }
 }

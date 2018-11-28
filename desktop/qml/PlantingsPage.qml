@@ -120,7 +120,9 @@ Page {
     property int lastIndexClicked: -1
 
     function refresh()  {
-       plantingModel.refresh();
+        var currentY = listView.contentY
+        plantingModel.refresh();
+        listView.contentY = currentY
     }
 
     function numberOfTrue(array) {
@@ -158,7 +160,7 @@ Page {
     function duplicateSelected() {
         var idList = selectedIdList();
         Planting.duplicateList(idList)
-        plantingModel.refresh()
+        page.refresh()
         selectedIdsChanged();
     }
 
@@ -170,7 +172,7 @@ Page {
                 ids.push(key)
             }
         Planting.removeList(ids)
-        plantingModel.refresh()
+        page.refresh()
         selectedIdsChanged()
     }
 
@@ -212,12 +214,14 @@ Page {
         onPlantingsAdded: {
             addPlantingSnackbar.successions = successions
             addPlantingSnackbar.open();
+            page.refresh();
         }
 
         onPlantingsModified: {
             editPlantingsSnackBar.successions = successions
             editPlantingsSnackBar.open()
             unselectAll();
+            page.refresh();
         }
 
         onRejected: unselectAll();
@@ -244,7 +248,7 @@ Page {
 
         onClicked: {
             Planting.rollback();
-            plantingModel.refresh();
+            page.refresh();
         }
     }
 
@@ -269,7 +273,7 @@ Page {
 
         onClicked: {
             Planting.rollback();
-            plantingModel.refresh();
+            page.refresh();
         }
     }
 
