@@ -30,6 +30,7 @@ Flickable {
     property int taskId
     property var taskValueMap
     property int taskTypeId: -1
+    property bool sowPlantTask: false
 
     property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
     property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
@@ -107,6 +108,7 @@ Flickable {
         ColumnLayout {
             width: parent.width
             spacing: 0
+            visible: !sowPlantTask
 
             MyComboBox {
                 id: methodField
@@ -189,6 +191,7 @@ Flickable {
             id: radioRow
             width: parent.width
             spacing: Units.smallSpacing
+            visible: !sowPlantTask
             Layout.fillWidth: true
 
             ChoiceChip {
@@ -207,7 +210,7 @@ Flickable {
         }
 
         FormGroupBox {
-            visible: plantingRadioButton.checked
+            visible: plantingRadioButton.checked && !sowPlantTask
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
 
@@ -280,9 +283,14 @@ Flickable {
 
         MyComboBox {
             id: locationField
-            visible: locationRadioButton.checked
+            visible: locationRadioButton.checked && !sowPlantTask
             Layout.fillWidth: true
             model: ["A", "B", "C"]
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
         }
     }
 }

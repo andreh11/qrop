@@ -50,6 +50,7 @@ Dialog {
         mode = "edit";
         dialog.taskId = taskId;
         taskIdChanged(); // To update taskValueMap
+
         taskDialogHeader.reset();
         taskDialogHeader.typeField.setRowId(taskTypeId)
         taskDialogHeader.completedDate = Date.fromLocaleDateString(Qt.locale(),
@@ -57,7 +58,7 @@ Dialog {
                                                                    "yyyy-MM-dd")
         taskForm.reset();
         taskForm.setFormValues(taskValueMap)
-        dialog.open()
+        dialog.open();
     }
 
     title: mode === "add" ? qsTr("Add Task") : qsTr("Edit Task")
@@ -71,6 +72,7 @@ Dialog {
         width: parent.width
         week: dialog.week
         year: dialog.year
+        sowPlantTask: dialog.taskTypeId <= 3
     }
 
     TaskForm {
@@ -82,6 +84,7 @@ Dialog {
         week: dialog.week
         year: dialog.year
         taskId: dialog.taskId
+        sowPlantTask: dialog.taskTypeId <= 3
     }
 
     footer: AddEditDialogFooter {

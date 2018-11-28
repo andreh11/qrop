@@ -15,8 +15,8 @@ Rectangle {
     property alias typeField: typeComboBox
     property int week
     property int year
-
-    onCompletedDateChanged: console.log(completedDate)
+    property bool sowPlantTask: false
+    onTaskTypeIdChanged: console.log("HEADER", taskTypeId)
 
     function reset() {
         typeComboBox.currentIndex = 0
@@ -31,7 +31,7 @@ Rectangle {
 
     TaskTypeModel {
         id: taskTypeModel
-        showPlantingTasks: false
+        showPlantingTasks: sowPlantTask
     }
 
     RowLayout {
@@ -76,6 +76,7 @@ Rectangle {
             Layout.fillWidth: true
             model: taskTypeModel
             showAddItem: true
+            enabled: !sowPlantTask
 
             addItemText: qsTr("Add Type")
 
