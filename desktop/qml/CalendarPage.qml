@@ -31,6 +31,7 @@ Page {
     property string filterText: ""
     property int checks: 0
     property alias listView: listView
+    property var activeCompleteButton: listView.currentItem
 
     property var tableHeaderModel: [
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
@@ -84,8 +85,8 @@ Page {
 
     Popup {
         id: popup
-        //                                y: control.height
-        //                                x: -control.width
+        y: page.activeCompleteButton.y
+        x: page.activeCompleteButton.x
         width: contentItem.width
         height: contentItem.height
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -96,7 +97,7 @@ Page {
             id: calendarView
 
             clip: true
-            year: year
+            year: page.year
             month: (new Date()).getMonth()
 
             onDateSelect: {
@@ -347,6 +348,23 @@ Page {
                         Row {
                             spacing: -16
                             anchors.verticalCenter: parent.verticalCenter
+
+                            // TODO: notes handling
+//                            MyToolButton {
+
+//                                id: noteButton
+//                                anchors.verticalCenter: parent.verticalCenter
+//                                text: "\uf249"
+//                                font.family: "Font Awesome 5 Free Solid"
+//                                visible: !model.done
+//                                onClicked: {
+//                                    Task.delay(model.task_id, -1);
+//                                    refresh();
+//                                }
+//                                ToolTip.text: qsTr("Show notes")
+//                                ToolTip.visible: hovered
+//                            }
+
                             MyToolButton {
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: !model.done
@@ -414,9 +432,7 @@ Page {
                                     taskModel.refresh();
                                 }
                                 onPressAndHold: {
-                                    var pt = mapToGlobal(x, y)
-                                    popup.x = pt.x
-                                    popup.y = pt.y
+                                    listView.currentIndex = index
                                     popup.open()
                                 }
                             }

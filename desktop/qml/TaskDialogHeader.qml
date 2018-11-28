@@ -19,7 +19,7 @@ Rectangle {
 
     function reset() {
         typeComboBox.currentIndex = 0
-        taskCompleteButton.checked = false
+        completedDate = ""
     }
 
     implicitHeight: 60
@@ -86,7 +86,7 @@ Rectangle {
         TaskCompleteButton {
             id: taskCompleteButton
             done: control.completedDate
-            onCheckedChanged: {
+            onClicked: {
                 if (checked)
                     control.completedDate = new Date().toLocaleDateString(Qt.locale(), "yyyy-MM-dd");
                 else
