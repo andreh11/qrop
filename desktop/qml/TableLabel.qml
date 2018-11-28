@@ -27,18 +27,20 @@ Label {
     font.family: "Roboto Condensed"
     font.pixelSize: Units.fontSizeBodyAndButton
 
-    ToolTip {
-        visible: showToolTip && mouseArea.containsMouse
-        delay: Qt.styleHints.mousePressAndHoldInterval
-        text: label.text
-        font.family: "Robo Regular"
-        x: label.width / 2
-        y: label.height + 16
-    }
+//    ToolTip {
+//        visible: showToolTip && mouseArea.containsMouse
+//        delay: Qt.styleHints.mousePressAndHoldInterval
+//        text: label.text
+//        font.family: "Robo Regular"
+//        x: label.width / 2
+//        y: label.height + 16
+//    }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-    }
+//    MouseArea {
+//        id: mouseArea
+//        anchors.fill: parent
+//        hoverEnabled: true
+//        propagateComposedEvents: true
+//        acceptedButtons: Qt.NoButton
+//    }
 }

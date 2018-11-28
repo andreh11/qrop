@@ -6,5 +6,6 @@
         <file>translations/fr.qm</file>
         <file>fonts/MaterialIcons-Regular.ttf</file>
         <file>fonts/FontAwesome.otf</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>

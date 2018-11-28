@@ -42,7 +42,7 @@ ItemDelegate {
             anchors.verticalCenter: parent.verticalCenter
             id: iconLabel
             text: iconText
-            font.family: "Font Awesome 5 Free"
+            font.family: "Font Awesome 5 Free Solid"
             font.pixelSize: 24
             horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -58,10 +58,4 @@ ItemDelegate {
         }
     }
 
-    onClicked: {
-        navigationIndex = index
-        if (!largeDisplay) {
-            drawer.close()
-        }
-    }
 }

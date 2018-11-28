@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material 2.0
 
 import io.croplan.components 1.0
 
@@ -33,22 +33,19 @@ Page {
     property alias listView: listView
 
     property var tableHeaderModel: [
-//        { name: qsTr("Task"),        columnName: "task",    width: 200},
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
         { name: qsTr("Locations"),   columnName: "locations", width: 200 },
         { name: qsTr("Description"), columnName: "descr", width: 200 },
-        { name: qsTr("Due Date"),   columnName: "assigned_date", width: 100}
+        { name: qsTr("Due Date"),    columnName: "assigned_date", width: 100}
     ]
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
 
-
-    function refresh() {
-        taskModel.refresh();
-    }
+    function refresh() { taskModel.refresh(); }
 
     title: "Calendar"
+    focus: true
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
@@ -69,13 +66,13 @@ Page {
         Rectangle {
             width: parent.width
             height: Units.rowHeight
-//            color: Material.color(Material.Green, Material.Shade200)
+            //            color: Material.color(Material.Green, Material.Shade200)
             color: Material.color(Material.Grey, Material.Shade100)
             radius: 4
 
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-//                leftPadding: 16
+                //                leftPadding: 16
                 text: section
                 color: Material.accent
                 font.bold: true
@@ -154,13 +151,14 @@ Page {
                     Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
-                    onClicked:  taskDialog.addTask()
                     MouseArea {
-                          id: mouseArea
-                          cursorShape: Qt.PointingHandCursor
-                          anchors.fill: parent
-                          onPressed:  mouse.accepted = false
+                        id: mouseArea
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        anchors.fill: parent
+                        onPressed:  mouse.accepted = false
                     }
+                    onClicked:  taskDialog.addTask()
                 }
 
                 SearchField {
@@ -270,8 +268,8 @@ Page {
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
                 filterString: searchField.text
-//                sortColumn: tableHeaderModel[tableSortColumn].columnName
-//                sortOrder: tableSortOrder
+                //                sortColumn: tableHeaderModel[tableSortColumn].columnName
+                //                sortOrder: tableSortOrder
             }
 
             headerPositioning: ListView.OverlayHeader
@@ -315,213 +313,222 @@ Page {
             delegate: Rectangle {
                 id: delegate
                 color: "white"
-                radius: 2
+                border.color: Material.color(Material.Grey, Material.Shade400)
+                border.width: rowMouseArea.containsMouse ? 1 : 0
 
+                radius: 2
                 property var idList: model.plantings.split(",")
                 property int firstId: Number(idList[0])
 
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
 
-                Rectangle {
-                    id: taskButtonRectangle
-                    height: Units.rowHeight
-                    width: childrenRect.width
-                    color: "white"
-                    anchors {
-                        top: parent.top
-                        right: parent.right
-                    }
+                MouseArea {
+                    id: rowMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    preventStealing: true
+                    propagateComposedEvents: true
+                    //                    z: 3
+                    cursorShape: Qt.PointingHandCursor
 
-                    Row {
-                        spacing: -16
-                        anchors.verticalCenter: parent.verticalCenter
-                        ToolButton {
-                            text: "-7"
-                            visible: !model.done
-                            font.family: "Roboto Condensed"
-                            anchors.verticalCenter: parent.verticalCenter
-                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
-                            onClicked: {
-                                Task.delay(model.task_id, -1);
-                                refresh();
-                            }
+                    onClicked: taskDialog.editTask(model.task_id)
 
-                        }
-
-                        ToolButton {
-                            text: "+7"
-                            visible: !model.done
-                            font.family: "Roboto Condensed"
-                            anchors.verticalCenter: parent.verticalCenter
-                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
-                            onClicked: {
-                                Task.delay(model.task_id, 1);
-                                refresh();
-                            }
-                        }
-
-                        ToolButton {
-                            text: enabled ? "\ue872" : ""
-                            Material.foreground: Material.color(Material.Grey, Material.Shade700)
-                            font.family: "Material Icons"
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: 22
-                            enabled: model.task_type_id > 3
-                            hoverEnabled: true
-                            onClicked: {
-                                Task.remove(model.task_id);
-                                refresh();
-                            }
-
-                            ToolTip.text: qsTr("Cannot remove a sow/plant task. Switch to crop plan to remove the related planting.")
-                            ToolTip.visible: hovered && !enabled
-                        }
-                    }
-                 }
-
-                Column {
-                    id: mainColumn
-                    width: parent.width
-
-                    Row {
-                        id: summaryRow
+                    Rectangle {
+                        id: taskButtonRectangle
                         height: Units.rowHeight
-                        spacing: Units.smallSpacing
-                        leftPadding: Units.smallSpacing
-
-                        TaskCompleteButton {
-                            id: completeButton
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: width
-                            width: parent.height
-                            overdue: model.overdue
-                            done: model.done
-                            due: model.due
-                            onClicked: {
-                                if (done)
-                                    Task.uncompleteTask(model.task_id);
-                                else
-                                    Task.completeTask(model.task_id);
-                                taskModel.refresh();
-                            }
-                            onPressAndHold: {
-                                popup.x = completeButton.x
-                                popup.y = completeButton.y
-                                popup.open()
-                            }
+                        width: childrenRect.width
+                        color: "white"
+                        z: 2
+                        visible: rowMouseArea.containsMouse
+                        anchors {
+                            top: parent.top
+                            bottom: parent.bottom
+                            right: parent.right
+                            topMargin: delegate.border.width
+                            bottomMargin: delegate.border.width
+                            rightMargin: delegate.border.width
                         }
 
                         Row {
-                            width: tableHeaderModel[0].width
+                            spacing: -16
                             anchors.verticalCenter: parent.verticalCenter
-                            PlantingLabel {
+                            MyToolButton {
                                 anchors.verticalCenter: parent.verticalCenter
-                                plantingId: firstId
-                                showOnlyDates: true
-                                sowingDate: Planting.sowingDate(plantingId)
-                                endHarvestDate: Planting.endHarvestDate(plantingId)
-                                year: page.year
-
-                                MouseArea {
-                                    id: rowMouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        if (model.task_type_id > 3)
-                                            taskDialog.editTask(model.task_id)
-                                    }
+                                visible: !model.done
+                                text: "-7"
+                                onClicked: {
+                                    Task.delay(model.task_id, -1);
+                                    refresh();
                                 }
-
-                            }
-
-                            ToolButton {
-                                id: detailsButton
-                                text: "⋅⋅⋅"
-//                                flat: true
-                                checkable: true
-                                visible: idList.length > 1
+                                ToolTip.text: qsTr("Move to previous week")
                                 ToolTip.visible: hovered
-                                ToolTip.text: checked ? qsTr("Hide plantings and locations details")
-                                                      : qsTr("Show plantings and locations details")
                             }
-                        }
 
-                        TableLabel {
-                            text: model.locations
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[1].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-//                        TableLabel {
-//                            text: model.type
-//                            elide: Text.ElideRight
-//                            width: tableHeaderModel[0].width
-//                            anchors.verticalCenter: parent.verticalCenter
-//                        }
-
-                        TableLabel {
-                            text: {
-                                var planting_ids = model.plantings.split(',')
-                                var planting_id = Number(planting_ids[0])
-                                var map = Planting.mapFromId("planting_view", planting_id);
-                                var length = map['length']
-                                var rows = map['rows']
-                                var spacingPlants = map['spacing_plants']
-                                var seedsPerHole = map['seeds_per_hole']
-
-                                if (task_type_id === 1 || task_type_id === 3) {
-                                    return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
-                                } else if (task_type_id === 2) {
-                                    return qsTr("%L1 x %L2, %3 seed(s) per cell", "", seedsPerHole).arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
-                                } else {
-                                    return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
+                            MyToolButton {
+                                text: "+7"
+                                visible: !model.done
+                                font.family: "Roboto Condensed"
+                                anchors.verticalCenter: parent.verticalCenter
+                                onClicked: {
+                                    Task.delay(model.task_id, 1);
+                                    refresh();
                                 }
-
+                                ToolTip.text: qsTr("Move to next week")
+                                ToolTip.visible: hovered
                             }
 
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[2].width
-                            anchors.verticalCenter: parent.verticalCenter
+                            MyToolButton {
+                                text: enabled ? "\ue872" : ""
+                                font.family: "Material Icons"
+                                font.pixelSize: 22
+                                anchors.verticalCenter: parent.verticalCenter
+                                enabled: model.task_type_id > 3
+                                onClicked: {
+                                    Task.remove(model.task_id);
+                                    refresh();
+                                }
+                                ToolTip.text: qsTr("Remove")
+                                ToolTip.visible: hovered
+                            }
                         }
-
-                        TableLabel {
-                            text: NDate.formatDate(model.assigned_date, year, "")
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[3].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
                     }
 
                     Column {
-                        id: detailsRow
-                        visible: detailsButton.checked
+                        id: mainColumn
                         width: parent.width
-                        height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
-                        Repeater {
-                            model: idList.slice(1)
+
+                        Row {
+                            id: summaryRow
+                            height: Units.rowHeight
+                            spacing: Units.smallSpacing
+                            leftPadding: Units.smallSpacing
+
+                            TaskCompleteButton {
+                                id: completeButton
+                                anchors.verticalCenter: parent.verticalCenter
+//                                height: parent.height * 1.3
+//                                width: height
+                                overdue: model.overdue
+                                done: model.done
+                                due: model.due
+                                onClicked: {
+                                    if (done)
+                                        Task.uncompleteTask(model.task_id);
+                                    else
+                                        Task.completeTask(model.task_id);
+                                    taskModel.refresh();
+                                }
+                                onPressAndHold: {
+                                    if (largeDisplay)
+                                        return
+                                    popup.x = completeButton.x
+                                    popup.y = completeButton.y
+                                    popup.open()
+                                }
+                            }
 
                             Row {
-                                height: Units.rowHeight
-                                spacing: Units.smallSpacing
-                                leftPadding: Units.smallSpacing
-                                Item { width: parent.height; height: width }
+                                width: tableHeaderModel[0].width
+                                anchors.verticalCenter: parent.verticalCenter
                                 PlantingLabel {
-                                    plantingId: Number(modelData)
-                                    year: page.year
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    plantingId: firstId
+                                    showOnlyDates: true
                                     sowingDate: Planting.sowingDate(plantingId)
                                     endHarvestDate: Planting.endHarvestDate(plantingId)
-                                    showOnlyDates: true
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    year: page.year
+                                }
+
+                                MyToolButton {
+                                    id: detailsButton
+                                    text: "⋅⋅⋅"
+                                    //                                flat: true
+                                    checkable: true
+                                    visible: idList.length > 1
+                                    ToolTip.visible: hovered
+                                    ToolTip.text: checked ? qsTr("Hide plantings and locations details")
+                                                          : qsTr("Show plantings and locations details")
+                                }
+                            }
+
+                            Label {
+                                text: model.locations
+                                elide: Text.ElideRight
+                                width: tableHeaderModel[1].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            //                        TableLabel {
+                            //                            text: model.type
+                            //                            elide: Text.ElideRight
+                            //                            width: tableHeaderModel[0].width
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                        }
+
+                            Label {
+                                text: {
+                                    var planting_ids = model.plantings.split(',')
+                                    var planting_id = Number(planting_ids[0])
+                                    var map = Planting.mapFromId("planting_view", planting_id);
+                                    var length = map['length']
+                                    var rows = map['rows']
+                                    var spacingPlants = map['spacing_plants']
+                                    var seedsPerHole = map['seeds_per_hole']
+
+                                    if (task_type_id === 1 || task_type_id === 3) {
+                                        return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
+                                    } else if (task_type_id === 2) {
+                                        return qsTr("%L1 x %L2, %3 seed(s) per cell", "", seedsPerHole).arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
+                                    } else {
+                                        return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
+                                    }
+
+                                }
+
+                                elide: Text.ElideRight
+                                width: tableHeaderModel[2].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Label {
+                                text: NDate.formatDate(model.assigned_date, year, "")
+                                elide: Text.ElideRight
+                                width: tableHeaderModel[3].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                        }
+
+                        Column {
+                            id: detailsRow
+                            visible: detailsButton.checked
+                            width: parent.width
+                            height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
+                            Repeater {
+                                model: idList.slice(1)
+
+                                Row {
+                                    height: Units.rowHeight
+                                    spacing: Units.smallSpacing
+                                    leftPadding: Units.smallSpacing
+                                    Item { width: parent.height; height: width }
+                                    PlantingLabel {
+                                        plantingId: Number(modelData)
+                                        year: page.year
+                                        sowingDate: Planting.sowingDate(plantingId)
+                                        endHarvestDate: Planting.endHarvestDate(plantingId)
+                                        showOnlyDates: true
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
                                 }
                             }
                         }
                     }
+
                 }
             }
+
         }
     }
 }

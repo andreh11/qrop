@@ -66,8 +66,6 @@ ComboBox {
             i++;
         if (i < model.count)
             currentIndex = i;
-        else
-            console.log(rowId, "NOT FOUND!")
     }
 
     Material.elevation: 0

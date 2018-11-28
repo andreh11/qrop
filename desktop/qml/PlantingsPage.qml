@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material 2.0
 import QtCharts 2.2
 import Qt.labs.settings 1.0
 
@@ -33,6 +33,7 @@ Page {
     property string filterText: ""
     property int currentYear: seasonSpinBox.year
     property date todayDate: new Date()
+    property alias searchField: filterField
 
     property alias model: listView.model
     property alias plantingModel: plantingModel
@@ -179,13 +180,13 @@ Page {
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequence : "Ctrl+K"
-        onActivated: {
-            filterField.clear();
-            filterField.forceActiveFocus();
-        }
-    }
+//    Shortcut {
+//        sequence : "Ctrl+K"
+//        onActivated: {
+//            filterField.clear();
+//            filterField.forceActiveFocus();
+//        }
+//    }
 
     Settings {
         id: settings

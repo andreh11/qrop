@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.2
 
 import io.croplan.components 1.0
 
-ToolButton {
+MyToolButton {
     id: completeButton
 
     property bool done
@@ -28,6 +28,4 @@ ToolButton {
                                 : Material.color(Material.Grey,
                                                  Material.Shade300)
     }
-    
-    
 }

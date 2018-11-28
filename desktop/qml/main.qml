@@ -339,6 +339,12 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     text: modelData.name
                     iconText: modelData.iconText
+                    onClicked: {
+                        navigationIndex = index
+                        if (!largeDisplay) {
+                            drawer.close()
+                        }
+                    }
                 }
 
             }

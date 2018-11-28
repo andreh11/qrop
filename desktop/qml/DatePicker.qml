@@ -140,19 +140,20 @@ Item {
         }
     }
 
-    Rectangle {
-        id: focusShade
-        parent: window.contentItem
-        anchors.fill: parent
-        opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
-        color: "black"
+    // BUG: cannot set cursorShape anymore if we use this trick!
+//    Rectangle {
+//        id: focusShade
+//        parent: window.contentItem
+//        anchors.fill: parent
+//        opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
+//        color: "black"
 
-        MouseArea {
-            anchors.fill: parent
-            enabled: parent.opacity > 0
-            onClicked: calendar.visible = false
-        }
-    }
+//        MouseArea {
+//            anchors.fill: parent
+//            enabled: parent.opacity > 0
+//            onClicked: calendar.visible = false
+//        }
+//    }
 
     Rectangle {
         id: calendar
@@ -160,7 +161,7 @@ Item {
         //        anchors.top: control.bottom
         //        parent: window.contentItem
         visible: false
-        focus: true
+//        focus: true
         z: 10
         width: childrenRect.width
         height: childrenRect.height
