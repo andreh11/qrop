@@ -88,7 +88,7 @@ Page {
         //                                x: -control.width
         width: contentItem.width
         height: contentItem.height
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
         padding: 0
         margins: 0
 
@@ -98,15 +98,9 @@ Page {
             clip: true
             year: year
             month: (new Date()).getMonth()
-            date: new Date()
-            //                                    month: calendarDate.getMonth()
-            //                                    year: calendarDate.getFullYear()
-            //                                    date: calendarDate
 
             onDateSelect: {
-                //                                        calendarDate = newDate;
                 popup.close();
-                //                                        control.editingFinished();
             }
         }
     }
@@ -408,7 +402,7 @@ Page {
                                 id: completeButton
                                 anchors.verticalCenter: parent.verticalCenter
 //                                height: parent.height * 1.3
-//                                width: height
+                                width: height
                                 overdue: model.overdue
                                 done: model.done
                                 due: model.due
@@ -420,10 +414,9 @@ Page {
                                     taskModel.refresh();
                                 }
                                 onPressAndHold: {
-                                    if (largeDisplay)
-                                        return
-                                    popup.x = completeButton.x
-                                    popup.y = completeButton.y
+                                    var pt = mapToGlobal(x, y)
+                                    popup.x = pt.x
+                                    popup.y = pt.y
                                     popup.open()
                                 }
                             }
@@ -479,7 +472,11 @@ Page {
                                     if (task_type_id === 1 || task_type_id === 3) {
                                         return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
                                     } else if (task_type_id === 2) {
-                                        return qsTr("%L1 x %L2, %3 seed(s) per cell", "", seedsPerHole).arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
+                                        if (seedsPerHole > 1)
+                                            return qsTr("%L1 x %L2, %3 seeds per cell").arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
+                                        else
+                                            return qsTr("%L1 x %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+
                                     } else {
                                         return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
                                     }
@@ -505,14 +502,14 @@ Page {
                             visible: detailsButton.checked
                             width: parent.width
                             height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
+                            leftPadding: Units.smallSpacing
                             Repeater {
                                 model: idList.slice(1)
 
                                 Row {
                                     height: Units.rowHeight
                                     spacing: Units.smallSpacing
-                                    leftPadding: Units.smallSpacing
-                                    Item { width: parent.height; height: width }
+                                    Item { width: completeButton.width; height: parent.height }
                                     PlantingLabel {
                                         plantingId: Number(modelData)
                                         year: page.year
