@@ -994,7 +994,7 @@
     <message>
         <location filename="../qml/TaskForm.qml" line="118"/>
         <source>Method</source>
-        <translation>Moyen</translation>
+        <translation>Méthode</translation>
     </message>
     <message>
         <source>Description</source>

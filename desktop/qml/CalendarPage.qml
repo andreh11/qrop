@@ -430,7 +430,6 @@ Page {
                             TaskCompleteButton {
                                 id: completeButton
                                 anchors.verticalCenter: parent.verticalCenter
-//                                height: parent.height * 1.3
                                 width: height
                                 overdue: model.overdue
                                 done: model.done
