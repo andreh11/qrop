@@ -140,6 +140,7 @@ Flickable {
 
             MyComboBox {
                 id: implementField
+                visible: methodField.currentIndex >= 0
                 labelText: qsTr("Implement")
                 showAddItem: true
                 addItemText: qsTr("Add Implement")
