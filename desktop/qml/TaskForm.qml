@@ -46,13 +46,13 @@ Flickable {
 
     readonly property var values: {
         "assigned_date": dueDateString,
-        "completed_date": completedDate,
-        "duration": duration,
-        "labor_time": laborTimeString,
-        "task_type_id": taskTypeId,
-        "task_method_id": taskMethodId,
-        "task_implement_id": taskImplementId,
-        "planting_ids": plantingIdList
+                "completed_date": completedDate,
+                "duration": duration,
+                "labor_time": laborTimeString,
+                "task_type_id": taskTypeId,
+                "task_method_id": taskMethodId,
+                "task_implement_id": taskImplementId,
+                "planting_ids": plantingIdList
     }
 
     function setFieldValue(item, value) {
@@ -117,13 +117,25 @@ Flickable {
                 editable: false
                 showAddItem: true
                 addItemText: qsTr("Add Method")
+                textRole: "method"
                 model: TaskMethodModel {
                     id: taskMethodModel
                     typeId: control.taskTypeId
                 }
-                textRole: "method"
-
+                onAddItemClicked: addMethodDialog.open();
                 Layout.fillWidth: true
+
+                SimpleAddDialog {
+                    id: addMethodDialog
+                    validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                    title: qsTr("Add Method")
+                    onAccepted:  {
+                        TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
+
+                        taskMethodModel.refresh();
+                        methodField.currentIndex = methodField.find(text);
+                    }
+                }
             }
 
             MyComboBox {
@@ -133,14 +145,26 @@ Flickable {
                 addItemText: qsTr("Add Implement")
                 floatingLabel: true
                 editable: false
-
+                textRole: "implement"
                 model: TaskImplementModel {
                     id: taskImplementModel
                     methodId: control.taskMethodId
                 }
-                textRole: "implement"
-
+                onAddItemClicked: addImplementDialog.open();
                 Layout.fillWidth: true
+
+                SimpleAddDialog {
+                    id: addImplementDialog
+                    validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                    title: qsTr("Add Implement")
+                    onAccepted:  {
+                        TaskImplement.add({"implement" : text,
+                                        "task_method_id" : control.taskMethodId});
+
+                        taskImplementModel.refresh();
+                        implementField.currentIndex = implementField.find(text);
+                    }
+                }
             }
         }
 
@@ -164,6 +188,7 @@ Flickable {
 
                 MyTextField {
                     id: durationField
+                    visible: !sowPlantTask
                     text: "0"
                     suffixText: qsTr("days")
                     labelText: qsTr("Duration")
@@ -288,9 +313,9 @@ Flickable {
             model: ["A", "B", "C"]
         }
 
-        Item {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
+//        Item {
+//            Layout.fillHeight: true
+//            Layout.fillWidth: true
+//        }
     }
 }

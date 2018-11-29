@@ -32,6 +32,7 @@ Dialog {
     property alias formAccepted: taskForm.accepted
     property var taskValueMap: Task.mapFromId("task_view", taskId)
     property int taskTypeId: Number(taskValueMap['task_type_id'])
+    property bool sowPlantTask: mode === "edit" && dialog.taskTypeId <= 3
 
     function reset() {
         taskDialogHeader.reset();
@@ -66,13 +67,14 @@ Dialog {
     focus: true
     closePolicy: Popup.NoAutoClose
     Material.background: Material.color(Material.Grey, Material.Shade100)
+    contentHeight: 200
 
     header: TaskDialogHeader {
         id: taskDialogHeader
         width: parent.width
         week: dialog.week
         year: dialog.year
-        sowPlantTask: dialog.taskTypeId <= 3
+        sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
     }
 
     TaskForm {
@@ -84,7 +86,7 @@ Dialog {
         week: dialog.week
         year: dialog.year
         taskId: dialog.taskId
-        sowPlantTask: dialog.taskTypeId <= 3
+        sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
     }
 
     footer: AddEditDialogFooter {

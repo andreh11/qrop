@@ -16,11 +16,10 @@ Rectangle {
     property int week
     property int year
     property bool sowPlantTask: false
-    onTaskTypeIdChanged: console.log("HEADER", taskTypeId)
 
     function reset() {
-        typeComboBox.currentIndex = 0
-        completedDate = ""
+        typeComboBox.currentIndex = 0;
+        completedDate = "";
     }
 
     implicitHeight: 60

@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Material 2.3
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
@@ -107,6 +107,7 @@ ApplicationWindow {
             Platform.MenuItem {
                 objectName: "aboutMenuButton"
                 text: qsTr("About...")
+                onTriggered: aboutDialog.open()
             }
         }
     }
@@ -393,7 +394,7 @@ ApplicationWindow {
         id: aboutDialog
         modal: true
         focus: true
-        title: "About"
+        title: qsTr("About Qrop")
         x: (window.width - width) / 2
         y: window.height / 6
         width: Math.min(window.width, window.height) / 3 * 2
@@ -403,12 +404,18 @@ ApplicationWindow {
             id: aboutColumn
             spacing: 20
 
+            Image {
+                source: "/icon.png"
+                width: 100
+                height: width
+            }
+
             Label {
                 width: aboutDialog.availableWidth
                 text: "Qrop"
                 font.family: "Roboto Medium"
                 wrapMode: Label.Wrap
-                font.pixelSize: 22
+                font.pixelSize: Units.fontSizeSubheading
             }
 
             Label {
@@ -416,7 +423,7 @@ ApplicationWindow {
                 text: "A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers."
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
-                font.pixelSize: 12
+                font.pixelSize: Units.fontSizeBodyAndButton
             }
         }
     }

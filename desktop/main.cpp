@@ -150,6 +150,24 @@ int main(int argc, char *argv[])
                                                   return unit;
                                               });
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskMethod",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *taskmethod = new DatabaseUtility();
+                                                  taskmethod->setTable("task_method");
+                                                  return taskmethod;
+                                              });
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskImplement",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *taskimplement = new DatabaseUtility();
+                                                  taskimplement->setTable("task_implement");
+                                                  return taskimplement;
+                                              });
+
     qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)

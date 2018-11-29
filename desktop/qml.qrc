@@ -52,5 +52,6 @@
         <file>qml/AddEditDialogFooter.qml</file>
         <file>qml/PlantingLabel.qml</file>
         <file>qml/MyToolButton.qml</file>
+        <file>qml/SimpleAddDialog.qml</file>
     </qresource>
 </RCC>
