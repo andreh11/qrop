@@ -76,12 +76,21 @@ Rectangle {
             model: taskTypeModel
             showAddItem: true
             enabled: !sowPlantTask
-
             addItemText: qsTr("Add Type")
-
             textRole: "type"
-            onAccepted: if (find(editText) === -1)
-                            model.append({text: editText})
+            onAddItemClicked: addTypeDialog.open()
+
+            SimpleAddDialog {
+                id: addTypeDialog
+                validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                title: qsTr("Add Type")
+                onAccepted:  {
+                    TaskType.add({"type" : text});
+
+                    taskTypeModel.refresh();
+                    typeComboBox.currentIndex = typeComboBox.find(text);
+                }
+            }
         }
 
         TaskCompleteButton {

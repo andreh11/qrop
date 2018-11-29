@@ -150,6 +150,15 @@ int main(int argc, char *argv[])
                                                   return unit;
                                               });
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskType",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *tasktype = new DatabaseUtility();
+                                                  tasktype->setTable("task_type");
+                                                  return tasktype;
+                                              });
+
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskMethod",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
