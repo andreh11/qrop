@@ -436,7 +436,10 @@ Page {
                                 done: model.done
                                 due: model.due
 
-                                ToolTip.text: done ? qsTr("Done on %1. Click to undo.".arg(model.completed_date.toLocaleDateString(Qt.locale(), Locale.ShortFormat))) : qsTr("Click to complete task. Hold to select date.")
+                                ToolTip.text:
+                                    done ? qsTr("Done on %1. Click to undo."
+                                                .arg(model.completed_date.toLocaleDateString(Qt.locale(), Locale.ShortFormat)))
+                                         : qsTr("Click to complete task. Hold to select date.")
                                 ToolTip.visible: hovered
 
                                 onClicked: {
