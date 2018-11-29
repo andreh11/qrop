@@ -22,19 +22,32 @@
 
 #include "sqltablemodel.h"
 
-
 SqlTableModel::SqlTableModel(QObject *parent)
     : QSqlRelationalTableModel(parent)
 {
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
+bool SqlTableModel::select()
+{
+    bool status = QSqlTableModel::select();
+
+    if (!status)
+        return status;
+
+    // Fetch as much as possible.
+    while (canFetchMore())
+        fetchMore();
+
+    return status;
+}
+
 bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 {
     bool ok = QSqlTableModel::insertRecord(row, record);
     if (!ok)
-        qWarning() << "Couldn't insert record" << record << "in database:"
-                   << query().lastError().text();
+        qWarning() << "Couldn't insert record" << record
+                   << "in database:" << query().lastError().text();
     return ok;
 }
 
@@ -71,7 +84,7 @@ QHash<int, QByteArray> SqlTableModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
 
-    for (int i = 0; i < this->record().count(); i ++)
+    for (int i = 0; i < this->record().count(); i++)
         roles.insert(Qt::UserRole + i, record().fieldName(i).toUtf8());
 
     return roles;
@@ -84,8 +97,7 @@ void SqlTableModel::setSortColumn(const QString &fieldName, const QString &order
         qDebug() << "m_rolesIndexes doesn't have key" << fieldName << roleIndex(fieldName);
         return;
     }
-    setSort(roleIndex(fieldName),
-            order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    setSort(roleIndex(fieldName), order == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     select();
 }
 
@@ -98,12 +110,11 @@ void SqlTableModel::setTable(const QString &tableName)
 
 bool SqlTableModel::submitAll()
 {
-   bool ok = QSqlTableModel::submitAll();
-   if (!ok)
-       qFatal("Cannot submit pending changes to database: %s",
-              qPrintable(lastError().text()));
+    bool ok = QSqlTableModel::submitAll();
+    if (!ok)
+        qFatal("Cannot submit pending changes to database: %s", qPrintable(lastError().text()));
 
-   return ok;
+    return ok;
 }
 
 int SqlTableModel::roleIndex(const QString &role) const

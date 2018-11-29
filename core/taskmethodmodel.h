@@ -20,14 +20,24 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT TaskMethodModel : public SqlTableModel
+class CORESHARED_EXPORT TaskMethodModel : public SortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int typeId READ typeId WRITE setTypeId NOTIFY typeIdChanged)
 
 public:
-    TaskMethodModel(QObject *parent = nullptr);
+    TaskMethodModel(QObject *parent = nullptr, const QString &tableName = "task_method");
+
+    int typeId() const;
+    void setTypeId(int typeId);
+
+private:
+    int m_typeId;
+
+signals:
+    void typeIdChanged();
 };
 
 #endif // TASKMETHODMODEL_H

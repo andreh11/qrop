@@ -21,7 +21,6 @@ import QtQuick.Controls.Material 2.2
 GroupBox {
     id: control
 
-
     padding: Units.formSpacing
 //    topPadding: padding + 8
 //    topPadding: title === "" ? 0 : 32

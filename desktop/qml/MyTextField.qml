@@ -67,7 +67,6 @@ TextField {
     onTextEdited: {
         floatMode = true
         manuallyModified = true
-        console.log("TEXT MANUALLY MODIFIED")
     }
     onAccepted: nextItemInFocusChain().forceActiveFocus()
     background.anchors.bottomMargin: 0

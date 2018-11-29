@@ -64,8 +64,8 @@ ComboBox {
         var i = 0;
         while (model.rowId(i) !== rowId && i < model.count)
             i++;
-       if (i < model.count)
-           currentIndex = i;
+        if (i < model.count)
+            currentIndex = i;
     }
 
     Material.elevation: 0
@@ -169,6 +169,7 @@ ComboBox {
         elide: Text.ElideRight
         renderType: control.contentItem.renderType
         visible: !control.contentItem.length
+        leftPadding: 10
     }
 
     Label {

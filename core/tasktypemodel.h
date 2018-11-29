@@ -20,14 +20,27 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT TaskTypeModel : public SqlTableModel
+class CORESHARED_EXPORT TaskTypeModel : public SortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(bool showPlantingTasks READ showPlantingTasks WRITE setShowPlantingTasks NOTIFY showPlantingTasksChanged)
 
 public:
-    TaskTypeModel(QObject *parent = nullptr);
+    TaskTypeModel(QObject *parent = nullptr, const QString &tableName = "task_type");
+
+    bool showPlantingTasks() const;
+    void setShowPlantingTasks(bool show);
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    bool m_showPlantingTasks;
+
+signals:
+    void showPlantingTasksChanged();
 };
 
 #endif // TASKTYPEMODEL_H

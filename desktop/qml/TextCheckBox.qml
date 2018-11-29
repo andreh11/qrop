@@ -25,7 +25,6 @@ CheckBox {
     property bool selectionMode: false
     property alias color: textBox.color
 
-
     indicator.visible: hovered || selectionMode
     indicator.x: textBox.x + textBox.width / 2 - indicator.width / 2
 

@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS seed_company (
 
 CREATE TABLE IF NOT EXISTS unit (
     unit_id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    fullname TEXT       UNIQUE NOT NULL,
-    abbreviation TEXT       UNIQUE NOT NULL,
+    fullname TEXT   UNIQUE NOT NULL,
+    abbreviation TEXT UNIQUE NOT NULL,
     conversion_rate FLOAT -- from unit to kilogram
 );
 
@@ -138,7 +138,8 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS task_type (
     task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT UNIQUE NOT NULL
+    type         TEXT UNIQUE NOT NULL,
+    color        TEXT DEFAULT '#000000' NOT NULL
 );
 
 INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
@@ -277,9 +278,12 @@ FROM variety
 LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
-SELECT task.*, group_concat(planting_id) as plantings, group_concat(location_id) as locations
+SELECT task.task_id as task_view_id, task.*, task_type.type, task_method.method, task_implement.implement, group_concat(planting_id) as plantings, group_concat(location_id) as locations
 FROM task
 LEFT JOIN planting_task using(task_id)
 LEFT JOIN location_task using(task_id)
+LEFT JOIN task_type using(task_type_id)
+LEFT JOIN task_method using (task_method_id)
+LEFT JOIN task_implement using (task_implement_id)
 GROUP BY task_id;
 

@@ -93,7 +93,6 @@ Page {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: console.log("clicked!")
                 }
             }
 

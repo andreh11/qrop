@@ -24,6 +24,6 @@ LocationModel::LocationModel(QObject *parent)
 {
     setTable("location");
 
-//    int parentColumn = fieldColumn("parent_id");
-//    setRelation(parentColumn, QSqlRelation("location", "location_id", "name"));
+    //    int parentColumn = fieldColumn("parent_id");
+    //    setRelation(parentColumn, QSqlRelation("location", "location_id", "name"));
 }

@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Material 2.3
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
@@ -29,8 +29,8 @@ ApplicationWindow {
 
     property var navigationModel: [
 //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
-        { source: "PlantingsPage.qml", name: qsTr("Plantings"), iconText: "\ueb4c" },
-        { source: "CalendarPage.qml",  name: qsTr("Tasks"),     iconText: "\ue876" }
+        { source: plantingsPage, name: qsTr("Plantings"), iconText: "\uf299" },
+        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\uf274" }
 //        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
@@ -60,9 +60,17 @@ ApplicationWindow {
     height: 768
 
     Material.primary: Material.Teal
-    Material.accent: Material.Cyan
+    Material.accent: Material.Indigo
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
+
+    PlantingsPage {
+        id: plantingsPage
+    }
+
+    CalendarPage {
+        id: calendarPage
+    }
 
     Shortcut {
         sequence: StandardKey.Quit
@@ -89,6 +97,17 @@ ApplicationWindow {
             Platform.MenuItem {
                 objectName: "quitMenuButton"
                 text: qsTr("Quit")
+            }
+        }
+        Platform.Menu {
+            id: helpMenu
+            objectName: "helpMenu"
+            title: qsTr("Help")
+
+            Platform.MenuItem {
+                objectName: "aboutMenuButton"
+                text: qsTr("About...")
+                onTriggered: aboutDialog.open()
             }
         }
     }
@@ -321,6 +340,12 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     text: modelData.name
                     iconText: modelData.iconText
+                    onClicked: {
+                        navigationIndex = index
+                        if (!largeDisplay) {
+                            drawer.close()
+                        }
+                    }
                 }
 
             }
@@ -329,16 +354,16 @@ ApplicationWindow {
         }
     }
 
-    Repeater {
-        id: pages
-        model: navigationModel
+//    Repeater {
+//        id: pages
+//        model: navigationModel
 
-        Loader {
-            property string title
-            source: modelData.source
-            onLoaded: title = item.title
-        }
-    }
+//        Loader {
+//            property string title
+//            source: modelData.source
+//            onLoaded: title = item.title
+//        }
+//    }
 
     StackView {
         id: stackView
@@ -349,20 +374,27 @@ ApplicationWindow {
         rightPadding: 20
         bottomPadding: 20
 
+        initialItem: plantingsPage
 
         function activatePage(index) {
-            if (index < pages.count)
-                stackView.replace(pages.itemAt(index))
+            switch (index) {
+            case 0:
+                stackView.replace(plantingsPage)
+                plantingsPage.refresh();
+                break;
+            case 1:
+                stackView.replace(calendarPage)
+                calendarPage.refresh();
+                break
+            }
         }
-
-        Component.onCompleted: stackView.push(pages.itemAt(0))
     }
 
     Dialog {
         id: aboutDialog
         modal: true
         focus: true
-        title: "About"
+        title: qsTr("About Qrop")
         x: (window.width - width) / 2
         y: window.height / 6
         width: Math.min(window.width, window.height) / 3 * 2
@@ -372,12 +404,18 @@ ApplicationWindow {
             id: aboutColumn
             spacing: 20
 
+            Image {
+                source: "/icon.png"
+                width: 100
+                height: width
+            }
+
             Label {
                 width: aboutDialog.availableWidth
-                text: "Logimaraich"
+                text: "Qrop"
                 font.family: "Roboto Medium"
                 wrapMode: Label.Wrap
-                font.pixelSize: 22
+                font.pixelSize: Units.fontSizeSubheading
             }
 
             Label {
@@ -385,7 +423,7 @@ ApplicationWindow {
                 text: "A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers."
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
-                font.pixelSize: 12
+                font.pixelSize: Units.fontSizeBodyAndButton
             }
         }
     }

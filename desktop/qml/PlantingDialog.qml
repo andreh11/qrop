@@ -47,6 +47,7 @@ Dialog {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
         plantingForm.clearAll();
+
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
         plantingForm.setFormValues(editPlantingValueMap);
@@ -79,29 +80,14 @@ Dialog {
         }
     }
 
-    footer: Item {
-        width: parent.width
+    footer: AddEditDialogFooter {
         height: childrenRect.height
-        Button {
-            id: cancelButton
-            flat: true
-            text: qsTr("Cancel")
-            anchors.right: applyButton.left
-            anchors.rightMargin: Units.smallSpacing
-            onClicked: dialog.reject();
-            Material.foreground: Material.accent
-        }
-
-        Button {
-            id: applyButton
-            Material.foreground: Material.accent
-            anchors.right: parent.right
-            anchors.rightMargin: Units.smallSpacing
-            flat: true
-            text: mode === "add" ? qsTr("Add") : qsTr("Edit")
-            enabled: formAccepted
-            onClicked: dialog.accept();
-        }
+        width: parent.width
+        applyEnabled: plantingForm.accepted
+        onRejected: dialog.reject();
+        onAccepted: dialog.accept();
+        rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
+        mode: dialog.mode
     }
 
     ScrollView {
@@ -148,7 +134,6 @@ Dialog {
             if (idList.length)
                 dialog.plantingsAdded(plantingForm.successions)
         } else {
-            console.log("EDIT VALUES:")
 //            var map = plantingForm.editedValues()
 //            for (var key in map)
 //                console.log(key, map[key])
@@ -157,6 +142,5 @@ Dialog {
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
-        model.refresh();
     }
 }

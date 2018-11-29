@@ -17,8 +17,8 @@ public:
     QDate date() const;
     void setDate(const QDate &date);
 
-//    Q_INVOKABLE void addNote(const QString &content, const QDate &date);
-//    static void removePlantingNotes(int plantingId);
+    //    Q_INVOKABLE void addNote(const QString &content, const QDate &date);
+    //    static void removePlantingNotes(int plantingId);
 
 signals:
     void dateChanged();

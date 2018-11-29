@@ -41,6 +41,7 @@ public:
     void setTable(const QString &tableName) Q_DECL_OVERRIDE;
     bool submitAll();
     int roleIndex(const QString &role) const;
+    bool select() override;
 
 private:
     QHash<QString, int> m_rolesIndexes;

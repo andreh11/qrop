@@ -20,11 +20,12 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class CORESHARED_EXPORT Location : public DatabaseUtility {
+class CORESHARED_EXPORT Location : public DatabaseUtility
+{
     Q_OBJECT
 public:
     Location(QObject *parent = nullptr);
-//    Q_INVOKABLE int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
+    //    Q_INVOKABLE int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
 
     Q_INVOKABLE QString fullName(int locationId) const;
     Q_INVOKABLE QList<QSqlRecord> locations(int plantingId) const;

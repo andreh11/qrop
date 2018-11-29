@@ -14,22 +14,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
 #include <QDate>
+#include <QDebug>
 #include <QVector>
 
 #include "databaseutility.h"
-#include "sqltablemodel.h"
 #include "plantingmodel.h"
+#include "sqltablemodel.h"
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
+    , m_week(-1)
+    , m_showActivePlantings(false)
 {
     setSortColumn("crop");
-//    int varietyColumn = fieldColumn("variety_id");
-//    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
+}
 
-//    select();
+int PlantingModel::week() const
+{
+    return m_week;
+}
+
+void PlantingModel::setWeek(int week)
+{
+    if (week < 0 || m_week == week)
+        return;
+
+    m_week = week;
+    invalidateFilter();
+    emit weekChanged();
+}
+
+bool PlantingModel::showActivePlantings() const
+{
+    return m_showActivePlantings;
+}
+
+void PlantingModel::setShowActivePlantings(bool show)
+{
+    if (m_showActivePlantings == show)
+        return;
+
+    m_showActivePlantings = show;
+    invalidateFilter();
+    emit showActivePlantingsChanged();
 }
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
@@ -39,10 +67,10 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_haverst_date");
     QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "end_harvest_date");
 
-    bool inRange = isDateInRange(sowingDate)
-            || isDateInRange(plantingDate)
-            || isDateInRange(harvestBeginDate)
-            || isDateInRange(harvestEndDate);
+    bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
+                    || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
+            && (!m_showActivePlantings
+                || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()));
 
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
 }

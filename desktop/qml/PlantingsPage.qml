@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material 2.0
 import QtCharts 2.2
 import Qt.labs.settings 1.0
 
@@ -33,6 +33,7 @@ Page {
     property string filterText: ""
     property int currentYear: seasonSpinBox.year
     property date todayDate: new Date()
+    property alias searchField: filterField
 
     property alias model: listView.model
     property alias plantingModel: plantingModel
@@ -118,8 +119,13 @@ Page {
     property int checks: numberOfTrue(selectedIds)
     property int lastIndexClicked: -1
 
-    function numberOfTrue(array)
-    {
+    function refresh()  {
+        var currentY = listView.contentY
+        plantingModel.refresh();
+        listView.contentY = currentY
+    }
+
+    function numberOfTrue(array) {
         var n = 0
         for (var key in array)
             if (array[key])
@@ -137,32 +143,28 @@ Page {
         return idList;
     }
 
-    function selectAll()
-    {
+    function selectAll() {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = true;
         selectedIdsChanged();
     }
 
-    function unselectAll()
-    {
+    function unselectAll() {
         var list = plantingModel.idList()
         for (var i = 0; i < list.length; i++)
             selectedIds[list[i]] = false
         selectedIdsChanged();
     }
 
-    function duplicateSelected()
-    {
+    function duplicateSelected() {
         var idList = selectedIdList();
         Planting.duplicateList(idList)
-        plantingModel.refresh()
+        page.refresh()
         selectedIdsChanged();
     }
 
-    function removeSelected()
-    {
+    function removeSelected() {
         var ids = []
         for (var key in selectedIds)
             if (selectedIds[key]) {
@@ -170,23 +172,23 @@ Page {
                 ids.push(key)
             }
         Planting.removeList(ids)
-        plantingModel.refresh()
+        page.refresh()
         selectedIdsChanged()
     }
 
     title: "Plantings"
-    padding: 8
+    padding: 0
     Material.background: "white"
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequence : "Ctrl+K"
-        onActivated: {
-            filterField.clear();
-            filterField.forceActiveFocus();
-        }
-    }
+//    Shortcut {
+//        sequence : "Ctrl+K"
+//        onActivated: {
+//            filterField.clear();
+//            filterField.forceActiveFocus();
+//        }
+//    }
 
     Settings {
         id: settings
@@ -205,19 +207,22 @@ Page {
     PlantingDialog {
         id: plantingDialog
         width: parent.width / 2
-        height: parent.height
+        height: parent.height - 2 * Units.smallSpacing
         x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         model: listView.model
         currentYear: page.currentYear
         onPlantingsAdded: {
-            addPlantingSnackbar.successions = successions
+            addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
+            page.refresh();
         }
 
         onPlantingsModified: {
-            editPlantingsSnackBar.successions = successions
-            editPlantingsSnackBar.open()
+            editPlantingsSnackBar.successions = successions;
+            editPlantingsSnackBar.open();
             unselectAll();
+            page.refresh();
         }
 
         onRejected: unselectAll();
@@ -244,7 +249,7 @@ Page {
 
         onClicked: {
             Planting.rollback();
-            plantingModel.refresh();
+            page.refresh();
         }
     }
 
@@ -269,7 +274,7 @@ Page {
 
         onClicked: {
             Planting.rollback();
-            plantingModel.refresh();
+            page.refresh();
         }
     }
 
@@ -307,7 +312,7 @@ Page {
                 RowLayout {
                     id: buttonRow
                     anchors.fill: parent
-                    spacing: 8
+                    spacing: Units.smallSpacing
                     visible: !filterMode
 
                     Button {
@@ -720,7 +725,6 @@ Page {
                                         lastIndexClicked = index
 
                                         selectedIdsChanged()
-                                        console.log("All:", plantingModel.rowCount( ) === checks)
                                     }
                                 }
                             }

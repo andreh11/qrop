@@ -15,13 +15,30 @@
  */
 
 #include <QDebug>
-#include "sqltablemodel.h"
-#include "cropmodel.h"
 
-CropModel::CropModel(QObject *parent, const QString &tableName)
+#include "taskimplementmodel.h"
+#include "sqltablemodel.h"
+
+TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
+    , m_methodId(-1)
 {
-    setSortColumn("crop");
-    //    int familyColumn = fieldColumn("family_id");
-    //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
+    int col = m_model->record().indexOf("task_method_id");
+    setFilterKeyColumn(col);
+    setSortColumn("implement");
+}
+
+int TaskImplementModel::methodId() const
+{
+    return m_methodId;
+}
+
+void TaskImplementModel::setMethodId(int methodId)
+{
+    if (m_methodId == methodId)
+        return;
+
+    m_methodId = methodId;
+    setFilterFixedString(QString::number(m_methodId));
+    methodIdChanged();
 }

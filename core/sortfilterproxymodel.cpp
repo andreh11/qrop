@@ -21,14 +21,14 @@
 #include "sqltablemodel.h"
 
 SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &tableName)
-    : QSortFilterProxyModel(parent),
-      m_model(new SqlTableModel(this)),
-      m_tableName(tableName),
-      m_string(""),
-      m_year(QDate::currentDate().year()),
-      m_season(1),
-      m_sortColumn(""),
-      m_sortOrder("ascending")
+    : QSortFilterProxyModel(parent)
+    , m_model(new SqlTableModel(this))
+    , m_tableName(tableName)
+    , m_string("")
+    , m_year(QDate::currentDate().year())
+    , m_season(1)
+    , m_sortColumn("")
+    , m_sortOrder("ascending")
 {
     m_model->setTable(tableName);
     m_model->select();
@@ -38,10 +38,10 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-//    int varietyColumn = fieldColumn("variety_id");
-//    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
+    //    int varietyColumn = fieldColumn("variety_id");
+    //    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
 
-//    select();
+    //    select();
 }
 
 QList<int> SortFilterProxyModel::idList() const
@@ -53,18 +53,15 @@ QList<int> SortFilterProxyModel::idList() const
         int id = m_model->data(sourceIndex, "planting_id").toInt();
         list.append(id);
     }
-    qDebug() << "idList:" << list;
     return list;
 }
 
 int SortFilterProxyModel::rowId(int row) const
 {
-    QModelIndex idx = index(row, 0);
-    QModelIndex sourceIndex = mapToSource(idx);
+    QModelIndex sourceIndex = mapToSource(index(row, 0));
     int id = m_model->data(sourceIndex, Qt::UserRole).toInt();
     return id;
 }
-
 
 void SortFilterProxyModel::refresh() const
 {
@@ -118,16 +115,16 @@ void SortFilterProxyModel::setFilterSeason(int season)
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
-                                                                      : Qt::DescendingOrder);
+    sort(m_model->roleIndex(m_sortColumn),
+         m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    sort(m_model->roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder
-                                                                      : Qt::DescendingOrder);
+    sort(m_model->roleIndex(m_sortColumn),
+         m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
     sortOrderChanged();
 }
 
@@ -135,13 +132,13 @@ QVector<QDate> SortFilterProxyModel::seasonDates() const
 {
     switch (m_season) {
     case 0: // Spring
-        return {QDate(m_year-1, 10, 1), QDate(m_year, 9, 30)};
+        return { QDate(m_year - 1, 10, 1), QDate(m_year, 9, 30) };
     case 2: // Fall
-        return {QDate(m_year, 4, 1), QDate(m_year+1, 3, 31)};
+        return { QDate(m_year, 4, 1), QDate(m_year + 1, 3, 31) };
     case 3: // Winter
-        return {QDate(m_year, 7, 1), QDate(m_year+1, 6, 30)};
+        return { QDate(m_year, 7, 1), QDate(m_year + 1, 6, 30) };
     default: // Summer or invalid season
-        return {QDate(m_year, 1, 1), QDate(m_year, 12, 31)};
+        return { QDate(m_year, 1, 1), QDate(m_year, 12, 31) };
     }
 }
 

@@ -16,15 +16,99 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.2
+
+import io.croplan.components 1.0
 
 Dialog {
     id: dialog
+
+    property int taskId: -1
+    property int week
+    property int year
+    property string mode: "add"
+    property alias form: taskForm
+    property alias formAccepted: taskForm.accepted
+    property var taskValueMap: Task.mapFromId("task_view", taskId)
+    property int taskTypeId: Number(taskValueMap['task_type_id'])
+    property bool sowPlantTask: mode === "edit" && dialog.taskTypeId <= 3
+
+    function reset() {
+        taskDialogHeader.reset();
+        taskForm.reset();
+    }
+
+    function addTask() {
+        mode = "add";
+        dialog.taskId = -1
+        taskDialogHeader.reset();
+        taskForm.reset()
+        dialog.open()
+    }
+
+    function editTask(taskId) {
+        mode = "edit";
+        dialog.taskId = taskId;
+        taskIdChanged(); // To update taskValueMap
+
+        taskDialogHeader.reset();
+        taskDialogHeader.typeField.setRowId(taskTypeId)
+        taskDialogHeader.completedDate =  taskValueMap['completed_date']
+        taskForm.reset();
+        taskForm.setFormValues(taskValueMap)
+        dialog.open();
+    }
+
+    title: mode === "add" ? qsTr("Add Task") : qsTr("Edit Task")
     modal: true
-    title: "Add task"
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    focus: true
+    closePolicy: Popup.NoAutoClose
+    Material.background: Material.color(Material.Grey, Material.Shade100)
+    height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing : parent.height - 2 * Units.smallSpacing
+
+    header: TaskDialogHeader {
+        id: taskDialogHeader
+        width: parent.width
+        week: dialog.week
+        year: dialog.year
+        sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
+    }
 
     TaskForm {
+        id: taskForm
         anchors.fill: parent
+        taskTypeId: taskDialogHeader.taskTypeId
+        taskValueMap: dialog.taskValueMap
+        completedDate: taskDialogHeader.completedDate
+        week: dialog.week
+        year: dialog.year
+        taskId: dialog.taskId
+        sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
+    }
+
+    footer: AddEditDialogFooter {
+        height: childrenRect.height
+        width: parent.width
+        applyEnabled: formAccepted
+        onRejected: dialog.reject();
+        onAccepted: dialog.accept();
+        mode: dialog.mode
+    }
+
+    onOpened: {
+        if (mode === "add") {
+            taskDialogHeader.typeComboBox.contentItem.forceActiveFocus();
+        }
+
+    }
+
+    onAccepted: {
+        if (mode === "add") {
+            var id = Task.add(taskForm.values)
+        } else {
+            var id = Task.update(dialog.taskId, taskForm.values)
+            //TODO: task update
+        }
     }
 }
-

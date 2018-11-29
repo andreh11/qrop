@@ -22,93 +22,304 @@ import QtQuick.Controls.Material 2.2
 import io.croplan.components 1.0
 
 Flickable {
-    Column {
+    id: control
+
+    property string mode: "add" // add or edit
+    property int week
+    property int year
+    property int taskId
+    property var taskValueMap
+    property int taskTypeId: -1
+    property bool sowPlantTask: false
+
+    property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
+    property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
+
+    readonly property bool accepted: plantingTask && plantingIdList.length
+    readonly property alias dueDateString: dueDatepicker.isoDateString
+    readonly property int duration: Number(durationField.text)
+    readonly property alias laborTimeString: laborTimeField.text
+    readonly property alias plantingTask: plantingRadioButton.checked
+    readonly property alias locationTask: locationRadioButton.checked
+    readonly property alias plantingIdList: plantingList.plantingIdList
+    property string completedDate: ""
+
+    readonly property var values: {
+        "assigned_date": dueDateString,
+                "completed_date": completedDate,
+                "duration": duration,
+                "labor_time": laborTimeString,
+                "task_type_id": taskTypeId,
+                "task_method_id": taskMethodId,
+                "task_implement_id": taskImplementId,
+                "planting_ids": plantingIdList
+    }
+
+    function setFieldValue(item, value) {
+        if (!value)
+            return;
+
+        if (item instanceof MyTextField)
+            item.text = value;
+        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+            item.checked = value;
+        else if (item instanceof MyComboBox)
+            item.setRowId(value);
+    }
+
+    function setFormValues(val) {
+        if ("assigned_date" in val)
+            dueDatepicker.calendarDate = Date.fromLocaleString(Qt.locale(), val['assigned_date'],
+                                                               "yyyy-MM-dd")
+        if ("duration" in val) durationField.text = val["duration"]
+        if ("labor_time" in val) laborTimeField.text = val["labor_time"]
+        if ("task_method_id" in val) methodField.setRowId(Number(val["task_method_id"]))
+        if ("task_implement_id" in val) implementField.setRowId(Number(val["task_implement_id"]))
+        if ("plantings" in val) {
+            var idList = val["plantings"].split(",")
+            for (var i = 0; i < idList.length; i++)
+                plantingList.selectedIds[idList[i]] = true
+            plantingList.selectedIdsChanged();
+        }
+    }
+
+    function reset() {
+        plantingList.reset();
+        methodField.currentIndex = -1;
+        implementField.currentIndex = -1;
+        dueDatepicker.calendarDate = NDate.dateFromWeekString(control.week);
+        durationField.text = "0";
+        laborTimeField.text = "00:00";
+        plantingRadioButton.checked = true;
+        locationRadioButton.checked = false;
+    }
+
+    focus: true
+    contentWidth: width
+    flickableDirection: Flickable.VerticalFlick
+    boundsBehavior: Flickable.StopAtBounds
+    Material.background: "white"
+
+    implicitHeight: 200
+    Layout.minimumHeight: implicitHeight
+
+    ColumnLayout {
+        id: mainColumn
         anchors.fill: parent
-        spacing: 16
-        
+        spacing: Units.formSpacing
+
         ColumnLayout {
             width: parent.width
-            spacing: 16
-            
+            spacing: 0
+            visible: !sowPlantTask
+
             MyComboBox {
-                id: taskField
-                editable: true
-                Layout.fillWidth: true
-                model: ListModel {
-                    id: model
-                    ListElement { text: "Cultivation \& Tillage"}
-                    ListElement { text: "Fertilize \& Amend"}
-                    ListElement { text: "Greenhouse Activaty"}
-                    ListElement { text: "Irrigate"}
-                    ListElement { text: "Maintenance"}
-                    ListElement { text: "Pest \& Disease"}
-                    ListElement { text: "Prune"}
-                    ListElement { text: "Row Cover \& Mulch"}
-                    ListElement { text: "Thin"}
-                    ListElement { text: "Treillis"}
-                    ListElement { text: "Weed"}
-                }
-
-                onAccepted: if (find(editText) === -1)
-                                 model.append({text: editText})
-            }
-
-            MyTextField {
-                id: varietyField
+                id: methodField
+                labelText: qsTr("Method")
                 floatingLabel: true
-                placeholderText: qsTr("Method")
-                Layout.fillWidth: true
-            }
-            
-            MyTextField {
-                id: familyField
-                floatingLabel: true
-                placeholderText: qsTr("Description")
-                Layout.fillWidth: true
-            }
-
-            Row {
-                id: rowLayout
-                width: parent.width
-                RadioButton {
-                    id: plantingRadioButton
-                    checked: true
-                    text: qsTr("Plantings")
+                editable: false
+                showAddItem: true
+                addItemText: qsTr("Add Method")
+                textRole: "method"
+                model: TaskMethodModel {
+                    id: taskMethodModel
+                    typeId: control.taskTypeId
                 }
-                RadioButton {
-                    id: locationRadioButton
-                    text: qsTr("Locations")
-                }
-            }
-
-            Rectangle {
-                visible: plantingRadioButton.checked
+                onAddItemClicked: addMethodDialog.open();
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: 4
-                border.color: Material.color(Material.Grey)
-                Column {
-                    anchors {
-                        fill: parent
-                        leftMargin: 8
-                        rightMargin: leftMargin
+
+                SimpleAddDialog {
+                    id: addMethodDialog
+                    validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
+                    title: qsTr("Add Method")
+                    onAccepted:  {
+                        TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
+
+                        taskMethodModel.refresh();
+                        methodField.currentIndex = methodField.find(text);
                     }
-//            PlantingList {
-//                implicitHeight: 200
-//                width: 180
-//                height: 200
-//                Layout.fillWidth: true
-//            }
                 }
             }
 
-
             MyComboBox {
-                id: locationField
-                visible: locationRadioButton.checked
+                id: implementField
+                visible: methodField.currentIndex >= 0
+                labelText: qsTr("Implement")
+                showAddItem: true
+                addItemText: qsTr("Add Implement")
+                floatingLabel: true
+                editable: false
+                textRole: "implement"
+                model: TaskImplementModel {
+                    id: taskImplementModel
+                    methodId: control.taskMethodId
+                }
+                onAddItemClicked: addImplementDialog.open();
                 Layout.fillWidth: true
-                model: ["A", "B", "C"]
+
+                SimpleAddDialog {
+                    id: addImplementDialog
+                    validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
+                    title: qsTr("Add Implement")
+                    onAccepted:  {
+                        TaskImplement.add({"implement" : text,
+                                        "task_method_id" : control.taskMethodId});
+
+                        taskImplementModel.refresh();
+                        implementField.currentIndex = implementField.find(text);
+                    }
+                }
             }
         }
+
+        FormGroupBox {
+            id: datesGroupBox
+            width: parent.width
+            Layout.fillWidth: true
+
+            RowLayout {
+                spacing: Units.formSpacing
+                width: parent.width
+
+                DatePicker {
+                    id: dueDatepicker
+                    labelText: qsTr("Due Date")
+                    floatingLabel: true
+                    Layout.minimumWidth: 100
+                    Layout.fillWidth: true
+                    calendarDate: NDate.dateFromWeekString(control.week)
+                }
+
+                MyTextField {
+                    id: durationField
+                    visible: !sowPlantTask
+                    text: "0"
+                    suffixText: qsTr("days")
+                    labelText: qsTr("Duration")
+                    floatingLabel: true
+                    validator: IntValidator { bottom: 0; top: 999 }
+                    Layout.minimumWidth: 80
+                    Layout.fillWidth: true
+                }
+
+                MyTextField {
+                    id: laborTimeField
+                    labelText: qsTr("Labor Time")
+                    floatingLabel: true
+                    Layout.minimumWidth: 80
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "99:99"
+                    text: "00:00"
+                    suffixText: qsTr("h", "Abbreviaton for hour")
+                    Layout.fillWidth: true
+                }
+            }
+        }
+
+        Row {
+            id: radioRow
+            width: parent.width
+            spacing: Units.smallSpacing
+            visible: !sowPlantTask
+            Layout.fillWidth: true
+
+            ChoiceChip {
+                id: plantingRadioButton
+                autoExclusive: true
+                checked: true
+                text: qsTr("Plantings")
+            }
+
+            ChoiceChip {
+                id: locationRadioButton
+                visible: false // Location handling is not implemented yet
+                text: qsTr("Locations")
+                autoExclusive: true
+            }
+        }
+
+        FormGroupBox {
+            visible: plantingRadioButton.checked && !sowPlantTask
+            topPadding: Units.smallSpacing
+            bottomPadding: Units.smallSpacing
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 0
+
+                RowLayout {
+                    height: Units.rowHeight
+                    Layout.fillWidth: true
+                    CheckBox {
+                        id: headerCheckbox
+                        width: parent.height
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        tristate: true
+                        checkState: (plantingList.count && plantingList.checks == plantingList.count)
+                                    ? Qt.Checked
+                                    : (plantingList.checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                        nextCheckState: function () {
+                            if (checkState == Qt.Checked) {
+                                plantingList.unselectAll()
+                                return Qt.Unchecked
+                            } else {
+                                plantingList.selectAll()
+                                return Qt.Checked
+                            }
+                        }
+                        ToolTip.text: checkState == Qt.Checked ? qsTr("Unelect all plantings")
+                                                               : qsTr("Select all plantings")
+                        ToolTip.visible: hovered
+                    }
+
+                    SearchField {
+                        id: plantingSearchField
+                        width: parent.width
+                        Layout.fillWidth: true
+                    }
+
+                    CheckBox {
+                        id: currentPlantingsCheckbox
+                        text: qsTr("Active plantings")
+                        checked: true
+                        ToolTip.visible: hovered
+                        ToolTip.text: checked ? qsTr("Show only active plantings for due date")
+                                              : qsTr("Show all plantings")
+                    }
+                }
+
+                PlantingList {
+                    id: plantingList
+                    week: dueDatepicker.week
+                    year: control.year
+                    filterString: plantingSearchField.text
+                    width: parent.widh
+                    implicitHeight: 30
+                    showActivePlantings: currentPlantingsCheckbox.checked
+
+                    Layout.minimumHeight: 30
+                    Layout.minimumWidth: 100
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+        }
+        //            }
+
+
+        MyComboBox {
+            id: locationField
+            visible: locationRadioButton.checked && !sowPlantTask
+            Layout.fillWidth: true
+            model: ["A", "B", "C"]
+        }
+
+//        Item {
+//            Layout.fillHeight: true
+//            Layout.fillWidth: true
+//        }
     }
 }

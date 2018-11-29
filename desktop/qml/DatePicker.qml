@@ -32,6 +32,7 @@ Item {
     property int currentYear: new Date().getFullYear()
 
     property date calendarDate: new Date()
+    readonly property int week: MDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
@@ -61,10 +62,12 @@ Item {
                                     : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
-        onEditingFinished: {
+        onTextEdited: {
+            if (!textField.acceptableInput)
+                return;
+
             var newDate = mode === "date" ? NDate.dateFromDateString(text)
                                           : NDate.dateFromWeekString(text);
-
             if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
 
@@ -137,19 +140,20 @@ Item {
         }
     }
 
-    Rectangle {
-        id: focusShade
-        parent: window.contentItem
-        anchors.fill: parent
-        opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
-        color: "black"
+    // BUG: cannot set cursorShape anymore if we use this trick!
+//    Rectangle {
+//        id: focusShade
+//        parent: window.contentItem
+//        anchors.fill: parent
+//        opacity: (!largeDisplay && calendar.visible) ? 0.5 : 0
+//        color: "black"
 
-        MouseArea {
-            anchors.fill: parent
-            enabled: parent.opacity > 0
-            onClicked: calendar.visible = false
-        }
-    }
+//        MouseArea {
+//            anchors.fill: parent
+//            enabled: parent.opacity > 0
+//            onClicked: calendar.visible = false
+//        }
+//    }
 
     Rectangle {
         id: calendar
@@ -157,7 +161,7 @@ Item {
         //        anchors.top: control.bottom
         //        parent: window.contentItem
         visible: false
-        focus: true
+//        focus: true
         z: 10
         width: childrenRect.width
         height: childrenRect.height

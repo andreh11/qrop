@@ -24,15 +24,15 @@
 #include "keyword.h"
 
 Planting::Planting(QObject *parent)
-    : DatabaseUtility(parent),
-      task(new Task(this)),
-      keyword(new Keyword(this))
+    : DatabaseUtility(parent)
+    , task(new Task(this))
+    , keyword(new Keyword(this))
 {
     m_table = "planting";
     m_idFieldName = "planting_id";
 }
 
-//QList<int> Planting::keywordListFromString(const QString &idString) const
+// QList<int> Planting::keywordListFromString(const QString &idString) const
 //{
 
 //}
@@ -60,20 +60,20 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-//    QDate sowingDate = QDate::fromString(map["sowing_date"].toString(), Qt::ISODate);
+    //    QDate sowingDate = QDate::fromString(map["sowing_date"].toString(), Qt::ISODate);
     QDate plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
-//    QDate begHarvestDate = QDate::fromString(map["beg_harvest_date"].toString(), Qt::ISODate);
-//    QDate endHarvestDate = QDate::fromString(map["end_harvest_date"].toString(), Qt::ISODate);
+    //    QDate begHarvestDate = QDate::fromString(map["beg_harvest_date"].toString(), Qt::ISODate);
+    //    QDate endHarvestDate = QDate::fromString(map["end_harvest_date"].toString(), Qt::ISODate);
     QVariantMap newMap(map);
     QList<int> ids;
 
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
         int days = i * daysBetween;
-//        newMap["sowing_date"] = sowingDate.addDays(days).toString(Qt::ISODate);
+        //        newMap["sowing_date"] = sowingDate.addDays(days).toString(Qt::ISODate);
         newMap["planting_date"] = plantingDate.addDays(days).toString(Qt::ISODate);
-//        newMap["beg_harvest_date"] = begHarvestDate.addDays(days).toString(Qt::ISODate);
-//        newMap["end_harvest_date"] = endHarvestDate.addDays(days).toString(Qt::ISODate);
+        //        newMap["beg_harvest_date"] = begHarvestDate.addDays(days).toString(Qt::ISODate);
+        //        newMap["end_harvest_date"] = endHarvestDate.addDays(days).toString(Qt::ISODate);
 
         int id = add(newMap);
         if (id > 0)
@@ -84,24 +84,22 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     return ids;
 }
 
-QVariantMap Planting::lastValues(const int varietyId,
-                                 const int cropId,
-                                 const int plantingType,
+QVariantMap Planting::lastValues(const int varietyId, const int cropId, const int plantingType,
                                  const bool inGreenhouse) const
 {
     const QString cropQueryString("SELECT planting_id FROM planting_view"
                                   " WHERE crop_id = %1 ORDER BY planting_id DESC");
     const QString varietyQueryString("SELECT planting_id FROM planting_view"
-                                 " WHERE variety_id = %1 ORDER BY planting_id DESC");
+                                     " WHERE variety_id = %1 ORDER BY planting_id DESC");
     const QString plantingTypeQueryString("SELECT planting_id FROM planting_view"
-                                      " WHERE variety_id = %1"
-                                      " AND planting_type = %2"
-                                      " ORDER BY planting_id DESC");
+                                          " WHERE variety_id = %1"
+                                          " AND planting_type = %2"
+                                          " ORDER BY planting_id DESC");
     const QString inGhQueryString("SELECT planting_id FROM planting_view"
-                              " WHERE variety_id = %1"
-                              " AND planting_type = %2"
-                              " AND in_greenhouse = %3"
-                              " ORDER BY planting_id DESC");
+                                  " WHERE variety_id = %1"
+                                  " AND planting_type = %2"
+                                  " AND in_greenhouse = %3"
+                                  " ORDER BY planting_id DESC");
 
     QSqlQuery query1(inGhQueryString.arg(varietyId).arg(plantingType).arg(inGreenhouse ? 1 : 0));
     QSqlQuery query2(plantingTypeQueryString.arg(varietyId).arg(plantingType));
@@ -123,9 +121,9 @@ QVariantMap Planting::lastValues(const int varietyId,
             if (plantingId >= 1)
                 return mapFromId("planting_view", plantingId);
         }
-        qDebug() << "lastValues: trying with less constraints...";
+        //        qDebug() << "lastValues: trying with less constraints...";
     }
-    qDebug() << "Couldn't find prefill values!";
+    //    qDebug() << "Couldn't find prefill values!";
 
     return {};
 }
@@ -145,7 +143,7 @@ QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
 
     for (const auto &key : common.keys()) {
         int i;
-        for (i = 1; i < list.length(); i ++)
+        for (i = 1; i < list.length(); i++)
             if (list[i].value(key) != common.value(key))
                 break;
         if (i != list.length())
@@ -176,4 +174,40 @@ int Planting::duplicate(int id) const
     int newId = DatabaseUtility::duplicate(id);
     task->duplicatePlantingTasks(id, newId);
     return newId;
+}
+
+QDate Planting::sowingDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("sowing_date").toString(), Qt::ISODate);
+}
+
+QDate Planting::plantingDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("planting_date").toString(), Qt::ISODate);
+}
+
+QDate Planting::begHarvestDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("beg_harvest_date").toString(), Qt::ISODate);
+}
+
+QDate Planting::endHarvestDate(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+
+    return QDate::fromString(map.value("end_harvest_date").toString(), Qt::ISODate);
 }

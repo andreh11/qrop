@@ -46,5 +46,12 @@
         <file>qml/AddUnitDialog.qml</file>
         <file>qml/AddDialogButtonBox.qml</file>
         <file>qml/ColorPicker.qml</file>
+        <file>qml/WeekSpinBox.qml</file>
+        <file>qml/TaskCompleteButton.qml</file>
+        <file>qml/TaskDialogHeader.qml</file>
+        <file>qml/AddEditDialogFooter.qml</file>
+        <file>qml/PlantingLabel.qml</file>
+        <file>qml/MyToolButton.qml</file>
+        <file>qml/SimpleAddDialog.qml</file>
     </qresource>
 </RCC>

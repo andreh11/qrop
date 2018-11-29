@@ -33,6 +33,7 @@
 #include "keyword.h"
 #include "mdate.h"
 #include "planting.h"
+#include "task.h"
 #include "variety.h"
 
 #include "cropmodel.h"
@@ -42,11 +43,13 @@
 #include "plantingmodel.h"
 #include "rolemodel.h"
 #include "seedcompanymodel.h"
+#include "taskimplementmodel.h"
+#include "taskmethodmodel.h"
 #include "taskmodel.h"
+#include "tasktypemodel.h"
 #include "unitmodel.h"
 #include "usermodel.h"
 #include "varietymodel.h"
-
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -57,14 +60,21 @@ static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 }
 
 // A subclass of QDoubleValidator which always use "." as a decimalPoint.
-class TextFieldDoubleValidator : public QDoubleValidator {
+class TextFieldDoubleValidator : public QDoubleValidator
+{
 public:
-    TextFieldDoubleValidator (QObject *parent = nullptr) : QDoubleValidator(parent) {}
-    TextFieldDoubleValidator (double bottom, double top, int decimals, QObject * parent) :
-    QDoubleValidator(bottom, top, decimals, parent) {}
+    TextFieldDoubleValidator(QObject *parent = nullptr)
+        : QDoubleValidator(parent)
+    {
+    }
+    TextFieldDoubleValidator(double bottom, double top, int decimals, QObject *parent)
+        : QDoubleValidator(bottom, top, decimals, parent)
+    {
+    }
     const QLocale locale;
 
-    QValidator::State validate(QString &input, int &pos) const override {
+    QValidator::State validate(QString &input, int &pos) const override
+    {
         const QString decimalPoint = locale.decimalPoint();
         input.replace(".", decimalPoint);
         return QDoubleValidator::validate(input, pos);
@@ -73,13 +83,13 @@ public:
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setApplicationName("Qrop");
-    QCoreApplication::setOrganizationName("AH");
-    QCoreApplication::setOrganizationDomain("io.qrop");
 
     QApplication app(argc, argv);
-    app.setWindowIcon(QIcon("/home/ah/src/qrop/icon.png"));
+    app.setAttribute(Qt::AA_EnableHighDpiScaling);
+    app.setApplicationName("Qrop");
+    app.setOrganizationName("AH");
+    app.setOrganizationDomain("io.qrop");
+    app.setWindowIcon(QIcon(":/icon.png"));
     QTranslator translator;
 
     const QString &lang = QLocale::system().name();
@@ -91,7 +101,7 @@ int main(int argc, char *argv[])
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     const int ret2 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
     const int ret3 = QFontDatabase::addApplicationFont(":/fonts/RobotoCondensed-Regular.ttf");
-    const int ret4 = QFontDatabase::addApplicationFont(":/fonts/fa-regular-400.ttf"); // font-awesome
+    const int ret4 = QFontDatabase::addApplicationFont(":/fonts/FontAwesome.otf"); // font-awesome
     const int ret5 = QFontDatabase::addApplicationFont(":/fonts/MaterialIcons-Regular.ttf");
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1 || ret5 == -1)
         qWarning() << "[desktop main] Some custom fonts can't be loaded.";
@@ -105,101 +115,131 @@ int main(int argc, char *argv[])
     qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
+    qmlRegisterType<TaskTypeModel>("io.croplan.components", 1, 0, "TaskTypeModel");
+    qmlRegisterType<TaskMethodModel>("io.croplan.components", 1, 0, "TaskMethodModel");
+    qmlRegisterType<TaskImplementModel>("io.croplan.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
 
-//    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
+    //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
 
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        auto *crop = new DatabaseUtility();
-        crop->setTable("crop");
-        return crop;
-    }
-    );
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *crop = new DatabaseUtility();
+                                                  crop->setTable("crop");
+                                                  return crop;
+                                              });
 
     qmlRegisterSingletonType<Variety>("io.croplan.components", 1, 0, "Variety",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        auto *variety = new Variety();
-        variety->setTable("variety");
-        return variety;
-    }
-    );
+                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                          Q_UNUSED(engine)
+                                          Q_UNUSED(scriptEngine)
+                                          auto *variety = new Variety();
+                                          variety->setTable("variety");
+                                          return variety;
+                                      });
 
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Unit",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        auto *unit = new DatabaseUtility();
-        unit->setTable("unit");
-        return unit;
-    }
-    );
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *unit = new DatabaseUtility();
+                                                  unit->setTable("unit");
+                                                  return unit;
+                                              });
 
-    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        auto *keyword = new Keyword();
-        return keyword;
-    }
-    );
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskType",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *tasktype = new DatabaseUtility();
+                                                  tasktype->setTable("task_type");
+                                                  return tasktype;
+                                              });
 
-    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        auto *mdate = new MDate();
-        return mdate;
-    }
-    );
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskMethod",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *taskmethod = new DatabaseUtility();
+                                                  taskmethod->setTable("task_method");
+                                                  return taskmethod;
+                                              });
 
-//    deleteDatabase();
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskImplement",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *taskimplement = new DatabaseUtility();
+                                                  taskimplement->setTable("task_implement");
+                                                  return taskimplement;
+                                              });
+
+    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword",
+                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                          Q_UNUSED(engine)
+                                          Q_UNUSED(scriptEngine)
+                                          auto *keyword = new Keyword();
+                                          return keyword;
+                                      });
+
+    qmlRegisterSingletonType<Task>("io.croplan.components", 1, 0, "Task",
+                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                       Q_UNUSED(engine)
+                                       Q_UNUSED(scriptEngine)
+                                       auto *task = new Task();
+                                       return task;
+                                   });
+
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
+                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                        Q_UNUSED(engine)
+                                        Q_UNUSED(scriptEngine)
+                                        auto *mdate = new MDate();
+                                        return mdate;
+                                    });
+
+    //    deleteDatabase();
     connectToDatabase();
-//    createDatabase();
+    //    createDatabase();
 
-//    QtAndroid::runOnAndroidThread([=]()
-//    {
-//        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-//        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-//        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-//        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
-//    });
+    //    QtAndroid::runOnAndroidThread([=]()
+    //    {
+    //        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+    //        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+    //        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+    //        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
+    //    });
 
-//    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
-//                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
+    //    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
+    //                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
 
-//    UserModel userModel;
-//    foreach (const QList<QVariant> &user, userList) {
-//        QVariantMap userMap({{"first_name", user[0]},
-//                             {"last_name", user[1]},
-//                             {"email", user[2]},
-//                             {"role_id", user[3]}});
+    //    UserModel userModel;
+    //    foreach (const QList<QVariant> &user, userList) {
+    //        QVariantMap userMap({{"first_name", user[0]},
+    //                             {"last_name", user[1]},
+    //                             {"email", user[2]},
+    //                             {"role_id", user[3]}});
 
-//        int id = userModel.add(userMap);
-//        int dupId = userModel.duplicate(id);
-//        userModel.remove(dupId);
-//        userModel.update(id, {{"last_name", "Waro"}});
-//    }
+    //        int id = userModel.add(userMap);
+    //        int dupId = userModel.duplicate(id);
+    //        userModel.remove(dupId);
+    //        userModel.update(id, {{"last_name", "Waro"}});
+    //    }
 
-//    PlantingModel plantingModel;
-//    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
-//                                        {2, 1, "2018-01-04"},
-//                                        {2, 2, "2018-01-28"}});
+    //    PlantingModel plantingModel;
+    //    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
+    //                                        {2, 1, "2018-01-04"},
+    //                                        {2, 2, "2018-01-28"}});
 
-//    foreach (const QList<QVariant> &planting, plantingMap) {
-//        QVariantMap plantingMap({{"variety_id", planting[0]},
-//                                 {"planting_type", planting[1]},
-//                                 {"planting_date", planting[2]}});
-//        Planting::add(plantingMap);
-//    }
+    //    foreach (const QList<QVariant> &planting, plantingMap) {
+    //        QVariantMap plantingMap({{"variety_id", planting[0]},
+    //                                 {"planting_type", planting[1]},
+    //                                 {"planting_date", planting[2]}});
+    //        Planting::add(plantingMap);
+    //    }
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));

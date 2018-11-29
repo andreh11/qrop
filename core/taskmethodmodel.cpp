@@ -14,10 +14,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "taskmethodmodel.h"
+#include <QDebug>
 
-TaskMethodModel::TaskMethodModel(QObject *parent)
-    : SqlTableModel(parent)
+#include "taskmethodmodel.h"
+#include "sqltablemodel.h"
+
+TaskMethodModel::TaskMethodModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
+    , m_typeId(-1)
 {
-    setTable("task_method");
+    int col = m_model->record().indexOf("task_type_id");
+    setFilterKeyColumn(col);
+    setSortColumn("method");
+}
+
+int TaskMethodModel::typeId() const
+{
+    return m_typeId;
+}
+
+void TaskMethodModel::setTypeId(int typeId)
+{
+    if (m_typeId == typeId)
+        return;
+
+    m_typeId = typeId;
+    setFilterFixedString(QString::number(m_typeId));
+    typeIdChanged();
 }

@@ -26,7 +26,7 @@ import "date.js" as MDate
 Flickable {
     id: control
     property int currentYear
-    property bool accepted: varietyField.acceptableInput
+    property bool accepted: varietyField.currentIndex >= 0
 
     property string mode: "add" // add or edit
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
@@ -101,7 +101,7 @@ Flickable {
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
-    property var values: {
+    readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
@@ -205,16 +205,15 @@ Flickable {
     // Set item to value only if it has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.
     function setFieldValue(item, value) {
-        if (!value)
+        if (!value || item.manuallyModified)
             return;
-        if (!item.manuallyModified) {
-            if (item instanceof MyTextField)
-                item.text = value;
-            else if (item instanceof CheckBox || item instanceof ChoiceChip)
-                item.checked = value;
-            else if (item instanceof MyComboBox)
-                item.setRowId(value);
-        }
+
+        if (item instanceof MyTextField)
+            item.text = value;
+        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+            item.checked = value;
+        else if (item instanceof MyComboBox)
+            item.setRowId(value);
     }
 
     function setFormValues(val) {
@@ -485,67 +484,6 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                DatePicker {
-                    id: fieldSowingDateField
-                    visible: directSeedRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Field Sowing")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(fieldSowingDateField,
-                                                       sowDtmField,
-                                                       firstHarvestDateField, 1)
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
-                }
-
-                DatePicker {
-                    id: greenhouseStartDateField
-                    visible: greenhouseRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Greenhouse start date")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(greenhouseStartDateField,
-                                                       greenhouseGrowTimeField,
-                                                       fieldPlantingDateField, 1)
-                }
-
-                DatePicker {
-                    id: fieldPlantingDateField
-                    visible: !directSeedRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Field planting")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: updateDateField(fieldPlantingDateField,
-                                                       greenhouseGrowTimeField,
-                                                       greenhouseStartDateField, -1)
-                    onCalendarDateChanged: updateDateField(fieldPlantingDateField,
-                                                           plantingDtmField,
-                                                           firstHarvestDateField, 1)
-                }
-
-                DatePicker {
-                    id: firstHarvestDateField
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("First harvest")
-                    currentYear: control.currentYear
-
-                    onEditingFinished: {
-                        if (directSeeded)
-                            updateDateField(firstHarvestDateField, sowDtmField,
-                                            fieldSowingDateField, -1)
-                        else
-                            updateDateField(firstHarvestDateField,
-                                            plantingDtmField,
-                                            fieldPlantingDateField, -1)
-                    }
-                }
-
                 MyTextField {
                     id: sowDtmField
                     visible: fieldSowingDateField.visible
@@ -616,6 +554,68 @@ Flickable {
                     helperText: text ? NDate.formatDate(endHarvestDate, currentYear) : ""
                     suffixText: qsTr("days")
                 }
+
+                DatePicker {
+                    id: fieldSowingDateField
+                    visible: directSeedRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Field Sowing")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(fieldSowingDateField,
+                                                       sowDtmField,
+                                                       firstHarvestDateField, 1)
+                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
+                }
+
+                DatePicker {
+                    id: greenhouseStartDateField
+                    visible: greenhouseRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Greenhouse start date")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(greenhouseStartDateField,
+                                                       greenhouseGrowTimeField,
+                                                       fieldPlantingDateField, 1)
+                }
+
+                DatePicker {
+                    id: fieldPlantingDateField
+                    visible: !directSeedRadio.checked
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Field planting")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: updateDateField(fieldPlantingDateField,
+                                                       greenhouseGrowTimeField,
+                                                       greenhouseStartDateField, -1)
+                    onCalendarDateChanged: updateDateField(fieldPlantingDateField,
+                                                           plantingDtmField,
+                                                           firstHarvestDateField, 1)
+                }
+
+                DatePicker {
+                    id: firstHarvestDateField
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("First harvest")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: {
+                        if (directSeeded)
+                            updateDateField(firstHarvestDateField, sowDtmField,
+                                            fieldSowingDateField, -1)
+                        else
+                            updateDateField(firstHarvestDateField,
+                                            plantingDtmField,
+                                            fieldPlantingDateField, -1)
+                    }
+                }
+
             }
         }
 

@@ -16,70 +16,128 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtCharts 2.0
+import QtQuick.Layouts 1.3
 
 import io.croplan.components 1.0
-import "date.js" as MDate
 
 ListView {
     id: listView
-    model: PlantingModel { }
+
+    property int year
+    property alias filterString: plantingModel.filterString
+    property alias count: plantingModel.count // Number of plantings currently filtered.
+    property alias showActivePlantings: plantingModel.showActivePlantings
+    property alias week: plantingModel.week
+
+    property var selectedIds: ({}) // Map of the ids of the selected plantings
+    property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
+    property int checks: numberOfTrue(selectedIds) // Number of selected plantings
+    property int lastIndexClicked: -1 // TODO: fors shift selection
+
+    function selectedIdList() {
+        var idList = []
+        for (var key in selectedIds)
+            if (selectedIds[key]) {
+//                selectedIds[key] = false
+                idList.push(key)
+            }
+        return idList;
+    }
+
+    function selectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = true;
+        selectedIdsChanged();
+    }
+
+    function unselectAll() {
+        var list = plantingModel.idList()
+        for (var i = 0; i < list.length; i++)
+            selectedIds[list[i]] = false
+        selectedIdsChanged();
+    }
+
+    function refresh()  {
+       plantingModel.refresh();
+    }
+
+    function numberOfTrue(array) {
+        var n = 0
+        for (var key in array)
+            if (array[key])
+                n++
+        return n
+    }
+
+    function reset() {
+        // TODO: reset all
+        selectedIds = ({});
+        plantingModel.refresh();
+    }
+
+    clip: true
+    implicitHeight: childrenRect.height
+    spacing: Units.smallSpacing
+    boundsBehavior: Flickable.StopAtBounds
+    flickableDirection: Flickable.HorizontalAndVerticalFlick
+
+    model: PlantingModel {
+        id: plantingModel
+    }
+
+    Keys.onUpPressed: verticalScrollBar.decrease()
+    Keys.onDownPressed: verticalScrollBar.increase()
+
+    ScrollBar.vertical: ScrollBar {
+        id: verticalScrollBar
+        visible: largeDisplay && plantingModel.count
+        height: listView.height
+        policy: ScrollBar.AlwaysOn
+    }
 
     delegate: Row {
         id: rowDelegate
-        height: 64
-        spacing: 16
-        leftPadding: 16
-        topPadding: 16
+        height: Units.rowHeight
+        spacing: Units.formSpacing
 
-        // This won't work because we don't control creation/deletion of delegates...
         property bool checked: false
 
-        Rectangle {
+        TextCheckBox {
+            width: parent.height
+            visible: !rowDelegate.checked
+            selectionMode: checks > 0
+            text: model.crop
+            font.pixelSize: 26
+            color: model.crop_color
+            round: true
             anchors.verticalCenter: parent.verticalCenter
-            height: 40
-            width: height
-            radius: 80
-            color: Material.color(Material.Green, Material.Shade400)
+            checked: model.planting_id in selectedIds
+                     && selectedIds[model.planting_id]
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: checked = !checked
-            }
+                onClicked: {
+                    if (mouse.button !== Qt.LeftButton)
+                        return
 
-            Text {
-                visible: !rowDelegate.checked
-                anchors.centerIn: parent
-                text: model.crop.slice(0,2)
-                color: "white"
-                font.family: "Roboto Regular"
-                font.pixelSize: 24
-            }
-            Text {
-                visible: rowDelegate.checked
-                anchors.centerIn: parent
-                text: "\ue876"
-                color: "white"
-                font.family: "Material Icons"
-                font.pixelSize: 24
+                    selectedIds[model.planting_id] = !selectedIds[model.planting_id]
+                    lastIndexClicked = index
+                    selectedIdsChanged()
+                }
             }
         }
 
-        Column {
+        PlantingLabel {
             anchors.verticalCenter: parent.verticalCenter
-            Text {
-                text: model.crop + ", " + model.variety
-                font.family: "Roboto Regular"
-                font.pixelSize: fontSizeBodyAndButton
-            }
-            Text {
-                text: MDate.formatDate(model.sowing_date) + " − " + MDate.week(model.end_harvest_date) + ", " + model.place_ids
-                font.family: "Roboto Regular"
-                color: Material.color(Material.Grey)
-                font.pixelSize: 12
-            }
+            plantingId: model.planting_id
+            sowingDate: model.sowing_date
+            endHarvestDate: model.end_harvest_date
+            year: listView.year
+            length: model.length
+            locations: model.locations
+
         }
     }
 }

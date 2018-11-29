@@ -14,14 +14,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-#include "sqltablemodel.h"
-#include "cropmodel.h"
+#ifndef TASKIMPLEMENTMODEL_H
+#define TASKIMPLEMENTMODEL_H
 
-CropModel::CropModel(QObject *parent, const QString &tableName)
-    : SortFilterProxyModel(parent, tableName)
+#include <QObject>
+
+#include "core_global.h"
+#include "sortfilterproxymodel.h"
+
+class CORESHARED_EXPORT TaskImplementModel : public SortFilterProxyModel
 {
-    setSortColumn("crop");
-    //    int familyColumn = fieldColumn("family_id");
-    //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
-}
+    Q_OBJECT
+    Q_PROPERTY(int methodId READ methodId WRITE setMethodId NOTIFY methodIdChanged)
+
+public:
+    TaskImplementModel(QObject *parent = nullptr, const QString &tableName = "task_implement");
+
+    int methodId() const;
+    void setMethodId(int methodId);
+
+private:
+    int m_methodId;
+
+signals:
+    void methodIdChanged();
+};
+
+#endif // TASKIMPLEMENTMODEL_H

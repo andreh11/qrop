@@ -22,9 +22,9 @@
 #include "databaseutility.h"
 
 DatabaseUtility::DatabaseUtility(QObject *parent)
-    : QObject(parent),
-      m_table(""),
-      m_idFieldName("")
+    : QObject(parent)
+    , m_table("")
+    , m_idFieldName("")
 {
 }
 
@@ -33,7 +33,6 @@ void DatabaseUtility::rollback() const
     qDebug() << "Rolling back...";
     QSqlDatabase::database().rollback();
     qDebug() << QSqlDatabase::database().lastError().text();
-
 }
 
 QString DatabaseUtility::table() const
@@ -58,10 +57,11 @@ void DatabaseUtility::setIdFieldName(const QString &name)
     m_idFieldName = name;
 }
 
-void DatabaseUtility::debugQuery(const QSqlQuery& query) const
+void DatabaseUtility::debugQuery(const QSqlQuery &query) const
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
-        qDebug() << "Query OK: " << query.lastQuery();
+        return;
+        //        qDebug() << "Query OK: " << query.lastQuery();
     } else {
         qWarning() << "Query ERROR: " << query.lastError().text();
         qWarning() << "Query text: " << query.lastQuery();
@@ -84,9 +84,9 @@ QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &
 QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 {
     if (id < 0)
-        return QSqlRecord();
+        return {};
     if (tableName.isNull())
-        return QSqlRecord();
+        return {};
 
     QString queryString("SELECT * FROM %1 WHERE %2 = %3");
     QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(id));
@@ -97,7 +97,7 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     if (query.isValid())
         return query.record();
 
-    return QSqlRecord();
+    return {};
 }
 
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
@@ -154,6 +154,7 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
 
 int DatabaseUtility::add(const QVariantMap &map) const
 {
+    qDebug() << "MAP:" << map;
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
     QString fieldName = idFieldName();
@@ -172,9 +173,8 @@ int DatabaseUtility::add(const QVariantMap &map) const
     queryValueString.append(")");
 
     QString queryString = queryNameString + queryValueString;
-
     QSqlQuery query;
-    query.prepare(queryString) ;
+    query.prepare(queryString);
 
     for (const auto &key : map.keys())
         query.bindValue(QString(":%1").arg(key), map[key]);
@@ -186,8 +186,7 @@ int DatabaseUtility::add(const QVariantMap &map) const
     return newId;
 }
 
-void DatabaseUtility::addLink(const QString &table,
-                              const QString &field1, int id1,
+void DatabaseUtility::addLink(const QString &table, const QString &field1, int id1,
                               const QString &field2, int id2) const
 {
     QString queryString = "INSERT INTO %1(%2,%3) VALUES (%4,%5)";
@@ -234,7 +233,7 @@ int DatabaseUtility::duplicate(int id) const
     if (id < 0)
         return -1;
     if (table().isNull())
-        return - 1;
+        return -1;
 
     QVariantMap map = mapFromId(table(), id);
     map.remove(idFieldName());
@@ -269,8 +268,7 @@ void DatabaseUtility::removeList(const QList<int> &idList) const
     QSqlDatabase::database().commit();
 }
 
-void DatabaseUtility::removeLink(const QString &table,
-                                 const QString &field1, int id1,
+void DatabaseUtility::removeLink(const QString &table, const QString &field1, int id1,
                                  const QString &field2, int id2) const
 {
     QString queryString = "DELETE FROM %1 WHERE %2 = %3 AND %4 = %5";
