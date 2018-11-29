@@ -207,8 +207,9 @@ Page {
     PlantingDialog {
         id: plantingDialog
         width: parent.width / 2
-        height: parent.height
+        height: parent.height - 2 * Units.smallSpacing
         x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         model: listView.model
         currentYear: page.currentYear
         onPlantingsAdded: {

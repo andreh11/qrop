@@ -16,12 +16,14 @@ Rectangle {
     property int week
     property int year
     property bool sowPlantTask: false
+    property alias typeComboBox: typeComboBox
 
     function reset() {
         typeComboBox.currentIndex = 0;
         completedDate = "";
     }
 
+    focus: true
     implicitHeight: 60
     color: Material.color(Material.Grey, Material.Shade200)
     radius: 2
@@ -50,7 +52,7 @@ Rectangle {
             height: 40
             width: height
             radius: 80
-            border.width: 4
+            border.width: 2
             border.color: Material.color(Material.Green, Material.Shade400)
 
             Text {
@@ -60,7 +62,7 @@ Rectangle {
                     if (stringList.length > 1)
                         return stringList[0][0] + stringList[1][0].toString().toUpperCase()
                     else
-                        return stringList[0][0]
+                        return stringList[0][0] + stringList[0][1]
                 }
                 color: "black"
                 font { family: "Roboto Regular"; pixelSize: 20 }
@@ -72,17 +74,18 @@ Rectangle {
             labelText: qsTr("Type")
             floatingLabel: true
             editable: false
-            Layout.fillWidth: true
             model: taskTypeModel
             showAddItem: true
             enabled: !sowPlantTask
             addItemText: qsTr("Add Type")
             textRole: "type"
+            Layout.fillWidth: true
+
             onAddItemClicked: addTypeDialog.open()
 
             SimpleAddDialog {
                 id: addTypeDialog
-                validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                 title: qsTr("Add Type")
                 onAccepted:  {
                     TaskType.add({"type" : text});
@@ -97,7 +100,9 @@ Rectangle {
             id: taskCompleteButton
             done: control.completedDate
 
-            ToolTip.text: qsTr("Click to complete task. Hold to select date.")
+            ToolTip.text: control.completedDate
+                          ? qsTr("Done on %1. Click to undo.").arg(Date.fromLocaleDateString(Qt.locale(), control.completedDate, "yyyy-MM-dd").toLocaleDateString(Qt.locale(), Locale.ShortFormat))
+                          : qsTr("Click to complete task. Hold to select date.")
             ToolTip.visible: hovered
 
             onClicked: {

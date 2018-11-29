@@ -54,9 +54,7 @@ Dialog {
 
         taskDialogHeader.reset();
         taskDialogHeader.typeField.setRowId(taskTypeId)
-        taskDialogHeader.completedDate = Date.fromLocaleDateString(Qt.locale(),
-                                                                   taskValueMap['completed_date'],
-                                                                   "yyyy-MM-dd")
+        taskDialogHeader.completedDate =  taskValueMap['completed_date']
         taskForm.reset();
         taskForm.setFormValues(taskValueMap)
         dialog.open();
@@ -67,7 +65,7 @@ Dialog {
     focus: true
     closePolicy: Popup.NoAutoClose
     Material.background: Material.color(Material.Grey, Material.Shade100)
-    contentHeight: 200
+    height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing : parent.height - 2 * Units.smallSpacing
 
     header: TaskDialogHeader {
         id: taskDialogHeader
@@ -96,6 +94,13 @@ Dialog {
         onRejected: dialog.reject();
         onAccepted: dialog.accept();
         mode: dialog.mode
+    }
+
+    onOpened: {
+        if (mode === "add") {
+            taskDialogHeader.typeComboBox.contentItem.forceActiveFocus();
+        }
+
     }
 
     onAccepted: {

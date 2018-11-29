@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS seed_company (
 
 CREATE TABLE IF NOT EXISTS unit (
     unit_id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    fullname TEXT       UNIQUE NOT NULL,
-    abbreviation TEXT       UNIQUE NOT NULL,
+    fullname TEXT   UNIQUE NOT NULL,
+    abbreviation TEXT UNIQUE NOT NULL,
     conversion_rate FLOAT -- from unit to kilogram
 );
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS task (
 CREATE TABLE IF NOT EXISTS task_type (
     task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
     type         TEXT UNIQUE NOT NULL,
-    color        TEXT DEFAULT '#000000' NOT NULL,
+    color        TEXT DEFAULT '#000000' NOT NULL
 );
 
 INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");

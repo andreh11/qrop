@@ -100,6 +100,9 @@ Flickable {
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
+    implicitHeight: 200
+    Layout.minimumHeight: implicitHeight
+
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
@@ -127,7 +130,7 @@ Flickable {
 
                 SimpleAddDialog {
                     id: addMethodDialog
-                    validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                    validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                     title: qsTr("Add Method")
                     onAccepted:  {
                         TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
@@ -156,7 +159,7 @@ Flickable {
 
                 SimpleAddDialog {
                     id: addImplementDialog
-                    validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+                    validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                     title: qsTr("Add Implement")
                     onAccepted:  {
                         TaskImplement.add({"implement" : text,

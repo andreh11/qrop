@@ -61,8 +61,9 @@ Page {
     TaskDialog {
         id: taskDialog
         width: parent.width / 2
-        height: parent.height
+//        height: parent.height
         x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         onAccepted: page.refresh()
         week: page.week
         year: page.year
@@ -435,7 +436,7 @@ Page {
                                 done: model.done
                                 due: model.due
 
-                                ToolTip.text: qsTr("Click to complete task. Hold to select date.")
+                                ToolTip.text: done ? qsTr("Done on %1. Click to undo.".arg(model.completed_date.toLocaleDateString(Qt.locale(), Locale.ShortFormat))) : qsTr("Click to complete task. Hold to select date.")
                                 ToolTip.visible: hovered
 
                                 onClicked: {

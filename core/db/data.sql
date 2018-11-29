@@ -1,10 +1,12 @@
-insert into family (family) values ("Solanaceae");
+insert into family (family) values ("Alliaceae");
 insert into family (family) values ("Apiaceae");
 insert into family (family) values ("Asteraceae");
 insert into family (family) values ("Brassicaceae");
 insert into family (family) values ("Chenopodiaceae");
+insert into family (family) values ("Cucurbitaceae");
+insert into family (family) values ("Fabaceae");
+insert into family (family) values ("Solanaceae");
 insert into family (family) values ("Valerianaceae");
-
 
 insert into crop (crop, family_id) values ("Tomato", 1);
 insert into crop (crop, family_id) values ("Pepper", 1);
