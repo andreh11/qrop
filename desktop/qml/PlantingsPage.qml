@@ -321,7 +321,6 @@ Page {
         }
     }
 
-
 //    ListView {
 //        id: smallListView
 //        clip: true
