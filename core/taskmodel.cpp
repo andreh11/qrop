@@ -168,21 +168,23 @@ bool TaskModel::isDone(int row, const QModelIndex &parent) const
 {
     QDate completedDate = fieldDate(row, parent, "completed_date");
     bool completed = completedDate.isValid();
-    return completed && m_mondayDate <= completedDate && completedDate <= m_sundayDate;
+    return completed && m_mondayDate <= completedDate && completedDate <= m_sundayDate
+            && completedDate.year() == m_year;
 }
 
 bool TaskModel::isDue(int row, const QModelIndex &parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
-    return !completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
+    return !completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate
+            && assignedDate.year() == m_year;
 }
 
 bool TaskModel::isOverdue(int row, const QModelIndex &parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
-    return !completed && assignedDate < m_mondayDate;
+    return !completed && assignedDate < m_mondayDate && assignedDate.year() == m_year;
 }
 
 bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
