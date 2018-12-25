@@ -74,6 +74,8 @@ AllowShortFunctionsOnASingleLine: Inline
 # re-order includes separated by empty lines, the feature is not used.
 SortIncludes: false
 
+ReflowComments: true
+
 # macros for which the opening brace stays attached.
 ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
 

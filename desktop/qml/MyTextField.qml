@@ -39,7 +39,7 @@ TextField {
     property bool hasError: showError && ((characterLimit && length > characterLimit) || !acceptableInput)
     property int characterLimit
     property bool showBorder: true
-    property color placeholderTextColor
+//    property color placeholderTextColor
     property int suffixTextAddedMargin: 0
 
     property color color: manuallyModified ? "red" : Material.accent
@@ -69,7 +69,7 @@ TextField {
         manuallyModified = true
     }
     onAccepted: nextItemInFocusChain().forceActiveFocus()
-    background.anchors.bottomMargin: 0
+//    background.anchors.bottomMargin: 0
 
     Label {
         id: fieldLabel

@@ -21,11 +21,16 @@
 #include "databaseutility.h"
 #include "plantingmodel.h"
 #include "sqltablemodel.h"
+#include "location.h"
+#include "planting.h"
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
     , m_week(-1)
     , m_showActivePlantings(false)
+    , m_showOnlyUnassigned(false)
+    , location(new Location(this))
+    , planting(new Planting(this))
 {
     setSortColumn("crop");
 }
@@ -60,8 +65,25 @@ void PlantingModel::setShowActivePlantings(bool show)
     emit showActivePlantingsChanged();
 }
 
+bool PlantingModel::showOnlyUnassigned() const
+{
+    return m_showOnlyUnassigned;
+}
+
+void PlantingModel::setShowOnlyUnassigned(bool show)
+{
+    if (m_showOnlyUnassigned == show)
+        return;
+
+    m_showOnlyUnassigned = show;
+    invalidateFilter();
+    emit showOnlyUnassignedChanged();
+}
+
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
+    int length = rowValue(sourceRow, sourceParent, "length").toInt();
     QDate sowingDate = fieldDate(sourceRow, sourceParent, "sowing_date");
     QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
     QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_haverst_date");
@@ -70,7 +92,8 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
                     || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
             && (!m_showActivePlantings
-                || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()));
+                || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
+            && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId));
 
-    return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent) && inRange;
+    return inRange && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

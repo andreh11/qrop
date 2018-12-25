@@ -25,6 +25,7 @@ Keyword::Keyword(QObject *parent)
     : DatabaseUtility(parent)
 {
     m_table = "keyword";
+    m_viewTable = "keyword";
 }
 
 QList<int> Keyword::keywordIdList(int plantingId) const

@@ -20,19 +20,38 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
+class Planting;
+
 class CORESHARED_EXPORT Location : public DatabaseUtility
 {
     Q_OBJECT
+
 public:
     Location(QObject *parent = nullptr);
-    //    Q_INVOKABLE int duplicate(int id) { return db.duplicate(id); } // TODO: duplicate children
+    Q_INVOKABLE void remove(int id) const override;
+    Q_INVOKABLE int duplicate(int id) const override;
 
     Q_INVOKABLE QString fullName(int locationId) const;
-    Q_INVOKABLE QList<QSqlRecord> locations(int plantingId) const;
+    QList<QString> pathName(int locationId) const;
+    Q_INVOKABLE QString fullName(QList<int> locationIdList) const;
+    Q_INVOKABLE QList<int> locations(int plantingId) const;
+    Q_INVOKABLE int plantingLength(int plantingId, int locationId) const;
+    Q_INVOKABLE QList<int> plantings(int locationId) const;
+    Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
+    Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
+    Q_INVOKABLE QList<int> conflictingPlantings(int locationId, int plantingId) const;
+    int availableSpace(int plantingId, int locationId, const QDate &seasonBeg,
+                       const QDate &seasonEnd) const;
     Q_INVOKABLE QList<int> children(int locationId) const;
-    Q_INVOKABLE void addPlanting(int plantingId, int locationId) const;
+    Q_INVOKABLE void addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
+                                 const QDate &seasonEnd) const;
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
+    QList<int> childrenTree(int locationId) const;
+
+private:
+    Planting *planting;
+    int duplicateTree(int id, int parentId) const;
 };
 
 #endif // LOCATION_H

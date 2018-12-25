@@ -21,13 +21,13 @@ Item {
     implicitHeight: childrenRect.height
     implicitWidth: childrenRect.width
 
-    function cropName(id) {
-        var map = Planting.mapFromId("planting_view", id);
+    function cropName(plantingId) {
+        var map = Planting.mapFromId("planting_view", plantingId);
         return map['crop']
     }
 
-    function varietyName(id) {
-        var map = Planting.mapFromId("planting_view", id);
+    function varietyName(plantingId) {
+        var map = Planting.mapFromId("planting_view", plantingId);
         return map['variety']
     }
 

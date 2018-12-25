@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS family (
     family_id INTEGER PRIMARY KEY AUTOINCREMENT,
     family    TEXT NOT NULL,
+    interval  INTEGER NOT NULL DEFAULT 0,
     color     TEXT DEFAULT '#000000' NOT NULL
 );
 
@@ -253,8 +254,8 @@ CREATE TABLE IF NOT EXISTS expense_file (
 
 CREATE VIEW IF NOT EXISTS planting_view AS
 SELECT planting_id as planting_view_id,
-       crop, variety, crop_id,
-       crop.color as crop_color,
+       family, family_id, family.color as family_color, family.interval as family_interval,
+       crop, variety, crop_id, crop.color as crop_color,
        planting.*,
        unit.abbreviation as unit,
        group_concat(location_id) as locations,
@@ -266,6 +267,7 @@ FROM planting
 LEFT JOIN planting_location using(planting_id)
 LEFT JOIN variety USING (variety_id)
 LEFT JOIN crop USING (crop_id)
+LEFT JOIN family USING (family_id)
 LEFT JOIN unit USING (unit_id)
 LEFT JOIN planting_task USING (planting_id)
 LEFT JOIN task USING (task_id)

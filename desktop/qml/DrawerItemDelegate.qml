@@ -53,7 +53,9 @@ ItemDelegate {
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
             id: textLabel
-            text: largeDisplay && railMode ? "" : control.text
+            visible: largeDisplay && railMode
+            width: visible ? implicitWidth : 0
+            text: control.text
             verticalAlignment: Text.AlignVCenter
         }
     }

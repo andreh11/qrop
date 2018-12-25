@@ -43,4 +43,31 @@ QtObject {
 
     readonly property int rowHeight: 40 // Height of rows in tables.
     readonly property int monthWidth: 60 // Width of a month in a timeline.
+    readonly property int timegraphWidth: monthWidth * 12
+
+    function coordinate(day) {
+        if (day < 0)
+            return 0;
+        else if (day > 365)
+            return timegraphWidth;
+        else
+            return (day / 365.0) * timegraphWidth;
+    }
+
+    function widthBetween(pos, seasonBegin, date) {
+        var width = position(seasonBegin, date) - pos;
+        if (width > 0)
+            return width;
+        else
+            return 0;
+    }
+
+    function daysDelta(beg, end) {
+        var msPerDay = 1000 * 60 * 60 * 24;
+        return (end - beg) / msPerDay;
+    }
+
+    function position(seasonBegin, date) {
+        return coordinate(daysDelta(seasonBegin, date))
+    }
 }

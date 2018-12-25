@@ -35,15 +35,24 @@ public:
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE int duplicate(int id) const override;
 
+    Q_INVOKABLE QString cropName(int plantingId) const;
+    Q_INVOKABLE QString cropColor(int plantingId) const;
+    Q_INVOKABLE QString varietyName(int plantingId) const;
+    Q_INVOKABLE QString familyId(int plantingId) const;
+    Q_INVOKABLE QString familyInterval(int plantingId) const;
+
     Q_INVOKABLE QDate sowingDate(int plantingId) const;
     Q_INVOKABLE QDate plantingDate(int plantingId) const;
     Q_INVOKABLE QDate begHarvestDate(int plantingId) const;
     Q_INVOKABLE QDate endHarvestDate(int plantingId) const;
 
+    Q_INVOKABLE int assignedLength(int plantingId) const;
+    Q_INVOKABLE int totalLength(int plantingId) const;
+    Q_INVOKABLE int lengthToAssign(int plantingId) const;
+
     Q_INVOKABLE QList<int> addSuccessions(int successions, int daysBetween, const QVariantMap &map) const;
     Q_INVOKABLE QVariantMap lastValues(const int varietyId, const int cropId,
                                        const int plantingType, const bool inGreenhouse) const;
-    Q_INVOKABLE QVariantMap commonValues(const QList<int> &plantingIdList) const;
 
 private:
     Task *task;

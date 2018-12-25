@@ -19,13 +19,13 @@
 
 #include <QObject>
 #include <QSqlRecord>
-#include <QSqlRelationalTableModel>
+#include <QSqlTableModel>
 #include <QHash>
 #include <QByteArray>
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT SqlTableModel : public QSqlRelationalTableModel
+class CORESHARED_EXPORT SqlTableModel : public QSqlTableModel
 {
     Q_OBJECT
 

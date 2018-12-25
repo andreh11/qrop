@@ -44,26 +44,17 @@ TextField {
     
     background: Rectangle {
         anchors.verticalCenter: parent.verticalCenter
-        implicitWidth: 200
-        implicitHeight: 20
-        //                        width: parent.width
-        height: parent.height * 0.7
+//        implicitWidth: 500
+        implicitHeight: height
+        height: parent.height * 0.8
         color: Material.color(Material.Grey,
                               Material.Shade400)
         radius: 4
         opacity: 0.1
-        //    MouseArea {
-        //        id: mouseArea
-        //        anchors.fill: parent
-        //        hoverEnabled: true
-        //        cursorShape: containsMouse ? Qt.IBeamCursor : Qt.ArrowCursor
-        //        onClicked: filterField.clicked()
-        //    }
     }
     
     Label {
         id: searchLogo
-        //                    visible: filterField.visible
         color: "black"
         anchors.left: parent.left
         anchors.leftMargin: 8
@@ -86,14 +77,4 @@ TextField {
         font.pixelSize: 24
         onClicked: filterField.clear()
     }
-
-//    MouseArea {
-//        id: mouseArea
-//        anchors.fill: parent
-//        hoverEnabled: true
-//        cursorShape: containsMouse ? Qt.IBeamCursor : Qt.ArrowCursor
-//        onClicked: filterField.clicked()
-//    }
-
-
 }

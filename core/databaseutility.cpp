@@ -24,6 +24,7 @@
 DatabaseUtility::DatabaseUtility(QObject *parent)
     : QObject(parent)
     , m_table("")
+    , m_viewTable("")
     , m_idFieldName("")
 {
 }
@@ -62,10 +63,9 @@ void DatabaseUtility::debugQuery(const QSqlQuery &query) const
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
         return;
         //        qDebug() << "Query OK: " << query.lastQuery();
-    } else {
-        qWarning() << "Query ERROR: " << query.lastError().text();
-        qWarning() << "Query text: " << query.lastQuery();
     }
+    qWarning() << "[Query ERROR] " << query.lastError().text();
+    qWarning() << "[Query TEXT]: " << query.lastQuery();
 }
 
 QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &idFieldName) const
@@ -146,7 +146,7 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
     QList<QVariantMap> mapList;
     QList<QSqlRecord> recordList = recordListFromIdList(tableName, idList);
 
-    for (auto &record : recordList)
+    for (const auto &record : recordList)
         if (!record.isEmpty())
             mapList.push_back(mapFromRecord(record));
     return mapList;
@@ -154,21 +154,20 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
 
 int DatabaseUtility::add(const QVariantMap &map) const
 {
-    qDebug() << "MAP:" << map;
     QString queryNameString = QString("INSERT INTO %1 (").arg(table());
     QString queryValueString = " VALUES (";
     QString fieldName = idFieldName();
 
-    for (const auto &key : map.keys())
+    for (const auto &key : map.keys()) {
         if (key != fieldName) {
             queryNameString.append(QString(" %1,").arg(key));
             queryValueString.append(QString(" :%1,").arg(key));
         }
+    }
 
-    // Remove last semicolons.
+    // Remove trailing semicolons.
     queryNameString.chop(1);
     queryValueString.chop(1);
-
     queryNameString.append(")");
     queryValueString.append(")");
 
@@ -261,7 +260,6 @@ void DatabaseUtility::remove(int id) const
 
 void DatabaseUtility::removeList(const QList<int> &idList) const
 {
-    qDebug() << "Batch remove:" << idList;
     QSqlDatabase::database().transaction();
     for (const int id : idList)
         remove(id);
@@ -275,4 +273,29 @@ void DatabaseUtility::removeLink(const QString &table, const QString &field1, in
     QSqlQuery query(queryString.arg(table, field1).arg(id1).arg(field2).arg(id2));
     query.exec();
     debugQuery(query);
+}
+
+QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
+{
+    if (idList.length() < 1)
+        return {};
+
+    QList<QVariantMap> list = mapListFromIdList(m_viewTable, idList);
+    if (list.isEmpty())
+        return {};
+
+    QVariantMap common = list[0];
+    if (list.length() == 1)
+        return common;
+
+    for (const auto &key : common.keys()) {
+        int i;
+        for (i = 1; i < list.length(); i++)
+            if (list[i].value(key) != common.value(key))
+                break;
+        if (i != list.length())
+            common.remove(key);
+    }
+
+    return common;
 }

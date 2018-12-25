@@ -81,11 +81,7 @@ Dialog {
     }
 
     footer: AddEditDialogFooter {
-        height: childrenRect.height
-        width: parent.width
         applyEnabled: plantingForm.accepted
-        onRejected: dialog.reject();
-        onAccepted: dialog.accept();
         rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
         mode: dialog.mode
     }

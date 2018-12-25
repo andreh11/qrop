@@ -23,7 +23,7 @@
 #include "sqltablemodel.h"
 
 SqlTableModel::SqlTableModel(QObject *parent)
-    : QSqlRelationalTableModel(parent)
+    : QSqlTableModel(parent)
 {
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }

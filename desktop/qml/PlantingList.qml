@@ -33,7 +33,7 @@ ListView {
     property var selectedIds: ({}) // Map of the ids of the selected plantings
     property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
     property int checks: numberOfTrue(selectedIds) // Number of selected plantings
-    property int lastIndexClicked: -1 // TODO: fors shift selection
+    property int lastIndexClicked: -1 // TODO: for shift selection
 
     function selectedIdList() {
         var idList = []
@@ -85,6 +85,7 @@ ListView {
 
     model: PlantingModel {
         id: plantingModel
+        year: listView.year
     }
 
     Keys.onUpPressed: verticalScrollBar.decrease()

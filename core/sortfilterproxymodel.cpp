@@ -37,11 +37,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-    //    int varietyColumn = fieldColumn("variety_id");
-    //    setRelation(varietyColumn, QSqlRelation("variety", "variety_id", "variety"));
-
-    //    select();
 }
 
 QList<int> SortFilterProxyModel::idList() const
@@ -63,7 +58,7 @@ int SortFilterProxyModel::rowId(int row) const
     return id;
 }
 
-void SortFilterProxyModel::refresh() const
+void SortFilterProxyModel::refresh()
 {
     m_model->select();
     countChanged();
@@ -128,18 +123,23 @@ void SortFilterProxyModel::setSortOrder(const QString &order)
     sortOrderChanged();
 }
 
-QVector<QDate> SortFilterProxyModel::seasonDates() const
+QPair<QDate, QDate> SortFilterProxyModel::seasonDates(int season, int year) const
 {
-    switch (m_season) {
+    switch (season) {
     case 0: // Spring
-        return { QDate(m_year - 1, 10, 1), QDate(m_year, 9, 30) };
+        return { QDate(year - 1, 10, 1), QDate(year, 9, 30) };
     case 2: // Fall
-        return { QDate(m_year, 4, 1), QDate(m_year + 1, 3, 31) };
+        return { QDate(year, 4, 1), QDate(year + 1, 3, 31) };
     case 3: // Winter
-        return { QDate(m_year, 7, 1), QDate(m_year + 1, 6, 30) };
+        return { QDate(year, 7, 1), QDate(year + 1, 6, 30) };
     default: // Summer or invalid season
-        return { QDate(m_year, 1, 1), QDate(m_year, 12, 31) };
+        return { QDate(year, 1, 1), QDate(year, 12, 31) };
     }
+}
+
+QPair<QDate, QDate> SortFilterProxyModel::seasonDates() const
+{
+    return seasonDates(m_season, m_year);
 }
 
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
@@ -147,9 +147,9 @@ QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, cons
     QModelIndex index = m_model->index(row, 0, parent);
 
     if (!index.isValid())
-        return QVariant();
+        return {};
 
-    return m_model->data(index, field).toString();
+    return m_model->data(index, field);
 }
 
 QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const QString &field) const
@@ -164,9 +164,9 @@ QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const 
 
 bool SortFilterProxyModel::isDateInRange(const QDate &date) const
 {
-    QVector<QDate> dates = seasonDates();
-    QDate seasonBeg = dates[0];
-    QDate seasonEnd = dates[1];
+    const QPair<QDate, QDate> dates = seasonDates();
+    QDate seasonBeg = dates.first;
+    QDate seasonEnd = dates.second;
 
     return (seasonBeg <= date) && (date < seasonEnd);
 }

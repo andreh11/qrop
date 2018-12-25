@@ -61,6 +61,7 @@ Dialog {
             validator: RegExpValidator { regExp: /\w[\w ]*/ }
             Layout.fillWidth: true
             Layout.minimumWidth: 100
+            Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
         }
 
         MyComboBox {
