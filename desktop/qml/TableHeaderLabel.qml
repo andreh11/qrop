@@ -29,6 +29,8 @@ Item {
     property Item container
 
     property int horizontalAlignment: Text.AlignLeft
+    signal newColumn(int column)
+    signal newOrder(string order)
 
     height: headerLabel.height
     anchors.verticalCenter: parent.verticalCenter
@@ -137,16 +139,13 @@ Item {
         onClicked: {
             switch (control.state) {
             case "":
-                if (page.tableSortColumn !== index) {
-                    page.tableSortColumn = index
-                    page.tableSortOrder = "descending"
-                }
+                newColumn(index);
                 break
             case "descending":
-                page.tableSortOrder = "ascending"
+                newOrder("ascending")
                 break;
             case "ascending":
-                page.tableSortOrder = "descending"
+                newOrder("descending")
                 break;
             }
         }

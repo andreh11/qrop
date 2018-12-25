@@ -44,7 +44,7 @@ Page {
     property string tableSortOrder: "descending"
 
     function refresh() {
-        // Save current position, for refreshing the model will cause reloading,
+        // Save current position, because refreshing the model will cause reloading,
         // and view position will be reset.
         var currentY = listView.contentY
         taskModel.refresh();
@@ -470,7 +470,6 @@ Page {
                                 MyToolButton {
                                     id: detailsButton
                                     text: "⋅⋅⋅"
-                                    //                                flat: true
                                     checkable: true
                                     visible: idList.length > 1
                                     ToolTip.visible: hovered
@@ -480,7 +479,7 @@ Page {
                             }
 
                             Label {
-                                text: model.locations
+                                text: Location.fullName(Location.locations(firstId))
                                 elide: Text.ElideRight
                                 width: tableHeaderModel[1].width
                                 anchors.verticalCenter: parent.verticalCenter
@@ -528,7 +527,6 @@ Page {
                                 width: tableHeaderModel[3].width
                                 anchors.verticalCenter: parent.verticalCenter
                             }
-
                         }
 
                         Column {
@@ -537,6 +535,7 @@ Page {
                             width: parent.width
                             height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
                             leftPadding: Units.smallSpacing
+
                             Repeater {
                                 model: idList.slice(1)
 
@@ -545,11 +544,18 @@ Page {
                                     spacing: Units.smallSpacing
                                     Item { width: completeButton.width; height: parent.height }
                                     PlantingLabel {
+                                        width: tableHeaderModel[0].width
                                         plantingId: Number(modelData)
                                         year: page.year
                                         sowingDate: Planting.sowingDate(plantingId)
                                         endHarvestDate: Planting.endHarvestDate(plantingId)
                                         showOnlyDates: true
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
+                                    Label {
+                                        text: Location.fullName(Location.locations(Number(modelData)))
+                                        elide: Text.ElideRight
+                                        width: tableHeaderModel[1].width
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
                                 }

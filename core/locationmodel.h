@@ -20,13 +20,52 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT LocationModel : public SqlTableModel
+class Planting;
+class Location;
+class SqlTreeModel;
+
+class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool showOnlyEmptyLocations READ showOnlyEmptyLocations WRITE
+                       setShowOnlyEmptyLocations NOTIFY showOnlyEmptyLocationsChanged)
+
 public:
-    explicit LocationModel(QObject *parent = nullptr);
+    LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
+    Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
+    Q_INVOKABLE int locationId(const QModelIndex &index) const;
+    Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
+    Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, int plantingId) const;
+    Q_INVOKABLE bool rotationRespected(const QModelIndex &index, int plantingId) const;
+    Q_INVOKABLE QList<int> conflictingPlantings(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
+
+    Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length) const;
+
+    Q_INVOKABLE bool addLocations(const QString &baseName, int length, int width, int quantity,
+                                  const QModelIndexList &parentList = { QModelIndex() });
+    Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
+    Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);
+    Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
+
+    bool showOnlyEmptyLocations() const;
+    void setShowOnlyEmptyLocations(bool show);
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+signals:
+    void showOnlyEmptyLocationsChanged();
+
+private:
+    bool m_showOnlyEmptyLocations;
+    SqlTreeModel *m_treeModel;
+    Planting *planting;
+    Location *location;
 };
 
 #endif // LOCATIONMODEL_H

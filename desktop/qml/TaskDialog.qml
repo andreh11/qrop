@@ -88,11 +88,7 @@ Dialog {
     }
 
     footer: AddEditDialogFooter {
-        height: childrenRect.height
-        width: parent.width
         applyEnabled: formAccepted
-        onRejected: dialog.reject();
-        onAccepted: dialog.accept();
         mode: dialog.mode
     }
 

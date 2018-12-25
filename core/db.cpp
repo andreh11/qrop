@@ -23,6 +23,7 @@
 #include <QDebug>
 
 #include "db.h"
+#include "location.h"
 
 QString databasePath()
 {
@@ -94,5 +95,30 @@ void createDatabase()
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
-    qInfo() << "Database successfully created";
+    qInfo() << "Database created";
+}
+
+void createFakeData()
+{
+    Location location;
+    int parentId0;
+    int parentId1;
+
+    QSqlDatabase::database().transaction();
+    for (int i = 0; i < 10; i++) {
+        parentId0 =
+                location.add({ { "name", QString::number(i) }, { "bed_length", 30 }, { "level", 0 } });
+        for (int j = 0; j < 10; j++) {
+            parentId1 = location.add({ { "name", QString::number(j) },
+                                       { "parent_id", parentId0 },
+                                       { "bed_length", 30 },
+                                       { "level", 1 } });
+            //            for (int k = 0; k < 10; k++)
+            //                location.add({ { "name", QString::number(k) },
+            //                               { "parent_id", parentId1 },
+            //                               { "bed_length", 30 },
+            //                               { "level", 2 } });
+        }
+    }
+    QSqlDatabase::database().commit();
 }

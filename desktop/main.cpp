@@ -26,11 +26,15 @@
 #include <QTranslator>
 #include <QVariantMap>
 #include <QtQml>
+#include <QQuickView>
+
+#include <QFileSystemModel>
 //#include <QAndroidJniObject>
 //#include <QtAndroid>
 
 #include "db.h"
 #include "keyword.h"
+#include "location.h"
 #include "mdate.h"
 #include "planting.h"
 #include "task.h"
@@ -39,6 +43,7 @@
 #include "cropmodel.h"
 #include "familymodel.h"
 #include "keywordmodel.h"
+#include "locationmodel.h"
 #include "notemodel.h"
 #include "plantingmodel.h"
 #include "rolemodel.h"
@@ -50,6 +55,9 @@
 #include "unitmodel.h"
 #include "usermodel.h"
 #include "varietymodel.h"
+#include "treemodel.h"
+
+#include "nametree.h"
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -83,15 +91,14 @@ public:
 
 int main(int argc, char *argv[])
 {
-
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.setApplicationName("Qrop");
     app.setOrganizationName("AH");
     app.setOrganizationDomain("io.qrop");
     app.setWindowIcon(QIcon(":/icon.png"));
-    QTranslator translator;
 
+    QTranslator translator;
     const QString &lang = QLocale::system().name();
     if (lang.contains("fr")) {
         translator.load(":/translations/fr.qm");
@@ -106,19 +113,22 @@ int main(int argc, char *argv[])
     if (ret1 == -1 || ret2 == -1 || ret3 == -1 || ret4 == -1 || ret5 == -1)
         qWarning() << "[desktop main] Some custom fonts can't be loaded.";
 
+    qmlRegisterType<QFileSystemModel>("io.croplan.components", 1, 0, "FileSystemModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<FamilyModel>("io.croplan.components", 1, 0, "FamilyModel");
     qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
+    qmlRegisterType<LocationModel>("io.croplan.components", 1, 0, "LocationModel");
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
     qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
     qmlRegisterType<SeedCompanyModel>("io.croplan.components", 1, 0, "SeedCompanyModel");
+    qmlRegisterType<TaskImplementModel>("io.croplan.components", 1, 0, "TaskImplementModel");
+    qmlRegisterType<TaskMethodModel>("io.croplan.components", 1, 0, "TaskMethodModel");
     qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
+    qmlRegisterType<TaskTypeModel>("io.croplan.components", 1, 0, "TaskTypeModel");
+    qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
     qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
-    qmlRegisterType<TaskTypeModel>("io.croplan.components", 1, 0, "TaskTypeModel");
-    qmlRegisterType<TaskMethodModel>("io.croplan.components", 1, 0, "TaskMethodModel");
-    qmlRegisterType<TaskImplementModel>("io.croplan.components", 1, 0, "TaskImplementModel");
-    qmlRegisterType<TextFieldDoubleValidator>("io.croplan.components", 1, 0, "TextFieldDoubleValidator");
+    qmlRegisterType<SqlTreeModel>("io.croplan.components", 1, 0, "SqlTreeModel");
 
     //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
@@ -193,6 +203,13 @@ int main(int argc, char *argv[])
                                        return task;
                                    });
 
+    qmlRegisterSingletonType<Location>("io.croplan.components", 1, 0, "Location",
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                           Q_UNUSED(engine)
+                                           Q_UNUSED(scriptEngine)
+                                           auto *location = new Location();
+                                           return location;
+                                       });
     qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                         Q_UNUSED(engine)
@@ -204,6 +221,7 @@ int main(int argc, char *argv[])
     //    deleteDatabase();
     connectToDatabase();
     //    createDatabase();
+    //    createFakeData();
 
     //    QtAndroid::runOnAndroidThread([=]()
     //    {
@@ -216,18 +234,18 @@ int main(int argc, char *argv[])
     //    QList<QList<QVariant>> userList({{"André", "Hoarau", "ah@ouvaton.org", 1},
     //                                     {"Diane", "Richard", "danette222@hotmail.fr", 1}});
 
-    //    UserModel userModel;
-    //    foreach (const QList<QVariant> &user, userList) {
-    //        QVariantMap userMap({{"first_name", user[0]},
-    //                             {"last_name", user[1]},
-    //                             {"email", user[2]},
-    //                             {"role_id", user[3]}});
+    //        UserModel userModel;
+    //        foreach (const QList<QVariant> &user, userList) {
+    //            QVariantMap userMap({{"first_name", user[0]},
+    //                                 {"last_name", user[1]},
+    //                                 {"email", user[2]},
+    //                                 {"role_id", user[3]}});
 
-    //        int id = userModel.add(userMap);
-    //        int dupId = userModel.duplicate(id);
-    //        userModel.remove(dupId);
-    //        userModel.update(id, {{"last_name", "Waro"}});
-    //    }
+    //            int id = userModel.add(userMap);
+    //            int dupId = userModel.duplicate(id);
+    //            userModel.remove(dupId);
+    //            userModel.update(id, {{"last_name", "Waro"}});
+    //        }
 
     //    PlantingModel plantingModel;
     //    QList<QList<QVariant>> plantingMap({{1, 0, "2018-03-02"},
@@ -242,6 +260,7 @@ int main(int argc, char *argv[])
     //    }
 
     QQmlApplicationEngine engine;
+    //    engine.rootContext()->setContextProperty("treeViewModel", &treeViewModel);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

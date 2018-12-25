@@ -60,13 +60,15 @@ public:
     Q_INVOKABLE void duplicateList(const QList<int> &idList) const;
 
     virtual Q_INVOKABLE void remove(int id) const;
-    Q_INVOKABLE void removeList(const QList<int> &idList) const;
+    virtual Q_INVOKABLE void removeList(const QList<int> &idList) const;
     void removeLink(const QString &table, const QString &field1, int id1, const QString &field2,
                     int id2) const;
     Q_INVOKABLE void rollback() const;
+    Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const;
 
 protected:
     QString m_table;
+    QString m_viewTable;
     QString m_idFieldName;
 };
 

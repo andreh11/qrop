@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SQLTASKGMODEL_H
+#ifndef SQLTASKMODEL_H
 #define SQLTASKMODEL_H
 
 #include <QDate>
@@ -83,4 +83,4 @@ private:
     bool isOverdue(int row, const QModelIndex &parent) const;
 };
 
-#endif // SQLPLANTINGMODEL_H
+#endif // SQLTASKMODEL_H

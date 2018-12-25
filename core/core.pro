@@ -38,7 +38,9 @@ SOURCES += \
     variety.cpp \
     keyword.cpp \
     mdate.cpp \
-    taskimplementmodel.cpp
+    taskimplementmodel.cpp \
+    treemodel.cpp \
+    nametree.cpp
 
 
 HEADERS += \
@@ -73,7 +75,10 @@ HEADERS += \
     variety.h \
     keyword.h \
     mdate.h \
-    taskimplementmodel.h
+    taskimplementmodel.h \
+    treemodel.h \
+    nametree.h
+
 
 RESOURCES += \
     core_resources.qrc

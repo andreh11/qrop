@@ -17,7 +17,7 @@ MyToolButton {
     checkable: true
     Text {
         anchors.fill: parent
-        text: overdue ? "\ue924" : "\ue86c"
+        text: overdue ? "\ue002" : "\ue86c"
         font.family: "Material Icons"
         font.pixelSize: 30
         verticalAlignment: Text.AlignVCenter

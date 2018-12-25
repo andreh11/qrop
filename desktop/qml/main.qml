@@ -14,7 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.11
+
+import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.3
@@ -30,8 +31,8 @@ ApplicationWindow {
     property var navigationModel: [
 //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\uf299" },
-        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\uf274" }
-//        { source: "CropMapPage.qml",   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\uf274" },
+        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\uf279" }
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
 //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
@@ -64,19 +65,24 @@ ApplicationWindow {
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
-    PlantingsPage {
-        id: plantingsPage
+    PlantingsPage { id: plantingsPage }
+    CalendarPage { id: calendarPage }
+    LocationsPage {
+        id: locationsPage
+        editMode: editCropMapButton.checked
     }
 
-    CalendarPage {
-        id: calendarPage
+    Action {
+        shortcut: StandardKey.Quit
+        text: qsTr("&Quit")
+        onTriggered: Qt.quit()
     }
 
-    Shortcut {
-        sequence: StandardKey.Quit
-        context: Qt.ApplicationShortcut
-        onActivated: Qt.quit()
-    }
+//    Shortcut {
+//        sequence: StandardKey.Quit
+//        context: Qt.ApplicationShortcut
+//        onActivated: Qt.quit()
+//    }
 
     Settings {
         id: settings
@@ -351,6 +357,33 @@ ApplicationWindow {
             }
 
             Item { Layout.fillHeight: true }
+
+            DrawerItemDelegate {
+                id: editCropMapButton
+                visible: stackView.currentItem === locationsPage
+                checkable: true
+                Layout.fillWidth: true
+                text: qsTr("Edit Crop Map")
+                iconText: "\uf044"
+                isActive: checked
+
+                ToolTip.text: qsTr("Edit Crop Map")
+                ToolTip.visible: hovered
+            }
+
+            DrawerItemDelegate {
+                Layout.fillWidth: true
+                text: qsTr("Settings")
+                iconText: "\uf013"
+
+                isActive: false
+                onClicked: {
+                    navigationIndex = index
+                    if (!largeDisplay) {
+                        drawer.close()
+                    }
+                }
+            }
         }
     }
 
@@ -385,6 +418,10 @@ ApplicationWindow {
             case 1:
                 stackView.replace(calendarPage)
                 calendarPage.refresh();
+                break
+            case 2:
+                stackView.replace(locationsPage)
+                locationsPage.refresh();
                 break
             }
         }

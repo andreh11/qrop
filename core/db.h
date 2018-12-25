@@ -29,6 +29,7 @@ CORESHARED_EXPORT void connectToDatabase();
 CORESHARED_EXPORT void execSqlFile(const QString &fileName, const QString &separator = ";");
 CORESHARED_EXPORT void createDatabase();
 CORESHARED_EXPORT void deleteDatabase();
+CORESHARED_EXPORT void createFakeData();
 
 // class CORESHARED_EXPORT Note : public DatabaseUtility {
 //    Q_OBJECT

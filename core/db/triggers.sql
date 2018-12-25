@@ -2,12 +2,12 @@
 
 -- A task is associated to at least 1 planting. If there is no more planting
 -- associated to a task, we delete it.
-CREATE TRIGGER planting_task_delete AFTER DELETE ON planting_task FOR EACH ROW
-WHEN (SELECT COUNT(*) FROM planting_task WHERE task_id = OLD.task_id) = 0
-BEGIN
-  DELETE FROM task
-  WHERE task_id = OLD.task_id;
-END;
+-- CREATE TRIGGER planting_task_delete AFTER DELETE ON planting_task FOR EACH ROW
+-- WHEN (SELECT COUNT(*) FROM planting_task WHERE task_id = OLD.task_id) = 0
+-- BEGIN
+--   DELETE FROM task
+--   WHERE task_id = OLD.task_id;
+-- END;
 
 -- If the dtt of TP, raised planting if modified, update linked transplant task.
 CREATE TRIGGER planting_update_dtt AFTER UPDATE ON planting FOR EACH ROW

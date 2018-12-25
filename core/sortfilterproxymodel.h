@@ -39,6 +39,8 @@ public:
 
     Q_INVOKABLE QList<int> idList() const;
     Q_INVOKABLE int rowId(int row) const;
+    Q_INVOKABLE void resetFilter() { invalidateFilter(); }
+    Q_INVOKABLE virtual void refresh();
 
     QString filterString() const;
     int filterYear() const;
@@ -50,14 +52,22 @@ public:
     void setFilterSeason(int season);
     void setSortColumn(const QString &columnName);
     void setSortOrder(const QString &order);
-    Q_INVOKABLE void refresh() const;
 
 protected:
     SqlTableModel *m_model;
     bool isDateInRange(const QDate &date) const;
     QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
-    QVector<QDate> seasonDates() const;
+    QPair<QDate, QDate> seasonDates() const;
+    QPair<QDate, QDate> seasonDates(int season, int year) const;
+    int m_year;
+    int m_season;
+
+private:
+    QString m_tableName;
+    QString m_string;
+    QString m_sortColumn;
+    QString m_sortOrder;
 
 signals:
     void filterStringChanged();
@@ -66,15 +76,7 @@ signals:
     void sortColumnChanged();
     void sortOrderChanged();
     void selectionChanged();
-    void countChanged() const;
-
-private:
-    QString m_tableName;
-    QString m_string;
-    int m_year;
-    int m_season;
-    QString m_sortColumn;
-    QString m_sortOrder;
+    void countChanged();
 };
 
 #endif // SORTFILTERPROXYMODEL_H

@@ -2,16 +2,12 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 
-
-Item {
+DialogButtonBox {
     id: control
 
     property alias applyEnabled: applyButton.enabled
     property string mode: "add"
     property string rejectToolTip: ""
-
-    signal rejected()
-    signal accepted()
 
     Button {
         id: rejectButton
@@ -20,7 +16,7 @@ Item {
         anchors.right: applyButton.left
         anchors.rightMargin: Units.smallSpacing
         Material.foreground: Material.accent
-        onClicked: rejected();
+        DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
     }
     
     Button {
@@ -30,7 +26,8 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: Units.mediumSpacing
         text: mode === "add" ? qsTr("Add") : qsTr("Edit")
-        onClicked: accepted()
+
+        DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
 
         ToolTip.text: control.rejectToolTip
         ToolTip.visible: ToolTip.text && hovered && !enabled

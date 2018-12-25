@@ -29,6 +29,7 @@ Planting::Planting(QObject *parent)
     , keyword(new Keyword(this))
 {
     m_table = "planting";
+    m_viewTable = "planting_view";
     m_idFieldName = "planting_id";
 }
 
@@ -70,10 +71,7 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
         int days = i * daysBetween;
-        //        newMap["sowing_date"] = sowingDate.addDays(days).toString(Qt::ISODate);
         newMap["planting_date"] = plantingDate.addDays(days).toString(Qt::ISODate);
-        //        newMap["beg_harvest_date"] = begHarvestDate.addDays(days).toString(Qt::ISODate);
-        //        newMap["end_harvest_date"] = endHarvestDate.addDays(days).toString(Qt::ISODate);
 
         int id = add(newMap);
         if (id > 0)
@@ -121,36 +119,9 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
             if (plantingId >= 1)
                 return mapFromId("planting_view", plantingId);
         }
-        //        qDebug() << "lastValues: trying with less constraints...";
     }
-    //    qDebug() << "Couldn't find prefill values!";
 
     return {};
-}
-
-QVariantMap Planting::commonValues(const QList<int> &plantingIdList) const
-{
-    if (plantingIdList.length() < 1)
-        return {};
-
-    QList<QVariantMap> list = mapListFromIdList("planting_view", plantingIdList);
-    if (list.isEmpty())
-        return {};
-
-    QVariantMap common = list[0];
-    if (list.length() == 1)
-        return common;
-
-    for (const auto &key : common.keys()) {
-        int i;
-        for (i = 1; i < list.length(); i++)
-            if (list[i].value(key) != common.value(key))
-                break;
-        if (i != list.length())
-            common.remove(key);
-    }
-
-    return common;
 }
 
 void Planting::update(int id, const QVariantMap &map) const
@@ -174,6 +145,46 @@ int Planting::duplicate(int id) const
     int newId = DatabaseUtility::duplicate(id);
     task->duplicatePlantingTasks(id, newId);
     return newId;
+}
+
+QString Planting::cropName(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("crop").toString();
+}
+
+QString Planting::cropColor(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("crop_color").toString();
+}
+
+QString Planting::varietyName(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("variety").toString();
+}
+
+QString Planting::familyId(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("family_id").toString();
+}
+
+QString Planting::familyInterval(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("family_interval").toString();
 }
 
 QDate Planting::sowingDate(int plantingId) const
@@ -210,4 +221,39 @@ QDate Planting::endHarvestDate(int plantingId) const
         return {};
 
     return QDate::fromString(map.value("end_harvest_date").toString(), Qt::ISODate);
+}
+
+int Planting::totalLength(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("length").toInt();
+}
+
+/* Return the already assigned bed length for plantingId */
+int Planting::assignedLength(int plantingId) const
+{
+    if (plantingId < 1)
+        return 0;
+
+    QString queryString("SELECT SUM(length) FROM planting_location WHERE planting_id=%1");
+    QSqlQuery query(queryString.arg(plantingId));
+    query.exec();
+    debugQuery(query);
+
+    if (!query.next())
+        return 0;
+
+    return query.value(0).toInt();
+}
+
+int Planting::lengthToAssign(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return 0;
+
+    int length = map.value("length").toInt();
+    return length - assignedLength(plantingId);
 }

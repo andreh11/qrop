@@ -24,6 +24,7 @@ Task::Task(QObject *parent)
     : DatabaseUtility(parent)
 {
     m_table = "task";
+    m_viewTable = "task_view";
 }
 
 int Task::add(const QVariantMap &map) const

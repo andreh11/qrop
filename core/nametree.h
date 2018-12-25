@@ -14,23 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDate>
-#include <QDebug>
-#include <QSqlRecord>
-#include <QVariantMap>
+#ifndef NAMETREE_H
+#define NAMETREE_H
 
-#include "variety.h"
-#include "task.h"
+#include <QMap>
+#include <QString>
 
-Variety::Variety(QObject *parent)
-    : DatabaseUtility(parent)
+#include "core_global.h"
+
+class CORESHARED_EXPORT NameTree
 {
-    m_table = "variety";
-    m_viewTable = "variety";
-}
+public:
+    NameTree(const QString &name, int level);
+    ~NameTree();
+    void insert(QList<QString> &path);
+    QString fullName() const;
 
-int Variety::cropId(int varietyId) const
-{
-    QVariantMap map = mapFromId("variety", varietyId);
-    return map["crop_id"].toInt();
-}
+private:
+    QString m_name;
+    int m_level;
+    QMap<QString, NameTree *> m_childrenName;
+};
+
+#endif // NAMETREE_H

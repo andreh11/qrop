@@ -21,6 +21,6 @@ HarvestModel::HarvestModel(QObject *parent)
 {
     setTable("harvest");
 
-    int plantingColumn = fieldColumn("planting_id");
-    setRelation(plantingColumn, QSqlRelation("planting", "planting_id", "planting_id"));
+    //    int plantingColumn = fieldColumn("planting_id");
+    //    setRelation(plantingColumn, QSqlRelation("planting", "planting_id", "planting_id"));
 }

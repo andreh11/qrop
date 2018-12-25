@@ -418,6 +418,7 @@ Flickable {
                 RowLayout {
                     spacing: Units.mediumSpacing
                     visible: mode === "add"
+                    Layout.fillWidth: true
 
                     MyTextField {
                         id: successionsField
