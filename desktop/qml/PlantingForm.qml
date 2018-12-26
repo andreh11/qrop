@@ -332,6 +332,7 @@ Flickable {
         RowLayout {
             width: parent.width
             spacing: Units.mediumSpacing
+            visible: !chooseLocation
 
             MyComboBox {
                 id: varietyField
@@ -481,7 +482,6 @@ Flickable {
             id: plantingDatesBox
             title: qsTr("Planting dates") + " " + (successions > 1 ? qsTr("(first succession)") : "")
             width: parent.width
-            visible: !chooseLocation
 
             GridLayout {
                 width: parent.width
@@ -491,7 +491,7 @@ Flickable {
 
                 MyTextField {
                     id: sowDtmField
-                    visible: fieldSowingDateField.visible
+                    visible: fieldSowingDateField.visible && !chooseLocation
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
                     text: "1"
@@ -507,7 +507,7 @@ Flickable {
 
                 MyTextField {
                     id: greenhouseGrowTimeField
-                    visible: greenhouseStartDateField.visible
+                    visible: greenhouseStartDateField.visible && !chooseLocation
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -533,7 +533,7 @@ Flickable {
 
                 MyTextField {
                     id: plantingDtmField
-                    visible: fieldPlantingDateField.visible
+                    visible: fieldPlantingDateField.visible && !chooseLocation
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -550,6 +550,7 @@ Flickable {
 
                 MyTextField {
                     id: harvestWindowField
+                    visible: !chooseLocation
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -624,34 +625,74 @@ Flickable {
             }
         }
 
-        Button {
-            id: locationButton
-            checkable: true
-            visible: successions === 1
-            width: parent.width
-            text: qsTr("Select location...")
-        }
 
-        LocationView {
-            id: locationView
+        FormGroupBox {
+            Behavior on height { NumberAnimation { duration: 1000 } }
+            Column {
 
-            property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
-                                                           : fieldPlantingDateField.calendarDate
-//            visible: chooseLocation
-            season: MDate.season(plantingDate)
-            year: {
-                if (plantingDate.getMonth() < 2)
-                    return  plantingDate.getFullYear() - 1;
-                else
-                    return  plantingDate.getFullYear() ;
+                Button {
+                    id: locationButton
+                    flat: true
+                    checkable: true
+                    visible: successions === 1 && !chooseLocation
+                    width: parent.width
+                    text: qsTr("Select location...")
+                    background: Rectangle {
+                            implicitWidth: 100
+                            implicitHeight: 20
+                            opacity: enabled ? 1 : 0.3
+                            border.width: 0
+                            radius: 2
+                        }
+                }
+
+                anchors.fill: parent
+                RowLayout {
+                    visible: chooseLocation
+                    width: parent.width
+
+                    Button {
+                        text: qsTr("Unassign from all beds")
+                        flat: true
+                    }
+
+                    Item { Layout.fillWidth: true }
+
+                    Button {
+                        text: qsTr("Cancel")
+                        flat: true
+                        onClicked: locationButton.checked = false
+                    }
+
+                    Button {
+                        text: qsTr("Apply")
+                        flat: true
+                        Material.foreground: Material.accent
+                    }
+                }
+
+                LocationView {
+                    id: locationView
+                    visible: chooseLocation
+
+                    property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
+                                                                   : fieldPlantingDateField.calendarDate
+                    season: MDate.season(plantingDate)
+                    year: {
+                        if (plantingDate.getMonth() < 2)
+                            return  plantingDate.getFullYear() - 1;
+                        else
+                            return  plantingDate.getFullYear() ;
+                    }
+
+                    width: parent.width
+                    height: 400
+                    plantingEditMode: true
+                    editedPlantingPlantingDate: plantingDate
+                    editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
+                                                                harvestWindow)
+                }
             }
-
-            width: parent.width
-            height: treeViewHeight
-            plantingEditMode: true
-            editedPlantingPlantingDate: plantingDate
-            editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
-                                                        harvestWindow)
         }
 
         FormGroupBox {

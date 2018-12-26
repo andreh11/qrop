@@ -37,6 +37,9 @@ Item {
     property int locationId: -1
     property bool showNames: false
     property bool dragActive: false
+    property bool showPersistentPlanting: false
+    property date persistentPlantingDate
+    property date persistentEndHarvestDate
 
     signal plantingClicked(int plantingId)
     signal plantingMoved()
@@ -44,11 +47,6 @@ Item {
     signal dragFinished();
 
     implicitWidth: gridRow.width
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-    }
 
     Row {
         id: gridRow
