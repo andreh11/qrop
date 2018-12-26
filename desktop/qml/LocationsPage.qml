@@ -253,6 +253,7 @@ Page {
                 season: seasonSpinBox.season
                 showOnlyEmptyLocations: emptyLocationsCheckbox.checked
                 editMode: page.editMode
+                onPlantingRemoved: plantingsView.resetFilter()
             }
         }
 
@@ -262,7 +263,7 @@ Page {
             padding: 0
             Layout.fillWidth: true
             //            Layout.fillHeight: true
-            Layout.minimumHeight: 300
+            Layout.minimumHeight: page.height / 4
             Material.elevation: 2
             Material.background: "white"
 
@@ -271,14 +272,14 @@ Page {
                 anchors.fill: parent
                 onEntered: {
                     drag.accepted = true
-                    treeView.draggedPlantingId = -1;
+                    locationView.draggedPlantingId = -1;
                 }
 
                 onDropped: {
                     if (drop.hasText && (drop.proposedAction === Qt.MoveAction
                                          || drop.proposedAction === Qt.CopyAction)) {
                         drop.acceptProposedAction()
-                        treeView.draggedPlantingId = -1;
+                        locationView.draggedPlantingId = -1;
                     }
                 }
             }
@@ -293,7 +294,7 @@ Page {
                 showHeader: false
                 showHorizontalScrollBar: false
                 showVerticalScrollBar: true
-                onDragFinished: treeView.draggedPlantingId = -1
+                onDragFinished: locationView.draggedPlantingId = -1
                 showOnlyActiveColor: true
                 dragActive: true
                 tableSortColumn: 3 // planting_date

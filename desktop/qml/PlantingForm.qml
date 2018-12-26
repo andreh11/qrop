@@ -29,6 +29,7 @@ Flickable {
     property bool accepted: varietyField.currentIndex >= 0
 
     property string mode: "add" // add or edit
+    property bool chooseLocation: locationButton.checked
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
     property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
@@ -326,7 +327,7 @@ Flickable {
     Column {
         id: mainColumn
         width: parent.width
-        spacing: Units.formSpacing
+        spacing: Units.smallSpacing
 
         RowLayout {
             width: parent.width
@@ -417,7 +418,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
-                    visible: mode === "add"
+                    visible: mode === "add" && !chooseLocation
                     Layout.fillWidth: true
 
                     MyTextField {
@@ -445,16 +446,12 @@ Flickable {
             }
         }
 
-        Button {
-            width: parent.width
-            text: qsTr("Location...")
-            onClicked: console.log("choose location")
-        }
 
         Flow {
             id: plantingTypeLayout
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             spacing: Units.smallSpacing
+            visible: !chooseLocation
 
             ChoiceChip {
                 id: directSeedRadio
@@ -484,6 +481,7 @@ Flickable {
             id: plantingDatesBox
             title: qsTr("Planting dates") + " " + (successions > 1 ? qsTr("(first succession)") : "")
             width: parent.width
+            visible: !chooseLocation
 
             GridLayout {
                 width: parent.width
@@ -626,10 +624,40 @@ Flickable {
             }
         }
 
+        Button {
+            id: locationButton
+            checkable: true
+            visible: successions === 1
+            width: parent.width
+            text: qsTr("Select location...")
+        }
+
+        LocationView {
+            id: locationView
+
+            property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
+                                                           : fieldPlantingDateField.calendarDate
+//            visible: chooseLocation
+            season: MDate.season(plantingDate)
+            year: {
+                if (plantingDate.getMonth() < 2)
+                    return  plantingDate.getFullYear() - 1;
+                else
+                    return  plantingDate.getFullYear() ;
+            }
+
+            width: parent.width
+            height: treeViewHeight
+            plantingEditMode: true
+            editedPlantingPlantingDate: plantingDate
+            editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
+                                                        harvestWindow)
+        }
+
         FormGroupBox {
             id: greenhouseBox
             title: qsTr("Greenhouse details")
-            visible: greenhouseRadio.checked
+            visible: greenhouseRadio.checked && !chooseLocation
             RowLayout {
                 width: parent.width
                 spacing: Units.formSpacing
@@ -657,7 +685,7 @@ Flickable {
         FormGroupBox {
             id: seedBox
             title: qsTr("Seeds")
-            visible: !boughtRadio.checked
+            visible: !boughtRadio.checked && !chooseLocation
             GridLayout {
                 width: parent.width
                 columns: 2
@@ -713,6 +741,7 @@ Flickable {
         FormGroupBox {
             width: parent.width
             title: qsTr("Harvest & revenue rate")
+            visible: !chooseLocation
 
             RowLayout {
                 width: parent.width
@@ -776,6 +805,7 @@ Flickable {
             clip: true
             width: parent.width
             spacing: 8
+            visible: !chooseLocation
 
             Repeater {
                 model: keywordModel

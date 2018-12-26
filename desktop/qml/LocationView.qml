@@ -37,6 +37,13 @@ Item {
     property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
     property alias hasSelection: selectionModel.hasSelection
     property alias selectedIndexes: selectionModel.selectedIndexes
+    property alias draggedPlantingId: treeView.draggedPlantingId
+
+    property int treeViewHeight: treeView.flickableItem.contentHeight
+    property int treeViewWidth: flickable.contentWidth
+    property bool plantingEditMode: false
+    property date editedPlantingPlantingDate
+    property date editedPlantingEndHarvestDate
     property bool editMode: false
     property int indentation: 20
     property var colorList: [
@@ -47,6 +54,9 @@ Item {
         Material.color(Material.Teal, Material.Shade100),
         Material.color(Material.Cyan, Material.Shade100)
     ]
+
+    signal plantingMoved()
+    signal plantingRemoved()
 
     function refresh() {
         locationModel.refresh();
@@ -92,7 +102,6 @@ Item {
         plantingsView.resetFilter();
     }
 
-
     LocationModel {
         id: locationModel
     }
@@ -129,7 +138,7 @@ Item {
             TableHeaderLabel {
                 text: qsTr("Name")
                 width: 120 - (locationView.editMode ? headerRowCheckBox.width + headerRow.spacing
-                                            : 0)
+                                                    : 0)
             }
 
             Row {
@@ -215,11 +224,12 @@ Item {
 
                 Rectangle {
                     id: begLine
-                    visible: treeView.draggedPlantingId > 0
+                    visible: plantingEditMode ||  treeView.draggedPlantingId > 0
                     // TODO: remove magic numbers
-                    x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2 + Units.position(treeView.seasonBegin, treeView.plantingDate)
+                    x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2
+                       + Units.position(treeView.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
+                                                                               : treeView.plantingDate)
                     anchors.top: parent.top
-                    anchors.topMargin: Units.rowHeight
                     anchors.bottom: parent.bottom
                     width: 2
                     color: Material.color(Material.Cyan)
@@ -228,11 +238,12 @@ Item {
 
                 Rectangle {
                     id: endLine
-                    visible: treeView.draggedPlantingId > 0
+                    visible: plantingEditMode || treeView.draggedPlantingId > 0
                     // TODO: remove magic numbers
-                    x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2 + Units.position(treeView.seasonBegin, treeView.endHarvestDate)
+                    x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2
+                       + Units.position(treeView.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
+                                                                               : treeView.endHarvestDate)
                     anchors.top: parent.top
-                    anchors.topMargin: Units.rowHeight
                     anchors.bottom: parent.bottom
                     width: 2
                     color: Material.color(Material.Cyan)
@@ -468,8 +479,8 @@ Item {
 
                                 Timeline {
                                     height: parent.height
-                                    year: seasonSpinBox.year
-                                    season: seasonSpinBox.season
+                                    year: locationView.year
+                                    season: locationView.season
                                     showGreenhouseSow: false
                                     showNames: true
                                     showOnlyActiveColor: true
@@ -477,10 +488,13 @@ Item {
                                     plantingIdList: locationModel.plantings(styleData.index, season, year)
                                     locationId: locationModel.locationId(styleData.index)
                                     onDragFinished: treeView.draggedPlantingId = -1
-                                    onPlantingMoved:  locationModel.refreshIndex(styleData.index)
+                                    onPlantingMoved: {
+                                        locationModel.refreshIndex(styleData.index)
+                                        locationView.plantingMoved()
+                                    }
                                     onPlantingRemoved: {
                                         locationModel.refreshIndex(styleData.index)
-                                        plantingsView.resetFilter()
+                                        locationView.plantingRemoved()
                                     }
                                 }
                             }
@@ -493,84 +507,6 @@ Item {
                                 right: parent.right
                             }
                         }
-                    }
-                }
-            }
-
-            Component {
-                id: headerDelegate
-                Rectangle {
-                    id: headerRectangle
-                    height: headerRow.height
-                    implicitWidth: headerRow.width
-                    color: "white"
-                    z: 5
-
-                    Row {
-                        id: headerRow
-                        height: Units.rowHeight
-                        spacing: Units.smallSpacing
-                        leftPadding: 16 + locationView.indentation
-
-                        CheckBox {
-                            id: headerRowCheckBox
-                            anchors.verticalCenter: headerRow.verticalCenter
-                            visible: locationView.editMode
-                            height: parent.height * 0.8
-                            width: height
-                            contentItem: Text {}
-                            //                            checked: selectionModel.isSelected(styleData.index)
-                            //                            onClicked: selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
-                        }
-
-                        TableHeaderLabel {
-                            text: qsTr("Name")
-                            width: 120 - (locationView.editMode ? headerRowCheckBox.width + headerRow.spacing
-                                                        : 0)
-                        }
-
-                        Row {
-                            id: headerTimelineRow
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: parent.height
-
-                            Repeater {
-                                model: monthsOrder[locationView.season]
-                                Item {
-                                    width: Units.monthWidth
-                                    height: parent.height
-
-                                    Rectangle {
-                                        id: lineRectangle
-                                        height: parent.height
-                                        width: 1
-                                        color: Qt.rgba(0, 0, 0, 0.12)
-                                    }
-
-                                    Label {
-                                        text: Qt.locale().monthName(modelData,
-                                                                    Locale.ShortFormat)
-                                        anchors.left: lineRectangle.right
-                                        font.family: "Roboto Condensed"
-                                        color: Material.color(Material.Grey,
-                                                              Material.Shade700)
-                                        width: 60 - 1
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        horizontalAlignment: Text.AlignHCenter
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                height: parent.height
-                                width: 1
-                                color: Qt.rgba(0, 0, 0, 0.12)
-                            }
-                        }
-                    }
-
-                    ThinDivider {
-                        anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
                     }
                 }
             }
