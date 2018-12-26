@@ -445,6 +445,12 @@ Flickable {
             }
         }
 
+        Button {
+            width: parent.width
+            text: qsTr("Location...")
+            onClicked: console.log("choose location")
+        }
+
         Flow {
             id: plantingTypeLayout
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter

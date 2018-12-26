@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
@@ -48,6 +47,7 @@ ApplicationWindow {
     property string searchString: searchField.text
     property alias stackView: stackView
 
+    // TODO: put this in a separate file
     readonly property var monthsOrder : [
         [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
