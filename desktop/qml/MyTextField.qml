@@ -57,6 +57,8 @@ TextField {
 
     activeFocusOnPress: true
     activeFocusOnTab: true
+    Layout.minimumWidth: 120
+    background.width: width
 
     onActiveFocusChanged: {
         if (activeFocus)
@@ -64,12 +66,13 @@ TextField {
         else
             select(0, 0);
     }
+
     onTextEdited: {
         floatMode = true
         manuallyModified = true
     }
+
     onAccepted: nextItemInFocusChain().forceActiveFocus()
-//    background.anchors.bottomMargin: 0
 
     Label {
         id: fieldLabel
@@ -150,19 +153,7 @@ TextField {
             color: control.hasError ? control.errorColor : control.hintColor
             horizontalAlignment: Text.AlignLeft
 
-            Behavior on color {
-                ColorAnimation { duration: 200 }
-            }
+            Behavior on color { ColorAnimation { duration: 200 } }
         }
     }
-
-//    leftPadding: 8
-
-//    Rectangle { anchors.bottom: parent.background.bottom
-//        height: 46
-//        width: parent.width
-//        z: -10
-//        color: Material.color(Material.Grey, Material.Shade100)
-//        radius: 4
-//    }
 }

@@ -47,19 +47,19 @@ Item {
     }
 
     height: textField.height
-    implicitWidth: 150
-    Layout.minimumWidth: 150
+//    implicitWidth: textField.implicitWidth
+    Layout.minimumWidth: 120
 
     MyTextField {
         id: textField
 
         width: parent.width
-        implicitWidth: 80
         text: NDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         validator: RegExpValidator {
-            regExp: mode === "date" ? /^(0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ]20\d\d){,1}$/
-                                    : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
+            regExp: mode === "date"
+                    ? /^(0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ]20\d\d){,1}$/
+                    : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
         onTextEdited: {
@@ -99,7 +99,7 @@ Item {
             anchors {
                 right: textField.right
                 rightMargin: -16
-                verticalCenter:  parent.verticalCenter
+                verticalCenter: parent.verticalCenter
             }
 
             onClicked: {
