@@ -37,9 +37,6 @@ Item {
     property int locationId: -1
     property bool showNames: false
     property bool dragActive: false
-    property bool showPersistentPlanting: false
-    property date persistentPlantingDate
-    property date persistentEndHarvestDate
 
     signal plantingClicked(int plantingId)
     signal plantingMoved()
@@ -102,5 +99,7 @@ Item {
             onDragFinished: control.dragFinished();
             showOnlyActiveColor: control.showOnlyActiveColor
         }
+
     }
+
 }

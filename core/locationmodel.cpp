@@ -77,6 +77,7 @@ void LocationModel::addPlanting(const QModelIndex &index, int plantingId, int le
     location->addPlanting(plantingId, lid, length, dates.first, dates.second);
 }
 
+/*! Returns true if there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -89,6 +90,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
     return location->availableSpace(plantingId, lid, dates.first, dates.second) > 0;
 }
 
+/*! Returns true if the planting \a plantingId respects the rotation. */
 bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())

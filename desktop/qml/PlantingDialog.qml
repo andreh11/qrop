@@ -59,6 +59,8 @@ Dialog {
     focus: true
     closePolicy: Popup.NoAutoClose
     Material.background: Material.color(Material.Grey, Material.Shade100)
+    contentWidth: scrollView.implicitWidth
+    contentHeight: scrollView.implicitHeight
 
     header: PlantingFormHeader {
         id: plantingFormHeader
@@ -86,10 +88,14 @@ Dialog {
         mode: dialog.mode
     }
 
+    width: scrollView.implicitWidth
+
     ScrollView {
         id: scrollView
         anchors.fill: parent
         clip: true
+
+        implicitWidth: plantingForm.chooseLocation ? plantingForm.locationViewWidth : 600
 
         Keys.onUpPressed: verticalScrollBar.decrease()
         Keys.onDownPressed: verticalScrollBar.increase()
@@ -139,4 +145,7 @@ Dialog {
         }
 
     }
+
+    Behavior on width { NumberAnimation { duration: 100 } }
+    Behavior on height { NumberAnimation { duration: 100 } }
 }

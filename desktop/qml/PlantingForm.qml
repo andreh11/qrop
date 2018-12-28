@@ -28,6 +28,8 @@ Flickable {
     property int currentYear
     property bool accepted: varietyField.currentIndex >= 0
 
+    property int locationViewWidth: locationView.treeViewWidth
+
     property string mode: "add" // add or edit
     property bool chooseLocation: locationButton.checked
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
@@ -40,8 +42,7 @@ Flickable {
     property alias cropId: varietyModel.cropId
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
-    readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text :
-                                                           plantingDtmField.text)
+    readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
     readonly property int dtt: plantingType === 2 ? Number(greenhouseGrowTimeField.text) : 0
     readonly property int harvestWindow: Number(harvestWindowField.text)
     readonly property string sowingDate: {
@@ -311,8 +312,6 @@ Flickable {
     }
 
     focus: true
-    contentWidth: width
-    contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
@@ -326,7 +325,7 @@ Flickable {
 
     Column {
         id: mainColumn
-        width: parent.width
+        width: control.width
         spacing: Units.smallSpacing
 
         RowLayout {

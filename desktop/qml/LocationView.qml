@@ -40,10 +40,7 @@ Item {
     property alias draggedPlantingId: treeView.draggedPlantingId
 
     property int treeViewHeight: treeView.flickableItem.contentHeight
-    property int treeViewWidth: flickable.contentWidth
-    property bool plantingEditMode: false
-    property date editedPlantingPlantingDate
-    property date editedPlantingEndHarvestDate
+    property int treeViewWidth: treeView.implicitWidth
     property bool editMode: false
     property int indentation: 20
     property var colorList: [
@@ -54,6 +51,13 @@ Item {
         Material.color(Material.Teal, Material.Shade100),
         Material.color(Material.Cyan, Material.Shade100)
     ]
+
+    property bool plantingEditMode: false
+    property string editedPlantingCropName
+    property string editedPlantingVarietyName
+    property string editedPlantingFamily
+    property date editedPlantingPlantingDate
+    property date editedPlantingEndHarvestDate
 
     signal plantingMoved()
     signal plantingRemoved()
@@ -199,7 +203,6 @@ Item {
             id: flickable
 
             boundsBehavior: Flickable.StopAtBounds
-
             contentHeight: treeView.flickableItem.contentHeight
             contentWidth: width
 
@@ -212,11 +215,13 @@ Item {
                 property int draggedPlantingId: -1
                 property date plantingDate: Planting.plantingDate(draggedPlantingId)
                 property date endHarvestDate: Planting.endHarvestDate(draggedPlantingId)
-                readonly property date seasonBegin: MDate.seasonBeginning(locationView.season, locationView.year)
+                readonly property date seasonBegin: MDate.seasonBeginning(locationView.season,
+                                                                          locationView.year)
 
                 frameVisible: false
                 horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
                 verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                implicitWidth: headerRectangle.implicitWidth + 80
 
                 Controls1.TableViewColumn {
                     role: "name"
@@ -252,7 +257,6 @@ Item {
 
                 backgroundVisible: false
                 headerDelegate: null
-
                 model: locationModel
 
                 style: Styles1.TreeViewStyle {
@@ -271,6 +275,7 @@ Item {
                     }
 
                     branchDelegate:  Rectangle {
+                        id: branchRectangle
                         color: styleData.hasChildren ? colorList[styleData.depth] : "white"
                         width: locationView.indentation
                         height: Units.rowHeight + 1
@@ -302,7 +307,9 @@ Item {
                     Rectangle {
                         width: column.width
                         height: Units.rowHeight + 1
-                        color: styleData.hasChildren ? colorList[styleData.depth] : "white"
+                        color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
+                                         selectionModel.isSelected(styleData.index) ? 1.1 :  1)
+
                         //                        opacity: dropArea.containsDrag ? 1 : 0.8
                         x: - styleData.depth * locationView.indentation
 
@@ -356,155 +363,192 @@ Item {
                             }
                         }
 
-                        Column {
-                            id: column
+                        MouseArea {
+                            id: rowMouseArea
+                            anchors.fill: parent
 
-                            Row {
-                                id: row
-                                height: Units.rowHeight
-                                spacing: Units.smallSpacing
-                                leftPadding: 16
-
-                                CheckBox {
-                                    id: rowCheckBox
-                                    anchors.verticalCenter: row.verticalCenter
-                                    visible: locationView.editMode
-                                    height: parent.height * 0.8
-                                    width: height
-                                    contentItem: Text {}
-                                    checked: selectionModel.isSelected(styleData.index)
-                                    //                                    onClicked: selectionModel.select(styleData.index,
-                                    //                                                                     ItemSelectionModel.Toggle)
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            if (mouse.button !== Qt.LeftButton)
-                                                return
-
-                                            selectionModel.select(styleData.index,
-                                                                  ItemSelectionModel.Toggle)
-                                            // Since selectionModel.isSelected() isn't called after
-                                            // select(), we refresh the index... Ugly but workin'.
-                                            locationModel.refreshIndex(styleData.index)
-                                        }
-                                    }
+                            onClicked: {
+                                if (locationView.plantingEditMode) {
+                                    console.log("HO!")
+                                    selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
+                                    locationModel.refreshIndex(styleData.index);
                                 }
+                            }
 
+                            Column {
+                                id: column
 
-                                ToolButton {
-                                    id: locationNameLabel
-                                    text: hovered ? "\ue889" : styleData.value
-                                    font.family: hovered ? "Material Icons" : "Roboto Regular"
-                                    font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
-                                    //                                    showToolTip: true
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    //                                    elide: Text.ElideRight
-                                    //                                    leftPadding: styleData.depth * 20
-
-                                    //                                    MouseArea {
-                                    //                                        id: labelMouseArea
-                                    //                                        hoverEnabled: true
-                                    //                                        anchors.fill: parent
-                                    //                                    }
-
-                                    ToolTip.visible: hovered && ToolTip.text
-                                    ToolTip.text: {
-                                        var text = ""
-                                        var plantingIdList = Location.plantings(locationModel.locationId(styleData.index))
-                                        var plantingId
-                                        for (var i = 0; i < plantingIdList.length; i++) {
-                                            plantingId = plantingIdList[i]
-                                            text += Planting.cropName(plantingId)
-                                                    + ", " + Planting.varietyName(plantingId)
-                                                    + " " + Planting.plantingDate(plantingId).getFullYear()
-                                                    + "\n"
-                                        }
-                                        return text.slice(0, -1)
-                                    }
-                                }
-
-
-                                Item {
-                                    id: namePadder
+                                Row {
+                                    id: row
                                     height: Units.rowHeight
-                                    width: 120 - locationNameLabel.width - row.spacing
-                                           - (rowCheckBox.visible
-                                              ? rowCheckBox.width + row.spacing
-                                              : 0)
-                                           - (rotationAlertLabel.visible
-                                              ? rotationAlertLabel.width + row.spacing
-                                              : 0)
+                                    spacing: Units.smallSpacing
+                                    leftPadding: 16
 
-                                }
+                                    CheckBox {
+                                        id: rowCheckBox
+                                        anchors.verticalCenter: row.verticalCenter
+                                        visible: locationView.editMode
+                                        height: parent.height * 0.8
+                                        width: height
+                                        contentItem: Text {}
+                                        checked: selectionModel.isSelected(styleData.index)
+                                        //                                    onClicked: selectionModel.select(styleData.index,
+                                        //                                                                     ItemSelectionModel.Toggle)
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                if (mouse.button !== Qt.LeftButton)
+                                                    return
 
-                                ToolButton {
-                                    id: rotationAlertLabel
-                                    visible: locationModel.hasRotationConflict(styleData.index, season, year)
-                                    opacity: visible ? 1 : 0
-                                    text: "\ue160"
-                                    font.pixelSize: Units.fontSizeTitle
-                                    font.family: "Material Icons"
-                                    Material.foreground: Material.color(Material.Red)
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-                                    ToolTip.visible: hovered
-                                    ToolTip.text: {
-                                        var list = locationModel.conflictingPlantings(styleData.index, season, year)
-
-                                        var text = ""
-                                        var plantingId = -1
-                                        var locationId = locationModel.locationId(styleData.index)
-                                        var conflictList = []
-                                        for (var i = 0; i < list.length; i++) {
-                                            plantingId = list[i]
-
-                                            text += Planting.cropName(plantingId)
-                                                    + ", " + Planting.varietyName(plantingId)
-                                                    + " " + Planting.plantingDate(plantingId).getFullYear()
-
-                                            conflictList = Location.conflictingPlantings(locationId, plantingId)
-                                            for (var j = 0; j < conflictList.length; j++) {
-                                                var conflictId = conflictList[j]
-                                                text += " ⋅ " + Planting.cropName(conflictId)
-                                                        + ", " + Planting.varietyName(conflictId)
-                                                        + " " + Planting.plantingDate(conflictId).getFullYear()
+                                                selectionModel.select(styleData.index,
+                                                                      ItemSelectionModel.Toggle)
+                                                // Since selectionModel.isSelected() isn't called after
+                                                // select(), we refresh the index... Ugly but workin'.
+                                                locationModel.refreshIndex(styleData.index)
                                             }
-                                            text += "\n"
                                         }
-                                        return text.slice(0, -1)
                                     }
 
-                                }
 
-                                Timeline {
-                                    height: parent.height
-                                    year: locationView.year
-                                    season: locationView.season
-                                    showGreenhouseSow: false
-                                    showNames: true
-                                    showOnlyActiveColor: true
-                                    dragActive: true
-                                    plantingIdList: locationModel.plantings(styleData.index, season, year)
-                                    locationId: locationModel.locationId(styleData.index)
-                                    onDragFinished: treeView.draggedPlantingId = -1
-                                    onPlantingMoved: {
-                                        locationModel.refreshIndex(styleData.index)
-                                        locationView.plantingMoved()
+                                    ToolButton {
+                                        id: locationNameLabel
+                                        text: hovered ? "\ue889" : styleData.value
+                                        font.family: hovered ? "Material Icons" : "Roboto Regular"
+                                        font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
+                                        //                                    showToolTip: true
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        //                                    elide: Text.ElideRight
+                                        //                                    leftPadding: styleData.depth * 20
+
+                                        //                                    MouseArea {
+                                        //                                        id: labelMouseArea
+                                        //                                        hoverEnabled: true
+                                        //                                        anchors.fill: parent
+                                        //                                    }
+
+                                        ToolTip.visible: hovered && ToolTip.text
+                                        ToolTip.text: {
+                                            var text = ""
+                                            var plantingIdList = Location.plantings(locationModel.locationId(styleData.index))
+                                            var plantingId
+                                            for (var i = 0; i < plantingIdList.length; i++) {
+                                                plantingId = plantingIdList[i]
+                                                text += Planting.cropName(plantingId)
+                                                        + ", " + Planting.varietyName(plantingId)
+                                                        + " " + Planting.plantingDate(plantingId).getFullYear()
+                                                        + "\n"
+                                            }
+                                            return text.slice(0, -1)
+                                        }
                                     }
-                                    onPlantingRemoved: {
-                                        locationModel.refreshIndex(styleData.index)
-                                        locationView.plantingRemoved()
+
+
+                                    Item {
+                                        id: namePadder
+                                        height: Units.rowHeight
+                                        width: 120 - locationNameLabel.width - row.spacing
+                                               - (rowCheckBox.visible
+                                                  ? rowCheckBox.width + row.spacing
+                                                  : 0)
+                                               - (rotationAlertLabel.visible
+                                                  ? rotationAlertLabel.width + row.spacing
+                                                  : 0)
+
+                                    }
+
+                                    ToolButton {
+                                        id: rotationAlertLabel
+                                        visible: locationModel.hasRotationConflict(styleData.index, season, year)
+                                        opacity: visible ? 1 : 0
+                                        text: "\ue160"
+                                        font.pixelSize: Units.fontSizeTitle
+                                        font.family: "Material Icons"
+                                        Material.foreground: Material.color(Material.Red)
+                                        anchors.verticalCenter: parent.verticalCenter
+
+                                        Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
+                                        ToolTip.visible: hovered
+                                        ToolTip.text: {
+                                            var list = locationModel.conflictingPlantings(styleData.index, season, year)
+
+                                            var text = ""
+                                            var plantingId = -1
+                                            var locationId = locationModel.locationId(styleData.index)
+                                            var conflictList = []
+                                            for (var i = 0; i < list.length; i++) {
+                                                plantingId = list[i]
+
+                                                text += Planting.cropName(plantingId)
+                                                        + ", " + Planting.varietyName(plantingId)
+                                                        + " " + Planting.plantingDate(plantingId).getFullYear()
+
+                                                conflictList = Location.conflictingPlantings(locationId, plantingId)
+                                                for (var j = 0; j < conflictList.length; j++) {
+                                                    var conflictId = conflictList[j]
+                                                    text += " ⋅ " + Planting.cropName(conflictId)
+                                                            + ", " + Planting.varietyName(conflictId)
+                                                            + " " + Planting.plantingDate(conflictId).getFullYear()
+                                                }
+                                                text += "\n"
+                                            }
+                                            return text.slice(0, -1)
+                                        }
+
+                                    }
+
+                                    Timeline {
+                                        height: parent.height
+                                        year: locationView.year
+                                        season: locationView.season
+                                        showGreenhouseSow: false
+                                        showNames: true
+                                        showOnlyActiveColor: true
+                                        dragActive: true
+                                        plantingIdList: locationModel.plantings(styleData.index, season, year)
+                                        locationId: locationModel.locationId(styleData.index)
+                                        onDragFinished: treeView.draggedPlantingId = -1
+                                        onPlantingMoved: {
+                                            locationModel.refreshIndex(styleData.index)
+                                            locationView.plantingMoved()
+                                        }
+                                        onPlantingRemoved: {
+                                            locationModel.refreshIndex(styleData.index)
+                                            locationView.plantingRemoved()
+                                        }
+
+                                        //                                    Timegraph {
+                                        //                                        id: assignTimegraph
+                                        //                                        visible: showAssignPlanting
+                                        //                                        plantingId: -1
+                                        //                                        locationId: -1
+                                        //                                        todayDate: control.todayDate
+                                        //                                        seasonBegin: control.seasonBegin
+                                        //                                        year: control.year
+                                        //                                        showGreenhouseSow: control.showGreenhouseSow
+                                        //                                        showNames: control.showNames
+                                        //                                        dragActive: false
+
+                                        //                                        cropColor: assignCropColor
+                                        //                                        cropName: assignCropName
+                                        //                                        varietyName: assignVarietyName
+                                        //                                        seedingDate: assignSeedingDate
+                                        //                                        plantingDate: assignPlantingDate
+                                        //                                        beginHarvestDate: assignBeginHarvestDate
+                                        //                                        endHarvestDate: assignEndHarvestDate
+                                        //                                        totalLength: assignTotalLength
+                                        //                                        assignedLength: assignAssignedLength
+                                        //                                        lengthLeft:  assignLengthLeft
+                                        //                                    }
                                     }
                                 }
                             }
-                        }
 
-                        ThinDivider {
-                            anchors {
-                                bottom: parent.bottom
-                                left: parent.left
-                                right: parent.right
+                            ThinDivider {
+                                anchors {
+                                    bottom: parent.bottom
+                                    left: parent.left
+                                    right: parent.right
+                                }
                             }
                         }
                     }
