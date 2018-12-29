@@ -65,7 +65,7 @@ Flickable {
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int traySize: Number(traySizeField.text)
-    readonly property int plantingAmount: Number(plantingAmountField.text)
+    readonly property int plantingLength: Number(plantingAmountField.text)
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
@@ -85,7 +85,7 @@ Flickable {
     readonly property int plantsToStart: traySize * traysNumber
     readonly property int plantsNeeded: inRowSpacing === 0
                                         ? 0
-                                        : plantingAmount / inRowSpacing * 100 * rowsPerBed
+                                        : plantingLength / inRowSpacing * 100 * rowsPerBed
     readonly property real traysNumber: control.traySize < 1
                                         ? 0
                                         : toPrecision((plantsNeeded / traySize)
@@ -93,7 +93,7 @@ Flickable {
 
     readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
-    readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
+    readonly property real estimatedYield: plantingLength * yieldPerBedMeter
     readonly property real averagePrice: {
         if (averagePriceField.acceptableInput)
             Number.fromLocaleString(Qt.locale(), averagePriceField.text);
@@ -101,6 +101,11 @@ Flickable {
             0;
     }
     readonly property real estimatedRevenue: averagePrice * estimatedYield
+
+    property var selectedLocationIds: locationView.selectedLocationIds()
+    property var selectedLengthList: locationView.assignedLengthList()
+    readonly property int assignedLength: locationView.assignedLength()
+    readonly property int remainingLength: plantingLength - assignedLength
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
     readonly property var values: {
@@ -111,7 +116,7 @@ Flickable {
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
-        "length": plantingAmount ,
+        "length": plantingLength ,
         "rows": rowsPerBed,
         "spacing_plants": inRowSpacing,
         "plants_needed": plantsNeeded,
@@ -142,7 +147,7 @@ Flickable {
         [plantingDtmField, "dtm", dtm],
         [greenhouseGrowTimeField, "dtt", dtt],
         [harvestWindowField, "harvest_window", harvestWindow],
-        [plantingAmountField, "length", plantingAmount],
+        [plantingAmountField, "length", plantingLength],
         [rowsPerBedField, "rows", rowsPerBed],
         [inRowSpacingField, "spacing_plants", inRowSpacing],
         // TODO: plants needed
@@ -176,6 +181,7 @@ Flickable {
 
     function clearAll() {
         varietyField.reset();
+        locationView.clearSelection();
         inGreenhouseCheckBox.checked = false;
         inGreenhouseCheckBox.manuallyModified = false;
         plantingAmountField.reset();
@@ -655,7 +661,13 @@ Flickable {
                         flat: true
                     }
 
-                    Item { Layout.fillWidth: true }
+                    Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                        text: qsTr("Remaining length to assign: %L1 m", "", remainingLength).arg(remainingLength)
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                    }
 
                     Button {
                         text: qsTr("Cancel")
@@ -687,9 +699,16 @@ Flickable {
                     width: parent.width
                     height: 400
                     plantingEditMode: true
+
+                    editedPlantingLength: plantingLength
                     editedPlantingPlantingDate: plantingDate
                     editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
                                                                 harvestWindow)
+                    onAddPlantingLength: {
+
+                        console.log("ADD!", length)
+                        plantingAmountField.text = plantingLength + length
+                    }
                 }
             }
         }

@@ -133,8 +133,18 @@ Dialog {
             var idList = Planting.addSuccessions(plantingForm.successions,
                                                  plantingForm.weeksBetween,
                                                  plantingForm.values);
-            if (idList.length)
+            if (idList.length) {
                 dialog.plantingsAdded(plantingForm.successions)
+
+                if (idList.lenght === 1) {
+                    var plantingId = idList[0]
+                    var locationIdList = plantingForm.selectedLocationIds
+                    for (var i = 0; locationIdList.length; i++) {
+                        var locationId = locationIdList[i]
+//                        Location.addPlanting(plantingId, locationId, )
+                    }
+                }
+            }
         } else {
 //            var map = plantingForm.editedValues()
 //            for (var key in map)

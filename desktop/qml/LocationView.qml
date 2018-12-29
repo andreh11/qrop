@@ -55,9 +55,13 @@ Item {
     property bool plantingEditMode: false
     property date editedPlantingPlantingDate
     property date editedPlantingEndHarvestDate
+    property int editedPlantingLength
+    property var assignedLengthMap: ({})
+    property int remainingLength: editedPlantingLength - assignedLength()
 
     signal plantingMoved()
     signal plantingRemoved()
+    signal addPlantingLength(int length)
 
     function refresh() {
         locationModel.refresh();
@@ -83,6 +87,44 @@ Item {
             locationModel.refreshIndex(selectedIndexes[j]);
 
     }
+
+    function selectedLocationIds() {
+        var list = [];
+        var selectedIndexes = selectionModel.selectedIndexes;
+
+        for (var i = 0; i < selectedIndexes.length; i++) {
+            list.push(locationModel.locationId(selectedIndexes[i]));
+        }
+        return list;
+    }
+
+    function assignedLengthList() {
+        var list = [];
+        var selectedIndexes = selectionModel.selectedIndexes;
+
+        for (var i = 0; i < selectedIndexes.length; i++) {
+            list.push(locationModel.availableSpace(selectedIndexes[i], editedPlantingPlantingDate,
+                                                   editedPlantingPlantingDate))
+        }
+        return list;
+    }
+
+    function assignedLength() {
+        var length = 0
+        for (var index in assignedLengthMap) {
+            length += assignedLengthMap[index];
+        }
+        return length;
+    }
+
+//    function assignedLength() {
+//        var length = 0
+//        for (var i = 0; i < selectedIndexes.length; i++) {
+//            length += locationModel.availableSpace(selectedIndexes[i], editedPlantingPlantingDate,
+//                                                   editedPlantingPlantingDate);
+//        }
+//        return length;
+//    }
 
     function addLocations(name, lenght, width, quantity) {
         if (locationView.hasSelection)
@@ -328,9 +370,7 @@ Item {
                                 }
                             }
 
-                            onExited: {
-                                treeView.draggedPlantingId = -1;
-                            }
+                            onExited: treeView.draggedPlantingId = -1;
 
                             onDropped: {
                                 treeView.draggedPlantingId = -1
@@ -343,9 +383,9 @@ Item {
                                     var plantingId = Number(list[0])
                                     var sourceLocationId = Number(list[1])
 
-                                    //                                            if (!locationModel.rotationRespected(styleData.index, plantingId)) {
-                                    //                                                rotationSnackbar.open();
-                                    //                                            }
+//                                    if (!locationModel.rotationRespected(styleData.index, plantingId)) {
+//                                        rotationSnackbar.open();
+//                                    }
 
                                     drop.acceptProposedAction()
 
@@ -363,6 +403,7 @@ Item {
                         MouseArea {
                             id: rowMouseArea
                             anchors.fill: parent
+                            hoverEnabled: true
 
                             onClicked: {
                                 if (styleData.hasChildren || !locationView.plantingEditMode)
@@ -372,7 +413,26 @@ Item {
                                                                  editedPlantingEndHarvestDate))
                                     return;
 
+                                if (selectionModel.isSelected(styleData.index)) {
+                                    assignedLengthMap[styleData.index] = 0
+                                } else {
+                                    if (remainingLength === 0) {
+                                        assignedLengthMap[styleData.index] =
+                                                locationModel.availableSpace(styleData.index,
+                                                                             editedPlantingPlantingDate,
+                                                                             editedPlantingEndHarvestDate);
+                                        locationView.addPlantingLength(assignedLengthMap[styleData.index]);
+                                    } else {
+                                         assignedLengthMap[styleData.index] =
+                                         Math.min(remainingLength,
+                                                  locationModel.availableSpace(styleData.index,
+                                                                               editedPlantingPlantingDate,
+                                                                               editedPlantingEndHarvestDate));
+                                    }
+                                }
+
                                 selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
+                                assignedLengthMapChanged()
                                 locationModel.refreshIndex(styleData.index);
                             }
 
@@ -516,30 +576,6 @@ Item {
                                             locationModel.refreshIndex(styleData.index)
                                             locationView.plantingRemoved()
                                         }
-
-                                        //                                    Timegraph {
-                                        //                                        id: assignTimegraph
-                                        //                                        visible: showAssignPlanting
-                                        //                                        plantingId: -1
-                                        //                                        locationId: -1
-                                        //                                        todayDate: control.todayDate
-                                        //                                        seasonBegin: control.seasonBegin
-                                        //                                        year: control.year
-                                        //                                        showGreenhouseSow: control.showGreenhouseSow
-                                        //                                        showNames: control.showNames
-                                        //                                        dragActive: false
-
-                                        //                                        cropColor: assignCropColor
-                                        //                                        cropName: assignCropName
-                                        //                                        varietyName: assignVarietyName
-                                        //                                        seedingDate: assignSeedingDate
-                                        //                                        plantingDate: assignPlantingDate
-                                        //                                        beginHarvestDate: assignBeginHarvestDate
-                                        //                                        endHarvestDate: assignEndHarvestDate
-                                        //                                        totalLength: assignTotalLength
-                                        //                                        assignedLength: assignAssignedLength
-                                        //                                        lengthLeft:  assignLengthLeft
-                                        //                                    }
                                     }
                                 }
                             }

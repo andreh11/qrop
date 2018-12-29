@@ -41,10 +41,9 @@ Page {
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
-
     onEditModeChanged: {
         if (!editMode) {
-            clearSelection();
+            locationView.clearSelection();
         }
     }
 

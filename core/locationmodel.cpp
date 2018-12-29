@@ -77,6 +77,19 @@ void LocationModel::addPlanting(const QModelIndex &index, int plantingId, int le
     location->addPlanting(plantingId, lid, length, dates.first, dates.second);
 }
 
+int LocationModel::availableSpace(const QModelIndex &index, const QDate &plantingDate,
+                                  const QDate &endHarvestDate) const
+{
+    if (!index.isValid())
+        return false;
+
+    int lid = locationId(index);
+    QVariantList list;
+    QPair<QDate, QDate> dates = seasonDates();
+
+    return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
+}
+
 /*! Returns true if there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
                                    const QDate &endHarvestDate) const
