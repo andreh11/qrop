@@ -53,9 +53,6 @@ Item {
     ]
 
     property bool plantingEditMode: false
-    property string editedPlantingCropName
-    property string editedPlantingVarietyName
-    property string editedPlantingFamily
     property date editedPlantingPlantingDate
     property date editedPlantingEndHarvestDate
 
@@ -368,11 +365,15 @@ Item {
                             anchors.fill: parent
 
                             onClicked: {
-                                if (locationView.plantingEditMode) {
-                                    console.log("HO!")
-                                    selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
-                                    locationModel.refreshIndex(styleData.index);
-                                }
+                                if (styleData.hasChildren || !locationView.plantingEditMode)
+                                    return;
+                                if (!locationModel.acceptPlanting(styleData.index,
+                                                                 editedPlantingPlantingDate,
+                                                                 editedPlantingEndHarvestDate))
+                                    return;
+
+                                selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
+                                locationModel.refreshIndex(styleData.index);
                             }
 
                             Column {

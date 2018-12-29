@@ -78,6 +78,20 @@ void LocationModel::addPlanting(const QModelIndex &index, int plantingId, int le
 }
 
 /*! Returns true if there is some space left for the planting \a plantingId. */
+bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
+                                   const QDate &endHarvestDate) const
+{
+    if (!index.isValid())
+        return false;
+
+    int lid = locationId(index);
+    QVariantList list;
+    QPair<QDate, QDate> dates = seasonDates();
+
+    return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
+}
+
+/*! Returns true if there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -87,7 +101,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
     QVariantList list;
     QPair<QDate, QDate> dates = seasonDates();
 
-    return location->availableSpace(plantingId, lid, dates.first, dates.second) > 0;
+    return location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
 }
 
 /*! Returns true if the planting \a plantingId respects the rotation. */
@@ -98,19 +112,6 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
 
     const int lid = locationId(index);
     return location->conflictingPlantings(lid, plantingId).count() == 0;
-
-    //    const QList<int> plantingIdList = location->plantings(lid);
-    //    const int familyId = planting->familyId(plantingId).toInt();
-    //    const int intervalDays = qAbs(planting->familyInterval(plantingId).toInt()) * 365;
-    //    const QDate plantingDate = planting->plantingDate(plantingId);
-
-    //    QDate pdate;
-    //    for (const int pid : plantingIdList) {
-    //        pdate = planting->plantingDate(pid);
-    //        if (familyId == planting->familyId(pid).toInt() && pdate.daysTo(plantingDate) < intervalDays)
-    //            return false;
-    //    }
-    //    return true;
 }
 
 /*! Returns a map such as map[id] is a list of all plantings conflicting
