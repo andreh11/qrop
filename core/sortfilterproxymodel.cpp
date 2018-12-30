@@ -35,6 +35,9 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     setSourceModel(m_model);
     setSortLocaleAware(true);
 
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
+
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
 }

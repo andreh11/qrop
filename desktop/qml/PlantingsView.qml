@@ -240,9 +240,12 @@ ListView {
                     width: parent.height * 0.8
                     anchors.verticalCenter: headerRow.verticalCenter
                     tristate: true
-                    checkState: checks == rowsNumber ? Qt.Checked
+                    checkState: rowsNumber && checks == rowsNumber ? Qt.Checked
                                                      : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                     nextCheckState: function () {
+                        if (!rowsNumber)
+                            return;
+
                         if (checkState == Qt.Checked) {
                             unselectAll()
                             return Qt.Unchecked
