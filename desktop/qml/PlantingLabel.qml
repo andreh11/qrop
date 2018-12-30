@@ -40,7 +40,7 @@ Item {
         }
         Text {
             text: showOnlyDates ? qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year))
-                                : qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(locations)
+                                : qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(Location.fullName(locations))
             font.family: "Roboto Regular"
             color: Material.color(Material.Grey, Material.Shade600)
             font.pixelSize: Units.fontSizeCaption

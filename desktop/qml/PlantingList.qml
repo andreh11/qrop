@@ -137,8 +137,7 @@ ListView {
             endHarvestDate: model.end_harvest_date
             year: listView.year
             length: model.length
-            locations: model.locations
-
+            locations: model.locations.split(",").map(Number)
         }
     }
 }
