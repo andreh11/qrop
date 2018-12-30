@@ -57,6 +57,7 @@ Item {
     property date editedPlantingEndHarvestDate
     property int editedPlantingLength
     property var assignedLengthMap: ({})
+    property var assignedIdMap: selectedLocationIdMap()
     property int remainingLength: editedPlantingLength - assignedLength()
 
     signal plantingMoved()
@@ -81,6 +82,7 @@ Item {
             selectedIndexes.push(selectionModel.selectedIndexes[i]);
 
         selectionModel.clearSelection();
+        assignedLengthMap = ({})
 
         // Refresh indexes to uncheck checkboxes.
         for (var j in selectedIndexes)
@@ -95,18 +97,20 @@ Item {
         for (var i = 0; i < selectedIndexes.length; i++) {
             list.push(locationModel.locationId(selectedIndexes[i]));
         }
+        console.log(list)
         return list;
     }
 
-    function assignedLengthList() {
-        var list = [];
-        var selectedIndexes = selectionModel.selectedIndexes;
+    function selectedLocationIdMap() {
+        var map = ({});
 
         for (var i = 0; i < selectedIndexes.length; i++) {
-            list.push(locationModel.availableSpace(selectedIndexes[i], editedPlantingPlantingDate,
-                                                   editedPlantingPlantingDate))
+            var index = selectedIndexes[i]
+            var locationId = locationModel.locationId(index)
+            var length = assignedLengthMap[index]
+            map[locationId] = length
         }
-        return list;
+        return map;
     }
 
     function assignedLength() {
@@ -115,6 +119,11 @@ Item {
             length += assignedLengthMap[index];
         }
         return length;
+    }
+
+    function addPlanting(locationIndex, plantingId, length) {
+        console.log("[view] addPlanting", locationIndex, plantingId, length)
+        locationModel.addPlanting(locationIndex, plantingId, length)
     }
 
 //    function assignedLength() {

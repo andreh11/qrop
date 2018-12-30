@@ -28,8 +28,10 @@ class CORESHARED_EXPORT Location : public DatabaseUtility
 
 public:
     Location(QObject *parent = nullptr);
-    Q_INVOKABLE void remove(int id) const override;
     Q_INVOKABLE int duplicate(int id) const override;
+    Q_INVOKABLE void remove(int id) const override;
+    Q_INVOKABLE QList<int> children(int locationId) const;
+    QList<int> childrenTree(int locationId) const;
 
     Q_INVOKABLE QString fullName(int locationId) const;
     QList<QString> pathName(int locationId) const;
@@ -45,12 +47,12 @@ public:
                                    const QDate &seasonEnd) const;
     int availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                        const QDate &seasonEnd) const;
-    Q_INVOKABLE QList<int> children(int locationId) const;
+
+    Q_INVOKABLE void addPlanting(int plantingId, int locationId, int length) const;
     Q_INVOKABLE void addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
                                  const QDate &seasonEnd) const;
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
-    QList<int> childrenTree(int locationId) const;
 
 private:
     Planting *planting;

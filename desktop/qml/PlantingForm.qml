@@ -53,7 +53,9 @@ Flickable {
         else
             fieldPlantingDateField.isoDateString;
     }
-    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString :
+    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate :
+                                                                fieldPlantingDateField.calendarDate
+    readonly property string plantingDateString: plantingType === 1 ? fieldSowingDateField.isoDateString :
                                                                 fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
@@ -103,7 +105,7 @@ Flickable {
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedLocationIds: locationView.selectedLocationIds()
-    property var selectedLengthList: locationView.assignedLengthList()
+    property alias assignedLengthMap: locationView.assignedIdMap // locationId -> length
     readonly property int assignedLength: locationView.assignedLength()
     readonly property int remainingLength: plantingLength - assignedLength
 
@@ -112,7 +114,7 @@ Flickable {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
-        "planting_date": plantingDate,
+        "planting_date": plantingDateString,
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
@@ -141,8 +143,8 @@ Flickable {
         [greenhouseRadio, "planting_type", plantingType],
         [boughtRadio, "planting_type", plantingType],
         [inGreenhouseCheckBox, "in_greenhouse", inGreenhouse],
-        [fieldSowingDateField, "planting_date", plantingDate],
-        [fieldPlantingDateField, "planting_date", plantingDate],
+        [fieldSowingDateField, "planting_date", plantingDateString],
+        [fieldPlantingDateField, "planting_date", plantingDateString],
         [sowDtmField, "dtm", dtm],
         [plantingDtmField, "dtm", dtm],
         [greenhouseGrowTimeField, "dtt", dtt],

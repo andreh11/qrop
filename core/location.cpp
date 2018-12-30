@@ -274,6 +274,21 @@ int Location::availableSpace(int locationId, int plantingId, const QDate &season
     return availableSpace(locationId, plantingDate, endHarvestDate, seasonBeg, seasonEnd);
 }
 
+/*! Add \a plantingId to \a locationId. No checking is performed.
+ */
+void Location::addPlanting(int plantingId, int locationId, int length) const
+{
+    QVariantMap map = mapFromId("location", locationId);
+    QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
+                        "VALUES (%1, %2, %3)");
+    QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(length));
+    query.exec();
+    debugQuery(query);
+}
+
+/*! Add \a plantingId to \a locationId checking for available space
+ * between \a seasonBeg and \a seasonEnd.
+ */
 void Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
                            const QDate &seasonEnd) const
 {

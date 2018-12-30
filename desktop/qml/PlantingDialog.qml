@@ -133,24 +133,20 @@ Dialog {
             var idList = Planting.addSuccessions(plantingForm.successions,
                                                  plantingForm.weeksBetween,
                                                  plantingForm.values);
-            if (idList.length) {
-                dialog.plantingsAdded(plantingForm.successions)
+            if (!idList.length)
+                return;
 
-                if (idList.lenght === 1) {
-                    var plantingId = idList[0]
-                    var locationIdList = plantingForm.selectedLocationIds
-                    for (var i = 0; locationIdList.length; i++) {
-                        var locationId = locationIdList[i]
-//                        Location.addPlanting(plantingId, locationId, )
-                    }
+            dialog.plantingsAdded(plantingForm.successions)
+
+            if (idList.length === 1) {
+                var plantingId = idList[0]
+                for (var locationId in plantingForm.assignedLengthMap) {
+                    var length = plantingForm.assignedLengthMap[locationId]
+                    Location.addPlanting(plantingId, locationId, length)
                 }
             }
         } else {
-//            var map = plantingForm.editedValues()
-//            for (var key in map)
-//                console.log(key, map[key])
-            Planting.updateList(dialog.editPlantingIdList,
-                                plantingForm.editedValues());
+            Planting.updateList(dialog.editPlantingIdList, plantingForm.editedValues());
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
