@@ -39,6 +39,10 @@ public:
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
     Q_INVOKABLE int locationId(const QModelIndex &index) const;
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
+    Q_INVOKABLE int availableSpace(const QModelIndex &index, const QDate &plantingDate,
+                                   const QDate &endHarvestDate) const;
+    Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
+                                    const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, int plantingId) const;
     Q_INVOKABLE bool rotationRespected(const QModelIndex &index, int plantingId) const;
     Q_INVOKABLE QList<int> conflictingPlantings(const QModelIndex &index, int season, int year) const;

@@ -243,15 +243,13 @@ QList<int> Location::conflictingPlantings(int locationId, int plantingId) const
     return clist;
 }
 
-int Location::availableSpace(int plantingId, int locationId, const QDate &seasonBeg,
-                             const QDate &seasonEnd) const
+int Location::availableSpace(int locationId, const QDate &plantingDate, const QDate &endHarvestDate,
+                             const QDate &seasonBeg, const QDate &seasonEnd) const
 {
     QVariantMap map = mapFromId("location", locationId);
     int length = map.value("bed_length").toInt();
 
     QList<int> plantingIdList = plantings(locationId, seasonBeg, seasonEnd);
-    QDate plantingDate = planting->plantingDate(plantingId);
-    QDate endHarvestDate = planting->endHarvestDate(plantingId);
 
     QDate pdate;
     QDate edate;
@@ -268,11 +266,34 @@ int Location::availableSpace(int plantingId, int locationId, const QDate &season
     return length - maxl;
 }
 
+int Location::availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
+                             const QDate &seasonEnd) const
+{
+    QDate plantingDate = planting->plantingDate(plantingId);
+    QDate endHarvestDate = planting->endHarvestDate(plantingId);
+    return availableSpace(locationId, plantingDate, endHarvestDate, seasonBeg, seasonEnd);
+}
+
+/*! Add \a plantingId to \a locationId. No checking is performed.
+ */
+void Location::addPlanting(int plantingId, int locationId, int length) const
+{
+    QVariantMap map = mapFromId("location", locationId);
+    QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
+                        "VALUES (%1, %2, %3)");
+    QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(length));
+    query.exec();
+    debugQuery(query);
+}
+
+/*! Add \a plantingId to \a locationId checking for available space
+ * between \a seasonBeg and \a seasonEnd.
+ */
 void Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
                            const QDate &seasonEnd) const
 {
     QVariantMap map = mapFromId("location", locationId);
-    int lengthToAdd = qMin(length, availableSpace(plantingId, locationId, seasonBeg, seasonEnd));
+    int lengthToAdd = qMin(length, availableSpace(locationId, plantingId, seasonBeg, seasonEnd));
 
     if (lengthToAdd < 1)
         return;

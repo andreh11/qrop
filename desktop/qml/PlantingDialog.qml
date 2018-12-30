@@ -59,11 +59,13 @@ Dialog {
     focus: true
     closePolicy: Popup.NoAutoClose
     Material.background: Material.color(Material.Grey, Material.Shade100)
+    contentWidth: scrollView.implicitWidth
+    contentHeight: scrollView.implicitHeight
 
     header: PlantingFormHeader {
         id: plantingFormHeader
-        visible: mode === "add"
         estimatedRevenue: plantingForm.estimatedRevenue
+        mode: dialog.mode
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
 
@@ -86,10 +88,14 @@ Dialog {
         mode: dialog.mode
     }
 
+    width: scrollView.implicitWidth
+
     ScrollView {
         id: scrollView
         anchors.fill: parent
         clip: true
+
+        implicitWidth: plantingForm.chooseLocationMode ? plantingForm.locationViewWidth : 600
 
         Keys.onUpPressed: verticalScrollBar.decrease()
         Keys.onDownPressed: verticalScrollBar.increase()
@@ -127,16 +133,25 @@ Dialog {
             var idList = Planting.addSuccessions(plantingForm.successions,
                                                  plantingForm.weeksBetween,
                                                  plantingForm.values);
-            if (idList.length)
-                dialog.plantingsAdded(plantingForm.successions)
+            if (!idList.length)
+                return;
+
+            dialog.plantingsAdded(plantingForm.successions)
+
+            if (idList.length === 1) {
+                var plantingId = idList[0]
+                for (var locationId in plantingForm.assignedLengthMap) {
+                    var length = plantingForm.assignedLengthMap[locationId]
+                    Location.addPlanting(plantingId, locationId, length)
+                }
+            }
         } else {
-//            var map = plantingForm.editedValues()
-//            for (var key in map)
-//                console.log(key, map[key])
-            Planting.updateList(dialog.editPlantingIdList,
-                                plantingForm.editedValues());
+            Planting.updateList(dialog.editPlantingIdList, plantingForm.editedValues());
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
     }
+
+    Behavior on width { NumberAnimation { duration: 100 } }
+    Behavior on height { NumberAnimation { duration: 100 } }
 }

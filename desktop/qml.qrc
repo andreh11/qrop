@@ -57,5 +57,6 @@
         <file>qml/Timegraph.qml</file>
         <file>qml/PlantingsView.qml</file>
         <file>qml/LocationDialog.qml</file>
+        <file>qml/LocationView.qml</file>
     </qresource>
 </RCC>

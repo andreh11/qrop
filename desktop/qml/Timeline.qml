@@ -45,11 +45,6 @@ Item {
 
     implicitWidth: gridRow.width
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-    }
-
     Row {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
@@ -104,5 +99,7 @@ Item {
             onDragFinished: control.dragFinished();
             showOnlyActiveColor: control.showOnlyActiveColor
         }
+
     }
+
 }

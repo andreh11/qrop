@@ -28,7 +28,10 @@ Flickable {
     property int currentYear
     property bool accepted: varietyField.currentIndex >= 0
 
+    property int locationViewWidth: locationView.treeViewWidth
+
     property string mode: "add" // add or edit
+    property bool chooseLocationMode: false
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
     property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
@@ -39,8 +42,7 @@ Flickable {
     property alias cropId: varietyModel.cropId
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
-    readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text :
-                                                           plantingDtmField.text)
+    readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
     readonly property int dtt: plantingType === 2 ? Number(greenhouseGrowTimeField.text) : 0
     readonly property int harvestWindow: Number(harvestWindowField.text)
     readonly property string sowingDate: {
@@ -51,7 +53,9 @@ Flickable {
         else
             fieldPlantingDateField.isoDateString;
     }
-    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.isoDateString :
+    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate :
+                                                                fieldPlantingDateField.calendarDate
+    readonly property string plantingDateString: plantingType === 1 ? fieldSowingDateField.isoDateString :
                                                                 fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: firstHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
@@ -63,7 +67,7 @@ Flickable {
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int traySize: Number(traySizeField.text)
-    readonly property int plantingAmount: Number(plantingAmountField.text)
+    readonly property int plantingLength: Number(plantingAmountField.text)
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
@@ -83,7 +87,7 @@ Flickable {
     readonly property int plantsToStart: traySize * traysNumber
     readonly property int plantsNeeded: inRowSpacing === 0
                                         ? 0
-                                        : plantingAmount / inRowSpacing * 100 * rowsPerBed
+                                        : plantingLength / inRowSpacing * 100 * rowsPerBed
     readonly property real traysNumber: control.traySize < 1
                                         ? 0
                                         : toPrecision((plantsNeeded / traySize)
@@ -91,7 +95,7 @@ Flickable {
 
     readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
-    readonly property real estimatedYield: plantingAmount * yieldPerBedMeter
+    readonly property real estimatedYield: plantingLength * yieldPerBedMeter
     readonly property real averagePrice: {
         if (averagePriceField.acceptableInput)
             Number.fromLocaleString(Qt.locale(), averagePriceField.text);
@@ -100,16 +104,21 @@ Flickable {
     }
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
+    property var selectedLocationIds: locationView.selectedLocationIds()
+    property alias assignedLengthMap: locationView.assignedIdMap // locationId -> length
+    readonly property int assignedLength: locationView.assignedLength()
+    readonly property int remainingLength: plantingLength - assignedLength
+
     property var selectedKeywords: [] // List of ids of the selected keywords.
     readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
         "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
-        "planting_date": plantingDate,
+        "planting_date": plantingDateString,
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
-        "length": plantingAmount ,
+        "length": plantingLength ,
         "rows": rowsPerBed,
         "spacing_plants": inRowSpacing,
         "plants_needed": plantsNeeded,
@@ -134,13 +143,13 @@ Flickable {
         [greenhouseRadio, "planting_type", plantingType],
         [boughtRadio, "planting_type", plantingType],
         [inGreenhouseCheckBox, "in_greenhouse", inGreenhouse],
-        [fieldSowingDateField, "planting_date", plantingDate],
-        [fieldPlantingDateField, "planting_date", plantingDate],
+        [fieldSowingDateField, "planting_date", plantingDateString],
+        [fieldPlantingDateField, "planting_date", plantingDateString],
         [sowDtmField, "dtm", dtm],
         [plantingDtmField, "dtm", dtm],
         [greenhouseGrowTimeField, "dtt", dtt],
         [harvestWindowField, "harvest_window", harvestWindow],
-        [plantingAmountField, "length", plantingAmount],
+        [plantingAmountField, "length", plantingLength],
         [rowsPerBedField, "rows", rowsPerBed],
         [inRowSpacingField, "spacing_plants", inRowSpacing],
         // TODO: plants needed
@@ -174,6 +183,8 @@ Flickable {
 
     function clearAll() {
         varietyField.reset();
+        locationView.clearSelection();
+        chooseLocationMode = false;
         inGreenhouseCheckBox.checked = false;
         inGreenhouseCheckBox.manuallyModified = false;
         plantingAmountField.reset();
@@ -310,8 +321,6 @@ Flickable {
     }
 
     focus: true
-    contentWidth: width
-    contentHeight: mainColumn.height
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
@@ -325,12 +334,13 @@ Flickable {
 
     Column {
         id: mainColumn
-        width: parent.width
-        spacing: Units.formSpacing
+        width: control.width
+        spacing: Units.smallSpacing
 
         RowLayout {
             width: parent.width
             spacing: Units.mediumSpacing
+            visible: !chooseLocationMode
 
             MyComboBox {
                 id: varietyField
@@ -417,7 +427,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
-                    visible: mode === "add"
+                    visible: mode === "add" && !chooseLocationMode
                     Layout.fillWidth: true
 
                     MyTextField {
@@ -445,10 +455,12 @@ Flickable {
             }
         }
 
+
         Flow {
             id: plantingTypeLayout
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             spacing: Units.smallSpacing
+            visible: !chooseLocationMode
 
             ChoiceChip {
                 id: directSeedRadio
@@ -487,7 +499,7 @@ Flickable {
 
                 MyTextField {
                     id: sowDtmField
-                    visible: fieldSowingDateField.visible
+                    visible: fieldSowingDateField.visible && !chooseLocationMode
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
                     text: "1"
@@ -503,7 +515,7 @@ Flickable {
 
                 MyTextField {
                     id: greenhouseGrowTimeField
-                    visible: greenhouseStartDateField.visible
+                    visible: greenhouseStartDateField.visible && !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -529,7 +541,7 @@ Flickable {
 
                 MyTextField {
                     id: plantingDtmField
-                    visible: fieldPlantingDateField.visible
+                    visible: fieldPlantingDateField.visible && !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -546,6 +558,7 @@ Flickable {
 
                 MyTextField {
                     id: harvestWindowField
+                    visible: !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -620,10 +633,87 @@ Flickable {
             }
         }
 
+
+        FormGroupBox {
+            id: locationGroupBox
+            visible: successions === 1 && mode === "add"
+
+            Behavior on height { NumberAnimation { duration: 1000 } }
+
+            Column {
+                id: locationColumn
+                anchors.fill: parent
+
+                Button {
+                    id: locationButton
+                    flat: true
+                    visible: !chooseLocationMode
+                    width: parent.width
+                    text: {
+                        if (locationView.selectedLocationIds().length ===  0) {
+                            return qsTr("Choose locations");
+                        }
+                        return qsTr("Locations: %1").arg(Location.fullName(locationView.selectedLocationIds()));
+                    }
+                    onClicked: chooseLocationMode = true
+                }
+
+                RowLayout {
+                    visible: chooseLocationMode
+                    width: parent.width
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Remaining length: %L1 m", "", remainingLength).arg(remainingLength)
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                    }
+
+                    Button {
+                        text: qsTr("Unassign all beds")
+                        onClicked: locationView.clearSelection()
+                        flat: true
+                    }
+
+                    Button {
+                        text: qsTr("Close")
+                        flat: true
+                        onClicked: chooseLocationMode = false
+                        Material.foreground: Material.accent
+                    }
+                }
+
+                LocationView {
+                    id: locationView
+                    visible: chooseLocationMode
+
+                    property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
+                                                                   : fieldPlantingDateField.calendarDate
+                    season: MDate.season(plantingDate)
+                    year: {
+                        if (plantingDate.getMonth() < 2)
+                            return  plantingDate.getFullYear() - 1;
+                        else
+                            return  plantingDate.getFullYear() ;
+                    }
+
+                    width: parent.width
+                    height: 400
+                    plantingEditMode: true
+
+                    editedPlantingLength: plantingLength
+                    editedPlantingPlantingDate: plantingDate
+                    editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
+                                                                harvestWindow)
+                    onAddPlantingLength: plantingAmountField.text = plantingLength + length
+                }
+            }
+        }
+
         FormGroupBox {
             id: greenhouseBox
             title: qsTr("Greenhouse details")
-            visible: greenhouseRadio.checked
+            visible: greenhouseRadio.checked && !chooseLocationMode
             RowLayout {
                 width: parent.width
                 spacing: Units.formSpacing
@@ -651,7 +741,7 @@ Flickable {
         FormGroupBox {
             id: seedBox
             title: qsTr("Seeds")
-            visible: !boughtRadio.checked
+            visible: !boughtRadio.checked && !chooseLocationMode
             GridLayout {
                 width: parent.width
                 columns: 2
@@ -707,6 +797,7 @@ Flickable {
         FormGroupBox {
             width: parent.width
             title: qsTr("Harvest & revenue rate")
+            visible: !chooseLocationMode
 
             RowLayout {
                 width: parent.width
@@ -770,6 +861,7 @@ Flickable {
             clip: true
             width: parent.width
             spacing: 8
+            visible: !chooseLocationMode
 
             Repeater {
                 model: keywordModel
