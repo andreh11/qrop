@@ -31,6 +31,7 @@ Rectangle {
     property alias currentIndex: cropField.currentIndex
     property alias cropField: cropField
     property int cropId: cropModel.rowId(cropField.currentIndex)
+    property string mode
 
     signal newCropAdded(int newCropId)
     signal cropSelected()
@@ -83,6 +84,7 @@ Rectangle {
             editable: false
             showAddItem: true
             addItemText: qsTr("Add Crop")
+            enabled: mode === "add"
 
             onActivated: control.cropSelected()
             onAddItemClicked: addCropDialog.open()

@@ -31,7 +31,7 @@ Flickable {
     property int locationViewWidth: locationView.treeViewWidth
 
     property string mode: "add" // add or edit
-    property bool chooseLocation: locationButton.checked
+    property bool chooseLocationMode: false
     readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
     property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
@@ -184,6 +184,7 @@ Flickable {
     function clearAll() {
         varietyField.reset();
         locationView.clearSelection();
+        chooseLocationMode = false;
         inGreenhouseCheckBox.checked = false;
         inGreenhouseCheckBox.manuallyModified = false;
         plantingAmountField.reset();
@@ -339,7 +340,7 @@ Flickable {
         RowLayout {
             width: parent.width
             spacing: Units.mediumSpacing
-            visible: !chooseLocation
+            visible: !chooseLocationMode
 
             MyComboBox {
                 id: varietyField
@@ -426,7 +427,7 @@ Flickable {
 
                 RowLayout {
                     spacing: Units.mediumSpacing
-                    visible: mode === "add" && !chooseLocation
+                    visible: mode === "add" && !chooseLocationMode
                     Layout.fillWidth: true
 
                     MyTextField {
@@ -459,7 +460,7 @@ Flickable {
             id: plantingTypeLayout
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             spacing: Units.smallSpacing
-            visible: !chooseLocation
+            visible: !chooseLocationMode
 
             ChoiceChip {
                 id: directSeedRadio
@@ -498,7 +499,7 @@ Flickable {
 
                 MyTextField {
                     id: sowDtmField
-                    visible: fieldSowingDateField.visible && !chooseLocation
+                    visible: fieldSowingDateField.visible && !chooseLocationMode
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
                     text: "1"
@@ -514,7 +515,7 @@ Flickable {
 
                 MyTextField {
                     id: greenhouseGrowTimeField
-                    visible: greenhouseStartDateField.visible && !chooseLocation
+                    visible: greenhouseStartDateField.visible && !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -540,7 +541,7 @@ Flickable {
 
                 MyTextField {
                     id: plantingDtmField
-                    visible: fieldPlantingDateField.visible && !chooseLocation
+                    visible: fieldPlantingDateField.visible && !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -557,7 +558,7 @@ Flickable {
 
                 MyTextField {
                     id: harvestWindowField
-                    visible: !chooseLocation
+                    visible: !chooseLocationMode
                     text: "1"
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -634,59 +635,57 @@ Flickable {
 
 
         FormGroupBox {
+            id: locationGroupBox
+            visible: successions === 1 && mode === "add"
+
             Behavior on height { NumberAnimation { duration: 1000 } }
+
             Column {
+                id: locationColumn
+                anchors.fill: parent
 
                 Button {
                     id: locationButton
                     flat: true
-                    checkable: true
-                    visible: successions === 1 && !chooseLocation
+                    visible: !chooseLocationMode
                     width: parent.width
-                    text: qsTr("Select location...")
-                    background: Rectangle {
-                            implicitWidth: 100
-                            implicitHeight: 20
-                            opacity: enabled ? 1 : 0.3
-                            border.width: 0
-                            radius: 2
+                    text: {
+                        if (locationView.selectedLocationIds().length ===  0) {
+                            return qsTr("Choose locations");
                         }
+                        return qsTr("Locations: %1").arg(Location.fullName(locationView.selectedLocationIds()));
+                    }
+                    onClicked: chooseLocationMode = true
                 }
 
-                anchors.fill: parent
                 RowLayout {
-                    visible: chooseLocation
+                    visible: chooseLocationMode
                     width: parent.width
-
-                    Button {
-                        text: qsTr("Unassign from all beds")
-                        flat: true
-                    }
 
                     Label {
                         Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                        text: qsTr("Remaining length to assign: %L1 m", "", remainingLength).arg(remainingLength)
+                        text: qsTr("Remaining length: %L1 m", "", remainingLength).arg(remainingLength)
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
 
                     Button {
-                        text: qsTr("Cancel")
+                        text: qsTr("Unassign all beds")
+                        onClicked: locationView.clearSelection()
                         flat: true
-                        onClicked: locationButton.checked = false
                     }
 
                     Button {
-                        text: qsTr("Apply")
+                        text: qsTr("Close")
                         flat: true
+                        onClicked: chooseLocationMode = false
                         Material.foreground: Material.accent
                     }
                 }
 
                 LocationView {
                     id: locationView
-                    visible: chooseLocation
+                    visible: chooseLocationMode
 
                     property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
                                                                    : fieldPlantingDateField.calendarDate
@@ -706,11 +705,7 @@ Flickable {
                     editedPlantingPlantingDate: plantingDate
                     editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
                                                                 harvestWindow)
-                    onAddPlantingLength: {
-
-                        console.log("ADD!", length)
-                        plantingAmountField.text = plantingLength + length
-                    }
+                    onAddPlantingLength: plantingAmountField.text = plantingLength + length
                 }
             }
         }
@@ -718,7 +713,7 @@ Flickable {
         FormGroupBox {
             id: greenhouseBox
             title: qsTr("Greenhouse details")
-            visible: greenhouseRadio.checked && !chooseLocation
+            visible: greenhouseRadio.checked && !chooseLocationMode
             RowLayout {
                 width: parent.width
                 spacing: Units.formSpacing
@@ -746,7 +741,7 @@ Flickable {
         FormGroupBox {
             id: seedBox
             title: qsTr("Seeds")
-            visible: !boughtRadio.checked && !chooseLocation
+            visible: !boughtRadio.checked && !chooseLocationMode
             GridLayout {
                 width: parent.width
                 columns: 2
@@ -802,7 +797,7 @@ Flickable {
         FormGroupBox {
             width: parent.width
             title: qsTr("Harvest & revenue rate")
-            visible: !chooseLocation
+            visible: !chooseLocationMode
 
             RowLayout {
                 width: parent.width
@@ -866,7 +861,7 @@ Flickable {
             clip: true
             width: parent.width
             spacing: 8
-            visible: !chooseLocation
+            visible: !chooseLocationMode
 
             Repeater {
                 model: keywordModel

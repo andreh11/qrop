@@ -285,7 +285,7 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: 2
-                    color: Material.color(Material.Cyan)
+                    color: Material.color(Material.Green)
                     z: 2
                 }
 
@@ -299,7 +299,7 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: 2
-                    color: Material.color(Material.Cyan)
+                    color: Material.color(Material.Green)
                     z: 2
                 }
 

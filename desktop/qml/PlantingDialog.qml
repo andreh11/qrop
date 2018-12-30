@@ -64,8 +64,8 @@ Dialog {
 
     header: PlantingFormHeader {
         id: plantingFormHeader
-        visible: mode === "add"
         estimatedRevenue: plantingForm.estimatedRevenue
+        mode: dialog.mode
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
 
@@ -95,7 +95,7 @@ Dialog {
         anchors.fill: parent
         clip: true
 
-        implicitWidth: plantingForm.chooseLocation ? plantingForm.locationViewWidth : 600
+        implicitWidth: plantingForm.chooseLocationMode ? plantingForm.locationViewWidth : 600
 
         Keys.onUpPressed: verticalScrollBar.decrease()
         Keys.onDownPressed: verticalScrollBar.increase()
