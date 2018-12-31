@@ -25,4 +25,3 @@ les blocs de code (```), car c'est très difficle à lire sinon. -->
 responsables du problème. -->
 
 /label ~bug
-/cc @project-manager
