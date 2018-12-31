@@ -69,7 +69,6 @@ ApplicationWindow {
     CalendarPage { id: calendarPage }
     LocationsPage {
         id: locationsPage
-        editMode: editCropMapButton.checked
     }
 
     Action {
@@ -358,18 +357,6 @@ ApplicationWindow {
 
             Item { Layout.fillHeight: true }
 
-            DrawerItemDelegate {
-                id: editCropMapButton
-                visible: stackView.currentItem === locationsPage
-                checkable: true
-                Layout.fillWidth: true
-                text: qsTr("Edit Crop Map")
-                iconText: "\uf044"
-                isActive: checked
-
-                ToolTip.text: qsTr("Edit Crop Map")
-                ToolTip.visible: hovered
-            }
 
             DrawerItemDelegate {
                 Layout.fillWidth: true

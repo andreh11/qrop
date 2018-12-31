@@ -62,9 +62,9 @@ ComboBox {
 
     function setRowId(rowId) {
         var i = 0;
-        while (model.rowId(i) !== rowId && i < model.count)
+        while (model.rowId(i) !== rowId && i < model.rowCount)
             i++;
-        if (i < model.count)
+        if (i < model.rowCount)
             currentIndex = i;
     }
 
@@ -110,7 +110,7 @@ ComboBox {
         }
 
         onOpened: {
-            if (listView.model.count === 0 && showAddItem)
+            if (listView.model.rowCount === 0 && showAddItem)
                 listView.contentY = listView.contentHeight; // Ensure footer is visible
         }
 

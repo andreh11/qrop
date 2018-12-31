@@ -36,14 +36,13 @@ Page {
     property alias searchField: filterField
 
     property alias model: plantingsView.model
-    property int rowsNumber: model.count
+    property int rowsNumber: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
 
     function refresh() {
         plantingsView.refresh();
     }
-
 
     function selectedIdList() {
         var idList = []
@@ -286,27 +285,41 @@ Page {
                 width: parent.width
             }
 
-            Label {
-                id: emptyStateLabel
-                text: qsTr('No plantings for this season. Click on "Add Plantings" to begin planning!')
-                font { family: "Roboto Regular"; pixelSize: Units.fontSizeHeadline }
-                color: Qt.rgba(0, 0, 0, 0.8)
+            Column {
+                id: blankStateColumn
+                z: 1
+                spacing: Units.smallSpacing
+                visible: !page.rowsNumber
                 anchors {
-                    top: topDivider.bottom;
-                    bottom: parent.bottom;
-                    left: parent.left;
-                    right: parent.right
+                    centerIn: parent
                 }
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                visible: !plantingsView.visible
+
+                Label {
+                    id: emptyStateLabel
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr('No plantings for this season')
+                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                    color: Qt.rgba(0, 0, 0, 0.8)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Button {
+                    text: qsTr("Add")
+                    flat: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.background: Material.accent
+                    Material.foreground: "white"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    onClicked: plantingDialog.createPlanting()
+                }
             }
 
             PlantingsView {
                 id: plantingsView
                 year: page.year
                 season: page.season
-                visible: page.rowsNumber
                 showTimegraph: page.showTimegraph
                 filterString: page.filterString
                 dragActive: false

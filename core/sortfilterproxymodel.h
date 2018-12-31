@@ -18,6 +18,7 @@
 #define SORTFILTERPROXYMODEL_H
 
 #include <QObject>
+#include <QDebug>
 #include <QSortFilterProxyModel>
 
 #include "core_global.h"
@@ -32,7 +33,7 @@ class CORESHARED_EXPORT SortFilterProxyModel : public QSortFilterProxyModel
     Q_PROPERTY(int season READ filterSeason() WRITE setFilterSeason NOTIFY filterSeasonChanged)
     Q_PROPERTY(QString sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
     Q_PROPERTY(QString sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
-    Q_PROPERTY(int count READ rowCount() NOTIFY countChanged)
+    Q_PROPERTY(int rowCount READ rowCount() NOTIFY countChanged)
 
 public:
     SortFilterProxyModel(QObject *parent = nullptr, const QString &tableName = "");

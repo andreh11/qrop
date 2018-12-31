@@ -20,7 +20,7 @@ ListView {
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
 
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
-    property alias rowsNumber: plantingModel.count
+    property alias rowsNumber: plantingModel.rowCount
     property bool showOnlyActiveColor: false
     property bool showOnlyTimegraph: false
     property bool showHorizontalScrollBar: true
@@ -240,9 +240,12 @@ ListView {
                     width: parent.height * 0.8
                     anchors.verticalCenter: headerRow.verticalCenter
                     tristate: true
-                    checkState: checks == rowsNumber ? Qt.Checked
+                    checkState: rowsNumber && checks == rowsNumber ? Qt.Checked
                                                      : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                     nextCheckState: function () {
+                        if (!rowsNumber)
+                            return;
+
                         if (checkState == Qt.Checked) {
                             unselectAll()
                             return Qt.Unchecked

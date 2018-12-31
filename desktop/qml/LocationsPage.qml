@@ -26,14 +26,23 @@ Page {
     id: page
 
     property date todayDate: new Date()
-    property bool editMode: false
+    property alias editMode: editCropMapButton.checked
     property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
     property alias hasSelection: locationView.hasSelection
+    property alias rowCount: locationView.rowCount
 
     function refresh() {
         locationView.refresh();
         plantingsView.refresh()
+    }
+
+    function previousSeason() {
+        seasonSpinBox.previousSeason();
+    }
+
+    function nextSeason() {
+        seasonSpinBox.nextSeason();
     }
 
     title: qsTr("Locations")
@@ -45,6 +54,33 @@ Page {
         if (!editMode) {
             locationView.clearSelection();
         }
+    }
+
+    RoundButton {
+        id: editCropMapButton
+        z: 2
+        // Cannot use anchors for the y position, because it will anchor
+        // to the footer, leaving a large vertical gap.
+        y: parent.height - height - anchors.margins
+        checkable: true
+        width: 56
+        height: width
+        anchors.right: parent.right
+        anchors.margins: 12
+        text: editMode ? "\ue0b8" : "\ue254"
+        font.family: "Material Icons"
+        font.pixelSize: 20
+        highlighted: true
+        rotation: editMode ? 0 : 360
+        //        ToolTip.visible: hovered
+
+        ToolTip {
+            y: -parent.width/2
+            visible: parent.hovered
+            text: editMode ? qsTr("Assign locations") : qsTr("Edit Crop Map")
+        }
+
+        Behavior on rotation { NumberAnimation { duration: 200 } }
     }
 
     Snackbar {
@@ -111,7 +147,7 @@ Page {
                     id: addDialog
                     mode: "add"
                     onAccepted: locationView.addLocations(nameField.text, Number(lengthField.text),
-                                             Number(widthField.text), Number(quantityField.text))
+                                                          Number(widthField.text), Number(quantityField.text))
                     onRejected: addDialog.close()
                 }
             }
@@ -209,8 +245,8 @@ Page {
             }
 
             SeasonSpinBox {
-                visible: !editMode
                 id: seasonSpinBox
+                visible: !editMode
                 season: MDate.season(todayDate)
                 year: todayDate.getFullYear()
 
@@ -245,6 +281,41 @@ Page {
             Material.background: "white"
             visible: largeDisplay
 
+            Column {
+                id: emptyStateColumn
+                z: 1
+                spacing: Units.smallSpacing
+                visible: !page.rowCount
+                anchors {
+                    centerIn: parent
+                }
+
+                Label {
+                    id: emptyStateLabel
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr('No locations yet')
+                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                    color: Qt.rgba(0, 0, 0, 0.8)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Button {
+                    id: emptyStateButton
+                    text: qsTr("Add")
+                    flat: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.background: Material.accent
+                    Material.foreground: "white"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    onClicked: {
+                        editCropMapButton.checked = true;
+                        addDialog.open();
+                    }
+                }
+            }
+
             LocationView {
                 anchors.fill: parent
                 id: locationView
@@ -265,6 +336,53 @@ Page {
             Layout.minimumHeight: page.height / 4
             Material.elevation: 2
             Material.background: "white"
+
+            Column {
+                id: emptyPlantingStateColumn
+                z: 1
+                spacing: Units.smallSpacing
+                visible: !plantingsView.rowsNumber
+                anchors {
+                    centerIn: parent
+                }
+
+                Label {
+                    id: emptyPlantingStateLabel
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr('No more plantings to assign for this season.')
+                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                    color: Qt.rgba(0, 0, 0, 0.8)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Row {
+                    spacing: Units.smallSpacing
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Button {
+                        id: emptyPreviousButton
+                        text: qsTr("Previous")
+                        flat: true
+                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                        Material.background: Material.accent
+                        Material.foreground: "white"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: page.previousSeason();
+                    }
+
+                    Button {
+                        id: emptyNextButton
+                        text: qsTr("Next")
+                        flat: true
+                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                        Material.background: Material.accent
+                        Material.foreground: "white"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: page.nextSeason();
+                    }
+                }
+            }
+
 
             DropArea {
                 id: plantingsDropArea

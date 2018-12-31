@@ -34,6 +34,7 @@ Item {
 
     property alias year: locationModel.year
     property alias season: locationModel.season
+    property alias rowCount: locationModel.rowCount
     property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
     property alias hasSelection: selectionModel.hasSelection
     property alias selectedIndexes: selectionModel.selectedIndexes

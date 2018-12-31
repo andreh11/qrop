@@ -23,10 +23,10 @@
 SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &tableName)
     : QSortFilterProxyModel(parent)
     , m_model(new SqlTableModel(this))
+    , m_year(QDate::currentDate().year())
+    , m_season(1) // default: summer
     , m_tableName(tableName)
     , m_string("")
-    , m_year(QDate::currentDate().year())
-    , m_season(1)
     , m_sortColumn("")
     , m_sortOrder("ascending")
 {
@@ -34,6 +34,9 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     m_model->select();
     setSourceModel(m_model);
     setSortLocaleAware(true);
+
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
 
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
