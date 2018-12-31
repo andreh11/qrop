@@ -33,8 +33,8 @@ public:
     static QDate firstMondayOfYear(int year);
     static QDate mondayOfWeek(int week, int year);
     static QList<QDate> weekDates(int week, int year);
-    Q_INVOKABLE static int currentWeek() { return QDate::currentDate().weekNumber(); }
-    Q_INVOKABLE static int currentYear() { return QDate::currentDate().year(); }
+    Q_INVOKABLE static int currentWeek();
+    Q_INVOKABLE static int currentYear();
     Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear, const QString &type = "");
 };
 

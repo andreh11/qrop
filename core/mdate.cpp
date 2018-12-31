@@ -54,6 +54,19 @@ QList<QDate> MDate::weekDates(int week, int year)
     return { monday, monday.addDays(6) };
 }
 
+int MDate::currentWeek()
+{
+    return QDate::currentDate().weekNumber();
+}
+
+int MDate::currentYear()
+{
+    int year = 0;
+    int week = QDate::currentDate().weekNumber(&year);
+
+    return year;
+}
+
 // Format date according to preferred format.
 QString MDate::formatDate(const QDate &date, int currentYear, const QString &type)
 {
