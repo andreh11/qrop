@@ -55,6 +55,8 @@ public:
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
     Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);
     Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
+    Q_INVOKABLE QModelIndexList treeIndexes() const;
+    Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
 
     bool showOnlyEmptyLocations() const;
     void setShowOnlyEmptyLocations(bool show);

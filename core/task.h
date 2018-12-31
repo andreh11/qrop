@@ -49,6 +49,7 @@ public:
     Q_INVOKABLE void addLocation(int locationId, int taskId) const;
     Q_INVOKABLE void removeLocation(int locationId, int taskId) const;
     Q_INVOKABLE QList<int> locationTasks(int locationId) const;
+    Q_INVOKABLE QList<int> taskLocations(int taskId) const;
     Q_INVOKABLE void duplicateLocationTasks(int sourceLocationId, int newLocationId) const;
     Q_INVOKABLE void removeLocationTasks(int locationId) const;
 

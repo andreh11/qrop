@@ -35,13 +35,15 @@ Flickable {
     property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
     property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
 
-    readonly property bool accepted: plantingTask && plantingIdList.length
+    readonly property bool accepted: (plantingTask && plantingIdList.length) ||
+                                     (locationTask && locationIdList.length)
     readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
     readonly property alias laborTimeString: laborTimeField.text
     readonly property alias plantingTask: plantingRadioButton.checked
     readonly property alias locationTask: locationRadioButton.checked
     readonly property alias plantingIdList: plantingList.plantingIdList
+    readonly property var locationIdList: locationView.selectedLocationIds()
     property string completedDate: ""
 
     readonly property var values: {
@@ -52,7 +54,8 @@ Flickable {
         "task_type_id": taskTypeId,
         "task_method_id": taskMethodId,
         "task_implement_id": taskImplementId,
-        "planting_ids": plantingIdList
+        "planting_ids": plantingTask ? plantingIdList : [],
+        "location_ids": locationTask ? locationIdList : []
     }
 
     function setFieldValue(item, value) {
@@ -75,16 +78,32 @@ Flickable {
         if ("labor_time" in val) laborTimeField.text = val["labor_time"]
         if ("task_method_id" in val) methodField.setRowId(Number(val["task_method_id"]))
         if ("task_implement_id" in val) implementField.setRowId(Number(val["task_implement_id"]))
+
+        // Select plantings
         if ("plantings" in val) {
             var idList = val["plantings"].split(",")
+            if (val["plantings"]) {
+                plantingRadioButton.checked = true
+            }
             for (var i = 0; i < idList.length; i++)
                 plantingList.selectedIds[idList[i]] = true
             plantingList.selectedIdsChanged();
+        }
+
+        // TODO: select locations
+        if ("locations" in val) {
+            if (val["locations"]) {
+                locationRadioButton.checked = true
+                var list = val["locations"].split(",")
+                locationView.selectLocationIds(list)
+            }
         }
     }
 
     function reset() {
         plantingList.reset();
+        locationView.clearSelection();
+        locationView.collapseAll();
         methodField.currentIndex = -1;
         implementField.currentIndex = -1;
         dueDatepicker.calendarDate = NDate.dateFromWeekString(control.week);
@@ -220,7 +239,7 @@ Flickable {
             id: radioRow
             width: parent.width
             spacing: Units.smallSpacing
-            visible: !sowPlantTask
+            visible: !sowPlantTask && mode === "add"
             Layout.fillWidth: true
 
             ChoiceChip {
@@ -315,15 +334,31 @@ Flickable {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            LocationView {
+            ColumnLayout {
                 anchors.fill: parent
-                id: locationView
-                showTimeline: true
-                showHeader: false
-                year: control.year
-                season: 1
-                showOnlyEmptyLocations: false
-                editMode: false
+                spacing: Units.smallSpacing
+
+                LocationView {
+                    id: locationView
+                    showTimeline: false
+                    showHeader: false
+                    alwaysShowCheckbox: true
+                    year: control.year
+                    season: 1
+                    showOnlyEmptyLocations: false
+                    editMode: false
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                }
+
+                Label {
+                    id: selectedLocationLabel
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds()))
+                    Layout.minimumHeight: 26
+                    Layout.fillWidth: true
+                }
             }
         }
     }

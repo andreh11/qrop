@@ -62,8 +62,7 @@ int MDate::currentWeek()
 int MDate::currentYear()
 {
     int year = 0;
-    int week = QDate::currentDate().weekNumber(&year);
-
+    QDate::currentDate().weekNumber(&year);
     return year;
 }
 
@@ -107,8 +106,6 @@ QDate MDate::dateFromWeekString(const QString &s)
         year = currentYear + 1;
     else
         year = currentYear;
-
-    qDebug() << s << week << year;
 
     return mondayOfWeek(week, year);
 }

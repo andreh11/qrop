@@ -54,7 +54,7 @@ Dialog {
 
         taskDialogHeader.reset();
         taskDialogHeader.typeField.setRowId(taskTypeId)
-        taskDialogHeader.completedDate =  taskValueMap['completed_date']
+        taskDialogHeader.completedDate = taskValueMap['completed_date']
         taskForm.reset();
         taskForm.setFormValues(taskValueMap)
         dialog.open();
@@ -84,6 +84,7 @@ Dialog {
         week: dialog.week
         year: dialog.year
         taskId: dialog.taskId
+        mode: dialog.mode
         sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
     }
 

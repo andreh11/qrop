@@ -42,6 +42,7 @@ Item {
 
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
+    property bool alwaysShowCheckbox: false
     property bool editMode: false
     property bool showTimeline: true
     property bool showHeader: true
@@ -75,14 +76,25 @@ Item {
         locationModel.updateIndexes(map, indexes);
     }
 
+    function collapseAll() {
+        var indexList = locationModel.treeIndexes();
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            treeView.collapse(index);
+        }
+
+    }
+
     function clearSelection() {
         // We have to manually refresh selected indexes, because isSelected() isn't properly
         // called after dataChanged().
 
         // Copy selected indexes.
         var selectedIndexes = [];
-        for (var i in selectionModel.selectedIndexes)
-            selectedIndexes.push(selectionModel.selectedIndexes[i]);
+        for (var i in selectionModel.selectedIndexes) {
+            var idx = selectionModel.selectedIndexes[i];
+            selectedIndexes.push(idx);
+        }
 
         selectionModel.clearSelection();
         assignedLengthMap = ({})
@@ -93,6 +105,16 @@ Item {
 
     }
 
+    function selectLocationIds(idList) {
+        var indexList = locationModel.treeHasIds(idList);
+        for (var i = 0; i < indexList.length; i++) {
+            var idx = indexList[i]
+            var parent = locationModel.parent(idx)
+            selectionModel.select(idx, ItemSelectionModel.Select);
+            treeView.expand(parent)
+        }
+    }
+
     function selectedLocationIds() {
         var list = [];
         var selectedIndexes = selectionModel.selectedIndexes;
@@ -100,7 +122,6 @@ Item {
         for (var i = 0; i < selectedIndexes.length; i++) {
             list.push(locationModel.locationId(selectedIndexes[i]));
         }
-        console.log(list)
         return list;
     }
 
@@ -123,20 +144,6 @@ Item {
         }
         return length;
     }
-
-    function addPlanting(locationIndex, plantingId, length) {
-        console.log("[view] addPlanting", locationIndex, plantingId, length)
-        locationModel.addPlanting(locationIndex, plantingId, length)
-    }
-
-//    function assignedLength() {
-//        var length = 0
-//        for (var i = 0; i < selectedIndexes.length; i++) {
-//            length += locationModel.availableSpace(selectedIndexes[i], editedPlantingPlantingDate,
-//                                                   editedPlantingPlantingDate);
-//        }
-//        return length;
-//    }
 
     function addLocations(name, lenght, width, quantity) {
         if (locationView.hasSelection)
@@ -464,7 +471,7 @@ Item {
                                     CheckBox {
                                         id: rowCheckBox
                                         anchors.verticalCenter: row.verticalCenter
-                                        visible: locationView.editMode
+                                        visible: locationView.editMode || locationView.alwaysShowCheckbox
                                         height: parent.height * 0.8
                                         width: height
                                         contentItem: Text {}
