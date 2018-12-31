@@ -232,7 +232,7 @@ Page {
                     id: emptyStateLabel
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: qsTr('No tasks for this week')
-                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeHeadline }
+                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
                     color: Qt.rgba(0, 0, 0, 0.8)
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
