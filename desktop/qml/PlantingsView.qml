@@ -20,7 +20,7 @@ ListView {
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
 
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
-    property alias rowsNumber: plantingModel.count
+    property alias rowsNumber: plantingModel.rowCount
     property bool showOnlyActiveColor: false
     property bool showOnlyTimegraph: false
     property bool showHorizontalScrollBar: true

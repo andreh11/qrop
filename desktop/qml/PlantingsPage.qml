@@ -36,7 +36,7 @@ Page {
     property alias searchField: filterField
 
     property alias model: plantingsView.model
-    property int rowsNumber: model.count
+    property int rowsNumber: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
 

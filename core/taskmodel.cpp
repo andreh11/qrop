@@ -161,7 +161,7 @@ void TaskModel::updateWeekDates()
     QList<QDate> weekDates = MDate::weekDates(m_week, m_year);
     m_mondayDate = weekDates[0];
     m_sundayDate = weekDates[1];
-    invalidate();
+    invalidateFilter();
 }
 
 bool TaskModel::isDone(int row, const QModelIndex &parent) const

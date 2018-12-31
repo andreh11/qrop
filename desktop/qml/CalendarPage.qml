@@ -26,7 +26,7 @@ Page {
 
     property alias week: weekSpinBox.week
     property alias year: weekSpinBox.year
-    property alias rowsNumber: taskModel.count
+    property alias rowsNumber: taskModel.rowCount
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
@@ -219,6 +219,36 @@ Page {
             anchors.top: buttonRectangle.bottom
             width: parent.width
         }
+            Column {
+                id: blankStateColumn
+                z: 1
+                spacing: Units.smallSpacing
+                visible: !page.rowsNumber
+                anchors {
+                    centerIn: parent
+                }
+
+                Label {
+                    id: emptyStateLabel
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr('No tasks for this week')
+                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeHeadline }
+                    color: Qt.rgba(0, 0, 0, 0.8)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Button {
+                    text: qsTr("Add")
+                    flat: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.background: Material.accent
+                    Material.foreground: "white"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    onClicked: taskDialog.addTask()
+                }
+            }
 
         ListView {
             id: listView

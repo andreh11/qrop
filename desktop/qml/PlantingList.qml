@@ -26,7 +26,7 @@ ListView {
 
     property int year
     property alias filterString: plantingModel.filterString
-    property alias count: plantingModel.count // Number of plantings currently filtered.
+    property alias count: plantingModel.rowCount // Number of plantings currently filtered.
     property alias showActivePlantings: plantingModel.showActivePlantings
     property alias week: plantingModel.week
 
@@ -93,7 +93,7 @@ ListView {
 
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
-        visible: largeDisplay && plantingModel.count
+        visible: largeDisplay && plantingModel.rowCount
         height: listView.height
         policy: ScrollBar.AlwaysOn
     }
