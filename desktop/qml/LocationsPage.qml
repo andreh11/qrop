@@ -72,7 +72,7 @@ Page {
         font.pixelSize: 20
         highlighted: true
         rotation: editMode ? 0 : 360
-//        ToolTip.visible: hovered
+        //        ToolTip.visible: hovered
 
         ToolTip {
             y: -parent.width/2
@@ -147,7 +147,7 @@ Page {
                     id: addDialog
                     mode: "add"
                     onAccepted: locationView.addLocations(nameField.text, Number(lengthField.text),
-                                             Number(widthField.text), Number(quantityField.text))
+                                                          Number(widthField.text), Number(quantityField.text))
                     onRejected: addDialog.close()
                 }
             }
@@ -359,27 +359,27 @@ Page {
                 Row {
                     spacing: Units.smallSpacing
                     anchors.horizontalCenter: parent.horizontalCenter
-                Button {
-                    id: emptyPreviousButton
-                    text: qsTr("Previous")
-                    flat: true
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.background: Material.accent
-                    Material.foreground: "white"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: { page.previousSeason(); }
-                }
+                    Button {
+                        id: emptyPreviousButton
+                        text: qsTr("Previous")
+                        flat: true
+                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                        Material.background: Material.accent
+                        Material.foreground: "white"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: page.previousSeason();
+                    }
 
-                Button {
-                    id: emptyNextButton
-                    text: qsTr("Next")
-                    flat: true
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.background: Material.accent
-                    Material.foreground: "white"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: { page.nextSeason(); }
-                }
+                    Button {
+                        id: emptyNextButton
+                        text: qsTr("Next")
+                        flat: true
+                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                        Material.background: Material.accent
+                        Material.foreground: "white"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: page.nextSeason();
+                    }
                 }
             }
 
