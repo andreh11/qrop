@@ -46,13 +46,13 @@ Flickable {
 
     readonly property var values: {
         "assigned_date": dueDateString,
-                "completed_date": completedDate,
-                "duration": duration,
-                "labor_time": laborTimeString,
-                "task_type_id": taskTypeId,
-                "task_method_id": taskMethodId,
-                "task_implement_id": taskImplementId,
-                "planting_ids": plantingIdList
+        "completed_date": completedDate,
+        "duration": duration,
+        "labor_time": laborTimeString,
+        "task_type_id": taskTypeId,
+        "task_method_id": taskMethodId,
+        "task_implement_id": taskImplementId,
+        "planting_ids": plantingIdList
     }
 
     function setFieldValue(item, value) {
@@ -232,7 +232,6 @@ Flickable {
 
             ChoiceChip {
                 id: locationRadioButton
-                visible: false // Location handling is not implemented yet
                 text: qsTr("Locations")
                 autoExclusive: true
             }
@@ -307,19 +306,25 @@ Flickable {
                 }
             }
         }
-        //            }
 
-
-        MyComboBox {
-            id: locationField
+        FormGroupBox {
             visible: locationRadioButton.checked && !sowPlantTask
-            Layout.fillWidth: true
-            model: ["A", "B", "C"]
-        }
+            topPadding: Units.smallSpacing
+            bottomPadding: Units.smallSpacing
 
-//        Item {
-//            Layout.fillHeight: true
-//            Layout.fillWidth: true
-//        }
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            LocationView {
+                anchors.fill: parent
+                id: locationView
+                showTimeline: true
+                showHeader: false
+                year: control.year
+                season: 1
+                showOnlyEmptyLocations: false
+                editMode: false
+            }
+        }
     }
 }

@@ -43,6 +43,8 @@ Item {
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
     property bool editMode: false
+    property bool showTimeline: true
+    property bool showHeader: true
     property int indentation: 20
     property var colorList: [
         Material.color(Material.Yellow, Material.Shade100),
@@ -167,7 +169,8 @@ Item {
 
     Rectangle {
         id: headerRectangle
-        height: headerRow.height
+        visible: showHeader
+        height: showHeader ? headerRow.height : 0
         implicitWidth: headerRow.width
         color: "white"
         z: 5
@@ -196,6 +199,7 @@ Item {
 
             Row {
                 id: headerTimelineRow
+                visible: locationView.showTimeline
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
 
@@ -313,7 +317,8 @@ Item {
                     indentation: locationView.indentation
                     rowDelegate: Rectangle {
                         height: Units.rowHeight + 1
-                        color: styleData.hasChildren ? colorList[styleData.depth] : "white"
+                        color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
+                                         selectionModel.isSelected(styleData.index) ? 1.1 :  1)
                         ThinDivider {
                             anchors {
                                 bottom: parent.bottom
@@ -325,7 +330,8 @@ Item {
 
                     branchDelegate:  Rectangle {
                         id: branchRectangle
-                        color: styleData.hasChildren ? colorList[styleData.depth] : "white"
+                        color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
+                                         selectionModel.isSelected(styleData.index) ? 1.1 :  1)
                         width: locationView.indentation
                         height: Units.rowHeight + 1
                         x: - styleData.depth * locationView.indentation
@@ -354,7 +360,7 @@ Item {
                 itemDelegate:  Column {
                     property int locationId: locationModel.locationId(styleData.index)
                     Rectangle {
-                        width: column.width
+                        width: parent.width
                         height: Units.rowHeight + 1
                         color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
                                          selectionModel.isSelected(styleData.index) ? 1.1 :  1)
@@ -569,6 +575,7 @@ Item {
 
                                     Timeline {
                                         height: parent.height
+                                        visible: locationView.showTimeline
                                         year: locationView.year
                                         season: locationView.season
                                         showGreenhouseSow: false

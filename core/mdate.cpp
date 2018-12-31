@@ -91,7 +91,9 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
 
 QDate MDate::dateFromWeekString(const QString &s)
 {
-    int currentYear = QDate::currentDate().year();
+    int currentYear = 0;
+    QDate::currentDate().weekNumber(&currentYear);
+
     QRegExp regexp("([><]{0,1})([1-9]|[0-4]\\d|5[0-3])");
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
@@ -105,6 +107,8 @@ QDate MDate::dateFromWeekString(const QString &s)
         year = currentYear + 1;
     else
         year = currentYear;
+
+    qDebug() << s << week << year;
 
     return mondayOfWeek(week, year);
 }
