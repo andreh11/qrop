@@ -293,3 +293,37 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
 
     return tmodel->removeIndexes(sourceIndexList);
 }
+
+/** Return a list of all QModelIndex of location tree. */
+QModelIndexList LocationModel::treeIndexes() const
+{
+    QModelIndex root;
+    QModelIndexList treeList;
+
+    for (int row = 0; row < rowCount(root); row++)
+        treeList.push_back(index(row, 0, root));
+
+    return treeList;
+}
+
+/** Return a list of QModelIndex which ids are in \a idList. Useful for
+ *  selecting indexes. */
+QModelIndexList LocationModel::treeHasIds(const QVariantList &idList) const
+{
+    QModelIndexList treeList = treeIndexes();
+    QModelIndexList matchIndexes;
+    QList<int> intList;
+
+    for (auto val : idList)
+        intList.push_back(val.toInt());
+
+    for (int i = 0; i < treeList.count(); i++) {
+        QModelIndex idx = treeList[i];
+        if (intList.contains(locationId(idx)))
+            matchIndexes.push_back(idx);
+        for (int row = 0; row < rowCount(idx); row++)
+            treeList.push_back(index(row, 0, idx));
+    }
+
+    return matchIndexes;
+}

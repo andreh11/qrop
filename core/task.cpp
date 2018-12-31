@@ -32,6 +32,8 @@ int Task::add(const QVariantMap &map) const
     QVariantMap newMap(map);
 
     QList<QVariant> plantingIdList = newMap.take("planting_ids").toList();
+    QList<QVariant> locationIdList = newMap.take("location_ids").toList();
+
     int methodId = newMap.value("task_method_id").toInt();
     if (methodId < 1)
         newMap.take("task_method_id");
@@ -47,6 +49,11 @@ int Task::add(const QVariantMap &map) const
     for (const auto &idString : plantingIdList) {
         int plantingId = idString.toInt();
         addPlanting(plantingId, id);
+    }
+
+    for (const auto &idString : locationIdList) {
+        int locationId = idString.toInt();
+        addLocation(locationId, id);
     }
 
     return id;
@@ -80,6 +87,27 @@ void Task::update(int id, const QVariantMap &map) const
 
         for (int plantingId : toRemove)
             removePlanting(plantingId, id);
+    }
+
+    if (map.contains("location_ids")) {
+        const auto &locationIdList = newMap.take("location_ids").toList();
+        QList<int> oldLocationList = taskLocations(id);
+        QList<int> toAdd;
+        QList<int> toRemove;
+
+        for (auto &newid : locationIdList)
+            if (!oldLocationList.contains(newid.toInt()))
+                toAdd.push_back(newid.toInt());
+
+        for (auto &oldid : oldLocationList)
+            if (!locationIdList.contains(oldid))
+                toRemove.push_back(oldid);
+
+        for (int locationId : toAdd)
+            addLocation(locationId, id);
+
+        for (int locationId : toRemove)
+            removeLocation(locationId, id);
     }
 
     DatabaseUtility::update(id, newMap);
@@ -145,6 +173,13 @@ QList<int> Task::locationTasks(int locationId) const
 
     QString queryString = "SELECT * FROM location_task WHERE location_id = %1";
     return queryIds(queryString.arg(locationId), "task_id");
+}
+
+QList<int> Task::taskLocations(int taskId) const
+{
+
+    QString queryString = "SELECT * FROM location_task WHERE task_id = %1";
+    return queryIds(queryString.arg(taskId), "location_id");
 }
 
 // TaskTypes: 0: DS, 1: GH sow, 2: TP

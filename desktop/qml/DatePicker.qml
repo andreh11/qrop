@@ -22,17 +22,15 @@ import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 
-import "date.js" as MDate
-
 Item {
     id: control
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
-    property int currentYear: new Date().getFullYear()
+    property int currentYear: NDate.currentYear()
 
     property date calendarDate: new Date()
-    readonly property int week: MDate.isoWeek(calendarDate)
+    readonly property int week: NDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true

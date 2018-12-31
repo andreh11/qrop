@@ -62,8 +62,7 @@ int MDate::currentWeek()
 int MDate::currentYear()
 {
     int year = 0;
-    int week = QDate::currentDate().weekNumber(&year);
-
+    QDate::currentDate().weekNumber(&year);
     return year;
 }
 
@@ -91,7 +90,9 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
 
 QDate MDate::dateFromWeekString(const QString &s)
 {
-    int currentYear = QDate::currentDate().year();
+    int currentYear = 0;
+    QDate::currentDate().weekNumber(&currentYear);
+
     QRegExp regexp("([><]{0,1})([1-9]|[0-4]\\d|5[0-3])");
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();

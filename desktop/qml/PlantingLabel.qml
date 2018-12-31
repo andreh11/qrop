@@ -9,6 +9,7 @@ Item {
     id: control
 
     property int plantingId
+    readonly property bool validId: plantingId > 1
     property string crop: cropName(plantingId)
     property string variety: varietyName(plantingId)
     property date sowingDate
@@ -34,12 +35,12 @@ Item {
     Column {
         id: column
         Text {
-            text: "%1, %2".arg(crop).arg(variety)
+            text: validId ? "%1, %2".arg(crop).arg(variety) : " "
             font.family: "Roboto Regular"
             font.pixelSize: Units.fontSizeBodyAndButton
         }
         Text {
-            text: showOnlyDates ? qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year))
+            text: !validId ? "" : showOnlyDates ? qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year))
                                 : qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(Location.fullName(locations))
             font.family: "Roboto Regular"
             color: Material.color(Material.Grey, Material.Shade600)

@@ -353,8 +353,9 @@ Page {
                 border.width: rowMouseArea.containsMouse ? 1 : 0
 
                 radius: 2
-                property var idList: model.plantings.split(",")
-                property int firstId: Number(idList[0])
+                property var plantingIdList: model.plantings.split(",")
+                property var locationIdList: model.locations.split(",")
+                property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
 
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
@@ -490,7 +491,7 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 PlantingLabel {
                                     anchors.verticalCenter: parent.verticalCenter
-                                    plantingId: firstId
+                                    plantingId: firstPlantingId
                                     showOnlyDates: true
                                     sowingDate: Planting.sowingDate(plantingId)
                                     endHarvestDate: Planting.endHarvestDate(plantingId)
@@ -501,7 +502,7 @@ Page {
                                     id: detailsButton
                                     text: "⋅⋅⋅"
                                     checkable: true
-                                    visible: idList.length > 1
+                                    visible: plantingIdList.length > 1
                                     ToolTip.visible: hovered
                                     ToolTip.text: checked ? qsTr("Hide plantings and locations details")
                                                           : qsTr("Show plantings and locations details")
@@ -509,7 +510,8 @@ Page {
                             }
 
                             Label {
-                                text: Location.fullName(Location.locations(firstId))
+                                text: locationIdList ? Location.fullName(locationIdList)
+                                                     : Location.fullName(Location.locations(firstPlantingId))
                                 elide: Text.ElideRight
                                 width: tableHeaderModel[1].width
                                 anchors.verticalCenter: parent.verticalCenter
@@ -563,11 +565,11 @@ Page {
                             id: detailsRow
                             visible: detailsButton.checked
                             width: parent.width
-                            height: detailsButton.checked ? (idList.length - 1) * Units.rowHeight : 0
+                            height: detailsButton.checked ? (plantingIdList.length - 1) * Units.rowHeight : 0
                             leftPadding: Units.smallSpacing
 
                             Repeater {
-                                model: idList.slice(1)
+                                model: plantingIdList.slice(1)
 
                                 Row {
                                     height: Units.rowHeight
