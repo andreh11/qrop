@@ -22,18 +22,43 @@ import QtQuick.Controls.Material 2.2
 import io.croplan.components 1.0
 
 Page {
-    title: "Harvests"
+    title: qsTr("Settings")
 
-    Pane {
-        width: 120
-        height: 120
-        anchors.centerIn: parent
+    Column {
+        width: parent.width * 0.8
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: Units.smallSpacing
+        topPadding: Units.smallSpacing
+        bottomPadding: topPadding
 
-        Material.elevation: 6
+        Pane {
+            width: parent.width
+            Material.elevation: 2
 
-        Label {
-            text: qsTr("Settings")
-            anchors.centerIn: parent
+            Label {
+                text: qsTr("Settings")
+                anchors.centerIn: parent
+            }
+        }
+
+        Pane {
+            width: parent.width
+            Material.elevation: 2
+
+            Label {
+                text: qsTr("Settings")
+                anchors.centerIn: parent
+            }
+        }
+
+        Pane {
+            width: parent.width
+            Material.elevation: 2
+
+            Label {
+                text: qsTr("Settings")
+                anchors.centerIn: parent
+            }
         }
     }
 }

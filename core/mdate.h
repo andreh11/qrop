@@ -37,6 +37,8 @@ public:
     Q_INVOKABLE static int currentWeek();
     Q_INVOKABLE static int currentYear();
     Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear, const QString &type = "");
+    Q_INVOKABLE static int season(const QDate &date);
+    Q_INVOKABLE static int seasonYear(const QDate &date);
 };
 
 #endif // MDATE_H

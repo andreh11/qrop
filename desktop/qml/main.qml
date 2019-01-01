@@ -31,11 +31,11 @@ ApplicationWindow {
 //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\uf299" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\uf274" },
-        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\uf279" }
+        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\uf279" },
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
 //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
-//        { source: "Settings.qml",      name: qsTr("Settings"),  iconText: "\ue8b8" }
+        { source: settingsPage,      name: qsTr("Settings"),  iconText: "\ue8b8" }
     ]
     property int navigationIndex: 0
 
@@ -67,9 +67,8 @@ ApplicationWindow {
 
     PlantingsPage { id: plantingsPage }
     CalendarPage { id: calendarPage }
-    LocationsPage {
-        id: locationsPage
-    }
+    LocationsPage { id: locationsPage }
+    SettingsPage { id: settingsPage }
 
     Action {
         shortcut: StandardKey.Quit
@@ -409,6 +408,9 @@ ApplicationWindow {
             case 2:
                 stackView.replace(locationsPage)
                 locationsPage.refresh();
+                break
+            case 3:
+                stackView.replace(settingsPage)
                 break
             }
         }
