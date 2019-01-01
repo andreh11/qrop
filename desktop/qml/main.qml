@@ -35,7 +35,6 @@ ApplicationWindow {
 //        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
 //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
 //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
-        { source: settingsPage,      name: qsTr("Settings"),  iconText: "\ue8b8" }
     ]
     property int navigationIndex: 0
 
@@ -70,17 +69,11 @@ ApplicationWindow {
     LocationsPage { id: locationsPage }
     SettingsPage { id: settingsPage }
 
-    Action {
-        shortcut: StandardKey.Quit
-        text: qsTr("&Quit")
-        onTriggered: Qt.quit()
+    Shortcut {
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
     }
-
-//    Shortcut {
-//        sequence: StandardKey.Quit
-//        context: Qt.ApplicationShortcut
-//        onActivated: Qt.quit()
-//    }
 
     Settings {
         id: settings
@@ -356,15 +349,14 @@ ApplicationWindow {
 
             Item { Layout.fillHeight: true }
 
-
             DrawerItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
-                iconText: "\uf013"
+                iconText: "\ue8b8"
+                isActive: navigationModel.length == navigationIndex
 
-                isActive: false
                 onClicked: {
-                    navigationIndex = index
+                    navigationIndex = navigationModel.length
                     if (!largeDisplay) {
                         drawer.close()
                     }

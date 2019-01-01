@@ -40,7 +40,8 @@ SOURCES += \
     mdate.cpp \
     taskimplementmodel.cpp \
     treemodel.cpp \
-    nametree.cpp
+    nametree.cpp \
+    family.cpp
 
 
 HEADERS += \
@@ -77,7 +78,8 @@ HEADERS += \
     mdate.h \
     taskimplementmodel.h \
     treemodel.h \
-    nametree.h
+    nametree.h \
+    family.h
 
 
 RESOURCES += \

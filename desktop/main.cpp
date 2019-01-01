@@ -33,6 +33,7 @@
 //#include <QtAndroid>
 
 #include "db.h"
+#include "family.h"
 #include "keyword.h"
 #include "location.h"
 #include "mdate.h"
@@ -132,6 +133,14 @@ int main(int argc, char *argv[])
 
     //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
+
+    qmlRegisterSingletonType<Family>("io.croplan.components", 1, 0, "Family",
+                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                         Q_UNUSED(engine)
+                                         Q_UNUSED(scriptEngine)
+                                         auto *family = new Family();
+                                         return family;
+                                     });
 
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {

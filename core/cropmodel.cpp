@@ -20,8 +20,31 @@
 
 CropModel::CropModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
+    , m_familyId(-1)
 {
     setSortColumn("crop");
-    //    int familyColumn = fieldColumn("family_id");
-    //    setRelation(familyColumn, QSqlRelation("family", "family_id", "family"));
+}
+
+int CropModel::familyId() const
+{
+    return m_familyId;
+}
+
+void CropModel::setFilterFamilyId(int familyId)
+{
+    if (familyId == m_familyId)
+        return;
+
+    m_familyId = familyId;
+
+    if (m_familyId < 1) {
+        qInfo("[CropModel] null filter");
+
+    } else {
+        //        setFilterFixedString(QString(familyId));
+        const QString filterString = QString::fromLatin1("family_id = %1").arg(familyId);
+        m_model->setFilter(filterString);
+    }
+
+    emit familyIdChanged();
 }
