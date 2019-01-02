@@ -44,6 +44,10 @@ Rectangle {
     implicitHeight: 60
     width: parent.width
 
+    function refresh() {
+        cropModel.refresh();
+    }
+
     CropModel {
         id: cropModel
     }

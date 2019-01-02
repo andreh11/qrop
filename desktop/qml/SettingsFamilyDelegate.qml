@@ -144,4 +144,28 @@ Column {
             secondColumnWidth: control.secondColumnWidth
         }
     }
+
+        Button {
+        id: addCropButton
+        visible: showCropsButton.checked
+        anchors.right: parent.right
+        anchors.rightMargin: Units.mediumSpacing
+        text: qsTr("Add crop")
+        flat: true
+        Material.foreground: Material.accent
+        onClicked: addCropDialog.open();
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        Layout.rightMargin: Units.formSpacing
+
+        AddCropDialog {
+            id: addCropDialog
+            alreadyAssignedFamilyId: true
+            onAccepted: {
+                Crop.add({"crop" : cropName,
+                             "family_id" : family_id,
+                             "color" : color});
+                cropModel.refresh();
+            }
+        }
+        }
 }

@@ -63,18 +63,6 @@ Pane {
 
         }
 
-        Button {
-            text: qsTr("Add crop")
-            flat: true
-            Material.foreground: Material.accent
-            onClicked: addCropDialog.open();
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.rightMargin: Units.formSpacing
-
-            AddCropDialog {
-                id: addCropDialog
-            }
-        }
     }
 
     ListView {
