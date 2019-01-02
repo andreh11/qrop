@@ -67,5 +67,9 @@
         <file>qml/SettingsKeywordPane.qml</file>
         <file>qml/AddKeywordDialog.qml</file>
         <file>qml/SettingsUnitPane.qml</file>
+        <file>qml/SettingsTaskPane.qml</file>
+        <file>qml/SettingsTaskTypeDelegate.qml</file>
+        <file>qml/SettingsTaskMethodDelegate.qml</file>
+        <file>qml/SettingsImplementDelegate.qml</file>
     </qresource>
 </RCC>

@@ -240,7 +240,7 @@ Page {
                         font.family: "Material Icons"
                         font.pixelSize: 22
                         flat: true
-                        //                        onClicked: showFamilyPane = true
+                        onClicked: showTaskTypePane = true
                     }
                 }
 
@@ -300,5 +300,14 @@ Page {
         visible: showUnitPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showUnitPane = false
+    }
+
+    SettingsTaskPane {
+        id: taskTypePane
+        height: parent.height
+        width: paneWidth
+        visible: showTaskTypePane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showTaskTypePane = false
     }
 }

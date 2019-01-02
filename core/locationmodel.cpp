@@ -47,6 +47,15 @@ int LocationModel::locationId(const QModelIndex &idx) const
     return id;
 }
 
+void LocationModel::refresh()
+{
+    setSourceModel(nullptr);
+    delete m_treeModel;
+    m_treeModel = new SqlTreeModel("location_id", "parent_id", this);
+    setSourceModel(m_treeModel);
+    countChanged();
+}
+
 QVariantList LocationModel::plantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())

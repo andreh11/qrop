@@ -126,9 +126,9 @@ CREATE TABLE IF NOT EXISTS task (
     duration           INTEGER, -- days
     labor_time         TEXT, -- HH:MM
     description        TEXT,
-    task_type_id       INTEGER NOT NULL REFERENCES task_type,
-    task_method_id     INTEGER REFERENCES task_method,
-    task_implement_id  INTEGER REFERENCES task_implement,
+    task_type_id       INTEGER NOT NULL REFERENCES task_type ON DELETE CASCADE,
+    task_method_id     INTEGER REFERENCES task_method ON DELETE SET NULL,
+    task_implement_id  INTEGER REFERENCES task_implement ON DELETE SET NULL,
     link_task_id       INTEGER REFERENCES task,
     link_days          INTEGER, -- If negative, days before linked task. Otherwise,
                                 -- days after. 0 : same day.
