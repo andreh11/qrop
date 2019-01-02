@@ -36,10 +36,10 @@ Dialog {
         
         MyTextField {
             id: familyNameField
-            labelText: qsTr("Crop")
-            validator: RegExpValidator { regExp: /\w[\w ]*/ }
+            labelText: qsTr("Family")
+            validator: RegExpValidator { regExp: /\w[\w -]*/ }
             Layout.fillWidth: true
-            Layout.minimumWidth: 100
+            Layout.minimumWidth: 200
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) dialog.accept();
         }
         
