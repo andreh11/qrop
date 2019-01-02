@@ -161,7 +161,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Families, crops and varieties"
+                        text: qsTr("Families, crops and varieties")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -184,7 +184,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Keywords"
+                        text: qsTr("Keywords")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -207,7 +207,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Seed companies"
+                        text: qsTr("Seed companies")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -230,7 +230,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Task types"
+                        text: qsTr("Task types")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -253,7 +253,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Units"
+                        text: qsTr("Units")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
