@@ -18,38 +18,22 @@
 #define DB_H
 
 #include <QObject>
-#include <QSqlRecord>
-#include <QSqlRelationalTableModel>
-#include <QHash>
-#include <QByteArray>
-
 #include "core_global.h"
 
-CORESHARED_EXPORT void connectToDatabase();
-CORESHARED_EXPORT void execSqlFile(const QString &fileName, const QString &separator = ";");
-CORESHARED_EXPORT void createDatabase();
-CORESHARED_EXPORT void deleteDatabase();
-CORESHARED_EXPORT void createFakeData();
+class CORESHARED_EXPORT Database : public QObject
+{
+    Q_OBJECT
 
-// class CORESHARED_EXPORT Note : public DatabaseUtility {
-//    Q_OBJECT
-// public:
-//    Note(QObject *parent = nullptr);
-//};
+public:
+    explicit Database(QObject *parent = nullptr);
 
-// class CORESHARED_EXPORT Keyword : public DatabaseUtility {
-//    Q_OBJECT
-//    Keyword(QObject *parent = nullptr);
-//};
-
-// class CORESHARED_EXPORT Expense : public DatabaseUtility {
-//    Q_OBJECT
-//    Expense(QObject *parent = nullptr);
-//};
-
-// class CORESHARED_EXPORT User : public DatabaseUtility {
-//    Q_OBJECT
-//    User(QObject *parent = nullptr);
-//};
+    static QString databasePath();
+    static void connectToDatabase();
+    static void execSqlFile(const QString &fileName, const QString &separator = ";");
+    static Q_INVOKABLE void createDatabase();
+    static Q_INVOKABLE void deleteDatabase();
+    static Q_INVOKABLE void createFakeData();
+    static Q_INVOKABLE void resetDatabase();
+};
 
 #endif // DB_H
