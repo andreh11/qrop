@@ -78,6 +78,9 @@ Pane {
     }
 
     ListView {
+        id: familyView
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.HorizontalAndVerticalFlick
         anchors {
             top: rowLayout.bottom
             topMargin: Units.mediumSpacing
@@ -87,141 +90,11 @@ Pane {
         }
         spacing: Units.smallSpacing
         model: FamilyModel { id: familyModel }
-        delegate: familyDelegate
-    }
-
-    Component {
-        id: familyDelegate
-        Column {
+        delegate: SettingsFamilyDelegate {
             width: parent.width
-
-            Rectangle {
-                color: Material.color(Material.Grey, Material.Shade100)
-                width: parent.width
-                height: childrenRect.height
-
-                MouseArea {
-                    id: familyMouseArea
-                    height: Units.rowHeight
-                    width: parent.width
-                    hoverEnabled: true
-
-                    RowLayout {
-                        id: headerRow
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width
-                        height: Units.rowHeight
-                        spacing: Units.formSpacing
-
-                        TextCheckBox {
-                            id: headerCheckbox
-                            text: family
-                            selectionMode: false
-                            color: model.color
-                            Layout.preferredWidth: Units.rowHeight * 0.8
-                            round: true
-                            MouseArea {
-                                anchors.fill: parent
-                            }
-                            Layout.leftMargin: Units.mediumSpacing
-                        }
-
-                        TextInput {
-                            text: family
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.minimumWidth: pane.firstColumnWidth
-                            onEditingFinished: {
-                                Family.update(family_id, {"family": text})
-                                familyModel.refresh();
-                            }
-
-                        }
-
-                        ComboBox {
-                            flat: true
-                            model: 10
-                            Layout.minimumWidth: pane.secondColumnWidth
-                            currentIndex: interval
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            displayText: qsTr("%L1 years", "", currentIndex).arg(currentIndex)
-                            onCurrentIndexChanged: Family.update(family_id, {"interval": currentIndex})
-
-                            ToolTip.text: qsTr("Minimum rotation interval for %1").arg(family)
-                            ToolTip.visible: hovered
-                            ToolTip.delay: 200
-                        }
-
-
-                        Item { Layout.fillWidth: true }
-
-                        MyToolButton {
-                            visible: familyMouseArea.containsMouse
-                            text: enabled ? "\ue872" : ""
-                            font.family: "Material Icons"
-                            font.pixelSize: 22
-                            ToolTip.text: qsTr("Remove family")
-                            ToolTip.visible: hovered
-                            ToolTip.delay: 200
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-
-                            onClicked: confirmFamilyDeleteDialog.open()
-
-                            Dialog {
-                                id: confirmFamilyDeleteDialog
-                                title: qsTr("Delete %1?").arg(family)
-                                standardButtons: Dialog.Ok | Dialog.Cancel
-
-                                Text {
-                                    width: parent.width
-                                    wrapMode: Text.WordWrap
-                                    text: qsTr("All crops and plantings will be lost.")
-                                }
-
-                                onAccepted: {
-                                    Family.remove(family_id)
-                                    familyModel.refresh();
-                                }
-
-                                onRejected: confirmFamilyDeleteDialog.close()
-                            }
-                        }
-
-                        MyToolButton {
-                            id: showCropsButton
-                            Layout.leftMargin: -28
-                            Layout.rightMargin: Units.mediumSpacing
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                            checkable: true
-                            text: checked ?  "\ue313" : "\ue315"
-                            font.family: "Material Icons"
-                            font.pixelSize: 22
-                            ToolTip.text: checked ? qsTr("Hide crops") : qsTr("Show crop")
-                            ToolTip.visible: hovered
-                            ToolTip.delay: 200
-                        }
-                    }
-                }
-            }
-
-            ListView {
-                spacing: 0
-                visible: showCropsButton.checked
-                width: parent.width
-                height: contentHeight
-
-                model: CropModel {
-                    id: cropModel
-                    familyId: family_id
-                }
-
-                delegate: SettingsCropDelegate {
-                    width: parent.width
-                    onRefresh: cropModel.refresh()
-                }
-            }
+            onRefresh: familyModel.refresh()
+            firstColumnWidth: pane.firstColumnWidth
+            secondColumnWidth: pane.secondColumnWidth
         }
-
     }
 }

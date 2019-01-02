@@ -61,5 +61,6 @@
         <file>qml/SettingsFamilyPane.qml</file>
         <file>qml/SettingsVarietyDelegate.qml</file>
         <file>qml/SettingsCropDelegate.qml</file>
+        <file>qml/SettingsFamilyDelegate.qml</file>
     </qresource>
 </RCC>

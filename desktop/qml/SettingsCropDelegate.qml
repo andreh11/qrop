@@ -22,6 +22,11 @@ import QtQuick.Controls.Material 2.2
 import io.croplan.components 1.0
 
 Column {
+    id: control
+
+    property int firstColumnWidth
+    property int secondColumnWidth
+
     signal refresh()
 
     Rectangle {
@@ -128,8 +133,8 @@ Column {
         delegate: SettingsVarietyDelegate {
             width: parent.width
             onRefresh: varietyModel.refresh()
-            firstColumnWidth: pane.firstColumnWidth
-            secondColumnWidth: pane.secondColumnWidth
+            firstColumnWidth: control.firstColumnWidth
+            secondColumnWidth: control.secondColumnWidth
         }
     }
     
