@@ -263,7 +263,7 @@ Page {
                         font.family: "Material Icons"
                         font.pixelSize: 22
                         flat: true
-                        //                        onClicked: showFamilyPane = true
+                        onClicked: showUnitPane = true
                     }
                 }
 
@@ -285,11 +285,20 @@ Page {
     }
 
     SettingsKeywordPane {
-        id: pane
+        id: keywordPane
         height: parent.height
         width: paneWidth
         visible: showKeywordPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showKeywordPane = false
+    }
+
+    SettingsUnitPane {
+        id: unitPane
+        height: parent.height
+        width: paneWidth
+        visible: showUnitPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showUnitPane = false
     }
 }

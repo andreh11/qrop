@@ -184,6 +184,7 @@ Flickable {
     function clearAll() {
         varietyModel.refresh();
         keywordModel.refresh();
+        unitModel.refresh();
 
         varietyField.reset();
         locationView.clearSelection();

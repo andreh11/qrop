@@ -27,6 +27,7 @@ Dialog {
 
     property alias unitName: unitNameField.text
     property alias unitAbbreviation: abbreviationField.text
+    readonly property bool acceptableForm: unitNameField.acceptableInput && abbreviationField.acceptableInput
 
     title: qsTr("Add Unit")
     standardButtons: Dialog.Ok | Dialog.Cancel
@@ -36,6 +37,13 @@ Dialog {
         unitNameField.clear();
         abbreviationField.clear();
         unitNameField.forceActiveFocus();
+    }
+
+    footer: AddDialogButtonBox {
+        width: parent.width
+        onAccept: control.accept()
+        onReject: control.reject()
+        acceptableInput: acceptableForm
     }
 
     ColumnLayout {
@@ -52,19 +60,23 @@ Dialog {
         MyTextField {
             id: unitNameField
             width: parent.width
+            validator: RegExpValidator { regExp: /\w[\w -]*/ }
 
             labelText: qsTr("Full name")
             Layout.fillWidth: true
             Layout.minimumWidth: 100
+            Keys.onReturnPressed: if (acceptableForm) control.accept();
         }
 
         MyTextField {
             id: abbreviationField
             width: parent.width
+            validator: RegExpValidator { regExp: /\w[\w -]*/ }
 
             labelText: qsTr("Abbreviation")
             Layout.fillWidth: true
             Layout.minimumWidth: 100
+            Keys.onReturnPressed: if (acceptableForm) control.accept();
         }
 
     }

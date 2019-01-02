@@ -9,15 +9,16 @@ import io.croplan.components 1.0
 Dialog {
     id: dialog
 
-    readonly property string keywordName: keywordNameField.text.trim()
-    property bool acceptableForm: keywordNameField.acceptableInput
+    property alias fieldName: textField.labelText
+    readonly property string fieldText: textField.text.trim()
+    property bool acceptableForm: textField.acceptableInput
 
     title: qsTr("Add New Family")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onOpened: {
-        keywordNameField.text = ""
-        keywordNameField.forceActiveFocus();
+        textField.text = ""
+        textField.forceActiveFocus();
     }
 
     footer: AddDialogButtonBox {
@@ -28,7 +29,7 @@ Dialog {
     }
 
     MyTextField {
-        id: keywordNameField
+        id: textField
         labelText: qsTr("Keyword")
         validator: RegExpValidator { regExp: /\w[\w -]*/ }
         Layout.fillWidth: true

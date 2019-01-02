@@ -66,5 +66,6 @@
         <file>qml/TextDisk.qml</file>
         <file>qml/SettingsKeywordPane.qml</file>
         <file>qml/AddKeywordDialog.qml</file>
+        <file>qml/SettingsUnitPane.qml</file>
     </qresource>
 </RCC>
