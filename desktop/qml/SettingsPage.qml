@@ -27,6 +27,7 @@ Page {
 
     property int paneWidth: 600
     property bool showFamilyPane: false
+    property bool showKeywordPane: false
     property bool showSeedCompanyPane: false
     property bool showUnitPane: false
     property bool showTaskTypePane: false
@@ -193,7 +194,7 @@ Page {
                         font.family: "Material Icons"
                         font.pixelSize: 22
                         flat: true
-                        //                        onClicked: showFamilyPane = true
+                        onClicked: showKeywordPane = true
                     }
                 }
 
@@ -281,6 +282,15 @@ Page {
         visible: showFamilyPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showFamilyPane = false
+    }
+
+    SettingsKeywordPane {
+        id: pane
+        height: parent.height
+        width: paneWidth
+        visible: showKeywordPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showKeywordPane = false
     }
 
     //        ListView {

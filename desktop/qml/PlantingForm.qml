@@ -182,8 +182,10 @@ Flickable {
     }
 
     function clearAll() {
-        varietyField.reset();
         varietyModel.refresh();
+        keywordModel.refresh();
+
+        varietyField.reset();
         locationView.clearSelection();
         chooseLocationMode = false;
         inGreenhouseCheckBox.checked = false;

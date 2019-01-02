@@ -64,5 +64,7 @@
         <file>qml/SettingsFamilyDelegate.qml</file>
         <file>qml/AddFamilyDialog.qml</file>
         <file>qml/TextDisk.qml</file>
+        <file>qml/SettingsKeywordPane.qml</file>
+        <file>qml/AddKeywordDialog.qml</file>
     </qresource>
 </RCC>
