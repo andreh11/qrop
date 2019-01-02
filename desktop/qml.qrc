@@ -59,5 +59,7 @@
         <file>qml/LocationDialog.qml</file>
         <file>qml/LocationView.qml</file>
         <file>qml/SettingsFamilyPane.qml</file>
+        <file>qml/SettingsVarietyDelegate.qml</file>
+        <file>qml/SettingsCropDelegate.qml</file>
     </qresource>
 </RCC>

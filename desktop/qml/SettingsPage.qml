@@ -37,6 +37,7 @@ Page {
     Settings {
         id: settings
         property alias farmName: farmNameField.text
+        property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
         property string dateType
     }
 
@@ -109,6 +110,30 @@ Page {
                                 settings.dateType = "date"
                         }
                     }
+                }
+
+                ThinDivider { width: parent.width }
+
+                RowLayout {
+                    width: parent.width
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Show seed company beside variety names")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+
+                    }
+
+                    Switch {
+                        id: showSeedCompanySwitch
+                        ToolTip.text: qsTr("Restart the application for this take effect.")
+                        ToolTip.visible: hovered
+                    }
+
+
                 }
 
             Item { Layout.fillHeight: true }
