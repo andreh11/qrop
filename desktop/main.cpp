@@ -169,6 +169,15 @@ int main(int argc, char *argv[])
                                                   return unit;
                                               });
 
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "SeedCompany",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *seedCompany = new DatabaseUtility();
+                                                  seedCompany->setTable("seed_company");
+                                                  return seedCompany;
+                                              });
+
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskType",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)

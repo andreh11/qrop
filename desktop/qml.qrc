@@ -58,5 +58,6 @@
         <file>qml/PlantingsView.qml</file>
         <file>qml/LocationDialog.qml</file>
         <file>qml/LocationView.qml</file>
+        <file>qml/SettingsFamilyPane.qml</file>
     </qresource>
 </RCC>
