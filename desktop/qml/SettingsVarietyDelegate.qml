@@ -48,7 +48,7 @@ Column {
                     text: model.variety
                     color: Qt.rgba(0, 0, 0, 0.7)
                     font.family: "Roboto Regular"
-                    Layout.leftMargin: Units.mediumSpacing + Units.formSpacing + Units.rowHeight * 0.8
+                    Layout.leftMargin: Units.mediumSpacing + Units.formSpacing + 48
                     Layout.minimumWidth: firstColumnWidth
 
                     onEditingFinished: Variety.update(model.variety_id, {"variety": text})

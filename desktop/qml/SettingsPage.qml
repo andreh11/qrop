@@ -217,7 +217,7 @@ Page {
                         font.family: "Material Icons"
                         font.pixelSize: 22
                         flat: true
-                        //                        onClicked: showFamilyPane = true
+                        onClicked: showSeedCompanyPane = true
                     }
                 }
 
@@ -291,6 +291,16 @@ Page {
         visible: showKeywordPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showKeywordPane = false
+    }
+
+
+    SettingsSeedCompanyPane {
+        id: seedCompanyPane
+        height: parent.height
+        width: paneWidth
+        visible: showSeedCompanyPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showSeedCompanyPane = false
     }
 
     SettingsUnitPane {

@@ -71,5 +71,6 @@
         <file>qml/SettingsTaskTypeDelegate.qml</file>
         <file>qml/SettingsTaskMethodDelegate.qml</file>
         <file>qml/SettingsImplementDelegate.qml</file>
+        <file>qml/SettingsSeedCompanyPane.qml</file>
     </qresource>
 </RCC>

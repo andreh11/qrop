@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS variety (
     variety_id      INTEGER PRIMARY KEY AUTOINCREMENT,
     variety         TEXT NOT NULL,
     crop_id         INTEGER NOT NULL REFERENCES crop ON DELETE CASCADE,
-    seed_company_id INTEGER REFERENCES seed_company
+    seed_company_id INTEGER REFERENCES seed_company ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS seed_company (
