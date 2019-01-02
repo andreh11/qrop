@@ -68,7 +68,6 @@ Dialog {
 
         MyComboBox {
             id: familyField
-            visible: !alreadyAssignedFamilyId
             labelText: qsTr("Family")
             Layout.minimumWidth: 150
             Layout.fillWidth: true

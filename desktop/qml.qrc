@@ -62,5 +62,6 @@
         <file>qml/SettingsVarietyDelegate.qml</file>
         <file>qml/SettingsCropDelegate.qml</file>
         <file>qml/SettingsFamilyDelegate.qml</file>
+        <file>qml/AddFamilyDialog.qml</file>
     </qresource>
 </RCC>

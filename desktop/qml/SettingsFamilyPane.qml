@@ -60,9 +60,19 @@ Pane {
             flat: true
             Material.foreground: Material.accent
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.rightMargin: Units.mediumSpacing
 
+            onClicked: addFamilyDialog.open()
+
+            AddFamilyDialog {
+                id: addFamilyDialog
+                onAccepted: {
+                    Family.add({"family" : cropName,
+                                 "color" : color});
+                    familyModel.refresh();
+                }
+            }
         }
-
     }
 
     ListView {

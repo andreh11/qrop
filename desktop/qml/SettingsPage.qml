@@ -183,6 +183,29 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
+                        text: "Keywords"
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                    }
+
+                    RoundButton {
+                        text: "\ue315"
+                        font.family: "Material Icons"
+                        font.pixelSize: 22
+                        flat: true
+                        //                        onClicked: showFamilyPane = true
+                    }
+                }
+
+                ThinDivider { width: parent.width }
+
+                RowLayout {
+                    width: parent.width
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Label {
+                        Layout.fillWidth: true
                         text: "Seed companies"
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
