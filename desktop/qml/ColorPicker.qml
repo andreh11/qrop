@@ -12,6 +12,8 @@ Item {
     id: control
     property color color
 
+    signal newColorSelected()
+
     implicitHeight: gridView.cellHeight * 5
 
     GridView {
@@ -80,7 +82,10 @@ Item {
             width: 46
             height: width
             autoExclusive: true
-            onToggled: control.color = modelData
+            onToggled: {
+                control.color = modelData
+                newColorSelected()
+            }
 
             background: Rectangle {
                 id: buttonRectangle

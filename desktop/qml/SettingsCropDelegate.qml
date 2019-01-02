@@ -47,15 +47,28 @@ Column {
                 height: Units.rowHeight
                 spacing: Units.formSpacing
                 
-                TextCheckBox {
-                    id: checkBox
+                TextDisk {
+                    id: headerCheckbox
                     text: model.crop
-                    selectionMode: false
-                    Layout.leftMargin: Units.mediumSpacing
-                    //                                width: 24
-                    Layout.preferredWidth: Units.rowHeight * 0.8
-                    round: true
                     color: model.color
+//                    Layout.preferredWidth: Units.rowHeight * 0.8
+//                    Layout.preferredHeight: Units.rowHeight * 0.8
+                    Layout.leftMargin: Units.mediumSpacing
+                    onClicked: colorPickerDialog.open()
+
+                    Dialog {
+                        id: colorPickerDialog
+                        width: 400
+                        height: 400
+                        ColorPicker {
+                            anchors.fill: parent
+                            onNewColorSelected:{
+                                colorPickerDialog.close()
+                                Crop.update(model.crop_id, {"color": color});
+                                refresh();
+                            }
+                        }
+                    }
                 }
                 
                 TextInput {

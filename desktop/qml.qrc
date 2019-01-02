@@ -63,5 +63,6 @@
         <file>qml/SettingsCropDelegate.qml</file>
         <file>qml/SettingsFamilyDelegate.qml</file>
         <file>qml/AddFamilyDialog.qml</file>
+        <file>qml/TextDisk.qml</file>
     </qresource>
 </RCC>

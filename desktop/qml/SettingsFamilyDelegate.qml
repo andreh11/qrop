@@ -31,19 +31,30 @@ Column {
                 height: Units.rowHeight
                 spacing: Units.formSpacing
                 
-                TextCheckBox {
+                TextDisk {
                     id: headerCheckbox
-                    text: family
-                    selectionMode: false
+                    text: family.slice(0,2)
                     color: model.color
-                    Layout.preferredWidth: Units.rowHeight * 0.8
-                    round: true
-                    MouseArea {
-                        anchors.fill: parent
-                    }
+//                    Layout.preferredWidth: Units.rowHeight * 0.8
+//                    Layout.preferredHeight: Units.rowHeight * 0.8
                     Layout.leftMargin: Units.mediumSpacing
+                    onClicked: colorPickerDialog.open()
+
+                    Dialog {
+                        id: colorPickerDialog
+                        width: 400
+                        height: 400
+                        ColorPicker {
+                            anchors.fill: parent
+                            onNewColorSelected: {
+                                colorPickerDialog.close()
+                                Family.update(model.family_id, {"color": color});
+                                refresh();
+                            }
+                        }
+                    }
                 }
-                
+
                 TextInput {
                     text: family
                     font.family: "Roboto Regular"
@@ -53,7 +64,6 @@ Column {
                         Family.update(family_id, {"family": text})
                         refresh();
                     }
-                    
                 }
                 
                 ComboBox {
