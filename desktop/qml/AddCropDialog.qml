@@ -30,7 +30,9 @@ Dialog {
     readonly property string cropName: cropNameField.text.trim()
     property alias color: colorPicker.color
     property int familyId: familyModel.rowId(familyField.currentIndex)
-    property bool acceptableForm: cropNameField.acceptableInput && familyField.currentIndex >= 0
+    property bool acceptableForm: cropNameField.acceptableInput
+                                  && (familyField.currentIndex >= 0 || alreadyAssignedFamilyId)
+    property bool alreadyAssignedFamilyId: false
 
     title: qsTr("Add New Crop")
     standardButtons: Dialog.Ok | Dialog.Cancel
@@ -58,7 +60,7 @@ Dialog {
         MyTextField {
             id: cropNameField
             labelText: qsTr("Crop")
-            validator: RegExpValidator { regExp: /\w[\w ]*/ }
+            validator: RegExpValidator { regExp: /\w[\w -]*/ }
             Layout.fillWidth: true
             Layout.minimumWidth: 100
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
@@ -66,6 +68,7 @@ Dialog {
 
         MyComboBox {
             id: familyField
+            visible: !alreadyAssignedFamilyId
             labelText: qsTr("Family")
             Layout.minimumWidth: 150
             Layout.fillWidth: true

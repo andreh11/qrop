@@ -182,6 +182,10 @@ Flickable {
     }
 
     function clearAll() {
+        varietyModel.refresh();
+        keywordModel.refresh();
+        unitModel.refresh();
+
         varietyField.reset();
         locationView.clearSelection();
         chooseLocationMode = false;
@@ -689,14 +693,8 @@ Flickable {
 
                     property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
                                                                    : fieldPlantingDateField.calendarDate
-                    season: MDate.season(plantingDate)
-                    year: {
-                        if (plantingDate.getMonth() < 2)
-                            return  plantingDate.getFullYear() - 1;
-                        else
-                            return  plantingDate.getFullYear() ;
-                    }
-
+                    season: NDate.season(plantingDate)
+                    year: NDate.seasonYear(plantingDate)
                     width: parent.width
                     height: 400
                     plantingEditMode: true

@@ -129,3 +129,25 @@ QDate MDate::dateFromDateString(const QString &s)
 
     return date;
 }
+
+int MDate::season(const QDate &date)
+{
+    int month = date.month();
+
+    if (3 <= month && month <= 5)
+        return 0;
+    else if (6 <= month && month <= 8)
+        return 1;
+    else if (9 <= month && month <= 11)
+        return 2;
+    else
+        return 3;
+}
+
+int MDate::seasonYear(const QDate &date)
+{
+    if (date.month() < 3)
+        return date.year() - 1;
+    else
+        return date.year();
+}

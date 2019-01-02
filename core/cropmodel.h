@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CROPTABLE_H
-#define CROPTABLE_H
+#ifndef CROPMODEL_H
+#define CROPMODEL_H
 
 #include <QObject>
 
@@ -24,8 +24,19 @@
 
 class CORESHARED_EXPORT CropModel : public SortFilterProxyModel
 {
+    Q_OBJECT
+    Q_PROPERTY(int familyId READ familyId WRITE setFilterFamilyId NOTIFY familyIdChanged)
+
 public:
     explicit CropModel(QObject *parent = nullptr, const QString &tableName = "crop");
+    int familyId() const;
+    void setFilterFamilyId(int familyId);
+
+signals:
+    void familyIdChanged();
+
+private:
+    int m_familyId;
 };
 
-#endif // CROPTABLE_H
+#endif // CROPMODEL_H

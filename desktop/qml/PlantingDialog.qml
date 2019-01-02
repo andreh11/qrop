@@ -38,6 +38,7 @@ Dialog {
 
     function createPlanting() {
         mode = "add";
+        refresh();
         plantingForm.clearAll();
         dialog.title = qsTr("Add planting(s)")
         dialog.open()
@@ -46,6 +47,7 @@ Dialog {
     function editPlantings(plantingIds) {
         mode = "edit";
         dialog.editPlantingIdList = plantingIds;
+        refresh();
         plantingForm.clearAll();
 
         // TODO: there's probably a bottleneck here.
@@ -53,6 +55,10 @@ Dialog {
         plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
         dialog.open()
+    }
+
+    function refresh() {
+        plantingFormHeader.refresh();
     }
 
     modal: true

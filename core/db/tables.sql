@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS variety (
     variety_id      INTEGER PRIMARY KEY AUTOINCREMENT,
     variety         TEXT NOT NULL,
     crop_id         INTEGER NOT NULL REFERENCES crop ON DELETE CASCADE,
-    seed_company_id INTEGER REFERENCES seed_company
+    seed_company_id INTEGER REFERENCES seed_company ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS seed_company (
@@ -126,9 +126,9 @@ CREATE TABLE IF NOT EXISTS task (
     duration           INTEGER, -- days
     labor_time         TEXT, -- HH:MM
     description        TEXT,
-    task_type_id       INTEGER NOT NULL REFERENCES task_type,
-    task_method_id     INTEGER REFERENCES task_method,
-    task_implement_id  INTEGER REFERENCES task_implement,
+    task_type_id       INTEGER NOT NULL REFERENCES task_type ON DELETE CASCADE,
+    task_method_id     INTEGER REFERENCES task_method ON DELETE SET NULL,
+    task_implement_id  INTEGER REFERENCES task_implement ON DELETE SET NULL,
     link_task_id       INTEGER REFERENCES task,
     link_days          INTEGER, -- If negative, days before linked task. Otherwise,
                                 -- days after. 0 : same day.
@@ -255,17 +255,19 @@ CREATE TABLE IF NOT EXISTS expense_file (
 CREATE VIEW IF NOT EXISTS planting_view AS
 SELECT planting_id as planting_view_id,
        family, family_id, family.color as family_color, family.interval as family_interval,
-       crop, variety, crop_id, crop.color as crop_color,
+       crop, variety, variety_id, crop_id, crop.color as crop_color,
        planting.*,
        unit.abbreviation as unit,
        group_concat(location_id) as locations,
        task.assigned_date as planting_date,
        date(task.assigned_date, "-" || dtt || " days") as sowing_date,
        date(task.assigned_date, dtm || " days") as beg_harvest_date,
-       date(task.assigned_date, (dtm + harvest_window) || " days") as end_harvest_date
+       date(task.assigned_date, (dtm + harvest_window) || " days") as end_harvest_date,
+       seed_company_id, seed_company
 FROM planting
 LEFT JOIN planting_location using(planting_id)
 LEFT JOIN variety USING (variety_id)
+LEFT JOIN seed_company USING (seed_company_id)
 LEFT JOIN crop USING (crop_id)
 LEFT JOIN family USING (family_id)
 LEFT JOIN unit USING (unit_id)

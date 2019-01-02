@@ -12,8 +12,9 @@ Item {
     id: control
     property color color
 
+    signal newColorSelected()
 
-    implicitHeight: gridView.cellHeight * 2
+    implicitHeight: gridView.cellHeight * 5
 
     GridView {
         id: gridView
@@ -21,8 +22,20 @@ Item {
         cellHeight: 46 + Units.smallSpacing
         cellWidth: cellHeight
         clip: true
-        flow: GridView.TopToBottom
         highlightFollowsCurrentItem: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.HorizontalAndVerticalFlick
+
+        ScrollBar.vertical: ScrollBar {
+            id: verticalScrollBar
+            parent: gridView.parent
+            anchors {
+                top: gridView.top
+                right: gridView.right
+                bottom: gridView.bottom
+
+            }
+        }
 
         //                orientation: ListView.Horizontal
         //                spacing: Units.smallSpacing
@@ -43,7 +56,6 @@ Item {
             Material.color(Material.Orange, Material.Shade300),
             Material.color(Material.DeepOrange, Material.Shade300),
             Material.color(Material.Brown, Material.Shade300),
-            Material.color(Material.Grey, Material.Shade300),
             Material.color(Material.BlueGrey, Material.Shade300),
 
             Material.color(Material.Red, Material.Shade700),
@@ -62,7 +74,6 @@ Item {
             Material.color(Material.Orange, Material.Shade700),
             Material.color(Material.DeepOrange, Material.Shade700),
             Material.color(Material.Brown, Material.Shade700),
-            Material.color(Material.Grey, Material.Shade700),
             Material.color(Material.BlueGrey, Material.Shade700)
         ]
 
@@ -71,7 +82,10 @@ Item {
             width: 46
             height: width
             autoExclusive: true
-            onToggled: control.color = modelData
+            onToggled: {
+                control.color = modelData
+                newColorSelected()
+            }
 
             background: Rectangle {
                 id: buttonRectangle

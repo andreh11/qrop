@@ -26,6 +26,7 @@ class CORESHARED_EXPORT VarietyModel : public SortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(int cropId READ cropId WRITE setFilterCropId NOTIFY cropIdChanged)
+
 public:
     explicit VarietyModel(QObject *parent = nullptr, const QString &tableName = "variety_view");
     int cropId() const;

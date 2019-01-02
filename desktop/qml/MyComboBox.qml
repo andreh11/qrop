@@ -27,6 +27,7 @@ ComboBox {
 
     property bool manuallyModified
 
+    property int rowId: -1
     property string labelText: ""
     property string helperText: ""
     property string prefixText: ""
@@ -68,6 +69,8 @@ ComboBox {
             currentIndex = i;
     }
 
+    onRowIdChanged: setRowId(rowId)
+
     Material.elevation: 0
     width: parent.width
     //    height: 56
@@ -84,7 +87,7 @@ ComboBox {
         }
     }
 
-    popup:  Popup {
+    popup: Popup {
         y: control.editable ? control.height - 5 : 0
         width: control.width
         height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
@@ -92,6 +95,7 @@ ComboBox {
         topMargin: 12
         bottomMargin: 12
         padding: 0
+
 
         Material.theme: control.Material.theme
         Material.accent: control.Material.accent

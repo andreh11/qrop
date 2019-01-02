@@ -21,6 +21,7 @@ Rectangle {
     function reset() {
         typeComboBox.currentIndex = 0;
         completedDate = "";
+        taskTypeModel.refresh();
     }
 
     focus: true

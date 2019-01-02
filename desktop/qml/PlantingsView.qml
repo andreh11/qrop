@@ -179,6 +179,11 @@ ListView {
         sortOrder: tableSortOrder
     }
 
+    Settings {
+        id: settings
+        property bool showSeedCompanyBesideVariety
+    }
+
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
         visible: showVerticalScrollBar
@@ -467,7 +472,9 @@ ListView {
                 }
 
                 TableLabel {
-                    text: model.variety
+                    text: settings.showSeedCompanyBesideVariety
+                          ? "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3))
+                          : model.variety
                     showToolTip: true
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight

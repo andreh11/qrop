@@ -58,5 +58,19 @@
         <file>qml/PlantingsView.qml</file>
         <file>qml/LocationDialog.qml</file>
         <file>qml/LocationView.qml</file>
+        <file>qml/SettingsFamilyPane.qml</file>
+        <file>qml/SettingsVarietyDelegate.qml</file>
+        <file>qml/SettingsCropDelegate.qml</file>
+        <file>qml/SettingsFamilyDelegate.qml</file>
+        <file>qml/AddFamilyDialog.qml</file>
+        <file>qml/TextDisk.qml</file>
+        <file>qml/SettingsKeywordPane.qml</file>
+        <file>qml/AddKeywordDialog.qml</file>
+        <file>qml/SettingsUnitPane.qml</file>
+        <file>qml/SettingsTaskPane.qml</file>
+        <file>qml/SettingsTaskTypeDelegate.qml</file>
+        <file>qml/SettingsTaskMethodDelegate.qml</file>
+        <file>qml/SettingsImplementDelegate.qml</file>
+        <file>qml/SettingsSeedCompanyPane.qml</file>
     </qresource>
 </RCC>

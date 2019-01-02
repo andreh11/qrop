@@ -247,8 +247,8 @@ Page {
             SeasonSpinBox {
                 id: seasonSpinBox
                 visible: !editMode
-                season: MDate.season(todayDate)
-                year: todayDate.getFullYear()
+                season: NDate.season(todayDate)
+                year: NDate.seasonYear(todayDate)
 
             }
         }

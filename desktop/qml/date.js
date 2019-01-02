@@ -58,18 +58,6 @@ function formatDate(date, currentYear) {
     return prefix + text;
 }
 
-function season(date) {
-    var month = date.getMonth();
-    if (2 <= month && month <= 4)
-        return 0;
-    else if (5 <= month && month <= 7)
-        return 1;
-    else if (8 <= month && month <= 10)
-        return 2;
-    else
-        return 3;
-}
-
 function seasonBeginning(season, year) {
     switch (season) {
     case 0:

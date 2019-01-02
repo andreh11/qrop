@@ -101,6 +101,10 @@ Flickable {
     }
 
     function reset() {
+        locationView.refresh();
+        taskImplementModel.refresh()
+        taskMethodModel.refresh()
+
         plantingList.reset();
         locationView.clearSelection();
         locationView.collapseAll();

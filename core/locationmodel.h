@@ -57,6 +57,7 @@ public:
     Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
     Q_INVOKABLE QModelIndexList treeIndexes() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
+    Q_INVOKABLE virtual void refresh() override;
 
     bool showOnlyEmptyLocations() const;
     void setShowOnlyEmptyLocations(bool show);
