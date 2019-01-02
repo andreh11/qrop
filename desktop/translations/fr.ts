@@ -1382,7 +1382,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../qml/SettingsKeywordPane.qml" line="119"/>
         <source>Delete %1?</source>
-        <translation type="unfinished">Supprimer %1 ?</translation>
+        <translation>Supprimer %1 ?</translation>
     </message>
 </context>
 <context>
@@ -1393,59 +1393,79 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="71"/>
+        <location filename="../qml/SettingsPage.qml" line="56"/>
+        <source>General Settings</source>
+        <translation>Paramètres généraux</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="78"/>
         <source>Farm name</source>
         <translation>Nom de la ferme</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="95"/>
+        <location filename="../qml/SettingsPage.qml" line="102"/>
         <source>Date type</source>
         <translation>Type de date</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="106"/>
+        <location filename="../qml/SettingsPage.qml" line="113"/>
         <source>Week</source>
         <translation>Semaine</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="106"/>
+        <location filename="../qml/SettingsPage.qml" line="113"/>
         <source>Full</source>
         <translation>Complète</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="125"/>
+        <location filename="../qml/SettingsPage.qml" line="132"/>
         <source>Show seed company beside variety names</source>
         <translation>Afficher le nom du fournisseur avec la variété</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="133"/>
+        <location filename="../qml/SettingsPage.qml" line="140"/>
         <source>Restart the application for this take effect.</source>
         <translation>Redémarrer l&apos;application pour que la modification soit prise en compte</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="164"/>
+        <location filename="../qml/SettingsPage.qml" line="153"/>
+        <source>Lists</source>
+        <translation>Listes</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="178"/>
         <source>Families, crops and varieties</source>
         <translation>Familles, espèces et variétés</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="187"/>
+        <location filename="../qml/SettingsPage.qml" line="201"/>
         <source>Keywords</source>
         <translation>Mot-clefs</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="210"/>
+        <location filename="../qml/SettingsPage.qml" line="224"/>
         <source>Seed companies</source>
         <translation>Fournisseurs de semences</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="233"/>
+        <location filename="../qml/SettingsPage.qml" line="247"/>
         <source>Task types</source>
         <translation>Types de tâche</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="256"/>
+        <location filename="../qml/SettingsPage.qml" line="270"/>
         <source>Units</source>
         <translation>Unités</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="292"/>
+        <source>Development options</source>
+        <translation>Options de développement</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="317"/>
+        <source>Reset database and quit</source>
+        <translation>Réinitialiser la base et quitter</translation>
     </message>
 </context>
 <context>
@@ -1481,7 +1501,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../qml/SettingsTaskMethodDelegate.qml" line="62"/>
         <source>Delete %1?</source>
-        <translation type="unfinished">Supprimer %1 ?</translation>
+        <translation>Supprimer %1 ?</translation>
     </message>
     <message>
         <location filename="../qml/SettingsTaskMethodDelegate.qml" line="68"/>
