@@ -228,6 +228,7 @@ int main(int argc, char *argv[])
                                            auto *location = new Location();
                                            return location;
                                        });
+
     qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                         Q_UNUSED(engine)
@@ -236,8 +237,16 @@ int main(int argc, char *argv[])
                                         return mdate;
                                     });
 
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "Database",
+                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                        Q_UNUSED(engine)
+                                        Q_UNUSED(scriptEngine)
+                                        auto *db = new Database();
+                                        return db;
+                                    });
+    Database db;
     //    deleteDatabase();
-    connectToDatabase();
+    db.connectToDatabase();
     //    createDatabase();
     //    createFakeData();
 

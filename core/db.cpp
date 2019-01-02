@@ -25,7 +25,12 @@
 #include "db.h"
 #include "location.h"
 
-QString databasePath()
+Database::Database(QObject *parent)
+    : QObject(parent)
+{
+}
+
+QString Database::databasePath()
 {
     const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (!writeDir.mkpath("."))
@@ -37,13 +42,13 @@ QString databasePath()
     return fileName;
 }
 
-void deleteDatabase()
+void Database::deleteDatabase()
 {
     QString fileName = databasePath();
     QFile::remove(fileName);
 }
 
-void connectToDatabase()
+void Database::connectToDatabase()
 {
     QSqlDatabase database = QSqlDatabase::database();
     if (!database.isValid()) {
@@ -66,7 +71,7 @@ void connectToDatabase()
     query.exec();
 }
 
-void execSqlFile(const QString &fileName, const QString &separator)
+void Database::execSqlFile(const QString &fileName, const QString &separator)
 {
     Q_INIT_RESOURCE(core_resources);
 
@@ -90,7 +95,7 @@ void execSqlFile(const QString &fileName, const QString &separator)
     }
 }
 
-void createDatabase()
+void Database::createDatabase()
 {
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
@@ -98,7 +103,7 @@ void createDatabase()
     qInfo() << "Database created";
 }
 
-void createFakeData()
+void Database::createFakeData()
 {
     Location location;
     int parentId0;
@@ -121,4 +126,11 @@ void createFakeData()
         }
     }
     QSqlDatabase::database().commit();
+}
+
+void Database::resetDatabase()
+{
+    deleteDatabase();
+    connectToDatabase();
+    createDatabase();
 }

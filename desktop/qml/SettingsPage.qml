@@ -52,6 +52,13 @@ Page {
         topPadding: Units.smallSpacing
         bottomPadding: topPadding
 
+        Label {
+            text: qsTr("General Settings")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            topPadding: Units.mediumSpacing
+        }
+
         Pane {
             width: parent.width
             Material.elevation: 2
@@ -142,6 +149,13 @@ Page {
 
         }
 
+        Label {
+            text: qsTr("Lists")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            topPadding: Units.mediumSpacing
+        }
+
         Pane {
             width: parent.width
             Material.elevation: 2
@@ -161,7 +175,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Families, crops and varieties"
+                        text: qsTr("Families, crops and varieties")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -184,7 +198,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Keywords"
+                        text: qsTr("Keywords")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -207,7 +221,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Seed companies"
+                        text: qsTr("Seed companies")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -230,7 +244,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Task types"
+                        text: qsTr("Task types")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -253,7 +267,7 @@ Page {
 
                     Label {
                         Layout.fillWidth: true
-                        text: "Units"
+                        text: qsTr("Units")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -273,7 +287,50 @@ Page {
 
             }
         }
+
+        Label {
+            text: qsTr("Development options")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            topPadding: Units.mediumSpacing
+        }
+
+        Pane {
+            width: parent.width
+            Material.elevation: 2
+            Material.background: "white"
+            padding: 0
+
+            ColumnLayout {
+                width: parent.width
+                spacing: 0
+
+                ThinDivider { width: parent.width }
+
+                RowLayout {
+                    width: parent.width
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Button {
+                        flat: true
+                        text: qsTr("Reset database and quit")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: {
+                            Database.resetDatabase();
+                            Qt.quit();
+                        }
+                    }
+
+                }
+
+                ThinDivider { width: parent.width }
+                Item { Layout.fillHeight: true }
+            }
+        }
     }
+
 
     SettingsFamilyPane {
         id: familyPane
