@@ -79,6 +79,7 @@ Pane {
         id: familyView
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalAndVerticalFlick
+        clip: true
         anchors {
             top: rowLayout.bottom
             topMargin: Units.mediumSpacing
@@ -86,6 +87,16 @@ Pane {
             right: parent.right
             bottom: parent.bottom
         }
+        ScrollBar.vertical: ScrollBar {
+            id: verticalScrollBar
+            parent: familyView.parent
+            anchors {
+                top: familyView.top
+                right: familyView.right
+                bottom: familyView.top
+            }
+//        policy: ScrollBar.AlwaysOn
+    }
         spacing: Units.smallSpacing
         model: FamilyModel { id: familyModel }
         delegate: SettingsFamilyDelegate {

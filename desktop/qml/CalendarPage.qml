@@ -357,6 +357,8 @@ Page {
                 property var locationIdList: model.locations.split(",")
                 property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
 
+                onLocationIdListChanged: console.log(locationIdList)
+
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
 

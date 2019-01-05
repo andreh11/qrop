@@ -1280,8 +1280,8 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message numerus="yes">
         <location filename="../qml/SettingsFamilyDelegate.qml" line="76"/>
         <source>%L1 years</source>
-        <translation>
-            <numerusform>% 1 an</numerusform>
+        <translation type="unfinished">
+            <numerusform>%1 an</numerusform>
             <numerusform>%1 ans</numerusform>
         </translation>
     </message>
@@ -1471,9 +1471,13 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
 <context>
     <name>SettingsSeedCompanyPane</name>
     <message>
-        <location filename="../qml/SettingsSeedCompanyPane.qml" line="37"/>
         <source>Units</source>
-        <translation>Unités</translation>
+        <translation type="vanished">Unités</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsSeedCompanyPane.qml" line="37"/>
+        <source>Seeds companies</source>
+        <translation>Fournisseurs de semences</translation>
     </message>
     <message>
         <location filename="../qml/SettingsSeedCompanyPane.qml" line="44"/>
