@@ -6,7 +6,7 @@ qmake -config release ..;
 make -j 8;
 mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
 mkdir deploy/usr/share/applications;
-find build \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
+find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
 cp -R core/* desktop/* deploy/usr/bin
 cd deploy;
 cp ../../logo.png desktop.png
