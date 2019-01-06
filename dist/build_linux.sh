@@ -2,13 +2,13 @@
 
 mkdir build;
 cd build;
-qmake ..;
+qmake -config release ..;
 make -j 8;
-mkdir -p deploy/usr/{bin, lib, share};
+mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
 mkdir usr/share/applications;
 find build \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
-cp -R build/{core,desktop}/* deploy/usr/bin
-cd desploy;
+cp -R build/core/* build/desktop/* deploy/usr/bin
+cd deploy;
 cp ../../logo.png desktop.png
 cp ../../dist/Qrop.desktop usr/share/applications
 wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
