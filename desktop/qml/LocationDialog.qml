@@ -92,8 +92,8 @@ Dialog {
     title: mode === "add" ? qsTr("Add Locations") : qsTr("Edit Locations")
 
     footer: AddEditDialogFooter {
-//        height: childrenRect.height
-//        width: parent.width
+        //        height: childrenRect.height
+        //        width: parent.width
         applyEnabled: dialog.formAccepted
         mode: dialog.mode
     }
@@ -101,6 +101,7 @@ Dialog {
     ColumnLayout {
         id: mainColumn
         spacing: Units.smallSpacing
+        width: parent.width
 
         MyTextField {
             id: nameField
@@ -111,6 +112,7 @@ Dialog {
             //                            validator: IntValidator { bottom: 0; top: 999 }
             Layout.fillWidth: true
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
+            Keys.onEnterPressed: if (formAccepted) dialog.accept();
         }
 
         MyTextField {
@@ -125,20 +127,23 @@ Dialog {
             }
             Layout.fillWidth: true
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
+            Keys.onEnterPressed: if (formAccepted) dialog.accept();
         }
 
         MyTextField {
             id: widthField
             labelText: qsTr("Width")
-            suffixText: qsTr("cm")
+            suffixText: qsTr("m")
             floatingLabel: true
             inputMethodHints: Qt.ImhDigitsOnly
-            validator: IntValidator {
+            validator: TextFieldDoubleValidator {
                 bottom: 0
                 top: 999
+                decimals: 2
             }
             Layout.fillWidth: true
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
+            Keys.onEnterPressed: if (formAccepted) dialog.accept();
         }
 
         MyTextField {
@@ -154,6 +159,7 @@ Dialog {
             }
             Layout.fillWidth: true
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
+            Keys.onEnterPressed: if (formAccepted) dialog.accept();
         }
     }
 }
