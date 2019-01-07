@@ -348,7 +348,9 @@ Page {
                 Label {
                     id: emptyPlantingStateLabel
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr('No more plantings to assign for this season.')
+                    text: searchField.text
+                          ? qsTr('No more "%1" plantings to assign for this season.').arg(searchField.text)
+                          : qsTr('No more plantings to assign for this season.')
                     font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
                     color: Qt.rgba(0, 0, 0, 0.8)
                     verticalAlignment: Text.AlignVCenter
@@ -380,6 +382,19 @@ Page {
                         onClicked: page.nextSeason();
                     }
                 }
+
+                Button {
+                    visible: searchField.text
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    id: clearSearchFieldButton
+                    text: qsTr("Clear search Field")
+                    flat: true
+                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    Material.foreground: Material.accent
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    onClicked: searchField.text = ""
+                }
+
             }
 
 

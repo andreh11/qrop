@@ -67,8 +67,7 @@ Pane {
             AddFamilyDialog {
                 id: addFamilyDialog
                 onAccepted: {
-                    Family.add({"family" : cropName,
-                                   "color" : color});
+                    Family.add({"family" : cropName, "color" : color});
                     familyModel.refresh();
                 }
             }

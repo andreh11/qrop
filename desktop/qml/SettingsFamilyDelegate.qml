@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// TODO: refactor
+
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -17,26 +35,24 @@ Column {
         color: Material.color(Material.Grey, Material.Shade100)
         width: parent.width
         height: childrenRect.height
-        
+
         MouseArea {
             id: familyMouseArea
             height: Units.rowHeight
             width: parent.width
             hoverEnabled: true
-            
+
             RowLayout {
                 id: headerRow
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width
                 height: Units.rowHeight
                 spacing: Units.formSpacing
-                
+
                 TextDisk {
                     id: headerCheckbox
                     text: family.slice(0,2)
                     color: model.color
-//                    Layout.preferredWidth: Units.rowHeight * 0.8
-//                    Layout.preferredHeight: Units.rowHeight * 0.8
                     Layout.leftMargin: Units.mediumSpacing
                     onClicked: colorPickerDialog.open()
 
@@ -66,7 +82,7 @@ Column {
                         refresh();
                     }
                 }
-                
+
                 ComboBox {
                     flat: true
                     model: 10
@@ -76,15 +92,15 @@ Column {
                     font.pixelSize: Units.fontSizeBodyAndButton
                     displayText: qsTr("%L1 years", "", currentIndex).arg(currentIndex)
                     onCurrentIndexChanged: Family.update(family_id, {"interval": currentIndex})
-                    
+
                     ToolTip.text: qsTr("Minimum rotation interval for %1").arg(family)
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
                 }
-                
-                
+
+
                 Item { Layout.fillWidth: true }
-                
+
                 MyToolButton {
                     visible: familyMouseArea.containsMouse
                     text: enabled ? "\ue872" : ""
@@ -94,30 +110,30 @@ Column {
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    
+
                     onClicked: confirmFamilyDeleteDialog.open()
-                    
+
                     Dialog {
                         id: confirmFamilyDeleteDialog
                         margins: 0
                         title: qsTr("Delete %1?").arg(family)
                         standardButtons: Dialog.Ok | Dialog.Cancel
-                        
+
                         Text {
                             width: parent.width
                             wrapMode: Text.WordWrap
                             text: qsTr("All crops and plantings will be lost.")
                         }
-                        
+
                         onAccepted: {
                             Family.remove(family_id)
                             refresh();
                         }
-                        
+
                         onRejected: confirmFamilyDeleteDialog.close()
                     }
                 }
-                
+
                 MyToolButton {
                     id: showCropsButton
                     Layout.leftMargin: -28
@@ -134,7 +150,7 @@ Column {
             }
         }
     }
-    
+
     ListView {
         id: cropView
         boundsBehavior: Flickable.StopAtBounds
@@ -143,12 +159,12 @@ Column {
         visible: showCropsButton.checked
         width: parent.width
         height: contentHeight
-        
+
         model: CropModel {
             id: cropModel
             familyId: family_id
         }
-        
+
         delegate: SettingsCropDelegate {
             width: parent.width
             onRefresh: cropModel.refresh()
@@ -157,7 +173,7 @@ Column {
         }
     }
 
-        Button {
+    Button {
         id: addCropButton
         visible: showCropsButton.checked
         anchors.right: parent.right
@@ -174,11 +190,9 @@ Column {
             margins: 0
             alreadyAssignedFamilyId: true
             onAccepted: {
-                Crop.add({"crop" : cropName,
-                             "family_id" : family_id,
-                             "color" : color});
+                Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
                 cropModel.refresh();
             }
         }
-        }
+    }
 }
