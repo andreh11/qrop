@@ -92,8 +92,8 @@ Item {
         RoundButton {
             id: calendarButton
             flat: true
-            text: "\uf073" // calendar-alt
-            font { pointSize: textField.font.pointSize * 1.2; family: "FontAwesome" }
+            text: "\ue916" // calendar-alt
+            font { pointSize: textField.font.pointSize * 1.4; family: "Material Icons" }
             anchors {
                 right: textField.right
                 rightMargin: -16

@@ -39,12 +39,12 @@ ItemDelegate {
 
         Label {
             color: "white"
-            width: 24
+            width: 28
             anchors.verticalCenter: parent.verticalCenter
             id: iconLabel
             text: iconText
-            font.family: "FontAwesome"
-            font.pixelSize: 24
+            font.family: "Material Icons"
+            font.pixelSize: 28
             horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
