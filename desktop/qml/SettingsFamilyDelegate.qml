@@ -77,6 +77,8 @@ Column {
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.minimumWidth: pane.firstColumnWidth
+                    maximumLength: 25
+                    Layout.maximumWidth: Layout.minimumWidth
                     onEditingFinished: {
                         Family.update(family_id, {"family": text})
                         refresh();

@@ -75,6 +75,8 @@ Column {
                 TextInput {
                     text: model.crop
                     font.family: "Roboto Regular"
+                    maximumLength: 25
+                    Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: pane.firstColumnWidth
                     onEditingFinished: {
                         Crop.update(model.crop_id, {"crop": text});

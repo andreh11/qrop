@@ -43,6 +43,11 @@ ListView {
             "width": 100,
             "visible": true
         }, {
+            "name": qsTr("Locations"),
+            "columnName": "locations",
+            "width": 100,
+            "visible": true
+        }, {
             "name": qsTr("Sowing"),
             "columnName": "sowing_date",
             "width": 60,
@@ -430,6 +435,7 @@ ListView {
                 leftPadding: listView.rowPadding
 
                 readonly property var labelList: [
+                    [Location.fullName(model.locations.split(",")), Text.AlignRight],
                     [model.planting_type !== 3 ? NDate.formatDate(seedingDate, year) : "",
                      Text.AlignRight],
                     [model.planting_type !== 1 ? NDate.formatDate(transplantingDate, year) : "",
