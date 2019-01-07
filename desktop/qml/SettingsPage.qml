@@ -22,6 +22,7 @@ import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 
+// TODO: refactor
 Page {
     id: page
 
@@ -178,6 +179,10 @@ Page {
                         text: qsTr("Families, crops and varieties")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: showFamilyPane = true
+                        }
                     }
 
                     RoundButton {
@@ -201,6 +206,10 @@ Page {
                         text: qsTr("Keywords")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: showKeywordPane = true
+                        }
                     }
 
                     RoundButton {
@@ -224,6 +233,10 @@ Page {
                         text: qsTr("Seed companies")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: showSeedCompanyPane = true
+                        }
                     }
 
                     RoundButton {
@@ -247,6 +260,10 @@ Page {
                         text: qsTr("Task types")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: showTaskTypePane = true
+                        }
                     }
 
                     RoundButton {
@@ -270,6 +287,10 @@ Page {
                         text: qsTr("Units")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: showUnitPane = true
+                        }
                     }
 
                     RoundButton {
