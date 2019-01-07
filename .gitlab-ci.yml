@@ -1,11 +1,10 @@
 before_script:
   - apt-get update
-  - apt-get install -y python3-requests p7zip-full wget tree
+  - apt-get install -y python3-requests p7zip-full wget
   - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   - chmod +x qli-installer.py
   - ./qli-installer.py 5.12.0 linux desktop
-  - tree 
-  - PATH=$PATH:./gcc_64/bin
+  - PATH=$PATH:./5.12.0/gcc_64/bin
 
 stages:
   - lint
