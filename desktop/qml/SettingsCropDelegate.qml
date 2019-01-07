@@ -60,6 +60,7 @@ Column {
                         id: colorPickerDialog
                         width: 400
                         height: 400
+                        margins: 0
                         ColorPicker {
                             anchors.fill: parent
                             onNewColorSelected:{
@@ -98,6 +99,7 @@ Column {
                     Dialog {
                         id: confirmCropDeleteDialog
                         title: qsTr("Delete %1?").arg(model.crop)
+                        margins: 0
                         standardButtons: Dialog.Ok | Dialog.Cancel
                         
                         Text {
@@ -162,6 +164,7 @@ Column {
         
         AddVarietyDialog {
             id: addVarietyDialog
+            margins: 0
             onAccepted: {
                 if (seedCompanyId > 0)
                     Variety.add({"variety" : varietyName,

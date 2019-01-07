@@ -44,6 +44,7 @@ Column {
                         id: colorPickerDialog
                         width: 400
                         height: 400
+                        margins: 0
                         ColorPicker {
                             anchors.fill: parent
                             onNewColorSelected: {
@@ -98,6 +99,7 @@ Column {
                     
                     Dialog {
                         id: confirmFamilyDeleteDialog
+                        margins: 0
                         title: qsTr("Delete %1?").arg(family)
                         standardButtons: Dialog.Ok | Dialog.Cancel
                         
@@ -169,6 +171,7 @@ Column {
 
         AddCropDialog {
             id: addCropDialog
+            margins: 0
             alreadyAssignedFamilyId: true
             onAccepted: {
                 Crop.add({"crop" : cropName,
