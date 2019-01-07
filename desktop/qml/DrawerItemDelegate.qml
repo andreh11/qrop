@@ -43,7 +43,7 @@ ItemDelegate {
             anchors.verticalCenter: parent.verticalCenter
             id: iconLabel
             text: iconText
-            font.family: "Font Awesome 5 Free Solid"
+            font.family: "FontAwesome"
             font.pixelSize: 24
             horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter

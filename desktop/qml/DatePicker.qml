@@ -93,7 +93,7 @@ Item {
             id: calendarButton
             flat: true
             text: "\uf073" // calendar-alt
-            font { pointSize: textField.font.pointSize * 1.2; family: "Font Awesome 5 Free" }
+            font { pointSize: textField.font.pointSize * 1.2; family: "FontAwesome" }
             anchors {
                 right: textField.right
                 rightMargin: -16

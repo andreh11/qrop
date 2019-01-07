@@ -49,8 +49,6 @@ Dialog {
         dialog.editPlantingIdList = plantingIds;
         refresh();
         plantingForm.clearAll();
-        console.log(Planting.cropId(plantingIds[0]))
-
 
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
