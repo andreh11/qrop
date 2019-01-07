@@ -279,7 +279,6 @@ Page {
             Layout.fillHeight: true
             Material.elevation: 2
             Material.background: "white"
-            visible: largeDisplay
 
             Column {
                 id: emptyStateColumn

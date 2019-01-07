@@ -73,7 +73,7 @@ Page {
         plantingsView.selectedIdsChanged()
     }
 
-    title: "Plantings"
+    title: qsTr("Plantings")
     padding: 0
     Material.background: "white"
 

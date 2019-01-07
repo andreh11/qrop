@@ -29,7 +29,6 @@ ItemDelegate {
 
     focusPolicy: Qt.NoFocus
     height: 48
-    width: drawer.width
     highlighted: isActive
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
@@ -37,8 +36,10 @@ ItemDelegate {
     contentItem: Row {
         anchors.centerIn: parent
         spacing: largeDisplay && railMode ? 0 : 24
+
         Label {
             color: "white"
+            width: 24
             anchors.verticalCenter: parent.verticalCenter
             id: iconLabel
             text: iconText
@@ -53,7 +54,7 @@ ItemDelegate {
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
             id: textLabel
-            visible: largeDisplay && railMode
+            visible: !largeDisplay
             width: visible ? implicitWidth : 0
             text: control.text
             verticalAlignment: Text.AlignVCenter

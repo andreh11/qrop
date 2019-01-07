@@ -51,7 +51,7 @@ Page {
         listView.contentY = currentY
     }
 
-    title: "Calendar"
+    title: qsTr("Task calendar")
     focus: true
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)

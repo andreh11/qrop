@@ -148,6 +148,11 @@
         <source>Due Date</source>
         <translation>Date prévue</translation>
     </message>
+    <message>
+        <location filename="../qml/CalendarPage.qml" line="54"/>
+        <source>Task calendar</source>
+        <translation>Calendrier des tâches</translation>
+    </message>
     <message numerus="yes">
         <location filename="../qml/CalendarPage.qml" line="141"/>
         <source>%L1 task(s) selected</source>
@@ -187,32 +192,32 @@
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="418"/>
+        <location filename="../qml/CalendarPage.qml" line="420"/>
         <source>Move to previous week</source>
         <translation>Reporter à la semaine précédente</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="431"/>
+        <location filename="../qml/CalendarPage.qml" line="433"/>
         <source>Move to next week</source>
         <translation>Reporter à la semaine suivante</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="445"/>
+        <location filename="../qml/CalendarPage.qml" line="447"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="472"/>
+        <location filename="../qml/CalendarPage.qml" line="474"/>
         <source>Click to complete task. Hold to select date.</source>
         <translation>Cliquer pour effectuer la tâche. Clic long pour sélectionner la date.</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="541"/>
+        <location filename="../qml/CalendarPage.qml" line="543"/>
         <source>%L1 x %L2, %3 seeds per cell</source>
         <translation>%L1 x %L2, %3 graines par trou</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="543"/>
+        <location filename="../qml/CalendarPage.qml" line="545"/>
         <source>%L1 x %L2</source>
         <translation>%L1 x %L2</translation>
     </message>
@@ -228,12 +233,12 @@
         <translation type="vanished">Impossible de supprimer une tâche de semis/plantation. Utiliser le plan de culture pour supprimer la série.</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="507"/>
+        <location filename="../qml/CalendarPage.qml" line="509"/>
         <source>Hide plantings and locations details</source>
         <translation>Cacher le détail des séries et emplacements.</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="508"/>
+        <location filename="../qml/CalendarPage.qml" line="510"/>
         <source>Show plantings and locations details</source>
         <translation>Afficher le détail des séries et emplacements.</translation>
     </message>
@@ -242,7 +247,7 @@
         <translation type="vanished">%L1 plaques de %L2</translation>
     </message>
     <message>
-        <location filename="../qml/CalendarPage.qml" line="546"/>
+        <location filename="../qml/CalendarPage.qml" line="548"/>
         <source>%1%2%3</source>
         <translation>%1%2%3</translation>
     </message>
@@ -1016,6 +1021,11 @@
         <translation type="vanished">Sous abris</translation>
     </message>
     <message>
+        <location filename="../qml/PlantingsPage.qml" line="76"/>
+        <source>Plantings</source>
+        <translation>Plan de culture</translation>
+    </message>
+    <message>
         <location filename="../qml/PlantingsPage.qml" line="222"/>
         <source>Edit</source>
         <translation>Éditer</translation>
@@ -1280,7 +1290,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message numerus="yes">
         <location filename="../qml/SettingsFamilyDelegate.qml" line="76"/>
         <source>%L1 years</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1 an</numerusform>
             <numerusform>%1 ans</numerusform>
         </translation>
@@ -1842,7 +1852,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Graphiques</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="354"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
@@ -1877,11 +1887,16 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation>Rechercher</translation>
     </message>
     <message>
+        <location filename="../qml/main.qml" line="432"/>
+        <source>A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers.</source>
+        <translation>Un outil moderne de planification et de suivi des cultures en maraîchage. Conçu par des maraîcher⋅es, pour des maraîcher⋅es.</translation>
+    </message>
+    <message>
         <source>Edit Crop Map</source>
         <translation type="vanished">Éditer le parcellaire</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="415"/>
+        <location filename="../qml/main.qml" line="406"/>
         <source>About Qrop</source>
         <translation>À props de Qrop</translation>
     </message>

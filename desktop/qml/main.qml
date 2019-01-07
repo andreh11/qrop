@@ -40,7 +40,7 @@ ApplicationWindow {
 
     readonly property bool largeDisplay: width > 800
     readonly property bool smallDisplay: width < 500
-    property bool railMode: true
+    property bool railMode: false
     property bool searchMode: false
     property bool showSaveButton: false
     property string searchString: searchField.text
@@ -335,6 +335,7 @@ ApplicationWindow {
 
                 DrawerItemDelegate {
                     Layout.fillWidth: true
+                    width: drawer.width
                     text: modelData.name
                     iconText: modelData.iconText
                     onClicked: {
@@ -351,6 +352,7 @@ ApplicationWindow {
 
             DrawerItemDelegate {
                 Layout.fillWidth: true
+                width: drawer.width
                 text: qsTr("Settings")
                 iconText: "\ue8b8"
                 isActive: navigationModel.length == navigationIndex
@@ -364,17 +366,6 @@ ApplicationWindow {
             }
         }
     }
-
-//    Repeater {
-//        id: pages
-//        model: navigationModel
-
-//        Loader {
-//            property string title
-//            source: modelData.source
-//            onLoaded: title = item.title
-//        }
-//    }
 
     StackView {
         id: stackView
@@ -438,7 +429,7 @@ ApplicationWindow {
 
             Label {
                 width: aboutDialog.availableWidth
-                text: "A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers."
+                text: qsTr("A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers.")
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize: Units.fontSizeBodyAndButton
