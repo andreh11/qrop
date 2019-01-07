@@ -1,7 +1,7 @@
 before_script:
   - apt-get update
   - apt-get install -y python3-requests p7zip-full wget
-  - apt-get install -y build-essential libgl1-mesa-dev
+  - apt-get install -y build-essential libgl1-mesa-dev libglib
   - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   - chmod +x qli-installer.py
   - ./qli-installer.py 5.12.0 linux desktop
