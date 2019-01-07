@@ -45,6 +45,11 @@ int Planting::add(const QVariantMap &map) const
     QString plantingDateString = newMap.take("planting_date").toString();
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
+    qDebug() << newMap.value("unit_id");
+
+    // Check if foreign seems to be valid, otherwise remove it.
+    if (newMap.contains("unit_id") && newMap.value("unit_id").toInt() < 1)
+        newMap.remove("unit_id");
 
     int id = DatabaseUtility::add(newMap);
     if (id < 1)

@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS planting (
     seeds_quantity    FLOAT,
     seeds_percentage  INTEGER,
     variety_id        INTEGER NOT NULL REFERENCES variety,
-    unit_id           INTEGER NOT NULL REFERENCES unit,
+    unit_id           INTEGER REFERENCES unit ON DELETE SET NULL,
     yield_per_bed_meter   FLOAT,
     average_price     FLOAT
 );
