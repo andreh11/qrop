@@ -25,6 +25,18 @@ MDate::MDate(QObject *parent)
 {
 }
 
+int MDate::isoWeek(const QDate &date)
+{
+    return date.weekNumber();
+}
+
+int MDate::isoYear(const QDate &date)
+{
+    int year = 0;
+    date.weekNumber(&year);
+    return year;
+}
+
 QDate MDate::firstMondayOfYear(int year)
 {
     if (year < 1)

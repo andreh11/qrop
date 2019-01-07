@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS location (
     location_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT NOT NULL,
     bed_length  INTEGER, -- meter
-    bed_width   INTEGER, -- centimeter
+    bed_width   INTEGER, -- meter
     path_width  INTEGER, -- centimeter
     surface     INTEGER, -- square meter
     parent_id   INTEGER REFERENCES location ON DELETE CASCADE
@@ -254,7 +254,8 @@ CREATE TABLE IF NOT EXISTS expense_file (
 
 CREATE VIEW IF NOT EXISTS planting_view AS
 SELECT planting_id as planting_view_id,
-       family, family_id, family.color as family_color, family.interval as family_interval,
+       family, family_id, family.color as family_color,
+       family.interval as family_interval,
        crop, variety, variety_id, crop_id, crop.color as crop_color,
        planting.*,
        unit.abbreviation as unit,
@@ -282,12 +283,22 @@ FROM variety
 LEFT JOIN seed_company USING (seed_company_id);
 
 CREATE VIEW IF NOT EXISTS task_view AS
-SELECT task.task_id as task_view_id, task.*, task_type.type, task_method.method, task_implement.implement, group_concat(planting_id) as plantings, group_concat(location_id) as locations
+SELECT task.task_id as task_view_id, task.*, task_type.type, task_method.method,
+       task_implement.implement, group_concat(planting_id) as plantings,
+       Null as locations
 FROM task
-LEFT JOIN planting_task using(task_id)
-LEFT JOIN location_task using(task_id)
+JOIN planting_task using(task_id)
+LEFT JOIN task_type using(task_type_id)
+LEFT JOIN task_method using (task_method_id)
+LEFT JOIN task_implement using (task_implement_id)
+GROUP BY task_id
+UNION ALL
+SELECT task.task_id as task_view_id, task.*, task_type.type, task_method.method,
+       task_implement.implement, Null as plantings,
+       group_concat(location_id) as locations
+FROM task
+JOIN location_task using(task_id)
 LEFT JOIN task_type using(task_type_id)
 LEFT JOIN task_method using (task_method_id)
 LEFT JOIN task_implement using (task_implement_id)
 GROUP BY task_id;
-

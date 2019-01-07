@@ -357,7 +357,6 @@ Page {
                 property var locationIdList: model.locations.split(",")
                 property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
 
-                onLocationIdListChanged: console.log(locationIdList)
 
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
@@ -512,8 +511,10 @@ Page {
                             }
 
                             Label {
-                                text: locationIdList ? Location.fullName(locationIdList)
-                                                     : Location.fullName(Location.locations(firstPlantingId))
+                                text: firstPlantingId > 0
+                                      ? Location.fullName(Location.locations(firstPlantingId))
+                                      : Location.fullName(locationIdList)
+
                                 elide: Text.ElideRight
                                 width: tableHeaderModel[1].width
                                 anchors.verticalCenter: parent.verticalCenter
