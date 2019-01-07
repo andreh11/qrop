@@ -1,4 +1,5 @@
 before_script:
+  - apt-get update
   - apt-get install -y python3-requests p7zip-full wget
   - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   - chmod +x qli-installer.py
