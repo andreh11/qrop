@@ -40,7 +40,7 @@ int MDate::isoYear(const QDate &date)
 QDate MDate::firstMondayOfYear(int year)
 {
     if (year < 1)
-        return QDate();
+        return {};
 
     QDate date(year, 1, 1);
     int day = date.dayOfWeek();
@@ -146,13 +146,13 @@ int MDate::season(const QDate &date)
 {
     int month = date.month();
 
-    if (3 <= month && month <= 5)
+    if (3 <= month && month <= 5) // Spring
         return 0;
-    else if (6 <= month && month <= 8)
+    else if (6 <= month && month <= 8) // Summer
         return 1;
-    else if (9 <= month && month <= 11)
+    else if (9 <= month && month <= 11) // Fall
         return 2;
-    else
+    else //  Winter
         return 3;
 }
 

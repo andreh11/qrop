@@ -18,6 +18,7 @@
 #define LOCATIONMODEL_H
 
 #include <QObject>
+#include <QItemSelection>
 
 #include "core_global.h"
 #include "sortfilterproxymodel.h"
@@ -56,6 +57,7 @@ public:
     Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);
     Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
     Q_INVOKABLE QModelIndexList treeIndexes() const;
+    Q_INVOKABLE QItemSelection treeSelection() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE virtual void refresh() override;
 

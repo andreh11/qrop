@@ -41,7 +41,6 @@ void TreeItem::appendChild(TreeItem *item)
 
 void TreeItem::removeChild(TreeItem *item)
 {
-    qDebug() << "removeChild()" << item;
     m_children.removeAll(item);
     item->m_parent = nullptr;
 }
@@ -138,7 +137,7 @@ QModelIndex SqlTreeModel::parent(const QModelIndex &index) const
     auto childItem = static_cast<TreeItem *>(index.internalPointer());
     TreeItem *parentItem = childItem->parent();
 
-    if (parentItem == m_root)
+    if (!parentItem || parentItem == m_root)
         return {};
 
     return createIndex(parentItem->row(), 0, parentItem);

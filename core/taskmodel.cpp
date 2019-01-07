@@ -75,10 +75,6 @@ void TaskModel::setFilterDate(const QDate &date)
         return;
 
     m_filterDate = date;
-
-    const QString filterString =
-            QString::fromLatin1("date_assigned = %1").arg(date.toString(Qt::ISODate));
-
     emit dateChanged();
 }
 

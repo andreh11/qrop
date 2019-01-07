@@ -76,13 +76,37 @@ Item {
         locationModel.updateIndexes(map, indexes);
     }
 
+    // TODO: improve performance
+    function selectAll() {
+        // Select all indexes
+        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select)
+        // Update view indexes
+        var indexList = locationModel.treeIndexes();
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            locationModel.refreshIndex(index);
+        }
+        console.log("After select:", selectionModel.selectedIndexes.length)
+    }
+
+    function deselectAll() {
+        selectionModel.clear();
+        console.log("UNSELECT")
+//        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Deselect)
+        var indexList = locationModel.treeIndexes();
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            locationModel.refreshIndex(index);
+        }
+        console.log("After unselect:", selectionModel.selectedIndexes.length)
+    }
+
     function collapseAll() {
         var indexList = locationModel.treeIndexes();
         for (var i = 0; i < indexList.length; i++) {
             var index = indexList[i];
             treeView.collapse(index);
         }
-
     }
 
     function clearSelection() {
@@ -195,7 +219,26 @@ Item {
                 height: parent.height * 0.8
                 width: height
                 contentItem: Text {}
-                //                            checked: selectionModel.isSelected(styleData.index)
+
+                tristate: true
+
+                checkState: locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
+                            ? Qt.Checked
+                            : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                nextCheckState: function () {
+                    if (!rowCount)
+                        return;
+
+                    if (checkState == Qt.Checked) {
+                        console.log("unselect")
+                        locationView.deselectAll()
+                        return Qt.Unchecked
+                    } else {
+                        console.log("select")
+                        locationView.selectAll()
+                        return Qt.Checked
+                    }
+                }
             }
 
             TableHeaderLabel {

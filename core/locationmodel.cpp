@@ -93,7 +93,6 @@ int LocationModel::availableSpace(const QModelIndex &index, const QDate &plantin
         return false;
 
     int lid = locationId(index);
-    QVariantList list;
     QPair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
@@ -157,7 +156,7 @@ QList<int> LocationModel::conflictingPlantings(const QModelIndex &index, int sea
 
 bool LocationModel::hasRotationConflict(const QModelIndex &index, int season, int year) const
 {
-    return conflictingPlantings(index, season, year).size() > 0;
+    return !conflictingPlantings(index, season, year).empty();
 }
 
 bool LocationModel::showOnlyEmptyLocations() const
@@ -266,7 +265,7 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
     for (auto idx : indexList) {
         id = data(index(idx.row(), 0, idx.parent()), 0).toInt();
         location->update(id, map);
-        for (auto key : map.keys())
+        for (const auto &key : map.keys())
             tmodel->setData(mapToSource(idx), map.value(key), key);
         dataChanged(idx, idx);
     }
@@ -312,7 +311,36 @@ QModelIndexList LocationModel::treeIndexes() const
     for (int row = 0; row < rowCount(root); row++)
         treeList.push_back(index(row, 0, root));
 
+    for (int i = 0; i < treeList.length(); i++) {
+        QModelIndex parent = treeList[i];
+        for (int row = 0; row < rowCount(parent); row++)
+            treeList.push_back(index(row, 0, parent));
+    }
+
     return treeList;
+}
+
+/** Return a list of all QModelIndex of location tree. */
+QItemSelection LocationModel::treeSelection() const
+{
+    QModelIndex root;
+    QModelIndexList treeList;
+    QItemSelection selection;
+
+    for (int row = 0; row < rowCount(root); row++)
+        treeList.push_back(index(row, 0, root));
+    QItemSelection rootSelection(index(0, 0, root), index(rowCount() - 1, 0, root));
+    selection.merge(rootSelection, QItemSelectionModel::Select);
+
+    for (int i = 0; i < treeList.length(); i++) {
+        QModelIndex parent = treeList[i];
+        QItemSelection sel(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
+        selection.merge(sel, QItemSelectionModel::Select);
+        for (int row = 0; row < rowCount(parent); row++)
+            treeList.push_back(index(row, 0, parent));
+    }
+
+    return selection;
 }
 
 /** Return a list of QModelIndex which ids are in \a idList. Useful for
@@ -323,15 +351,13 @@ QModelIndexList LocationModel::treeHasIds(const QVariantList &idList) const
     QModelIndexList matchIndexes;
     QList<int> intList;
 
-    for (auto val : idList)
+    for (const auto &val : idList)
         intList.push_back(val.toInt());
 
     for (int i = 0; i < treeList.count(); i++) {
         QModelIndex idx = treeList[i];
         if (intList.contains(locationId(idx)))
             matchIndexes.push_back(idx);
-        for (int row = 0; row < rowCount(idx); row++)
-            treeList.push_back(index(row, 0, idx));
     }
 
     return matchIndexes;

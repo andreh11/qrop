@@ -278,7 +278,6 @@ int Location::availableSpace(int locationId, int plantingId, const QDate &season
  */
 void Location::addPlanting(int plantingId, int locationId, int length) const
 {
-    QVariantMap map = mapFromId("location", locationId);
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(length));
@@ -292,7 +291,6 @@ void Location::addPlanting(int plantingId, int locationId, int length) const
 void Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
                            const QDate &seasonEnd) const
 {
-    QVariantMap map = mapFromId("location", locationId);
     int lengthToAdd = qMin(length, availableSpace(locationId, plantingId, seasonBeg, seasonEnd));
 
     if (lengthToAdd < 1)

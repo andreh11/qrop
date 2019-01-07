@@ -89,7 +89,7 @@ Page {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         model: plantingsView.model
-        currentYear: page.year
+        currentYear: page.season === 3 ? page.year + 1 : page.year
         onPlantingsAdded: {
             addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
