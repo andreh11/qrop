@@ -5,8 +5,7 @@ before_script:
   - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   - chmod +x qli-installer.py
   - ./qli-installer.py 5.12.0 linux desktop
-  - ls ./5.12.0/gcc_64/bin;
-  - PATH=$PATH:./5.12.0/gcc_64/bin
+  - PATH=$PATH:$(pwd)/5.12.0/gcc_64/bin
 
 stages:
   - lint
