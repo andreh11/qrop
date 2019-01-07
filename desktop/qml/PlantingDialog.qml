@@ -30,7 +30,7 @@ Dialog {
     property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
     property alias currentYear: plantingForm.currentYear
-    property var editPlantingIdList
+    property var editPlantingIdList: []
     property var editPlantingValueMap
 
     signal plantingsAdded(int successions)
@@ -49,11 +49,17 @@ Dialog {
         dialog.editPlantingIdList = plantingIds;
         refresh();
         plantingForm.clearAll();
+        console.log(Planting.cropId(plantingIds[0]))
+
 
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
         plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
+
+        if (plantingIds.length === 1) {
+            plantingFormHeader.cropField.setRowId(Planting.cropId(plantingIds[0]))
+        }
         dialog.open()
     }
 
@@ -69,6 +75,7 @@ Dialog {
     contentHeight: scrollView.implicitHeight
 
     header: PlantingFormHeader {
+        visible: mode === "add"
         id: plantingFormHeader
         estimatedRevenue: plantingForm.estimatedRevenue
         mode: dialog.mode

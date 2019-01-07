@@ -183,6 +183,7 @@ Flickable {
 
     function clearAll() {
         varietyModel.refresh();
+        locationView.refresh();
         keywordModel.refresh();
         unitModel.refresh();
 
@@ -280,6 +281,7 @@ Flickable {
 
         if ('planting_id' in val) {
             var keywordIdList = Keyword.keywordIdList(val['planting_id'])
+            console.log(keywordIdList)
             for (var i in keywordIdList)
                 selectedKeywords[keywordIdList[i]] = true;
             selectedKeywordsChanged();

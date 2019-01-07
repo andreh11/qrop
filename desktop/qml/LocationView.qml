@@ -222,7 +222,7 @@ Item {
 
                 tristate: true
 
-                checkState: locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
+                checkState: rowCount && locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
                             ? Qt.Checked
                             : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                 nextCheckState: function () {

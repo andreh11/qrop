@@ -160,6 +160,14 @@ QString Planting::cropName(int plantingId) const
     return map.value("crop").toString();
 }
 
+QString Planting::cropId(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("crop_id").toString();
+}
+
 QString Planting::cropColor(int plantingId) const
 {
     QVariantMap map = mapFromId("planting_view", plantingId);

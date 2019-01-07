@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE int duplicate(int id) const override;
 
     Q_INVOKABLE QString cropName(int plantingId) const;
+    Q_INVOKABLE QString cropId(int plantingId) const;
     Q_INVOKABLE QString cropColor(int plantingId) const;
     Q_INVOKABLE QString varietyName(int plantingId) const;
     Q_INVOKABLE QString familyId(int plantingId) const;
