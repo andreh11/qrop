@@ -73,6 +73,11 @@ Pane {
             right: parent.right
             bottom: parent.bottom
         }
+
+        Keys.onUpPressed: scrollBar.decrease()
+        Keys.onDownPressed: scrollBar.increase()
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+
         spacing: Units.smallSpacing
         model: KeywordModel { id: keywordModel }
         delegate: MouseArea {

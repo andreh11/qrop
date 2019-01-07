@@ -104,6 +104,10 @@ Column {
         width: parent.width
         height: contentHeight
         
+        Keys.onUpPressed: scrollBar.decrease()
+        Keys.onDownPressed: scrollBar.increase()
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+
         model: TaskMethodModel {
             id: taskImplementModel
             typeId: task_type_id

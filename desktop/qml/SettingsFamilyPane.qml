@@ -68,7 +68,7 @@ Pane {
                 id: addFamilyDialog
                 onAccepted: {
                     Family.add({"family" : cropName,
-                                 "color" : color});
+                                   "color" : color});
                     familyModel.refresh();
                 }
             }
@@ -80,6 +80,7 @@ Pane {
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         clip: true
+
         anchors {
             top: rowLayout.bottom
             topMargin: Units.mediumSpacing
@@ -87,16 +88,11 @@ Pane {
             right: parent.right
             bottom: parent.bottom
         }
-        ScrollBar.vertical: ScrollBar {
-            id: verticalScrollBar
-            parent: familyView.parent
-            anchors {
-                top: familyView.top
-                right: familyView.right
-                bottom: familyView.top
-            }
-//        policy: ScrollBar.AlwaysOn
-    }
+
+        Keys.onUpPressed: scrollBar.decrease()
+        Keys.onDownPressed: scrollBar.increase()
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+
         spacing: Units.smallSpacing
         model: FamilyModel { id: familyModel }
         delegate: SettingsFamilyDelegate {
