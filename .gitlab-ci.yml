@@ -9,7 +9,7 @@ before_script:
   - find $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - export QMAKESPEC PATH
-  - qmake -set QMAKESPEC $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
+  - qmake -query
 
 stages:
   # - lint
@@ -23,11 +23,10 @@ stages:
 build:
   stage: build
   script:
-    - qmake -query QMAKESPEC
     - mkdir build;
     - cd build;
-    - qmake -config release ..;
-    - make -j 8;
+    - qmake -spec $QMAKESPEC -config release ..;
+    - make -j 4;
     - mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
     - mkdir deploy/usr/share/applications;
     - find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
