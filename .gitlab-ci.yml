@@ -2,17 +2,16 @@ before_script:
   - apt-get update
   - apt-get install -y libdbus-1-3 libfreetype6 libfontconfig1
   - apt-get install -y build-essential libgl1-mesa-dev libglib2.0-dev mesa-common-dev libglu1-mesa-dev
-  - apt-get install -y qtbase5-* qt5-qmake* qt5-default qt*5*-dev qml-module-qtquick-controls
-
+  # - apt-get install -y qtbase5-* qt5-qmake* qt5-default qt*5*-dev qml-module-qtquick-controls
   # - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   # - chmod +x qli-installer.py
   # - ./qli-installer.py 5.12.0 linux desktop
-  # - wget -c http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
+  - wget -c http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
   # - wget -c https://raw.githubusercontent.com/benlau/qtci/master/bin/extract-qt-installer
   # - chmod +x extract-qt-installer
   # - ./extract-qt-installer qt-unified-linux-x64-*.run ./Qt
-  # - chmod +x qt-unified-linux-x64-*.run
-  # - ./qt-unified-linux-x64-*.run --script dist/qt-headless-installer.qs -platform minimal --verbose
+  - chmod +x qt-unified-linux-x64-*.run
+  - ./qt-unified-linux-x64-*.run --script dist/qt-headless-installer.qs -platform minimal --verbose
 
 stages:
   # - lint
