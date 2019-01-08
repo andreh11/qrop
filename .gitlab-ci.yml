@@ -6,16 +6,16 @@ before_script:
   - chmod +x qli-installer.py
   - ./qli-installer.py 5.12.0 linux desktop
   - PATH=$PATH:$(pwd)/5.12.0/gcc_64/bin
-  - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
+  - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs
 
 stages:
-  - lint
+  # - lint
   - build
 
-lint:
-  stage: lint
-  script:
-    - qmllint desktop/qml/*.qml
+# lint:
+#   stage: lint
+#   script:
+#     - qmllint desktop/qml/*.qml
 
 build:
   stage: build
