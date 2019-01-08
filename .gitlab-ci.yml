@@ -2,48 +2,41 @@ before_script:
   - apt-get update
   - apt-get install -y libdbus-1-3 libfreetype6 libfontconfig1 wget tree
   - apt-get install -y build-essential libgl1-mesa-dev libglib2.0-dev mesa-common-dev libglu1-mesa-dev
-  # - apt-get install -y qtbase5-* qt5-qmake* qt5-default qt*5*-dev qml-module-qtquick-controls
-  # - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
-  # - chmod +x qli-installer.py
-  # - ./qli-installer.py 5.12.0 linux desktop
-  - wget -c http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
-  # - wget -c https://raw.githubusercontent.com/benlau/qtci/master/bin/extract-qt-installer
-  # - chmod +x extract-qt-installer
-  # - ./extract-qt-installer qt-unified-linux-x64-*.run ./Qt
-  - chmod +x qt-unified-linux-x64-*.run
-  - ./qt-unified-linux-x64-*.run --script dist/qt-headless-installer.qs -platform minimal --verbose
-  - tree
+  - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
+  - chmod +x qli-installer.py
+  - ./qli-installer.py 5.12.0 linux desktop
+  - export PATH=$PWD/5.12.0/gcc_64/bin
 
 stages:
-  # - lint
+  - lint
   - build
 
-# lint:
-#   stage: lint
-#   script:
-#     - qmllint desktop/qml/*.qml
-#
-build:
-  stage: build
+lint:
+  stage: lint
   script:
-    - mkdir build;
-    - cd build;
-    - qmake -config release ..;
-    - make -j 4;
-    - mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
-    - mkdir deploy/usr/share/applications;
-    - find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
-    - cp -R core/* desktop/* deploy/usr/bin
-    - cd deploy;
-    - cp ../../logo.png desktop.png
-    - cp ../../dist/Qrop.desktop usr/share/applications
-    - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
-    - chmod a+x linuxdeployqt*.AppImage;
-    - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
-    - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=/home/ah/src/qrop/desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers,imageformats/libqsvg.so
-    - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=/home/ah/src/qrop/desktop/qml -appimage
-    - find . | grep AppImage;
+    - qmllint desktop/qml/*.qml
 
-  artifacts:
-    paths:
-      - build/deploy/Qrop*.AppImage
+# build:
+#   stage: build
+#   script:
+#     - mkdir build;
+#     - cd build;
+#     - qmake -config release ..;
+#     - make -j 4;
+#     - mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
+#     - mkdir deploy/usr/share/applications;
+#     - find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
+#     - cp -R core/* desktop/* deploy/usr/bin
+#     - cd deploy;
+#     - cp ../../logo.png desktop.png
+#     - cp ../../dist/Qrop.desktop usr/share/applications
+#     - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
+#     - chmod a+x linuxdeployqt*.AppImage;
+#     - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
+#     - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=/home/ah/src/qrop/desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers,imageformats/libqsvg.so
+#     - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=/home/ah/src/qrop/desktop/qml -appimage
+#     - find . | grep AppImage;
+#
+#   artifacts:
+#     paths:
+#       - build/deploy/Qrop*.AppImage
