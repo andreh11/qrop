@@ -40,11 +40,9 @@ build_script:
 after_build:
   - nmake install
   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%""
-  - cd desktop;
-  - windeployqt --release --qmldir qml "%DEPLOY_DIR%\desktop.exe"
-  - 7z a qrop-%name%-%version%.zip "%DEPLOY_DIR%"
-  - cd ..
+  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"
+  - 7z a qrop-%name%.zip "desktop\%DEPLOY_DIR%"
 
 artifacts:
-  - path: desktop/qrop-%name%-%version%.zip
+  - path: desktop/qrop-%name%.zip
     name: portable
