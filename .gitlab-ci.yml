@@ -1,13 +1,9 @@
 before_script:
   - apt-get update
-  - apt-get install -y software-properties-common python-software-properties
-  - add-apt-repository -y "deb http://ppa.launchpad.net/beineri/opt-qt-5.12.0-xenial/ubuntu xenial main"
-  - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1024R/C65D51784EDC19A871DBDBB710C56D0DE9977759
-  - apt-get install -y python3-requests p7zip-full wget tree
   - apt-get install -y libdbus-1-3 libfreetype6 libfontconfig1
   - apt-get install -y build-essential libgl1-mesa-dev libglib2.0-dev mesa-common-dev libglu1-mesa-dev
-  - apt-get install -y qt512-meta-minimal
-  - . /opt/qt512/bin/qt512-env.sh
+  - apt-get install -y qtbase5-* qt5-qmake*
+
   # - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   # - chmod +x qli-installer.py
   # - ./qli-installer.py 5.12.0 linux desktop
@@ -17,31 +13,6 @@ before_script:
   # - ./extract-qt-installer qt-unified-linux-x64-*.run ./Qt
   # - chmod +x qt-unified-linux-x64-*.run
   # - ./qt-unified-linux-x64-*.run --script dist/qt-headless-installer.qs -platform minimal --verbose
-  - tree
-  - export QTPATH=$(pwd)/5.12.0/gcc_64
-  - export PATH=$(pwd)/5.12.0/gcc_64/bin:$PATH
-  - export QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
-  - qmake -set QT_INSTALL_PREFIX $QTPATH/install
-  - qmake -set QT_INSTALL_ARCHDATA $QTPATH/install
-  - qmake -set QT_INSTALL_DATA $QTPATH/install
-  - qmake -set QT_INSTALL_DOCS $QTPATH/install/doc
-  - qmake -set QT_INSTALL_HEADERS $QTPATH/install/include
-  - qmake -set QT_INSTALL_LIBS $QTPATH/install/lib
-  - qmake -set QT_INSTALL_LIBEXECS $QTPATH/install/libexec
-  - qmake -set QT_INSTALL_BINS $QTPATH/install/bin
-  - qmake -set QT_INSTALL_TESTS $QTPATH/install/tests
-  - qmake -set QT_INSTALL_PLUGINS $QTPATH/install/plugins
-  - qmake -set QT_INSTALL_IMPORTS $QTPATH/install/imports
-  - qmake -set QT_INSTALL_QML $QTPATH/install/qml
-  - qmake -set QT_INSTALL_TRANSLATIONS $QTPATH/install/translations
-  - qmake -set QT_INSTALL_CONFIGURATION $QTPATH
-  - qmake -set QT_INSTALL_EXAMPLES $QTPATH/install/examples
-  - qmake -set QT_INSTALL_DEMOS $QTPATH/install/examples
-  - qmake -set QT_HOST_PREFIX $QTPATH/install
-  - qmake -set QT_HOST_DATA $QTPATH/install
-  - qmake -set QT_HOST_BINS $QTPATH/install/bin
-  - qmake -set QT_HOST_LIBS $QTPATH/install/lib
-  - qmake -query
 
 stages:
   # - lint
@@ -57,7 +28,7 @@ build:
   script:
     - mkdir build;
     - cd build;
-    - qmake -spec $QMAKESPEC -config release ..;
+    - qmake -config release ..;
     - make -j 4;
     - mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
     - mkdir deploy/usr/share/applications;
