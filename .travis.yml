@@ -9,6 +9,7 @@ before_install:
 
 install:
   - sudo apt-get install -y qt512base qt512svg qt512charts-no-lgpl qt512xmlpatterns
+  - sudo apt-get install build-essential libfontconfig1 mesa-common-dev libglu1-mesa-dev
   - source /opt/qt512/bin/qt512-env.sh
 
 script:
