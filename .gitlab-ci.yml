@@ -1,11 +1,14 @@
 before_script:
+  - sudo add-apt-repository ppa:beineri/opt-qt-5.12.0-xenial
   - apt-get update
   - apt-get install -y python3-requests p7zip-full wget tree
   - apt-get install -y libdbus-1-3 libfreetype6 libfontconfig1
   - apt-get install -y build-essential libgl1-mesa-dev libglib2.0-dev mesa-common-dev libglu1-mesa-dev
-  - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
-  - chmod +x qli-installer.py
-  - ./qli-installer.py 5.12.0 linux desktop
+  - apt-get install -y qt512-meta-minimal
+  - . /opt/qt512/bin/qt512-env.sh
+  # - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
+  # - chmod +x qli-installer.py
+  # - ./qli-installer.py 5.12.0 linux desktop
   # - wget -c http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
   # - wget -c https://raw.githubusercontent.com/benlau/qtci/master/bin/extract-qt-installer
   # - chmod +x extract-qt-installer
@@ -15,7 +18,6 @@ before_script:
   - tree
   - export QTPATH=$(pwd)/5.12.0/gcc_64
   - export PATH=$(pwd)/5.12.0/gcc_64/bin:$PATH
-  - find $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - export QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - qmake -set QT_INSTALL_PREFIX $QTPATH/install
   - qmake -set QT_INSTALL_ARCHDATA $QTPATH/install
