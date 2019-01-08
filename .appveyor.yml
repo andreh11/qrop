@@ -39,8 +39,8 @@ build_script:
 
 after_build:
   - nmake install
-  - cmd: ls core/release/
-  - cmd: cp core/release/core.dll "desktop/%DEPLOY_DIR%""
+  - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%"
+  - cmd: ls "desktop/%DEPLOY_DIR%"
   - cmd: tree
   - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"
   - 7z a qrop-%name%.zip "desktop\%DEPLOY_DIR%"
