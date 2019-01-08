@@ -29,7 +29,7 @@ environment:
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
   - if %arch%==x86 call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
-  - if %arch%==x68 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - if %arch%==x64 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cd /D "%APPVEYOR_BUILD_FOLDER%"
 
 build_script:
@@ -43,7 +43,7 @@ after_build:
   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%""
   - cd desktop;
   - windeployqt --release --qmldir qml "%DEPLOY_DIR%\desktop.exe"
-  - 7z a qrop-%name%.zip "%DEPLOY_DIR%"
+  - 7z a qrop-%name%-%version%.zip "%DEPLOY_DIR%"
   - cd ..
 
 artifacts:
