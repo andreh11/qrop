@@ -9,6 +9,7 @@ before_script:
   - find $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - export QMAKESPEC PATH
+  - qmake -set QMAKESPEC $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
 
 stages:
   # - lint
