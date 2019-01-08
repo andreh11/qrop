@@ -5,8 +5,10 @@ before_script:
   - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   - chmod +x qli-installer.py
   - ./qli-installer.py 5.12.0 linux desktop
-  - PATH=$PATH:$(pwd)/5.12.0/gcc_64/bin
-  - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs
+  - PATH=$(pwd)/5.12.0/gcc_64/bin:$PATH
+  - find $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
+  - QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
+  - export QMAKESPEC PATH
 
 stages:
   # - lint
@@ -16,10 +18,11 @@ stages:
 #   stage: lint
 #   script:
 #     - qmllint desktop/qml/*.qml
-
+#
 build:
   stage: build
   script:
+    - qmake -query QMAKESPEC
     - mkdir build;
     - cd build;
     - qmake -config release ..;
