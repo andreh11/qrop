@@ -13,31 +13,31 @@ before_script:
   # - chmod +x qt-unified-linux-x64-*.run
   # - ./qt-unified-linux-x64-*.run --script dist/qt-headless-installer.qs -platform minimal --verbose
   - tree
-  - export QTPATH=$(pwd)/Qt/5.12.0/gcc_64
-  - export PATH=$(pwd)/Qt/5.12.0/gcc_64/bin:$PATH
-  - find $(pwd)/Qt/5.12.0/gcc_64/mkspecs/linux-g++
+  - export QTPATH=$(pwd)/5.12.0/gcc_64
+  - export PATH=$(pwd)/5.12.0/gcc_64/bin:$PATH
+  - find $(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
   - export QMAKESPEC=$(pwd)/5.12.0/gcc_64/mkspecs/linux-g++
+  - qmake -set QT_INSTALL_PREFIX $QTPATH/install
+  - qmake -set QT_INSTALL_ARCHDATA $QTPATH/install
+  - qmake -set QT_INSTALL_DATA $QTPATH/install
+  - qmake -set QT_INSTALL_DOCS $QTPATH/install/doc
+  - qmake -set QT_INSTALL_HEADERS $QTPATH/install/include
+  - qmake -set QT_INSTALL_LIBS $QTPATH/install/lib
+  - qmake -set QT_INSTALL_LIBEXECS $QTPATH/install/libexec
+  - qmake -set QT_INSTALL_BINS $QTPATH/install/bin
+  - qmake -set QT_INSTALL_TESTS $QTPATH/install/tests
+  - qmake -set QT_INSTALL_PLUGINS $QTPATH/install/plugins
+  - qmake -set QT_INSTALL_IMPORTS $QTPATH/install/imports
+  - qmake -set QT_INSTALL_QML $QTPATH/install/qml
+  - qmake -set QT_INSTALL_TRANSLATIONS $QTPATH/install/translations
+  - qmake -set QT_INSTALL_CONFIGURATION $QTPATH
+  - qmake -set QT_INSTALL_EXAMPLES $QTPATH/install/examples
+  - qmake -set QT_INSTALL_DEMOS $QTPATH/install/examples
+  - qmake -set QT_HOST_PREFIX $QTPATH/install
+  - qmake -set QT_HOST_DATA $QTPATH/install
+  - qmake -set QT_HOST_BINS $QTPATH/install/bin
+  - qmake -set QT_HOST_LIBS $QTPATH/install/lib
   - qmake -query
-  # - qmake -set QT_INSTALL_PREFIX $QTPATH/install
-  # - qmake -set QT_INSTALL_ARCHDATA $QTPATH/install
-  # - qmake -set QT_INSTALL_DATA $QTPATH/install
-  # - qmake -set QT_INSTALL_DOCS $QTPATH/install/doc
-  # - qmake -set QT_INSTALL_HEADERS $QTPATH/install/include
-  # - qmake -set QT_INSTALL_LIBS $QTPATH/install/lib
-  # - qmake -set QT_INSTALL_LIBEXECS $QTPATH/install/libexec
-  # - qmake -set QT_INSTALL_BINS $QTPATH/install/bin
-  # - qmake -set QT_INSTALL_TESTS $QTPATH/install/tests
-  # - qmake -set QT_INSTALL_PLUGINS $QTPATH/install/plugins
-  # - qmake -set QT_INSTALL_IMPORTS $QTPATH/install/imports
-  # - qmake -set QT_INSTALL_QML $QTPATH/install/qml
-  # - qmake -set QT_INSTALL_TRANSLATIONS $QTPATH/install/translations
-  # - qmake -set QT_INSTALL_CONFIGURATION $QTPATH
-  # - qmake -set QT_INSTALL_EXAMPLES $QTPATH/install/examples
-  # - qmake -set QT_INSTALL_DEMOS $QTPATH/install/examples
-  # - qmake -set QT_HOST_PREFIX $QTPATH/install
-  # - qmake -set QT_HOST_DATA $QTPATH/install
-  # - qmake -set QT_HOST_BINS $QTPATH/install/bin
-  # - qmake -set QT_HOST_LIBS $QTPATH/install/lib
 
 stages:
   # - lint
