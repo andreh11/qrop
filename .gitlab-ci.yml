@@ -1,7 +1,7 @@
 before_script:
   - apt-get update
   # - apt-get install -y python3-requests p7zip-full wget tree
-  - apt-get install -y libdbus-1-3 libfreetype6 wget tree
+  - apt-get install -y libdbus-1-3 libfreetype6 libfontconfig1 wget tree
   - apt-get install -y build-essential libgl1-mesa-dev libglib2.0-dev
   # - wget https://git.kaidan.im/lnj/qli-installer/raw/master/qli-installer.py
   # - chmod +x qli-installer.py
