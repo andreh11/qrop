@@ -39,7 +39,6 @@ build_script:
 
 after_build:
   - nmake install
-  - cmd: find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%""
   - cd desktop;
   - windeployqt --release --qmldir qml "%DEPLOY_DIR%\desktop.exe"
