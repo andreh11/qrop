@@ -27,22 +27,22 @@ Controller.prototype.TargetDirectoryPageCallback = function()
 Controller.prototype.ComponentSelectionPageCallback = function() {
     var widget = gui.currentPageWidget();
 
-    widget.deselectAll();
-    widget.selectComponent("qt.512.gcc_64");
-    widget.selectComponent("qt.512.qtquickcontrols");
-
-    // widget.deselectComponent("qt.tools.qtcreator");
-    // widget.deselectComponent("qt.55.qt3d");
-    // widget.deselectComponent("qt.55.qtcanvas3d");
-    // widget.deselectComponent("qt.55.qtlocation");
-    // widget.deselectComponent("qt.55.qtquick1");
-    // widget.deselectComponent("qt.55.qtscript");
-    // widget.deselectComponent("qt.55.qtwebengine");
-    // widget.deselectComponent("qt.extras");
-    // widget.deselectComponent("qt.tools.doc");
-    // widget.deselectComponent("qt.tools.examples");
-
-    gui.clickButton(buttons.NextButton);
+    widget.selectAll();
+    // widget.selectComponent("qt.512.gcc_64");
+    // widget.selectComponent("qt.512.qtquickcontrols");
+    //
+    // // widget.deselectComponent("qt.tools.qtcreator");
+    // // widget.deselectComponent("qt.55.qt3d");
+    // // widget.deselectComponent("qt.55.qtcanvas3d");
+    // // widget.deselectComponent("qt.55.qtlocation");
+    // widget.selectComponent("qt.55.qtquick1");
+    // // widget.deselectComponent("qt.55.qtscript");
+    // // widget.deselectComponent("qt.55.qtwebengine");
+    // widget.selectComponent("qt.extras");
+    // // widget.deselectComponent("qt.tools.doc");
+    // // widget.deselectComponent("qt.tools.examples");
+    //
+    // gui.clickButton(buttons.NextButton);
 }
 
 Controller.prototype.LicenseAgreementPageCallback = function() {
