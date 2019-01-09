@@ -1,4 +1,4 @@
-# Qrop 
+# Qrop
 
 A crop planning and recordkeeping free software Available on GNU/Linux, Windows and Mac and Android.
 
@@ -15,12 +15,23 @@ some of the times, but use at your own risk.
 * **Task management and recordkeeping:** plan your tasks (weeding, seeding,
   planting, stale seed bed, cultivating, etc.) and dynamically keep track of
   them.
-* *(Planned)* **Harvests tracking:** keep track of each harvest and get
-  real-time crop yields.
+
+## Planned features
+
+* **Harvests tracking:** keep track of each harvest and get real-time crop yields.
+* **Note taking**: wriite notes, take photos and link theme to your plantings, tasks and locations.
+
+## How to install?
+
+## Linux (AppImage)
+
+## Windows
+
+## OS X
 
 ## Built With
 
-* C++, QML and Javascript 
+* C++, QML and Javascript
 * Qt5
 * SQLite
 
@@ -31,7 +42,7 @@ conduct, and the process for submitting bug reports and merge requests to us.
 
 ## Authors
 
-* **André Hoarau** @ah − initial coding
+* **André Hoarau** @ah − developer
 
 ## Licence
 

@@ -30,11 +30,11 @@ script:
   - cd build;
   - qmake -config release ..;
   - make -j 8;
-  - tree
   - mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
   - mkdir deploy/usr/share/applications;
   - find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
   - cp -R core/* desktop/* deploy/usr/bin
+  - tree;
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then macdeployqt deploy/usr/bin/desktop.app ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd deploy; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ../../logo.png desktop.png; fi
