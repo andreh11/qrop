@@ -34,15 +34,18 @@ script:
   - mkdir deploy/usr/share/applications;
   - find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
   - cp -R core/* desktop/* deploy/usr/bin
-  - cd deploy;
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then macdeployqt desktop/desktop.app ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd deploy; fi
   - cp ../../logo.png desktop.png
   - cp ../../dist/Qrop.desktop usr/share/applications
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
-  - chmod a+x linuxdeployqt*.AppImage;
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then chmod a+x linuxdeployqt*.AppImage; fi
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
-  - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers,imageformats/libqsvg.so"
-  - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -appimage
-  - find . | grep AppImage;
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers,imageformats/libqsvg.so"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -appimage; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then find . | grep AppImage; fi
+  - ls -al
+  - tree
 
 deploy:
   provider: releases
