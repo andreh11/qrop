@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -x
-set -e
-
 BUILD_DIR=$PWD
 mkdir build;
 cd build;

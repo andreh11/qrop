@@ -46,16 +46,16 @@ matrix:
           packages:
             - qt
             - tree
-            - xz
-            - hidapi
-            - libusb
-            - libxml2
-            - libxslt
-            - libzip
-            - openssl
-            - pkg-config
-            - libgit2
-            - libssh2
+            # - xz
+            # - hidapi
+            # - libusb
+            # - libxml2
+            # - libxslt
+            # - libzip
+            # - openssl
+            # - pkg-config
+            # - libgit2
+            # - libssh2
           update: true
     # - os: windows
     #   env: QROP_PLATFORM="linux"
@@ -73,12 +73,12 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source /opt/qt512/bin/qt512-env.sh; fi
 
 script:
-  - source ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
+  - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
 deploy:
   provider: releases
   api_key: $GH_TOKEN
-  file: build/deploy/Qrop-x86_64.AppImage
+  file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
   skip_cleanup: true
   draft: true
 
