@@ -9,7 +9,7 @@ before_install:
 
 install:
   - sudo apt-get install -y qt512-meta-full qt512charts-no-lgpl
-  - sudo apt-get install build-essential libfontconfig1 mesa-common-dev libglu1-mesa-dev
+  - sudo apt-get install -y build-essential libfontconfig1 mesa-common-dev libglu1-mesa-dev
   - source /opt/qt512/bin/qt512-env.sh
 
 script:
