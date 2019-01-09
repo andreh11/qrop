@@ -23,11 +23,11 @@ some of the times, but use at your own risk.
 
 ## How to install?
 
-## Linux (AppImage)
+### Linux (AppImage)
 
-## Windows
+### Windows
 
-## OS X
+### OS X
 
 ## Built With
 
