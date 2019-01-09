@@ -7,7 +7,6 @@ branches:
 
 environment:
   DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
-  VERSION: 0.1_b{build}
   matrix:
     - name: mingw53_32
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -16,26 +15,27 @@ environment:
       suffix: mingw53_32
       arch: x86
 
-    # # MSVC x86
-    # - name: win32
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    #   platform: amd64_x86
-    #   qt: 5.11\msvc2015
-    #   suffix: msvc2015
-    #   arch: x86
-    #
-    # # MSVC x64
-    # - name: amd64
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    #   platform: amd64
-    #   qt: 5.11\msvc2015_64
-    #   suffix: msvc2017
-    #   arch: x64
+    # MSVC x86
+    - name: win32
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      platform: amd64_x86
+      qt: 5.11\msvc2015
+      suffix: msvc2015
+      arch: x86
+
+    # MSVC x64
+    - name: amd64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      platform: amd64
+      qt: 5.11\msvc2015_64
+      suffix: msvc2015
+      arch: x64
 
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
   - if %name%==win32 call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
-  - if %name%==amd64 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - if %name%==amd64 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - if %name%==amd64 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
   - if %name%==mingw53_32 set PATH=C:\MinGW\bin;%PATH%
   - cd /D "%APPVEYOR_BUILD_FOLDER%"
 
@@ -50,8 +50,8 @@ after_build:
   - if %name%==mingw53_32 xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
   - xcopy "C:\Qt\%qt%\bin\libstdc++-*.dll" "desktop\%DEPLOY_DIR%"
   - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"
-  - 7z a qrop-%VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
+  - 7z a qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
 
 artifacts:
-  - path: qrop-%VERSION%-%name%.zip
+  - path: qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip
     name: release

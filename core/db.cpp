@@ -21,6 +21,7 @@
 #include <QSqlField>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QFileInfo>
 
 #include "db.h"
 #include "location.h"
@@ -58,17 +59,20 @@ void Database::connectToDatabase()
     }
 
     QString fileName = databasePath();
+    QFileInfo fileInfo(fileName);
+    bool create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
-    qDebug() << fileName;
+    qDebug() << "Database file:" << fileName;
     database.setDatabaseName(fileName);
     if (!database.open()) {
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
-
     QSqlQuery query("PRAGMA foreign_keys = ON");
     query.exec();
+    if (create)
+        createDatabase();
 }
 
 void Database::execSqlFile(const QString &fileName, const QString &separator)
@@ -107,22 +111,16 @@ void Database::createFakeData()
 {
     Location location;
     int parentId0;
-    int parentId1;
 
     QSqlDatabase::database().transaction();
     for (int i = 0; i < 10; i++) {
         parentId0 =
                 location.add({ { "name", QString::number(i) }, { "bed_length", 30 }, { "level", 0 } });
         for (int j = 0; j < 10; j++) {
-            parentId1 = location.add({ { "name", QString::number(j) },
-                                       { "parent_id", parentId0 },
-                                       { "bed_length", 30 },
-                                       { "level", 1 } });
-            //            for (int k = 0; k < 10; k++)
-            //                location.add({ { "name", QString::number(k) },
-            //                               { "parent_id", parentId1 },
-            //                               { "bed_length", 30 },
-            //                               { "level", 2 } });
+            location.add({ { "name", QString::number(j) },
+                           { "parent_id", parentId0 },
+                           { "bed_length", 30 },
+                           { "level", 1 } });
         }
     }
     QSqlDatabase::database().commit();
