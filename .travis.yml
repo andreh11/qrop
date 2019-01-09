@@ -30,3 +30,10 @@ script:
   - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers,imageformats/libqsvg.so
   - ./linuxdeployqt*.AppImage usr/share/applications/Qrop.desktop -verbose=2 -qmldir=$TRAVIS_BUILD_DIR/desktop/qml -appimage
   - find . | grep AppImage;
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: "build/deploy/Qrop-x86_64.AppImage"
+  skip_cleanup: true
+  draft: true
