@@ -11,3 +11,4 @@ find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" 
 cp -R core/* desktop/* deploy/usr/bin
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
 macdeployqt deploy/usr/bin/desktop.app
+tree

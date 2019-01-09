@@ -8,6 +8,12 @@ matrix:
       compiler: g++
       dist: xenial
       sudo: required
+      deploy:
+        provider: releases
+        api_key: $GH_TOKEN
+        file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
+        skip_cleanup: true
+        draft: true
       addons:
         apt:
           sources:
@@ -76,12 +82,6 @@ install:
 script:
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
-deploy:
-  provider: releases
-  api_key: $GH_TOKEN
-  file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
-  skip_cleanup: true
-  draft: true
 
 env:
   global:
