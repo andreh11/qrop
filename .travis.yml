@@ -13,7 +13,7 @@ matrix:
         api_key: $GH_TOKEN
         file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
         skip_cleanup: true
-        draft: true
+        draft: false
       addons:
         apt:
           sources:

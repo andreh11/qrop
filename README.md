@@ -25,6 +25,14 @@ some of the times, but use at your own risk.
 
 ### Linux (AppImage)
 
+We only provide AppImages. Download latest version at:
+
+Then open a console and type
+
+``chmod u+x Qrop-x86_64.AppImage && ./Qrop-x86_64.AppImage``
+
+to launch the AppImage.
+
 ### Windows
 
 ### OS X
