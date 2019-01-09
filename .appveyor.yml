@@ -7,6 +7,7 @@ branches:
 
 environment:
   DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
+  VERSION: 0.1_b{build}
   matrix:
     - name: mingw53_32
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -40,16 +41,17 @@ init:
 
 build_script:
   - cd C:\projects\qrop
-  - qmake -config release qrop.pro PREFIX="%DEPLOY_DIR%"
+  - qmake -config release qrop.pro CONFIG+=windows PREFIX="%DEPLOY_DIR%"
   - if %name%==mingw53_32 (mingw32-make) else (nmake)
 
 after_build:
   - if %name%==mingw53_32 (mingw32-make install) else (nmake install)
   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%"
-  - xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
+  - if %name%==mingw53_32 xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
+  - xcopy "C:\Qt\%qt%\bin\libstdc++-*.dll" "desktop\%DEPLOY_DIR%"
   - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"
-  - 7z a qrop-%name%.zip "desktop\%DEPLOY_DIR%"
+  - 7z a qrop-%VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
 
 artifacts:
-  - path: qrop-%name%.zip
+  - path: qrop-%VERSION%-%name%.zip
     name: release
