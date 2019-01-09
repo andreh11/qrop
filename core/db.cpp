@@ -70,6 +70,7 @@ void Database::connectToDatabase()
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
     QSqlQuery query("PRAGMA foreign_keys = ON");
+    qDebug() << "Creating database...";
     query.exec();
     if (create)
         createDatabase();
