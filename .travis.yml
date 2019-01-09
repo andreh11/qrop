@@ -5,7 +5,7 @@ matrix:
     - os: linux
       env:
         - QROP_PLATFORM="linux"
-        - PATH=""/usr/local/opt/qt/bin:$PATH"
+        - PATH="/usr/local/opt/qt/bin:$PATH"
         - LDFLAGS="-L/usr/local/opt/qt/lib"
         - CPPFLAGS="-I/usr/local/opt/qt/include"
         - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
@@ -18,17 +18,28 @@ matrix:
             - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
               key_url: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x10C56D0DE9977759'
           packages:
-            - qt512-meta-full
-            - qt512charts-no-lgpl
             - build-essential
             - libfontconfig1
             - mesa-common-dev
             - libglu1-mesa-dev
             - libsqlite3-dev
             - libxcb-xinerama0
+            - qt512-meta-minimal
+            - qt512base
+            - qt512charts-no-lgpl
+            - qt512connectivity
+            - qt512declarative
+            - qt512graphicaleffects
+            - qt512imageformats
+            - qt512quickcontrols
+            - qt512quickcontrols2
+            - qt512tools
+            - qt512translations
+            - qt512wayland
+            - qt512x11extras
     - os: osx
       env: QROP_PLATFORM="osx"
-      osx_image: xcode7.2
+      osx_image: xcode10.1
       compiler: clang
       addons:
         homebrew:
