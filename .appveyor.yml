@@ -49,7 +49,7 @@ after_build:
   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%"
   - if %name%==mingw53_32 xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
   - xcopy "C:\Qt\%qt%\bin\libstdc++-*.dll" "desktop\%DEPLOY_DIR%"
-  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe"
+  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe" +core +declarative +opengl +qml +qmltooling +quick +quickwidgets +sql +winextras
   - 7z a qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
 
 artifacts:
