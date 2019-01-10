@@ -19,19 +19,18 @@ some of the times, but use at your own risk.
 ## Planned features
 
 * **Harvests tracking:** keep track of each harvest and get real-time crop yields.
-* **Note taking**: wriite notes, take photos and link theme to your plantings, tasks and locations.
+* **Note taking**: write notes, take photos and link them to your plantings, tasks and locations.
 
 ## How to install?
 
 ### Linux (AppImage)
 
-We only provide AppImages. Download latest version at:
-
-Then open a console and type
+We only provide AppImages. [Download](https://github.com/andreh11/qrop/releases/download/untagged-211173875fe8aa376dc9/Qrop-x86_64.AppImage) latest version, then open a console in right folder and type:
 
 ``chmod u+x Qrop-x86_64.AppImage && ./Qrop-x86_64.AppImage``
 
-to launch the AppImage.
+to launch the AppImage. It has been tested with Ubuntu 16.04 and Fedora 29, but
+may not works for other distributions or version.
 
 ### Windows
 
