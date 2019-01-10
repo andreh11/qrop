@@ -31,7 +31,8 @@ and type:
 
 ```shell
 chmod u+x Qrop-x86_64.AppImage
-./Qrop-x86_64.AppImage```
+./Qrop-x86_64.AppImage
+```
 
 to launch the AppImage. It has been tested with Ubuntu 16.04 and Fedora 29, but
 may not works for other distributions or version.
