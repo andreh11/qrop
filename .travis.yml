@@ -14,6 +14,8 @@ matrix:
         file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
         skip_cleanup: true
         draft: false
+        on:
+          tags: true
       addons:
         apt:
           sources:
