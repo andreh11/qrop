@@ -57,7 +57,6 @@
 #include "usermodel.h"
 #include "varietymodel.h"
 #include "treemodel.h"
-
 #include "nametree.h"
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
