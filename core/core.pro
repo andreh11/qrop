@@ -7,10 +7,6 @@ CONFIG += lib c++11
 
 DEFINES += CORE_LIBRARY
 
-windows {
-    CONFIG += staticlib
-}
-
 SOURCES += \
     sqltablemodel.cpp \
     taskmodel.cpp \
