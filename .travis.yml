@@ -40,7 +40,7 @@ matrix:
             - qt510quickcontrols2
             - qt510tools
             - qt510translations
-            - qt510wayland
+            # - qt510wayland
             - qt510x11extras
     - os: osx
       env:
