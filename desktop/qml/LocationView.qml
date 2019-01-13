@@ -20,7 +20,7 @@ import QtQuick.Controls 1.4 as Controls1
 import QtQuick.Controls.Styles 1.4 as Styles1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
-import QtQml.Models 2.12
+import QtQml.Models 2.10
 
 import io.croplan.components 1.0
 import "date.js" as MDate

@@ -22,7 +22,7 @@
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT NameTree
+class NameTree
 {
 public:
     NameTree(const QString &name, int level);

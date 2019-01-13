@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += charts qml quick sql
+QT += gui charts qml quick sql
 android: QT += androidextras
 
 CONFIG += c++11
@@ -17,7 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    qropdoublevalidator.cpp
 
 # HEADERS += \
 
@@ -47,6 +48,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 win32:target.path = $$PREFIX
 win32:!isEmpty(target.path): INSTALLS += target
 
+linux {
+    message(Compiling on Linux $$LIBS)
+}
+
+windows {
+    message(Compiling on Windows $$LIBS)
+}
+
 DISTFILES += \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \
@@ -65,4 +74,5 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-QMAKE_LFLAGS += -Wl,-rpath,"'\$$ORIGIN'"
+HEADERS += \
+    qropdoublevalidator.h

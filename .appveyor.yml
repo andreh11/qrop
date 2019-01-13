@@ -1,57 +1,126 @@
-version: 0.1_b{build}
-configuration: Release
+# common settings
+version: 0.1.{build}
+clone_depth: 1
+clone_folder: C:\projects\qrop
+image: Visual Studio 2017
 
 branches:
   only:
     - master
 
 environment:
-  DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
   matrix:
-    - name: mingw53_32
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      platform: amd64_x86
-      qt: 5.11\mingw53_32
-      suffix: mingw53_32
-      arch: x86
-
-    # MSVC x86
-    - name: win32
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      platform: amd64_x86
-      qt: 5.11\msvc2015
-      suffix: msvc2015
-      arch: x86
-
-    # MSVC x64
-    - name: amd64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      platform: amd64
-      qt: 5.11\msvc2015_64
-      suffix: msvc2015
+    - suffix: msvc2017_64
       arch: x64
+    - suffix: msvc2015
+      arch: x86
 
-init:
-  - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - if %name%==win32 call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
-  - if %name%==amd64 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-  - if %name%==amd64 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
-  - if %name%==mingw53_32 set PATH=C:\MinGW\bin;%PATH%
-  - cd /D "%APPVEYOR_BUILD_FOLDER%"
+install:
+  - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
+  - set QTDIR=C:\Qt\5.11\%suffix%
+  - set PATH=%PATH%;%QTDIR%\bin;
+  - cmd: mkdir C:\Code
+  - cmd: cd C:\Code
+  - ps: Start-FileDownload 'https://download.qt.io/official_releases/jom/jom_1_1_2.zip'
+  - cmd: 7z x jom_1_1_2.zip -oC:/jom/
+  - set PATH=%PATH%;C:/jom/;
 
 build_script:
-  - cd C:\projects\qrop
-  - qmake -config release qrop.pro CONFIG+=windows PREFIX="%DEPLOY_DIR%"
-  - if %name%==mingw53_32 (mingw32-make) else (nmake)
-
-after_build:
-  - if %name%==mingw53_32 (mingw32-make install) else (nmake install)
-  - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%"
-  - if %name%==mingw53_32 xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
-  - xcopy "C:\Qt\%qt%\bin\libstdc++-*.dll" "desktop\%DEPLOY_DIR%"
-  - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe" +core +declarative +opengl +qml +qmltooling +quick +quickwidgets +sql +winextras
-  - 7z a qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
+  - cmd: cd C:\projects\qrop
+  - cmd: qmake qrop.pro
+  - cmd: jom
+  - cmd: cp core/release/*.dll desktop/release
+  - cmd: windeployqt.exe --qmldir desktop\qml desktop\release
 
 artifacts:
-  - path: qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip
-    name: release
+  - path: desktop\release\
+    name: qrop-5.11-%suffix%
+    type: zip
+# install:
+#   - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64'
+#   - cmd: mkdir C:\Code
+#   - cmd: cd C:\Code
+#   - ps: Start-FileDownload 'https://download.qt.io/official_releases/jom/jom_1_1_2.zip'
+#   - cmd: 7z x jom_1_1_2.zip -oC:/jom/
+#   - set PATH=%PATH%;C:/jom/;
+#   - cmd: git clone --depth=1 --branch=5.12 http://code.qt.io/qt/qt5.git
+#   - cmd: cd qt5
+#   - cmd: curl -fsS -o qtbase_static.zip https://ah.ouvaton.org/appveyor/qtbase_static.zip
+#   - cmd: unzip qtbase_static.zip
+#   - cmd: perl .\init-repository --module-subset=qtbase,qtdeclarative,qtgraphicaleffects,qtquickcontrols2
+#   # - cmd: perl .\init-repository --module-subset=qtbase
+#   - cmd: .\configure.bat -opensource -prefix C:\Qt\5.12\ -release -static -opengl desktop -optimize-size -nomake examples -nomake tests -no-feature-d3d12 -no-feature-qml-debug -no-feature-qml-preview -no-feature-qml-profiler -no-feature-quickcontrols2-fusion -no-feature-quickcontrols2-imagine -no-feature-quickcontrols2-universal -confirm-license
+#   # - cmd: .\configure.bat -opensource -prefix C:\projects\qrop\Qt\5.12\ -release -static -opengl desktop -optimize-size -nomake examples -nomake tests -confirm-license
+#   - cmd: jom
+#   - cmd: jom install
+#
+# build_script:
+#   - set QTDIR=C:\projects\qrop\Qt\5.12\
+#   - set PATH=%PATH%;%QTDIR%\bin;
+  # - cmd: cd C:\projects\qrop
+  # - cmd: qmake qrop.pro
+  # - cmd: jom
+
+# artifacts:
+#   - path: Qt\5.12\
+#     name: Qt 5.12 Static
+#     type: zip
+  # - path: app\release\desktop.exe
+  #   name: Qrop Portable
+# version: 0.1_b{build}
+# configuration: Release
+#
+# branches:
+#   only:
+#     - master
+#
+# environment:
+#   DEPLOY_DIR: Qrop-%APPVEYOR_BUILD_VERSION%
+#   matrix:
+#     - name: mingw53_32
+#       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#       platform: amd64_x86
+#       qt: 5.11\mingw53_32
+#       suffix: mingw53_32
+#       arch: x86
+#
+#     # MSVC x86
+#     - name: win32
+#       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#       platform: amd64_x86
+#       qt: 5.11\msvc2015
+#       suffix: msvc2015
+#       arch: x86
+#
+#     # MSVC x64
+#     - name: amd64
+#       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#       platform: amd64
+#       qt: 5.11\msvc2015_64
+#       suffix: msvc2015
+#       arch: x64
+#
+# init:
+#   - set PATH=C:\Qt\%qt%\bin;%PATH%
+#   - if %name%==win32 call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
+#   - if %name%==amd64 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+#   - if %name%==amd64 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+#   - if %name%==mingw53_32 set PATH=C:\MinGW\bin;%PATH%
+#   - cd /D "%APPVEYOR_BUILD_FOLDER%"
+#
+# build_script:
+#   - cd C:\projects\qrop
+#   - qmake -config release qrop.pro CONFIG+=windows PREFIX="%DEPLOY_DIR%"
+#   - if %name%==mingw53_32 (mingw32-make) else (nmake)
+#
+# after_build:
+#   - if %name%==mingw53_32 (mingw32-make install) else (nmake install)
+#   - cmd: cp core/release/*.dll "desktop/%DEPLOY_DIR%"
+#   - if %name%==mingw53_32 xcopy "C:\Qt\%qt%\bin\libwinpthread-1.dll" "desktop\%DEPLOY_DIR%"
+#   - xcopy "C:\Qt\%qt%\bin\libstdc++-*.dll" "desktop\%DEPLOY_DIR%"
+#   - windeployqt --release --qmldir desktop/qml "desktop\%DEPLOY_DIR%\desktop.exe" +core +declarative +opengl +qml +qmltooling +quick +quickwidgets +sql +winextras
+#   - 7z a qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip "desktop\%DEPLOY_DIR%"
+#
+# artifacts:
+#   - path: qrop-%APPVEYOR_BUILD_VERSION%-%name%.zip
+#     name: release

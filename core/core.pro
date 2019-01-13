@@ -7,8 +7,11 @@ CONFIG += lib c++11
 
 DEFINES += CORE_LIBRARY
 
+windows {
+    CONFIG += staticlib
+}
+
 SOURCES += \
-#    databasemanager.cpp \
     sqltablemodel.cpp \
     taskmodel.cpp \
     notemodel.cpp \
@@ -43,10 +46,8 @@ SOURCES += \
     nametree.cpp \
     family.cpp
 
-
 HEADERS += \
     core_global.h \
-#    databasemanager.h \
     sqltablemodel.h \
     taskmodel.h \
     notemodel.h \
@@ -80,7 +81,6 @@ HEADERS += \
     treemodel.h \
     nametree.h \
     family.h
-
 
 RESOURCES += \
     core_resources.qrc

@@ -843,7 +843,7 @@ Flickable {
                     id: averagePriceField
                     labelText: qsTr("Price/") + unitField.currentText
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    validator: TextFieldDoubleValidator {
+                    validator: QropDoubleValidator {
                         bottom: 0
                         decimals: 2
                         top: 999
