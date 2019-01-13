@@ -6,7 +6,7 @@ matrix:
       env:
         - QROP_PLATFORM="linux"
       compiler: g++
-      dist: xenial
+      dist: trusty
       sudo: required
       deploy:
         provider: releases
@@ -19,7 +19,8 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
+            # - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
               key_url: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x10C56D0DE9977759'
           packages:
             - build-essential
@@ -28,19 +29,19 @@ matrix:
             - libglu1-mesa-dev
             - libsqlite3-dev
             - libxcb-xinerama0
-            - qt512-meta-minimal
-            - qt512base
-            - qt512charts-no-lgpl
-            - qt512connectivity
-            - qt512declarative
-            - qt512graphicaleffects
-            - qt512imageformats
-            - qt512quickcontrols
-            - qt512quickcontrols2
-            - qt512tools
-            - qt512translations
-            - qt512wayland
-            - qt512x11extras
+            - qt510-meta-minimal
+            - qt510base
+            - qt510charts-no-lgpl
+            - qt510connectivity
+            - qt510declarative
+            - qt510graphicaleffects
+            - qt510imageformats
+            - qt510quickcontrols
+            - qt510quickcontrols2
+            - qt510tools
+            - qt510translations
+            - qt510wayland
+            - qt510x11extras
     - os: osx
       env:
         - QROP_PLATFORM="osx"
@@ -61,7 +62,7 @@ matrix:
     #   compiler: msvc2015
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source /opt/qt512/bin/qt512-env.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source /opt/qt510/bin/qt510-env.sh; fi
 
 script:
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh

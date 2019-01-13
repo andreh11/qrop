@@ -34,7 +34,7 @@ build_script:
 
 artifacts:
   - path: desktop\release\
-    name: qrop-5.11-%suffix%
+    name: qrop-0.1-%arch%
     type: zip
 # install:
 #   - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64'
