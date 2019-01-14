@@ -9,21 +9,22 @@ some of the times, but use at your own risk.
 
 ## Features
 
-* **Crop planning:** build crop plans including expected yields and harvest
+* **Crop planning − ** build crop plans including expected yields and harvest
   windows. Easily create, duplicate, delete, batch-edit, sort and filter
   successions.
-* **Task management and recordkeeping:** plan your tasks (weeding, seeding,
+* **Task management and recordkeeping − ** plan your tasks (weeding, seeding,
   planting, stale seed bed, cultivating, etc.) and dynamically keep track of
   them.
+* **Field map − ** define your field map and assign planting to your beds.
 
 ## Planned features
 
 * **Harvests tracking:** keep track of each harvest and get real-time crop yields.
 * **Note taking**: write notes, take photos and link them to your plantings, tasks and locations.
 
-## Getting started with Qrop
+## Getting started
 
-### On Linux (AppImage)
+### Linux (AppImage)
 
 We only provide AppImages. Download the latest version at
 https://github.com/andreh11/qrop/releases. Then open a console in the right folder
@@ -38,7 +39,7 @@ to launch the AppImage. It has been tested with Ubuntu 16.04 and Fedora 29, but
 may not work on other distributions or version.
 
 
-### On Windows
+### Windows
 
 Download the right Zip file for you architecture:
 
@@ -68,6 +69,6 @@ conduct, and the process for submitting bug reports and merge requests to us.
 
 * **André Hoarau** @ah − developer
 
-## Licence
+## License
 
 This project is licensed under the GNU GPLv3 − see [LICENSE](LICENSE) for more details.

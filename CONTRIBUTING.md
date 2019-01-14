@@ -8,7 +8,7 @@ improving them, please file an issue or open a merge request!
 
 ## Documentation
 
-## Websit
+## Website
 
 # Core team
 
