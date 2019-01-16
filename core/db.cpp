@@ -45,6 +45,8 @@ QString Database::databasePath()
 
 void Database::deleteDatabase()
 {
+    qInfo() << "Deleting database...";
+    QSqlDatabase::database().close();
     QString fileName = databasePath();
     QFile::remove(fileName);
 }
@@ -63,14 +65,14 @@ void Database::connectToDatabase()
     bool create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
-    qDebug() << "Database file:" << fileName;
+    qInfo() << "Database file:" << fileName;
     database.setDatabaseName(fileName);
     if (!database.open()) {
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
     QSqlQuery query("PRAGMA foreign_keys = ON");
-    qDebug() << "Creating database...";
+    qInfo() << "Creating database...";
     query.exec();
     if (create)
         createDatabase();
@@ -105,7 +107,7 @@ void Database::createDatabase()
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
-    qInfo() << "Database created";
+    qInfo() << "Database created.";
 }
 
 void Database::createFakeData()
