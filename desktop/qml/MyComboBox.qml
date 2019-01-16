@@ -15,7 +15,7 @@
  */
 
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtQuick.Window 2.0
@@ -49,6 +49,7 @@ ComboBox {
     property color color: Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
+
 
     signal addItemClicked()
 
@@ -90,12 +91,13 @@ ComboBox {
     popup: Popup {
         y: control.editable ? control.height - 5 : 0
         width: control.width
-        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
+        height: ApplicationWindow.window
+                ? Math.min(listView.implicitHeight + addItemRectangle.height, ApplicationWindow.window.height - topMargin - bottomMargin)
+                : listView.implicitHeight + addItemRectangle.height
         transformOrigin: Item.Top
         topMargin: 12
         bottomMargin: 12
         padding: 0
-
 
         Material.theme: control.Material.theme
         Material.accent: control.Material.accent
@@ -114,51 +116,75 @@ ComboBox {
         }
 
         onOpened: {
-            if (listView.model.rowCount === 0 && showAddItem)
-                listView.contentY = listView.contentHeight; // Ensure footer is visible
+                listView.positionViewAtBeginning();
         }
 
-        contentItem: ListView {
-            id: listView
-            clip: true
-            implicitHeight: contentHeight
-            model: control.delegateModel
-            currentIndex: control.highlightedIndex
-            highlightMoveDuration: 0
+        contentItem: Column {
+            width: parent.width
+            height: parent.height
 
-            ScrollIndicator.vertical: ScrollIndicator { }
-            footerPositioning: ListView.OverlayHeader
-
-            delegate: ItemDelegate {
-                text: modelData
-                font.pixelSize: Units.fontSizeBodyAndButton
-                font.family: "Robo Regular"
+            ListView {
+                id: listView
+                clip: true
+                currentIndex: control.highlightedIndex
                 width: parent.width
-            }
+                implicitHeight: contentHeight
+                height: parent.height - addItemRectangle.height
 
-            Component {
-                id: addItemDelegate
-                ItemDelegate {
-                    text: control.addItemText
+                model: control.delegateModel
+                highlightMoveDuration: 0
+                keyNavigationEnabled: true
+                keyNavigationWraps: true
+
+
+                ScrollBar.vertical: ScrollBar { }
+
+                delegate: ItemDelegate {
+                    text: modelData
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    font.family: "Robo Regular"
                     width: parent.width
-                    leftPadding: addItemIcon.width + Units.smallSpacing
-                    z: 3
-                    focus: true
-
-                    Label {
-                        id: addItemIcon
-                        leftPadding: Units.smallSpacing
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "\ue147"
-                        font.family: "Material Icons"
-                        font.pixelSize: Units.fontSizeHeadline
-                        Material.foreground: Material.accent
-                    }
-                    onClicked: addItemClicked()
                 }
-            }
 
-            footer: showAddItem ? addItemDelegate : null
+//            Component {
+//                id: footerComponent
+//            }
+
+//            footer: showAddItem ? footerComponent : null
+//            footerPositioning: ListView.OverlayFooter
+        }
+
+        Rectangle {
+            id: addItemRectangle
+            implicitHeight: visible ? addItemDelegate.implicitHeight : 0
+            width: parent.width
+            color: "white"
+            z: 5
+            focus: true
+//            anchors.bottom: parent.bottom
+
+            ItemDelegate {
+                id: addItemDelegate
+                text: control.addItemText
+                width: parent.width
+                leftPadding: addItemIcon.width + Units.smallSpacing
+                z: 3
+                focus: true
+                Material.background: "white"
+                background.opacity: 1
+
+                Label {
+                    id: addItemIcon
+                    leftPadding: Units.smallSpacing
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "\ue147"
+                    font.family: "Material Icons"
+                    font.pixelSize: Units.fontSizeHeadline
+                    Material.foreground: Material.accent
+                }
+                onClicked: addItemClicked()
+            }
+        }
         }
     }
 
