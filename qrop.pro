@@ -2,7 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
   core \
-  desktop
+  desktop \
+    tests
 
 desktop.depends = core
 

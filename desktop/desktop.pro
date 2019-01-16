@@ -20,6 +20,9 @@ SOURCES += \
         main.cpp \
     qropdoublevalidator.cpp
 
+HEADERS += \
+    qropdoublevalidator.h
+
 # HEADERS += \
 
 RESOURCES += qml.qrc \
@@ -65,8 +68,5 @@ DISTFILES += \
     android/gradlew.bat
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
-HEADERS += \
-    qropdoublevalidator.h
 
 QMAKE_LFLAGS += -Wl,-rpath,"'$$ORIGIN'"
