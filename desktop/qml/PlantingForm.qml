@@ -174,7 +174,8 @@ Flickable {
             var name = widgetField[i][1]
             var value = widgetField[i][2]
 
-            if (widget.manuallyModified) {
+            if ((widget instanceof MyTextField && widget.manuallyModified)
+                    || (widget instanceof DatePicker && widget.dateChanged)) {
                 map[name] = value;
             }
         }
@@ -201,6 +202,10 @@ Flickable {
         directSeedRadio.checked = true;
         boughtRadio.reset();
         greenhouseRadio.reset();
+        fieldSowingDateField.clear();
+        greenhouseStartDateField.clear();
+        fieldPlantingDateField.clear();
+        firstHarvestDateField.clear();
         sowDtmField.reset();
         greenhouseGrowTimeField.reset();
         plantingDtmField.reset();
