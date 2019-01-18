@@ -139,6 +139,7 @@ void Database::createDatabase()
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
     qInfo() << "Database created.";
+    migrationCheck();
 }
 
 void Database::createFakeData()
