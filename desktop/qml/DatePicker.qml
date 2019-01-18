@@ -36,14 +36,7 @@ Item {
     property bool showDateHelper: true
     property string dateHelperText: NDate.formatDate(calendarDate, currentYear,
                                                      mode === "date" ? "week" : "date")
-    property bool dateChanged: false
-
     signal editingFinished()
-
-    function clear() {
-//        textField.clear();
-        dateChanged = false;
-    }
 
     Settings {
         id: settings
@@ -66,7 +59,6 @@ Item {
                     : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
-        onTextChanged: control.dateChanged = true
         onTextEdited: {
             if (!textField.acceptableInput)
                 return;
