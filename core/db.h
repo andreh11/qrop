@@ -30,10 +30,14 @@ public:
     static QString databasePath();
     static void connectToDatabase();
     static void execSqlFile(const QString &fileName, const QString &separator = ";");
+    static void migrationCheck();
     static Q_INVOKABLE void createDatabase();
     static Q_INVOKABLE void deleteDatabase();
     static Q_INVOKABLE void createFakeData();
     static Q_INVOKABLE void resetDatabase();
+
+private:
+    static int databaseVersion();
 };
 
 #endif // DB_H

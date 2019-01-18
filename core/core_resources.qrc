@@ -3,5 +3,6 @@
         <file>db/tables.sql</file>
         <file>db/data.sql</file>
         <file>db/triggers.sql</file>
+        <file>db/migrations/001.sql</file>
     </qresource>
 </RCC>

@@ -40,6 +40,7 @@ Item {
     property alias selectedIndexes: selectionModel.selectedIndexes
     property alias draggedPlantingId: treeView.draggedPlantingId
 
+    property LocationModel locationModel
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
     property bool alwaysShowCheckbox: false

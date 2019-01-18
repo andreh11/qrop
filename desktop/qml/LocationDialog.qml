@@ -12,22 +12,22 @@ import "date.js" as MDate
 Dialog {
     id: dialog
 
-    property alias nameField: nameField
-    property alias lengthField: lengthField
-    property alias widthField: widthField
-    property alias quantityField: quantityField
+    property alias name: nameField.text
+    property int bedLength: Number(lengthField.text)
+    property double bedWidth: Number.fromLocaleString(Qt.locale(), widthField.text)
+    property int quantity: Number(quantityField.text)
 
     property string mode: "add"
-    property var locationIndexes
+    property var locationIdList: []
     property bool formAccepted: (!nameField.visible || nameField.acceptableInput)
                                 && lengthField.acceptableInput
                                 && widthField.acceptableInput
                                 && (!quantityField.visible || quantityField.acceptableInput)
 
     readonly property var widgetField: [
-        [nameField, "name", nameField.text],
-        [lengthField, "bed_length", Number(lengthField.text)],
-        [widthField, "bed_width", Number(widthField.text)]
+        [nameField, "name", name],
+        [lengthField, "bed_length", bedLength],
+        [widthField, "bed_width", bedWidth]
     ]
 
     function clearForm() {
@@ -81,10 +81,10 @@ Dialog {
 
         if (mode === "edit") {
             // TODO: there's probably a bottleneck here.
-            var idList = []
-            for (var i = 0; i < locationIndexes.length; i++)
-                idList.push(locationModel.locationId(locationIndexes[i]));
-            var valueMap = Location.commonValues(idList);
+//            var idList = []
+//            for (var i = 0; i < locationIdList.length; i++)
+//                idList.push(locationModel.locationId(locationIdList[i]));
+            var valueMap = Location.commonValues(locationIdList);
             setFormValues(valueMap);
         }
     }
@@ -105,7 +105,7 @@ Dialog {
 
         MyTextField {
             id: nameField
-            visible: !locationIndexes || locationIndexes.length === 1
+            visible: mode === "add" || !locationIdList || locationIdList.length === 1
             labelText: qsTr("Name")
             floatingLabel: true
             //                            inputMethodHints: Qt.ImhDigitsOnly

@@ -1,0 +1,27 @@
+-- 0001
+-- * location: change bed_width type from INTEGER to FLOAT
+
+PRAGMA foreign_keys = OFF;
+
+BEGIN TRANSACTION;
+
+ALTER TABLE location RENAME TO location_old;
+
+CREATE TABLE IF NOT EXISTS location (
+    location_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL,
+    bed_length  INTEGER, -- meter
+    bed_width   FLOAT, -- meter
+    path_width  INTEGER, -- centimeter
+    surface     INTEGER, -- square meter
+    parent_id   INTEGER REFERENCES location ON DELETE CASCADE
+);
+
+INSERT INTO location SELECT * FROM location_old;
+DROP TABLE location_old;
+
+PRAGMA user_version = 1;
+
+COMMIT;
+
+PRAGMA foreign_keys = ON;
