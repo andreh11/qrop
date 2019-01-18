@@ -87,19 +87,16 @@ Item {
             var index = indexList[i];
             locationModel.refreshIndex(index);
         }
-        console.log("After select:", selectionModel.selectedIndexes.length)
     }
 
     function deselectAll() {
         selectionModel.clear();
-        console.log("UNSELECT")
-//        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Deselect)
+        //        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Deselect)
         var indexList = locationModel.treeIndexes();
         for (var i = 0; i < indexList.length; i++) {
             var index = indexList[i];
             locationModel.refreshIndex(index);
         }
-        console.log("After unselect:", selectionModel.selectedIndexes.length)
     }
 
     function collapseAll() {
@@ -322,6 +319,21 @@ Item {
                 readonly property date seasonBegin: MDate.seasonBeginning(locationView.season,
                                                                           locationView.year)
 
+                property var expandIndex: null
+                property var draggedOnIndex: null
+                property alias expandTimer: expandTimer
+
+                Timer {
+                    id: expandTimer
+                    interval: 300
+                    onTriggered: {
+                        if (treeView.expandIndex && treeView.expandIndex === treeView.draggedOnIndex) {
+                            treeView.expand(treeView.expandIndex);
+                            treeView.draggedOnIndex = null;
+                        }
+                    }
+                }
+
                 frameVisible: false
                 horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
                 verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
@@ -430,14 +442,23 @@ Item {
                                     treeView.draggedPlantingId = plantingId;
 
                                 if (styleData.hasChildren || locationId === sourceLocationId) {
-                                    drag.accepted = false
+                                    if (!styleData.isExpanded) {
+                                        treeView.expandIndex = styleData.index
+                                        treeView.draggedOnIndex = styleData.index
+                                        treeView.expandTimer.stop();
+                                        treeView.expandTimer.start();
+                                    }
+                                    drag.accepted = false;
                                 } else {
                                     drag.accepted = locationModel.acceptPlanting(styleData.index,
                                                                                  plantingId)
                                 }
                             }
 
-                            onExited: treeView.draggedPlantingId = -1;
+                            onExited: {
+                                treeView.draggedPlantingId = -1;
+                                treeView.draggedOnIndex = null
+                            }
 
                             onDropped: {
                                 treeView.draggedPlantingId = -1
@@ -450,9 +471,9 @@ Item {
                                     var plantingId = Number(list[0])
                                     var sourceLocationId = Number(list[1])
 
-//                                    if (!locationModel.rotationRespected(styleData.index, plantingId)) {
-//                                        rotationSnackbar.open();
-//                                    }
+                                    //                                    if (!locationModel.rotationRespected(styleData.index, plantingId)) {
+                                    //                                        rotationSnackbar.open();
+                                    //                                    }
 
                                     drop.acceptProposedAction()
 
@@ -463,6 +484,8 @@ Item {
                                         length = Planting.lengthToAssign(plantingId)
                                     locationModel.addPlanting(styleData.index, plantingId, length)
                                     locationModel.refreshIndex(styleData.index);
+                                    treeView.draggedOnIndex = null
+                                    treeView.expandIndex = null
                                 }
                             }
                         }
@@ -476,8 +499,8 @@ Item {
                                 if (styleData.hasChildren || !locationView.plantingEditMode)
                                     return;
                                 if (!locationModel.acceptPlanting(styleData.index,
-                                                                 editedPlantingPlantingDate,
-                                                                 editedPlantingEndHarvestDate))
+                                                                  editedPlantingPlantingDate,
+                                                                  editedPlantingEndHarvestDate))
                                     return;
 
                                 if (selectionModel.isSelected(styleData.index)) {
@@ -490,11 +513,11 @@ Item {
                                                                              editedPlantingEndHarvestDate);
                                         locationView.addPlantingLength(assignedLengthMap[styleData.index]);
                                     } else {
-                                         assignedLengthMap[styleData.index] =
-                                         Math.min(remainingLength,
-                                                  locationModel.availableSpace(styleData.index,
-                                                                               editedPlantingPlantingDate,
-                                                                               editedPlantingEndHarvestDate));
+                                        assignedLengthMap[styleData.index] =
+                                                Math.min(remainingLength,
+                                                         locationModel.availableSpace(styleData.index,
+                                                                                      editedPlantingPlantingDate,
+                                                                                      editedPlantingEndHarvestDate));
                                     }
                                 }
 
