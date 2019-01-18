@@ -157,6 +157,10 @@ Dialog {
                 }
             }
         } else {
+            console.log("Edited values:");
+            var values = plantingForm.editedValues()
+            for (var key in values)
+                console.log(key, values[key])
             Planting.updateList(dialog.editPlantingIdList, plantingForm.editedValues());
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }

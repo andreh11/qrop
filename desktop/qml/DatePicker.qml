@@ -36,7 +36,6 @@ Item {
     property bool showDateHelper: true
     property string dateHelperText: NDate.formatDate(calendarDate, currentYear,
                                                      mode === "date" ? "week" : "date")
-
     signal editingFinished()
 
     Settings {
