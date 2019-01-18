@@ -51,7 +51,7 @@ public:
 
     Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length) const;
 
-    Q_INVOKABLE bool addLocations(const QString &baseName, int length, int width, int quantity,
+    Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   const QModelIndexList &parentList = { QModelIndex() });
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
     Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);

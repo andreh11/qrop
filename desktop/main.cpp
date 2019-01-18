@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("io.qrop");
     app.setApplicationDisplayName("Qrop");
     app.setApplicationVersion("0.1");
-    //    app.setWindowIcon(QIcon(":/icon.png"));
+    app.setWindowIcon(QIcon(":/icon.png"));
 
     QTranslator translator;
     const QString &lang = QLocale::system().name();
@@ -235,6 +235,7 @@ int main(int argc, char *argv[])
 
     Database db;
     db.connectToDatabase();
+    db.migrationCheck();
 
     //    QtAndroid::runOnAndroidThread([=]()
     //    {

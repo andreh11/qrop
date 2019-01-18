@@ -189,7 +189,7 @@ void LocationModel::setShowOnlyEmptyLocations(bool show)
  *
  * Returns \c true if all locations can be added, \c false otherwise
  */
-bool LocationModel::addLocations(const QString &baseName, int length, int width, int quantity,
+bool LocationModel::addLocations(const QString &baseName, int length, double width, int quantity,
                                  const QModelIndexList &parentList)
 {
     // TODO: This is ugly, we should redesign the class hierarchy.

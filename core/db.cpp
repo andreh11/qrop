@@ -22,6 +22,7 @@
 #include <QStandardPaths>
 #include <QDebug>
 #include <QFileInfo>
+#include <QDirIterator>
 
 #include "db.h"
 #include "location.h"
@@ -49,6 +50,36 @@ void Database::deleteDatabase()
     QSqlDatabase::database().close();
     QString fileName = databasePath();
     QFile::remove(fileName);
+}
+
+int Database::databaseVersion()
+{
+    QSqlQuery query("PRAGMA user_version");
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+}
+
+void Database::migrationCheck()
+{
+    QSqlDatabase database = QSqlDatabase::database();
+    if (!database.isValid())
+        connectToDatabase();
+
+    int dbVersion = databaseVersion();
+
+    QDir dir(":/db/migrations");
+    QFileInfoList fileInfoList = dir.entryInfoList(QDir::NoFilter, QDir::Name);
+    int lastVersion = fileInfoList.last().baseName().toInt();
+
+    if (dbVersion < lastVersion) {
+        qInfo() << "Migration database from version" << dbVersion << "to latest version " << lastVersion;
+        for (auto fileInfo : fileInfoList) {
+            execSqlFile(fileInfo.absoluteFilePath());
+        }
+    } else {
+        qInfo() << "Latest database version:" << dbVersion;
+    }
 }
 
 void Database::connectToDatabase()
@@ -108,6 +139,7 @@ void Database::createDatabase()
     execSqlFile(":/db/triggers.sql", "END;");
     execSqlFile(":/db/data.sql");
     qInfo() << "Database created.";
+    migrationCheck();
 }
 
 void Database::createFakeData()

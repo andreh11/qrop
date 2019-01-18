@@ -146,8 +146,7 @@ Page {
                 LocationDialog {
                     id: addDialog
                     mode: "add"
-                    onAccepted: locationView.addLocations(nameField.text, Number(lengthField.text),
-                                                          Number(widthField.text), Number(quantityField.text))
+                    onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity)
                     onRejected: addDialog.close()
                 }
             }
@@ -165,16 +164,16 @@ Page {
                 LocationDialog {
                     id: editDialog
                     mode: "edit"
-                    locationIndexes: locationView.selectedIndexes
+                    locationIdList: locationView.selectedLocationIds();
 
                     onAccepted: {
-                        locationView.updateIndexes(editDialog.editedValues(), locationIndexes);
-                        clearSelection();
+                        locationView.updateIndexes(editDialog.editedValues(), locationView.selectedIndexes);
+                        locationView.clearSelection();
                     }
 
                     onRejected: {
                         editDialog.close();
-                        clearSelection();
+                        locationView.clearSelection();
                     }
                 }
             }
