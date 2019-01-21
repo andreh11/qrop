@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Settings* − Add restart snackbar.
 
   - *Planting form* − Add a checkbox for duration fields to enable or disable
     date calculation from durations. Add setting options to enable or disable
