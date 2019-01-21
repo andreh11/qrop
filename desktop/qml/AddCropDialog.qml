@@ -38,6 +38,7 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onOpened: {
+        familyModel.refresh();
         cropNameField.text = ""
         familyField.currentIndex = -1
         cropNameField.forceActiveFocus();

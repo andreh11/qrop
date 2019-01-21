@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
     version. Each script will applied successively to reach the latest version.
 
 ### Fixed
+  - Date update bug which prevented proper duration update.
   - Properly clean database before reset.
 
 ## 0.1.1 - 2019-01-10

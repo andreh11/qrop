@@ -19,6 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import Qt.labs.platform 1.0 as Lab
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -26,9 +27,15 @@ import "date.js" as MDate
 Flickable {
     id: control
     property int currentYear
-    property bool accepted: varietyField.currentIndex >= 0
+
+    // Initialisation mode ensures that no duration field is modified.
+    property bool initMode: false
+
+    property bool coherentDates: dtt >= 0 && dtm >= 0 && harvestWindow >= 0
+    property bool accepted: varietyField.currentIndex >= 0 && coherentDates
 
     property int locationViewWidth: locationView.treeViewWidth
+    property alias durationMode: durationCheckBox.checked
 
     property string mode: "add" // add or edit
     property bool chooseLocationMode: false
@@ -57,9 +64,9 @@ Flickable {
                                                                 fieldPlantingDateField.calendarDate
     readonly property string plantingDateString: plantingType === 1 ? fieldSowingDateField.isoDateString :
                                                                 fieldPlantingDateField.isoDateString
-    readonly property string begHarvestDate: firstHarvestDateField.isoDateString
+    readonly property string begHarvestDate: begHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
-                                                               firstHarvestDateField.calendarDate,
+                                                               begHarvestDateField.calendarDate,
                                                                harvestWindow),
                                                            "yyyy-MM-dd")
 
@@ -207,6 +214,13 @@ Flickable {
         boughtRadio.reset();
         greenhouseRadio.reset();
 
+        durationCheckBox.checked = plantingSettings.durationsByDefault
+        fieldPlantingDateField.clear();
+        fieldSowingDateField.clear();
+        greenhouseStartDateField.clear();
+        begHarvestDateField.clear();
+        endHarvestDateField.clear();
+
         fieldSowingDateField.modified = false;
         fieldPlantingDateField.modified = false;
 
@@ -260,10 +274,13 @@ Flickable {
                                    : Date.fromLocaleString(Qt.locale(), val["planting_date"],
                                                            "yyyy-MM-dd");
 
+        initMode = true
+        setFieldValue(harvestWindowField, val['harvest_window']);
         switch (val['planting_type']) {
         case 1:
             setFieldValue(directSeedRadio, true);
             setFieldValue(sowDtmField, val['dtm']);
+
             fieldSowingDateField.calendarDate = pDate;
             updateFromFieldSowingDate();
             fieldSowingDateField.modified = false;
@@ -272,18 +289,20 @@ Flickable {
             setFieldValue(greenhouseRadio, true);
             setFieldValue(greenhouseGrowTimeField, val['dtt']);
             setFieldValue(plantingDtmField, val['dtm']);
+
             fieldPlantingDateField.calendarDate = pDate
-            updateFromFieldPlantingDate();
+            updateFromFieldPlantingDate(true, true);
             fieldPlantingDateField.modified = false;
             break;
         default:
             setFieldValue(boughtRadio, true);
             setFieldValue(plantingDtmField, val['dtm']);
+
             fieldPlantingDateField.calendarDate = pDate;
-            updateFromFieldPlantingDate();
+            updateFromFieldPlantingDate(true, true);
             fieldPlantingDateField.modified = false;
         }
-        setFieldValue(harvestWindowField, val['harvest_window']);
+        initMode = false
 
         setFieldValue(traySizeField, val['tray_size']);
         setFieldValue(seedsPerHoleField, val['seeds_per_hole']);
@@ -317,15 +336,6 @@ Flickable {
         return idList;
     }
 
-    // direction = 1 means days forward, -1 means backward
-    function updateDateField(from, duration, to, direction) {
-        if (duration.text === "")
-            to.calendarDate = from.calendarDate;
-        else
-            to.calendarDate = MDate.addDays(from.calendarDate,
-                                            Number(duration.text) * direction);
-    }
-
     function toPrecision(x, decimals) {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
@@ -342,23 +352,98 @@ Flickable {
         }
     }
 
+    // Duration functions
+
+    function updateDuration(picker1, picker2, durationField) {
+        if (!initMode) {
+            durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
+            durationField.manuallyModified = true
+        }
+    }
+
+    function updateGHDuration() {
+        updateDuration(greenhouseStartDateField, fieldPlantingDateField, greenhouseGrowTimeField);
+    }
+
+    function updateDtm() {
+        if (directSeeded) {
+            updateDuration(fieldSowingDateField, begHarvestDateField, sowDtmField);
+        }  else {
+            updateDuration(fieldPlantingDateField, begHarvestDateField, plantingDtmField);
+        }
+    }
+
+    function updateHarvestWindow() {
+        updateDuration(begHarvestDateField, endHarvestDateField, harvestWindowField);
+    }
+
+    // Date functions
+
     // The following functions should be called only when prefilling the form
     // or when the user edit the relevant field.
 
+    // direction = 1 means days forward, -1 means backward
+    function updateDateField(from, duration, to, direction) {
+        if (duration.text === "")
+            to.calendarDate = from.calendarDate;
+        else
+            to.calendarDate = MDate.addDays(from.calendarDate,
+                                            Number(duration.text) * direction);
+    }
+
     function updateFromFieldSowingDate() {
-        updateDateField(fieldSowingDateField, sowDtmField, firstHarvestDateField, 1)
+        if (!durationMode && !initMode)
+            return;
+        updateDateField(fieldSowingDateField, sowDtmField, begHarvestDateField, 1);
+
+        updateFromFirstHarvestDate(true, false);
     }
 
     function updateFromGreenhouseStartDate() {
-        updateDateField(greenhouseStartDateField, greenhouseGrowTimeField,
-                        fieldPlantingDateField, 1)
+        if (!durationMode && !initMode)
+            return;
+        updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
+
+        updateFromFieldPlantingDate(true, false);
     }
 
-    function updateFromFieldPlantingDate() {
-        if (plantingType == 2)
+    function updateFromFieldPlantingDate(forward, backward) {
+        if (!durationMode && !initMode)
+            return;
+
+        if (plantingType === 2 && backward)
             updateDateField(fieldPlantingDateField, greenhouseGrowTimeField,
                             greenhouseStartDateField, -1)
-        updateDateField(fieldPlantingDateField, plantingDtmField, firstHarvestDateField, 1);
+        if (forward) {
+            updateDateField(fieldPlantingDateField, plantingDtmField, begHarvestDateField, 1);
+            updateFromFirstHarvestDate(true, false);
+        }
+    }
+
+    function updateFromFirstHarvestDate(forward, backward) {
+        if (!durationMode && !initMode)
+            return;
+
+        if (forward)
+            updateDateField(begHarvestDateField, harvestWindowField, endHarvestDateField, 1);
+
+        if (!backward)
+            return;
+
+        if (directSeeded) {
+            updateDateField(begHarvestDateField, sowDtmField, fieldSowingDateField, -1);
+        }  else {
+            updateDateField(begHarvestDateField, plantingDtmField, fieldPlantingDateField, -1);
+            updateFromFieldPlantingDate(false, true);
+        }
+    }
+
+    function updateFromEndHarvestDate() {
+        if (!durationMode && !initMode)
+            return;
+
+        updateDateField(endHarvestDateField, harvestWindowField, begHarvestDateField, -1);
+        updateFromFirstHarvestDate(false, true);
     }
 
     focus: true
@@ -370,6 +455,14 @@ Flickable {
     onVarietyIdChanged: preFillForm()
     onPlantingTypeChanged: preFillForm()
     onInGreenhouseChanged: preFillForm()
+
+
+    Settings {
+        id: plantingSettings
+        category: "PlantingsPane"
+        property bool durationsByDefault
+        property bool showDurationFields
+    }
 
     VarietyModel { id: varietyModel }
     KeywordModel { id: keywordModel }
@@ -528,19 +621,28 @@ Flickable {
         }
 
         FormGroupBox {
-            id: plantingDatesBox
-            title: qsTr("Planting dates") + " " + (successions > 1 ? qsTr("(first succession)") : "")
+            id: durationsBox
+            title: qsTr("Durations")
             width: parent.width
+            visible: plantingSettings.showDurationFields
+
+            label: CheckBox {
+                id: durationCheckBox
+                text: parent.title
+                checked: plantingSettings.durationsByDefault
+            }
 
             GridLayout {
                 width: parent.width
-                columns: smallDisplay ? 1 : (plantingType === 2 ? 3 : 2)
+                columns: smallDisplay ? 1 : (plantingType === 2 ? 4 : 3)
                 rowSpacing: 16
                 columnSpacing: 16
 
                 MyTextField {
                     id: sowDtmField
                     visible: fieldSowingDateField.visible && !chooseLocationMode
+
+                    enabled: durationMode
                     text: "1"
                     labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
@@ -556,6 +658,7 @@ Flickable {
                 MyTextField {
                     id: greenhouseGrowTimeField
                     visible: greenhouseStartDateField.visible && !chooseLocationMode
+                    enabled: durationMode
                     text: "1"
                     labelText: qsTr("Greenhouse duration")
                     suffixText: qsTr("days")
@@ -580,6 +683,7 @@ Flickable {
                 MyTextField {
                     id: plantingDtmField
                     visible: fieldPlantingDateField.visible && !chooseLocationMode
+                    enabled: durationMode
                     text: "1"
                     labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
@@ -589,22 +693,37 @@ Flickable {
                     validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
 
-                    onTextChanged: updateFromFieldPlantingDate()
+                    onTextChanged: updateFromFieldPlantingDate(true, true)
                 }
 
                 MyTextField {
                     id: harvestWindowField
                     visible: !chooseLocationMode
+                    enabled: durationMode
                     text: "1"
                     labelText: qsTr("Harvest window")
                     suffixText: qsTr("days")
-                    helperText: text ? NDate.formatDate(endHarvestDate, currentYear) : ""
                     floatingLabel: true
 
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
+
+                    onTextChanged: updateFromFirstHarvestDate(true, true);
                 }
+            }
+        }
+
+        FormGroupBox {
+            id: plantingDatesBox
+            title: qsTr("Planting dates") + " " + (successions > 1 ? qsTr("(first succession)") : "")
+            width: parent.width
+
+            GridLayout {
+                width: parent.width
+                columns: smallDisplay ? 1 : (plantingType === 2 ? 4 : 3)
+                rowSpacing: 16
+                columnSpacing: 16
 
                 DatePicker {
                     id: fieldSowingDateField
@@ -617,7 +736,12 @@ Flickable {
                     labelText: qsTr("Field Sowing")
                     currentYear: control.currentYear
 
-                    onEditingFinished: updateFromFieldSowingDate();
+                    onEditingFinished: {
+                        if (durationMode)
+                            updateFromFieldSowingDate();
+                        else
+                            updateDtm();
+                    }
                     onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
                     onCalendarDateChanged: modified = true
                 }
@@ -629,9 +753,13 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
                     currentYear: control.currentYear
-                    onEditingFinished: updateFromGreenhouseStartDate()
+                    onEditingFinished: {
+                        if (durationMode)
+                            updateFromGreenhouseStartDate()
+                        else
+                            updateGHDuration();
+                    }
                 }
-
 
                 DatePicker {
                     id: fieldPlantingDateField
@@ -644,38 +772,50 @@ Flickable {
                     labelText: qsTr("Field planting")
                     currentYear: control.currentYear
 
-                    onEditingFinished: updateFromFieldPlantingDate()
-                    onCalendarDateChanged: {
-                        modified = true;
-                        // Update the first harvest date when the field planting date is
-                        // calculated from the greenhouse start date.
-                        updateDateField(fieldPlantingDateField, plantingDtmField,
-                                        firstHarvestDateField, 1)
+                    onEditingFinished: {
+                        if (durationMode)
+                            updateFromFieldPlantingDate(true, true)
+                        else {
+                            if (plantingType == 2)
+                                updateGHDuration();
+                            updateDtm();
+                        }
                     }
                 }
 
                 DatePicker {
-                    id: firstHarvestDateField
+                    id: begHarvestDateField
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("First harvest")
                     currentYear: control.currentYear
 
                     onEditingFinished: {
-                        if (directSeeded)
-                            updateDateField(firstHarvestDateField, sowDtmField,
-                                            fieldSowingDateField, -1);
-                        else {
-                            updateDateField(firstHarvestDateField,
-                                            plantingDtmField,
-                                            fieldPlantingDateField, -1);
-                            updateFromFieldPlantingDate();
+                        if (durationMode) {
+                            updateFromFirstHarvestDate(true, true)
+                        } else {
+                            updateDtm();
+                            updateHarvestWindow();
                         }
+                    }
+                }
+
+                DatePicker {
+                    id: endHarvestDateField
+                    Layout.fillWidth: true
+                    floatingLabel: true
+                    labelText: qsTr("Last harvest")
+                    currentYear: control.currentYear
+
+                    onEditingFinished: {
+                        if (durationMode)
+                            updateFromEndHarvestDate()
+                        else
+                            updateHarvestWindow();
                     }
                 }
             }
         }
-
 
         FormGroupBox {
             id: locationGroupBox
@@ -740,7 +880,7 @@ Flickable {
 
                     editedPlantingLength: plantingLength
                     editedPlantingPlantingDate: plantingDate
-                    editedPlantingEndHarvestDate: MDate.addDays(firstHarvestDateField.calendarDate,
+                    editedPlantingEndHarvestDate: MDate.addDays(begHarvestDateField.calendarDate,
                                                                 harvestWindow)
                     onAddPlantingLength: plantingAmountField.text = plantingLength + length
                 }

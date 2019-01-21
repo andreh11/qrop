@@ -48,14 +48,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 win32:target.path = $$PREFIX
 win32:!isEmpty(target.path): INSTALLS += target
 
-linux {
-    message(Compiling on Linux $$LIBS)
-}
-
-windows {
-    message(Compiling on Windows $$LIBS)
-}
-
 DISTFILES += \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \

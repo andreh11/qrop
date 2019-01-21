@@ -442,7 +442,9 @@ ListView {
                      Text.AlignRight],
                     [NDate.formatDate(beginHarvestDate, year), Text.AlignRight],
                     [NDate.formatDate(endHarvestDate, year), Text.AlignRight],
-                    [qsTr("%L1 d", "Abbreviation for day").arg(model.dtt), Text.AlignRight],
+                    [model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt)
+                                               : "",
+                     Text.AlignRight],
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.dtm), Text.AlignRight],
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),
                      Text.AlignRight],
