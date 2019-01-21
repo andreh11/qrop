@@ -182,6 +182,7 @@ Flickable {
             var value = widgetField[i][2]
 
             if ((widget instanceof MyTextField && widget.manuallyModified)
+                    || (widget instanceof CheckBox && widget.manuallyModified)
                     || (widget instanceof DatePicker && widget.modified)) {
                 map[name] = value;
             }
@@ -359,6 +360,13 @@ Flickable {
             durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
             durationField.manuallyModified = true
         }
+
+
+        // Set sow/planting field date as modified for proper update.
+        if (directSeeded)
+            fieldSowingDateField.modified = true
+        else
+            fieldPlantingDateField.modified = true
     }
 
     function updateGHDuration() {
@@ -452,10 +460,9 @@ Flickable {
     Material.background: "white"
 
     onCropIdChanged: varietyField.reset()
-    onVarietyIdChanged: preFillForm()
-    onPlantingTypeChanged: preFillForm()
-    onInGreenhouseChanged: preFillForm()
-
+    onVarietyIdChanged: if (mode === "add") preFillForm()
+    onPlantingTypeChanged: if (mode === "add") preFillForm()
+    onInGreenhouseChanged: if (mode === "add") preFillForm()
 
     Settings {
         id: plantingSettings
