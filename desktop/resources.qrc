@@ -7,5 +7,6 @@
         <file>fonts/MaterialIcons-Regular.ttf</file>
         <file>fonts/FontAwesome.otf</file>
         <file>icon.png</file>
+        <file alias="ghicon.png">ghicon.png</file>
     </qresource>
 </RCC>

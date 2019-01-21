@@ -38,6 +38,10 @@ Item {
                                                      mode === "date" ? "week" : "date")
     signal editingFinished()
 
+    function clear() {
+        textField.clear();
+    }
+
     Settings {
         id: settings
         property alias dateType: control.mode
@@ -45,7 +49,7 @@ Item {
 
     height: textField.height
 //    implicitWidth: textField.implicitWidth
-    Layout.minimumWidth: 120
+    Layout.minimumWidth: 100
 
     MyTextField {
         id: textField

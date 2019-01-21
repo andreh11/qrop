@@ -43,6 +43,25 @@ Page {
         property string dateType
     }
 
+    Settings {
+        id: plantingSettings
+        category: "PlantingsPane"
+        property alias durationsByDefault: durationsByDefaultSwitch.checked
+        property alias showDurationFields: showDurationFieldSwitch.checked
+    }
+
+    Snackbar {
+        id: restartSnackbar
+
+        property int successions: 0
+
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Recent the application for modifications to take effect")
+        visible: false
+    }
+
     Column {
         width: paneWidth
         anchors.horizontalCenter: parent.horizontalCenter
@@ -138,8 +157,7 @@ Page {
 
                     Switch {
                         id: showSeedCompanySwitch
-                        ToolTip.text: qsTr("Restart the application for this take effect.")
-                        ToolTip.visible: hovered
+                        onToggled: restartSnackbar.open();
                     }
 
 
@@ -148,6 +166,68 @@ Page {
                 Item { Layout.fillHeight: true }
             }
 
+        }
+
+        Label {
+            text: qsTr("Plantings view")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            topPadding: Units.mediumSpacing
+        }
+
+        Pane {
+            width: parent.width
+            Material.elevation: 2
+            Material.background: "white"
+            padding: 0
+
+            ColumnLayout {
+                width: parent.width
+                spacing: 0
+
+                RowLayout {
+                    Layout.minimumHeight: Units.rowHeight
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Label {
+                        text: qsTr("Compute from durations by default")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        Layout.fillWidth: true
+                    }
+
+                    Switch {
+                        id: durationsByDefaultSwitch
+                        checked: true
+                        onToggled: restartSnackbar.open();
+                    }
+                }
+
+                ThinDivider { width: parent.width }
+
+                RowLayout {
+                    Layout.minimumHeight: Units.rowHeight
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Label {
+                        text: qsTr("Show duration fields")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        Layout.fillWidth: true
+                    }
+
+
+                    Switch {
+                        id: showDurationFieldSwitch
+                        checked: true
+                        onToggled: restartSnackbar.open();
+                    }
+                }
+
+                ThinDivider { width: parent.width }
+            }
         }
 
         Label {

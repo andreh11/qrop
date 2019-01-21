@@ -25,13 +25,14 @@ Popup {
     property alias text: label.text
     property alias actionText: actionButton.text
     property int duration: 5000
+    property int labelMargin: 16
 
     // Emitted when the user clicked on the action button.
     signal clicked()
 
     // Dimensions according to Material guidelines.
     implicitHeight: 48
-    implicitWidth: 344
+    implicitWidth: Math.max(344, label.implicitWidth + labelMargin*2)
     padding: 0
     Material.elevation: 6
     closePolicy: Popup.NoAutoClose
@@ -53,7 +54,7 @@ Popup {
     Label {
         id: label
         color: "#ffffffde"
-        anchors { left: parent.left; leftMargin: 16;  verticalCenter: parent.verticalCenter }
+        anchors { left: parent.left; leftMargin: labelMargin;  verticalCenter: parent.verticalCenter }
         font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft

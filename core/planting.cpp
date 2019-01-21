@@ -121,8 +121,10 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
 
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
-            if (plantingId >= 1)
-                return mapFromId("planting_view", plantingId);
+            if (plantingId >= 1) {
+                qDebug() << mapFromId("planting", plantingId);
+                return mapFromId("planting", plantingId);
+            }
         }
     }
 
@@ -132,10 +134,12 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
 void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
+    QString plantingDateString;
+    if (newMap.contains("planting_date"))
+        plantingDateString = newMap.take("planting_date").toString();
     DatabaseUtility::update(id, newMap);
 
-    if (newMap.contains("planting_date")) {
-        QString plantingDateString = newMap.take("planting_date").toString();
+    if (!plantingDateString.isNull()) {
         QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
         task->updateTaskDates(id, plantingDate);
     }

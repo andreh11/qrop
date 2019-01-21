@@ -442,7 +442,9 @@ ListView {
                      Text.AlignRight],
                     [NDate.formatDate(beginHarvestDate, year), Text.AlignRight],
                     [NDate.formatDate(endHarvestDate, year), Text.AlignRight],
-                    [qsTr("%L1 d", "Abbreviation for day").arg(model.dtt), Text.AlignRight],
+                    [model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt)
+                                               : "",
+                     Text.AlignRight],
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.dtm), Text.AlignRight],
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),
                      Text.AlignRight],
@@ -480,11 +482,21 @@ ListView {
                 TableLabel {
                     text: settings.showSeedCompanyBesideVariety
                           ? "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3))
-                          : model.variety
+                          : "%1".arg(model.variety)
                     showToolTip: true
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight
                     width: 100
+
+                    Image {
+                        z: -1
+                        visible: model.in_greenhouse === 1
+                        height: parent.height
+                        anchors.right: parent.right
+                        fillMode: Image.PreserveAspectFit
+                        source: "/ghicon.png"
+
+                    }
                 }
 
                 Timeline {

@@ -274,6 +274,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     case PlantingType::DirectSeeded: {
         QString queryString = "UPDATE task SET assigned_date = :assigned_date "
                               "WHERE task_id = :task_id";
+        qDebug() << "New date for sowing task:" << plantingDate.toString(Qt::ISODate);
         QSqlQuery query;
         query.prepare(queryString);
         query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));

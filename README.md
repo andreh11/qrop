@@ -9,18 +9,18 @@ some of the times, but use at your own risk.
 
 ## Features
 
-* **Crop planning − ** build crop plans including expected yields and harvest
+* **Crop planning −** build crop plans including expected yields and harvest
   windows. Easily create, duplicate, delete, batch-edit, sort and filter
   successions.
-* **Task management and recordkeeping − ** plan your tasks (weeding, seeding,
+* **Task management and recordkeeping −** plan your tasks (weeding, seeding,
   planting, stale seed bed, cultivating, etc.) and dynamically keep track of
   them.
-* **Field map − ** define your field map and assign planting to your beds.
+* **Field map −** define your field map and assign planting to your beds.
 
 ## Planned features
 
-* **Harvests tracking:** keep track of each harvest and get real-time crop yields.
-* **Note taking**: write notes, take photos and link them to your plantings, tasks and locations.
+* **Harvests tracking −** keep track of each harvest and get real-time crop yields.
+* **Note taking −** write notes, take photos and link them to your plantings, tasks and locations.
 
 ## Getting started
 
