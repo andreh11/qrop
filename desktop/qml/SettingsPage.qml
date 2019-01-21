@@ -50,6 +50,18 @@ Page {
         property alias showDurationFields: showDurationFieldSwitch.checked
     }
 
+    Snackbar {
+        id: restartSnackbar
+
+        property int successions: 0
+
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Recent the application for modifications to take effect")
+        visible: false
+    }
+
     Column {
         width: paneWidth
         anchors.horizontalCenter: parent.horizontalCenter
@@ -145,8 +157,7 @@ Page {
 
                     Switch {
                         id: showSeedCompanySwitch
-                        ToolTip.text: qsTr("Restart the application for this take effect.")
-                        ToolTip.visible: hovered
+                        onToggled: restartSnackbar.open();
                     }
 
 
@@ -188,8 +199,8 @@ Page {
 
                     Switch {
                         id: durationsByDefaultSwitch
-//                        ToolTip.text: qsTr("Restart the application for this take effect.")
-                        ToolTip.visible: hovered
+                        checked: true
+                        onToggled: restartSnackbar.open();
                     }
                 }
 
@@ -210,8 +221,8 @@ Page {
 
                     Switch {
                         id: showDurationFieldSwitch
-//                        ToolTip.text: qsTr("Restart the application for this take effect.")
-                        ToolTip.visible: hovered
+                        checked: true
+                        onToggled: restartSnackbar.open();
                     }
                 }
 
