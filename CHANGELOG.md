@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
     date calculation from durations. Add setting options to enable or disable
     durations by default and to hide duration fields.
 
-  - *Plantings view* − Add a "GH" (greenhouse) column. 
+  - *Plantings view* − Show an icon for greenhouse crops.
 
   - *Field map* − After dragging a planting over a location which has
     sublocations for some time, it will expand if it is collapsed.
@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file.
   - *Database* − Migration framework: start to cleanly migrate database schemas,
     setting a database version and writing a SQL script for each new database
     version. Each script will applied successively to reach the latest version.
+
+### Changed
+  - Update French translation.
 
 ### Fixed
   - *Planting view* - Properly set greenhouse checkbox state.
