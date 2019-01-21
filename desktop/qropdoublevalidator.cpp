@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "qropdoublevalidator.h"
 
 QropDoubleValidator::QropDoubleValidator(QObject *parent)

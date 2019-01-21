@@ -103,12 +103,7 @@ Flickable {
     readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
     readonly property real estimatedYield: plantingLength * yieldPerBedMeter
-    readonly property real averagePrice: {
-        if (averagePriceField.acceptableInput)
-            Number.fromLocaleString(Qt.locale(), averagePriceField.text);
-        else
-            0;
-    }
+    readonly property real averagePrice: Number.fromLocaleString(Qt.locale(), averagePriceField.text);
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedLocationIds: locationView.selectedLocationIds()
@@ -280,26 +275,31 @@ Flickable {
         switch (val['planting_type']) {
         case 1:
             setFieldValue(directSeedRadio, true);
-            setFieldValue(sowDtmField, val['dtm']);
+            if ('dtm' in val)
+                setFieldValue(sowDtmField, val['dtm']);
 
             fieldSowingDateField.calendarDate = pDate;
-            updateFromFieldSowingDate();
+            if ('dtm' in val)
+                updateFromFieldSowingDate();
             fieldSowingDateField.modified = false;
             break;
         case 2:
             setFieldValue(greenhouseRadio, true);
-            setFieldValue(greenhouseGrowTimeField, val['dtt']);
-            setFieldValue(plantingDtmField, val['dtm']);
+            if ('dtt' in val) setFieldValue(greenhouseGrowTimeField, val['dtt']);
+            if ('dtm' in val) setFieldValue(plantingDtmField, val['dtm']);
 
             fieldPlantingDateField.calendarDate = pDate
-            updateFromFieldPlantingDate(true, true);
+            if ('dtt' in val && 'dtm' in val)
+                updateFromFieldPlantingDate(true, true);
             fieldPlantingDateField.modified = false;
             break;
-        default:
+        case 3:
             setFieldValue(boughtRadio, true);
-            setFieldValue(plantingDtmField, val['dtm']);
+            if ('dtm' in val) setFieldValue(plantingDtmField, val['dtm']);
 
             fieldPlantingDateField.calendarDate = pDate;
+            if ('dtm' in val)
+                updateFromFieldPlantingDate(true, true);
             updateFromFieldPlantingDate(true, true);
             fieldPlantingDateField.modified = false;
         }
@@ -356,13 +356,13 @@ Flickable {
     // Duration functions
 
     function updateDuration(picker1, picker2, durationField) {
-        if (!initMode) {
-            durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
-            durationField.manuallyModified = true
-        }
+        if (!initMode)
+        return;
 
+        durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
+        durationField.manuallyModified = true
 
-        // Set sow/planting field date as modified for proper update.
+        // Mark sow/planting field date as modified (for proper update).
         if (directSeeded)
             fieldSowingDateField.modified = true
         else
@@ -411,6 +411,8 @@ Flickable {
         if (!durationMode && !initMode)
             return;
         updateDateField(greenhouseStartDateField, greenhouseGrowTimeField, fieldPlantingDateField, 1)
+        if (!initMode)
+            fieldPlantingDateField.modified = true
 
         updateFromFieldPlantingDate(true, false);
     }
@@ -440,8 +442,12 @@ Flickable {
 
         if (directSeeded) {
             updateDateField(begHarvestDateField, sowDtmField, fieldSowingDateField, -1);
+            if (!initMode)
+                fieldSowingDateField.modified = true;
         }  else {
             updateDateField(begHarvestDateField, plantingDtmField, fieldPlantingDateField, -1);
+            if (!initMode)
+                fieldPlantingDateField.modified = true;
             updateFromFieldPlantingDate(false, true);
         }
     }
