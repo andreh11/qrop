@@ -356,8 +356,8 @@ Flickable {
     // Duration functions
 
     function updateDuration(picker1, picker2, durationField) {
-        if (!initMode)
-        return;
+        if (initMode)
+            return;
 
         durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
         durationField.manuallyModified = true

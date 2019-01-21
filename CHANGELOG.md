@@ -5,15 +5,24 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+
+  - *Planting form* − Add a checkbox for duration fields to enable or disable
+    date calculation from durations. Add setting options to enable or disable
+    durations by default and to hide duration fields.
+
+  - *Plantings view* − Add a "GH" (greenhouse) column. 
+
   - *Field map* − After dragging a planting over a location which has
     sublocations for some time, it will expand if it is collapsed.
+
   - *Database* − Migration framework: start to cleanly migrate database schemas,
     setting a database version and writing a SQL script for each new database
     version. Each script will applied successively to reach the latest version.
 
 ### Fixed
-  - Timegraph end harvest bar drawing (add one week).
-  - Date update bug which prevented proper duration update.
+  - *Planting view* - Properly set greenhouse checkbox state.
+  - *Plantings view* − Timegraph end harvest bar drawing (add one week).
+  - *Planting form* − Date update bug which prevented proper duration update.
   - Properly clean database before reset.
 
 ## 0.1.1 - 2019-01-10

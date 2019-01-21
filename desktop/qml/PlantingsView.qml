@@ -48,11 +48,6 @@ ListView {
             "width": 100,
             "visible": true
         }, {
-            "name": qsTr("GH"),
-            "columnName": "in_greenhouse",
-            "width": 50,
-            "visible": true
-        }, {
             "name": qsTr("Sowing"),
             "columnName": "sowing_date",
             "width": 60,
@@ -441,7 +436,6 @@ ListView {
 
                 readonly property var labelList: [
                     [Location.fullName(model.locations.split(",")), Text.AlignRight],
-                    [model.in_greenhouse === 1 ? "X" : "", Text.AlignRight],
                     [model.planting_type !== 3 ? NDate.formatDate(seedingDate, year) : "",
                      Text.AlignRight],
                     [model.planting_type !== 1 ? NDate.formatDate(transplantingDate, year) : "",
@@ -488,11 +482,21 @@ ListView {
                 TableLabel {
                     text: settings.showSeedCompanyBesideVariety
                           ? "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3))
-                          : model.variety
+                          : "%1".arg(model.variety)
                     showToolTip: true
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight
                     width: 100
+
+                    Image {
+                        z: -1
+                        visible: model.in_greenhouse === 1
+                        height: parent.height
+                        anchors.right: parent.right
+                        fillMode: Image.PreserveAspectFit
+                        source: "/ghicon.png"
+
+                    }
                 }
 
                 Timeline {
