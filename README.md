@@ -9,13 +9,23 @@ some of the times, but use at your own risk.
 
 ## Features
 
-* **Crop planning −** build crop plans including expected yields and harvest
-  windows. Easily create, duplicate, delete, batch-edit, sort and filter
-  successions.
-* **Task management and recordkeeping −** plan your tasks (weeding, seeding,
-  planting, stale seed bed, cultivating, etc.) and dynamically keep track of
-  them.
-* **Field map −** define your field map and assign planting to your beds.
+### Plan your season
+
+Define your crop plan: plantings, crop, varieties, bed lengths, spacings,
+expected yields... Autogenerate sowing and planting tasks and get seed
+quantities, flats to start. Visualize each season of your plan. Easily create,
+duplicate, delete, batch-edit, sort and filter successions.
+
+### Keep track of your tasks
+
+Get a week-to-week list of your tasks: sowing, planting, weeding, pruning,
+irrigating... Quickly filter overdue, due and done tasks. Track your labor cost
+by task.
+
+### Effectively manage your crop rotations
+
+Define your crop map: drag n' drop your plantings on your crop map. Get the crop
+history of every single bed to ensure good rotations.
 
 ## Planned features
 
