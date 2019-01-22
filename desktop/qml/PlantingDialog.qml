@@ -73,12 +73,13 @@ Dialog {
     contentHeight: scrollView.implicitHeight
 
     Shortcut {
-        sequence: "Ctrl+Enter"
-        enabled: parent.visible
+        sequences: ["Ctrl+Enter", "Ctrl+Return"]
+        enabled: dialog.visible
         context: Qt.ApplicationShortcut
-        onActivated: if (plantingForm.accepted) accept();
+        onActivated: {
+            if (plantingForm.accepted) accept();
+        }
     }
-
 
     header: PlantingFormHeader {
         visible: mode === "add"

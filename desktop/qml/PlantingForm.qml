@@ -177,6 +177,7 @@ Flickable {
             var value = widgetField[i][2]
 
             if ((widget instanceof MyTextField && widget.manuallyModified)
+                    || (widget instanceof MyComboBox && widget.manuallyModified)
                     || (widget instanceof CheckBox && widget.manuallyModified)
                     || (widget instanceof DatePicker && widget.modified)) {
                 map[name] = value;
