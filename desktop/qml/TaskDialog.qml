@@ -68,6 +68,15 @@ Dialog {
     Material.background: Material.color(Material.Grey, Material.Shade100)
     height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing : parent.height - 2 * Units.smallSpacing
 
+    Shortcut {
+        sequences: ["Ctrl+Enter", "Ctrl+Return"]
+        enabled: dialog.visible
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            if (taskForm.accepted) accept();
+        }
+    }
+
     header: TaskDialogHeader {
         id: taskDialogHeader
         width: parent.width
