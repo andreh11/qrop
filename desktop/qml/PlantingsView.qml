@@ -182,14 +182,6 @@ ListView {
         selectedIdsChanged()
     }
 
-    add: Transition {
-        NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
-    }
-
-    remove: Transition {
-        NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
-    }
-
     model: PlantingModel {
         id: plantingModel
         year: listView.year

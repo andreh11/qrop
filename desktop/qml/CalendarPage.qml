@@ -30,8 +30,8 @@ Page {
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
-    property alias listView: listView
-    property var activeCompleteButton: listView.currentItem
+    property alias listView: taskView
+    property var activeCompleteButton: taskView.currentItem
 
     property var tableHeaderModel: [
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
@@ -46,9 +46,9 @@ Page {
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
         // and view position will be reset.
-        var currentY = listView.contentY
+        var currentY = taskView.contentY
         taskModel.refresh();
-        listView.contentY = currentY
+        taskView.contentY = currentY
     }
 
     title: qsTr("Task calendar")
@@ -60,45 +60,51 @@ Page {
 
     Shortcut {
         sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 1 && addButton.visible
+        enabled: navigationIndex === 1 && addButton.visible && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
-//        onActivated: plantingDialog.createPlanting();
         onActivated: addButton.clicked()
     }
 
     Shortcut {
         sequences: [StandardKey.Find, "Ctrl+K"]
-        enabled: navigationIndex === 1
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
     }
 
     Shortcut {
         sequence: "Ctrl+Right"
-        enabled: navigationIndex === 1
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.nextWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Left"
-        enabled: navigationIndex === 1
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.previousWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Up"
-        enabled: navigationIndex === 1
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.nextYear()
     }
 
     Shortcut {
         sequence: "Ctrl+Down"
-        enabled: navigationIndex === 1
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.previousYear();
+    }
+
+    Shortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: navigationIndex === 1 && !taskView.activeFocus && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: taskView.forceActiveFocus();
     }
 
     TaskDialog {
@@ -211,7 +217,7 @@ Page {
                 }
 
                 SearchField {
-                    id: searchField
+                    id: filterField
                     placeholderText: qsTr("Search Tasks")
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
@@ -294,7 +300,7 @@ Page {
             }
 
         ListView {
-            id: listView
+            id: taskView
             clip: true
             spacing: 4
             anchors {
@@ -308,11 +314,13 @@ Page {
                 rightMargin: parent.width * 0.1
             }
 
-            add: Transition {
-                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
-            }
-            remove: Transition {
-                NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
+            highlightMoveDuration: 0
+            highlightResizeDuration: 0
+            highlight: Rectangle {
+                z:3;
+                opacity: 0.1;
+                color: Material.primary
+                radius: 2
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -320,18 +328,10 @@ Page {
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
-                parent: listView.parent
-                anchors.top: listView.top
-                anchors.left: listView.right
-                anchors.bottom: listView.bottom
-            }
-
-            Shortcut {
-                sequence: "Ctrl+K"
-                onActivated: {
-                    filterMode = true
-                    filterField.focus = true
-                }
+                parent: taskView.parent
+                anchors.top: taskView.top
+                anchors.left: taskView.right
+                anchors.bottom: taskView.bottom
             }
 
             section.property: "type"
@@ -346,7 +346,7 @@ Page {
                 showDone: showDoneCheckBox.checked
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
-                filterString: searchField.text
+                filterString: filterField.text
                 //                sortColumn: tableHeaderModel[tableSortColumn].columnName
                 //                sortOrder: tableSortOrder
             }
@@ -524,7 +524,7 @@ Page {
                                     page.refresh();
                                 }
                                 onPressAndHold: {
-                                    listView.currentIndex = index
+                                    taskView.currentIndex = index
                                     calendarPopup.taskId = model.task_id
                                     calendarPopup.open()
                                 }
