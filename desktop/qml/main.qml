@@ -20,6 +20,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.3
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
+import QtQuick.Window 2.10
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -45,6 +46,7 @@ ApplicationWindow {
     property bool showSaveButton: false
     property string searchString: searchField.text
     property alias stackView: stackView
+    property int oldWindowVisibility: Window.Windowed
 
     // TODO: put this in a separate file
     readonly property var monthsOrder : [
@@ -53,6 +55,16 @@ ApplicationWindow {
         [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
         [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
     ]
+
+    function toggleFullScreen() {
+        if (window.visibility === Window.FullScreen) {
+            window.visibility = oldWindowVisibility
+        }
+        else {
+            oldWindowVisibility = window.visibility
+            window.visibility = Window.FullScreen
+        }
+    }
 
     title: "Qrop"
     visible: true
@@ -73,6 +85,59 @@ ApplicationWindow {
         sequence: StandardKey.Quit
         context: Qt.ApplicationShortcut
         onActivated: Qt.quit()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+1"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = 0
+    }
+
+    Shortcut {
+        sequence: "Ctrl+2"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = 1
+    }
+
+    Shortcut {
+        sequence: "Ctrl+3"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = 2
+    }
+
+    Shortcut {
+        sequence: "Ctrl+0"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = navigationModel.length
+    }
+
+    Shortcut {
+        sequence: StandardKey.NextChild
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            if (navigationIndex === navigationModel.length)
+                navigationIndex = 0;
+            else
+                navigationIndex++;
+        }
+    }
+
+    Shortcut {
+        sequence: StandardKey.PreviousChild
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            if (navigationIndex === 0)
+                navigationIndex = navigationModel.length;
+            else
+                navigationModel--;
+        }
+    }
+
+    Shortcut {
+        objectName: "fullScreenToggleShortcut"
+        context: Qt.ApplicationShortcut
+        sequence: "F11"
+        onActivated: toggleFullScreen()
     }
 
     Settings {
@@ -96,6 +161,7 @@ ApplicationWindow {
                 text: qsTr("Quit")
             }
         }
+
         Platform.Menu {
             id: helpMenu
             objectName: "helpMenu"
@@ -168,7 +234,6 @@ ApplicationWindow {
                     } else {
                         drawer.open()
                     }
-
                 }
             }
 

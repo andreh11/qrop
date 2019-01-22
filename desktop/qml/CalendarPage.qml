@@ -58,6 +58,49 @@ Page {
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
+    Shortcut {
+        sequences: ["Ctrl+N"]
+        enabled: navigationIndex === 1 && addButton.visible
+        context: Qt.ApplicationShortcut
+//        onActivated: plantingDialog.createPlanting();
+        onActivated: addButton.clicked()
+    }
+
+    Shortcut {
+        sequences: [StandardKey.Find, "Ctrl+K"]
+        enabled: navigationIndex === 1
+        context: Qt.ApplicationShortcut
+        onActivated: filterField.forceActiveFocus();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Right"
+        enabled: navigationIndex === 1
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.nextWeek()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Left"
+        enabled: navigationIndex === 1
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.previousWeek()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Up"
+        enabled: navigationIndex === 1
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.nextYear()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Down"
+        enabled: navigationIndex === 1
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.previousYear();
+    }
+
     TaskDialog {
         id: taskDialog
         width: parent.width / 2

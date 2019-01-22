@@ -149,6 +149,7 @@ ListView {
         plantingModel.resetFilter();
     }
 
+    focus: true
     onTableSortColumnChanged: tableSortOrder = "ascending"
     clip: true
     width: parent.width - verticalScrollBar.width
@@ -159,14 +160,27 @@ ListView {
     bottomMargin: horizontalScrollBar.height
     contentWidth: contentItem.childrenRect.width
     contentHeight: contentItem.childrenRect.height
+    highlightMoveDuration: 0
+    highlightResizeDuration: 0
+    highlight: Rectangle {
+        z:3;
+        opacity: 0.1;
+        color: Material.primary
+        radius: 2
+    }
 
     implicitWidth: contentWidth
     implicitHeight: contentHeight
 
-    Keys.onUpPressed: verticalScrollBar.decrease()
-    Keys.onDownPressed: verticalScrollBar.increase()
+//    Keys.onUpPressed: verticalScrollBar.decrease()
+//    Keys.onDownPressed: verticalScrollBar.increase()
     Keys.onRightPressed: horizontalScrollBar.increase()
     Keys.onLeftPressed: horizontalScrollBar.decrease()
+    Keys.onSpacePressed: {
+        var plantingId = plantingModel.rowId(currentIndex)
+        selectedIds[plantingId] = !selectedIds[plantingId]
+        selectedIdsChanged()
+    }
 
     add: Transition {
         NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }

@@ -67,10 +67,18 @@ Dialog {
 
     modal: true
     focus: true
-    closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
     contentWidth: scrollView.implicitWidth
     contentHeight: scrollView.implicitHeight
+
+    Shortcut {
+        sequence: "Ctrl+Enter"
+        enabled: parent.visible
+        context: Qt.ApplicationShortcut
+        onActivated: if (plantingForm.accepted) accept();
+    }
+
 
     header: PlantingFormHeader {
         visible: mode === "add"
