@@ -74,6 +74,8 @@ TextField {
 
     onAccepted: nextItemInFocusChain().forceActiveFocus()
 
+    Keys.onEscapePressed: event.accepted = false
+
     Label {
         id: fieldLabel
         x: control.leftPadding

@@ -30,8 +30,8 @@ Page {
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
-    property alias listView: listView
-    property var activeCompleteButton: listView.currentItem
+    property alias listView: taskView
+    property var activeCompleteButton: taskView.currentItem
 
     property var tableHeaderModel: [
         { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
@@ -46,9 +46,9 @@ Page {
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
         // and view position will be reset.
-        var currentY = listView.contentY
+        var currentY = taskView.contentY
         taskModel.refresh();
-        listView.contentY = currentY
+        taskView.contentY = currentY
     }
 
     title: qsTr("Task calendar")
@@ -57,6 +57,79 @@ Page {
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
     onTableSortColumnChanged: tableSortOrder = "descending"
+
+    Shortcut {
+        sequences: ["Ctrl+N"]
+        enabled: navigationIndex === 1 && addButton.visible && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: addButton.clicked()
+    }
+
+    Shortcut {
+        sequences: [StandardKey.Find]
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: filterField.forceActiveFocus();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Right"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.nextWeek()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Left"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.previousWeek()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Up"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.nextYear()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Down"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: weekSpinBox.previousYear();
+    }
+
+    Shortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: navigationIndex === 1 && !taskView.activeFocus && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            taskView.currentIndex = 0
+            taskView.forceActiveFocus();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+J"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showDoneCheckBox.toggle();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+K"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showDueCheckBox.toggle();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+L"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showOverdueCheckBox.toggle();
+    }
 
     TaskDialog {
         id: taskDialog
@@ -168,7 +241,7 @@ Page {
                 }
 
                 SearchField {
-                    id: searchField
+                    id: filterField
                     placeholderText: qsTr("Search Tasks")
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
@@ -251,7 +324,7 @@ Page {
             }
 
         ListView {
-            id: listView
+            id: taskView
             clip: true
             spacing: 4
             anchors {
@@ -265,11 +338,14 @@ Page {
                 rightMargin: parent.width * 0.1
             }
 
-            add: Transition {
-                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
-            }
-            remove: Transition {
-                NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
+            highlightMoveDuration: 0
+            highlightResizeDuration: 0
+            highlight: Rectangle {
+                visible: taskView.activeFocus
+                z:3;
+                opacity: 0.1;
+                color: Material.primary
+                radius: 2
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -277,19 +353,29 @@ Page {
 
             ScrollBar.vertical: ScrollBar {
                 visible: largeDisplay
-                parent: listView.parent
-                anchors.top: listView.top
-                anchors.left: listView.right
-                anchors.bottom: listView.bottom
+                parent: taskView.parent
+                anchors.top: taskView.top
+                anchors.left: taskView.right
+                anchors.bottom: taskView.bottom
             }
 
-            Shortcut {
-                sequence: "Ctrl+K"
-                onActivated: {
-                    filterMode = true
-                    filterField.focus = true
-                }
+            Keys.onSpacePressed: {
+                if (event.modifiers & Qt.ControlModifier)
+                    currentItem.completeButton.pressAndHold()
+                else
+                    currentItem.completeButton.clicked()
             }
+
+            Keys.onPressed: {
+                if (event.key === Qt.Key_E)
+                    currentItem.editTask()
+                if (event.key === Qt.Key_D)
+                    currentItem.detailsButton.toggle()
+            }
+
+            Keys.onRightPressed: currentItem.forwardDelayButton.clicked()
+            Keys.onLeftPressed: currentItem.backwardDelayButton.clicked()
+            Keys.onDeletePressed: currentItem.deleteButton.clicked()
 
             section.property: "type"
             section.criteria: ViewSection.FullString
@@ -303,7 +389,7 @@ Page {
                 showDone: showDoneCheckBox.checked
                 showDue: showDueCheckBox.checked
                 showOverdue: showOverdueCheckBox.checked
-                filterString: searchField.text
+                filterString: filterField.text
                 //                sortColumn: tableHeaderModel[tableSortColumn].columnName
                 //                sortOrder: tableSortOrder
             }
@@ -348,6 +434,17 @@ Page {
 
             delegate: Rectangle {
                 id: delegate
+
+                property alias completeButton: completeButton
+                property alias forwardDelayButton: forwardDelayButton
+                property alias backwardDelayButton: backwardDelayButton
+                property alias deleteButton: deleteButton
+                property alias detailsButton: detailsButton
+
+                function editTask() {
+                    taskDialog.editTask(model.task_id)
+                }
+
                 color: "white"
                 border.color: Material.color(Material.Grey, Material.Shade400)
                 border.width: rowMouseArea.containsMouse ? 1 : 0
@@ -356,7 +453,6 @@ Page {
                 property var plantingIdList: model.plantings.split(",")
                 property var locationIdList: model.locations.split(",")
                 property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
-
 
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
@@ -370,7 +466,7 @@ Page {
                     //                    z: 3
                     cursorShape: Qt.PointingHandCursor
 
-                    onClicked: taskDialog.editTask(model.task_id)
+                    onClicked: editTask()
 
                     Rectangle {
                         id: taskButtonRectangle
@@ -409,9 +505,12 @@ Page {
 //                            }
 
                             MyToolButton {
+                                id: backwardDelayButton
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: !model.done
-                                text: "-7"
+                                text: "\ue314"
+                                font.family: "Material Icons"
+                                font.pointSize: Units.fontSizeBodyAndButton
                                 onClicked: {
                                     Task.delay(model.task_id, -1);
                                     page.refresh();
@@ -421,9 +520,11 @@ Page {
                             }
 
                             MyToolButton {
-                                text: "+7"
+                                id: forwardDelayButton
+                                text: "\ue315"
+                                font.family: "Material Icons"
+                                font.pointSize: Units.fontSizeBodyAndButton
                                 visible: !model.done
-                                font.family: "Roboto Condensed"
                                 anchors.verticalCenter: parent.verticalCenter
                                 onClicked: {
                                     Task.delay(model.task_id, 1);
@@ -434,6 +535,7 @@ Page {
                             }
 
                             MyToolButton {
+                                id: deleteButton
                                 text: enabled ? "\ue872" : ""
                                 font.family: "Material Icons"
                                 font.pixelSize: 22
@@ -481,7 +583,7 @@ Page {
                                     page.refresh();
                                 }
                                 onPressAndHold: {
-                                    listView.currentIndex = index
+                                    taskView.currentIndex = index
                                     calendarPopup.taskId = model.task_id
                                     calendarPopup.open()
                                 }

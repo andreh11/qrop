@@ -83,13 +83,22 @@ ListView {
     boundsBehavior: Flickable.StopAtBounds
     flickableDirection: Flickable.HorizontalAndVerticalFlick
 
+    Keys.onSpacePressed: currentItem.select()
+
+    highlightMoveDuration: 0
+    highlightResizeDuration: 0
+    highlight: Rectangle {
+        visible: listView.activeFocus
+        z:3;
+        opacity: 0.1;
+        color: Material.primary
+        radius: 2
+    }
+
     model: PlantingModel {
         id: plantingModel
         year: listView.year
     }
-
-    Keys.onUpPressed: verticalScrollBar.decrease()
-    Keys.onDownPressed: verticalScrollBar.increase()
 
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
@@ -105,7 +114,14 @@ ListView {
 
         property bool checked: false
 
+        function select() {
+            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
+            lastIndexClicked = index
+            selectedIdsChanged()
+        }
+
         TextCheckBox {
+            id: checkBox
             width: parent.height
             visible: !rowDelegate.checked
             selectionMode: checks > 0
@@ -122,10 +138,7 @@ ListView {
                 onClicked: {
                     if (mouse.button !== Qt.LeftButton)
                         return
-
-                    selectedIds[model.planting_id] = !selectedIds[model.planting_id]
-                    lastIndexClicked = index
-                    selectedIdsChanged()
+                    select();
                 }
             }
         }

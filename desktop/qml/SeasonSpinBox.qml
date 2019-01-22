@@ -31,6 +31,14 @@ Item {
         qsTr("Winter")
     ]
 
+    function previousYear() {
+        year--;
+    }
+
+    function nextYear() {
+        year++;
+    }
+
     function previousSeason() {
         if (season == 0) {
             season = 3;
@@ -82,7 +90,7 @@ Item {
             onClicked: previousSeason()
             flat: true
             ToolTip.visible: hovered
-        ToolTip.text: qsTr("Previous season")
+            ToolTip.text: qsTr("Previous season")
         }
 
         Label {
@@ -94,11 +102,10 @@ Item {
             Layout.preferredWidth: width
         }
 
-
         Label {
             text: year
             font.family: "Roboto Regular"
-//            Layout.fillWidth: true
+            //            Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -126,7 +133,7 @@ Item {
             flat: true
             onClicked: year++
             ToolTip.visible: hovered
-        ToolTip.text: qsTr("Next year")
+            ToolTip.text: qsTr("Next year")
         }
     }
 }

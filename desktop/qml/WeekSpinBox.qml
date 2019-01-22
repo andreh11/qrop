@@ -11,6 +11,14 @@ Item {
     property int week: 1
     property int year: 2018
     
+    function previousYear() {
+        year--;
+    }
+
+    function nextYear() {
+        year++;
+    }
+
     function previousWeek() {
         if (week == 1) {
             week = 52;
@@ -28,7 +36,7 @@ Item {
             week++;
         }
     }
-    
+
     implicitHeight: buttonLayout.implicitHeight
     implicitWidth: buttonLayout.implicitWidth
     height: implicitHeight

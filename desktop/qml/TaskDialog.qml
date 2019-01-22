@@ -45,6 +45,7 @@ Dialog {
         taskDialogHeader.reset();
         taskForm.reset()
         dialog.open()
+        taskDialogHeader.typeField.forceActiveFocus();
     }
 
     function editTask(taskId) {

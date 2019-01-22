@@ -82,6 +82,112 @@ Page {
         property alias tableModel: plantingsView.tableHeaderModel
     }
 
+    Shortcut {
+        sequences: ["Ctrl+N"]
+        enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+//        onActivated: plantingDialog.createPlanting();
+        onActivated: addButton.clicked()
+    }
+
+    Shortcut {
+        sequences: ["Ctrl+T"]
+        enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+//        onActivated: plantingDialog.createPlanting();
+        onActivated: timegraphButton.toggle();
+    }
+
+
+    Shortcut {
+        sequences: [StandardKey.Find]
+        enabled: navigationIndex === 0 && filterField.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: filterField.forceActiveFocus();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+E"
+        enabled: navigationIndex === 0 && editButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: editButton.clicked()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+D"
+        enabled: navigationIndex === 0 && duplicateButton.visible && !plantingDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: duplicateButton.clicked()
+    }
+
+    Shortcut {
+        sequence: StandardKey.Delete
+        enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: deleteButton.clicked()
+    }
+
+    Shortcut {
+        sequence: StandardKey.SelectAll
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: plantingsView.selectAll();
+    }
+
+    Shortcut {
+        sequence: StandardKey.Deselect
+        enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: plantingsView.unselectAll()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Right"
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.nextSeason()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Left"
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.previousSeason();
+    }
+
+    Shortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: navigationIndex === 0 && !plantingsView.activeFocus && !plantingDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            plantingsView.currentIndex = 0
+            plantingsView.forceActiveFocus();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Up"
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.nextYear()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Down"
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.previousYear();
+    }
+
     PlantingDialog {
         id: plantingDialog
 //        width: parent.width / 2

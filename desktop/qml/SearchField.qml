@@ -34,12 +34,14 @@ TextField {
     topPadding: 16
     focus: true
 
-    Shortcut {
-        sequence: "Escape"
-        onActivated: {
-            filterMode = false
+    Keys.onEscapePressed: {
+        event.accepted = true
+        console.log("ESC")
+        if (filterField.length)
             filterField.clear()
-        }
+        else
+            filterField.focus = false;
+
     }
     
     background: Rectangle {

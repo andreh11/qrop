@@ -149,6 +149,7 @@ ListView {
         plantingModel.resetFilter();
     }
 
+    focus: true
     onTableSortColumnChanged: tableSortOrder = "ascending"
     clip: true
     width: parent.width - verticalScrollBar.width
@@ -159,22 +160,24 @@ ListView {
     bottomMargin: horizontalScrollBar.height
     contentWidth: contentItem.childrenRect.width
     contentHeight: contentItem.childrenRect.height
+    highlightMoveDuration: 0
+    highlightResizeDuration: 0
+    highlight: Rectangle {
+        visible: listView.activeFocus
+        z:3;
+        opacity: 0.1;
+        color: Material.primary
+        radius: 2
+    }
 
     implicitWidth: contentWidth
     implicitHeight: contentHeight
 
-    Keys.onUpPressed: verticalScrollBar.decrease()
-    Keys.onDownPressed: verticalScrollBar.increase()
+//    Keys.onUpPressed: verticalScrollBar.decrease()
+//    Keys.onDownPressed: verticalScrollBar.increase()
     Keys.onRightPressed: horizontalScrollBar.increase()
     Keys.onLeftPressed: horizontalScrollBar.decrease()
-
-    add: Transition {
-        NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
-    }
-
-    remove: Transition {
-        NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
-    }
+    Keys.onSpacePressed: currentItem.checkBox.select()
 
     model: PlantingModel {
         id: plantingModel
@@ -214,14 +217,6 @@ ListView {
         }
         orientation: Qt.Horizontal
 //        policy: ScrollBar.AlwaysOn
-    }
-
-    Shortcut {
-        sequence: "Ctrl+K"
-        onActivated: {
-            filterMode = true
-            filterField.forceActiveFocus();
-        }
     }
 
     headerPositioning: ListView.OverlayHeader
@@ -400,6 +395,8 @@ ListView {
     delegate: Rectangle {
         id: delegate
 
+        property alias checkBox: checkBox
+
         property date seedingDate: model.sowing_date
         property date transplantingDate: model.planting_date
         property date beginHarvestDate: model.beg_harvest_date
@@ -457,6 +454,13 @@ ListView {
 
                 TextCheckBox {
                     id: checkBox
+
+                    function select() {
+                        selectedIds[model.planting_id] = !selectedIds[model.planting_id]
+                        lastIndexClicked = index
+                        selectedIdsChanged()
+                    }
+
                     text: model.crop
                     selectionMode: checks > 0
                     anchors.verticalCenter: row.verticalCenter
@@ -467,14 +471,12 @@ ListView {
                     checked: model.planting_id in selectedIds && selectedIds[model.planting_id]
 
                     MouseArea {
+                        id: checkBoxMouseArea
                         anchors.fill: parent
                         onClicked: {
                             if (mouse.button !== Qt.LeftButton)
                                 return
-
-                            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
-                            lastIndexClicked = index
-                            selectedIdsChanged()
+                            parent.select()
                         }
                     }
                 }

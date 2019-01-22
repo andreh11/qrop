@@ -122,9 +122,9 @@ ComboBox {
         contentItem: Column {
             width: parent.width
             height: parent.height
-
             ListView {
                 id: listView
+                focus: true
                 clip: true
                 currentIndex: control.highlightedIndex
                 width: parent.width
@@ -136,6 +136,14 @@ ComboBox {
                 keyNavigationEnabled: true
                 keyNavigationWraps: true
 
+                Keys.priority: Keys.AfterItem
+
+//                Shortcut {
+//                    sequence: "Down"
+//                    enabled: listView.visible && listView.currentIndex === listView.count - 1 && showAddItem
+//                    context: Qt.ApplicationShortcut
+//                    onActivated: addItemRectangle.forceActiveFocus();
+//                }
 
                 ScrollBar.vertical: ScrollBar { }
 
@@ -145,13 +153,6 @@ ComboBox {
                     font.family: "Robo Regular"
                     width: parent.width
                 }
-
-//            Component {
-//                id: footerComponent
-//            }
-
-//            footer: showAddItem ? footerComponent : null
-//            footerPositioning: ListView.OverlayFooter
         }
 
         Rectangle {
