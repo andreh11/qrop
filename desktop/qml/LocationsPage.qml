@@ -50,6 +50,53 @@ Page {
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
+    Shortcut {
+        sequences: [StandardKey.Find]
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: filterField.forceActiveFocus();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Right"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.nextSeason()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Left"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.previousSeason();
+    }
+
+    Shortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            plantingsView.currentIndex = 0
+            plantingsView.forceActiveFocus();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Up"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.nextYear()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Down"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: seasonSpinBox.previousYear();
+    }
+
     onEditModeChanged: {
         if (!editMode) {
             locationView.clearSelection();
@@ -231,12 +278,13 @@ Page {
             }
 
             SearchField {
-                id: searchField
+                id: filterField
                 visible: !editMode
                 placeholderText: qsTr("Search Plantings")
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhPreferLowercase
             }
+
             Item {
                 id: fillerItem
                 visible: editMode
@@ -347,8 +395,8 @@ Page {
                 Label {
                     id: emptyPlantingStateLabel
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: searchField.text
-                          ? qsTr('No more "%1" plantings to assign for this season.').arg(searchField.text)
+                    text: filterField.text
+                          ? qsTr('No more "%1" plantings to assign for this season.').arg(filterField.text)
                           : qsTr('No more plantings to assign for this season.')
                     font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
                     color: Qt.rgba(0, 0, 0, 0.8)
@@ -383,7 +431,7 @@ Page {
                 }
 
                 Button {
-                    visible: searchField.text
+                    visible: filterField.text
                     anchors.horizontalCenter: parent.horizontalCenter
                     id: clearSearchFieldButton
                     text: qsTr("Clear search Field")
@@ -391,7 +439,7 @@ Page {
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                     Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: searchField.text = ""
+                    onClicked: filterField.text = ""
                 }
 
             }
@@ -429,7 +477,7 @@ Page {
                 dragActive: true
                 tableSortColumn: 3 // planting_date
                 tableSortOrder: "ascending"
-                filterString: searchField.text
+                filterString: filterField.text
                 anchors.fill: parent
             }
         }

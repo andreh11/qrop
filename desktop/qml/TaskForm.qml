@@ -126,6 +126,34 @@ Flickable {
     implicitHeight: 200
     Layout.minimumHeight: implicitHeight
 
+    Shortcut {
+        sequences: [StandardKey.Find]
+        enabled: control.visible && plantingSearchField.visible
+        context: Qt.ApplicationShortcut
+        onActivated: plantingSearchField.forceActiveFocus()
+    }
+
+    Shortcut {
+        sequences: ["Ctrl+J"]
+        enabled: control.visible && currentPlantingsCheckbox.visible
+        context: Qt.ApplicationShortcut
+        onActivated: currentPlantingsCheckbox.toggle()
+    }
+
+    Shortcut {
+        sequence: StandardKey.SelectAll
+        enabled: control.visible && plantingList.visible
+        context: Qt.ApplicationShortcut
+        onActivated: plantingList.selectAll();
+    }
+
+    Shortcut {
+        sequence: StandardKey.Deselect
+        enabled: control.visible && plantingList.visible
+        context: Qt.ApplicationShortcut
+        onActivated: plantingList.unselectAll();
+    }
+
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent

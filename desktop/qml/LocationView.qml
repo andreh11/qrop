@@ -382,6 +382,7 @@ Item {
                         height: Units.rowHeight + 1
                         color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
                                          selectionModel.isSelected(styleData.index) ? 1.1 :  1)
+
                         ThinDivider {
                             anchors {
                                 bottom: parent.bottom

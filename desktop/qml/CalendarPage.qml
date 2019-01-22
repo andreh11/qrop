@@ -66,7 +66,7 @@ Page {
     }
 
     Shortcut {
-        sequences: [StandardKey.Find, "Ctrl+K"]
+        sequences: [StandardKey.Find]
         enabled: navigationIndex === 1 && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
@@ -104,7 +104,31 @@ Page {
         sequences: ["Up", "Down", "Left", "Right"]
         enabled: navigationIndex === 1 && !taskView.activeFocus && !taskDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: taskView.forceActiveFocus();
+        onActivated: {
+            taskView.currentIndex = 0
+            taskView.forceActiveFocus();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+J"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showDoneCheckBox.toggle();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+K"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showDueCheckBox.toggle();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+L"
+        enabled: navigationIndex === 1 && !taskDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: showOverdueCheckBox.toggle();
     }
 
     TaskDialog {
@@ -317,6 +341,7 @@ Page {
             highlightMoveDuration: 0
             highlightResizeDuration: 0
             highlight: Rectangle {
+                visible: taskView.activeFocus
                 z:3;
                 opacity: 0.1;
                 color: Material.primary
@@ -333,6 +358,24 @@ Page {
                 anchors.left: taskView.right
                 anchors.bottom: taskView.bottom
             }
+
+            Keys.onSpacePressed: {
+                if (event.modifiers & Qt.ControlModifier)
+                    currentItem.completeButton.pressAndHold()
+                else
+                    currentItem.completeButton.clicked()
+            }
+
+            Keys.onPressed: {
+                if (event.key === Qt.Key_E)
+                    currentItem.editTask()
+                if (event.key === Qt.Key_D)
+                    currentItem.detailsButton.toggle()
+            }
+
+            Keys.onRightPressed: currentItem.forwardDelayButton.clicked()
+            Keys.onLeftPressed: currentItem.backwardDelayButton.clicked()
+            Keys.onDeletePressed: currentItem.deleteButton.clicked()
 
             section.property: "type"
             section.criteria: ViewSection.FullString
@@ -391,6 +434,17 @@ Page {
 
             delegate: Rectangle {
                 id: delegate
+
+                property alias completeButton: completeButton
+                property alias forwardDelayButton: forwardDelayButton
+                property alias backwardDelayButton: backwardDelayButton
+                property alias deleteButton: deleteButton
+                property alias detailsButton: detailsButton
+
+                function editTask() {
+                    taskDialog.editTask(model.task_id)
+                }
+
                 color: "white"
                 border.color: Material.color(Material.Grey, Material.Shade400)
                 border.width: rowMouseArea.containsMouse ? 1 : 0
@@ -399,7 +453,6 @@ Page {
                 property var plantingIdList: model.plantings.split(",")
                 property var locationIdList: model.locations.split(",")
                 property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
-
 
                 height: summaryRow.height + detailsRow.height
                 width: parent.width
@@ -413,7 +466,7 @@ Page {
                     //                    z: 3
                     cursorShape: Qt.PointingHandCursor
 
-                    onClicked: taskDialog.editTask(model.task_id)
+                    onClicked: editTask()
 
                     Rectangle {
                         id: taskButtonRectangle
@@ -452,9 +505,12 @@ Page {
 //                            }
 
                             MyToolButton {
+                                id: backwardDelayButton
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: !model.done
-                                text: "-7"
+                                text: "\ue314"
+                                font.family: "Material Icons"
+                                font.pointSize: Units.fontSizeBodyAndButton
                                 onClicked: {
                                     Task.delay(model.task_id, -1);
                                     page.refresh();
@@ -464,9 +520,11 @@ Page {
                             }
 
                             MyToolButton {
-                                text: "+7"
+                                id: forwardDelayButton
+                                text: "\ue315"
+                                font.family: "Material Icons"
+                                font.pointSize: Units.fontSizeBodyAndButton
                                 visible: !model.done
-                                font.family: "Roboto Condensed"
                                 anchors.verticalCenter: parent.verticalCenter
                                 onClicked: {
                                     Task.delay(model.task_id, 1);
@@ -477,6 +535,7 @@ Page {
                             }
 
                             MyToolButton {
+                                id: deleteButton
                                 text: enabled ? "\ue872" : ""
                                 font.family: "Material Icons"
                                 font.pixelSize: 22

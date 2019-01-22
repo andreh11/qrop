@@ -102,7 +102,7 @@ Page {
 
 
     Shortcut {
-        sequences: [StandardKey.Find, "Ctrl+K"]
+        sequences: [StandardKey.Find]
         enabled: navigationIndex === 0 && filterField.visible && !plantingDialog.activeFocus
 
         context: Qt.ApplicationShortcut
@@ -168,19 +168,22 @@ Page {
         sequences: ["Up", "Down", "Left", "Right"]
         enabled: navigationIndex === 0 && !plantingsView.activeFocus && !plantingDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: plantingsView.forceActiveFocus();
+        onActivated: {
+            plantingsView.currentIndex = 0
+            plantingsView.forceActiveFocus();
+        }
     }
 
     Shortcut {
         sequence: "Ctrl+Up"
-        enabled: navigationIndex === 0 && !deleteButton.visible
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.nextYear()
     }
 
     Shortcut {
         sequence: "Ctrl+Down"
-        enabled: navigationIndex === 0 && !deleteButton.visible
+        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.previousYear();
     }

@@ -102,7 +102,6 @@ Item {
             Layout.preferredWidth: width
         }
 
-
         Label {
             text: year
             font.family: "Roboto Regular"
