@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
     version. Each script will applied successively to reach the latest version.
 
 ### Changed
+  - *Field map* − Add shortcut to show/hide the plantings pane.
+  - *Field map* − Attach show/hide button to the plantings pane.
   - Update French translation.
 
 ### Fixed
