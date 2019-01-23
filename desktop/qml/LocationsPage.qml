@@ -31,6 +31,7 @@ Page {
     property alias season: seasonSpinBox.season
     property alias hasSelection: locationView.hasSelection
     property alias rowCount: locationView.rowCount
+    property bool showPlantingsPane: true
 
     function refresh() {
         locationView.refresh();
@@ -55,6 +56,14 @@ Page {
         enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
+    }
+
+    Shortcut {
+        sequence: "Ctrl+P"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+
+        context: Qt.ApplicationShortcut
+        onActivated: showPlantingPaneButton.clicked()
     }
 
     Shortcut {
@@ -261,13 +270,13 @@ Page {
                 }
             }
 
-            CheckBox {
-                id: unassignedPlantingsCheckbox
-                text: qsTr("Show unassigned plantings")
-                Layout.leftMargin: 16
-                visible: !editMode
-                checked: true
-            }
+//            CheckBox {
+//                id: unassignedPlantingsCheckbox
+//                text: qsTr("Show unassigned plantings")
+//                Layout.leftMargin: 16
+//                visible: !editMode
+//                checked: true
+//            }
 
             CheckBox {
                 id: emptyLocationsCheckbox
@@ -313,7 +322,7 @@ Page {
             top: topDivider.bottom
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
-            margins: Units.smallSpacing
+            margins: 0
         }
         spacing: Units.smallSpacing
         width: plantingsView.implicitWidth
@@ -375,13 +384,55 @@ Page {
 
         Pane {
             id: plantingsPane
-            visible: unassignedPlantingsCheckbox.checked & !editMode
+//            visible: unassignedPlantingsCheckbox.checked & !editMode
+            visible: !editMode
+
+
             padding: 0
             Layout.fillWidth: true
             //            Layout.fillHeight: true
-            Layout.minimumHeight: page.height / 4
+            Layout.minimumHeight: showPlantingsPane ? page.height / 4 : 0
+//            Layout.minimumHeight: unassignedPlantingsCheckbox.checked ? page.height / 4 : 10
             Material.elevation: 2
             Material.background: "white"
+
+            Behavior on Layout.minimumHeight {
+                NumberAnimation { duration: Units.shortDuration  }
+            }
+
+            MouseArea {
+                id: plantingPaneMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+
+            RoundButton {
+                id: showPlantingPaneButton
+                text: ">"
+                Material.background: "white"
+                width: 60
+                height: width
+                anchors.top: parent.top
+                anchors.topMargin: visible ? -width/2 : 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: showPlantingsPane =!showPlantingsPane
+                contentItem: Text {
+                    text: showPlantingsPane ? "\ue313" : "\ue316"
+                    font.family: "Material Icons"
+                    font.pixelSize: 24
+//                    color: parent.down ? "#17a81a" : "#21be2b"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.Top
+                    elide: Text.ElideRight
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.text: showPlantingsPane ? qsTr("Hide the plantings pane") : qsTr("Show the planting pane")
+                ToolTip.delay: Units.shortDuration
+
+                Behavior on anchors.topMargin {
+                    NumberAnimation { duration: Units.shortDuration  }
+                }
+            }
 
             Column {
                 id: emptyPlantingStateColumn
@@ -484,3 +535,4 @@ Page {
     }
 }
 
+}
