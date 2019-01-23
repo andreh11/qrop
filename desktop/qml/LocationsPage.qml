@@ -311,6 +311,8 @@ Page {
                             text: index + 1
                             checkable: true
                             checked: expandButton.expandBoolList[index]
+                                     ? expandButton.expandBoolList[index]
+                                     : false
                             onTriggered: expandButton.expandLevel(index)
                         }
                     }
