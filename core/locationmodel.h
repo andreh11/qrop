@@ -33,6 +33,7 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 
     Q_PROPERTY(bool showOnlyEmptyLocations READ showOnlyEmptyLocations WRITE
                        setShowOnlyEmptyLocations NOTIFY showOnlyEmptyLocationsChanged)
+    Q_PROPERTY(int depth READ depth NOTIFY depthChanged)
 
 public:
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
@@ -56,7 +57,8 @@ public:
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
     Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);
     Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
-    Q_INVOKABLE QModelIndexList treeIndexes() const;
+    Q_INVOKABLE QModelIndexList treeIndexes(int depth = -1, bool includeParent = true) const;
+    Q_INVOKABLE int depth() const;
     Q_INVOKABLE QItemSelection treeSelection() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE virtual void refresh() override;
@@ -69,6 +71,7 @@ protected:
 
 signals:
     void showOnlyEmptyLocationsChanged();
+    void depthChanged();
 
 private:
     bool m_showOnlyEmptyLocations;

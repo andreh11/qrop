@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Add button, menu and shortcuts to expand/collapse location level. 
   - Keyboard shortcuts for the most common actions (see user guide in the wiki
    for more details).
   - *Settings* − Add restart snackbar.
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
     version. Each script will applied successively to reach the latest version.
 
 ### Changed
+  - *Field map* − Attach show/hide button to the plantings pane.
   - Update French translation.
 
 ### Fixed

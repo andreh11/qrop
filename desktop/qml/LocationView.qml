@@ -41,6 +41,7 @@ Item {
     property alias draggedPlantingId: treeView.draggedPlantingId
 
     property LocationModel locationModel
+    property alias treeDepth: locationModel.depth
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
     property bool alwaysShowCheckbox: false
@@ -99,8 +100,16 @@ Item {
         }
     }
 
-    function collapseAll() {
-        var indexList = locationModel.treeIndexes();
+    function expandAll(depth) {
+        var indexList = locationModel.treeIndexes(depth);
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            treeView.expand(index);
+        }
+    }
+
+    function collapseAll(depth) {
+        var indexList = locationModel.treeIndexes(depth, false);
         for (var i = 0; i < indexList.length; i++) {
             var index = indexList[i];
             treeView.collapse(index);
@@ -289,29 +298,35 @@ Item {
         ThinDivider { anchors { bottom: parent.bottom; left: parent.left; right: parent.right } }
     }
 
-    ScrollView {
-        id: scrollView
-        anchors {
-            top: headerRectangle.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
+//    ScrollView {
+//        id: scrollView
+//        anchors {
+//            top: headerRectangle.bottom
+//            left: parent.left
+//            right: parent.right
+//            bottom: parent.bottom
+//        }
 
-        clip: true
+//        clip: true
 
-        Flickable {
-            id: flickable
+//        Flickable {
+//            id: flickable
 
-            boundsBehavior: Flickable.StopAtBounds
-            contentHeight: treeView.flickableItem.contentHeight
-            contentWidth: width
+//            boundsBehavior: Flickable.StopAtBounds
+//            contentHeight: treeView.flickableItem.contentHeight
+//            contentWidth: width
 
-            ScrollBar.vertical: ScrollBar { id: verticalScrollBar }
+//            ScrollBar.vertical: ScrollBar { id: verticalScrollBar }
 
             Controls1.TreeView {
                 id: treeView
-                anchors.fill: parent
+//                anchors.fill: parent
+                anchors {
+                    top: headerRectangle.bottom
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
                 property int draggedPlantingId: -1
                 property date plantingDate: Planting.plantingDate(draggedPlantingId)
@@ -336,7 +351,7 @@ Item {
 
                 frameVisible: false
                 horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-                verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
                 implicitWidth: headerRectangle.implicitWidth + 80
 
                 Controls1.TableViewColumn {
@@ -684,5 +699,5 @@ Item {
                 }
             }
         }
-    }
-}
+//    }
+//}
