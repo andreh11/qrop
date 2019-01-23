@@ -271,6 +271,7 @@ Page {
 
             RoundButton {
                 id: expandButton
+                visible: !editMode
                 flat: true
                 text: "\ue313"
                 font.family: "Material Icons"

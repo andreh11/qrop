@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.3 − 2019-01-23
+### Fixed
+  - Compilation error on Linux.
+
 ## 0.1.2 − 2019-01-23
 
 ### Added
