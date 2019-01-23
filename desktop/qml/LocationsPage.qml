@@ -106,6 +106,41 @@ Page {
         onActivated: seasonSpinBox.previousYear();
     }
 
+    Shortcut {
+        sequence: "Shift+A"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: expandButton.expandLevel(0)
+    }
+
+    Shortcut {
+        sequence: "Shift+B"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: expandButton.expandLevel(1)
+    }
+
+    Shortcut {
+        sequence: "Shift+C"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: expandButton.expandLevel(2)
+    }
+
+    Shortcut {
+        sequence: "Shift+D"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: expandButton.expandLevel(3)
+    }
+
+    Shortcut {
+        sequence: "Shift+E"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: expandButton.expandLevel(4)
+    }
+
     onEditModeChanged: {
         if (!editMode) {
             locationView.clearSelection();
@@ -230,6 +265,54 @@ Page {
                     onRejected: {
                         editDialog.close();
                         locationView.clearSelection();
+                    }
+                }
+            }
+
+            RoundButton {
+                id: expandButton
+                flat: true
+                text: "\ue313"
+                font.family: "Material Icons"
+                font.pixelSize: 24
+                onClicked: expandMenu.open();
+
+                property int depth: locationView.treeDepth
+                property var expandBoolList: ({})
+
+                function expandLevel(level) {
+                    if (expandBoolList[level]) {
+                        locationView.collapseAll(level, false)
+                    } else {
+                        locationView.expandAll(level)
+                        for (var i = 0; i < level; i++)
+                            expandBoolList[i] = true
+                    }
+                    expandBoolList[level] = !expandBoolList[level]
+                    expandBoolListChanged();
+                }
+
+                Component.onCompleted: {
+                    for (var i; i < depth; i++)
+                        expandBoolList[i+1] = false
+                }
+
+                ToolTip.text: qsTr("Expand and collapse location levels")
+                ToolTip.delay: Units.shortDuration
+                ToolTip.visible: hovered
+
+                Menu {
+                    id: expandMenu
+                    y: expandButton.height
+
+                    Repeater {
+                        model: expandButton.depth
+                        MenuItem {
+                            text: index + 1
+                            checkable: true
+                            checked: expandButton.expandBoolList[index]
+                            onTriggered: expandButton.expandLevel(index)
+                        }
                     }
                 }
             }
@@ -387,7 +470,6 @@ Page {
 //            visible: unassignedPlantingsCheckbox.checked & !editMode
             visible: !editMode
 
-
             padding: 0
             Layout.fillWidth: true
             //            Layout.fillHeight: true
@@ -407,7 +489,7 @@ Page {
 
             RoundButton {
                 id: showPlantingPaneButton
-                text: ">"
+                z: -1
                 Material.background: "white"
                 width: 60
                 height: width
@@ -434,11 +516,16 @@ Page {
                 }
             }
 
+            Rectangle {
+                color: "white"
+                anchors.fill: parent
+            }
+
             Column {
                 id: emptyPlantingStateColumn
-                z: 1
                 spacing: Units.smallSpacing
-                visible: !plantingsView.rowsNumber
+                visible: !plantingsView.rowsNumber && showPlantingsPane
+                z:2
                 anchors {
                     centerIn: parent
                 }

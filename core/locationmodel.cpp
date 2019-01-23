@@ -224,6 +224,7 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
         }
     }
     QSqlDatabase::database().commit();
+    depthChanged();
 
     return true;
 }
@@ -299,25 +300,72 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
     }
     location->removeList(idList);
 
+    depthChanged();
     return tmodel->removeIndexes(sourceIndexList);
 }
 
-/** Return a list of all QModelIndex of location tree. */
-QModelIndexList LocationModel::treeIndexes() const
+/*!
+ * Return a list of all QModelIndex of location tree.
+ *
+ * If \a depth is greater or equal to 0, only indexes of this depth
+ * will be return, including their parents if \a includeParent is true.
+ */
+QModelIndexList LocationModel::treeIndexes(int depth, bool includeParent) const
 {
     QModelIndex root;
-    QModelIndexList treeList;
+    QModelIndexList tmpList;
+    QModelIndexList indexList;
+    QMap<QModelIndex, int> indexDepth;
 
-    for (int row = 0; row < rowCount(root); row++)
-        treeList.push_back(index(row, 0, root));
-
-    for (int i = 0; i < treeList.length(); i++) {
-        QModelIndex parent = treeList[i];
-        for (int row = 0; row < rowCount(parent); row++)
-            treeList.push_back(index(row, 0, parent));
+    for (int row = 0; row < rowCount(root); row++) {
+        QModelIndex idx = index(row, 0, root);
+        tmpList.push_back(idx);
+        indexDepth[idx] = 0;
+        if (depth < 0 || indexDepth[idx] == depth || (indexDepth[idx] < depth && includeParent))
+            indexList.push_back(idx);
     }
 
-    return treeList;
+    for (int i = 0; i < tmpList.length(); i++) {
+        QModelIndex parent = tmpList[i];
+        for (int row = 0; row < rowCount(parent); row++) {
+            QModelIndex idx = index(row, 0, parent);
+            indexDepth[idx] = indexDepth.value(parent) + 1;
+            if (indexDepth[idx] < depth)
+                tmpList.push_back(idx);
+            if (depth < 0 || indexDepth[idx] == depth || (indexDepth[idx] < depth && includeParent))
+                indexList.push_back(idx);
+        }
+    }
+
+    return indexList;
+}
+
+int LocationModel::depth() const
+{
+    QModelIndex root;
+    QModelIndexList tmpList;
+    QMap<QModelIndex, int> indexDepth;
+    int d = 0;
+
+    for (int row = 0; row < rowCount(root); row++) {
+        QModelIndex idx = index(row, 0, root);
+        tmpList.push_back(idx);
+        indexDepth[idx] = 0;
+    }
+
+    for (int i = 0; i < tmpList.length(); i++) {
+        QModelIndex parent = tmpList[i];
+        for (int row = 0; row < rowCount(parent); row++) {
+            QModelIndex idx = index(row, 0, parent);
+            indexDepth[idx] = indexDepth.value(parent) + 1;
+            tmpList.push_back(idx);
+
+            if (indexDepth[idx] > d)
+                d = indexDepth[idx];
+        }
+    }
+
+    return d;
 }
 
 /** Return a list of all QModelIndex of location tree. */
