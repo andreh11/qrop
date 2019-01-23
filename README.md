@@ -53,8 +53,8 @@ may not work on other distributions or version.
 
 Download the right Zip file for you architecture:
 
- - https://ah.ouvaton.org/qrop/qrop-0.1.1-x86.zip (32 bit)
- - https://ah.ouvaton.org/qrop/qrop-0.1.1-amd64.zip (64 bit)
+ - https://ah.ouvaton.org/qrop/qrop-0.1.2-x86.zip (32 bit)
+ - https://ah.ouvaton.org/qrop/qrop-0.1.2-amd64.zip (64 bit)
 
 Unzip it, open the folder and click on "desktop" to launch the application.
 
