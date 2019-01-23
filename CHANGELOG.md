@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.1.2 − 2019-01-23
 
 ### Added
-  - *Field map* − Add button, menu and shortcuts to expand/collapse location level. 
+  - *Field map* − Add button, menu and shortcuts to expand/collapse location level.
   - Keyboard shortcuts for the most common actions (see user guide in the wiki
    for more details).
   - *Settings* − Add restart snackbar.
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
   - *Planting view* - Properly set greenhouse checkbox state.
   - *Plantings view* − Timegraph end harvest bar drawing (add one week).
   - *Planting form* − Date update bug which prevented proper duration update.
+  - ComboBox: fix popup scrollbar.
   - Properly clean database before reset.
 
 ## 0.1.1 - 2019-01-10
