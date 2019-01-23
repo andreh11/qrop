@@ -7,8 +7,8 @@ qmake -config release ..;
 make -j 8;
 mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
 mkdir deploy/usr/share/applications;
+cp -R core/*so* desktop/* deploy/usr/bin
 find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
-cp -R core/* desktop/* deploy/usr/bin
 cd deploy;
 cp ../../logo.png desktop.png
 cp ../../dist/Qrop.desktop usr/share/applications

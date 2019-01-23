@@ -68,3 +68,5 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
     qropdoublevalidator.h
+
+QMAKE_LFLAGS += -Wl,-rpath,"'$$ORIGIN'"
