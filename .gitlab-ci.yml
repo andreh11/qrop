@@ -16,7 +16,7 @@ stages:
 
 lint:
   stage: lint
-    script:
+  script:
     - qmllint desktop/qml/*.qml
 
 build:
