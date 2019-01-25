@@ -159,7 +159,7 @@ Item {
     Rectangle {
         id: harvestBar
         x: Units.position(seasonBegin, beginHarvestDate) - control.x
-        width: Units.widthBetween(x+control.x, seasonBegin, MDate.addDays(endHarvestDate, 7))
+        width: Units.widthBetween(x+control.x, seasonBegin, endHarvestDate)
         visible: width > 0
         height: parent.height * 0.6
         anchors.verticalCenter: parent.verticalCenter

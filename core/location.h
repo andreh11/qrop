@@ -48,9 +48,9 @@ public:
     int availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                        const QDate &seasonEnd) const;
 
-    Q_INVOKABLE void addPlanting(int plantingId, int locationId, int length) const;
-    Q_INVOKABLE void addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
-                                 const QDate &seasonEnd) const;
+    Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length) const;
+    Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
+                                const QDate &seasonEnd) const;
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 

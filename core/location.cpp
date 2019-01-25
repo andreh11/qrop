@@ -18,6 +18,8 @@
 #include <QDebug>
 #include <QSqlRecord>
 #include <QVariant>
+#include <QSettings>
+#include <QSqlError>
 
 #include "location.h"
 #include "planting.h"
@@ -275,32 +277,52 @@ int Location::availableSpace(int locationId, int plantingId, const QDate &season
 }
 
 /*! Add \a plantingId to \a locationId. No checking is performed.
+ * Returns the length add to location.
  */
-void Location::addPlanting(int plantingId, int locationId, int length) const
+int Location::addPlanting(int plantingId, int locationId, int length) const
 {
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(length));
     query.exec();
     debugQuery(query);
+    return length;
 }
 
-/*! Add \a plantingId to \a locationId checking for available space
- * between \a seasonBeg and \a seasonEnd.
+/*! Add \a plantingId to \a locationId between \a seasonBeg and
+    \a seasonEnd.
+
+    If the location has sublocations, assign the planting to the sublocations,
+    checking for available space if planting conflicts aren't authorized.
+    Return the length added to the location or its sublocations.
  */
-void Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
-                           const QDate &seasonEnd) const
+int Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
+                          const QDate &seasonEnd) const
 {
-    int lengthToAdd = qMin(length, availableSpace(locationId, plantingId, seasonBeg, seasonEnd));
+    QSettings settings;
+    bool allowConflicts = settings.value("LocationView/allowPlantingsConflict").toBool();
+    int lengthToAdd;
+
+    // A planting cannot be assigned several times to the same location.
+    if (plantings(locationId, seasonBeg, seasonEnd).contains(plantingId))
+        return 0;
+
+    if (allowConflicts) {
+        int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
+        lengthToAdd = qMin(length, bedLength);
+    } else {
+        lengthToAdd = qMin(length, availableSpace(locationId, plantingId, seasonBeg, seasonEnd));
+    }
 
     if (lengthToAdd < 1)
-        return;
+        return 0;
 
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(lengthToAdd));
     query.exec();
     debugQuery(query);
+    return lengthToAdd;
 }
 
 void Location::removePlanting(int plantingId, int locationId) const

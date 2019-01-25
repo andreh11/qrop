@@ -1,14 +1,19 @@
 
 # Changelog
 
-All notable changes to this project will be documented in this file.
-Tous les changements
+Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
 ### Ajouts
+  - *Parcellaire* − Ajout d'une fonctionnalité d'affectation à un bloc :
+    lorsqu'on dépose une série sur un emplacement qui contient des
+    sous-emplacements, affecter la série aux sous-emplacements, en vérifiant la
+    place disponible si les conflits de série ne sont pas autorisés.
+  - *Parcellaire* − Ajout d'une option pour autoriser les conflits de série sur
+    un même emplacement.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
-  
+
 ### Corrections
   - Erreur de compilation sous Linux.
 
@@ -34,7 +39,8 @@ Tous les changements
     successivement pour atteindre la dernière version.
 
 ### Changements
-  - *Parcellaire* − Le bouton pour afficher/cacher le panneau des séries est désormais attaché au panneau lui-même.
+  - *Parcellaire* − Le bouton pour afficher/cacher le panneau des séries est
+    désormais attaché au panneau lui-même.
   - Mise à jour de la traduction française.
 
 ### Corrections

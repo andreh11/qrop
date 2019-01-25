@@ -92,16 +92,30 @@ QVariantList LocationModel::plantings(const QModelIndex &index) const
     return plantings(index, m_season, m_year);
 }
 
-void LocationModel::addPlanting(const QModelIndex &index, int plantingId, int length) const
+void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int length)
 {
-    if (!index.isValid())
+    if (!idx.isValid())
         return;
     if (length < 1)
         return;
 
     QPair<QDate, QDate> dates = seasonDates();
-    int lid = locationId(index);
-    location->addPlanting(plantingId, lid, length, dates.first, dates.second);
+    if (hasChildren(idx)) {
+        int l = length;
+        int row = 0;
+        for (; row < rowCount(idx) && l > 0; row++) {
+            QModelIndex child = index(row, 0, idx);
+            if (!hasChildren(child)) {
+                int lid = locationId(child);
+                l -= location->addPlanting(plantingId, lid, length, dates.first, dates.second);
+            }
+        }
+        dataChanged(index(0, 0, idx), index(row - 1, 0, idx));
+    } else {
+        int lid = locationId(idx);
+        location->addPlanting(plantingId, lid, length, dates.first, dates.second);
+        refreshIndex(idx);
+    }
 }
 
 int LocationModel::availableSpace(const QModelIndex &index, const QDate &plantingDate,
