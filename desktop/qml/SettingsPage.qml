@@ -54,6 +54,7 @@ Page {
         id: locationSettings
         category: "LocationView"
         property alias showFullName: showFullNameSwitch.checked
+        property alias allowPlantingsConflict: allowPlantingsConflictSwitch.checked
     }
 
     Snackbar {
@@ -68,415 +69,448 @@ Page {
         visible: false
     }
 
-    Column {
-        width: paneWidth
-        anchors.horizontalCenter: parent.horizontalCenter
+    ScrollView {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: mainColumn.implicitWidth
 
-        spacing: Units.smallSpacing
-        topPadding: Units.smallSpacing
-        bottomPadding: topPadding
+        visible: !showFamilyPane && !showKeywordPane && !showSeedCompanyPane && !showUnitPane
+                 && !showTaskTypePane
+        contentHeight: mainColumn.implicitHeight
 
-        Label {
-            text: qsTr("General Settings")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            topPadding: Units.mediumSpacing
-        }
+        Column {
+            id: mainColumn
+            width: paneWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.top: parent.top
+//            anchors.bottom: parent.bottom
 
-        Pane {
-            width: parent.width
-            Material.elevation: 2
-            Material.background: "white"
-            padding: 0
+            spacing: Units.smallSpacing
+            topPadding: Units.smallSpacing
+            bottomPadding: topPadding
 
-            ColumnLayout {
+            Label {
+                text: qsTr("General Settings")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
+            }
+
+            Pane {
                 width: parent.width
-                spacing: 0
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
 
-                RowLayout {
-                    Layout.minimumHeight: Units.rowHeight
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
-
-                    Label {
-                        text: qsTr("Farm name")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.fillWidth: true
-                    }
-
-                    TextInput {
-                        id: farmNameField
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.minimumWidth: 200
-                    }
-
-                }
-
-                ThinDivider { width: parent.width }
-
-                RowLayout {
+                ColumnLayout {
                     width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                    spacing: 0
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Date type")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            text: qsTr("Farm name")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+                        TextInput {
+                            id: farmNameField
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.minimumWidth: 200
+                        }
+
                     }
 
-                    ComboBox {
-                        Material.elevation: 0
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.minimumWidth: 200
-                        currentIndex: settings.dateType == "week" ? 0 : 1
-                        model: [qsTr("Week"), qsTr("Full")]
-                        onCurrentTextChanged: {
-                            if (currentIndex == 0)
-                                settings.dateType = "week"
-                            else
-                                settings.dateType = "date"
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Date type")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                        }
+
+                        ComboBox {
+                            Material.elevation: 0
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.minimumWidth: 200
+                            currentIndex: settings.dateType == "week" ? 0 : 1
+                            model: [qsTr("Week"), qsTr("Full")]
+                            onCurrentTextChanged: {
+                                if (currentIndex == 0)
+                                    settings.dateType = "week"
+                                else
+                                    settings.dateType = "date"
+                            }
                         }
                     }
+
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Show seed company beside variety names")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+
+                        }
+
+                        Switch {
+                            id: showSeedCompanySwitch
+                            onToggled: restartSnackbar.open();
+                        }
+
+
+                    }
+
+                    Item { Layout.fillHeight: true }
                 }
 
-                ThinDivider { width: parent.width }
+            }
 
-                RowLayout {
+            Label {
+                text: qsTr("Plantings view")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
+            }
+
+            Pane {
+                width: parent.width
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
+
+                ColumnLayout {
                     width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                    spacing: 0
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Show seed company beside variety names")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
 
+                        Label {
+                            text: qsTr("Compute from durations by default")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+                        Switch {
+                            id: durationsByDefaultSwitch
+                            checked: true
+                            onToggled: restartSnackbar.open();
+                        }
                     }
 
-                    Switch {
-                        id: showSeedCompanySwitch
-                        onToggled: restartSnackbar.open();
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            text: qsTr("Show duration fields")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+
+                        Switch {
+                            id: showDurationFieldSwitch
+                            checked: true
+                            onToggled: restartSnackbar.open();
+                        }
                     }
 
-
+                    ThinDivider { width: parent.width }
                 }
-
-                Item { Layout.fillHeight: true }
             }
 
-        }
-
-        Label {
-            text: qsTr("Plantings view")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            topPadding: Units.mediumSpacing
-        }
-
-        Pane {
-            width: parent.width
-            Material.elevation: 2
-            Material.background: "white"
-            padding: 0
-
-            ColumnLayout {
-                width: parent.width
-                spacing: 0
-
-                RowLayout {
-                    Layout.minimumHeight: Units.rowHeight
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
-
-                    Label {
-                        text: qsTr("Compute from durations by default")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.fillWidth: true
-                    }
-
-                    Switch {
-                        id: durationsByDefaultSwitch
-                        checked: true
-                        onToggled: restartSnackbar.open();
-                    }
-                }
-
-                ThinDivider { width: parent.width }
-
-                RowLayout {
-                    Layout.minimumHeight: Units.rowHeight
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
-
-                    Label {
-                        text: qsTr("Show duration fields")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.fillWidth: true
-                    }
-
-
-                    Switch {
-                        id: showDurationFieldSwitch
-                        checked: true
-                        onToggled: restartSnackbar.open();
-                    }
-                }
-
-                ThinDivider { width: parent.width }
+            Label {
+                text: qsTr("Field map")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
             }
-        }
 
-        Label {
-            text: qsTr("Field map")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            topPadding: Units.mediumSpacing
-        }
-
-        Pane {
-            width: parent.width
-            Material.elevation: 2
-            Material.background: "white"
-            padding: 0
-
-            ColumnLayout {
+            Pane {
                 width: parent.width
-                spacing: 0
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
 
-                RowLayout {
-                    Layout.minimumHeight: Units.rowHeight
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
-
-                    Label {
-                        text: qsTr("Show complete name of locations")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        Layout.fillWidth: true
-                    }
-
-                    Switch {
-                        id: showFullNameSwitch
-                        checked: true
-                        onToggled: restartSnackbar.open();
-                    }
-                }
-
-//                ThinDivider { width: parent.width }
-            }
-        }
-        Label {
-            text: qsTr("Lists")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            topPadding: Units.mediumSpacing
-        }
-
-        Pane {
-            width: parent.width
-            Material.elevation: 2
-            Material.background: "white"
-            padding: 0
-
-            ColumnLayout {
-                width: parent.width
-                spacing: 0
-
-                ThinDivider { width: parent.width }
-
-                RowLayout {
+                ColumnLayout {
                     width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                    spacing: 0
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Families, crops and varieties")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        MouseArea {
-                            anchors.fill: parent
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            text: qsTr("Show complete name of locations")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+                        Switch {
+                            id: showFullNameSwitch
+                            checked: true
+                            onToggled: restartSnackbar.open();
+                        }
+                    }
+
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            text: qsTr("Allow plantings conflicts on same location")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+                        Switch {
+                            id: allowPlantingsConflictSwitch
+                            checked: true
+                            onToggled: restartSnackbar.open();
+                        }
+                    }
+
+                    ThinDivider { width: parent.width }
+                }
+            }
+            Label {
+                text: qsTr("Lists")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
+            }
+
+            Pane {
+                width: parent.width
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
+
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 0
+
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Families, crops and varieties")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: showFamilyPane = true
+                            }
+                        }
+
+                        RoundButton {
+                            text: "\ue315"
+                            font.family: "Material Icons"
+                            font.pixelSize: 22
+                            flat: true
                             onClicked: showFamilyPane = true
                         }
                     }
 
-                    RoundButton {
-                        text: "\ue315"
-                        font.family: "Material Icons"
-                        font.pixelSize: 22
-                        flat: true
-                        onClicked: showFamilyPane = true
-                    }
-                }
+                    ThinDivider { width: parent.width }
 
-                ThinDivider { width: parent.width }
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
 
-                RowLayout {
-                    width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Keywords")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: showKeywordPane = true
+                            }
+                        }
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Keywords")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        MouseArea {
-                            anchors.fill: parent
+                        RoundButton {
+                            text: "\ue315"
+                            font.family: "Material Icons"
+                            font.pixelSize: 22
+                            flat: true
                             onClicked: showKeywordPane = true
                         }
                     }
 
-                    RoundButton {
-                        text: "\ue315"
-                        font.family: "Material Icons"
-                        font.pixelSize: 22
-                        flat: true
-                        onClicked: showKeywordPane = true
-                    }
-                }
+                    ThinDivider { width: parent.width }
 
-                ThinDivider { width: parent.width }
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
 
-                RowLayout {
-                    width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Seed companies")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: showSeedCompanyPane = true
+                            }
+                        }
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Seed companies")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        MouseArea {
-                            anchors.fill: parent
+                        RoundButton {
+                            text: "\ue315"
+                            font.family: "Material Icons"
+                            font.pixelSize: 22
+                            flat: true
                             onClicked: showSeedCompanyPane = true
                         }
                     }
 
-                    RoundButton {
-                        text: "\ue315"
-                        font.family: "Material Icons"
-                        font.pixelSize: 22
-                        flat: true
-                        onClicked: showSeedCompanyPane = true
-                    }
-                }
+                    ThinDivider { width: parent.width }
 
-                ThinDivider { width: parent.width }
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
 
-                RowLayout {
-                    width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Task types")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: showTaskTypePane = true
+                            }
+                        }
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Task types")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        MouseArea {
-                            anchors.fill: parent
+                        RoundButton {
+                            text: "\ue315"
+                            font.family: "Material Icons"
+                            font.pixelSize: 22
+                            flat: true
                             onClicked: showTaskTypePane = true
                         }
                     }
 
-                    RoundButton {
-                        text: "\ue315"
-                        font.family: "Material Icons"
-                        font.pixelSize: 22
-                        flat: true
-                        onClicked: showTaskTypePane = true
-                    }
-                }
+                    ThinDivider { width: parent.width }
 
-                ThinDivider { width: parent.width }
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
 
-                RowLayout {
-                    width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Units")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: showUnitPane = true
+                            }
+                        }
 
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Units")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        MouseArea {
-                            anchors.fill: parent
+                        RoundButton {
+                            text: "\ue315"
+                            font.family: "Material Icons"
+                            font.pixelSize: 22
+                            flat: true
                             onClicked: showUnitPane = true
                         }
                     }
 
-                    RoundButton {
-                        text: "\ue315"
-                        font.family: "Material Icons"
-                        font.pixelSize: 22
-                        flat: true
-                        onClicked: showUnitPane = true
-                    }
+                    ThinDivider { width: parent.width }
+
+                    Item { Layout.fillHeight: true }
+
                 }
-
-                ThinDivider { width: parent.width }
-
-                Item { Layout.fillHeight: true }
-
             }
-        }
 
-        Label {
-            text: qsTr("Development options")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            topPadding: Units.mediumSpacing
-        }
+            Label {
+                text: qsTr("Development options")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
+            }
 
-        Pane {
-            width: parent.width
-            Material.elevation: 2
-            Material.background: "white"
-            padding: 0
-
-            ColumnLayout {
+            Pane {
                 width: parent.width
-                spacing: 0
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
 
-                ThinDivider { width: parent.width }
-
-                RowLayout {
+                ColumnLayout {
                     width: parent.width
-                    Layout.leftMargin: Units.mediumSpacing
-                    Layout.rightMargin: Layout.leftMargin
+                    spacing: 0
 
-                    Button {
-                        flat: true
-                        text: qsTr("Reset database and quit")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        onClicked: {
-                            Database.resetDatabase();
-                            Qt.quit();
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Button {
+                            flat: true
+                            text: qsTr("Reset database and quit")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            onClicked: {
+                                Database.resetDatabase();
+                                Qt.quit();
+                            }
                         }
+
                     }
 
+                    ThinDivider { width: parent.width }
+                    Item { Layout.fillHeight: true }
                 }
-
-                ThinDivider { width: parent.width }
-                Item { Layout.fillHeight: true }
             }
         }
-    }
 
+    }
 
     SettingsFamilyPane {
         id: familyPane

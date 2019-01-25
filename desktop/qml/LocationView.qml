@@ -195,6 +195,7 @@ Item {
         id: locationSettings
         category: "LocationView"
         property bool showFullName
+        property bool allowPlantingsConflict
     }
 
     LocationModel {
@@ -457,17 +458,23 @@ Item {
                                 if (plantingId !== treeView.draggedPlantingId)
                                     treeView.draggedPlantingId = plantingId;
 
-                                if (styleData.hasChildren || locationId === sourceLocationId) {
+                                console.log(sourceLocationId)
+
+                                if (styleData.hasChildren) {
                                     if (!styleData.isExpanded) {
                                         treeView.expandIndex = styleData.index
                                         treeView.draggedOnIndex = styleData.index
                                         treeView.expandTimer.stop();
                                         treeView.expandTimer.start();
                                     }
-                                    drag.accepted = false;
+                                    drag.accepted = (styleData.depth >= locationModel.depth - 1)
+                                            && (sourceLocationId === -1);
+
+                                } else if (locationId !== sourceLocationId) {
+                                    drag.accepted = locationSettings.allowPlantingsConflict
+                                            || locationModel.acceptPlanting(styleData.index, plantingId);
                                 } else {
-                                    drag.accepted = locationModel.acceptPlanting(styleData.index,
-                                                                                 plantingId)
+                                    drag.accepted = false;
                                 }
                             }
 
@@ -478,8 +485,9 @@ Item {
 
                             onDropped: {
                                 treeView.draggedPlantingId = -1
-                                if (!styleData.hasChildren
-                                        && drop.hasText
+
+                                if (//!styleData.hasChildren
+                                        drop.hasText
                                         && drop.proposedAction == Qt.MoveAction) {
 
                                     var locationId = locationModel.locationId(styleData.index)
@@ -499,7 +507,7 @@ Item {
                                     else
                                         length = Planting.lengthToAssign(plantingId)
                                     locationModel.addPlanting(styleData.index, plantingId, length)
-                                    locationModel.refreshIndex(styleData.index);
+
                                     treeView.draggedOnIndex = null
                                     treeView.expandIndex = null
                                 }

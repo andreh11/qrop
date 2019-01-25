@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Add an “assign to block” feature: when dropping a planting on
+   a location which has sublocations, assign the planting to the sublocations,
+    checking for available space if planting conflicts aren't authorized.
+  - *Field map* − Add option to allow planting conflicts on the same location.
   - *Field map* − Add option to show full name of locations.
 
 ### Fixed

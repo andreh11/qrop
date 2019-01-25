@@ -53,7 +53,7 @@ public:
     Q_INVOKABLE QList<int> conflictingPlantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
 
-    Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length) const;
+    Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   const QModelIndexList &parentList = { QModelIndex() });
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
