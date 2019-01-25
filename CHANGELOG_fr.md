@@ -4,7 +4,11 @@
 All notable changes to this project will be documented in this file.
 Tous les changements
 
-## 0.1.3 − 2019-01-23
+## Non publiés
+
+### Ajouts
+  - *Parcellaire* − Option pour afficher le nom complet des emplacements.
+  
 ### Corrections
   - Erreur de compilation sous Linux.
 

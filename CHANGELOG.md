@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.1.3 − 2019-01-23
+## Unreleased
+
+### Added
+  - *Field map* − Add option to show full name of locations.
+
 ### Fixed
-  - Compilation error on Linux.
+  - Deployment error  on Linux.
 
 ## 0.1.2 − 2019-01-23
 

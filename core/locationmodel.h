@@ -40,7 +40,10 @@ public:
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
     Q_INVOKABLE int locationId(const QModelIndex &index) const;
+
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
+    Q_INVOKABLE void refreshTree();
+
     Q_INVOKABLE int availableSpace(const QModelIndex &index, const QDate &plantingDate,
                                    const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
@@ -51,7 +54,6 @@ public:
     Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
 
     Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length) const;
-
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   const QModelIndexList &parentList = { QModelIndex() });
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
@@ -59,6 +61,8 @@ public:
     Q_INVOKABLE bool removeIndexes(const QModelIndexList &indexList);
     Q_INVOKABLE QModelIndexList treeIndexes(int depth = -1, bool includeParent = true) const;
     Q_INVOKABLE int depth() const;
+
+    Q_INVOKABLE void selectTree(QItemSelectionModel &selectionModel);
     Q_INVOKABLE QItemSelection treeSelection() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE virtual void refresh() override;

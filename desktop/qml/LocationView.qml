@@ -21,6 +21,7 @@ import QtQuick.Controls.Styles 1.4 as Styles1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import QtQml.Models 2.10
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -78,26 +79,21 @@ Item {
         locationModel.updateIndexes(map, indexes);
     }
 
-    // TODO: improve performance
+    // TODO: optimize
     function selectAll() {
-        // Select all indexes
-        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select)
-        // Update view indexes
-        var indexList = locationModel.treeIndexes();
-        for (var i = 0; i < indexList.length; i++) {
-            var index = indexList[i];
-            locationModel.refreshIndex(index);
-        }
+        console.time("selectAll")
+        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select);
+//        console.log(l);
+//        for (var i = 0; i < l.length; i++) {
+//            selectionModel.select(l[i], ItemSelectionModel.Select)
+////        }
+        locationModel.refreshTree();
+        console.timeEnd("selectAll")
     }
 
     function deselectAll() {
         selectionModel.clear();
-        //        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Deselect)
-        var indexList = locationModel.treeIndexes();
-        for (var i = 0; i < indexList.length; i++) {
-            var index = indexList[i];
-            locationModel.refreshIndex(index);
-        }
+        locationModel.refreshTree();
     }
 
     function expandAll(depth) {
@@ -195,6 +191,12 @@ Item {
         plantingsView.resetFilter();
     }
 
+    Settings {
+        id: locationSettings
+        category: "LocationView"
+        property bool showFullName
+    }
+
     LocationModel {
         id: locationModel
     }
@@ -237,11 +239,9 @@ Item {
                         return;
 
                     if (checkState == Qt.Checked) {
-                        console.log("unselect")
                         locationView.deselectAll()
                         return Qt.Unchecked
                     } else {
-                        console.log("select")
                         locationView.selectAll()
                         return Qt.Checked
                     }
@@ -579,11 +579,14 @@ Item {
 
                                     ToolButton {
                                         id: locationNameLabel
-                                        text: hovered ? "\ue889" : styleData.value
+                                        text: hovered ? "\ue889"
+                                                      : locationSettings.showFullName
+                                                        ? Location.fullName(locationModel.locationId(styleData.index))
+                                                        : styleData.value
                                         font.family: hovered ? "Material Icons" : "Roboto Regular"
                                         font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
                                         //                                    showToolTip: true
-                                        anchors.verticalCenter: parent.verticalCenter
+//                                        anchors.verticalCenter: parent.verticalCenter
                                         //                                    elide: Text.ElideRight
                                         //                                    leftPadding: styleData.depth * 20
 
