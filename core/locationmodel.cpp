@@ -56,6 +56,24 @@ void LocationModel::refresh()
     countChanged();
 }
 
+/** Emit dataChanged signal for all indexes of the tree. */
+void LocationModel::refreshTree()
+{
+    QModelIndex root;
+    QModelIndexList treeList;
+
+    dataChanged(index(0, 0, root), index(rowCount() - 1, 0, root));
+    for (int row = 0; row < rowCount(root); row++)
+        treeList.push_back(index(row, 0, root));
+
+    for (int i = 0; i < treeList.length(); i++) {
+        QModelIndex parent = treeList[i];
+        dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
+        for (int row = 0; row < rowCount(parent); row++)
+            treeList.push_back(index(row, 0, parent));
+    }
+}
+
 QVariantList LocationModel::plantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())
@@ -389,6 +407,26 @@ QItemSelection LocationModel::treeSelection() const
     }
 
     return selection;
+}
+/** Return a list of all QModelIndex of location tree. */
+void LocationModel::selectTree(QItemSelectionModel &selectionModel)
+{
+    QModelIndex root;
+    QModelIndexList treeList;
+
+    for (int row = 0; row < rowCount(root); row++)
+        treeList.push_back(index(row, 0, root));
+    QItemSelection rootSelection(index(0, 0, root), index(rowCount() - 1, 0, root));
+    selectionModel.select(rootSelection, QItemSelectionModel::Select);
+    //    selectionList.push_back(rootSelection);
+
+    for (int i = 0; i < treeList.length(); i++) {
+        QModelIndex parent = treeList[i];
+        QItemSelection sel(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
+        selectionModel.select(sel, QItemSelectionModel::Select);
+        for (int row = 0; row < rowCount(parent); row++)
+            treeList.push_back(index(row, 0, parent));
+    }
 }
 
 /** Return a list of QModelIndex which ids are in \a idList. Useful for

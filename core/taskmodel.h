@@ -69,7 +69,6 @@ protected:
 
 private:
     QDate m_filterDate;
-    int m_year;
     int m_week;
     QDate m_mondayDate;
     QDate m_sundayDate;

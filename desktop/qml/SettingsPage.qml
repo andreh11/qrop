@@ -50,6 +50,12 @@ Page {
         property alias showDurationFields: showDurationFieldSwitch.checked
     }
 
+    Settings {
+        id: locationSettings
+        category: "LocationView"
+        property alias showFullName: showFullNameSwitch.checked
+    }
+
     Snackbar {
         id: restartSnackbar
 
@@ -230,6 +236,45 @@ Page {
             }
         }
 
+        Label {
+            text: qsTr("Field map")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            topPadding: Units.mediumSpacing
+        }
+
+        Pane {
+            width: parent.width
+            Material.elevation: 2
+            Material.background: "white"
+            padding: 0
+
+            ColumnLayout {
+                width: parent.width
+                spacing: 0
+
+                RowLayout {
+                    Layout.minimumHeight: Units.rowHeight
+                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.rightMargin: Layout.leftMargin
+
+                    Label {
+                        text: qsTr("Show complete name of locations")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        Layout.fillWidth: true
+                    }
+
+                    Switch {
+                        id: showFullNameSwitch
+                        checked: true
+                        onToggled: restartSnackbar.open();
+                    }
+                }
+
+//                ThinDivider { width: parent.width }
+            }
+        }
         Label {
             text: qsTr("Lists")
             font.family: "Roboto Regular"

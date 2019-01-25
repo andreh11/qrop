@@ -100,7 +100,7 @@ SqlTreeModel::SqlTreeModel(const QString &idFieldName, const QString &parentIdFi
     , m_idFieldName(idFieldName)
     , m_parentIdFieldName(parentIdFieldName)
 {
-    SqlTableModel *model = new SqlTableModel();
+    SqlTableModel *model = new SqlTableModel(this);
     model->setTable("location");
     model->select();
     setSourceModel(model);
