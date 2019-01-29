@@ -186,12 +186,8 @@ ApplicationWindow {
             RowLayout {
                 spacing: Units.mediumDuration
                 anchors.fill: parent
-                Label {
+                BackIcon {
                     id: backIcon
-                    text: "\ue5c4" // arrow_back
-                    color: Material.Grey
-                    font.family: "Material Icons"
-                    font.pixelSize: Units.fontSizeHeadline
                 }
                 TextField {
                     placeholderText: qsTr("Search")

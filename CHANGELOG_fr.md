@@ -6,6 +6,10 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Parcellaire* − Ajout d'un bouton indiquant les séries en conflit de place
+    sur un emplacement. Un clic sur ce bouton ouvre un menu permettant de
+    choisir une série en conflit pour l'éditer, l'enlever de l'emplacement ou
+    bien la diviser s'il reste de la place sur l'emplacement.
   - *Parcellaire* − Ajout d'une fonctionnalité d'affectation à un bloc :
     lorsqu'on dépose une série sur un emplacement qui contient des
     sous-emplacements, affecter la série aux sous-emplacements, en vérifiant la

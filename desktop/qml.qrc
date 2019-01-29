@@ -72,5 +72,10 @@
         <file>qml/SettingsTaskMethodDelegate.qml</file>
         <file>qml/SettingsImplementDelegate.qml</file>
         <file>qml/SettingsSeedCompanyPane.qml</file>
+        <file>qml/ConflictAlertButton.qml</file>
+        <file>qml/BackIcon.qml</file>
+        <file>qml/LocationTreeView.qml</file>
+        <file>qml/MenuItemDelegate.qml</file>
+        <file>qml/LightPlantingForm.qml</file>
     </qresource>
 </RCC>

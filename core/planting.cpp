@@ -204,6 +204,14 @@ QString Planting::familyInterval(int plantingId) const
     return map.value("family_interval").toString();
 }
 
+int Planting::type(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("planting_type").toInt();
+}
+
 QDate Planting::sowingDate(int plantingId) const
 {
     QVariantMap map = mapFromId("planting_view", plantingId);

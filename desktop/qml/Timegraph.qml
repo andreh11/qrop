@@ -37,6 +37,10 @@ Item {
     signal plantingRemoved()
     signal dragFinished();
 
+    function refresh() {
+        plantingIdChanged();
+    }
+
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
@@ -91,6 +95,7 @@ Item {
         text: NDate.formatDate(seedingDate, year)
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
+        font.pixelSize: Units.fontSizeBodyAndButton
         visible: seedingCircle.visible
         
         anchors.right: seedingCircle.left
@@ -128,7 +133,7 @@ Item {
         x: Units.position(seasonBegin, plantingDate) - control.x
         width: Units.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
         visible: width > 0
-        height: parent.height * 0.6
+        height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
         color: {
             if (current || showOnlyActiveColor) {
@@ -148,6 +153,7 @@ Item {
             text: NDate.formatDate(plantingDate, year) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
                                                                     : "")
             font.family: "Roboto Condensed"
+            font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left
@@ -161,7 +167,7 @@ Item {
         x: Units.position(seasonBegin, beginHarvestDate) - control.x
         width: Units.widthBetween(x+control.x, seasonBegin, endHarvestDate)
         visible: width > 0
-        height: parent.height * 0.6
+        height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
         color: {
             if (current || showOnlyActiveColor) {
@@ -180,6 +186,7 @@ Item {
         Label {
             text: NDate.formatDate(beginHarvestDate, year)
             font.family: "Roboto Condensed"
+            font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
             color: Material.color(Material.Grey, Material.Shade100)
             anchors.left: parent.left

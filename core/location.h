@@ -41,12 +41,15 @@ public:
     Q_INVOKABLE QList<int> plantings(int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
-    Q_INVOKABLE QList<int> conflictingPlantings(int locationId, int plantingId) const;
+    Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
+    Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
+                                                      const QDate &seasonEnd) const;
     Q_INVOKABLE int availableSpace(int locationId, const QDate &plantingDate,
                                    const QDate &endHarvestDate, const QDate &seasonBeg,
                                    const QDate &seasonEnd) const;
     int availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                        const QDate &seasonEnd) const;
+    Q_INVOKABLE void splitPlanting(int plantingId, int otherPlantingId, int locationId);
 
     Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length) const;
     Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
