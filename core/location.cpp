@@ -188,7 +188,7 @@ QList<int> Location::plantings(int locationId) const
     return queryIds(queryString.arg(locationId), "planting_id");
 }
 
-/* Return the ids of all plantings assigned to locationId befre \a last. */
+/* Return the ids of all plantings assigned to locationId before \a last. */
 QList<int> Location::plantings(int locationId, const QDate &last) const
 {
     QString lastDateString = last.toString(Qt::ISODate);
@@ -198,7 +198,8 @@ QList<int> Location::plantings(int locationId, const QDate &last) const
                         "WHERE location_id = %1 "
                         "AND ((planting_date AND planting_date <= '%2') "
                         "     OR (beg_harvest_date AND beg_harvest_date <= '%2') "
-                        "     OR (end_harvest_date AND end_harvest_date <= '%2'))");
+                        "     OR (end_harvest_date AND end_harvest_date <= '%2')) "
+                        "ORDER BY (planting_date)");
     return queryIds(queryString.arg(locationId).arg(lastDateString), "planting_id");
 }
 
@@ -213,7 +214,8 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
                         "WHERE location_id = %1 "
                         "AND (('%2' <= planting_date AND planting_date <= '%3') "
                         "     OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
-                        "     OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3'))");
+                        "     OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
+                        "ORDER BY (planting_date)");
     return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "planting_id");
 }
 
@@ -224,9 +226,9 @@ QList<int> Location::children(int locationId) const
 }
 
 /*!
- * Returns a list of planting ids of locationId conflicting with plantingId.
- */
-QList<int> Location::conflictingPlantings(int locationId, int plantingId) const
+ * Returns a list of planting ids of locationId conflicting with plantingId
+   because they don't observe the family rotation interval. */
+QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId) const
 {
     QList<int> clist;
     const QDate plantingDate = planting->plantingDate(plantingId);
@@ -243,6 +245,38 @@ QList<int> Location::conflictingPlantings(int locationId, int plantingId) const
     }
 
     return clist;
+}
+
+/*!
+ * Returns a list of planting ids of locationId conflicting because
+   of space availabilty. */
+QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
+                                                const QDate &seasonEnd) const
+{
+    QList<int> plantingList = plantings(locationId, seasonBeg, seasonEnd);
+    QVariantMap conflictMap;
+
+    int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
+
+    for (int i = 0; i < plantingList.count(); i++) {
+        int plantingId = plantingList.value(i);
+        int length = plantingLength(plantingId, locationId);
+        QDate plantingDate = planting->plantingDate(plantingId);
+        QDate endHarvestDate = planting->endHarvestDate(plantingId);
+        //        QList<int> conflictList;
+        for (int j = i + 1; j < plantingList.count(); j++) {
+            int pid = plantingList.value(j);
+            QDate pdate = planting->plantingDate(pid);
+            QDate edate = planting->endHarvestDate(pid);
+            int l = plantingLength(pid, locationId);
+            if (pdate < endHarvestDate && edate > plantingDate && length + l > bedLength) {
+                conflictMap[QString::number(plantingId)] = QVariant(pid);
+                //                conflictList.push_back(pid);
+            }
+        }
+    }
+
+    return conflictMap;
 }
 
 int Location::availableSpace(int locationId, const QDate &plantingDate, const QDate &endHarvestDate,
@@ -274,6 +308,17 @@ int Location::availableSpace(int locationId, int plantingId, const QDate &season
     QDate plantingDate = planting->plantingDate(plantingId);
     QDate endHarvestDate = planting->endHarvestDate(plantingId);
     return availableSpace(locationId, plantingDate, endHarvestDate, seasonBeg, seasonEnd);
+}
+
+void Location::splitPlanting(int plantingId, int otherPlantingId, int locationId)
+{
+    int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
+    int otherLength = plantingLength(otherPlantingId, locationId);
+    int lengthToAdd = bedLength - otherLength;
+
+    removePlanting(plantingId, locationId);
+    if (lengthToAdd > 0)
+        addPlanting(plantingId, locationId, lengthToAdd);
 }
 
 /*! Add \a plantingId to \a locationId. No checking is performed.

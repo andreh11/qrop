@@ -164,12 +164,13 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
         return false;
 
     const int lid = locationId(index);
-    return location->conflictingPlantings(lid, plantingId).count() == 0;
+    return location->rotationConflictingPlantings(lid, plantingId).count() == 0;
 }
 
 /*! Returns a map such as map[id] is a list of all plantings conflicting
- * with planting id on the location represented by \a index. */
-QList<int> LocationModel::conflictingPlantings(const QModelIndex &index, int season, int year) const
+    with planting id on the location represented by \a index because they
+    don't observe the family rotation interval. */
+QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())
         return {};
@@ -179,16 +180,42 @@ QList<int> LocationModel::conflictingPlantings(const QModelIndex &index, int sea
     QList<int> plantingIdList = location->plantings(lid, dates.first, dates.second);
     QList<int> list;
     for (const int pid : plantingIdList) {
-        auto conflictList = location->conflictingPlantings(lid, pid);
+        auto conflictList = location->rotationConflictingPlantings(lid, pid);
         if (conflictList.count() > 0)
             list.push_back(pid);
     }
     return list;
 }
 
+/*! Returns a map such as map[id] is a list of all plantings conflicting
+    with planting id on the location represented by \a index because they
+    don't observe the family rotation interval.
+*/
+QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index, int season, int year) const
+{
+    if (!index.isValid())
+        return {};
+
+    const int lid = locationId(index);
+    QPair<QDate, QDate> dates = seasonDates(season, year);
+    return location->spaceConflictingPlantings(lid, dates.first, dates.second);
+    //    QList<int> list;
+    //    for (const int pid : plantingIdList) {
+    //        auto conflictList = location->rotationConflictingPlantings(lid, pid);
+    //        if (conflictList.count() > 0)
+    //            list.push_back(pid);
+    //    }
+    //    return list;
+}
+
 bool LocationModel::hasRotationConflict(const QModelIndex &index, int season, int year) const
 {
-    return !conflictingPlantings(index, season, year).empty();
+    return !rotationConflictingPlantings(index, season, year).empty();
+}
+
+bool LocationModel::hasSpaceConflict(const QModelIndex &index, int season, int year) const
+{
+    return !spaceConflictingPlantings(index, season, year).empty();
 }
 
 bool LocationModel::showOnlyEmptyLocations() const

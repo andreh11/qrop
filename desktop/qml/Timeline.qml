@@ -43,6 +43,13 @@ Item {
     signal plantingRemoved()
     signal dragFinished();
 
+    function refresh() {
+        for (var i = 0; i < timegraphView.children.length; i++) {
+            if (timegraphView.children[i] instanceof Timegraph)
+                timegraphView.children[i].refresh();
+        }
+    }
+
     implicitWidth: gridRow.width
 
     Row {
@@ -61,45 +68,40 @@ Item {
         }
     }
 
-//    Rectangle {
-//        id: januaryLine
-//        x: Units.position(seasonBegin, new Date(year, 0, 1))
-//        visible: x != 0 && x != graphWidth
-//        width: 1
-//        anchors.top: parent.top
-//        anchors.bottom: parent.bottom
-//        color: Material.color(Material.Grey, Material.Shade800)
-//    }
-
     Rectangle {
         id: todayLine
         x: Units.position(seasonBegin, todayDate)
-        z: 1
+        z: 3
         visible: x != 0 && x != graphWidth
         width: 1
+        anchors.topMargin: -1
+        anchors.bottomMargin: -1
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         color: Material.accent
     }
 
-    Repeater {
-        model: plantingIdList
-        Timegraph {
-            plantingId: modelData
-            todayDate: control.todayDate
-            seasonBegin: control.seasonBegin
-            year: control.year
-            showGreenhouseSow: control.showGreenhouseSow
-            showNames: control.showNames
-            dragActive: control.dragActive
-            onSelected: control.plantingClicked(plantingId)
-            locationId: control.locationId
-            onPlantingMoved:  control.plantingMoved();
-            onPlantingRemoved: control.plantingRemoved();
-            onDragFinished: control.dragFinished();
-            showOnlyActiveColor: control.showOnlyActiveColor
+    Item {
+        id: timegraphView
+        anchors.fill: parent
+        Repeater {
+            model: plantingIdList
+            Timegraph {
+                plantingId: modelData
+                todayDate: control.todayDate
+                seasonBegin: control.seasonBegin
+                year: control.year
+                showGreenhouseSow: control.showGreenhouseSow
+                showNames: control.showNames
+                dragActive: control.dragActive
+                onSelected: control.plantingClicked(plantingId)
+                locationId: control.locationId
+                onPlantingMoved: control.plantingMoved();
+                onPlantingRemoved: control.plantingRemoved();
+                onDragFinished: control.dragFinished();
+                showOnlyActiveColor: control.showOnlyActiveColor
+            }
         }
-
     }
 
 }

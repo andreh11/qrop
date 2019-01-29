@@ -50,8 +50,12 @@ public:
                                     const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, int plantingId) const;
     Q_INVOKABLE bool rotationRespected(const QModelIndex &index, int plantingId) const;
-    Q_INVOKABLE QList<int> conflictingPlantings(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QList<int> rotationConflictingPlantings(const QModelIndex &index, int season,
+                                                        int year) const;
     Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QVariantMap spaceConflictingPlantings(const QModelIndex &index, int season,
+                                                      int year) const;
+    Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index, int season, int year) const;
 
     Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,

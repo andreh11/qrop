@@ -82,15 +82,15 @@ Page {
         onActivated: seasonSpinBox.previousSeason();
     }
 
-    Shortcut {
-        sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            plantingsView.currentIndex = 0
-            plantingsView.forceActiveFocus();
-        }
-    }
+//    Shortcut {
+//        sequences: ["Up", "Down", "Left", "Right"]
+//        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+//        context: Qt.ApplicationShortcut
+//        onActivated: {
+//            plantingsView.currentIndex = 0
+//            plantingsView.forceActiveFocus();
+//        }
+//    }
 
     Shortcut {
         sequence: "Ctrl+Up"
@@ -464,6 +464,7 @@ Page {
                 season: seasonSpinBox.season
                 showOnlyEmptyLocations: emptyLocationsCheckbox.checked
                 editMode: page.editMode
+                firstColumnWidth: plantingsView.firstColumnWidth
                 onPlantingRemoved: plantingsView.resetFilter()
             }
         }
