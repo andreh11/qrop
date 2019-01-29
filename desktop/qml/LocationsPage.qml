@@ -82,15 +82,15 @@ Page {
         onActivated: seasonSpinBox.previousSeason();
     }
 
-//    Shortcut {
-//        sequences: ["Up", "Down", "Left", "Right"]
-//        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-//        context: Qt.ApplicationShortcut
-//        onActivated: {
-//            plantingsView.currentIndex = 0
-//            plantingsView.forceActiveFocus();
-//        }
-//    }
+    //    Shortcut {
+    //        sequences: ["Up", "Down", "Left", "Right"]
+    //        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+    //        context: Qt.ApplicationShortcut
+    //        onActivated: {
+    //            plantingsView.currentIndex = 0
+    //            plantingsView.forceActiveFocus();
+    //        }
+    //    }
 
     Shortcut {
         sequence: "Ctrl+Up"
@@ -356,13 +356,13 @@ Page {
                 }
             }
 
-//            CheckBox {
-//                id: unassignedPlantingsCheckbox
-//                text: qsTr("Show unassigned plantings")
-//                Layout.leftMargin: 16
-//                visible: !editMode
-//                checked: true
-//            }
+            //            CheckBox {
+            //                id: unassignedPlantingsCheckbox
+            //                text: qsTr("Show unassigned plantings")
+            //                Layout.leftMargin: 16
+            //                visible: !editMode
+            //                checked: true
+            //            }
 
             CheckBox {
                 id: emptyLocationsCheckbox
@@ -471,14 +471,14 @@ Page {
 
         Pane {
             id: plantingsPane
-//            visible: unassignedPlantingsCheckbox.checked & !editMode
+            //            visible: unassignedPlantingsCheckbox.checked & !editMode
             visible: !editMode
 
             padding: 0
             Layout.fillWidth: true
             //            Layout.fillHeight: true
             Layout.minimumHeight: showPlantingsPane ? page.height / 4 : 0
-//            Layout.minimumHeight: unassignedPlantingsCheckbox.checked ? page.height / 4 : 10
+            //            Layout.minimumHeight: unassignedPlantingsCheckbox.checked ? page.height / 4 : 10
             Material.elevation: 2
             Material.background: "white"
 
@@ -491,139 +491,139 @@ Page {
                 anchors.fill: parent
                 hoverEnabled: true
 
-            RoundButton {
-                id: showPlantingPaneButton
-                z: -1
-                Material.background: "white"
-                width: 60
-                height: width
-                anchors.top: parent.top
-                anchors.topMargin: visible ? -width/2 : 0
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: showPlantingsPane =!showPlantingsPane
-                contentItem: Text {
-                    text: showPlantingsPane ? "\ue313" : "\ue316"
-                    font.family: "Material Icons"
-                    font.pixelSize: 24
-//                    color: parent.down ? "#17a81a" : "#21be2b"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.Top
-                    elide: Text.ElideRight
-                }
-
-                ToolTip.visible: hovered
-                ToolTip.text: showPlantingsPane ? qsTr("Hide the plantings pane") : qsTr("Show the planting pane")
-                ToolTip.delay: Units.shortDuration
-
-                Behavior on anchors.topMargin {
-                    NumberAnimation { duration: Units.shortDuration  }
-                }
-            }
-
-            Rectangle {
-                color: "white"
-                anchors.fill: parent
-            }
-
-            Column {
-                id: emptyPlantingStateColumn
-                spacing: Units.smallSpacing
-                visible: !plantingsView.rowsNumber && showPlantingsPane
-                z:2
-                anchors {
-                    centerIn: parent
-                }
-
-                Label {
-                    id: emptyPlantingStateLabel
+                RoundButton {
+                    id: showPlantingPaneButton
+                    z: -1
+                    Material.background: "white"
+                    width: 60
+                    height: width
+                    anchors.top: parent.top
+                    anchors.topMargin: visible ? -width/2 : 0
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: filterField.text
-                          ? qsTr('No more "%1" plantings to assign for this season.').arg(filterField.text)
-                          : qsTr('No more plantings to assign for this season.')
-                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-                    color: Qt.rgba(0, 0, 0, 0.8)
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
+                    onClicked: showPlantingsPane =!showPlantingsPane
+                    contentItem: Text {
+                        text: showPlantingsPane ? "\ue313" : "\ue316"
+                        font.family: "Material Icons"
+                        font.pixelSize: 24
+                        //                    color: parent.down ? "#17a81a" : "#21be2b"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.Top
+                        elide: Text.ElideRight
+                    }
+
+                    ToolTip.visible: hovered
+                    ToolTip.text: showPlantingsPane ? qsTr("Hide the plantings pane") : qsTr("Show the planting pane")
+                    ToolTip.delay: Units.shortDuration
+
+                    Behavior on anchors.topMargin {
+                        NumberAnimation { duration: Units.shortDuration  }
+                    }
                 }
 
-                Row {
+                Rectangle {
+                    color: "white"
+                    anchors.fill: parent
+                }
+
+                Column {
+                    id: emptyPlantingStateColumn
                     spacing: Units.smallSpacing
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Button {
-                        id: emptyPreviousButton
-                        text: qsTr("Previous")
-                        flat: true
-                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        Material.background: Material.accent
-                        Material.foreground: "white"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        onClicked: page.previousSeason();
+                    visible: !plantingsView.rowsNumber && showPlantingsPane
+                    z:2
+                    anchors {
+                        centerIn: parent
+                    }
+
+                    Label {
+                        id: emptyPlantingStateLabel
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: filterField.text
+                              ? qsTr('No more "%1" plantings to assign for this season.').arg(filterField.text)
+                              : qsTr('No more plantings to assign for this season.')
+                        font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                        color: Qt.rgba(0, 0, 0, 0.8)
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    Row {
+                        spacing: Units.smallSpacing
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button {
+                            id: emptyPreviousButton
+                            text: qsTr("Previous")
+                            flat: true
+                            Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                            Material.background: Material.accent
+                            Material.foreground: "white"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            onClicked: page.previousSeason();
+                        }
+
+                        Button {
+                            id: emptyNextButton
+                            text: qsTr("Next")
+                            flat: true
+                            Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                            Material.background: Material.accent
+                            Material.foreground: "white"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            onClicked: page.nextSeason();
+                        }
                     }
 
                     Button {
-                        id: emptyNextButton
-                        text: qsTr("Next")
+                        visible: filterField.text
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        id: clearSearchFieldButton
+                        text: qsTr("Clear search Field")
                         flat: true
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        Material.background: Material.accent
-                        Material.foreground: "white"
+                        Material.foreground: Material.accent
                         font.pixelSize: Units.fontSizeBodyAndButton
-                        onClicked: page.nextSeason();
+                        onClicked: filterField.text = ""
                     }
+
                 }
 
-                Button {
-                    visible: filterField.text
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    id: clearSearchFieldButton
-                    text: qsTr("Clear search Field")
-                    flat: true
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.foreground: Material.accent
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: filterField.text = ""
-                }
 
-            }
-
-
-            DropArea {
-                id: plantingsDropArea
-                anchors.fill: parent
-                onEntered: {
-                    drag.accepted = true
-                    locationView.draggedPlantingId = -1;
-                }
-
-                onDropped: {
-                    if (drop.hasText && (drop.proposedAction === Qt.MoveAction
-                                         || drop.proposedAction === Qt.CopyAction)) {
-                        drop.acceptProposedAction()
+                DropArea {
+                    id: plantingsDropArea
+                    anchors.fill: parent
+                    onEntered: {
+                        drag.accepted = true
                         locationView.draggedPlantingId = -1;
                     }
-                }
-            }
 
-            PlantingsView {
-                id: plantingsView
-                year: page.year
-                season: page.season
-                showOnlyUnassigned: true
-                showTimegraph: true
-                showOnlyTimegraph: true
-                showHeader: false
-                showHorizontalScrollBar: false
-                showVerticalScrollBar: true
-                onDragFinished: locationView.draggedPlantingId = -1
-                showOnlyActiveColor: true
-                dragActive: true
-                tableSortColumn: 3 // planting_date
-                tableSortOrder: "ascending"
-                filterString: filterField.text
-                anchors.fill: parent
+                    onDropped: {
+                        if (drop.hasText && (drop.proposedAction === Qt.MoveAction
+                                             || drop.proposedAction === Qt.CopyAction)) {
+                            drop.acceptProposedAction()
+                            locationView.draggedPlantingId = -1;
+                        }
+                    }
+                }
+
+                PlantingsView {
+                    id: plantingsView
+                    year: page.year
+                    season: page.season
+                    showOnlyUnassigned: true
+                    showTimegraph: true
+                    showOnlyTimegraph: true
+                    showHeader: false
+                    showHorizontalScrollBar: false
+                    showVerticalScrollBar: true
+                    onDragFinished: locationView.draggedPlantingId = -1
+                    showOnlyActiveColor: true
+                    dragActive: true
+                    tableSortColumn: 3 // planting_date
+                    tableSortOrder: "ascending"
+                    filterString: filterField.text
+                    anchors.fill: parent
+                }
             }
         }
     }
-}
 
 }

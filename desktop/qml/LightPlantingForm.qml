@@ -14,7 +14,6 @@ ColumnLayout {
     property int plantingId
     property int year
 
-//    property int length: Number(plantingAmountField.text)
     property int dtt: NDate.daysTo(greenhouseStartDateField.calendarDate,
                                    plantingDateField.calendarDate)
     property int dtm: NDate.daysTo(plantingDateField.calendarDate,
@@ -27,6 +26,8 @@ ColumnLayout {
     property bool accepted: coherentDates
 
     signal plantingModified()
+    signal cancel()
+    signal done()
 
     function updatePlanting() {
         var map = {"planting_date": plantingDateField.isoDateString,
@@ -49,7 +50,7 @@ ColumnLayout {
             text: "\ue5c4" // arrow_back
             font.family: "Material Icons"
             font.pixelSize: Units.fontSizeHeadline
-            onClicked: conflictStackView.pop();
+            onClicked: cancel()
         }
 
         Label {
@@ -68,7 +69,7 @@ ColumnLayout {
             font.pixelSize: Units.fontSizeHeadline
             onClicked: {
                 updatePlanting();
-                conflictStackView.pop();
+                done()
             }
         }
     }
@@ -102,12 +103,13 @@ ColumnLayout {
         labelText: qsTr("Greenhouse start date")
         currentYear: control.year
         calendarDate: Planting.sowingDate(plantingId);
+        Keys.onReturnPressed: if (accepted) confirmButton.clicked();
+        Keys.onEnterPressed: if (accepted) confirmButton.clicked();
     }
 
     DatePicker {
         id: plantingDateField
 
-        visible: plantingType !== 3
         Layout.fillWidth: true
         Layout.topMargin: Units.formSpacing
         Layout.leftMargin: Units.formSpacing
@@ -116,6 +118,8 @@ ColumnLayout {
         labelText: plantingType === 1 ? qsTr("Field sowing") : qsTr("Field planting")
         currentYear: control.year
         calendarDate: Planting.plantingDate(plantingId)
+        Keys.onReturnPressed: if (accepted) confirmButton.clicked();
+        Keys.onEnterPressed: if (accepted) confirmButton.clicked();
     }
 
     DatePicker {
@@ -129,6 +133,8 @@ ColumnLayout {
         labelText: qsTr("First harvest")
         currentYear: control.year
         calendarDate: Planting.begHarvestDate(plantingId)
+        Keys.onReturnPressed: if (accepted) confirmButton.clicked();
+        Keys.onEnterPressed: if (accepted) confirmButton.clicked();
     }
 
     DatePicker {
@@ -142,5 +148,7 @@ ColumnLayout {
         labelText: qsTr("Last harvest")
         currentYear: control.year
         calendarDate: Planting.endHarvestDate(plantingId)
+        Keys.onReturnPressed: if (accepted) control.accept();
+        Keys.onEnterPressed: if (accepted) control.accept();
     }
 }
