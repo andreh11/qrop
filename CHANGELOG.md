@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to allow planting conflicts on the same location.
   - *Field map* − Add option to show full name of locations.
 
+### Changed
+  - *Timeline* − For week date format, don't show year indicators < and > anymore.
+
 ### Fixed
   - Deployment error  on Linux.
 

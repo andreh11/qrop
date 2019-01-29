@@ -92,7 +92,7 @@ Item {
 
     Label {
         id: seedingLabel
-        text: NDate.formatDate(seedingDate, year)
+        text: NDate.formatDate(seedingDate, year, null, false)
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         font.pixelSize: Units.fontSizeBodyAndButton
@@ -150,7 +150,7 @@ Item {
         }
 
         Label {
-            text: NDate.formatDate(plantingDate, year) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
+            text: NDate.formatDate(plantingDate, year, null, false) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
                                                                     : "")
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
@@ -184,7 +184,7 @@ Item {
         }
 
         Label {
-            text: NDate.formatDate(beginHarvestDate, year)
+            text: NDate.formatDate(beginHarvestDate, year, null, false)
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
