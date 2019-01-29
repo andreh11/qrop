@@ -18,6 +18,10 @@ Tous les changements importants seront documentés dans ce fichier.
     un même emplacement.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
+### Changements
+  - *Diagramme des séries* − Pour le format de date « semaine », ne plus
+    afficher les indicateurs < et > d'années.
+    
 ### Corrections
   - Erreur de compilation sous Linux.
 

@@ -78,8 +78,9 @@ int MDate::currentYear()
     return year;
 }
 
-// Format date according to preferred format.
-QString MDate::formatDate(const QDate &date, int currentYear, const QString &type)
+/*! Format date according to preferred format. If \a showIndicator if
+ * false, the year indicators < and > will never be shown. */
+QString MDate::formatDate(const QDate &date, int currentYear, const QString &type, bool showIndicator)
 {
     QSettings settings;
     QString dateType = settings.value("dateType", "week").toString();
@@ -90,7 +91,7 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
     int year;
     int week = date.weekNumber(&year);
     if (dateType == "week") {
-        if (year == currentYear)
+        if (year == currentYear || !showIndicator)
             return QString::number(week);
         return QString("%1%2").arg(year < currentYear ? "<" : ">").arg(week);
     } else {

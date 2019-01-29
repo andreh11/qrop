@@ -37,7 +37,8 @@ public:
     Q_INVOKABLE static int isoYear(const QDate &date);
     Q_INVOKABLE static int currentWeek();
     Q_INVOKABLE static int currentYear();
-    Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear, const QString &type = "");
+    Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear,
+                                          const QString &type = "", const bool showIndicator = true);
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
