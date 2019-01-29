@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Add a button to show planting conflicts on a location.
+    Clicking on the button will open a menu select a conflicting planting and
+    either edit, unassign or split the planting if there is remaining space on
+    the location.
   - *Field map* − Add an “assign to block” feature: when dropping a planting on
    a location which has sublocations, assign the planting to the sublocations,
     checking for available space if planting conflicts aren't authorized.
