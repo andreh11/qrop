@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Add greenhouse filter mode to only show greenhouse locations
+    and plantings. Add a new shortcut for this mode (Ctrl+G).
   - *Field map* − Add a button to show planting conflicts on a location.
     Clicking on the button will open a menu select a conflicting planting and
     either edit, unassign or split the planting if there is remaining space on

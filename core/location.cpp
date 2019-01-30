@@ -104,6 +104,15 @@ int Location::duplicateTree(int id, int parentId) const
     return 0;
 }
 
+bool Location::isGreenhouse(int locationId) const
+{
+    QSqlRecord record(recordFromId("location", locationId));
+    if (record.isEmpty())
+        return false;
+
+    return record.value("greenhouse").toInt() == 1;
+}
+
 QString Location::fullName(int locationId) const
 {
     if (locationId < 1)

@@ -6,6 +6,9 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Parcellaire* − Ajout d'un mode « sous abris » permettant d'afficher
+    uniquement les emplacements et séries sous abris. Ajout d'un raccourci
+    clavier pour ce mode.
   - *Parcellaire* − Ajout d'un bouton indiquant les séries en conflit de place
     sur un emplacement. Un clic sur ce bouton ouvre un menu permettant de
     choisir une série en conflit pour l'éditer, l'enlever de l'emplacement ou
@@ -21,7 +24,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ### Changements
   - *Diagramme des séries* − Pour le format de date « semaine », ne plus
     afficher les indicateurs < et > d'années.
-    
+
 ### Corrections
   - Erreur de compilation sous Linux.
 

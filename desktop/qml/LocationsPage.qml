@@ -107,6 +107,13 @@ Page {
     }
 
     Shortcut {
+        sequence: "Ctrl+G"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: greenhouseButton.toggle();
+    }
+
+    Shortcut {
         sequence: "Shift+A"
         enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
         context: Qt.ApplicationShortcut
@@ -140,6 +147,7 @@ Page {
         context: Qt.ApplicationShortcut
         onActivated: expandButton.expandLevel(4)
     }
+
 
     onEditModeChanged: {
         if (!editMode) {
@@ -320,6 +328,16 @@ Page {
                 }
             }
 
+            ToolButton {
+                id: greenhouseButton
+                checkable: true
+                visible: !editMode
+                flat: true
+                text: qsTr("GH", "Abbreviation for \"greenhouse\"")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+            }
+
             Button {
                 id: duplicateButton
                 flat: true
@@ -463,6 +481,7 @@ Page {
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
                 showOnlyEmptyLocations: emptyLocationsCheckbox.checked
+                showOnlyGreenhouseLocations: greenhouseButton.checked
                 editMode: page.editMode
                 firstColumnWidth: plantingsView.firstColumnWidth
                 onPlantingRemoved: plantingsView.resetFilter()
@@ -611,6 +630,7 @@ Page {
                     showOnlyUnassigned: true
                     showTimegraph: true
                     showOnlyTimegraph: true
+                    showOnlyGreenhouse: greenhouseButton.checked
                     showHeader: false
                     showHorizontalScrollBar: false
                     showVerticalScrollBar: true

@@ -19,6 +19,7 @@ ListView {
     property int checkBoxWidth: Units.rowHeight * 0.8
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
 
+    property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
     property alias rowsNumber: plantingModel.rowCount
     property bool showOnlyActiveColor: false

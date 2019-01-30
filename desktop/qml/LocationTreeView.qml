@@ -192,8 +192,6 @@ Controls1.TreeView {
                     if (plantingId !== treeView.draggedPlantingId)
                         treeView.draggedPlantingId = plantingId;
                     
-                    console.log(sourceLocationId)
-                    
                     if (styleData.hasChildren) {
                         if (!styleData.isExpanded) {
                             treeView.expandIndex = styleData.index

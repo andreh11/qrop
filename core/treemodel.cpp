@@ -252,8 +252,6 @@ void SqlTreeModel::buildRolesIndexes()
 
 bool SqlTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    qDebug() << "removeRows" << row << count << parent;
-
     TreeItem *parentItem;
     if (!parent.isValid())
         parentItem = m_root;

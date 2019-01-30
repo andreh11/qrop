@@ -57,7 +57,7 @@ public:
 protected:
     SqlTableModel *m_model;
     bool isDateInRange(const QDate &date) const;
-    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
+    virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
     QPair<QDate, QDate> seasonDates() const;
     QPair<QDate, QDate> seasonDates(int season, int year) const;

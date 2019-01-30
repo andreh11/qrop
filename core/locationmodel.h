@@ -33,6 +33,8 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 
     Q_PROPERTY(bool showOnlyEmptyLocations READ showOnlyEmptyLocations WRITE
                        setShowOnlyEmptyLocations NOTIFY showOnlyEmptyLocationsChanged)
+    Q_PROPERTY(bool showOnlyGreenhouseLocations READ showOnlyGreenhouseLocations WRITE
+                       setShowOnlyGreenhouseLocations NOTIFY showOnlyGreenhouseLocationsChanged)
     Q_PROPERTY(int depth READ depth NOTIFY depthChanged)
 
 public:
@@ -74,15 +76,21 @@ public:
     bool showOnlyEmptyLocations() const;
     void setShowOnlyEmptyLocations(bool show);
 
+    bool showOnlyGreenhouseLocations() const;
+    void setShowOnlyGreenhouseLocations(bool show);
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const override;
 
 signals:
     void showOnlyEmptyLocationsChanged();
+    void showOnlyGreenhouseLocationsChanged();
     void depthChanged();
 
 private:
     bool m_showOnlyEmptyLocations;
+    bool m_showOnlyGreenhouseLocations;
     SqlTreeModel *m_treeModel;
     Planting *planting;
     Location *location;
