@@ -2,6 +2,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 import "date.js" as MDate
@@ -25,9 +26,10 @@ Item {
     property date endHarvestDate: Planting.endHarvestDate(plantingId)
     property string cropName: Planting.cropName(plantingId)
     property string varietyName: Planting.varietyName(plantingId)
-    property int totalLength: Planting.totalLength(plantingId)
-    property int assignedLength: locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0
-    property int lengthLeft: Planting.lengthToAssign(plantingId)
+    property real totalLength: Planting.totalLength(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
+    property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
+    property real lengthLeft: Planting.lengthToAssign(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
+    readonly property string bedUnit: settings.useStandardBedLength ? qsTr("beds") : qsTr("m")
     readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
     readonly property alias hovered: mouseArea.containsMouse
     readonly property bool displaySow: showGreenhouseSow && plantingDate > seasonBegin
@@ -41,6 +43,12 @@ Item {
         plantingIdChanged();
     }
 
+    Settings {
+        id: settings
+        property bool useStandardBedLength
+        property int standardBedLength
+    }
+
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
@@ -49,8 +57,8 @@ Item {
     z: mouseArea.containsMouse ? 4 : 1
 
     ToolTip.text: locationId > 0
-                  ? "%1, %2 (%3/%4 m)".arg(cropName).arg(varietyName).arg(assignedLength).arg(totalLength)
-                  : "%1, %2 (%3/%4 m)".arg(cropName).arg(varietyName).arg(lengthLeft).arg(totalLength)
+                  ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName).arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
+                  : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName).arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
     ToolTip.visible: mouseArea.containsMouse
     ToolTip.delay: 200
 

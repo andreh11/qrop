@@ -40,6 +40,8 @@ Page {
         id: settings
         property alias farmName: farmNameField.text
         property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
+        property alias useStandardBedLength: standardBedLengthSwitch.checked
+        property alias standardBedLength: standardBedLengthField.text
         property string dateType
     }
 
@@ -177,8 +179,53 @@ Page {
                             id: showSeedCompanySwitch
                             onToggled: restartSnackbar.open();
                         }
+                    }
 
+                    ThinDivider { width: parent.width }
 
+                    RowLayout {
+                        width: parent.width
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Standard bed length")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+
+                        }
+
+                        Switch {
+                            id: standardBedLengthSwitch
+                            onToggled: restartSnackbar.open();
+                        }
+                    }
+
+                    ThinDivider { width: parent.width }
+
+                    RowLayout {
+                        width: parent.width
+                        enabled: standardBedLengthSwitch.checked
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+                        Layout.minimumHeight: Units.rowHeight
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTr("Bed length")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+
+                        }
+
+                        TextInput {
+                            id: standardBedLengthField
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            validator: IntValidator { bottom: 0; top: 999 }
+                            Layout.minimumWidth: 200
+                            horizontalAlignment: Text.AlignRight
+                        }
                     }
 
                     Item { Layout.fillHeight: true }

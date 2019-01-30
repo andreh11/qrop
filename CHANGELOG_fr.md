@@ -6,6 +6,9 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Gestion des planches standardisées : l'utilisateurice peut entre une
+    longueur de planche standard et l'utiliser comme unité pour définir la
+    longueur des séries.
   - *Parcellaire* − Ajout d'un mode « sous abris » permettant d'afficher
     uniquement les emplacements et séries sous abris. Ajout d'un raccourci
     clavier pour ce mode.

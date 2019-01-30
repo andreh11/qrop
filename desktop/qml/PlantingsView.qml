@@ -191,6 +191,8 @@ ListView {
     Settings {
         id: settings
         property bool showSeedCompanyBesideVariety
+        property bool useStandardBedLength
+        property int standardBedLength
     }
 
     ScrollBar.vertical: ScrollBar {
@@ -446,7 +448,9 @@ ListView {
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.dtm), Text.AlignRight],
                     [qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),
                      Text.AlignRight],
-                    [qsTr("%L1 m", "Abbreviation for meter").arg(model.length), Text.AlignRight],
+                    [settings.useStandardBedLength
+                     ? qsTr("%L1 bed", "", model.length/settings.standardBedLength).arg(model.length/settings.standardBedLength)
+                     : qsTr("%L1 m", "Abbreviation for meter").arg(model.length), Text.AlignRight],
                     [model.rows, Text.AlignRight],
                     [model.spacing_plants + " cm", Text.AlignRight],
                     [model.yield_per_bed_meter + " " + model.unit, Text.AlignRight],

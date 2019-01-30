@@ -16,6 +16,7 @@
 
 pragma Singleton
 import QtQuick 2.0
+import Qt.labs.settings 1.0
 
 QtObject {
     // font sizes - defaults from Google Material Design Guide
@@ -69,5 +70,13 @@ QtObject {
 
     function position(seasonBegin, date) {
         return coordinate(daysDelta(seasonBegin, date))
+    }
+
+    function bedLength(length) {
+        if (settings.useStandardBedLength) {
+            return length/settings.standardBedLength
+        } else {
+            return length
+        }
     }
 }

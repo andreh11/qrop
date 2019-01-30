@@ -74,7 +74,17 @@ Flickable {
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int traySize: Number(traySizeField.text)
-    readonly property int plantingLength: Number(plantingAmountField.text)
+    readonly property int plantingLength: {
+        if (plantingAmountField.text) {
+            if (settings.useStandardBedLength)
+                return Number.fromLocaleString(Qt.locale(), plantingAmountField.text)
+                        * settings.standardBedLength
+            else
+                return Number.fromLocaleString(Qt.locale(), plantingAmountField.text)
+        } else {
+            return 0;
+        }
+    }
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
@@ -101,9 +111,9 @@ Flickable {
                                                       / (1.0 - greenhouseEstimatedLoss/100), 2);
 
     readonly property alias unitText: unitField.currentText
-    readonly property real yieldPerBedMeter: Number(yieldPerBedMeterField.text)
+    readonly property real yieldPerBedMeter: yieldPerBedMeterField.text ? Number.fromLocaleString(Qt.locale(), yieldPerBedMeterField.text) : 0
     readonly property real estimatedYield: plantingLength * yieldPerBedMeter
-    readonly property real averagePrice: Number.fromLocaleString(Qt.locale(), averagePriceField.text);
+    readonly property real averagePrice: averagePriceField.text ? Number.fromLocaleString(Qt.locale(), averagePriceField.text) : 0
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedLocationIds: locationView.selectedLocationIds()
@@ -120,7 +130,7 @@ Flickable {
         "dtm": dtm,
         "dtt": dtt,
         "harvest_window": harvestWindow,
-        "length": plantingLength ,
+        "length": plantingLength,
         "rows": rowsPerBed,
         "spacing_plants": inRowSpacing,
         "plants_needed": plantsNeeded,
@@ -262,7 +272,14 @@ Flickable {
             varietyField.setRowId(varietyId);
         }
 
-        if (mode === "edit") setFieldValue(plantingAmountField, val['length']);
+        if (mode === "edit") {
+            if (settings.useStandardBedLength) {
+                var bedLength = Number(settings.standardBedLength)
+                setFieldValue(plantingAmountField, val['length']/bedLength);
+            } else {
+                setFieldValue(plantingAmountField, val['length']);
+            }
+        }
         setFieldValue(inRowSpacingField, val['spacing_plants']);
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
@@ -472,6 +489,12 @@ Flickable {
     onInGreenhouseChanged: if (mode === "add") preFillForm()
 
     Settings {
+        id: settings
+        property bool useStandardBedLength
+        property int standardBedLength
+    }
+
+    Settings {
         id: plantingSettings
         category: "PlantingsPane"
         property bool durationsByDefault
@@ -544,11 +567,16 @@ Flickable {
 
                     MyTextField {
                         id: plantingAmountField
-                        labelText: qsTr("Length")
-                        suffixText: qsTr("bed m")
+                        labelText: settings.useStandardBedLength ? qsTr("# of beds") : qsTr("Length")
+                        suffixText: settings.useStandardBedLength ? qsTr("bed", "", Number(text)) : qsTr("bed m")
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
-                        validator: IntValidator { bottom: 0; top: 999 }
+                        validator:  QropDoubleValidator {
+                            bottom: 0;
+                            decimals: settings.useStandardBedLength ? 2 : 0
+                            top: 999;
+                            notation: DoubleValidator.StandardNotation
+                        }
                         Layout.fillWidth: true
                         onActiveFocusChanged: ensureVisible(activeFocus, y, height)
                     }
@@ -861,7 +889,9 @@ Flickable {
 
                     Label {
                         Layout.fillWidth: true
-                        text: qsTr("Remaining length: %L1 m", "", remainingLength).arg(remainingLength)
+                        text: settings.useStandardBedLength
+                              ? qsTr("Remaining beds: %L1").arg(remainingLength/settings.standardBedLength)
+                              : qsTr("Remaining length: %L1 m", "", remainingLength).arg(remainingLength)
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
                     }
@@ -896,7 +926,12 @@ Flickable {
                     editedPlantingPlantingDate: plantingDate
                     editedPlantingEndHarvestDate: MDate.addDays(begHarvestDateField.calendarDate,
                                                                 harvestWindow)
-                    onAddPlantingLength: plantingAmountField.text = plantingLength + length
+                    onAddPlantingLength: {
+                        if (settings.useStandardBedLength)
+                            plantingAmountField.text = Number(plantingAmountField.text) + (length/settings.standardBedLength)
+                        else
+                            plantingAmountField.text = plantingLength + length
+                    }
                 }
             }
         }
@@ -1038,7 +1073,7 @@ Flickable {
                         bottom: 0
                         decimals: 2
                         top: 999
-                        notation:  DoubleValidator.StandardNotation
+                        notation: DoubleValidator.StandardNotation
                     }
                     floatingLabel: true
                     suffixText: "€"
