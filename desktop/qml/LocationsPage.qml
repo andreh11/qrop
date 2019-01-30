@@ -107,6 +107,13 @@ Page {
     }
 
     Shortcut {
+        sequence: "Ctrl+G"
+        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+        context: Qt.ApplicationShortcut
+        onActivated: greenhouseButton.toggle();
+    }
+
+    Shortcut {
         sequence: "Shift+A"
         enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
         context: Qt.ApplicationShortcut
@@ -140,6 +147,7 @@ Page {
         context: Qt.ApplicationShortcut
         onActivated: expandButton.expandLevel(4)
     }
+
 
     onEditModeChanged: {
         if (!editMode) {
