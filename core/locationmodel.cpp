@@ -74,6 +74,18 @@ void LocationModel::refreshTree()
     }
 }
 
+QVariant LocationModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
+{
+    if (!m_treeModel)
+        return {};
+
+    QModelIndex index = m_treeModel->index(row, 0, parent);
+    if (!index.isValid())
+        return {};
+
+    return m_treeModel->data(index, field);
+}
+
 QVariantList LocationModel::plantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())
@@ -233,6 +245,21 @@ void LocationModel::setShowOnlyEmptyLocations(bool show)
     emit showOnlyEmptyLocationsChanged();
 }
 
+bool LocationModel::showOnlyGreenhouseLocations() const
+{
+    return m_showOnlyGreenhouseLocations;
+}
+
+void LocationModel::setShowOnlyGreenhouseLocations(bool show)
+{
+    if (show == m_showOnlyGreenhouseLocations)
+        return;
+
+    m_showOnlyGreenhouseLocations = show;
+    invalidateFilter();
+    emit showOnlyGreenhouseLocationsChanged();
+}
+
 /*!
  * Insert \a quantity locations of given \a length and \a width, whose parents
  * while be indexes of \a parentList, and generating location names using \a baseName,
@@ -335,14 +362,21 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
 
 bool LocationModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (!m_showOnlyEmptyLocations)
-        return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    bool accept = true;
 
-    QModelIndex idx = mapFromSource(sourceModel()->index(sourceRow, 0, sourceParent));
-    QVariantList plantingIdList = plantings(idx);
-    bool isEmpty = plantingIdList.count() == 0;
+    if (m_showOnlyEmptyLocations) {
+        QModelIndex idx = mapFromSource(m_treeModel->index(sourceRow, 0, sourceParent));
+        QVariantList plantingIdList = plantings(idx);
+        bool isEmpty = plantingIdList.count() == 0;
+        accept = accept && isEmpty;
+    }
 
-    return isEmpty && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    if (m_showOnlyGreenhouseLocations) {
+        bool isGreenhouse = rowValue(sourceRow, sourceParent, "greenhouse").toInt() == 1;
+        accept = accept && isGreenhouse;
+    }
+
+    return accept && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }
 
 bool LocationModel::removeIndexes(const QModelIndexList &indexList)

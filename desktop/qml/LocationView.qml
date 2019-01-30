@@ -42,12 +42,11 @@ Item {
 
     property alias rowCount: locationModel.rowCount
     property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
+    property alias showOnlyGreenhouseLocations: locationModel.showOnlyGreenhouseLocations
     property alias hasSelection: selectionModel.hasSelection
     property alias selectedIndexes: selectionModel.selectedIndexes
     property alias draggedPlantingId: treeView.draggedPlantingId
 
-
-    property LocationModel locationModel
     property alias treeDepth: locationModel.depth
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
@@ -512,8 +511,6 @@ Item {
                         var sourceLocationId = Number(list[1])
                         if (plantingId !== treeView.draggedPlantingId)
                             treeView.draggedPlantingId = plantingId;
-
-                        console.log(sourceLocationId)
 
                         if (styleData.hasChildren) {
                             if (!styleData.isExpanded) {

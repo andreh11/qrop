@@ -35,6 +35,8 @@ class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
                        showActivePlantingsChanged)
     Q_PROPERTY(bool showOnlyUnassigned READ showOnlyUnassigned WRITE setShowOnlyUnassigned NOTIFY
                        showOnlyUnassignedChanged)
+    Q_PROPERTY(bool showOnlyGreenhouse READ showOnlyGreenhouse WRITE setShowOnlyGreenhouse NOTIFY
+                       showOnlyGreenhouseChanged)
 
 public:
     PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
@@ -48,6 +50,9 @@ public:
     bool showOnlyUnassigned() const;
     void setShowOnlyUnassigned(bool show);
 
+    bool showOnlyGreenhouse() const;
+    void setShowOnlyGreenhouse(bool show);
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
@@ -55,6 +60,7 @@ private:
     int m_week;
     bool m_showActivePlantings;
     bool m_showOnlyUnassigned;
+    bool m_showOnlyGreenhouse;
     Location *location;
     Planting *planting;
 
@@ -62,6 +68,7 @@ signals:
     void weekChanged();
     void showActivePlantingsChanged();
     void showOnlyUnassignedChanged();
+    void showOnlyGreenhouseChanged();
 };
 
 #endif // SQLPLANTINGMODEL_H

@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE QList<int> children(int locationId) const;
     QList<int> childrenTree(int locationId) const;
 
+    Q_INVOKABLE bool isGreenhouse(int locationId) const;
     Q_INVOKABLE QString fullName(int locationId) const;
     QList<QString> pathName(int locationId) const;
     Q_INVOKABLE QString fullName(QList<int> locationIdList) const;

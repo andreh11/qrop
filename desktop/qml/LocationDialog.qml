@@ -16,6 +16,7 @@ Dialog {
     property int bedLength: Number(lengthField.text)
     property double bedWidth: Number.fromLocaleString(Qt.locale(), widthField.text)
     property int quantity: Number(quantityField.text)
+    property alias greenhouse: greenhouseCheckBox.checked
 
     property string mode: "add"
     property var locationIdList: []
@@ -27,7 +28,8 @@ Dialog {
     readonly property var widgetField: [
         [nameField, "name", name],
         [lengthField, "bed_length", bedLength],
-        [widthField, "bed_width", bedWidth]
+        [widthField, "bed_width", bedWidth],
+        [greenhouseCheckBox, "greenhouse", greenhouse ? 1 : 0]
     ]
 
     function clearForm() {
@@ -35,6 +37,8 @@ Dialog {
         lengthField.reset();
         widthField.reset();
         quantityField.reset();
+        greenhouseCheckBox.checked = false;
+        greenhouseCheckBox.manuallyModified = false;
     }
 
     function editedValues() {
@@ -70,6 +74,7 @@ Dialog {
         setFieldValue(nameField, val['name']);
         setFieldValue(widthField, val['bed_width']);
         setFieldValue(lengthField, val['bed_length']);
+        setFieldValue(greenhouseCheckBox, val['greenhouse'] === 1 ? true : false);
     }
 
     onOpened: {
@@ -160,6 +165,13 @@ Dialog {
             Layout.fillWidth: true
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
             Keys.onEnterPressed: if (formAccepted) dialog.accept();
+        }
+
+        CheckBox {
+            id: greenhouseCheckBox
+            property bool manuallyModified
+            text: qsTr("Greenhouse")
+            onPressed: manuallyModified = true
         }
     }
 }
