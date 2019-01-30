@@ -57,8 +57,8 @@ Item {
     z: mouseArea.containsMouse ? 4 : 1
 
     ToolTip.text: locationId > 0
-                  ? "%1, %2 (%L3/%L4 %5 assigned)".arg(cropName).arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
-                  : "%1, %2 (%L3/%L4 %5 to assign)".arg(cropName).arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
+                  ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName).arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
+                  : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName).arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
     ToolTip.visible: mouseArea.containsMouse
     ToolTip.delay: 200
 
