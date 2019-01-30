@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 
@@ -9,7 +10,7 @@ Item {
     id: control
 
     property int plantingId
-    readonly property bool validId: plantingId > 1
+    readonly property bool validId: plantingId > 0
     property string crop: cropName(plantingId)
     property string variety: varietyName(plantingId)
     property date sowingDate
@@ -32,6 +33,12 @@ Item {
         return map['variety']
     }
 
+    Settings {
+        id: settings
+        property bool useStandardBedLength
+        property int standardBedLength
+    }
+
     Column {
         id: column
         Text {
@@ -40,11 +47,26 @@ Item {
             font.pixelSize: Units.fontSizeBodyAndButton
         }
         Text {
-            text: !validId ? "" : showOnlyDates ? qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year))
-                                : qsTr("%1 − %2 ⋅ %3 bed m ⋅ %4").arg(NDate.formatDate(sowingDate, year)).arg(NDate.formatDate(endHarvestDate, year)).arg(length).arg(Location.fullName(locations))
+            text: {
+                if (!validId)
+                    return "";
+
+                var txt = qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year))
+                                         .arg(NDate.formatDate(endHarvestDate, year))
+
+                if (!showOnlyDates) {
+                    if (settings.useStandardBedLength) {
+                        var beds = length/settings.standardBedLength
+                        txt += qsTr(" ⋅ %L1 bed ⋅ %2", "", beds).arg(beds).arg(Location.fullName(locations))
+                    } else {
+                        txt += qsTr(" ⋅ %L1 bed m ⋅ %2").arg(length).arg(Location.fullName(locations))
+                    }
+                }
+                return txt;
+            }
             font.family: "Roboto Regular"
             color: Material.color(Material.Grey, Material.Shade600)
             font.pixelSize: Units.fontSizeCaption
         }
-}
+    }
 }
