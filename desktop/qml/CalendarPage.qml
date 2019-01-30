@@ -18,6 +18,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
+import Qt.labs.settings 1.0
 
 import io.croplan.components 1.0
 
@@ -140,6 +141,13 @@ Page {
         onAccepted: page.refresh()
         week: page.week
         year: page.year
+    }
+
+    Settings {
+        id: settings
+        property bool showSeedCompanyBesideVariety
+        property bool useStandardBedLength
+        property int standardBedLength
     }
 
     Component {
@@ -445,6 +453,33 @@ Page {
                     taskDialog.editTask(model.task_id)
                 }
 
+                function labelText() {
+                    var planting_ids = model.plantings.split(',')
+                    var planting_id = Number(planting_ids[0])
+                    var map = Planting.mapFromId("planting_view", planting_id);
+                    var length = map['length']
+                    var rows = map['rows']
+                    var spacingPlants = map['spacing_plants']
+                    var seedsPerHole = map['seeds_per_hole']
+
+                    if (task_type_id === 1 || task_type_id === 3) {
+                        if (settings.useStandardBedLength) {
+                            var beds = length/settings.standardBedLength
+                            return qsTr("%L1 bed: ", "", beds).arg(beds) + qsTr("%L1 rows X %L2 cm").arg(rows).arg(spacingPlants)
+                        } else {
+                            return qsTr("%L1 bed m, %L2 rows X %L3 cm").arg(length).arg(rows).arg(spacingPlants)
+                        }
+                    } else if (task_type_id === 2) {
+                        if (seedsPerHole > 1)
+                            return qsTr("%L1 x %L2, %L3 seeds per cell").arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
+                        else
+                            return qsTr("%L1 x %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+
+                    } else {
+                        return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
+                    }
+                }
+
                 color: "white"
                 border.color: Material.color(Material.Grey, Material.Shade400)
                 border.width: rowMouseArea.containsMouse ? 1 : 0
@@ -629,30 +664,9 @@ Page {
                             //                            anchors.verticalCenter: parent.verticalCenter
                             //                        }
 
+
                             Label {
-                                text: {
-                                    var planting_ids = model.plantings.split(',')
-                                    var planting_id = Number(planting_ids[0])
-                                    var map = Planting.mapFromId("planting_view", planting_id);
-                                    var length = map['length']
-                                    var rows = map['rows']
-                                    var spacingPlants = map['spacing_plants']
-                                    var seedsPerHole = map['seeds_per_hole']
-
-                                    if (task_type_id === 1 || task_type_id === 3) {
-                                        return "%1 bed m, %2 X %3 cm".arg(length).arg(rows).arg(spacingPlants)
-                                    } else if (task_type_id === 2) {
-                                        if (seedsPerHole > 1)
-                                            return qsTr("%L1 x %L2, %3 seeds per cell").arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
-                                        else
-                                            return qsTr("%L1 x %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
-
-                                    } else {
-                                        return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
-                                    }
-
-                                }
-
+                                text: labelText()
                                 elide: Text.ElideRight
                                 width: tableHeaderModel[2].width
                                 anchors.verticalCenter: parent.verticalCenter
