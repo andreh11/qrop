@@ -1,5 +1,5 @@
 -- 003
--- * add a harvest view table
+-- * add a harvest view
 
 PRAGMA foreign_keys = OFF;
 
