@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Harvest page.
   - Standardized beds mode: user can now define a standard bed length, and use
     this length as a unit for planting lengths.
   - *Field map* − Add greenhouse filter mode to only show greenhouse locations
