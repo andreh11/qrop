@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
+    Q_INVOKABLE static QString dayName(const QDate &date);
 };
 
 #endif // MDATE_H

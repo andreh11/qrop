@@ -41,6 +41,7 @@
 
 #include "cropmodel.h"
 #include "familymodel.h"
+#include "harvestmodel.h"
 #include "keywordmodel.h"
 #include "locationmodel.h"
 #include "notemodel.h"
@@ -83,6 +84,7 @@ void registerTypes()
     qmlRegisterType<QFileSystemModel>("io.croplan.components", 1, 0, "FileSystemModel");
     qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
     qmlRegisterType<FamilyModel>("io.croplan.components", 1, 0, "FamilyModel");
+    qmlRegisterType<HarvestModel>("io.croplan.components", 1, 0, "HarvestModel");
     qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
     qmlRegisterType<LocationModel>("io.croplan.components", 1, 0, "LocationModel");
     qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
@@ -108,15 +110,6 @@ void registerTypes()
                                          return family;
                                      });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                                  Q_UNUSED(engine)
-                                                  Q_UNUSED(scriptEngine)
-                                                  auto *crop = new DatabaseUtility();
-                                                  crop->setTable("crop");
-                                                  return crop;
-                                              });
-
     qmlRegisterSingletonType<Variety>("io.croplan.components", 1, 0, "Variety",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
@@ -125,6 +118,55 @@ void registerTypes()
                                           variety->setTable("variety");
                                           return variety;
                                       });
+
+    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword",
+                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                          Q_UNUSED(engine)
+                                          Q_UNUSED(scriptEngine)
+                                          auto *keyword = new Keyword();
+                                          return keyword;
+                                      });
+
+    qmlRegisterSingletonType<Task>("io.croplan.components", 1, 0, "Task",
+                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                       Q_UNUSED(engine)
+                                       Q_UNUSED(scriptEngine)
+                                       auto *task = new Task();
+                                       return task;
+                                   });
+
+    qmlRegisterSingletonType<Location>("io.croplan.components", 1, 0, "Location",
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                           Q_UNUSED(engine)
+                                           Q_UNUSED(scriptEngine)
+                                           auto *location = new Location();
+                                           return location;
+                                       });
+
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
+                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                        Q_UNUSED(engine)
+                                        Q_UNUSED(scriptEngine)
+                                        auto *mdate = new MDate();
+                                        return mdate;
+                                    });
+
+    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "Database",
+                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                        Q_UNUSED(engine)
+                                        Q_UNUSED(scriptEngine)
+                                        auto *db = new Database();
+                                        return db;
+                                    });
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *crop = new DatabaseUtility();
+                                                  crop->setTable("crop");
+                                                  return crop;
+                                              });
 
     qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Unit",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -171,45 +213,14 @@ void registerTypes()
                                                   return taskimplement;
                                               });
 
-    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword",
-                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                          Q_UNUSED(engine)
-                                          Q_UNUSED(scriptEngine)
-                                          auto *keyword = new Keyword();
-                                          return keyword;
-                                      });
-
-    qmlRegisterSingletonType<Task>("io.croplan.components", 1, 0, "Task",
-                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                       Q_UNUSED(engine)
-                                       Q_UNUSED(scriptEngine)
-                                       auto *task = new Task();
-                                       return task;
-                                   });
-
-    qmlRegisterSingletonType<Location>("io.croplan.components", 1, 0, "Location",
-                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                           Q_UNUSED(engine)
-                                           Q_UNUSED(scriptEngine)
-                                           auto *location = new Location();
-                                           return location;
-                                       });
-
-    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
-                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                        Q_UNUSED(engine)
-                                        Q_UNUSED(scriptEngine)
-                                        auto *mdate = new MDate();
-                                        return mdate;
-                                    });
-
-    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "Database",
-                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                        Q_UNUSED(engine)
-                                        Q_UNUSED(scriptEngine)
-                                        auto *db = new Database();
-                                        return db;
-                                    });
+    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Harvest",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *db = new DatabaseUtility();
+                                                  db->setTable("harvest");
+                                                  return db;
+                                              });
 }
 
 int main(int argc, char *argv[])

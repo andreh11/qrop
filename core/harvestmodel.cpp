@@ -15,12 +15,56 @@
  */
 
 #include "harvestmodel.h"
+#include "mdate.h"
 
-HarvestModel::HarvestModel(QObject *parent)
-    : SqlTableModel(parent)
+HarvestModel::HarvestModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
+    , m_week(0)
 {
-    setTable("harvest");
+}
 
-    //    int plantingColumn = fieldColumn("planting_id");
-    //    setRelation(plantingColumn, QSqlRelation("planting", "planting_id", "planting_id"));
+int HarvestModel::year() const
+{
+    return m_year;
+}
+
+void HarvestModel::setYear(int year)
+{
+    if (year < 0 || m_year == year)
+        return;
+
+    m_year = year;
+    updateWeekDates();
+    emit yearChanged();
+}
+
+int HarvestModel::week() const
+{
+    return m_week;
+}
+
+void HarvestModel::setWeek(int week)
+{
+    if (week < 0 || m_week == week)
+        return;
+
+    m_week = week;
+    updateWeekDates();
+    emit weekChanged();
+}
+void HarvestModel::updateWeekDates()
+{
+    QList<QDate> weekDates = MDate::weekDates(m_week, m_year);
+    m_mondayDate = weekDates[0];
+    m_sundayDate = weekDates[1];
+    // We have to use both of these to get everything working.
+    invalidateFilter();
+    invalidate();
+}
+
+bool HarvestModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QDate taskDate = fieldDate(sourceRow, sourceParent, "date");
+    bool inRange = m_mondayDate <= taskDate && taskDate <= m_sundayDate;
+    return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

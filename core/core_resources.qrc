@@ -5,5 +5,6 @@
         <file>db/triggers.sql</file>
         <file>db/migrations/001.sql</file>
         <file>db/migrations/002.sql</file>
+        <file>db/migrations/003.sql</file>
     </qresource>
 </RCC>

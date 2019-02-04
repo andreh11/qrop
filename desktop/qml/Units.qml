@@ -17,6 +17,7 @@
 pragma Singleton
 import QtQuick 2.0
 import Qt.labs.settings 1.0
+import QtQuick.Controls 2.4
 
 QtObject {
     // font sizes - defaults from Google Material Design Guide
@@ -78,5 +79,38 @@ QtObject {
         } else {
             return length
         }
+    }
+
+    // Set item to value only if it has not been manually modified by
+    // the user. To do this, we use the manuallyModified boolean value.
+    function setFieldValue(item, value) {
+        if (!value || item.manuallyModified)
+            return;
+
+        if (item instanceof MyTextField)
+            item.text = value;
+        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+            item.checked = value;
+        else if (item instanceof MyComboBox)
+            item.setRowId(value);
+        else if (item instanceof DatePicker)
+            item.calendarDate = Date.fromLocaleString(Qt.locale(), value, "yyyy-MM-dd")
+
+    }
+
+    //! Return the elements of \a componentList which have been modified.
+    function editedValues(componentList) {
+        var map = ({});
+
+        for (var i = 0; i < componentList.length; i++) {
+            var widget = componentList[i][0]
+            var name = componentList[i][1]
+            var value = componentList[i][2]
+
+            if (widget.manuallyModified) {
+                map[name] = value;
+            }
+        }
+        return map;
     }
 }

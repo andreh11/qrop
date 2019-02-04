@@ -164,3 +164,8 @@ int MDate::seasonYear(const QDate &date)
     else
         return date.year();
 }
+
+QString MDate::dayName(const QDate &date)
+{
+    return date.toString("dddd");
+}
