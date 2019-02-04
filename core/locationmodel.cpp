@@ -179,9 +179,13 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
     return location->rotationConflictingPlantings(lid, plantingId).count() == 0;
 }
 
-/*! Returns a map such as map[id] is a list of all plantings conflicting
-    with planting id on the location represented by \a index because they
-    don't observe the family rotation interval. */
+/**
+ * \fn QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index, int season, int year) const
+ *
+ * Returns a list all plantings conflicting on the location represented
+ * by \a index for the given \a season of \a year because they don't respect the
+ * family rotation interval.
+ */
 QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())
@@ -211,13 +215,6 @@ QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index, i
     const int lid = locationId(index);
     QPair<QDate, QDate> dates = seasonDates(season, year);
     return location->spaceConflictingPlantings(lid, dates.first, dates.second);
-    //    QList<int> list;
-    //    for (const int pid : plantingIdList) {
-    //        auto conflictList = location->rotationConflictingPlantings(lid, pid);
-    //        if (conflictList.count() > 0)
-    //            list.push_back(pid);
-    //    }
-    //    return list;
 }
 
 bool LocationModel::hasRotationConflict(const QModelIndex &index, int season, int year) const
@@ -260,7 +257,7 @@ void LocationModel::setShowOnlyGreenhouseLocations(bool show)
     emit showOnlyGreenhouseLocationsChanged();
 }
 
-/*!
+/**
  * Insert \a quantity locations of given \a length and \a width, whose parents
  * while be indexes of \a parentList, and generating location names using \a baseName,
  * into database and underlying SqlTreeModel.

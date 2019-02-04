@@ -77,5 +77,7 @@
         <file>qml/LocationTreeView.qml</file>
         <file>qml/MenuItemDelegate.qml</file>
         <file>qml/LightPlantingForm.qml</file>
+        <file>qml/HarvestDialog.qml</file>
+        <file>qml/CropIcon.qml</file>
     </qresource>
 </RCC>

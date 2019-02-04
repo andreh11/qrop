@@ -223,14 +223,6 @@ Page {
         text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
         visible: false
 
-        //        Behavior on y {
-        //              NumberAnimation {
-        //                  easing.type: Easing.OutQuad;
-        //                  easing.amplitude: 1.0;
-        //                  easing.period: 1.0;
-        //                  duration: 300 }
-        //          }
-
         onClicked: {
             Planting.rollback();
             page.refresh();
@@ -247,14 +239,6 @@ Page {
         y: parent.height - height - Units.mediumSpacing
         text: qsTr("Modified %L1 planting(s)", "", successions).arg(successions)
         visible: false
-
-        //        Behavior on y {
-        //              NumberAnimation {
-        //                  easing.type: Easing.OutQuad;
-        //                  easing.amplitude: 1.0;
-        //                  easing.period: 1.0;
-        //                  duration: 300 }
-        //          }
 
         onClicked: {
             Planting.rollback();
