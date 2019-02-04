@@ -28,7 +28,10 @@ ListView {
     property alias filterString: plantingModel.filterString
     property alias count: plantingModel.rowCount // Number of plantings currently filtered.
     property alias showActivePlantings: plantingModel.showActivePlantings
+    property alias showOnlyHarvested: plantingModel.showOnlyHarvested
+    property alias cropId: plantingModel.cropId
     property alias week: plantingModel.week
+    property alias season: plantingModel.season
 
     property var selectedIds: ({}) // Map of the ids of the selected plantings
     property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
@@ -110,7 +113,7 @@ ListView {
     delegate: Row {
         id: rowDelegate
         height: Units.rowHeight
-        spacing: Units.formSpacing
+        spacing: Units.smallSpacing
 
         property bool checked: false
 
@@ -122,7 +125,7 @@ ListView {
 
         TextCheckBox {
             id: checkBox
-            width: parent.height
+            width: parent.height * 0.8
             visible: !rowDelegate.checked
             selectionMode: checks > 0
             text: model.crop

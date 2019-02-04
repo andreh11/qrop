@@ -29,6 +29,9 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     , m_week(-1)
     , m_showActivePlantings(false)
     , m_showOnlyUnassigned(false)
+    , m_showOnlyGreenhouse(false)
+    , m_showOnlyHarvested(false)
+    , m_cropId(-1)
     , location(new Location(this))
     , planting(new Planting(this))
 {
@@ -95,22 +98,56 @@ void PlantingModel::setShowOnlyGreenhouse(bool show)
     emit showOnlyGreenhouseChanged();
 }
 
+bool PlantingModel::showOnlyHarvested() const
+{
+    return m_showOnlyHarvested;
+}
+
+void PlantingModel::setShowOnlyHarvested(bool show)
+{
+    if (m_showOnlyHarvested == show)
+        return;
+
+    m_showOnlyHarvested = show;
+    invalidateFilter();
+    emit showOnlyHarvestedChanged();
+}
+
+int PlantingModel::cropId() const
+{
+    return m_cropId;
+}
+
+void PlantingModel::setCropId(int cropId)
+{
+    if (m_cropId == cropId)
+        return;
+
+    m_cropId = cropId;
+    invalidateFilter();
+    emit cropIdChanged();
+}
+
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
     int length = rowValue(sourceRow, sourceParent, "length").toInt();
     QDate sowingDate = fieldDate(sourceRow, sourceParent, "sowing_date");
     QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
-    QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_haverst_date");
+    QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_harvest_date");
     QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "end_harvest_date");
     bool inGreenhouse = rowValue(sourceRow, sourceParent, "in_greenhouse").toInt() > 0;
+    int cropId = rowValue(sourceRow, sourceParent, "crop_id").toInt();
 
     bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
                     || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
             && (!m_showActivePlantings
                 || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId))
-            && (!m_showOnlyGreenhouse || inGreenhouse);
+            && (!m_showOnlyGreenhouse || inGreenhouse)
+            && (!m_showOnlyHarvested
+                || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
+            && (m_cropId < 1 || cropId == m_cropId);
 
     return inRange && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

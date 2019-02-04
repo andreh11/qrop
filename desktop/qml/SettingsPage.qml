@@ -59,6 +59,12 @@ Page {
         property alias allowPlantingsConflict: allowPlantingsConflictSwitch.checked
     }
 
+    Settings {
+        id: harvestSettings
+        category: "Harvest"
+        property alias showAllPlantingIfNoneInWindow: showAllPlantingIfNoneInWindonSwitch.checked
+    }
+
     Snackbar {
         id: restartSnackbar
 
@@ -355,6 +361,45 @@ Page {
                     ThinDivider { width: parent.width }
                 }
             }
+
+            Label {
+                text: qsTr("Harvests")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                topPadding: Units.mediumSpacing
+            }
+
+            Pane {
+                width: parent.width
+                Material.elevation: 2
+                Material.background: "white"
+                padding: 0
+
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 0
+
+                    RowLayout {
+                        Layout.minimumHeight: Units.rowHeight
+                        Layout.leftMargin: Units.mediumSpacing
+                        Layout.rightMargin: Layout.leftMargin
+
+                        Label {
+                            text: qsTr("Show all plantings if there is none in harvest window")
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            Layout.fillWidth: true
+                        }
+
+                        Switch {
+                            id: showAllPlantingIfNoneInWindonSwitch
+                            checked: true
+                            onToggled: restartSnackbar.open();
+                        }
+                    }
+                }
+            }
+
             Label {
                 text: qsTr("Lists")
                 font.family: "Roboto Regular"

@@ -27,6 +27,8 @@ Rectangle {
 
     property int estimatedYield: 0
     property int estimatedRevenue: 0
+    property bool showYieldAndRevenue: true
+    property bool showAddItem: true
     property string unitText: ""
     property alias currentIndex: cropField.currentIndex
     property alias cropField: cropField
@@ -36,17 +38,21 @@ Rectangle {
     signal newCropAdded(int newCropId)
     signal cropSelected()
 
+    function refresh() {
+        cropModel.refresh();
+    }
+
+    function reset() {
+        refresh();
+        cropField.currentIndex = 0
+    }
+
     color: Material.color(Material.Grey, Material.Shade200)
     Material.elevation: 2
     radius: 2
     clip: true
-//    height: textIcon.height + 2 * Units.smallSpacing
     implicitHeight: 60
     width: parent.width
-
-    function refresh() {
-        cropModel.refresh();
-    }
 
     CropModel {
         id: cropModel
@@ -86,7 +92,7 @@ Rectangle {
             model: cropModel
             textRole: "crop"
             editable: false
-            showAddItem: true
+            showAddItem: control.showAddItem
             addItemText: qsTr("Add Crop")
             enabled: mode === "add"
 
@@ -114,6 +120,7 @@ Rectangle {
         }
         
         ColumnLayout {
+            visible: showYieldAndRevenue
             Label {
                 text: qsTr("Yield")
                 Layout.alignment: Qt.AlignRight
@@ -130,6 +137,7 @@ Rectangle {
         }
         
         ColumnLayout {
+            visible: showYieldAndRevenue
             Label {
                 text: qsTr("Revenue")
                 font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }

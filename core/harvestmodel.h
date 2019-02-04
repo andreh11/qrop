@@ -18,16 +18,39 @@
 #define HARVESTMODEL_H
 
 #include <QObject>
+#include <QDate>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT HarvestModel : public SqlTableModel
+class CORESHARED_EXPORT HarvestModel : public SortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int week READ week WRITE setWeek NOTIFY weekChanged)
+    Q_PROPERTY(int year READ year WRITE setYear NOTIFY yearChanged)
 
 public:
-    HarvestModel(QObject *parent = nullptr);
+    HarvestModel(QObject *parent = nullptr, const QString &tableName = "harvest_view");
+
+    int week() const;
+    void setWeek(int week);
+
+    int year() const;
+    void setYear(int year);
+
+signals:
+    void weekChanged();
+    void yearChanged();
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    int m_week;
+    QDate m_mondayDate;
+    QDate m_sundayDate;
+
+    void updateWeekDates();
 };
 
 #endif // HARVESTMODEL_H

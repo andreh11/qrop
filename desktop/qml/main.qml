@@ -29,13 +29,13 @@ ApplicationWindow {
     id: window
 
     property var navigationModel: [
-//        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
+        //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue8f1" },
-//        { source: "HarvestsPage.qml",  name: qsTr("Harvests"),  iconText: "\ue896" },
-//        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
-//        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
+        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
+        //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
+        //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
     property int navigationIndex: 0
 
@@ -79,6 +79,7 @@ ApplicationWindow {
     PlantingsPage { id: plantingsPage }
     CalendarPage { id: calendarPage }
     LocationsPage { id: locationsPage }
+    HarvestsPage { id: harvestsPage }
     SettingsPage { id: settingsPage }
 
     Shortcut {
@@ -103,6 +104,12 @@ ApplicationWindow {
         sequence: "Ctrl+3"
         context: Qt.ApplicationShortcut
         onActivated: navigationIndex = 2
+    }
+
+    Shortcut {
+        sequence: "Ctrl+4"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = 3
     }
 
     Shortcut {
@@ -406,7 +413,6 @@ ApplicationWindow {
                         }
                     }
                 }
-
             }
 
             Item { Layout.fillHeight: true }
@@ -439,6 +445,9 @@ ApplicationWindow {
 
         initialItem: plantingsPage
 
+        replaceEnter: null
+        replaceExit: null
+
         function activatePage(index) {
             switch (index) {
             case 0:
@@ -454,6 +463,10 @@ ApplicationWindow {
                 locationsPage.refresh();
                 break
             case 3:
+                stackView.replace(harvestsPage)
+                harvestsPage.refresh();
+                break
+            case 4:
                 stackView.replace(settingsPage)
                 break
             }
