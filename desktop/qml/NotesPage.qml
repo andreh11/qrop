@@ -38,11 +38,11 @@ Page {
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
-        { name: qsTr("Planting"),   columnName: "planting_id", width: 200 },
-        { name: qsTr("Locations"),   columnName: "locations", width: 200 },
-        { name: qsTr("Quantity"), columnName: "quantity", width: 80 },
         { name: qsTr("Date"),    columnName: "date", width: 100},
-        { name: qsTr("Time"),    columnName: "time", width: 80}
+//        { name: qsTr("Type"),   columnName: "planting_id", width: 200 },
+        { name: qsTr("Details"),   columnName: "planting_id", width: 200 },
+        { name: qsTr("Plantings"),   columnName: "locations", width: 200 },
+        { name: qsTr("Locations"), columnName: "quantity", width: 80 },
     ]
 
     property int rowWidth: {
@@ -312,13 +312,13 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: Units.smallSpacing
 
-                        Item {
-                            visible: true
-                            id: headerCheckbox
-                            anchors.verticalCenter: headerRow.verticalCenter
-                            width: parent.height
-                            height: width
-                        }
+//                        Item {
+//                            visible: true
+//                            id: headerCheckbox
+//                            anchors.verticalCenter: headerRow.verticalCenter
+//                            width: parent.height
+//                            height: width
+//                        }
 
                         Repeater {
                             model: page.tableHeaderModel
@@ -409,8 +409,11 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: Units.formSpacing
 
-                        CheckBox {
-
+                        Label {
+                            text: NDate.formatDate(model.date, 2019)
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[0].width
+                            anchors.verticalCenter: parent.verticalCenter
                         }
 
                         Label {
@@ -420,12 +423,6 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        Label {
-                            text: NDate.dayName(model.date)
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[2].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
 
                         Label {
                             text: model.time

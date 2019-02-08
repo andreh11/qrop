@@ -33,8 +33,8 @@ ApplicationWindow {
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue8f1" },
-        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
+        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" }
+//        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
         //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
     property int navigationIndex: 0
