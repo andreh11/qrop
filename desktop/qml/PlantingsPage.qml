@@ -21,7 +21,7 @@ import QtQuick.Controls.Material 2.0
 import QtCharts 2.2
 import Qt.labs.settings 1.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 import "date.js" as MDate
 
 Page {
@@ -36,9 +36,11 @@ Page {
     property alias searchField: filterField
 
     property alias model: plantingsView.model
-    property int rowsNumber: model.rowCount
+    property int rowCount: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
+
+    signal noteButtonClicked(int plantingId)
 
     function refresh() {
         plantingsView.refresh();
@@ -47,16 +49,15 @@ Page {
     function selectedIdList() {
         var idList = []
         for (var key in selectedIds)
-            if (selectedIds[key]) {
-                selectedIds[key] = false
+            if (selectedIds[key])
                 idList.push(key)
-            }
         return idList;
     }
 
     function duplicateSelected() {
         var idList = selectedIdList();
         Planting.duplicateList(idList)
+        plantingsView.unselectAll()
         page.refresh()
         plantingsView.selectedIdsChanged();
     }
@@ -379,7 +380,7 @@ Page {
                 id: blankStateColumn
                 z: 1
                 spacing: Units.smallSpacing
-                visible: !page.rowsNumber
+                visible: !page.rowCount
                 anchors {
                     centerIn: parent
                 }
@@ -423,156 +424,4 @@ Page {
             }
         }
     }
-
-//    ListView {
-//        id: smallListView
-//        clip: true
-//        visible: !largeDisplay
-//        width: parent.width
-//        height: parent.height - buttonRectangle.height
-//        spacing: 0
-
-//        //                flickableDirection: Flickable.HorizontalAndVerticalFlick
-//        property string filterColumn: "crop"
-//        //            property TableHeaderLabel filterLabel: headerRow.cropLabel
-//        Keys.onUpPressed: verticalScrollBar.decrease()
-//        Keys.onDownPressed: verticalScrollBar.increase()
-
-//        model: page.model
-
-//        headerPositioning: ListView.OverlayHeader
-//        section.property: "crop"
-//        section.delegate: Rectangle {
-//            width: parent.width
-//            height: 48
-//            color: "transparent"
-//            RowLayout {
-//                anchors.fill: parent
-//                //                ThinDivider { width: parent.width }
-
-//                Label {
-//                    text: section
-//                    font.family: "Roboto Regular"
-//                    font.pixelSize: Units.fontSizeBodyAndButton
-//                    Layout.fillWidth: true
-//                }
-//                //                Label {
-//                //                    text: ">"
-//                //                }
-//            }
-//        }
-
-//        delegate: Rectangle {
-//            id: smallDelegate
-//            property date seedingDate: model.planting_type
-//                                       === 2 ? MDate.addDays(
-//                                                   transplantingDate,
-//                                                   -model.dtt) : transplantingDate
-//            property date transplantingDate: model.planting_date
-//            property date beginHarvestDate: MDate.addDays(model.planting_date,
-//                                                          model.dtm)
-//            property date endHarvestDate: MDate.addDays(beginHarvestDate,
-//                                                        model.harvest_window)
-
-//            height: 48
-//            width: parent.width
-//            color: {
-//                if (smallCheckBox.checked) {
-//                    return Material.color(Material.Grey, Material.Shade200)
-//                }
-
-//                /*} else if (mouseArea.containsMouse) {
-//    return Material.color(Material.Grey, Material.Shade100)
-//    }*/ else {
-//                    return "white"
-//                }
-//            }
-
-//            Column {
-//                anchors.fill: parent
-
-//                ThinDivider {
-//                    width: parent.width
-//                }
-
-//                RowLayout {
-//                    id: smallRow
-//                    height: parent.height
-//                    spacing: 8
-
-//                    //                    leftPadding: 16
-//                    CheckBox {
-//                        id: smallCheckBox
-//                        //                        text: model.crop
-//                        //                        round: true
-//                        //                        anchors.verticalCenter: smallRow.verticalCenter
-//                        width: 100
-//                        height: width
-//                        checked: model.planting_id
-//                        in selectedIds ? selectedIds[model.planting_id] : false
-//                        onCheckStateChanged: {
-//                            selectedIds[model.planting_id] = checked
-//                        }
-//                    }
-
-//                    ColumnLayout {
-
-//                        //                        Layout.fillWidth: true
-//                        TableLabel {
-//                            text: model.variety
-//                            font.family: "Roboto Regular"
-//                            elide: Text.ElideRight
-//                            //                        width: 100
-//                        }
-
-//                        TableLabel {
-//                            font.family: "Roboto Regular"
-//                            text: NDate.formatDate(
-//                                      model.planting_date, currentYear) + " ⋅ " + model.locations
-//                        }
-//                    }
-
-//                    Item { Layout.fillWidth: true }
-
-//                    ColumnLayout {
-//                        TableLabel {
-//                            font.family: "Roboto Regular"
-//                            text: model.planting_type !== 3 ? NDate.formatDate(
-//                                                                  seedingDate,
-//                                                                  currentYear) : ""
-//                            horizontalAlignment: Text.AlignRight
-//                            elide: Text.ElideRight
-//                            //                                            width: 60
-//                        }
-//                        TableLabel {
-//                            font.family: "Roboto Regular"
-//                            text: model.length + " m"
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    RoundButton {
-//        id: roundAddButton
-//        font.family: "Material Icons"
-//        font.pixelSize: 20
-//        text: "\ue145"
-//        width: 56
-//        height: width
-//        anchors.right: parent.right
-//        anchors.margins: 12
-//        // Cannot use anchors for the y position, because it will anchor
-//        // to the footer, leaving a large vertical gap.
-//        y: parent.height - height - anchors.margins
-//        visible: !largeDisplay
-//        highlighted: true
-
-//        onClicked: {
-//            var item = stackView.push("MobilePlantingForm.qml");
-//            item.setFocus();
-//            //            mobilePlantingForm.setFocus();
-//        }
-//    }
 }

@@ -22,7 +22,7 @@ import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 import QtQuick.Window 2.10
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 import "date.js" as MDate
 
 ApplicationWindow {
@@ -33,8 +33,8 @@ ApplicationWindow {
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue8f1" },
-        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
-        //        { source: "NotesPage.qml",     name: qsTr("Notes"),     iconText: "\ue616" },
+        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" }
+//        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
         //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
     property int navigationIndex: 0
@@ -76,11 +76,43 @@ ApplicationWindow {
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
-    PlantingsPage { id: plantingsPage }
-    CalendarPage { id: calendarPage }
-    LocationsPage { id: locationsPage }
-    HarvestsPage { id: harvestsPage }
-    SettingsPage { id: settingsPage }
+    Dialog {
+        id: imageDialog
+        property alias path: dialogPhotoImage.source
+        x: (window.width - width) / 2
+        y: (window.height - height) / 2
+
+        Image {
+            id: dialogPhotoImage
+            width: parent.width*0.8
+            height: parent.height*0.8
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+    PlantingsPage {
+        id: plantingsPage
+    }
+
+    CalendarPage {
+        id: calendarPage
+    }
+
+    LocationsPage {
+        id: locationsPage
+    }
+
+    HarvestsPage {
+        id: harvestsPage
+    }
+
+    NotesPage {
+        id: notesPage
+    }
+
+    SettingsPage {
+        id: settingsPage
+    }
 
     Shortcut {
         sequence: StandardKey.Quit
@@ -259,7 +291,7 @@ ApplicationWindow {
                 visible: !largeDisplay && !searchMode
                 font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
-//                color: "white"
+                //                color: "white"
                 Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignLeft
                 verticalAlignment: Qt.AlignVCenter
@@ -279,9 +311,9 @@ ApplicationWindow {
                 background: Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height * 0.7
-//                    width: parent.width
+                    //                    width: parent.width
                     //                        opacity: 0.3
-//                    color: largeDisplay ? Material.color(Material.Teal, Material.Shade400) : "white"
+                    //                    color: largeDisplay ? Material.color(Material.Teal, Material.Shade400) : "white"
                     radius: 5
                     Label {
                         leftPadding: 16
@@ -356,24 +388,25 @@ ApplicationWindow {
         }
     }
 
+
     Drawer {
         id: drawer
-//        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
-//        width: childrenRect.width
+        //        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
+        //        width: childrenRect.width
         height: window.height
-//        height: window.height - toolBar.height
-//        y: toolBar.height
+        //        height: window.height - toolBar.height
+        //        y: toolBar.height
         modal: !largeDisplay
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
-//        Material.background: Material.color(Material.Teal, Material.Shade300)
+        //        Material.background: Material.color(Material.Teal, Material.Shade300)
         Material.background: Material.primary
 
-//        background: Rectangle {
-//            anchors.fill: parent
-//            color: "green"
-//        }
+        //        background: Rectangle {
+        //            anchors.fill: parent
+        //            color: "green"
+        //        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -434,10 +467,64 @@ ApplicationWindow {
         }
     }
 
+    NoteSideSheet {
+        id: noteSideSheet
+        height: window.height
+        width: Math.min(300, window.width*0.3)
+        plantingId: plantingsPage.checks ? plantingsPage.selectedIdList()[0] : -1
+        onClosed: photoPane.visible = false
+        onShowPhoto: {
+            photoPane.photoIdList = Note.photoList(noteId)
+            photoPane.visible = true
+        }
+        onHidePhoto: photoPane.visible = false
+    }
+
+    RoundButton {
+        id: noteButton
+        z:3
+        visible: navigationIndex === 0
+        Material.background: "white"
+        width: 72
+        height: width
+        anchors.right: parent.right
+        anchors.rightMargin: visible ? -width/2 : 0
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+            if(!noteSideSheet.opened) {
+                console.log("open!")
+                noteSideSheet.open();
+            }
+        }
+
+        contentItem: Text {
+            text: "\ue24d"
+            font.family: "Material Icons"
+            font.pixelSize: 24
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Show the note pane")
+        ToolTip.delay: Units.shortDuration
+    }
+
+    PhotoPane {
+        id: photoPane
+        anchors.fill: parent
+        anchors.leftMargin: largeDisplay ? drawer.width : undefined
+        anchors.rightMargin: noteSideSheet.opened ? noteSideSheet.width : 0
+        visible: false
+        z: 3
+    }
+
     StackView {
         id: stackView
         anchors.fill: parent
         anchors.leftMargin: largeDisplay ? drawer.width : undefined
+        anchors.rightMargin: noteSideSheet.opened ? noteSideSheet.width : 0
         topPadding: 20
         leftPadding: 20
         rightPadding: 20
@@ -467,6 +554,10 @@ ApplicationWindow {
                 harvestsPage.refresh();
                 break
             case 4:
+                stackView.replace(notesPage)
+                notesPage.refresh();
+                break
+            case 5:
                 stackView.replace(settingsPage)
                 break
             }

@@ -19,7 +19,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 import "date.js" as MDate
 
 Page {
@@ -193,31 +193,6 @@ Page {
         visible: false
     }
 
-    //    Rectangle {
-    //        height: 35
-    //        width: noteLabel.implicitWidth + Units.smallSpacing * 2
-    //        color: "black"
-    //        anchors.right: parent.right
-    //        anchors.margins: 0
-
-    //        Label {
-    //            id: noteLabel
-    //            anchors.verticalCenter: parent.verticalCenter
-    //            anchors.left: parent.left
-    //            anchors.leftMargin: Units.smallSpacing
-    //            text: qsTr("Add note")
-    //            color: "white"
-    //            font.pixelSize: Units.fontSizeBodyAndButton
-    //            font.family: "Roboto Regular"
-    //            font.capitalization: Font.AllUppercase
-    //        }
-
-    //        // Cannot use anchors for the y position, because it will anchor
-    //        // to the footer, leaving a large vertical gap.
-    //        y: parent.height - height
-    //        z: 3
-    ////        highlighted: true
-    //    }
 
     Rectangle {
         id: buttonRectangle

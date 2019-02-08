@@ -21,7 +21,7 @@ import QtQuick.Controls.Material 2.2
 import Qt.labs.platform 1.0 as Lab
 import Qt.labs.settings 1.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 import "date.js" as MDate
 
 Flickable {

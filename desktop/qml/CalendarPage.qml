@@ -20,7 +20,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 
 Page {
     id: page

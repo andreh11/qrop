@@ -5,55 +5,34 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-static const char *noteTableName = "note";
+NoteModel::NoteModel(QObject *parent, const QString &tableName)
+    : SortFilterProxyModel(parent, tableName)
+    , m_plantingId(-1)
 
-NoteModel::NoteModel(QObject *parent)
-    : SqlTableModel(parent)
 {
-    m_date = QDate();
-
-    setTable(noteTableName);
-    setSort(2, Qt::AscendingOrder);
-    setEditStrategy(QSqlTableModel::OnManualSubmit);
-    select();
 }
 
-// void NoteModel::removePlantingNotes(int plantingId)
-//{
-//    qDebug() << "[NoteModel] Removing notes of planting" << plantingId;
-//    QString queryString("DELETE FROM planting_note WHERE planting_id = %1");
-//    QSqlQuery query(queryString.arg(plantingId));
-//}
-
-QDate NoteModel::date() const
+int NoteModel::plantingId() const
 {
-    return m_date;
+    return m_plantingId;
 }
 
-void NoteModel::setDate(const QDate &date)
+void NoteModel::setPlantingId(int plantingId)
 {
-    if (date == m_date)
+    if (m_plantingId == plantingId)
         return;
 
-    m_date = date;
-
-    const QString filterString =
-            QString::fromLatin1("date_assigned = %1").arg(date.toString(Qt::ISODate));
-    setFilter(filterString);
-    select();
-
-    emit dateChanged();
+    m_plantingId = plantingId;
+    invalidateFilter();
+    emit plantingIdChanged();
 }
 
-// void NoteModel::addNote(const QString &content, const QDate &date)
-//{
-//    QSqlRecord newRecord = record();
-//    newRecord.setValue("text", content);
-//    newRecord.setValue("date_modified", date);
-//    if (!insertRecord(rowCount(), newRecord)) {
-//        qWarning() << "Failed to send message:" << lastError().text();
-//        return;
-//    }
-
-//    submitAll();
-//}
+bool NoteModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    if (m_plantingId < 0)
+        return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
+    qDebug() << plantingId;
+    return plantingId == m_plantingId
+            && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+}

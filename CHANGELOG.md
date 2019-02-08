@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Basic note taking feature for plantings.
   - Harvest page.
   - Standardized beds mode: user can now define a standard bed length, and use
     this length as a unit for planting lengths.

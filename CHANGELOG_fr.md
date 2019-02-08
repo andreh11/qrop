@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Fonctionnalité basique de prise de notes pour les séries.
   - Onglet récolte.
   - Gestion des planches standardisées : l'utilisateurice peut entre une
     longueur de planche standard et l'utiliser comme unité pour définir la
