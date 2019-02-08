@@ -4,27 +4,27 @@
 #include <QDate>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT NoteModel : public SqlTableModel
+class CORESHARED_EXPORT NoteModel : public SortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
+    Q_PROPERTY(int plantingId READ plantingId WRITE setPlantingId NOTIFY plantingIdChanged)
 
 public:
-    NoteModel(QObject *parent = nullptr);
+    NoteModel(QObject *parent = nullptr, const QString &tableName = "note_view");
 
-    QDate date() const;
-    void setDate(const QDate &date);
-
-    //    Q_INVOKABLE void addNote(const QString &content, const QDate &date);
-    //    static void removePlantingNotes(int plantingId);
+    int plantingId() const;
+    void setPlantingId(int plantingId);
 
 signals:
-    void dateChanged();
+    void plantingIdChanged();
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    QDate m_date;
+    int m_plantingId;
 };
 
 #endif // SQLNOTEMODEL_H

@@ -79,5 +79,8 @@
         <file>qml/LightPlantingForm.qml</file>
         <file>qml/HarvestDialog.qml</file>
         <file>qml/CropIcon.qml</file>
+        <file>qml/NoteButton.qml</file>
+        <file>qml/NoteSideSheet.qml</file>
+        <file>qml/PhotoPane.qml</file>
     </qresource>
 </RCC>

@@ -5,9 +5,9 @@ PRAGMA foreign_keys = OFF;
 
 BEGIN TRANSACTION;
 
-ALTER TABLE location RENAME TO location_old;
+-- ALTER TABLE location RENAME TO location_old;
 
-CREATE TABLE IF NOT EXISTS location (
+CREATE TABLE IF NOT EXISTS location_new (
     location_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT NOT NULL,
     bed_length  INTEGER, -- meter
@@ -17,8 +17,9 @@ CREATE TABLE IF NOT EXISTS location (
     parent_id   INTEGER REFERENCES location ON DELETE CASCADE
 );
 
-INSERT INTO location SELECT * FROM location_old;
-DROP TABLE location_old;
+INSERT INTO location_new SELECT * FROM location;
+DROP TABLE location;
+ALTER TABLE location_new RENAME TO location;
 
 PRAGMA user_version = 1;
 

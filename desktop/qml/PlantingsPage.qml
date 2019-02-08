@@ -21,7 +21,7 @@ import QtQuick.Controls.Material 2.0
 import QtCharts 2.2
 import Qt.labs.settings 1.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 import "date.js" as MDate
 
 Page {
@@ -36,9 +36,11 @@ Page {
     property alias searchField: filterField
 
     property alias model: plantingsView.model
-    property int rowsNumber: model.rowCount
+    property int rowCount: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
+
+    signal noteButtonClicked(int plantingId)
 
     function refresh() {
         plantingsView.refresh();
@@ -47,16 +49,15 @@ Page {
     function selectedIdList() {
         var idList = []
         for (var key in selectedIds)
-            if (selectedIds[key]) {
-                selectedIds[key] = false
+            if (selectedIds[key])
                 idList.push(key)
-            }
         return idList;
     }
 
     function duplicateSelected() {
         var idList = selectedIdList();
         Planting.duplicateList(idList)
+        plantingsView.unselectAll()
         page.refresh()
         plantingsView.selectedIdsChanged();
     }
@@ -379,7 +380,7 @@ Page {
                 id: blankStateColumn
                 z: 1
                 spacing: Units.smallSpacing
-                visible: !page.rowsNumber
+                visible: !page.rowCount
                 anchors {
                     centerIn: parent
                 }
@@ -423,6 +424,7 @@ Page {
             }
         }
     }
+
 
 //    ListView {
 //        id: smallListView

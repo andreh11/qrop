@@ -4,20 +4,20 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
-import io.croplan.components 1.0
+import io.qrop.components 1.0
 
 Item {
     id: control
 
     property int plantingId
     readonly property bool validId: plantingId > 0
-    property string crop: cropName(plantingId)
-    property string variety: varietyName(plantingId)
-    property date sowingDate
-    property date endHarvestDate
+    property string crop: Planting.cropName(plantingId)
+    property string variety: Planting.varietyName(plantingId)
+    property date sowingDate: Planting.sowingDate(plantingId)
+    property date endHarvestDate: Planting.endHarvestDate(plantingId)
     property int year
-    property int length
-    property var locations
+    property int length: Planting.totalLength(plantingId)
+    property var locations: Location.locations(plantingId)
     property bool showOnlyDates: false
 
     implicitHeight: childrenRect.height

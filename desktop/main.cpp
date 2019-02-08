@@ -35,15 +35,19 @@
 #include "keyword.h"
 #include "location.h"
 #include "mdate.h"
+#include "note.h"
 #include "planting.h"
 #include "task.h"
 #include "variety.h"
+
+#include "pictureimageprovider.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
 #include "harvestmodel.h"
 #include "keywordmodel.h"
 #include "locationmodel.h"
+#include "nametree.h"
 #include "notemodel.h"
 #include "plantingmodel.h"
 #include "rolemodel.h"
@@ -52,11 +56,10 @@
 #include "taskmethodmodel.h"
 #include "taskmodel.h"
 #include "tasktypemodel.h"
+#include "treemodel.h"
 #include "unitmodel.h"
 #include "usermodel.h"
 #include "varietymodel.h"
-#include "treemodel.h"
-#include "nametree.h"
 
 #include "qropdoublevalidator.h"
 
@@ -81,28 +84,28 @@ void registerFonts()
 
 void registerTypes()
 {
-    qmlRegisterType<QFileSystemModel>("io.croplan.components", 1, 0, "FileSystemModel");
-    qmlRegisterType<CropModel>("io.croplan.components", 1, 0, "CropModel");
-    qmlRegisterType<FamilyModel>("io.croplan.components", 1, 0, "FamilyModel");
-    qmlRegisterType<HarvestModel>("io.croplan.components", 1, 0, "HarvestModel");
-    qmlRegisterType<KeywordModel>("io.croplan.components", 1, 0, "KeywordModel");
-    qmlRegisterType<LocationModel>("io.croplan.components", 1, 0, "LocationModel");
-    qmlRegisterType<NoteModel>("io.croplan.components", 1, 0, "NoteModel");
-    qmlRegisterType<PlantingModel>("io.croplan.components", 1, 0, "PlantingModel");
-    qmlRegisterType<SeedCompanyModel>("io.croplan.components", 1, 0, "SeedCompanyModel");
-    qmlRegisterType<TaskImplementModel>("io.croplan.components", 1, 0, "TaskImplementModel");
-    qmlRegisterType<TaskMethodModel>("io.croplan.components", 1, 0, "TaskMethodModel");
-    qmlRegisterType<TaskModel>("io.croplan.components", 1, 0, "TaskModel");
-    qmlRegisterType<TaskTypeModel>("io.croplan.components", 1, 0, "TaskTypeModel");
-    qmlRegisterType<QropDoubleValidator>("io.croplan.components", 1, 0, "QropDoubleValidator");
-    qmlRegisterType<UnitModel>("io.croplan.components", 1, 0, "UnitModel");
-    qmlRegisterType<VarietyModel>("io.croplan.components", 1, 0, "VarietyModel");
-    qmlRegisterType<SqlTreeModel>("io.croplan.components", 1, 0, "SqlTreeModel");
+    qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
+    qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
+    qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
+    qmlRegisterType<HarvestModel>("io.qrop.components", 1, 0, "HarvestModel");
+    qmlRegisterType<KeywordModel>("io.qrop.components", 1, 0, "KeywordModel");
+    qmlRegisterType<LocationModel>("io.qrop.components", 1, 0, "LocationModel");
+    qmlRegisterType<NoteModel>("io.qrop.components", 1, 0, "NoteModel");
+    qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
+    qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
+    qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
+    qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");
+    qmlRegisterType<TaskModel>("io.qrop.components", 1, 0, "TaskModel");
+    qmlRegisterType<TaskTypeModel>("io.qrop.components", 1, 0, "TaskTypeModel");
+    qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
+    qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
+    qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
+    qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
 
-    //    qmlRegisterType<Planting>("io.croplan.components", 1, 0, "Planting");
-    qmlRegisterSingletonType<Planting>("io.croplan.components", 1, 0, "Planting", plantingCallback);
+    //    qmlRegisterType<Planting>("io.qrop.components", 1, 0, "Planting");
+    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
 
-    qmlRegisterSingletonType<Family>("io.croplan.components", 1, 0, "Family",
+    qmlRegisterSingletonType<Family>("io.qrop.components", 1, 0, "Family",
                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                          Q_UNUSED(engine)
                                          Q_UNUSED(scriptEngine)
@@ -110,7 +113,7 @@ void registerTypes()
                                          return family;
                                      });
 
-    qmlRegisterSingletonType<Variety>("io.croplan.components", 1, 0, "Variety",
+    qmlRegisterSingletonType<Variety>("io.qrop.components", 1, 0, "Variety",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
@@ -119,7 +122,7 @@ void registerTypes()
                                           return variety;
                                       });
 
-    qmlRegisterSingletonType<Keyword>("io.croplan.components", 1, 0, "Keyword",
+    qmlRegisterSingletonType<Keyword>("io.qrop.components", 1, 0, "Keyword",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
@@ -127,7 +130,7 @@ void registerTypes()
                                           return keyword;
                                       });
 
-    qmlRegisterSingletonType<Task>("io.croplan.components", 1, 0, "Task",
+    qmlRegisterSingletonType<Task>("io.qrop.components", 1, 0, "Task",
                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                        Q_UNUSED(engine)
                                        Q_UNUSED(scriptEngine)
@@ -135,7 +138,7 @@ void registerTypes()
                                        return task;
                                    });
 
-    qmlRegisterSingletonType<Location>("io.croplan.components", 1, 0, "Location",
+    qmlRegisterSingletonType<Location>("io.qrop.components", 1, 0, "Location",
                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                            Q_UNUSED(engine)
                                            Q_UNUSED(scriptEngine)
@@ -143,7 +146,7 @@ void registerTypes()
                                            return location;
                                        });
 
-    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "NDate",
+    qmlRegisterSingletonType<MDate>("io.qrop.components", 1, 0, "NDate",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                         Q_UNUSED(engine)
                                         Q_UNUSED(scriptEngine)
@@ -151,15 +154,24 @@ void registerTypes()
                                         return mdate;
                                     });
 
-    qmlRegisterSingletonType<MDate>("io.croplan.components", 1, 0, "Database",
-                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                        Q_UNUSED(engine)
-                                        Q_UNUSED(scriptEngine)
-                                        auto *db = new Database();
-                                        return db;
-                                    });
+    qmlRegisterSingletonType<Database>("io.qrop.components", 1, 0, "Database",
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                           Q_UNUSED(engine)
+                                           Q_UNUSED(scriptEngine)
+                                           auto *db = new Database();
+                                           return db;
+                                       });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Crop",
+    qmlRegisterSingletonType<Note>("io.qrop.components", 1, 0, "Note",
+                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                       Q_UNUSED(engine)
+                                       Q_UNUSED(scriptEngine)
+                                       auto *db = new Note();
+                                       db->setTable("note");
+                                       return db;
+                                   });
+
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Crop",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -168,7 +180,7 @@ void registerTypes()
                                                   return crop;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Unit",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Unit",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -177,7 +189,7 @@ void registerTypes()
                                                   return unit;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "SeedCompany",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "SeedCompany",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -186,7 +198,7 @@ void registerTypes()
                                                   return seedCompany;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskType",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskType",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -195,7 +207,7 @@ void registerTypes()
                                                   return tasktype;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskMethod",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskMethod",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -204,7 +216,7 @@ void registerTypes()
                                                   return taskmethod;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "TaskImplement",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskImplement",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -213,7 +225,7 @@ void registerTypes()
                                                   return taskimplement;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.croplan.components", 1, 0, "Harvest",
+    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Harvest",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -258,6 +270,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl("qrc:/qml/main.qml"));
+    engine.addImageProvider("pictures", new PictureImageProvider());
     Q_ASSERT(!engine.rootObjects().isEmpty());
 
     return app.exec();

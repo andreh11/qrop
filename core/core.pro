@@ -1,5 +1,4 @@
-QT       += sql
-QT       -= gui
+QT       += sql quick gui
 
 TARGET = core
 TEMPLATE = lib
@@ -40,7 +39,9 @@ SOURCES += \
     taskimplementmodel.cpp \
     treemodel.cpp \
     nametree.cpp \
-    family.cpp
+    family.cpp \
+    note.cpp \
+    pictureimageprovider.cpp
 
 HEADERS += \
     core_global.h \
@@ -76,7 +77,9 @@ HEADERS += \
     taskimplementmodel.h \
     treemodel.h \
     nametree.h \
-    family.h
+    family.h \
+    note.h \
+    pictureimageprovider.h
 
 RESOURCES += \
     core_resources.qrc

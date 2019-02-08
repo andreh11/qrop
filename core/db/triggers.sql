@@ -9,6 +9,12 @@ BEGIN
 	DELETE FROM task WHERE task_id = OLD.task_id;
 END;
 
+CREATE TRIGGER note_file_delete AFTER DELETE ON note_file FOR EACH ROW
+WHEN ((SELECT COUNT(*) FROM note_file WHERE file = OLD.file_id) = 0)
+BEGIN
+	DELETE FROM file WHERE file_id = OLD.file_id;
+END;
+
 CREATE TRIGGER location_task_delete AFTER DELETE ON location_task FOR EACH ROW
 WHEN ((SELECT COUNT(*) FROM location_task WHERE task_id = OLD.task_id) = 0)
 BEGIN
