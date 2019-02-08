@@ -470,6 +470,7 @@ ApplicationWindow {
     NoteSideSheet {
         id: noteSideSheet
         height: window.height
+        width: Math.min(300, window.width*0.3)
         plantingId: plantingsPage.checks ? plantingsPage.selectedIdList()[0] : -1
         onClosed: photoPane.visible = false
         onShowPhoto: {
@@ -482,6 +483,7 @@ ApplicationWindow {
     RoundButton {
         id: noteButton
         z:3
+        visible: navigationIndex === 0
         Material.background: "white"
         width: 72
         height: width
@@ -489,15 +491,16 @@ ApplicationWindow {
         anchors.rightMargin: visible ? -width/2 : 0
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
-            if(!noteSideSheet.opened)
+            if(!noteSideSheet.opened) {
+                console.log("open!")
                 noteSideSheet.open();
+            }
         }
 
         contentItem: Text {
             text: "\ue24d"
             font.family: "Material Icons"
             font.pixelSize: 24
-            //                    color: parent.down ? "#17a81a" : "#21be2b"
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight

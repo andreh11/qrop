@@ -1,17 +1,30 @@
+/*
+ * Copyright (C) 2018, 2019 André Hoarau <ah@ouvaton.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.3
-import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 import QtQuick.Window 2.10
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Drawer {
     id: noteSideSheet
-    width: Math.min(300, window.width*0.3)
     edge: Qt.RightEdge
     modal: false
     Material.elevation: 0
@@ -170,6 +183,7 @@ Drawer {
                             Layout.preferredHeight: Layout.preferredWidth
                             source: "/icon.png"
                             fillMode: Image.PreserveAspectFit
+
                             Layout.alignment: Qt.AlignTop
                             Layout.leftMargin: Units.smallSpacing
                             Layout.topMargin: Units.smallSpacing
@@ -182,10 +196,9 @@ Drawer {
 
                             Label {
                                 Layout.fillWidth: true
-                                text: "%1 − %2".arg(NDate.formatDate(model.date, 2019)).arg(NDate.formatDate(model.date, 2019, "date"))
+                                text: "%1 − %2".arg(NDate.formatDate(model.date, 2019))
+                                               .arg(NDate.formatDate(model.date, 2019, "date"))
 
-//                                Layout.leftMargin: Units.smallSpacing
-//                                Layout.rightMargin: Layout.leftMargin
                             }
                             
                             Text {
@@ -193,34 +206,10 @@ Drawer {
                                 text: model.content
                                 elide: Text.ElideRight
                                 wrapMode: Text.WordWrap
-//                                Layout.leftMargin: Units.smallSpacing
-//                                Layout.rightMargin: Layout.leftMargin
 
                             }
 
-
-//                            ListView {
-//                                id: photoPreviewList
-//                                Layout.fillWidth: true
-//                                visible: noteDelegate.checked
-//                                model: 5
-//                                spacing: Units.smallSpacing
-//                                orientation: ListView.Horizontal
-//                                ScrollBar.horizontal: ScrollBar {}
-//                                Layout.minimumHeight: 40
-
-//                                delegate: ItemDelegate {
-//                                    Layout.preferredWidth: 32
-//                                    Layout.preferredHeight: Layout.preferredWidth
-//                                    Image {
-//                                        anchors.fill: parent
-//                                        source: "/icon.png"
-//                                        fillMode: Image.PreserveAspectFit
-//                                    }
-//                                }
-//                            }
                         }
-
                     }
                 }
             }
@@ -286,11 +275,6 @@ Drawer {
                     fillMode: Image.PreserveAspectFit
                     source: photoPath
                 }
-                
-                //                    onClicked: {
-                //                        imageDialog.path = photoImage.source
-                //                        imageDialog.open()
-                //                    }
             }
         }
         

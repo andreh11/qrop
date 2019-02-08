@@ -23,7 +23,6 @@ void NoteModel::setPlantingId(int plantingId)
         return;
 
     m_plantingId = plantingId;
-    qDebug() << "New plantingId:" << m_plantingId;
     invalidateFilter();
     emit plantingIdChanged();
 }
