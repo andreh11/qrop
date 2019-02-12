@@ -51,8 +51,8 @@ Item {
                 if (!validId)
                     return "";
 
-                var txt = qsTr("%1 − %2").arg(NDate.formatDate(sowingDate, year))
-                                         .arg(NDate.formatDate(endHarvestDate, year))
+                var txt = qsTr("%1 − %2").arg(MDate.formatDate(sowingDate, year))
+                                         .arg(MDate.formatDate(endHarvestDate, year))
 
                 if (!showOnlyDates) {
                     if (settings.useStandardBedLength) {

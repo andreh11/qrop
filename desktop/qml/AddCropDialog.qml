@@ -22,7 +22,6 @@ import QtCharts 2.0
 import Qt.labs.platform 1.0 as Lab
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Dialog {
     id: addCropDialog
@@ -37,7 +36,7 @@ Dialog {
     title: qsTr("Add New Crop")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    onOpened: {
+    onAboutToShow: {
         familyModel.refresh();
         cropNameField.text = ""
         familyField.currentIndex = -1

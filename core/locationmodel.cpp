@@ -23,6 +23,7 @@
 #include "treemodel.h"
 #include "location.h"
 #include "planting.h"
+#include "mdate.h"
 
 LocationModel::LocationModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -93,7 +94,7 @@ QVariantList LocationModel::plantings(const QModelIndex &index, int season, int 
 
     int lid = locationId(index);
     QVariantList list;
-    QPair<QDate, QDate> dates = seasonDates(season, year);
+    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
     for (int id : location->plantings(lid, dates.first, dates.second))
         list.push_back(id);
     return list;
@@ -192,7 +193,7 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
         return {};
 
     const int lid = locationId(index);
-    QPair<QDate, QDate> dates = seasonDates(season, year);
+    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
     QList<int> plantingIdList = location->plantings(lid, dates.first, dates.second);
     QList<int> list;
     for (const int pid : plantingIdList) {
@@ -213,7 +214,7 @@ QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index, i
         return {};
 
     const int lid = locationId(index);
-    QPair<QDate, QDate> dates = seasonDates(season, year);
+    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
     return location->spaceConflictingPlantings(lid, dates.first, dates.second);
 }
 

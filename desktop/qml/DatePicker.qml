@@ -27,14 +27,14 @@ Item {
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
-    property int currentYear: NDate.currentYear()
+    property int currentYear: MDate.currentYear()
 
     property date calendarDate: new Date()
-    readonly property int week: NDate.isoWeek(calendarDate)
+    readonly property int week: MDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: NDate.formatDate(calendarDate, currentYear,
+    property string dateHelperText: MDate.formatDate(calendarDate, currentYear,
                                                      mode === "date" ? "week" : "date")
     signal editingFinished()
 
@@ -55,7 +55,7 @@ Item {
         id: textField
 
         width: parent.width
-        text: NDate.formatDate(calendarDate, currentYear)
+        text: MDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         validator: RegExpValidator {
             regExp: mode === "date"
@@ -67,8 +67,8 @@ Item {
             if (!textField.acceptableInput)
                 return;
 
-            var newDate = mode === "date" ? NDate.dateFromDateString(text)
-                                          : NDate.dateFromWeekString(text);
+            var newDate = mode === "date" ? MDate.dateFromDateString(text)
+                                          : MDate.dateFromWeekString(text);
             if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
 

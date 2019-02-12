@@ -19,16 +19,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
+import io.qrop.components 1.0
+
 Item {
     id: control
 
     property int season: 0
     property int year: 2018
     readonly property var seasonNames: [
+        qsTr("Winter"),
         qsTr("Spring"),
         qsTr("Summer"),
-        qsTr("Fall"),
-        qsTr("Winter")
+        qsTr("Fall")
     ]
 
     function previousYear() {
@@ -40,8 +42,8 @@ Item {
     }
 
     function previousSeason() {
-        if (season == 0) {
-            season = 3;
+        if (season == MDate.WINTER) {
+            season = MDate.FALL;
             year--;
         } else {
             season--;
@@ -49,8 +51,8 @@ Item {
     }
 
     function nextSeason() {
-        if (season == 3) {
-            season = 0;
+        if (season == MDate.FALL) {
+            season = MDate.WINTER;
             year++
         } else {
             season++;

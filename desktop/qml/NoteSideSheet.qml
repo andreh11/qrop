@@ -196,8 +196,8 @@ Drawer {
 
                             Label {
                                 Layout.fillWidth: true
-                                text: "%1 − %2".arg(NDate.formatDate(model.date, 2019))
-                                               .arg(NDate.formatDate(model.date, 2019, "date"))
+                                text: "%1 − %2".arg(MDate.formatDate(model.date, 2019))
+                                               .arg(MDate.formatDate(model.date, 2019, "date"))
 
                             }
                             

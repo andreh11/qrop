@@ -213,8 +213,8 @@ Page {
                 WeekSpinBox {
                     id: weekSpinBox
                     visible: checks === 0
-                    week: NDate.currentWeek();
-                    year: NDate.currentYear();
+                    week: MDate.currentWeek();
+                    year: MDate.currentYear();
                 }
 
                 IconButton {
@@ -456,7 +456,7 @@ Page {
                         }
 
                         Label {
-                            text: NDate.dayName(model.date)
+                            text: MDate.dayName(model.date)
                             elide: Text.ElideRight
                             width: tableHeaderModel[3].width
                             anchors.verticalCenter: parent.verticalCenter

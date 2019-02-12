@@ -24,7 +24,6 @@ import QtQml.Models 2.10
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 // Since we use a Controls 1 TreeWidget, we have to put it in ScrollView + Flickable to
 // have Controls 2 Scrollbars.  When TreeView will be implemented in Controls 2, we'll

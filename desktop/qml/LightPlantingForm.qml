@@ -6,7 +6,6 @@ import QtQml.Models 2.10
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 ColumnLayout {
     id: control
@@ -14,11 +13,11 @@ ColumnLayout {
     property int plantingId
     property int year
 
-    property int dtt: NDate.daysTo(greenhouseStartDateField.calendarDate,
+    property int dtt: MDate.daysTo(greenhouseStartDateField.calendarDate,
                                    plantingDateField.calendarDate)
-    property int dtm: NDate.daysTo(plantingDateField.calendarDate,
+    property int dtm: MDate.daysTo(plantingDateField.calendarDate,
                                    begHarvestDateField.calendarDate)
-    property int harvestWindow: NDate.daysTo(begHarvestDateField.calendarDate,
+    property int harvestWindow: MDate.daysTo(begHarvestDateField.calendarDate,
                                              endHarvestDateField.calendarDate)
 
     property int plantingType: Planting.type(plantingId)

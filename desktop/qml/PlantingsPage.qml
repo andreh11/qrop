@@ -22,7 +22,6 @@ import QtCharts 2.2
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Page {
     id: page
@@ -364,8 +363,8 @@ Page {
                     SeasonSpinBox {
                         id: seasonSpinBox
                         visible: checks === 0
-                        season: NDate.season(todayDate)
-                        year: NDate.seasonYear(todayDate)
+                        season: MDate.season(todayDate)
+                        year: MDate.seasonYear(todayDate)
                     }
                 }
             }

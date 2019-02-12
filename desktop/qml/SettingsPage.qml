@@ -33,6 +33,10 @@ Page {
     property bool showUnitPane: false
     property bool showTaskTypePane: false
 
+    function refresh() {
+        familyPane.refresh();
+    }
+
     title: qsTr("Settings")
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
