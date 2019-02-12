@@ -10,7 +10,7 @@ BEGIN
 END;
 
 CREATE TRIGGER note_file_delete AFTER DELETE ON note_file FOR EACH ROW
-WHEN ((SELECT COUNT(*) FROM note_file WHERE file = OLD.file_id) = 0)
+WHEN ((SELECT COUNT(*) FROM note_file WHERE file_id = OLD.file_id) = 0)
 BEGIN
 	DELETE FROM file WHERE file_id = OLD.file_id;
 END;

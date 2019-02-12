@@ -32,7 +32,7 @@ Flickable {
     property bool initMode: false
 
     property bool coherentDates: dtt >= 0 && dtm >= 0 && harvestWindow >= 0
-    property bool accepted: varietyField.currentIndex >= 0 && coherentDates
+    property bool accepted: (mode === "edit" || varietyField.currentIndex >= 0) && coherentDates
 
     property int locationViewWidth: locationView.treeViewWidth
     property alias durationMode: durationCheckBox.checked
@@ -341,8 +341,9 @@ Flickable {
         }
     }
 
-    function preFillForm() {
+    function preFillForm(from) {
         var val = Planting.lastValues(varietyId, cropId, plantingType, inGreenhouse);
+        delete val[from];
         if (val.length)
             setFormValues(val);
     }
@@ -359,20 +360,25 @@ Flickable {
         return Math.round(x * (10^decimals)) / (10^decimals);
     }
 
-    function ensureVisible(focus, y, height) {
-        console.log("CALLED", y, height, control.contentY, control.height)
-        if (!focus)
+    // From https://stackoverflow.com/a/45947980
+    function ensureItemVisible(item) {
+        if (!item.activeFocus)
             return;
 
-        if (y < control.contentY) {
-            control.contentY = y
-        } else if ((y+height) > (control.contentY + control.height)) {
-            control.contentY = y + height - control.height
+        var ypos = item.mapToItem(contentItem, 0, 0).y
+        var ext = item.height + ypos
+        if (ypos < contentY // begins before
+                || ypos > contentY + height // begins after
+                || ext < contentY // ends before
+                || ext > contentY + height) { // ends after
+            // don't exceed bounds
+            contentY = Math.max(0, Math.min(ypos - height + item.height, contentHeight - height))
         }
-    }
+     }
 
-    // Duration functions
-
+    /**
+     * Duration functions
+     **/
     function updateDuration(picker1, picker2, durationField) {
         if (initMode)
             return;
@@ -482,11 +488,13 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
+    contentHeight: mainColumn.height
+    contentWidth: width
 
     onCropIdChanged: varietyField.reset()
-    onVarietyIdChanged: if (mode === "add") preFillForm()
-    onPlantingTypeChanged: if (mode === "add") preFillForm()
-    onInGreenhouseChanged: if (mode === "add") preFillForm()
+    onVarietyIdChanged: if (mode === "add") preFillForm("variety_id")
+    onPlantingTypeChanged: if (mode === "add") preFillForm("planting_type")
+    onInGreenhouseChanged: if (mode === "add") preFillForm("in_greenhouse")
 
     Settings {
         id: settings
@@ -526,7 +534,7 @@ Flickable {
 
                 onAddItemClicked: addVarietyDialog.open()
                 onActivated: plantingAmountField.forceActiveFocus()
-                onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+                onActiveFocusChanged: ensureItemVisible(varietyField)
 
                 AddVarietyDialog {
                     id: addVarietyDialog
@@ -567,6 +575,7 @@ Flickable {
 
                     MyTextField {
                         id: plantingAmountField
+                        focus: true
                         labelText: settings.useStandardBedLength ? qsTr("# of beds") : qsTr("Length")
                         suffixText: settings.useStandardBedLength ? qsTr("bed", "", Number(text)) : qsTr("bed m")
                         floatingLabel: true
@@ -578,7 +587,7 @@ Flickable {
                             notation: DoubleValidator.StandardNotation
                         }
                         Layout.fillWidth: true
-                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+                        onActiveFocusChanged: ensureItemVisible(plantingAmountField)
                     }
 
                     MyTextField {
@@ -589,7 +598,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 999 }
                         Layout.fillWidth: true
-                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+                        onActiveFocusChanged: ensureItemVisible(inRowSpacingField)
                     }
 
                     MyTextField {
@@ -599,7 +608,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
-                        onActiveFocusChanged: ensureVisible(activeFocus, y, height)
+                        onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
                     }
                 }
 
@@ -644,21 +653,21 @@ Flickable {
                 text: qsTr("Direct seed")
                 checked: true
                 autoExclusive: true
-                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeLayout.y+height, height)
+                onActiveFocusChanged: ensureItemVisible(directSeedRadio)
             }
 
             ChoiceChip {
                 id: greenhouseRadio
                 text: qsTr("Transplant, raised")
                 autoExclusive: true
-                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeLayout.y+height, height)
+                onActiveFocusChanged: ensureItemVisible(greenhouseRadio)
             }
 
             ChoiceChip {
                 id: boughtRadio
                 text: qsTr("Transplant, bought")
                 autoExclusive: true
-                onActiveFocusChanged: ensureVisible(activeFocus, plantingTypeLayout.y+height, height)
+                onActiveFocusChanged: ensureItemVisible(boughtRadio)
             }
         }
 
@@ -672,6 +681,7 @@ Flickable {
                 id: durationCheckBox
                 text: parent.title
                 checked: plantingSettings.durationsByDefault
+                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
             }
 
             GridLayout {
@@ -695,6 +705,7 @@ Flickable {
                     Layout.fillWidth: true
 
                     onTextChanged: updateFromFieldSowingDate()
+                    onActiveFocusChanged: ensureItemVisible(sowDtmField)
                 }
 
                 MyTextField {
@@ -711,15 +722,7 @@ Flickable {
                     Layout.fillWidth: true
 
                     onTextChanged: updateFromGreenhouseStartDate();
-                    onActiveFocusChanged: {
-                        //                        if (!activeFocus)
-                        //                            return;
-                        console.log("Scrolling...")
-                        if (y < control.contentY)
-                            control.contentY = control.contentY - y
-                        else if (y > control.contentY + control.height)
-                            control.contentY = control.contentY + y
-                    }
+                    onActiveFocusChanged: ensureItemVisible(greenhouseGrowTimeField)
                 }
 
                 MyTextField {
@@ -736,6 +739,7 @@ Flickable {
                     Layout.fillWidth: true
 
                     onTextChanged: updateFromFieldPlantingDate(true, true)
+                    onActiveFocusChanged: ensureItemVisible(plantingDtmField)
                 }
 
                 MyTextField {
@@ -752,6 +756,7 @@ Flickable {
                     Layout.fillWidth: true
 
                     onTextChanged: updateFromFirstHarvestDate(true, true);
+                    onActiveFocusChanged: ensureItemVisible(harvestWindowField)
                 }
             }
         }
@@ -784,7 +789,7 @@ Flickable {
                         else
                             updateDtm();
                     }
-                    onActiveFocusChanged: ensureVisible(activeFocus, plantingsDateBox.y, plantingsDateBox.height)
+                    onActiveFocusChanged: ensureItemVisible(fieldSowingDateField)
                     onCalendarDateChanged: modified = true
                 }
 
@@ -795,6 +800,7 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
                     currentYear: control.currentYear
+                    onActiveFocusChanged: ensureItemVisible(greenhouseStartDateField)
                     onEditingFinished: {
                         if (durationMode)
                             updateFromGreenhouseStartDate()
@@ -814,6 +820,7 @@ Flickable {
                     labelText: qsTr("Field planting")
                     currentYear: control.currentYear
 
+                    onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
                     onEditingFinished: {
                         if (durationMode)
                             updateFromFieldPlantingDate(true, true)
@@ -832,6 +839,7 @@ Flickable {
                     labelText: qsTr("First harvest")
                     currentYear: control.currentYear
 
+                    onActiveFocusChanged: ensureItemVisible(begHarvestDateField)
                     onEditingFinished: {
                         if (durationMode) {
                             updateFromFirstHarvestDate(true, true)
@@ -849,6 +857,7 @@ Flickable {
                     labelText: qsTr("Last harvest")
                     currentYear: control.currentYear
 
+                    onActiveFocusChanged: ensureItemVisible(endHarvestDateField)
                     onEditingFinished: {
                         if (durationMode)
                             updateFromEndHarvestDate()
@@ -881,6 +890,7 @@ Flickable {
                         return qsTr("Locations: %1").arg(Location.fullName(locationView.selectedLocationIds()));
                     }
                     onClicked: chooseLocationMode = true
+                    onActiveFocusChanged: ensureItemVisible(locationButton)
                 }
 
                 RowLayout {
@@ -949,6 +959,7 @@ Flickable {
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(traySizeField)
                 }
 
                 MyTextField {
@@ -960,6 +971,7 @@ Flickable {
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0; top: 99 }
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(greenhouseEstimatedLossField)
                 }
             }
         }
@@ -983,6 +995,7 @@ Flickable {
                     text: "1"
                     floatingLabel: true
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(seedsPerHoleField)
                 }
 
                 MyTextField {
@@ -994,6 +1007,7 @@ Flickable {
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: "%L1".arg(Math.round(seedsNeeded))
+                    onActiveFocusChanged: ensureItemVisible(seedsNeededField)
                 }
 
                 MyTextField {
@@ -1004,6 +1018,7 @@ Flickable {
                     labelText: qsTr("Extra %")
                     suffixText: "%"
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(seedsExtraPercentageField)
                 }
 
                 MyTextField {
@@ -1016,6 +1031,7 @@ Flickable {
                     errorText: qsTr("Enter a quantity!")
                     helperText: qsTr("%L1 g", "", seedsQuantity).arg(seedsQuantity)
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(seedsPerGramField)
                 }
             }
         }
@@ -1042,6 +1058,7 @@ Flickable {
                     Layout.fillWidth: true
 
                     onAddItemClicked: addUnitDialog.open();
+                    onActiveFocusChanged: ensureItemVisible(unitField)
                     //                    onActivated: plantingAmountField.forceActiveFocus()
 
                     AddUnitDialog {
@@ -1063,6 +1080,7 @@ Flickable {
                     suffixText: unitField.currentText
                     //                    inputMask: "900000"
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(yieldPerBedMeterField)
                 }
 
                 MyTextField {
@@ -1078,6 +1096,7 @@ Flickable {
                     floatingLabel: true
                     suffixText: "€"
                     Layout.fillWidth: true
+                    onActiveFocusChanged: ensureItemVisible(averagePriceField)
                 }
             }
         }
@@ -1094,9 +1113,11 @@ Flickable {
                 width: parent.width
 
                 ChoiceChip {
+                    id: keywordChoiceChip
                     text: keyword
                     checked: keyword_id in selectedKeywords && selectedKeywords[keyword_id]
 
+                    onActiveFocusChanged: ensureItemVisible(keywordChoiceChip)
                     onClicked: {
                         selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
                         selectedKeywordsChanged();

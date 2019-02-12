@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QQuickImageProvider>
 
-class PictureImageProvider : public QQuickImageProvider
+#include "core_global.h"
+
+class CORESHARED_EXPORT PictureImageProvider : public QQuickImageProvider
 {
 public:
     PictureImageProvider();

@@ -31,6 +31,8 @@ Tous les changements importants seront documentés dans ce fichier.
     afficher les indicateurs < et > d'années.
 
 ### Corrections
+  - *Édition des séries* − Les champs sont désormais toujours visibles lorsque
+    l'on se déplace avec la touche tabulation.
   - Erreur de compilation sous Linux.
 
 ## 0.1.2 − 2019-01-23
