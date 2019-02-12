@@ -146,7 +146,7 @@ void registerTypes()
                                            return location;
                                        });
 
-    qmlRegisterSingletonType<MDate>("io.qrop.components", 1, 0, "NDate",
+    qmlRegisterSingletonType<MDate>("io.qrop.components", 1, 0, "MDate",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                         Q_UNUSED(engine)
                                         Q_UNUSED(scriptEngine)

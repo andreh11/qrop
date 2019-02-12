@@ -23,7 +23,6 @@ import Qt.labs.platform 1.0 as Platform
 import QtQuick.Window 2.10
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 ApplicationWindow {
     id: window

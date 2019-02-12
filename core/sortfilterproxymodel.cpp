@@ -19,6 +19,7 @@
 
 #include "sortfilterproxymodel.h"
 #include "sqltablemodel.h"
+#include "mdate.h"
 
 SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &tableName)
     : QSortFilterProxyModel(parent)
@@ -126,23 +127,9 @@ void SortFilterProxyModel::setSortOrder(const QString &order)
     sortOrderChanged();
 }
 
-QPair<QDate, QDate> SortFilterProxyModel::seasonDates(int season, int year) const
-{
-    switch (season) {
-    case 0: // Spring
-        return { QDate(year - 1, 10, 1), QDate(year, 9, 30) };
-    case 2: // Fall
-        return { QDate(year, 4, 1), QDate(year + 1, 3, 31) };
-    case 3: // Winter
-        return { QDate(year, 7, 1), QDate(year + 1, 6, 30) };
-    default: // Summer or invalid season
-        return { QDate(year, 1, 1), QDate(year, 12, 31) };
-    }
-}
-
 QPair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 {
-    return seasonDates(m_season, m_year);
+    return MDate::seasonDates(m_season, m_year);
 }
 
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const

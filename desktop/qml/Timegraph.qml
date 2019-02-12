@@ -5,7 +5,6 @@ import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Item {
     id: control
@@ -101,7 +100,7 @@ Item {
 
     Label {
         id: seedingLabel
-        text: NDate.formatDate(seedingDate, year, null, false)
+        text: MDate.formatDate(seedingDate, year, null, false)
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         font.pixelSize: Units.fontSizeBodyAndButton
@@ -159,7 +158,7 @@ Item {
         }
 
         Label {
-            text: NDate.formatDate(plantingDate, year, null, false) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
+            text: MDate.formatDate(plantingDate, year, null, false) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
                                                                     : "")
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
@@ -193,7 +192,7 @@ Item {
         }
 
         Label {
-            text: NDate.formatDate(beginHarvestDate, year, null, false)
+            text: MDate.formatDate(beginHarvestDate, year, null, false)
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true

@@ -60,7 +60,7 @@ protected:
     virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
     QPair<QDate, QDate> seasonDates() const;
-    QPair<QDate, QDate> seasonDates(int season, int year) const;
+    //    QPair<QDate, QDate> seasonDates(int season, int year) const;
     int m_year;
     int m_season;
 

@@ -147,22 +147,40 @@ int MDate::season(const QDate &date)
 {
     int month = date.month();
 
-    if (3 <= month && month <= 5) // Spring
-        return 0;
-    else if (6 <= month && month <= 8) // Summer
-        return 1;
-    else if (9 <= month && month <= 11) // Fall
-        return 2;
-    else //  Winter
-        return 3;
+    if (3 <= month && month <= 5)
+        return SPRING;
+    else if (6 <= month && month <= 8)
+        return SUMMER;
+    else if (9 <= month && month <= 11)
+        return FALL;
+    else
+        return WINTER;
+}
+
+QPair<QDate, QDate> MDate::seasonDates(int season, int year)
+{
+    switch (season) {
+    case SPRING:
+        return { QDate(year - 1, 10, 1), QDate(year, 9, 30) };
+    case FALL:
+        return { QDate(year, 4, 1), QDate(year + 1, 3, 31) };
+    case WINTER:
+        return { QDate(year - 1, 7, 1), QDate(year, 6, 30) };
+    default: // Summer or invalid season
+        return { QDate(year, 1, 1), QDate(year, 12, 31) };
+    }
+}
+
+QDate MDate::seasonBeginning(int season, int year)
+{
+    return seasonDates(season, year).first;
 }
 
 int MDate::seasonYear(const QDate &date)
 {
-    if (date.month() < 3)
-        return date.year() - 1;
-    else
+    if (date.month() < 12)
         return date.year();
+    return date.year() + 1;
 }
 
 QString MDate::dayName(const QDate &date)

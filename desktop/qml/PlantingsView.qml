@@ -6,7 +6,6 @@ import QtCharts 2.2
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 ListView {
     id: listView
@@ -437,12 +436,12 @@ ListView {
 
                 readonly property var labelList: [
                     [Location.fullName(model.locations.split(",")), Text.AlignRight],
-                    [model.planting_type !== 3 ? NDate.formatDate(seedingDate, year) : "",
+                    [model.planting_type !== 3 ? MDate.formatDate(seedingDate, year) : "",
                      Text.AlignRight],
-                    [model.planting_type !== 1 ? NDate.formatDate(transplantingDate, year) : "",
+                    [model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
                      Text.AlignRight],
-                    [NDate.formatDate(beginHarvestDate, year), Text.AlignRight],
-                    [NDate.formatDate(endHarvestDate, year), Text.AlignRight],
+                    [MDate.formatDate(beginHarvestDate, year), Text.AlignRight],
+                    [MDate.formatDate(endHarvestDate, year), Text.AlignRight],
                     [model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt)
                                                : "",
                      Text.AlignRight],

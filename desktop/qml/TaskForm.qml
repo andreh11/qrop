@@ -110,7 +110,7 @@ Flickable {
         locationView.collapseAll();
         methodField.currentIndex = -1;
         implementField.currentIndex = -1;
-        dueDatepicker.calendarDate = NDate.dateFromWeekString(control.week);
+        dueDatepicker.calendarDate = MDate.dateFromWeekString(control.week);
         durationField.text = "0";
         laborTimeField.text = "00:00";
         plantingRadioButton.checked = true;
@@ -238,7 +238,7 @@ Flickable {
                     floatingLabel: true
                     Layout.minimumWidth: 100
                     Layout.fillWidth: true
-                    calendarDate: NDate.dateFromWeekString(control.week)
+                    calendarDate: MDate.dateFromWeekString(control.week)
                 }
 
                 MyTextField {

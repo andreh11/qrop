@@ -6,7 +6,6 @@ import QtCharts 2.0
 import Qt.labs.platform 1.0 as Lab
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Item {
     id: control

@@ -26,8 +26,13 @@
 class CORESHARED_EXPORT MDate : public QObject
 {
     Q_OBJECT
+
 public:
+    enum Season { WINTER, SPRING, SUMMER, FALL };
+    Q_ENUMS(Season)
+
     explicit MDate(QObject *parent = nullptr);
+
     Q_INVOKABLE static QDate dateFromWeekString(const QString &s);
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
     static QDate firstMondayOfYear(int year);
@@ -41,7 +46,10 @@ public:
                                           const QString &type = "", const bool showIndicator = true);
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);
+    static QPair<QDate, QDate> seasonDates(int season, int year);
+    Q_INVOKABLE static QDate seasonBeginning(int season, int year);
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
+    Q_INVOKABLE static QDate addDays(const QDate &date, qint64 days) { return date.addDays(days); }
     Q_INVOKABLE static QString dayName(const QDate &date);
 };
 

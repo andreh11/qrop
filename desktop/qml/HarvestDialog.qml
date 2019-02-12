@@ -24,7 +24,6 @@ import QtQml.Models 2.10
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Dialog {
     id: dialog

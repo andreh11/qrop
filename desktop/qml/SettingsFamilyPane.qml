@@ -29,6 +29,10 @@ Pane {
 
     signal close();
 
+    function refresh() {
+        familyModel.refresh();
+    }
+
     Material.elevation: 2
     Material.background: "white"
     padding: 0

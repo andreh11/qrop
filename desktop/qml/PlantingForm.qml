@@ -22,7 +22,6 @@ import Qt.labs.platform 1.0 as Lab
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
-import "date.js" as MDate
 
 Flickable {
     id: control
@@ -383,7 +382,7 @@ Flickable {
         if (initMode)
             return;
 
-        durationField.text = NDate.daysTo(picker1.calendarDate, picker2.calendarDate)
+        durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate)
         durationField.manuallyModified = true
 
         // Mark sow/planting field date as modified (for proper update).
@@ -926,8 +925,8 @@ Flickable {
 
                     property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
                                                                    : fieldPlantingDateField.calendarDate
-                    season: NDate.season(plantingDate)
-                    year: NDate.seasonYear(plantingDate)
+                    season: MDate.season(plantingDate)
+                    year: MDate.seasonYear(plantingDate)
                     width: parent.width
                     height: 400
                     plantingEditMode: true

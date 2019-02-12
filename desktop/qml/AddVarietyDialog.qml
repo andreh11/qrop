@@ -31,7 +31,7 @@ Dialog {
     title: qsTr("Add New Variety")
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    onOpened: {
+    onAboutToShow: {
         varietyNameField.clear();
         seedCompanyField.currentIndex = 0;
         varietyNameField.forceActiveFocus();
