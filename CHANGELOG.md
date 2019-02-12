@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
 
 ### Fixed
+  - Planting form: fields are now always visible when nagivating with tab.
   - Deployment error  on Linux.
 
 ## 0.1.2 − 2019-01-23
