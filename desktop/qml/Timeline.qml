@@ -34,6 +34,7 @@ Item {
     property var plantingIdList
     property bool showGreenhouseSow: true
     property bool showOnlyActiveColor: false
+    property bool showFamilyColor: false
     property int locationId: -1
     property bool showNames: false
     property bool dragActive: false
@@ -100,6 +101,7 @@ Item {
                 onPlantingRemoved: control.plantingRemoved();
                 onDragFinished: control.dragFinished();
                 showOnlyActiveColor: control.showOnlyActiveColor
+                showFamilyColor: control.showFamilyColor
             }
         }
     }

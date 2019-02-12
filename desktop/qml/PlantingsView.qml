@@ -23,6 +23,7 @@ ListView {
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
     property alias rowsNumber: plantingModel.rowCount
     property bool showOnlyActiveColor: false
+    property bool showFamilyColor: false
     property bool showOnlyTimegraph: false
     property bool showHorizontalScrollBar: true
     property bool showVerticalScrollBar: true
@@ -514,6 +515,7 @@ ListView {
                     dragActive: listView.dragActive
                     plantingIdList: [model.planting_id]
                     showOnlyActiveColor: listView.showOnlyActiveColor
+                    showFamilyColor: listView.showFamilyColor
                     onPlantingMoved: listView.resetFilter()
                     onDragFinished: listView.dragFinished()
                 }

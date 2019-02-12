@@ -204,6 +204,14 @@ QString Planting::familyInterval(int plantingId) const
     return map.value("family_interval").toString();
 }
 
+QString Planting::familyColor(int plantingId) const
+{
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("family_color").toString();
+}
+
 int Planting::type(int plantingId) const
 {
     QVariantMap map = mapFromId("planting_view", plantingId);

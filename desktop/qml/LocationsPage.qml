@@ -303,6 +303,18 @@ Page {
                 }
             }
 
+            RoundButton {
+                id: familyColorButton
+                visible: !editMode
+                checkable: true
+                flat: true
+                text: checked ? qsTr("F", "Abbreviation for family") : qsTr("C", "Abbreviation for crop")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                ToolTip.text: checked ? qsTr("Click to show crop color") : qsTr("Click to show family color")
+                ToolTip.visible: hovered
+            }
+
             ToolButton {
                 id: greenhouseButton
                 checkable: true
@@ -457,6 +469,7 @@ Page {
                 season: seasonSpinBox.season
                 showOnlyEmptyLocations: emptyLocationsCheckbox.checked
                 showOnlyGreenhouseLocations: greenhouseButton.checked
+                showFamilyColor: familyColorButton.checked
                 editMode: page.editMode
                 firstColumnWidth: plantingsView.firstColumnWidth
                 onPlantingRemoved: plantingsView.resetFilter()
@@ -611,6 +624,7 @@ Page {
                     showVerticalScrollBar: true
                     onDragFinished: locationView.draggedPlantingId = -1
                     showOnlyActiveColor: true
+                    showFamilyColor: familyColorButton.checked
                     dragActive: true
                     tableSortColumn: 3 // planting_date
                     tableSortOrder: "ascending"
