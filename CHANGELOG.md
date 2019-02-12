@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Add button show family or crop color.
   - Basic note taking feature for plantings.
   - Harvest page.
   - Standardized beds mode: user can now define a standard bed length, and use
