@@ -6,6 +6,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Parcellaire* − Ajout d'un bouton afficher la couleur de la famille ou de
+    l'espèce.
   - Fonctionnalité basique de prise de notes pour les séries.
   - Onglet récolte.
   - Gestion des planches standardisées : l'utilisateurice peut entre une

@@ -46,6 +46,7 @@ Item {
     property alias hasSelection: selectionModel.hasSelection
     property alias selectedIndexes: selectionModel.selectedIndexes
     property alias draggedPlantingId: treeView.draggedPlantingId
+    property bool showFamilyColor: false
 
     property alias treeDepth: locationModel.depth
     property int treeViewHeight: treeView.flickableItem.contentHeight
@@ -755,6 +756,7 @@ Item {
                                 showGreenhouseSow: false
                                 showNames: true
                                 showOnlyActiveColor: true
+                                showFamilyColor: locationView.showFamilyColor
                                 dragActive: true
                                 plantingIdList: locationModel.plantings(styleData.index, season, year)
                                 locationId: locationModel.locationId(styleData.index)

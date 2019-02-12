@@ -17,9 +17,10 @@ Item {
     property bool showNames: false
     property bool showOnlyActiveColor: false
     property bool dragActive: false
+    property bool showFamilyColor: false
     property int year
     property date seasonBegin
-    property color cropColor: Planting.cropColor(plantingId)
+    property color cropColor: showFamilyColor ? Planting.familyColor(plantingId) :Planting.cropColor(plantingId)
     property date seedingDate: Planting.sowingDate(plantingId)
     property date plantingDate: Planting.plantingDate(plantingId)
     property date beginHarvestDate: Planting.begHarvestDate(plantingId)

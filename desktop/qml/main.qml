@@ -553,11 +553,11 @@ ApplicationWindow {
                 stackView.replace(harvestsPage)
                 harvestsPage.refresh();
                 break
+//            case 4:
+//                stackView.replace(notesPage)
+//                notesPage.refresh();
+//                break
             case 4:
-                stackView.replace(notesPage)
-                notesPage.refresh();
-                break
-            case 5:
                 stackView.replace(settingsPage)
                 break
             }
