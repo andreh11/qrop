@@ -56,8 +56,8 @@ class CORESHARED_EXPORT SqlTreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit SqlTreeModel(const QString &idFieldName = "location_id",
-                          const QString &parentIdFieldName = "parent_id", QObject *parent = nullptr);
+    explicit SqlTreeModel(QString idFieldName = "location_id",
+                          QString parentIdFieldName = "parent_id", QObject *parent = nullptr);
     ~SqlTreeModel() override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -83,7 +83,7 @@ private:
     QMap<int, TreeItem *> m_idItemMap;
     QString m_idFieldName;
     QString m_parentIdFieldName;
-    SqlTableModel *m_sourceModel;
+    SqlTableModel *m_sourceModel{};
     QHash<QString, int> m_rolesIndexes;
     void buildRolesIndexes();
 };

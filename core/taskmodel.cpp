@@ -24,6 +24,10 @@
 
 TaskModel::TaskModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
+    , m_week(0)
+    , m_showDone(false)
+    , m_showDue(false)
+    , m_showOverdue(false)
 {
     setSortColumn("assigned_date");
     m_filterDate = QDate();

@@ -25,7 +25,7 @@
 class NameTree
 {
 public:
-    NameTree(const QString &name, int level);
+    NameTree(QString name, int level);
     ~NameTree();
     void insert(QList<QString> &path);
     QString fullName() const;

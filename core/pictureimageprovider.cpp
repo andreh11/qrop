@@ -15,7 +15,7 @@ QPixmap PictureImageProvider::requestPixmap(const QString &id, QSize *size, cons
     Q_UNUSED(requestedSize)
 
     QStringList lst = id.split("/");
-    if (lst.size() < 1)
+    if (lst.empty())
         return {};
 
     int photoId = lst[0].toInt();

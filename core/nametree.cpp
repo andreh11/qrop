@@ -15,10 +15,11 @@
  */
 
 #include <QDebug>
+#include <utility>
 #include "nametree.h"
 
-NameTree::NameTree(const QString &name, int level)
-    : m_name(name)
+NameTree::NameTree(QString name, int level)
+    : m_name(std::move(name))
     , m_level(level)
 {
 }
