@@ -94,11 +94,10 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
         if (year == currentYear || !showIndicator)
             return QString::number(week);
         return QString("%1%2").arg(year < currentYear ? "<" : ">").arg(week);
-    } else {
-        if (year == currentYear)
-            return date.toString("dd/MM");
-        return date.toString("dd/MM/yyyy");
     }
+    if (year == currentYear)
+        return date.toString("dd/MM");
+    return date.toString("dd/MM/yyyy");
 }
 
 QDate MDate::dateFromWeekString(const QString &s)
@@ -125,7 +124,7 @@ QDate MDate::dateFromWeekString(const QString &s)
 
 QDate MDate::dateFromDateString(const QString &s)
 {
-    QRegExp regexp("(0{,1}[1-9]|[12]\\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ](20\\d\\d)){,1}");
+    QRegExp regexp(R"((0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ](20\d\d)){,1})");
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
     int day = list[1].toInt();
@@ -148,23 +147,22 @@ int MDate::season(const QDate &date)
     int month = date.month();
 
     if (3 <= month && month <= 5)
-        return SPRING;
-    else if (6 <= month && month <= 8)
-        return SUMMER;
-    else if (9 <= month && month <= 11)
-        return FALL;
-    else
-        return WINTER;
+        return Season::Spring;
+    if (6 <= month && month <= 8)
+        return Season::Summer;
+    if (9 <= month && month <= 11)
+        return Season::Fall;
+    return Season::Winter;
 }
 
 QPair<QDate, QDate> MDate::seasonDates(int season, int year)
 {
     switch (season) {
-    case SPRING:
+    case Season::Spring:
         return { QDate(year - 1, 10, 1), QDate(year, 9, 30) };
-    case FALL:
+    case Season::Fall:
         return { QDate(year, 4, 1), QDate(year + 1, 3, 31) };
-    case WINTER:
+    case Season::Winter:
         return { QDate(year - 1, 7, 1), QDate(year, 6, 30) };
     default: // Summer or invalid season
         return { QDate(year, 1, 1), QDate(year, 12, 31) };

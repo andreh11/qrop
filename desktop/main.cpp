@@ -84,6 +84,13 @@ void registerFonts()
 
 void registerTypes()
 {
+    qmlRegisterUncreatableMetaObject(
+            Season::staticMetaObject, // static meta object
+            "io.qrop.components", // import statement (can be any string)
+            1, 0, // major and minor version of the import
+            "Season", // name in QML (does not have to match C++ name)
+            "Error: only enums" // error in case someone tries to create a MyNamespace object
+    );
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
@@ -239,26 +246,26 @@ int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
-    app.setApplicationName("Qrop");
-    app.setOrganizationName("AH");
-    app.setOrganizationDomain("io.qrop");
-    app.setApplicationDisplayName("Qrop");
-    app.setApplicationVersion("0.1");
-    app.setWindowIcon(QIcon(":/icon.png"));
+    QApplication::setApplicationName("Qrop");
+    QApplication::setOrganizationName("AH");
+    QApplication::setOrganizationDomain("io.qrop");
+    QApplication::setApplicationDisplayName("Qrop");
+    QApplication::setApplicationVersion("0.1");
+    QApplication::setWindowIcon(QIcon(":/icon.png"));
 
     QTranslator translator;
     const QString &lang = QLocale::system().name();
     if (lang.contains("fr")) {
         translator.load(":/translations/fr.qm");
-        app.installTranslator(&translator);
+        QApplication::installTranslator(&translator);
     }
 
     registerFonts();
     registerTypes();
 
     Database db;
-    db.connectToDatabase();
-    db.migrationCheck();
+    Database::connectToDatabase();
+    Database::migrationCheck();
 
     //    QtAndroid::runOnAndroidThread([=]()
     //    {
@@ -273,5 +280,5 @@ int main(int argc, char *argv[])
     engine.addImageProvider("pictures", new PictureImageProvider());
     Q_ASSERT(!engine.rootObjects().isEmpty());
 
-    return app.exec();
+    return QApplication::exec();
 }

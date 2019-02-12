@@ -47,11 +47,7 @@ void VarietyModel::setFilterCropId(int cropId)
 
     m_cropId = cropId;
 
-    if (m_cropId < 1) {
-        qInfo("[VarietyModel] null filter");
-
-    } else {
-        //        setFilterFixedString(QString(cropId));
+    if (m_cropId >= 1) {
         const QString filterString = QString::fromLatin1("crop_id = %1").arg(cropId);
         m_model->setFilter(filterString);
     }

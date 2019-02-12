@@ -18,6 +18,7 @@
 #include <QMap>
 #include <QDebug>
 #include <QDate>
+#include <utility>
 
 #include "treemodel.h"
 #include "sqltablemodel.h"
@@ -94,13 +95,13 @@ int TreeItem::columnCount() const
     return m_record.count();
 }
 
-SqlTreeModel::SqlTreeModel(const QString &idFieldName, const QString &parentIdFieldName, QObject *parent)
+SqlTreeModel::SqlTreeModel(QString idFieldName, QString parentIdFieldName, QObject *parent)
     : QAbstractItemModel(parent)
     , m_root(nullptr)
-    , m_idFieldName(idFieldName)
-    , m_parentIdFieldName(parentIdFieldName)
+    , m_idFieldName(std::move(idFieldName))
+    , m_parentIdFieldName(std::move(parentIdFieldName))
 {
-    SqlTableModel *model = new SqlTableModel(this);
+    auto *model = new SqlTableModel(this);
     model->setTable("location");
     model->select();
     setSourceModel(model);
@@ -359,7 +360,7 @@ bool SqlTreeModel::addRecordTree(QList<QSqlRecord> &recordList, const QModelInde
     m_idItemMap[rootParentId]->appendChild(m_idItemMap[rootId]);
 
     // Create tree items.
-    for (auto record : recordList) {
+    for (const auto &record : recordList) {
         if (record.isEmpty() || !record.contains(m_idFieldName) || !record.contains(m_parentIdFieldName))
             continue;
 
@@ -393,8 +394,7 @@ void SqlTreeModel::setSourceModel(SqlTableModel *model)
 
     m_sourceModel = model;
     buildRolesIndexes();
-    if (m_root)
-        delete m_root;
+    delete m_root;
     m_root = new TreeItem(m_sourceModel->record());
 
     int rows = model->rowCount();

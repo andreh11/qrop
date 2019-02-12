@@ -23,14 +23,17 @@
 
 #include "core_global.h"
 
+namespace Season {
+Q_NAMESPACE
+enum Enum { Winter = 0, Spring, Summer, Fall };
+Q_ENUM_NS(Enum)
+}
+
 class CORESHARED_EXPORT MDate : public QObject
 {
     Q_OBJECT
 
 public:
-    enum Season { WINTER, SPRING, SUMMER, FALL };
-    Q_ENUMS(Season)
-
     explicit MDate(QObject *parent = nullptr);
 
     Q_INVOKABLE static QDate dateFromWeekString(const QString &s);

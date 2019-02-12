@@ -90,7 +90,7 @@ signals:
 
 private:
     bool m_showOnlyEmptyLocations;
-    bool m_showOnlyGreenhouseLocations;
+    bool m_showOnlyGreenhouseLocations{};
     SqlTreeModel *m_treeModel;
     Planting *planting;
     Location *location;

@@ -42,8 +42,8 @@ Item {
     }
 
     function previousSeason() {
-        if (season == MDate.WINTER) {
-            season = MDate.FALL;
+        if (season === Season.Winter) {
+            season = Season.Fall;
             year--;
         } else {
             season--;
@@ -51,8 +51,8 @@ Item {
     }
 
     function nextSeason() {
-        if (season == MDate.FALL) {
-            season = MDate.WINTER;
+        if (season === Season.Fall) {
+            season = Season.Winter;
             year++
         } else {
             season++;
