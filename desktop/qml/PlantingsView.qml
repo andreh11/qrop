@@ -116,7 +116,8 @@ ListView {
     property var selectedIds: ({})
     // Number of selected plantings
     property int checks: numberOfTrue(selectedIds)
-    property int lastIndexClicked: -1
+    property int firstSelectedIndex: -1
+    property int secondSelectedIndex: -1
 
     function numberOfTrue(array) {
         var n = 0
@@ -124,6 +125,17 @@ ListView {
             if (array[key])
                 n++
         return n
+    }
+
+    function shiftSelectBetween() {
+        var min = Math.min(firstSelectedIndex, secondSelectedIndex)
+        var max = Math.max(firstSelectedIndex, secondSelectedIndex)
+
+        for (var row = min; row <= max; row++)
+            selectedIds[plantingModel.rowId(row)] = true;
+        selectedIdsChanged();
+        firstSelectedIndex = -1
+        secondSelectedIndex = -1
     }
 
     function selectAll() {
@@ -174,11 +186,16 @@ ListView {
     implicitWidth: contentWidth
     implicitHeight: contentHeight
 
-//    Keys.onUpPressed: verticalScrollBar.decrease()
-//    Keys.onDownPressed: verticalScrollBar.increase()
     Keys.onRightPressed: horizontalScrollBar.increase()
     Keys.onLeftPressed: horizontalScrollBar.decrease()
-    Keys.onSpacePressed: currentItem.checkBox.select()
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Space) {
+            if (event.modifiers & Qt.ShiftModifier)
+                currentItem.shiftSelect();
+            else
+                currentItem.select()
+        }
+    }
 
     model: PlantingModel {
         id: plantingModel
@@ -405,6 +422,28 @@ ListView {
         property date beginHarvestDate: model.beg_harvest_date
         property date endHarvestDate: model.end_harvest_date
 
+        function select() {
+            if (selectedIds[model.planting_id])
+                firstSelectedIndex = -1;
+            else
+                firstSelectedIndex = index;
+
+            selectedIds[model.planting_id] = !selectedIds[model.planting_id];
+
+            secondSelectedIndex = -1;
+            selectedIdsChanged();
+        }
+
+        function shiftSelect() {
+            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
+            if (firstSelectedIndex >= 0) {
+                secondSelectedIndex = index;
+                shiftSelectBetween();
+            } else {
+                delegate.select();
+            }
+        }
+
         height: row.height
         width: headerColumn.width
         color: {
@@ -460,12 +499,6 @@ ListView {
                 TextCheckBox {
                     id: checkBox
 
-                    function select() {
-                        selectedIds[model.planting_id] = !selectedIds[model.planting_id]
-                        lastIndexClicked = index
-                        selectedIdsChanged()
-                    }
-
                     text: model.crop
                     selectionMode: checks > 0
                     anchors.verticalCenter: row.verticalCenter
@@ -480,8 +513,12 @@ ListView {
                         anchors.fill: parent
                         onClicked: {
                             if (mouse.button !== Qt.LeftButton)
-                                return
-                            parent.select()
+                                return;
+
+                            if (mouse.modifiers & Qt.ShiftModifier)
+                                delegate.shiftSelect();
+                            else
+                                delegate.select();
                         }
                     }
                 }

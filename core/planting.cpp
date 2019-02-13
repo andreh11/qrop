@@ -45,7 +45,6 @@ int Planting::add(const QVariantMap &map) const
     QString plantingDateString = newMap.take("planting_date").toString();
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
-    qDebug() << newMap.value("unit_id");
 
     // Check if foreign seems to be valid, otherwise remove it.
     if (newMap.contains("unit_id") && newMap.value("unit_id").toInt() < 1)
@@ -54,7 +53,6 @@ int Planting::add(const QVariantMap &map) const
     int id = DatabaseUtility::add(newMap);
     if (id < 1)
         return -1;
-    qDebug() << plantingDate;
 
     task->createTasks(id, plantingDate);
     for (const auto &keywordId : keywordIdList)
@@ -122,7 +120,6 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
             if (plantingId >= 1) {
-                qDebug() << mapFromId("planting", plantingId);
                 return mapFromId("planting", plantingId);
             }
         }

@@ -36,7 +36,8 @@ ListView {
     property var selectedIds: ({}) // Map of the ids of the selected plantings
     property var plantingIdList: selectedIdList() // List of the ids of the selected plantings
     property int checks: numberOfTrue(selectedIds) // Number of selected plantings
-    property int lastIndexClicked: -1 // TODO: for shift selection
+    property int firstSelectedIndex: -1
+    property int secondSelectedIndex: -1
 
     function selectedIdList() {
         var idList = []
@@ -46,6 +47,17 @@ ListView {
                 idList.push(key)
             }
         return idList;
+    }
+
+    function shiftSelectBetween() {
+        var min = Math.min(firstSelectedIndex, secondSelectedIndex)
+        var max = Math.max(firstSelectedIndex, secondSelectedIndex)
+
+        for (var row = min; row <= max; row++)
+            selectedIds[plantingModel.rowId(row)] = true;
+        selectedIdsChanged();
+        firstSelectedIndex = -1
+        secondSelectedIndex = -1
     }
 
     function selectAll() {
@@ -86,7 +98,14 @@ ListView {
     boundsBehavior: Flickable.StopAtBounds
     flickableDirection: Flickable.HorizontalAndVerticalFlick
 
-    Keys.onSpacePressed: currentItem.select()
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Space) {
+            if (event.modifiers & Qt.ShiftModifier)
+                currentItem.shiftSelect();
+            else
+                currentItem.select()
+        }
+    }
 
     highlightMoveDuration: 0
     highlightResizeDuration: 0
@@ -118,11 +137,26 @@ ListView {
         property bool checked: false
 
         function select() {
-            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
-            lastIndexClicked = index
-            selectedIdsChanged()
+            if (selectedIds[model.planting_id])
+                firstSelectedIndex = -1;
+            else
+                firstSelectedIndex = index;
+
+            selectedIds[model.planting_id] = !selectedIds[model.planting_id];
+
+            secondSelectedIndex = -1;
+            selectedIdsChanged();
         }
 
+        function shiftSelect() {
+            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
+            if (firstSelectedIndex >= 0) {
+                secondSelectedIndex = index;
+                shiftSelectBetween();
+            } else {
+                rowDelegate.select();
+            }
+        }
         TextCheckBox {
             id: checkBox
             width: parent.height * 0.8
@@ -141,7 +175,11 @@ ListView {
                 onClicked: {
                     if (mouse.button !== Qt.LeftButton)
                         return
-                    select();
+
+                    if (mouse.modifiers & Qt.ShiftModifier)
+                        rowDelegate.shiftSelect();
+                    else
+                        rowDelegate.select();
                 }
             }
         }

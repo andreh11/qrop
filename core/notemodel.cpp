@@ -32,7 +32,6 @@ bool NoteModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
     if (m_plantingId < 0)
         return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
-    qDebug() << plantingId;
     return plantingId == m_plantingId
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

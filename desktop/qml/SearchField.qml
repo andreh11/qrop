@@ -35,7 +35,6 @@ TextField {
 
     Keys.onEscapePressed: {
         event.accepted = true
-        console.log("ESC")
         if (filterField.length)
             filterField.clear()
         else
