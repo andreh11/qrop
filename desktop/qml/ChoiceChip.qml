@@ -53,13 +53,14 @@ Button {
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                                           contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
-    padding: 8
+    leftPadding: 12
+    rightPadding: 12
     hoverEnabled: true
     font { family: "Roboto Regular"; pixelSize: 14; capitalization: Font.MixedCase }
 
     background: Rectangle {
         implicitHeight: Units.chipHeight
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: control.verticalCenter
         radius: 32
         color: checked ? (hasFocus ? focusCheckedColor : checkedColor)
                        : hasFocus ? activeFocusColor
@@ -71,8 +72,8 @@ Button {
     }
 
     contentItem: Text {
-        leftPadding: 12
-        rightPadding: leftPadding
+        anchors.verticalCenter: control.verticalCenter
+        verticalAlignment: Qt.AlignVCenter
 
         color: checked ? Material.color(Material.Blue, Material.Shade800)
                        : Material.color(Material.Grey, Material.Shade800)
