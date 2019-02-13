@@ -182,6 +182,7 @@ ListView {
         color: Material.primary
         radius: 2
     }
+    cacheBuffer: Units.rowHeight*2
 
     implicitWidth: contentWidth
     implicitHeight: contentHeight

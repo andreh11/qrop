@@ -6,6 +6,9 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout d'une vue des listes de semences et plants à commander.
+  - *Vue des séries* − Sélection d'un intervalle de séries avec la touche Shift
+    (souris ou clavier).
   - *Parcellaire* − Ajout d'un bouton afficher la couleur de la famille ou de
     l'espèce.
   - Fonctionnalité basique de prise de notes pour les séries.

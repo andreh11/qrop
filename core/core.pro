@@ -41,7 +41,9 @@ SOURCES += \
     nametree.cpp \
     family.cpp \
     note.cpp \
-    pictureimageprovider.cpp
+    pictureimageprovider.cpp \
+    seedlistmodel.cpp \
+    transplantlistmodel.cpp
 
 HEADERS += \
     core_global.h \
@@ -79,7 +81,9 @@ HEADERS += \
     nametree.h \
     family.h \
     note.h \
-    pictureimageprovider.h
+    pictureimageprovider.h \
+    seedlistmodel.h \
+    transplantlistmodel.h
 
 RESOURCES += \
     core_resources.qrc

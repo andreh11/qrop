@@ -46,6 +46,7 @@ Button {
             hasFocus = false
     }
     onPressed: manuallyModified = true
+    onToggled: manuallyModified = true
 
     checkable: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0,

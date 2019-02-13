@@ -31,6 +31,7 @@ Drawer {
     closePolicy: Popup.NoAutoClose
     
     property int selectedIndex
+    property int year
 
     property alias plantingId: noteModel.plantingId
 
@@ -58,6 +59,7 @@ Drawer {
             radius: 4
 
             PlantingLabel {
+                year: noteSideSheet.year
                 anchors.verticalCenter: parent.verticalCenter
                 plantingId: section
             }

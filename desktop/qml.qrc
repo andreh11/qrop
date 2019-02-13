@@ -81,5 +81,6 @@
         <file>qml/NoteButton.qml</file>
         <file>qml/NoteSideSheet.qml</file>
         <file>qml/PhotoPane.qml</file>
+        <file>qml/SeedsPage.qml</file>
     </qresource>
 </RCC>

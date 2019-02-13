@@ -52,10 +52,12 @@
 #include "plantingmodel.h"
 #include "rolemodel.h"
 #include "seedcompanymodel.h"
+#include "seedlistmodel.h"
 #include "taskimplementmodel.h"
 #include "taskmethodmodel.h"
 #include "taskmodel.h"
 #include "tasktypemodel.h"
+#include "transplantlistmodel.h"
 #include "treemodel.h"
 #include "unitmodel.h"
 #include "usermodel.h"
@@ -100,10 +102,12 @@ void registerTypes()
     qmlRegisterType<NoteModel>("io.qrop.components", 1, 0, "NoteModel");
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
+    qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
     qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");
     qmlRegisterType<TaskModel>("io.qrop.components", 1, 0, "TaskModel");
     qmlRegisterType<TaskTypeModel>("io.qrop.components", 1, 0, "TaskTypeModel");
+    qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
     qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
