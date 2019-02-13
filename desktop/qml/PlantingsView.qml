@@ -188,7 +188,6 @@ ListView {
 
     Keys.onRightPressed: horizontalScrollBar.increase()
     Keys.onLeftPressed: horizontalScrollBar.decrease()
-//    Keys.onSpacePressed: currentItem.select()
     Keys.onPressed: {
         if (event.key === Qt.Key_Space) {
             if (event.modifiers & Qt.ShiftModifier)
@@ -424,8 +423,13 @@ ListView {
         property date endHarvestDate: model.end_harvest_date
 
         function select() {
+            if (selectedIds[model.planting_id])
+                firstSelectedIndex = -1;
+            else
+                firstSelectedIndex = index;
+
             selectedIds[model.planting_id] = !selectedIds[model.planting_id];
-            firstSelectedIndex = index;
+
             secondSelectedIndex = -1;
             selectedIdsChanged();
         }
