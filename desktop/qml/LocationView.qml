@@ -25,10 +25,6 @@ import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
 
-// Since we use a Controls 1 TreeWidget, we have to put it in ScrollView + Flickable to
-// have Controls 2 Scrollbars.  When TreeView will be implemented in Controls 2, we'll
-// get rid of this ugly trick...
-
 Item {
     id: locationView
 
@@ -314,26 +310,6 @@ Item {
 
         ThinDivider { anchors { bottom: parent.bottom; left: parent.left; right: parent.right } }
     }
-
-    //    ScrollView {
-    //        id: scrollView
-    //        anchors {
-    //            top: headerRectangle.bottom
-    //            left: parent.left
-    //            right: parent.right
-    //            bottom: parent.bottom
-    //        }
-
-    //        clip: true
-
-    //        Flickable {
-    //            id: flickable
-
-    //            boundsBehavior: Flickable.StopAtBounds
-    //            contentHeight: treeView.flickableItem.contentHeight
-    //            contentWidth: width
-
-    //            ScrollBar.vertical: ScrollBar { id: verticalScrollBar }
 
     Controls1.TreeView {
         id: treeView
@@ -784,10 +760,3 @@ Item {
         }
     }
 }
-//    }
-//}
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/
