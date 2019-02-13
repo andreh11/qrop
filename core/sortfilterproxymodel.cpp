@@ -95,6 +95,9 @@ QString SortFilterProxyModel::sortOrder() const
 
 void SortFilterProxyModel::setFilterYear(int year)
 {
+    if (year == m_year)
+        return;
+
     m_year = year;
     filterYearChanged();
     invalidateFilter();
@@ -102,6 +105,9 @@ void SortFilterProxyModel::setFilterYear(int year)
 
 void SortFilterProxyModel::setFilterSeason(int season)
 {
+    if (season == m_season)
+        return;
+
     if (0 <= season && season <= 3)
         m_season = season;
     else

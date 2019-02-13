@@ -167,7 +167,7 @@ Flickable {
         [greenhouseEstimatedLossField, "estimated_gh_loss", greenhouseEstimatedLoss],
         [seedsPerHoleField, "seeds_per_hole", seedsPerHole],
         [seedsPerGramField, "seeds_per_gram", seedsPerGram],
-        // TODO: seeds needed
+        [seedsNeededField, "seeds_number", seedsNeeded],
         [seedsExtraPercentageField, "seeds_percentage", seedsExtraPercentage],
         // TODO: keywords
         [unitField, "unit_id", unitModel.rowId(unitField.currentIndex)],
@@ -186,6 +186,7 @@ Flickable {
             var value = widgetField[i][2]
 
             if ((widget instanceof MyTextField && widget.manuallyModified)
+                    || (widget instanceof ChoiceChip && widget.manuallyModified)
                     || (widget instanceof MyComboBox && widget.manuallyModified)
                     || (widget instanceof CheckBox && widget.manuallyModified)
                     || (widget instanceof DatePicker && widget.modified)) {

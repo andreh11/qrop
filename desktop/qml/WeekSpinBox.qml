@@ -10,6 +10,7 @@ Item {
     
     property int week: 1
     property int year: 2018
+    property bool showOnlyYear: false
     
     function previousYear() {
         year--;
@@ -54,7 +55,7 @@ Item {
             font.bold: true
             font.pointSize: 20
             Material.foreground: Material.accent
-            Layout.rightMargin: -32
+            Layout.rightMargin: showOnlyYear ? 0 : -32
             onClicked: year--
             flat: true
             ToolTip.visible: hovered
@@ -63,6 +64,7 @@ Item {
         
         RoundButton {
             id: previousWeekButton
+            visible: !showOnlyYear
             text: "\ue314"
             font.family: "Material Icons"
             Layout.rightMargin: -16
@@ -76,6 +78,7 @@ Item {
         TextInput {
             id: weekInput
             text: week
+            visible: !showOnlyYear
             font.family: "Roboto Regular"
             inputMethodHints: Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 1; top: 53 }
@@ -101,6 +104,7 @@ Item {
         RoundButton {
             id: nextWeekButton
             text: "\ue315"
+            visible: !showOnlyYear
             font.family: "Material Icons"
             font.pointSize: 20
             Layout.leftMargin: -16
@@ -117,7 +121,7 @@ Item {
             font.bold: true
             Material.foreground: Material.accent
             font.pointSize: 20
-            Layout.leftMargin: -32
+            Layout.leftMargin: showOnlyYear ? 0 : -32
             flat: true
             onClicked: year++
             ToolTip.visible: hovered

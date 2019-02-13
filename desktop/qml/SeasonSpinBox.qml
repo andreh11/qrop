@@ -24,8 +24,8 @@ import io.qrop.components 1.0
 Item {
     id: control
 
-    property int season: 0
-    property int year: 2018
+    property int season
+    property int year
     readonly property var seasonNames: [
         qsTr("Winter"),
         qsTr("Spring"),

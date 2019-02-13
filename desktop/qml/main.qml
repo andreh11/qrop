@@ -31,8 +31,9 @@ ApplicationWindow {
         //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
-        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue8f1" },
-        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" }
+        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
+        { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" }
 //        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
         //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
@@ -49,10 +50,10 @@ ApplicationWindow {
 
     // TODO: put this in a separate file
     readonly property var monthsOrder : [
+        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
         [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2],
-        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
+        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2]
     ]
 
     function toggleFullScreen() {
@@ -109,6 +110,10 @@ ApplicationWindow {
         id: notesPage
     }
 
+    SeedsPage {
+        id: seedListPage
+    }
+
     SettingsPage {
         id: settingsPage
     }
@@ -141,6 +146,12 @@ ApplicationWindow {
         sequence: "Ctrl+4"
         context: Qt.ApplicationShortcut
         onActivated: navigationIndex = 3
+    }
+
+    Shortcut {
+        sequence: "Ctrl+5"
+        context: Qt.ApplicationShortcut
+        onActivated: navigationIndex = 4
     }
 
     Shortcut {
@@ -468,6 +479,7 @@ ApplicationWindow {
 
     NoteSideSheet {
         id: noteSideSheet
+        year: plantingsPage.year
         height: window.height
         width: Math.min(300, window.width*0.3)
         plantingId: plantingsPage.checks ? plantingsPage.selectedIdList()[0] : -1
@@ -552,11 +564,11 @@ ApplicationWindow {
                 stackView.replace(harvestsPage)
                 harvestsPage.refresh();
                 break
-//            case 4:
-//                stackView.replace(notesPage)
-//                notesPage.refresh();
-//                break
             case 4:
+                stackView.replace(seedListPage)
+                seedListPage.refresh();
+                break
+            case 5:
                 stackView.replace(settingsPage)
                 break
             }

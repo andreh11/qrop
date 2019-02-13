@@ -24,7 +24,7 @@ import io.qrop.components 1.0
 Item {
     id: control
 
-    property int season: 1
+    property int season: Season.Summer
     property int year
     property date todayDate: new Date()
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
@@ -86,6 +86,7 @@ Item {
         anchors.fill: parent
         Repeater {
             model: plantingIdList
+
             Timegraph {
                 plantingId: modelData
                 todayDate: control.todayDate

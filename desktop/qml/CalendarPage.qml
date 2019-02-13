@@ -335,6 +335,7 @@ Page {
             id: taskView
             clip: true
             spacing: 4
+            cacheBuffer: Units.rowHeight*2
             anchors {
                 top: topDivider.bottom
                 left: parent.left
