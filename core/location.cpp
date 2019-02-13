@@ -77,7 +77,6 @@ int Location::duplicate(int id) const
 
     QSqlDatabase::database().transaction();
     QVariantMap map = mapFromId(table(), id);
-    qDebug() << map;
     map.remove(idFieldName());
     map["name"] = map["name"].toString() + QString(" (copy)");
     int newId = add(map);
