@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Add a view for seed and planting lists to make it easier to order them.
   - *Planting view* - Shift selection of planting intervals with mouse or keyboard.
   - *Field map* − Add button show family or crop color.
   - Basic note taking feature for plantings.
