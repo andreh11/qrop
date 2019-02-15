@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout de l'export papier pour le plan de culture.
   - Ajout d'une vue des listes de semences et plants à commander.
   - *Vue des séries* − Sélection d'un intervalle de séries avec la touche Shift
     (souris ou clavier).

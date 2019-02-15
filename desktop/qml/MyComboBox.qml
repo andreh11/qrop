@@ -157,6 +157,7 @@ ComboBox {
 
         Rectangle {
             id: addItemRectangle
+            visible: showAddItem
             implicitHeight: visible ? addItemDelegate.implicitHeight : 0
             width: parent.width
             color: "white"

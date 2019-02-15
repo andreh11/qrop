@@ -44,6 +44,7 @@ public:
     Q_INVOKABLE static int isoWeek(const QDate &date);
     Q_INVOKABLE static int isoYear(const QDate &date);
     Q_INVOKABLE static int currentWeek();
+    Q_INVOKABLE static int currentMonth();
     Q_INVOKABLE static int currentYear();
     Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear,
                                           const QString &type = "", const bool showIndicator = true);
@@ -54,6 +55,7 @@ public:
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
     Q_INVOKABLE static QDate addDays(const QDate &date, qint64 days) { return date.addDays(days); }
     Q_INVOKABLE static QString dayName(const QDate &date);
+    Q_INVOKABLE static QString monthName(int month);
 };
 
 #endif // MDATE_H

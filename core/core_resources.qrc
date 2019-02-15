@@ -7,5 +7,6 @@
         <file>db/migrations/002.sql</file>
         <file>db/migrations/003.sql</file>
         <file>db/migrations/004.sql</file>
+        <file>core_translations/fr.qm</file>
     </qresource>
 </RCC>

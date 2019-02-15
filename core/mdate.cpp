@@ -71,6 +71,11 @@ int MDate::currentWeek()
     return QDate::currentDate().weekNumber();
 }
 
+int MDate::currentMonth()
+{
+    return QDate::currentDate().month();
+}
+
 int MDate::currentYear()
 {
     int year = 0;
@@ -184,4 +189,12 @@ int MDate::seasonYear(const QDate &date)
 QString MDate::dayName(const QDate &date)
 {
     return date.toString("dddd");
+}
+
+QString MDate::monthName(int month)
+{
+    if (month < 1 || month > 12)
+        return {};
+
+    return QDate(2018, month, 1).toString("MMMM");
 }
