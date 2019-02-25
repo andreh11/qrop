@@ -392,7 +392,6 @@ Page {
                         verticalAlignment: Qt.AlignVCenter
                     }
 
-
                     IconButton {
                         id: printButton
                         text: "\ue8ad"
