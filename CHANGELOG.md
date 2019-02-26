@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Add print output for crop map. 
   - Add print output for task calendar. 
-  - Add print output for crop map.
+  - Add print output for crop plan.
   - Add a view for seed and planting lists to make it easier to order them.
   - *Planting view* - Shift selection of planting intervals with mouse or keyboard.
   - *Field map* − Add button show family or crop color.

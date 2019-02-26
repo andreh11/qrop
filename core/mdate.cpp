@@ -19,6 +19,10 @@
 #include <QSettings>
 
 #include "mdate.h"
+const QList<QList<int>> MDate::monthsOrder({ { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 },
+                                             { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 },
+                                             { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
+                                             { 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2 } });
 
 MDate::MDate(QObject *parent)
     : QObject(parent)
@@ -160,6 +164,20 @@ int MDate::season(const QDate &date)
     return Season::Winter;
 }
 
+QString MDate::seasonName(int season)
+{
+    if (season == 0)
+        return tr("Winter");
+    else if (season == 1)
+        return tr("Spring");
+    else if (season == 2)
+        return tr("Summer");
+    else if (season == 3)
+        return tr("Fall");
+    else
+        return {};
+}
+
 QPair<QDate, QDate> MDate::seasonDates(int season, int year)
 {
     switch (season) {
@@ -197,4 +215,12 @@ QString MDate::monthName(int month)
         return {};
 
     return QDate(2018, month, 1).toString("MMMM");
+}
+
+QString MDate::shortMonthName(int month)
+{
+    if (month < 1 || month > 12)
+        return {};
+
+    return QDate(2018, month, 1).toString("MMM");
 }

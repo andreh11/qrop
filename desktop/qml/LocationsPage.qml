@@ -18,6 +18,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
+import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
@@ -151,6 +152,18 @@ Page {
     onEditModeChanged: {
         if (!editMode) {
             locationView.clearSelection();
+        }
+    }
+
+    Platform.FileDialog {
+        id: saveCropMapDialog
+
+        defaultSuffix: "pdf"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: {
+            Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
+                               greenhouseButton.checked)
         }
     }
 
@@ -388,6 +401,69 @@ Page {
                 id: fillerItem
                 visible: editMode
                 Layout.fillWidth: true
+            }
+
+            IconButton {
+                id: printButton
+                text: "\ue8ad"
+                hoverEnabled: true
+//                visible: largeDisplay && checks == 0
+                Layout.rightMargin: -padding*2
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Print the task calendar")
+
+//                onClicked: printDialog.open();
+                onClicked: saveCropMapDialog.open()
+
+//                Dialog {
+//                    id: printDialog
+//                    title: qsTr("Print the task calendar")
+//                    width: 200
+//                    margins: 0
+
+//                    onAccepted: saveCalendarDialog.open()
+
+//                    ColumnLayout {
+//                        width: parent.width
+
+//                        RadioButton {
+//                            id: weekRadioButton
+//                            text: qsTr("Current week")
+//                            checked: true
+//                        }
+
+//                        RadioButton {
+//                            id: monthRadioButton
+//                            text: qsTr("Current month")
+//                        }
+
+//                        RadioButton {
+//                            id: yearRadioButton
+//                            text: qsTr("Current year")
+//                        }
+//                    }
+
+//                    footer: DialogButtonBox {
+//                        Button {
+//                            id: rejectButton
+//                            flat: true
+//                            text: qsTr("Cancel")
+//                            Material.foreground: Material.accent
+//                            DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+//                        }
+
+//                        Button {
+//                            id: applyButton
+//                            Material.background: Material.accent
+//                            Material.foreground: "white"
+//                            text: qsTr("Print")
+
+//                            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+//                        }
+//                    }
+//                }
             }
 
             SeasonSpinBox {

@@ -14,23 +14,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QPrinter>
-#include <QPdfWriter>
-#include <QTextDocument>
-#include <QSqlQuery>
 #include <QDate>
-#include <QString>
 #include <QDebug>
+#include <QPainter>
+#include <QPdfWriter>
+#include <QPrinter>
 #include <QSettings>
+#include <QSqlQuery>
+#include <QString>
+#include <QTextDocument>
+#include <QModelIndex>
 
 #include "print.h"
 #include "location.h"
 #include "planting.h"
 #include "task.h"
 #include "mdate.h"
+#include "locationmodel.h"
 
 Print::Print(QObject *parent)
     : QObject(parent)
+    , m_firstColumnWidth(1500)
+    , m_rowHeight(500)
+    , m_monthWidth(950)
+    , m_textPadding(100)
+    , m_locationRows(0)
+    , m_pageNumber(0)
+    , m_showFamilyColor(false)
+    , location(new Location(this))
+    , planting(new Planting(this))
+    , m_locationModel(new LocationModel(this))
     , cropPlanQueryString(
               "SELECT *, "
               "strftime('%Y', sowing_date) AS sowing_year, "
@@ -549,4 +562,168 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
     }
     html += "</table>";
     return html;
+}
+
+void Print::printCropMap(int year, int season, const QUrl &path, bool showFamilyColor,
+                         bool showOnlyGreenhouse)
+
+{
+    QPdfWriter writer(path.toLocalFile());
+    writer.setPageSize(QPagedPaintDevice::A4);
+    writer.setPageOrientation(QPageLayout::Landscape);
+    writer.setPageMargins(QMargins(10, 10, 10, 10), QPageLayout::Millimeter);
+
+    QPainter painter;
+    painter.begin(&writer);
+
+    QPen pen;
+    pen.setWidth(10);
+    pen.setStyle(Qt::SolidLine);
+    pen.setBrush(QColor("grey"));
+    painter.setPen(pen);
+
+    m_locationModel->refresh();
+    m_locationModel->setFilterYear(year);
+    m_locationModel->setFilterSeason(season);
+    m_locationModel->setShowOnlyGreenhouseLocations(showOnlyGreenhouse);
+    m_locationRows = 0;
+    m_showFamilyColor = showFamilyColor;
+    m_pageNumber = 1;
+    paintHeader(painter, season, year);
+    paintTree(writer, painter, QModelIndex(), season, year);
+
+    painter.end();
+}
+
+void Print::paintHeader(QPainter &painter, int season, int year)
+{
+    QRectF headerRect(0, 0, m_firstColumnWidth + 12 * m_monthWidth, m_rowHeight);
+
+    painter.save();
+    QFont font("Roboto Regular", 14, 10);
+    painter.setFont(font);
+    painter.drawText(headerRect, Qt::AlignLeft,
+                     QString("%1 %2").arg(MDate::seasonName(season)).arg(year));
+    painter.drawText(headerRect, Qt::AlignRight, QString::number(m_pageNumber));
+    painter.restore();
+
+    QRectF locationRect(0, m_rowHeight, m_firstColumnWidth, m_rowHeight);
+
+    painter.drawRect(locationRect);
+    painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter, tr("Location"));
+
+    for (int m = 0; m < 12; m++) {
+        QRectF rect(m_firstColumnWidth + m * m_monthWidth, m_rowHeight, m_monthWidth, m_rowHeight);
+        painter.drawRect(rect);
+        painter.drawText(rect, Qt::AlignCenter,
+                         MDate::shortMonthName(1 + MDate::monthsOrder[season][m]));
+    }
+}
+
+void Print::paintRowGrid(QPainter &painter, int row)
+{
+    painter.drawRect(0, (row + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
+    for (int m = 0; m < 12; m++) {
+        QRectF rect(m_firstColumnWidth + m * m_monthWidth, (2 + row) * m_rowHeight, m_monthWidth,
+                    m_rowHeight);
+        painter.drawRect(rect);
+    }
+}
+
+int Print::datePosition(const QDate &date, int season)
+{
+    int x = 0;
+    QPair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
+    QDate seasonBeg = seasonDates.first;
+    QDate seasonEnd = seasonDates.second;
+
+    if ((seasonBeg <= date) && (date <= seasonEnd))
+        x = (1.0 * seasonBeg.daysTo(date) / date.daysInYear()) * m_monthWidth * 12;
+    else if (date < seasonBeg)
+        x = 0;
+    else
+        x = 12 * m_monthWidth;
+
+    return m_firstColumnWidth + x;
+}
+
+void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int season, int year)
+{
+    QDate plantingDate = planting->plantingDate(plantingId);
+    QDate begHarvestDate = planting->begHarvestDate(plantingId);
+    QDate endHarvestDate = planting->endHarvestDate(plantingId);
+
+    QString colorString;
+
+    if (m_showFamilyColor)
+        colorString = planting->familyColor(plantingId);
+    else
+        colorString = planting->cropColor(plantingId);
+
+    QColor cropColor(colorString);
+    QString cropName = planting->cropName(plantingId);
+    QString varietyName = planting->varietyName(plantingId);
+
+    int y = (2 + row) * m_rowHeight;
+    int p = m_rowHeight * 0.1;
+
+    QPoint point1(datePosition(plantingDate, season), y + p);
+    QPoint point2(datePosition(begHarvestDate, season), y + m_rowHeight - p);
+    QPoint point3(datePosition(begHarvestDate, season), y + p);
+    QPoint point4(datePosition(endHarvestDate, season), y + m_rowHeight - p);
+
+    painter.fillRect(QRectF(point1, point2), cropColor);
+    painter.fillRect(QRectF(point3, point4), cropColor.darker(120));
+
+    painter.save();
+    QPen pen(QColor("white"));
+    painter.setPen(pen);
+    painter.drawText(QRectF(point1, point4).adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
+                     QString("%1 %2, %3")
+                             .arg(MDate::formatDate(plantingDate, year, "", false))
+                             .arg(cropName)
+                             .arg(varietyName));
+    painter.restore();
+}
+
+void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int season, int year)
+{
+    int locationId = m_locationModel->locationId(parent);
+
+    QPair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
+    QDate seasonBeg = seasonDates.first;
+    QDate seasonEnd = seasonDates.second;
+
+    for (int plantingId : location->plantings(locationId, seasonBeg, seasonEnd)) {
+        paintTimegraph(painter, row, plantingId, season, year);
+    }
+}
+
+void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
+                      int season, int year)
+{
+    for (int row = 0; row < m_locationModel->rowCount(parent); row++) {
+        QModelIndex index = m_locationModel->index(row, 0, parent);
+        int locationId = m_locationModel->locationId(index);
+
+        if (m_locationModel->hasChildren(index)) {
+            paintTree(printer, painter, index, season, year);
+        } else {
+            paintRowGrid(painter, m_locationRows);
+
+            QRectF locationRect(0, (m_locationRows + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
+            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
+                             location->fullName(locationId));
+
+            paintTimeline(painter, m_locationRows, index, season, year);
+
+            m_locationRows++;
+            if (m_locationRows > 15) {
+                printer.newPage();
+                m_pageNumber++;
+                paintHeader(painter, season, year);
+                m_locationRows = 0;
+            }
+        }
+    }
 }

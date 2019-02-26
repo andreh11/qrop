@@ -19,7 +19,15 @@
 
 #include <QObject>
 #include <QMap>
+#include <QPainter>
+#include <QPagedPaintDevice>
+
 #include "core_global.h"
+
+class QModelIndex;
+class LocationModel;
+class Location;
+class Planting;
 
 class CORESHARED_EXPORT Print : public QObject
 {
@@ -32,6 +40,8 @@ public:
                                    const QString &type = "entire");
     Q_INVOKABLE void printCalendar(int year, int month, int week, const QUrl &path,
                                    bool showOverdue = false);
+    Q_INVOKABLE void printCropMap(int year, int season, const QUrl &path,
+                                  bool showFamilyColor = false, bool showOnlyGreenhouse = false);
 
 private:
     typedef struct {
@@ -43,6 +53,17 @@ private:
         QString tableRow;
     } TableInfo;
 
+    int m_firstColumnWidth;
+    int m_rowHeight;
+    int m_monthWidth;
+    int m_textPadding;
+    int m_locationRows;
+    int m_pageNumber;
+    bool m_showFamilyColor;
+    Location *location;
+    Planting *planting;
+    LocationModel *m_locationModel;
+
     QMap<QString, TableInfo> cropPlanMap;
     QString cropPlanQueryString;
     QString cropPlanHtml(int year, int month, int week, const QString &type) const;
@@ -52,6 +73,14 @@ private:
     QString calendarHtml(int year, int week, bool showOverdue) const;
 
     void exportPdf(const QString &html, const QUrl &path);
+
+    void paintHeader(QPainter &painter, int season, int year);
+    void paintRowGrid(QPainter &painter, int row);
+    int datePosition(const QDate &date, int season);
+    void paintTimegraph(QPainter &painter, int row, int plantingId, int season, int year);
+    void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int season, int year);
+    void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
+                   int season, int year);
 };
 
 #endif // PRINT_H
