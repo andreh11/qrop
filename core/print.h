@@ -76,9 +76,9 @@ private:
 
     void paintHeader(QPainter &painter, int season, int year);
     void paintRowGrid(QPainter &painter, int row);
-    int datePosition(const QDate &date, int season);
-    void paintTimegraph(QPainter &painter, int row, int plantingId, int season, int year);
-    void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int season, int year);
+    int datePosition(const QDate &date);
+    void paintTimegraph(QPainter &painter, int row, int plantingId, int year);
+    void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year);
     void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
                    int season, int year);
 };

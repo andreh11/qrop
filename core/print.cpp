@@ -630,7 +630,7 @@ void Print::paintRowGrid(QPainter &painter, int row)
     }
 }
 
-int Print::datePosition(const QDate &date, int season)
+int Print::datePosition(const QDate &date)
 {
     int x = 0;
     QPair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
@@ -638,7 +638,7 @@ int Print::datePosition(const QDate &date, int season)
     QDate seasonEnd = seasonDates.second;
 
     if ((seasonBeg <= date) && (date <= seasonEnd))
-        x = (1.0 * seasonBeg.daysTo(date) / date.daysInYear()) * m_monthWidth * 12;
+        x = static_cast<int>((1.0 * seasonBeg.daysTo(date) / date.daysInYear()) * m_monthWidth * 12);
     else if (date < seasonBeg)
         x = 0;
     else
@@ -647,7 +647,7 @@ int Print::datePosition(const QDate &date, int season)
     return m_firstColumnWidth + x;
 }
 
-void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int season, int year)
+void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
 {
     QDate plantingDate = planting->plantingDate(plantingId);
     QDate begHarvestDate = planting->begHarvestDate(plantingId);
@@ -665,12 +665,12 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int seaso
     QString varietyName = planting->varietyName(plantingId);
 
     int y = (2 + row) * m_rowHeight;
-    int p = m_rowHeight * 0.1;
+    int p = static_cast<int>(m_rowHeight * 0.1);
 
-    QPoint point1(datePosition(plantingDate, season), y + p);
-    QPoint point2(datePosition(begHarvestDate, season), y + m_rowHeight - p);
-    QPoint point3(datePosition(begHarvestDate, season), y + p);
-    QPoint point4(datePosition(endHarvestDate, season), y + m_rowHeight - p);
+    QPoint point1(datePosition(plantingDate), y + p);
+    QPoint point2(datePosition(begHarvestDate), y + m_rowHeight - p);
+    QPoint point3(datePosition(begHarvestDate), y + p);
+    QPoint point4(datePosition(endHarvestDate), y + m_rowHeight - p);
 
     painter.fillRect(QRectF(point1, point2), cropColor);
     painter.fillRect(QRectF(point3, point4), cropColor.darker(120));
@@ -686,7 +686,7 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int seaso
     painter.restore();
 }
 
-void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int season, int year)
+void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year)
 {
     int locationId = m_locationModel->locationId(parent);
 
@@ -694,9 +694,8 @@ void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent,
     QDate seasonBeg = seasonDates.first;
     QDate seasonEnd = seasonDates.second;
 
-    for (int plantingId : location->plantings(locationId, seasonBeg, seasonEnd)) {
-        paintTimegraph(painter, row, plantingId, season, year);
-    }
+    for (int plantingId : location->plantings(locationId, seasonBeg, seasonEnd))
+        paintTimegraph(painter, row, plantingId, year);
 }
 
 void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
@@ -715,7 +714,7 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
             painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
                              location->fullName(locationId));
 
-            paintTimeline(painter, m_locationRows, index, season, year);
+            paintTimeline(painter, m_locationRows, index, year);
 
             m_locationRows++;
             if (m_locationRows > 15) {
