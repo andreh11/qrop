@@ -6,9 +6,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
-  - Ajout de l'export PDF pour le parcellaire. 
-  - Ajout de l'export PDF pour le calendrier des tâches.
-  - Ajout de l'export PDF pour le plan de culture.
+  - Ajout de l'export PDF pour le plan de culture, le calendrier des tâches,
+    le parcellaire, les récoltes.
   - Ajout d'une vue des listes de semences et plants à commander.
   - *Vue des séries* − Sélection d'un intervalle de séries avec la touche Shift
     (souris ou clavier).

@@ -19,6 +19,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
@@ -38,10 +39,10 @@ Page {
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
         { name: qsTr("Planting"),   columnName: "planting_id", width: 200 },
-        { name: qsTr("Locations"),   columnName: "locations", width: 200 },
-        { name: qsTr("Quantity"), columnName: "quantity", width: 80 },
-        { name: qsTr("Date"),    columnName: "date", width: 100},
-        { name: qsTr("Time"),    columnName: "time", width: 80}
+        { name: qsTr("Locations"),  columnName: "locations",   width: 200 },
+        { name: qsTr("Quantity"),   columnName: "quantity",    width: 80 },
+        { name: qsTr("Date"),       columnName: "date",        width: 100},
+        { name: qsTr("Time"),       columnName: "time",        width: 80}
     ]
 
     property int rowWidth: {
@@ -137,6 +138,15 @@ Page {
         visible: false
     }
 
+    Platform.FileDialog {
+        id: saveDialog
+
+        defaultSuffix: "pdf"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted:  Print.printHarvests(page.year, file)
+    }
+
     Pane {
         width: parent.width
         height: parent.height
@@ -210,26 +220,24 @@ Page {
                     visible: !checks
                 }
 
+                IconButton {
+                    id: printButton
+                    text: "\ue8ad"
+                    hoverEnabled: true
+                    Layout.rightMargin: -padding*2
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: qsTr("Print the task calendar")
+
+                    onClicked: saveDialog.open()
+                }
+
                 WeekSpinBox {
                     id: weekSpinBox
                     visible: checks === 0
                     week: MDate.currentWeek();
                     year: MDate.currentYear();
-                }
-
-                IconButton {
-                    text: "\ue3c9" // edit
-                    visible: checks > 0
-                }
-
-                IconButton {
-                    text: "\ue14d" // content_copy
-                    visible: checks > 0
-                }
-
-                IconButton {
-                    text: "\ue872" // delete
-                    visible: checks > 0
                 }
             }
         }

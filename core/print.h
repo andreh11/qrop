@@ -42,6 +42,7 @@ public:
                                    bool showOverdue = false);
     Q_INVOKABLE void printCropMap(int year, int season, const QUrl &path,
                                   bool showFamilyColor = false, bool showOnlyGreenhouse = false);
+    Q_INVOKABLE void printHarvests(int year, const QUrl &path);
 
 private:
     typedef struct {
@@ -64,6 +65,8 @@ private:
     Planting *planting;
     LocationModel *m_locationModel;
 
+    void exportPdf(const QString &html, const QUrl &path);
+
     QMap<QString, TableInfo> cropPlanMap;
     QString cropPlanQueryString;
     QString cropPlanHtml(int year, int month, int week, const QString &type) const;
@@ -72,8 +75,6 @@ private:
     QString calendarQueryString;
     QString calendarHtml(int year, int week, bool showOverdue) const;
 
-    void exportPdf(const QString &html, const QUrl &path);
-
     void paintHeader(QPainter &painter, int season, int year);
     void paintRowGrid(QPainter &painter, int row);
     int datePosition(const QDate &date);
@@ -81,6 +82,10 @@ private:
     void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year);
     void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
                    int season, int year);
+
+    TableInfo harvestInfo;
+    QString harvestQueryString;
+    QString harvestHtml(int year) const;
 };
 
 #endif // PRINT_H

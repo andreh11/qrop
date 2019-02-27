@@ -44,23 +44,22 @@ Print::Print(QObject *parent)
     , location(new Location(this))
     , planting(new Planting(this))
     , m_locationModel(new LocationModel(this))
-    , cropPlanQueryString(
-              "SELECT *, "
-              "strftime('%Y', sowing_date) AS sowing_year, "
-              "CAST(strftime('%m', sowing_date) AS INTEGER) AS sowing_month, "
-              "strftime('%Y', planting_date) AS planting_year, "
-              "CAST(strftime('%m', planting_date) AS INTEGER) AS planting_month "
-              //                        "strftime('%Y', beg_harvest_date) as beg_harvest_year, "
-              //                        "strftime('%m', beg_harvest_date) as beg_harvest_month, "
-              //                        "strftime('%Y', end_harvest_date) as end_harvest_year, "
-              //                        "strftime('%m', end_harvest_date) as end_harvest_month "
-              "FROM planting_view "
-              "WHERE (sowing_year = '%1' OR planting_year = '%1') ")
+    , cropPlanQueryString("SELECT *, "
+                          "strftime('%Y', sowing_date) AS sowing_year, "
+                          "CAST(strftime('%m', sowing_date) AS INTEGER) AS sowing_month, "
+                          "strftime('%Y', planting_date) AS planting_year, "
+                          "CAST(strftime('%m', planting_date) AS INTEGER) AS planting_month "
+                          "FROM planting_view "
+                          "WHERE (sowing_year = '%1' OR planting_year = '%1') ")
     , calendarQueryString("SELECT *, "
                           "strftime('%Y', assigned_date) AS assigned_year, "
                           "strftime('%Y', completed_date) AS completed_year "
                           "FROM task_view "
                           "WHERE (assigned_year = '%1' OR completed_year = '%1') ")
+    , harvestQueryString("SELECT *, "
+                         "strftime('%Y', date) as harvest_year "
+                         "FROM harvest_view "
+                         "WHERE harvest_year = '%1' ")
 {
     cropPlanMap["entire"] = {
         "",
@@ -247,6 +246,32 @@ Print::Print(QObject *parent)
                       "</tr>")
 
     };
+
+    harvestInfo = { "",
+                    "",
+                    "ORDER BY date ",
+                    QString("<h2 align=center>%1 %2</h2>").arg(tr("Harvests")).arg("%1"),
+                    QString("<table width='100%' style='page-break-after: always'>"
+                            "<tr>"
+                            "<th class='tg' align=left width=10%>%1</th>"
+                            "<th class='tg' align=left width=30%>%2</th>"
+                            "<th class='tg' align=left width=30%>%3</th>"
+                            "<th class='tg' align=left width=15%>%4</th>"
+                            "<th class='tg' align=left width=15%>%5</th>"
+                            "</tr>")
+                            .arg(tr("Date"))
+                            .arg(tr("Planting"))
+                            .arg(tr("Locations"))
+                            .arg(tr("Quantity"))
+                            .arg(tr("Labor time")),
+                    ("<td class='tg' align=left>%1</th>"
+                     "<td class='tg' align=left>%2</th>"
+                     "<td class='tg' align=left>%3</th>"
+                     "<td class='tg' align=left>%4</th>"
+                     "<td class='tg' align=left>%5</th>"
+                     "</tr>")
+
+    };
 }
 
 void Print::printCropPlan(int year, int month, int week, const QUrl &path, const QString &type)
@@ -282,6 +307,12 @@ void Print::printCalendar(int year, int month, int week, const QUrl &path, bool 
     QString html;
     for (int w = begWeek; w <= endWeek; w++)
         html += calendarHtml(year, w, (week > 0 || month > 0) && showOverdue);
+    exportPdf(html, path);
+}
+
+void Print::printHarvests(int year, const QUrl &path)
+{
+    QString html = harvestHtml(year);
     exportPdf(html, path);
 }
 
@@ -725,4 +756,50 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
             }
         }
     }
+}
+
+QString Print::harvestHtml(int year) const
+{
+    QString html = harvestInfo.title.arg(year);
+    html.append(harvestInfo.tableHeader);
+
+    QString queryString = harvestQueryString.arg(year);
+    queryString.append(harvestInfo.plantingTypeClause);
+    queryString.append(harvestInfo.orderClause);
+    QSqlQuery query(queryString);
+
+    qDebug() << queryString;
+
+    int i = 0;
+    while (query.next()) {
+        QString dateString = query.value("date").toString();
+        QDate date = QDate::fromString(dateString, Qt::ISODate);
+        QString crop = query.value("crop").toString();
+        QString variety = query.value("variety").toString();
+        QString unit = query.value("unit").toString();
+        double quantity = query.value("quantity").toDouble();
+        QString laborTime = query.value("time").toString();
+        QString locationString = query.value("locations").toString();
+
+        QList<int> locationIdList;
+        for (QString idString : locationString.split(","))
+            locationIdList.append(idString.toInt());
+
+        if (i % 2 == 0)
+            html.append("<tr style='background-color: #e0e0e0'>");
+        else
+            html.append("<tr>");
+
+        html += harvestInfo.tableRow
+                        .arg(QString("%1 %2")
+                                     .arg(MDate::formatDate(date, year, "", false))
+                                     .arg(date.toString("ddd")))
+                        .arg(QString("%1, %2").arg(crop, variety))
+                        .arg(location->fullName(locationIdList))
+                        .arg(QString("%1 %2").arg(quantity).arg(unit))
+                        .arg(laborTime);
+        i++;
+    }
+
+    return html;
 }
