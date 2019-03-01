@@ -12,13 +12,7 @@ before_script:
 #   - export QMAKESPEC=$PWD/5.12.0/gcc_64/mkspecs/linux-g++
 
 stages:
-  - lint
   - build
-
-lint:
-  stage: lint
-  script:
-    - qmllint desktop/qml/*.qml
 
 build:
   stage: build
