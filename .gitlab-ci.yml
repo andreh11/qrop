@@ -17,9 +17,10 @@ stages:
 build:
   stage: build
   script:
-    - mkdir build;
-    - cd build;
-    - qmake -config release ..;
+          #- mkdir build;
+          #- cd build;
+          #- qmake -config release ..;
+    - cmake CMakeLists.txt
     - make -j 4;
     #- mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
     #- mkdir deploy/usr/share/applications;
