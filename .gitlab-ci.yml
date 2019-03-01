@@ -20,7 +20,7 @@ build:
     - mkdir build;
     - cd build;
     - qmake -config release ..;
-    - make -j 8;
+    - make -j 4;
     #- mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
     #- mkdir deploy/usr/share/applications;
     #- find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
