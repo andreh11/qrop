@@ -28,8 +28,11 @@
 #include <QVariantMap>
 #include <QFileSystemModel>
 #include <QLibraryInfo>
-//#include <QAndroidJniObject>
-//#include <QtAndroid>
+
+#if defined(Q_OS_ANDROID)
+#include <QAndroidJniObject>
+#include <QtAndroid>
+#endif
 
 #include "db.h"
 #include "family.h"
@@ -114,7 +117,6 @@ void registerTypes()
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
     qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
 
-    //    qmlRegisterType<Planting>("io.qrop.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
@@ -283,13 +285,15 @@ int main(int argc, char *argv[])
     Database::connectToDatabase();
     Database::migrationCheck();
 
-    //    QtAndroid::runOnAndroidThread([=]()
-    //    {
-    //        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-    //        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-    //        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-    //        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
-    //    });
+#if defined(Q_OS_ANDROID)
+    QtAndroid::runOnAndroidThread([=]() {
+        QAndroidJniObject window =
+                QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
+    });
+#endif
 
     QQmlApplicationEngine engine;
     engine.load(QUrl("qrc:/qml/main.qml"));

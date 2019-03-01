@@ -4,6 +4,8 @@ TARGET = core
 TEMPLATE = lib
 CONFIG += lib c++11
 
+windows: CONFIG += static
+
 DEFINES += CORE_LIBRARY
 
 SOURCES += \
