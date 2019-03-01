@@ -27,6 +27,7 @@
 #include <QTranslator>
 #include <QVariantMap>
 #include <QFileSystemModel>
+#include <QLibraryInfo>
 //#include <QAndroidJniObject>
 //#include <QtAndroid>
 
@@ -36,11 +37,11 @@
 #include "location.h"
 #include "mdate.h"
 #include "note.h"
+#include "pictureimageprovider.h"
 #include "planting.h"
+#include "print.h"
 #include "task.h"
 #include "variety.h"
-
-#include "pictureimageprovider.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -115,6 +116,14 @@ void registerTypes()
 
     //    qmlRegisterType<Planting>("io.qrop.components", 1, 0, "Planting");
     qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
+
+    qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
+                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                        Q_UNUSED(engine)
+                                        Q_UNUSED(scriptEngine)
+                                        auto *print = new Print();
+                                        return print;
+                                    });
 
     qmlRegisterSingletonType<Family>("io.qrop.components", 1, 0, "Family",
                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -258,10 +267,13 @@ int main(int argc, char *argv[])
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
     QTranslator translator;
+    QTranslator coreTranslator;
     const QString &lang = QLocale::system().name();
     if (lang.contains("fr")) {
         translator.load(":/translations/fr.qm");
+        coreTranslator.load(":/core_translations/fr.qm");
         QApplication::installTranslator(&translator);
+        QApplication::installTranslator(&coreTranslator);
     }
 
     registerFonts();

@@ -20,6 +20,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import QtCharts 2.2
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
@@ -246,6 +247,36 @@ Page {
         }
     }
 
+    Platform.FileDialog {
+        id: saveCropPlanDialog
+
+        defaultSuffix: "pdf"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: {
+            var type
+            if (printTypeComboBox.currentIndex === 0)
+                type  = "entire"
+            else if (printTypeComboBox.currentIndex === 1)
+                type  = "greenhouse"
+            else if (printTypeComboBox.currentIndex === 2)
+                type  = "field_sowing"
+            else if (printTypeComboBox.currentIndex === 3)
+                type  = "field_transplanting"
+
+            var month = -1
+            var week = -1
+            var rangeIndex = printDateRangeComboBox.currentIndex
+
+            if (rangeIndex === 0)
+                week = MDate.currentWeek();
+            else if (rangeIndex === 1)
+                month = MDate.currentMonth();
+
+            Print.printCropPlan(page.year, month, week, file, type)
+        }
+    }
+
     Column {
         id: columnLayout
         anchors.fill: parent
@@ -349,6 +380,7 @@ Page {
                         visible: !checks
                     }
 
+
                     Label {
                         text: qsTr("planting(s) selected", "", checks)
                         color: "white"
@@ -360,6 +392,78 @@ Page {
                         verticalAlignment: Qt.AlignVCenter
                     }
 
+                    IconButton {
+                        id: printButton
+                        text: "\ue8ad"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        Layout.rightMargin: -padding*2
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Print the crop plan")
+
+//                        onClicked: Print.printCropPlan(page.year)
+                        onClicked: printDialog.open();
+
+                        Dialog {
+                            id: printDialog
+                            title: qsTr("Print crop plan")
+                            width: 200
+                            margins: 0
+
+                            onAccepted: saveCropPlanDialog.open();
+
+                            ColumnLayout {
+                                width: parent.width
+
+                                MyComboBox {
+                                    id: printTypeComboBox
+                                    labelText: qsTr("Type")
+                                    Layout.fillWidth: true
+                                    showAddItem: false
+                                    model: [
+                                        qsTr("Entire plan"),
+                                        qsTr("Greenhouse plan"),
+                                        qsTr("Field sowing plan"),
+                                        qsTr("Transplanting plan")
+                                    ]
+                                }
+
+                                MyComboBox {
+                                    id: printDateRangeComboBox
+                                    labelText: qsTr("Date range")
+                                    showAddItem: false
+                                    model: [
+                                        qsTr("Current week"),
+                                        qsTr("Current month"),
+                                        qsTr("Current year"),
+                                    ]
+                                    Layout.fillWidth: true
+                                }
+                            }
+
+                            footer: DialogButtonBox {
+                                Button {
+                                    id: rejectButton
+                                    flat: true
+                                    text: qsTr("Cancel")
+                                    Material.foreground: Material.accent
+                                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                                }
+
+                                Button {
+                                    id: applyButton
+                                    Material.background: Material.accent
+                                    Material.foreground: "white"
+                                    text: qsTr("Print")
+
+                                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                                }
+                            }
+                        }
+                    }
+
                     SeasonSpinBox {
                         id: seasonSpinBox
                         visible: checks === 0
@@ -367,6 +471,7 @@ Page {
                         year: MDate.seasonYear(todayDate)
                     }
                 }
+
             }
 
             ThinDivider {

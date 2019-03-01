@@ -19,6 +19,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
@@ -135,12 +136,31 @@ Page {
     TaskDialog {
         id: taskDialog
         width: parent.width / 2
-//        height: parent.height
+        //        height: parent.height
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         onAccepted: page.refresh()
         week: page.week
         year: page.year
+    }
+
+    Platform.FileDialog {
+        id: saveCalendarDialog
+
+        defaultSuffix: "pdf"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: {
+            var month = -1
+            var week = -1
+
+            if (weekRadioButton.checked)
+                week = MDate.currentWeek();
+            else if (monthRadioButton.checked)
+                month = MDate.currentMonth();
+
+            Print.printCalendar(page.year, month, week, file, showOverdueCheckBox.checked)
+        }
     }
 
     Settings {
@@ -272,25 +292,72 @@ Page {
                     text: qsTr("Overdue")
                 }
 
+                IconButton {
+                    id: printButton
+                    text: "\ue8ad"
+                    hoverEnabled: true
+                    visible: largeDisplay && checks == 0
+                    Layout.rightMargin: -padding*2
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: qsTr("Print the task calendar")
+
+                    onClicked: printDialog.open();
+
+                    Dialog {
+                        id: printDialog
+                        title: qsTr("Print the task calendar")
+                        width: 200
+                        margins: 0
+
+                        onAccepted: saveCalendarDialog.open()
+
+                        ColumnLayout {
+                            width: parent.width
+
+                            RadioButton {
+                                id: weekRadioButton
+                                text: qsTr("Current week")
+                                checked: true
+                            }
+
+                            RadioButton {
+                                id: monthRadioButton
+                                text: qsTr("Current month")
+                            }
+
+                            RadioButton {
+                                id: yearRadioButton
+                                text: qsTr("Current year")
+                            }
+                        }
+
+                        footer: DialogButtonBox {
+                            Button {
+                                id: rejectButton
+                                flat: true
+                                text: qsTr("Cancel")
+                                Material.foreground: Material.accent
+                                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                            }
+
+                            Button {
+                                id: applyButton
+                                Material.background: Material.accent
+                                Material.foreground: "white"
+                                text: qsTr("Print")
+
+                                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                            }
+                        }
+                    }
+                }
+
                 WeekSpinBox {
                     id: weekSpinBox
                     week: MDate.currentWeek();
                     year: MDate.currentYear();
-                }
-
-                IconButton {
-                    text: "\ue3c9" // edit
-                    visible: checks > 0
-                }
-
-                IconButton {
-                    text: "\ue14d" // content_copy
-                    visible: checks > 0
-                }
-
-                IconButton {
-                    text: "\ue872" // delete
-                    visible: checks > 0
                 }
             }
         }
@@ -300,36 +367,36 @@ Page {
             anchors.top: buttonRectangle.bottom
             width: parent.width
         }
-            Column {
-                id: blankStateColumn
-                z: 1
-                spacing: Units.smallSpacing
-                visible: !page.rowsNumber
-                anchors {
-                    centerIn: parent
-                }
-
-                Label {
-                    id: emptyStateLabel
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr('No tasks for this week')
-                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-                    color: Qt.rgba(0, 0, 0, 0.8)
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Button {
-                    text: qsTr("Add")
-                    flat: true
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.background: Material.accent
-                    Material.foreground: "white"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: taskDialog.addTask()
-                }
+        Column {
+            id: blankStateColumn
+            z: 1
+            spacing: Units.smallSpacing
+            visible: !page.rowsNumber
+            anchors {
+                centerIn: parent
             }
+
+            Label {
+                id: emptyStateLabel
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr('No tasks for this week')
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                color: Qt.rgba(0, 0, 0, 0.8)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Button {
+                text: qsTr("Add")
+                flat: true
+                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                Material.background: Material.accent
+                Material.foreground: "white"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                onClicked: taskDialog.addTask()
+            }
+        }
 
         ListView {
             id: taskView
@@ -525,20 +592,20 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
 
                             // TODO: notes handling
-//                            MyToolButton {
+                            //                            MyToolButton {
 
-//                                id: noteButton
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                text: "\uf249"
-//                                font.family: "Font Awesome 5 Free Solid"
-//                                visible: !model.done
-//                                onClicked: {
-//                                    Task.delay(model.task_id, -1);
-//                                    refresh();
-//                                }
-//                                ToolTip.text: qsTr("Show notes")
-//                                ToolTip.visible: hovered
-//                            }
+                            //                                id: noteButton
+                            //                                anchors.verticalCenter: parent.verticalCenter
+                            //                                text: "\uf249"
+                            //                                font.family: "Font Awesome 5 Free Solid"
+                            //                                visible: !model.done
+                            //                                onClicked: {
+                            //                                    Task.delay(model.task_id, -1);
+                            //                                    refresh();
+                            //                                }
+                            //                                ToolTip.text: qsTr("Show notes")
+                            //                                ToolTip.visible: hovered
+                            //                            }
 
                             MyToolButton {
                                 id: backwardDelayButton

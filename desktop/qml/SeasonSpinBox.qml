@@ -76,7 +76,7 @@ Item {
             font.bold: true
             font.pointSize: 20
             Material.foreground: Material.accent
-            Layout.rightMargin: -32
+            Layout.rightMargin: -padding*3
             onClicked: year--
             flat: true
             ToolTip.visible: hovered

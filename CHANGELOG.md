@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Add print output for crop plan, task calendar, field map, harvests, seed and
+    transplant lists.
   - Add a view for seed and planting lists to make it easier to order them.
   - *Planting view* - Shift selection of planting intervals with mouse or keyboard.
   - *Field map* − Add button show family or crop color.

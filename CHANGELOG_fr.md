@@ -6,15 +6,17 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout de l'export PDF pour le plan de culture, le calendrier des tâches,
+    le parcellaire, les récoltes et les listes de semences et plants à commander.
   - Ajout d'une vue des listes de semences et plants à commander.
   - *Vue des séries* − Sélection d'un intervalle de séries avec la touche Shift
     (souris ou clavier).
-  - *Parcellaire* − Ajout d'un bouton afficher la couleur de la famille ou de
+  - *Parcellaire* − Ajout d'un bouton pour afficher la couleur de la famille ou de
     l'espèce.
-  - Fonctionnalité basique de prise de notes pour les séries.
+  - Fonctionnalité basique de prise de notes pour les séries (avec ajout de photos).
   - Onglet récolte.
-  - Gestion des planches standardisées : l'utilisateurice peut entre une
-    longueur de planche standard et l'utiliser comme unité pour définir la
+  - Gestion des planches standardisées : il est dorénavant possible de définir une
+    longueur de planche standard et de l'utiliser comme unité pour définir la
     longueur des séries.
   - *Parcellaire* − Ajout d'un mode « sous abris » permettant d'afficher
     uniquement les emplacements et séries sous abris. Ajout d'un raccourci

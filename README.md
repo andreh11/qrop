@@ -27,10 +27,13 @@ by task.
 Define your crop map: drag n' drop your plantings on your crop map. Get the crop
 history of every single bed to ensure good rotations.
 
+### Take notes and photos
+
+Write notes, take photos and link them to your plantings, tasks and locations.
+
 ## Planned features
 
 * **Harvests tracking −** keep track of each harvest and get real-time crop yields.
-* **Note taking −** write notes, take photos and link them to your plantings, tasks and locations.
 
 ## Getting started
 

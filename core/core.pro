@@ -1,4 +1,4 @@
-QT       += sql quick gui
+QT       += sql quick gui printsupport
 
 TARGET = core
 TEMPLATE = lib
@@ -43,7 +43,8 @@ SOURCES += \
     note.cpp \
     pictureimageprovider.cpp \
     seedlistmodel.cpp \
-    transplantlistmodel.cpp
+    transplantlistmodel.cpp \
+    print.cpp
 
 HEADERS += \
     core_global.h \
@@ -83,7 +84,10 @@ HEADERS += \
     note.h \
     pictureimageprovider.h \
     seedlistmodel.h \
-    transplantlistmodel.h
+    transplantlistmodel.h \
+    print.h
 
 RESOURCES += \
     core_resources.qrc
+
+TRANSLATIONS = core_translations/fr.ts

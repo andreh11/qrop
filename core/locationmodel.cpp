@@ -151,7 +151,6 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &planti
         return false;
 
     int lid = locationId(index);
-    QVariantList list;
     QPair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
@@ -164,7 +163,6 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
         return false;
 
     int lid = locationId(index);
-    QVariantList list;
     QPair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
