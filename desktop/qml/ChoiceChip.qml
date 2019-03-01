@@ -34,6 +34,8 @@ Button {
         manuallyModified = false;
     }
 
+    onManuallyModifiedChanged: console.log("modified")
+
     activeFocusOnTab: true
     Keys.onEnterPressed:  if (!checked || !autoExclusive) control.toggle()
     Keys.onReturnPressed:  if (!checked || !autoExclusive) control.toggle()
@@ -45,7 +47,6 @@ Button {
         else
             hasFocus = false
     }
-    onPressed: manuallyModified = true
     onToggled: manuallyModified = true
 
     checkable: true
@@ -91,6 +92,11 @@ Button {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-        onClicked: if (!checked || !autoExclusive) control.toggle()
+        onClicked: {
+            if (!checked) {
+                control.toggle()
+                manuallyModified = true
+            }
+        }
     }
 }

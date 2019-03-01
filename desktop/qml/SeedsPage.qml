@@ -19,6 +19,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
@@ -37,6 +38,7 @@ Page {
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
+        { name: qsTr("Date"),   columnName: "crop", width: 100, alignment: Text.AlignLeft },
         { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft },
         { name: qsTr("Variety"),   columnName: "variety", width: 200, alignment: Text.AlignLeft },
         { name: qsTr("Seed company"), columnName: "seed_company", width: 200, alignment: Text.AlignLeft },
@@ -115,6 +117,20 @@ Page {
         sortOrder: tableSortOrder
     }
 
+    Platform.FileDialog {
+        id: saveDialog
+
+        defaultSuffix: "pdf"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: {
+            if (seedsRadioButton.checked)
+                Print.printSeedList(page.year, file);
+            else
+                Print.printTransplantList(page.year, file);
+        }
+    }
+
     Pane {
         width: parent.width
         height: parent.height
@@ -154,6 +170,20 @@ Page {
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
                     visible: !checks
+                }
+
+                IconButton {
+                    id: printButton
+                    text: "\ue8ad"
+                    hoverEnabled: true
+                    Layout.rightMargin: -padding*2
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
+                                                           : qsTr("Print the transplant order list")
+
+                    onClicked: saveDialog.open()
                 }
 
                 WeekSpinBox {
@@ -232,6 +262,8 @@ Page {
                             model: page.tableHeaderModel
 
                             TableHeaderLabel {
+                                visible: (index == 0 && transplantsRadioButton.checked) || (index === 5 && seedsRadioButton.checked) || (index > 0 && index < 5)
+
                                 text: modelData.name
                                 anchors.verticalCenter: headerRow.verticalCenter
                                 width: modelData.width
@@ -275,7 +307,8 @@ Page {
                         leftPadding: Units.formSpacing
 
                         Label {
-                            text: model.crop
+                            visible: transplantsRadioButton.checked
+                            text: MDate.formatDate(model.planting_date, page.year)
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight
@@ -285,7 +318,7 @@ Page {
                         }
 
                         Label {
-                            text: model.variety
+                            text: model.crop
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight
@@ -295,7 +328,7 @@ Page {
                         }
 
                         Label {
-                            text: model.seed_company
+                            text: model.variety
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight
@@ -305,8 +338,7 @@ Page {
                         }
 
                         Label {
-                            text: "%L1".arg(seedsRadioButton.checked ? model.seeds_number
-                                                                     : model.plants_needed)
+                            text: model.seed_company
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight
@@ -316,13 +348,24 @@ Page {
                         }
 
                         Label {
-                            visible: seedsRadioButton.checked
-                            text: qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
+                            text: "%L1".arg(seedsRadioButton.checked ? model.seeds_number
+                                                                     : model.plants_needed)
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight
                             width: tableHeaderModel[4].width
                             horizontalAlignment: tableHeaderModel[4].alignment
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Label {
+                            visible: seedsRadioButton.checked
+                            text: qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeBodyAndButton
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[5].width
+                            horizontalAlignment: tableHeaderModel[5].alignment
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
