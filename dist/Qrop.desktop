@@ -2,6 +2,6 @@
 Type=Application
 Name=Qrop
 Comment=Crop planning and recordkeeping software
-Exec=desktop
-Icon=desktop
+Exec=qrop
+Icon=qrop
 Categories=Office;

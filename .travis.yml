@@ -2,45 +2,6 @@ language: cpp
 
 matrix:
   include:
-    - os: linux
-      env:
-        - QROP_PLATFORM="linux"
-      compiler: g++
-      dist: xenial
-      sudo: required
-      deploy:
-        provider: releases
-        api_key: $GH_TOKEN
-        file: ${TRAVIS_BUILD_DIR}/build/deploy/Qrop-x86_64.AppImage
-        skip_cleanup: true
-        draft: false
-        on:
-          tags: true
-      addons:
-        apt:
-          sources:
-            - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
-              key_url: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x10C56D0DE9977759'
-          packages:
-            - build-essential
-            - libfontconfig1
-            - mesa-common-dev
-            - libglu1-mesa-dev
-            - libsqlite3-dev
-            - libxcb-xinerama0
-            - qt512-meta-minimal
-            - qt512base
-            - qt512charts-no-lgpl
-            - qt512connectivity
-            - qt512declarative
-            - qt512graphicaleffects
-            - qt512imageformats
-            - qt512quickcontrols
-            - qt512quickcontrols2
-            - qt512tools
-            - qt512translations
-            - qt512wayland
-            - qt512x11extras
     - os: osx
       env:
         - QROP_PLATFORM="osx"
@@ -56,12 +17,6 @@ matrix:
             - qt
             - tree
           update: true
-    # - os: windows
-    #   env: QROP_PLATFORM="linux"
-    #   compiler: msvc2015
-
-install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source /opt/qt512/bin/qt512-env.sh; fi
 
 script:
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh

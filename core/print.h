@@ -29,6 +29,9 @@ class LocationModel;
 class Location;
 class Planting;
 
+/**
+ * \brief The Print classe handles PDF export for most views.
+ */
 class CORESHARED_EXPORT Print : public QObject
 {
     Q_OBJECT

@@ -148,7 +148,6 @@ Page {
         onActivated: expandButton.expandLevel(4)
     }
 
-
     onEditModeChanged: {
         if (!editMode) {
             locationView.clearSelection();
@@ -204,7 +203,6 @@ Page {
         text: qsTr("Rotation problem")
         visible: false
     }
-
 
     Rectangle {
         id: buttonRectangle
