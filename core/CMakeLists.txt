@@ -12,6 +12,7 @@ find_package(Qt5 COMPONENTS Core Quick Gui Sql PrintSupport REQUIRED)
 include_directories(.)
 
 add_library(core SHARED
+        core_global.h
 	sqltablemodel.cpp 
 	taskmodel.cpp 
 	notemodel.cpp 
