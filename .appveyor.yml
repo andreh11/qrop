@@ -27,12 +27,13 @@ install:
 
 build_script:
   - cmd: cd C:\projects\qrop
-  - cmd: qmake qrop.pro
-  - cmd: jom
-  - cmd: cp core/release/*.dll desktop/release
-  - cmd: windeployqt.exe --qmldir desktop\qml desktop\release
+  - cmd: cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
+  - cmd: ls -al
+  - cmd: jom -j4
+  - cmd: cp core/release/*.dll release
+  - cmd: windeployqt.exe --qmldir desktop\qml release
 
 artifacts:
-  - path: desktop\release\
+  - path: release\
     name: qrop-0.1-%arch%
     type: zip
