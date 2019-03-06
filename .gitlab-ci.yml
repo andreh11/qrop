@@ -5,7 +5,7 @@ before_script:
 
 normal-build:
   script:
-    - bash dist/build_linux.sh
+    - bash dist/linux/build.sh
   except:
     - tags
 
