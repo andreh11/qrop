@@ -90,13 +90,6 @@ void registerFonts()
 
 void registerTypes()
 {
-    qmlRegisterUncreatableMetaObject(
-            Season::staticMetaObject, // static meta object
-            "io.qrop.components", // import statement (can be any string)
-            1, 0, // major and minor version of the import
-            "Season", // name in QML (does not have to match C++ name)
-            "Error: only enums" // error in case someone tries to create a MyNamespace object
-    );
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");

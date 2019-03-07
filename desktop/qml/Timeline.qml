@@ -24,7 +24,7 @@ import io.qrop.components 1.0
 Item {
     id: control
 
-    property int season: Season.Summer
+    property int season: 2
     property int year
     property date todayDate: new Date()
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
