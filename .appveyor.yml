@@ -27,9 +27,9 @@ install:
 
 build_script:
   - cmd: cd C:\projects\qrop
-  - cmd: cmake . -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release
+  - cmd: cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
   - cmd: ls -al
-  - cmd: nmake 
+  - cmd: jom -j4 
   - cmd: cp core/release/*.dll release
   - cmd: windeployqt.exe --qmldir desktop\qml release
 

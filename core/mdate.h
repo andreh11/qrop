@@ -23,7 +23,7 @@
 
 #include "core_global.h"
 
-namespace Season {
+namespace CORESHARED_EXPORT Season {
 Q_NAMESPACE
 enum Enum { Winter = 0, Spring, Summer, Fall };
 Q_ENUM_NS(Enum)
