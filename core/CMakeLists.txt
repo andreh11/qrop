@@ -8,8 +8,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#include_directories(.)
+
 find_package(Qt5 COMPONENTS Core Quick Gui Sql PrintSupport REQUIRED)
-include_directories(.)
 
 add_library(core SHARED
         core_global.h
