@@ -156,8 +156,6 @@ Dialog {
             if (!idList.length)
                 return;
 
-            dialog.plantingsAdded(plantingForm.successions)
-
             if (idList.length === 1) {
                 var plantingId = idList[0]
                 for (var locationId in plantingForm.assignedLengthMap) {
@@ -165,6 +163,7 @@ Dialog {
                     Location.addPlanting(plantingId, locationId, length)
                 }
             }
+            dialog.plantingsAdded(plantingForm.successions)
         } else {
             console.log("Edited values:");
             var values = plantingForm.editedValues()

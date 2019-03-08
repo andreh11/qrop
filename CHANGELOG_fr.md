@@ -39,6 +39,9 @@ Tous les changements importants seront documentés dans ce fichier.
     afficher les indicateurs < et > d'années.
 
 ### Corrections
+  - *Ajout de séries* : lorsque une série est créée avec affection d'emplacements
+    depuis la fênetre d'ajout de séries, les emplacements sont imméditement
+    dans la vue des séries.
   - *Édition des séries* − Les champs sont désormais toujours visibles lorsque
     l'on se déplace avec la touche tabulation.
   - Erreur de compilation sous Linux.

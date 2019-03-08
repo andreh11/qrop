@@ -199,7 +199,7 @@ Flickable {
     function clearAll() {
         // Refresh models
         varietyModel.refresh();
-        locationView.refresh();
+        locationView.reload();
         keywordModel.refresh();
         unitModel.refresh();
 
