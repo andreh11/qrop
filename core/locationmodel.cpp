@@ -57,7 +57,7 @@ void LocationModel::refresh()
     countChanged();
 }
 
-/** Emit dataChanged signal for all indexes of the tree. */
+/** \brief Emit dataChanged signal for all indexes of the tree. */
 void LocationModel::refreshTree()
 {
     QModelIndex root;
@@ -179,9 +179,7 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
 }
 
 /**
- * \fn QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index, int season, int year) const
- *
- * Returns a list all plantings conflicting on the location represented
+ * \brief Returns a list all plantings conflicting on the location represented
  * by \a index for the given \a season of \a year because they don't respect the
  * family rotation interval.
  */

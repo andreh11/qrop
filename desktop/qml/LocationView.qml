@@ -76,6 +76,10 @@ Item {
         locationModel.refreshTree();
     }
 
+    function reload() {
+        locationModel.refresh();
+    }
+
     function updateIndexes(map, indexes) {
         locationModel.updateIndexes(map, indexes);
     }
