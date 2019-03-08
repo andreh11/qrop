@@ -86,18 +86,14 @@ Page {
     Shortcut {
         sequences: ["Ctrl+N"]
         enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
-//        onActivated: plantingDialog.createPlanting();
         onActivated: addButton.clicked()
     }
 
     Shortcut {
         sequences: ["Ctrl+T"]
         enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
-//        onActivated: plantingDialog.createPlanting();
         onActivated: timegraphButton.toggle();
     }
 
@@ -105,7 +101,6 @@ Page {
     Shortcut {
         sequences: [StandardKey.Find]
         enabled: navigationIndex === 0 && filterField.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
     }
@@ -113,7 +108,6 @@ Page {
     Shortcut {
         sequence: "Ctrl+E"
         enabled: navigationIndex === 0 && editButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: editButton.clicked()
     }
@@ -128,7 +122,6 @@ Page {
     Shortcut {
         sequence: StandardKey.Delete
         enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: deleteButton.clicked()
     }
@@ -136,7 +129,6 @@ Page {
     Shortcut {
         sequence: StandardKey.SelectAll
         enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: plantingsView.selectAll();
     }
@@ -144,7 +136,6 @@ Page {
     Shortcut {
         sequence: StandardKey.Deselect
         enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: plantingsView.unselectAll()
     }
@@ -152,7 +143,6 @@ Page {
     Shortcut {
         sequence: "Ctrl+Right"
         enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.nextSeason()
     }
@@ -160,7 +150,6 @@ Page {
     Shortcut {
         sequence: "Ctrl+Left"
         enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
-
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.previousSeason();
     }
@@ -191,8 +180,6 @@ Page {
 
     PlantingDialog {
         id: plantingDialog
-//        width: parent.width / 2
-//        height: parent.height - 2 * Units.smallSpacing
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         model: plantingsView.model
