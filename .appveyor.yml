@@ -12,7 +12,7 @@ environment:
   matrix:
     - suffix: msvc2017_64
       arch: x64
-    - suffix: msvc2015
+    - suffix: msvc2017
       arch: x86
 
 install:
@@ -28,10 +28,11 @@ install:
 build_script:
   - cmd: cd C:\projects\qrop
   - cmd: cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
-  - cmd: ls -al
   - cmd: jom -j4 
-  - cmd: cp core/release/*.dll release
-  - cmd: windeployqt.exe --qmldir desktop\qml release
+  - cmd: mkdir release
+  - cmd: cp core/*.dll release/
+  - cmd: cp qrop.exe release/
+  - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release 
 
 artifacts:
   - path: release\
