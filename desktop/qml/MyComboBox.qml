@@ -50,7 +50,6 @@ ComboBox {
     property color errorColor: Material.color(Material.red, Material.Shade500)
     property color hintColor: shade(0.38)
 
-
     signal addItemClicked()
 
     function shade(alpha) {
@@ -62,9 +61,9 @@ ComboBox {
         currentIndex = -1;
     }
 
-    function setRowId(rowId) {
+    function setRowId(id) {
         var i = 0;
-        while (model.rowId(i) !== rowId && i < model.rowCount)
+        while (model.rowId(i) !== id && i < model.rowCount)
             i++;
         if (i < model.rowCount)
             currentIndex = i;
@@ -74,7 +73,6 @@ ComboBox {
 
     Material.elevation: 0
     width: parent.width
-    //    height: 56
     padding: 0
 
     onPressedChanged: manuallyModified = true

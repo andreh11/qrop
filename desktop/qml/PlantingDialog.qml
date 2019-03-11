@@ -36,9 +36,15 @@ Dialog {
     signal plantingsAdded(int successions)
     signal plantingsModified(int successions)
 
+    function refresh() {
+        plantingFormHeader.reset();
+        plantingFormHeader.bulkEditMode = false;
+    }
+
     function createPlanting() {
         mode = "add";
         refresh();
+
         plantingForm.clearAll();
         dialog.title = qsTr("Add planting(s)")
         dialog.open()
@@ -55,22 +61,20 @@ Dialog {
         plantingForm.setFormValues(editPlantingValueMap);
         dialog.title = qsTr("Edit planting(s)")
 
-        if (plantingIds.length === 1) {
-            plantingFormHeader.cropField.setRowId(Planting.cropId(plantingIds[0]))
-        }
         dialog.open()
-    }
-
-    function refresh() {
-        plantingFormHeader.refresh();
+        if (plantingIds.length === 1)
+            plantingFormHeader.cropField.rowId = Planting.cropId(plantingIds[0])
+        else
+            plantingFormHeader.bulkEditMode = true
     }
 
     modal: true
     focus: true
-    closePolicy: Popup.CloseOnEscape
-    Material.background: Material.color(Material.Grey, Material.Shade100)
     contentWidth: scrollView.implicitWidth
     contentHeight: scrollView.implicitHeight
+    width: scrollView.implicitWidth
+    closePolicy: Popup.CloseOnEscape
+    Material.background: Material.color(Material.Grey, Material.Shade100)
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
@@ -82,7 +86,7 @@ Dialog {
     }
 
     header: PlantingFormHeader {
-        visible: mode === "add"
+//        visible: mode === "add"
         id: plantingFormHeader
         estimatedRevenue: plantingForm.estimatedRevenue
         mode: dialog.mode
@@ -108,7 +112,6 @@ Dialog {
         mode: dialog.mode
     }
 
-    width: scrollView.implicitWidth
 
     ScrollView {
         id: scrollView

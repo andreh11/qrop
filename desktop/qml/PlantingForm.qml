@@ -18,7 +18,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import Qt.labs.platform 1.0 as Lab
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
@@ -170,7 +169,6 @@ Flickable {
         [seedsPerGramField, "seeds_per_gram", seedsPerGram],
         [seedsNeededField, "seeds_number", seedsNeeded],
         [seedsExtraPercentageField, "seeds_percentage", seedsExtraPercentage],
-        // TODO: keywords
         [unitField, "unit_id", unitModel.rowId(unitField.currentIndex)],
         [yieldPerBedMeterField, "yield_per_bed_meter", yieldPerBedMeter],
         [averagePriceField, "average_price", averagePrice],
@@ -1084,7 +1082,6 @@ Flickable {
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
                     suffixText: unitField.currentText
-                    //                    inputMask: "900000"
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(yieldPerBedMeterField)
                 }
@@ -1126,7 +1123,6 @@ Flickable {
                     onActiveFocusChanged: ensureItemVisible(keywordChoiceChip)
                     onClicked: {
                         selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
-                        console.log("new value", selectedKeywords[keyword_id])
                         selectedKeywordsChanged();
                         keywordsModified = true
                     }

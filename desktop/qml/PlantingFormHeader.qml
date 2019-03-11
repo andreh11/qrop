@@ -29,6 +29,7 @@ Rectangle {
     property int estimatedRevenue: 0
     property bool showYieldAndRevenue: true
     property bool showAddItem: true
+    property bool bulkEditMode: false
     property string unitText: ""
     property alias currentIndex: cropField.currentIndex
     property alias cropField: cropField
@@ -58,8 +59,17 @@ Rectangle {
         id: cropModel
     }
 
+    Label {
+        visible: bulkEditMode
+        anchors.centerIn: parent
+        text: qsTr("Bulk edit")
+        font.family: "Roboto Regular"
+        font.pixelSize: Units.fontSizeBodyAndButton
+    }
+
     RowLayout {
         id: rowLayout
+        visible: !bulkEditMode
         anchors.fill: parent
         spacing: Units.mediumSpacing
         anchors {

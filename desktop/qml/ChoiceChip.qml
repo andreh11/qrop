@@ -34,8 +34,6 @@ Button {
         manuallyModified = false;
     }
 
-    onManuallyModifiedChanged: console.log("modified")
-
     activeFocusOnTab: true
     Keys.onEnterPressed:  if (!checked || !autoExclusive) control.toggle()
     Keys.onReturnPressed:  if (!checked || !autoExclusive) control.toggle()
