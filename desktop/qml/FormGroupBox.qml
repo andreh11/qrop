@@ -34,7 +34,8 @@ GroupBox {
     }
 
     label: Label {
-        x: control.leftPadding
+//        x: control.leftPadding
+        x: 0
         width: control.availableWidth
         text: control.title
         font.family: "Roboto Regular"

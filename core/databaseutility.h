@@ -64,7 +64,7 @@ public:
     void removeLink(const QString &table, const QString &field1, int id1, const QString &field2,
                     int id2) const;
     Q_INVOKABLE void rollback() const;
-    Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const;
+    Q_INVOKABLE virtual QVariantMap commonValues(const QList<int> &idList) const;
 
 protected:
     QString m_table;

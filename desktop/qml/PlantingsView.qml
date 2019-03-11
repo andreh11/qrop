@@ -172,7 +172,7 @@ ListView {
     rightMargin: verticalScrollBar.width
     bottomMargin: horizontalScrollBar.height
     contentWidth: contentItem.childrenRect.width
-    contentHeight: contentItem.childrenRect.height
+//    contentHeight: contentItem.childrenRect.height
     highlightMoveDuration: 0
     highlightResizeDuration: 0
     highlight: Rectangle {

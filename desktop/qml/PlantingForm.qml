@@ -18,7 +18,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import Qt.labs.platform 1.0 as Lab
 import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
@@ -121,6 +120,8 @@ Flickable {
     readonly property int remainingLength: plantingLength - assignedLength
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
+    property bool keywordsModified: false
+    property var keywordOldIdList: []
     readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
@@ -169,7 +170,6 @@ Flickable {
         [seedsPerGramField, "seeds_per_gram", seedsPerGram],
         [seedsNeededField, "seeds_number", seedsNeeded],
         [seedsExtraPercentageField, "seeds_percentage", seedsExtraPercentage],
-        // TODO: keywords
         [unitField, "unit_id", unitModel.rowId(unitField.currentIndex)],
         [yieldPerBedMeterField, "yield_per_bed_meter", yieldPerBedMeter],
         [averagePriceField, "average_price", averagePrice],
@@ -193,6 +193,12 @@ Flickable {
                 map[name] = value;
             }
         }
+
+        if (keywordsModified)  {
+            map['keyword_new_ids'] = keywordsIdList();
+            map['keyword_old_ids'] = keywordOldIdList;
+        }
+
         return map;
     }
 
@@ -248,6 +254,8 @@ Flickable {
         yieldPerBedMeterField.reset();
         averagePriceField.reset();
         selectedKeywords = []
+        keywordsModified = false
+        keywordOldIdList = []
     }
 
     // Set item to value only if it has not been manually modified by
@@ -332,10 +340,11 @@ Flickable {
         setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
         setFieldValue(averagePriceField, val['average_price']);
 
-        if ('planting_id' in val) {
-            var keywordIdList = Keyword.keywordIdList(val['planting_id'])
-            for (var i in keywordIdList)
-                selectedKeywords[keywordIdList[i]] = true;
+        if ('keyword_ids' in val) {
+            var list = val['keyword_ids'];
+            keywordOldIdList = list
+            for (var i in list)
+                selectedKeywords[list[i]] = true;
             selectedKeywordsChanged();
         }
     }
@@ -676,18 +685,25 @@ Flickable {
             width: parent.width
             visible: plantingSettings.showDurationFields
 
-            label: CheckBox {
-                id: durationCheckBox
-                text: parent.title
-                checked: plantingSettings.durationsByDefault
-                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-            }
+//            label: CheckBox {
+//                id: durationCheckBox
+//                text: parent.title
+//                checked: plantingSettings.durationsByDefault
+//                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+//            }
 
             GridLayout {
                 width: parent.width
                 columns: smallDisplay ? 1 : (plantingType === 2 ? 4 : 3)
                 rowSpacing: 16
                 columnSpacing: 16
+
+                Switch {
+                    id: durationCheckBox
+                    text: parent.title
+                    checked: plantingSettings.durationsByDefault
+                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+                }
 
                 MyTextField {
                     id: sowDtmField
@@ -1077,7 +1093,6 @@ Flickable {
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
                     suffixText: unitField.currentText
-                    //                    inputMask: "900000"
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(yieldPerBedMeterField)
                 }
@@ -1120,6 +1135,7 @@ Flickable {
                     onClicked: {
                         selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
                         selectedKeywordsChanged();
+                        keywordsModified = true
                     }
                 }
             }

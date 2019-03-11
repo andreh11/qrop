@@ -95,7 +95,8 @@ TextField {
         id: floatingLabel
         anchors.verticalCenter: control.top
         anchors.left: parent.left
-        color: Material.accent
+        color: parent.enabled ? Material.accent
+                              : parent.Material.hintTextColor
         text: labelText
         font.pixelSize: Units.fontSizeBodyAndButton
         visible: control.text != "" || activeFocus
