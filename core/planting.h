@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE int duplicate(int id) const override;
+    Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const override;
 
     Q_INVOKABLE QString cropName(int plantingId) const;
     Q_INVOKABLE QString cropId(int plantingId) const;

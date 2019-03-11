@@ -337,8 +337,8 @@ Flickable {
         setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
         setFieldValue(averagePriceField, val['average_price']);
 
-        if ('planting_id' in val) {
-            var list = Keyword.keywordIdList(val['planting_id'])
+        if ('keyword_ids' in val) {
+            var list = val['keyword_ids'];
             for (var i in list)
                 selectedKeywords[list[i]] = true;
             selectedKeywordsChanged();
@@ -681,18 +681,25 @@ Flickable {
             width: parent.width
             visible: plantingSettings.showDurationFields
 
-            label: CheckBox {
-                id: durationCheckBox
-                text: parent.title
-                checked: plantingSettings.durationsByDefault
-                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-            }
+//            label: CheckBox {
+//                id: durationCheckBox
+//                text: parent.title
+//                checked: plantingSettings.durationsByDefault
+//                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+//            }
 
             GridLayout {
                 width: parent.width
                 columns: smallDisplay ? 1 : (plantingType === 2 ? 4 : 3)
                 rowSpacing: 16
                 columnSpacing: 16
+
+                Switch {
+                    id: durationCheckBox
+                    text: parent.title
+                    checked: plantingSettings.durationsByDefault
+                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+                }
 
                 MyTextField {
                     id: sowDtmField

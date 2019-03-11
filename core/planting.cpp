@@ -163,6 +163,33 @@ int Planting::duplicate(int id) const
     return newId;
 }
 
+QVariantMap Planting::commonValues(const QList<int> &idList) const
+{
+    if (idList.empty())
+        return {};
+
+    QVariantMap common = DatabaseUtility::commonValues(idList);
+
+    // Add common keywords
+    QList<int> commonKeywords = keyword->keywordIdList(idList.value(0));
+    for (const auto plantingId : idList) {
+        QList<int> keywords = keyword->keywordIdList(plantingId);
+        for (const auto kid : commonKeywords) {
+            if (!keywords.contains(kid))
+                commonKeywords.removeOne(kid);
+        }
+    }
+
+    // Convert to QVariantList
+    QVariantList vlist;
+    for (const auto id : commonKeywords)
+        vlist.append(QVariant(id));
+
+    common["keyword_ids"] = vlist;
+
+    return common;
+}
+
 QString Planting::cropName(int plantingId) const
 {
     QVariantMap map = mapFromId("planting_view", plantingId);
