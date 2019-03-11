@@ -34,6 +34,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
 ### Changements
+  - *Édition des séries* : il est dorénavant possible d'éditer par lot les 
+    étiquettes de série.
   - L'année commence maintenant par l'hiver plutôt que par le printemps.
   - *Diagramme des séries* − Pour le format de date « semaine », ne plus
     afficher les indicateurs < et > d'années.

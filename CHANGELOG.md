@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to show full name of locations.
 
 ### Changed
+  - *Planting form* : it is now possible to bulk edit keywords.
   - The year now begins with winter instead of spring.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
 
