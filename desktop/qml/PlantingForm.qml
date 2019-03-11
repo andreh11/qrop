@@ -121,6 +121,7 @@ Flickable {
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
     property bool keywordsModified: false
+    property var keywordOldIdList: []
     readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
@@ -194,7 +195,8 @@ Flickable {
         }
 
         if (keywordsModified)  {
-            map['keyword_ids'] = keywordsIdList();
+            map['keyword_new_ids'] = keywordsIdList();
+            map['keyword_old_ids'] = keywordOldIdList;
         }
 
         return map;
@@ -253,6 +255,7 @@ Flickable {
         averagePriceField.reset();
         selectedKeywords = []
         keywordsModified = false
+        keywordOldIdList = []
     }
 
     // Set item to value only if it has not been manually modified by
@@ -339,6 +342,7 @@ Flickable {
 
         if ('keyword_ids' in val) {
             var list = val['keyword_ids'];
+            keywordOldIdList = list
             for (var i in list)
                 selectedKeywords[list[i]] = true;
             selectedKeywordsChanged();

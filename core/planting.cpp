@@ -127,9 +127,9 @@ void Planting::update(int id, const QVariantMap &map) const
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
 
-    if (map.contains("keyword_ids")) {
-        const auto &keywordIdList = newMap.take("keyword_ids").toList();
-        QList<int> oldKeywordIdList = keyword->keywordIdList(id);
+    if (map.contains("keyword_new_ids")) {
+        const auto &keywordIdList = newMap.take("keyword_new_ids").toList();
+        const auto &oldKeywordIdList = newMap.take("keyword_old_ids").toList();
         QList<int> toAdd;
         QList<int> toRemove;
 
@@ -139,7 +139,7 @@ void Planting::update(int id, const QVariantMap &map) const
 
         for (auto &oldid : oldKeywordIdList)
             if (!keywordIdList.contains(oldid))
-                toRemove.push_back(oldid);
+                toRemove.push_back(oldid.toInt());
 
         for (int keywordId : toAdd)
             keyword->addPlanting(id, keywordId);
