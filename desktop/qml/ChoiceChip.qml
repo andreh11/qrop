@@ -93,10 +93,9 @@ Button {
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
-            if (!checked) {
-                control.toggle()
-                manuallyModified = true
-            }
+            control.toggle()
+            manuallyModified = true
+            control.clicked()
         }
     }
 }

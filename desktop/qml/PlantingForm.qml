@@ -121,6 +121,7 @@ Flickable {
     readonly property int remainingLength: plantingLength - assignedLength
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
+    property bool keywordsModified: false
     readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
@@ -193,6 +194,11 @@ Flickable {
                 map[name] = value;
             }
         }
+
+        if (keywordsModified)  {
+            map['keyword_ids'] = keywordsIdList();
+        }
+
         return map;
     }
 
@@ -248,6 +254,7 @@ Flickable {
         yieldPerBedMeterField.reset();
         averagePriceField.reset();
         selectedKeywords = []
+        keywordsModified = false
     }
 
     // Set item to value only if it has not been manually modified by
@@ -333,9 +340,9 @@ Flickable {
         setFieldValue(averagePriceField, val['average_price']);
 
         if ('planting_id' in val) {
-            var keywordIdList = Keyword.keywordIdList(val['planting_id'])
-            for (var i in keywordIdList)
-                selectedKeywords[keywordIdList[i]] = true;
+            var list = Keyword.keywordIdList(val['planting_id'])
+            for (var i in list)
+                selectedKeywords[list[i]] = true;
             selectedKeywordsChanged();
         }
     }
@@ -1119,7 +1126,9 @@ Flickable {
                     onActiveFocusChanged: ensureItemVisible(keywordChoiceChip)
                     onClicked: {
                         selectedKeywords[keyword_id] = !selectedKeywords[keyword_id]
+                        console.log("new value", selectedKeywords[keyword_id])
                         selectedKeywordsChanged();
+                        keywordsModified = true
                     }
                 }
             }

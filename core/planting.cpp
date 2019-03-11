@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018, 2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,6 @@ Planting::Planting(QObject *parent)
     m_idFieldName = "planting_id";
 }
 
-// QList<int> Planting::keywordListFromString(const QString &idString) const
-//{
-
-//}
-
 // map has planting table's fields and a "keyword_ids" field.
 int Planting::add(const QVariantMap &map) const
 {
@@ -64,10 +59,7 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-    //    QDate sowingDate = QDate::fromString(map["sowing_date"].toString(), Qt::ISODate);
     QDate plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
-    //    QDate begHarvestDate = QDate::fromString(map["beg_harvest_date"].toString(), Qt::ISODate);
-    //    QDate endHarvestDate = QDate::fromString(map["end_harvest_date"].toString(), Qt::ISODate);
     QVariantMap newMap(map);
     QList<int> ids;
 
@@ -134,15 +126,33 @@ void Planting::update(int id, const QVariantMap &map) const
     QString plantingDateString;
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
+
+    if (map.contains("keyword_ids")) {
+        const auto &keywordIdList = newMap.take("keyword_ids").toList();
+        QList<int> oldKeywordIdList = keyword->keywordIdList(id);
+        QList<int> toAdd;
+        QList<int> toRemove;
+
+        for (auto &newid : keywordIdList)
+            if (!oldKeywordIdList.contains(newid.toInt()))
+                toAdd.push_back(newid.toInt());
+
+        for (auto &oldid : oldKeywordIdList)
+            if (!keywordIdList.contains(oldid))
+                toRemove.push_back(oldid);
+
+        for (int keywordId : toAdd)
+            keyword->addPlanting(id, keywordId);
+
+        for (int keywordId : toRemove)
+            keyword->removePlanting(id, keywordId);
+    }
+
     DatabaseUtility::update(id, newMap);
 
     if (!plantingDateString.isNull()) {
         QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
         task->updateTaskDates(id, plantingDate);
-    }
-
-    if (newMap.contains("keyword_ids")) {
-        QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList(); // TODO: update keyword
     }
 }
 
@@ -261,7 +271,7 @@ int Planting::totalLength(int plantingId) const
     return map.value("length").toInt();
 }
 
-/* Return the already assigned bed length for plantingId */
+/** \brief Return the already assigned bed length for \a plantingId */
 int Planting::assignedLength(int plantingId) const
 {
     if (plantingId < 1)
