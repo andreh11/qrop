@@ -41,6 +41,9 @@ Tous les changements importants seront documentés dans ce fichier.
     afficher les indicateurs < et > d'années.
 
 ### Corrections
+  - *Édition des séries* : lors de l'édition d'une ou plusieurs séries (par lot),
+    si la longueur, le nombre de rang ou la distance sur la rang sont modifiées,
+    recalculer pour chaque série le nombre de plants nécessaires.
   - *Ajout de séries* : lorsque une série est créée avec affection d'emplacements
     depuis la fênetre d'ajout de séries, les emplacements sont imméditement
     dans la vue des séries.

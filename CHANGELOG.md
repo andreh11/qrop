@@ -32,9 +32,12 @@ All notable changes to this project will be documented in this file.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
 
 ### Fixed
-  - Planting view/form: when creating a planting for which locations has been 
+  - *Planting form* : when (bulk) editing planting(s), if the length, the number 
+    of rows or the in-row spacing have changed, recompute the number of plants 
+    needed for each planting.
+  - *Planting view/form*: when creating a planting for which locations has been 
     selected, the locations are now immediately visible in the planting view.
-  - Planting form: fields are now always visible when nagivating with tab.
+  - *Planting form*: fields are now always visible when nagivating with tab.
   - Deployment error  on Linux.
 
 ## 0.1.2 − 2019-01-23
