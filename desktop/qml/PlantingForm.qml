@@ -684,13 +684,13 @@ Flickable {
             title: qsTr("Durations")
             width: parent.width
             visible: plantingSettings.showDurationFields
+                label: Switch {
+                    id: durationCheckBox
+                    text: parent.title
+                    checked: plantingSettings.durationsByDefault
+                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+                }
 
-//            label: CheckBox {
-//                id: durationCheckBox
-//                text: parent.title
-//                checked: plantingSettings.durationsByDefault
-//                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-//            }
 
             GridLayout {
                 width: parent.width
@@ -698,12 +698,6 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                Switch {
-                    id: durationCheckBox
-                    text: parent.title
-                    checked: plantingSettings.durationsByDefault
-                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-                }
 
                 MyTextField {
                     id: sowDtmField
@@ -1018,11 +1012,11 @@ Flickable {
                     floatingLabel: true
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0; top: 999999}
-                    //                    inputMask: "900000"
                     labelText: qsTr("Needed")
                     Layout.fillWidth: true
                     text: "%L1".arg(Math.round(seedsNeeded))
                     onActiveFocusChanged: ensureItemVisible(seedsNeededField)
+                    onTextChanged: manuallyModified = true
                 }
 
                 MyTextField {

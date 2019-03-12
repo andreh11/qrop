@@ -206,7 +206,7 @@ Page {
         property int successions: 0
 
         z: 2
-        x: Units.mediumSpacing
+        x: parent.width/2 - width/2
         y: parent.height - height - Units.mediumSpacing
         text: qsTr("Added %L1 planting(s)", "", successions).arg(successions)
         visible: false
@@ -223,7 +223,7 @@ Page {
         property int successions: 0
 
         z: 2
-        x: Units.mediumSpacing
+        x: parent.width/2 - width/2
         y: parent.height - height - Units.mediumSpacing
         text: qsTr("Modified %L1 planting(s)", "", successions).arg(successions)
         visible: false

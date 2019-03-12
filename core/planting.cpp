@@ -18,6 +18,7 @@
 #include <QDebug>
 #include <QSqlRecord>
 #include <QVariantMap>
+#include <QtMath>
 
 #include "planting.h"
 #include "task.h"
@@ -127,6 +128,37 @@ void Planting::update(int id, const QVariantMap &map) const
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
 
+    // If the length, the number of rows or the in-row spacing has changed,
+    // recompute the number of plants needed.
+    if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants")) {
+        QSqlRecord record = recordFromId("planting_view", id);
+
+        int length;
+        int rows;
+        int spacing;
+
+        if (newMap.contains("length"))
+            length = newMap.value("length").toInt();
+        else
+            length = record.value("length").toInt();
+
+        if (newMap.contains("rows"))
+            rows = newMap.value("rows").toInt();
+        else
+            rows = record.value("rows").toInt();
+
+        if (newMap.contains("spacing_plants"))
+            spacing = newMap.value("spacing_plants").toInt();
+        else
+            spacing = record.value("spacing_plants").toInt();
+
+        if (rows == 0)
+            newMap["plants_needed"] = 0;
+        else
+            newMap["plants_needed"] = qCeil(static_cast<double>(length) / spacing * 100 * rows);
+    }
+
+    // Handle bulk editing of keywords.
     if (map.contains("keyword_new_ids")) {
         const auto &keywordIdList = newMap.take("keyword_new_ids").toList();
         const auto &oldKeywordIdList = newMap.take("keyword_old_ids").toList();

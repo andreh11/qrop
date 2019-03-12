@@ -24,7 +24,7 @@ Popup {
 
     property alias text: label.text
     property alias actionText: actionButton.text
-    property int duration: 5000
+    property int duration: 3000
     property int labelMargin: 16
 
     // Emitted when the user clicked on the action button.
