@@ -29,7 +29,7 @@ Flickable {
     // Initialisation mode ensures that no duration field is modified.
     property bool initMode: false
 
-    property bool coherentDates: dtt >= 0 && dtm >= 0 && harvestWindow >= 0
+    property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
     property bool accepted: (mode === "edit" || varietyField.currentIndex >= 0) && coherentDates
 
     property int locationViewWidth: locationView.treeViewWidth
@@ -388,10 +388,7 @@ Flickable {
         if (initMode)
             return;
 
-        console.log(picker2, settings.dateType)
-
         if (picker2 === endHarvestDateField && settings.dateType === "week") {
-            console.log("EH, week")
             durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate) + 7
         } else
             durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate)
