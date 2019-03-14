@@ -18,6 +18,7 @@
 #include <QDebug>
 #include <QSqlRecord>
 #include <QVariantMap>
+#include <QtMath>
 
 #include "planting.h"
 #include "task.h"
@@ -120,6 +121,42 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
     return {};
 }
 
+/** \brief Given a \a key, return its value in \a map if contains this key.
+ *  Otherwise returs the value of the \a record for this key.
+ */
+QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const
+{
+    if (map.contains(key))
+        return map.value(key);
+    else if (record.contains(key))
+        return record.value(key);
+    else
+        return {};
+}
+void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
+{
+    int plantsNeeded = get(map, record, "plants_needed").toInt();
+    int greenhouseLoss = get(map, record, "estimated_gh_loss").toInt();
+    int seedsPerHole = get(map, record, "seeds_per_hole").toInt();
+    double seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
+    int traySize = get(map, record, "tray_size").toInt();
+
+    int plantsToStart = qCeil(static_cast<double>(plantsNeeded) / (1 - greenhouseLoss / 100));
+
+    double traysToStart = plantsToStart / traySize;
+
+    int seedsNumber = plantsToStart * seedsPerHole;
+    double seedsQuantity = seedsNumber / seedsPerGram;
+
+    qDebug() << "[TP] n:" << seedsNumber << "q:" << seedsQuantity << "to start" << plantsToStart
+             << "trays:" << traysToStart;
+
+    map["plants_to_start"] = plantsToStart;
+    map["trays_to_start"] = traysToStart;
+    map["seeds_number"] = seedsNumber;
+    map["seeds_quantity"] = seedsQuantity;
+}
+
 void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
@@ -127,7 +164,59 @@ void Planting::update(int id, const QVariantMap &map) const
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
 
-    if (map.contains("keyword_new_ids")) {
+    QSqlRecord record = recordFromId("planting_view", id);
+    // If the length, the number of rows or the in-row spacing has changed,
+    // recompute the number of plants needed.
+    if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants")) {
+        double length = get(newMap, record, "length").toDouble();
+        int rows = get(newMap, record, "rows").toInt();
+        int spacing = get(newMap, record, "spacing_plants").toInt();
+
+        int plantsNeeded = spacing > 0 ? qCeil(length / spacing * 100 * rows) : 0;
+        newMap["plants_needed"] = plantsNeeded;
+    }
+
+    int plantingType = get(newMap, record, "planting_type").toInt();
+
+    if ((newMap.contains("plants_needed") && plantingType == 1) || newMap.contains("seeds_per_hole")
+        || newMap.contains("seeds_percentage")) {
+        int plantsNeeded = get(newMap, record, "plants_needed").toInt();
+        int seedsPerHole = get(newMap, record, "seeds_per_hole").toInt();
+        int seedsPercentage = get(newMap, record, "seeds_percentage").toInt();
+
+        int seedsNumber =
+                qCeil(plantsNeeded * seedsPerHole * (1 + static_cast<double>(seedsPercentage) / 100));
+        newMap["seeds_number"] = seedsNumber;
+    }
+
+    if ((newMap.contains("plants_needed") && plantingType == 2)
+        || newMap.contains("estimated_gh_loss")) {
+        int plantsNeeded = get(newMap, record, "plants_needed").toInt();
+        int greenhouseLoss = get(newMap, record, "estimated_gh_loss").toInt();
+        newMap["plants_to_start"] =
+                qCeil(plantsNeeded / (1 - static_cast<double>(greenhouseLoss) / 100));
+    }
+
+    if (newMap.contains("plants_to_start") || newMap.contains("tray_size")) {
+        int plantsToStart = get(newMap, record, "plants_to_start").toInt();
+        int traySize = get(newMap, record, "tray_size").toInt();
+        newMap["trays_to_start"] = static_cast<double>(plantsToStart) / traySize;
+    }
+
+    if (newMap.contains("plants_to_start") || (plantingType == 2 && newMap.contains("seeds_per_hole"))) {
+        int plantsToStart = get(newMap, record, "plants_to_start").toInt();
+        int seedsPerHole = get(newMap, record, "seeds_per_hole").toInt();
+        newMap["seeds_number"] = plantsToStart * seedsPerHole;
+    }
+
+    if (newMap.contains("seeds_number") || newMap.contains("seeds_per_gram")) {
+        int seedsNumber = get(newMap, record, "seeds_number").toInt();
+        double seedsPerGram = get(newMap, record, "seeds_per_gram").toDouble();
+        newMap["seeds_quantity"] = static_cast<double>(seedsNumber) / seedsPerGram;
+    }
+
+    // Handle bulk editing of keywords.
+    if (newMap.contains("keyword_new_ids")) {
         const auto &keywordIdList = newMap.take("keyword_new_ids").toList();
         const auto &oldKeywordIdList = newMap.take("keyword_old_ids").toList();
         QList<int> toAdd;

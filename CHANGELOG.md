@@ -26,15 +26,24 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to allow planting conflicts on the same location.
   - *Field map* − Add option to show full name of locations.
 
+
 ### Changed
+  - Use decimal numbers for planting length, surface and seeds per gram.
+  - *Planting view/form*: When using week dates, we assume that the harvest will end
+    at the *end* of the end harvest week.
   - *Planting form* : it is now possible to bulk edit keywords.
   - The year now begins with winter instead of spring.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
 
 ### Fixed
-  - Planting view/form: when creating a planting for which locations has been 
+  - *Planting form*: quantities are correctly recomputed when (bulk) editing 
+    plantings.
+  - *Planting form* : when (bulk) editing planting(s), if the length, the number 
+    of rows or the in-row spacing have changed, recompute the number of plants 
+    needed for each planting.
+  - *Planting view/form*: when creating a planting for which locations has been 
     selected, the locations are now immediately visible in the planting view.
-  - Planting form: fields are now always visible when nagivating with tab.
+  - *Planting form*: fields are now always visible when nagivating with tab.
   - Deployment error  on Linux.
 
 ## 0.1.2 − 2019-01-23

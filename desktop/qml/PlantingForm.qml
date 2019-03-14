@@ -72,7 +72,7 @@ Flickable {
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int traySize: Number(traySizeField.text)
-    readonly property int plantingLength: {
+    readonly property double plantingLength: {
         if (plantingAmountField.text) {
             if (settings.useStandardBedLength)
                 return Number.fromLocaleString(Qt.locale(), plantingAmountField.text)
@@ -87,26 +87,25 @@ Flickable {
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
-    readonly property int seedsPerGram: Number(seedsPerGramField.text)
+    readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
     readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
             plantsNeeded * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
-            plantsToStart * seedsPerHole * (1 + seedsExtraPercentage / 100);
+            plantsToStart * seedsPerHole
         else // TP, bought
             0;
     }
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
     readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2)
                                                        : 0
-    readonly property int plantsToStart: traySize * traysNumber
     readonly property int plantsNeeded: inRowSpacing === 0
                                         ? 0
                                         : plantingLength / inRowSpacing * 100 * rowsPerBed
+    readonly property int plantsToStart: plantsNeeded / (1.0 - greenhouseEstimatedLoss/100)
     readonly property real traysNumber: control.traySize < 1
                                         ? 0
-                                        : toPrecision((plantsNeeded / traySize)
-                                                      / (1.0 - greenhouseEstimatedLoss/100), 2);
+                                        : 1.0 * plantsToStart / traySize
 
     readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: yieldPerBedMeterField.text ? Number.fromLocaleString(Qt.locale(), yieldPerBedMeterField.text) : 0
@@ -243,11 +242,9 @@ Flickable {
         harvestWindowField.reset();
 
         traySizeField.reset();
-        seedsPerHoleField.reset();
         greenhouseEstimatedLossField.reset();
         seedsNeededField.reset();
         seedsExtraPercentageField.reset();
-        seedsExtraPercentageField.text = "0"
         seedsPerGramField.reset();
 
         unitField.reset();
@@ -283,7 +280,7 @@ Flickable {
         if (mode === "edit") {
             if (settings.useStandardBedLength) {
                 var bedLength = Number(settings.standardBedLength)
-                setFieldValue(plantingAmountField, val['length']/bedLength);
+                setFieldValue(plantingAmountField, "%L1".arg(val['length']/bedLength))
             } else {
                 setFieldValue(plantingAmountField, val['length']);
             }
@@ -391,7 +388,13 @@ Flickable {
         if (initMode)
             return;
 
-        durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate)
+        console.log(picker2, settings.dateType)
+
+        if (picker2 === endHarvestDateField && settings.dateType === "week") {
+            console.log("EH, week")
+            durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate) + 7
+        } else
+            durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate)
         durationField.manuallyModified = true
 
         // Mark sow/planting field date as modified (for proper update).
@@ -417,18 +420,23 @@ Flickable {
         updateDuration(begHarvestDateField, endHarvestDateField, harvestWindowField);
     }
 
-    // Date functions
+    // Date updatefunctions
 
     // The following functions should be called only when prefilling the form
     // or when the user edit the relevant field.
 
     // direction = 1 means days forward, -1 means backward
     function updateDateField(from, duration, to, direction) {
-        if (duration.text === "")
+        if (duration.text === "") {
             to.calendarDate = from.calendarDate;
-        else
+        } else if (settings.dateType === "week"
+                 && (to === endHarvestDateField || from === endHarvestDateField)) {
+            to.calendarDate = MDate.addDays(from.calendarDate,
+                                            (Number(duration.text) - 7) * direction);
+        } else {
             to.calendarDate = MDate.addDays(from.calendarDate,
                                             Number(duration.text) * direction);
+        }
     }
 
     function updateFromFieldSowingDate() {
@@ -508,6 +516,7 @@ Flickable {
         id: settings
         property bool useStandardBedLength
         property int standardBedLength
+        property string dateType
     }
 
     Settings {
@@ -685,12 +694,17 @@ Flickable {
             width: parent.width
             visible: plantingSettings.showDurationFields
 
-//            label: CheckBox {
-//                id: durationCheckBox
-//                text: parent.title
-//                checked: plantingSettings.durationsByDefault
-//                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-//            }
+            label: Switch {
+                    id: durationCheckBox
+                    bottomPadding: 0
+                    text: parent.title
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    checked: plantingSettings.durationsByDefault
+                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+
+                    Layout.alignment: Qt.AlignRight
+                }
 
             GridLayout {
                 width: parent.width
@@ -698,12 +712,6 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                Switch {
-                    id: durationCheckBox
-                    text: parent.title
-                    checked: plantingSettings.durationsByDefault
-                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-                }
 
                 MyTextField {
                     id: sowDtmField
@@ -982,7 +990,7 @@ Flickable {
                     text: "0"
                     labelText: qsTr("Estimated loss")
                     suffixText: qsTr("%")
-                    helperText: qsTr("%L1 flat(s)", "", traysNumber).arg(traysNumber)
+                    helperText: qsTr("%L1 flat(s) − %L2 transplants", "", traysNumber).arg(traysNumber).arg(plantsToStart)
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0; top: 99 }
                     Layout.fillWidth: true
@@ -997,7 +1005,7 @@ Flickable {
             visible: !boughtRadio.checked && !chooseLocationMode
             GridLayout {
                 width: parent.width
-                columns: 2
+                columns: 3
                 rowSpacing: 16
                 columnSpacing: 16
 
@@ -1014,19 +1022,8 @@ Flickable {
                 }
 
                 MyTextField {
-                    id: seedsNeededField
-                    floatingLabel: true
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 0; top: 999999}
-                    //                    inputMask: "900000"
-                    labelText: qsTr("Needed")
-                    Layout.fillWidth: true
-                    text: "%L1".arg(Math.round(seedsNeeded))
-                    onActiveFocusChanged: ensureItemVisible(seedsNeededField)
-                }
-
-                MyTextField {
                     id: seedsExtraPercentageField
+                    visible: plantingType == 1
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 99 }
                     floatingLabel: true
@@ -1034,20 +1031,40 @@ Flickable {
                     suffixText: "%"
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(seedsExtraPercentageField)
+                    helperText: "Number of seeds: %L1".arg(Math.round(seedsNeeded))
                 }
 
                 MyTextField {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 0; top: 99999 }
+                    validator: QropDoubleValidator {
+                        bottom: 0
+                        decimals: 3
+                        top: 999
+                        notation: DoubleValidator.StandardNotation
+                    }
                     text: "0"
                     floatingLabel: true
                     labelText: qsTr("Per gram")
                     errorText: qsTr("Enter a quantity!")
-                    helperText: qsTr("%L1 g", "", seedsQuantity).arg(seedsQuantity)
+                    helperText: qsTr("Quantity: %L1 g", "", seedsQuantity).arg(seedsQuantity)
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(seedsPerGramField)
                 }
+
+                MyTextField {
+                    id: seedsNeededField
+                    visible: false
+                    enabled: false
+                    floatingLabel: true
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom: plantsNeeded; top: 999999}
+                    labelText: qsTr("Needed")
+                    Layout.fillWidth: true
+                    text: "%L1".arg(Math.round(seedsNeeded))
+                    onActiveFocusChanged: ensureItemVisible(seedsNeededField)
+                }
+
             }
         }
 
