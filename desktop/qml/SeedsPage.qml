@@ -28,7 +28,8 @@ Page {
 
     property alias week: weekSpinBox.week
     property alias year: weekSpinBox.year
-    property alias rowsNumber: seedListModel.rowCount
+    property alias seedsRowCount: seedListModel.rowCount
+    property alias transplantsRowCount: transplantListModel.rowCount
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
@@ -137,6 +138,25 @@ Page {
         anchors.fill: parent
         padding: 0
         Material.elevation: 1
+        Label {
+            anchors.centerIn: parent
+            visible: seedsRadioButton.checked && !seedsRowCount
+            text:  qsTr('No seeds to order for %1').arg(page.year)
+            font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+            color: Qt.rgba(0, 0, 0, 0.8)
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Label {
+            anchors.centerIn: parent
+            visible: transplantsRadioButton.checked && !transplantsRowCount
+            text:  qsTr('No transplants to order for %1').arg(page.year)
+            font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+            color: Qt.rgba(0, 0, 0, 0.8)
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
 
         Rectangle {
             id: buttonRectangle

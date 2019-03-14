@@ -211,6 +211,7 @@ ListView {
         property bool showSeedCompanyBesideVariety
         property bool useStandardBedLength
         property int standardBedLength
+        property string dateType
     }
 
     ScrollBar.vertical: ScrollBar {
@@ -481,7 +482,9 @@ ListView {
                     [model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
                      Text.AlignRight],
                     [MDate.formatDate(beginHarvestDate, year), Text.AlignRight],
-                    [MDate.formatDate(endHarvestDate, year), Text.AlignRight],
+                    [settings.dateType === "week" ? MDate.formatDate(MDate.addDays(endHarvestDate, -7), year)
+                                                   : MDate.formatDate(endHarvestDate, year),
+                     Text.AlignRight],
                     [model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt)
                                                : "",
                      Text.AlignRight],

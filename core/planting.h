@@ -61,6 +61,8 @@ public:
 private:
     Task *task;
     Keyword *keyword;
+    QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
+    void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     //    QList<int> keywordListFromString(const QString &idString) const;
 };
 
