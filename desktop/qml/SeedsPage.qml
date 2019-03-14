@@ -380,7 +380,9 @@ Page {
 
                         Label {
                             visible: seedsRadioButton.checked
-                            text: qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
+                            text: model.seeds_quantity > 1000
+                                  ? qsTr("%L1 kg").arg(Math.round(model.seeds_quantity * 0.1) / 100)
+                                  : qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
                             elide: Text.ElideRight

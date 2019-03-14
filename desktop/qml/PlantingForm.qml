@@ -72,7 +72,7 @@ Flickable {
     property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     readonly property int traySize: Number(traySizeField.text)
-    readonly property int plantingLength: {
+    readonly property double plantingLength: {
         if (plantingAmountField.text) {
             if (settings.useStandardBedLength)
                 return Number.fromLocaleString(Qt.locale(), plantingAmountField.text)
@@ -87,26 +87,25 @@ Flickable {
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
-    readonly property int seedsPerGram: Number(seedsPerGramField.text)
+    readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
     readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
             plantsNeeded * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
-            plantsToStart * seedsPerHole * (1 + seedsExtraPercentage / 100);
+            plantsToStart * seedsPerHole
         else // TP, bought
             0;
     }
     readonly property int greenhouseEstimatedLoss: Number(greenhouseEstimatedLossField.text)
     readonly property real seedsQuantity: seedsPerGram ? toPrecision(seedsNeeded / seedsPerGram, 2)
                                                        : 0
-    readonly property int plantsToStart: traySize * traysNumber
     readonly property int plantsNeeded: inRowSpacing === 0
                                         ? 0
                                         : plantingLength / inRowSpacing * 100 * rowsPerBed
+    readonly property int plantsToStart: plantsNeeded / (1.0 - greenhouseEstimatedLoss/100)
     readonly property real traysNumber: control.traySize < 1
                                         ? 0
-                                        : toPrecision((plantsNeeded / traySize)
-                                                      / (1.0 - greenhouseEstimatedLoss/100), 2);
+                                        : 1.0 * plantsToStart / traySize
 
     readonly property alias unitText: unitField.currentText
     readonly property real yieldPerBedMeter: yieldPerBedMeterField.text ? Number.fromLocaleString(Qt.locale(), yieldPerBedMeterField.text) : 0
@@ -1038,7 +1037,12 @@ Flickable {
                 MyTextField {
                     id: seedsPerGramField
                     inputMethodHints: Qt.ImhDigitsOnly
-                    validator: IntValidator { bottom: 0; top: 99999 }
+                    validator: QropDoubleValidator {
+                        bottom: 0
+                        decimals: 3
+                        top: 999
+                        notation: DoubleValidator.StandardNotation
+                    }
                     text: "0"
                     floatingLabel: true
                     labelText: qsTr("Per gram")

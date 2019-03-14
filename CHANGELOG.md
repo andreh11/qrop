@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 
 ### Changed
+  - Use decimal numbers for planting length, surface and seeds per gram.
   - *Planting view/form*: When using week dates, we assume that the harvest will end
     at the *end* of the end harvest week.
   - *Planting form* : it is now possible to bulk edit keywords.

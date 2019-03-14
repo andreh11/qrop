@@ -138,7 +138,7 @@ void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
     int plantsNeeded = get(map, record, "plants_needed").toInt();
     int greenhouseLoss = get(map, record, "estimated_gh_loss").toInt();
     int seedsPerHole = get(map, record, "seeds_per_hole").toInt();
-    int seedsPerGram = get(map, record, "seeds_per_gram").toInt();
+    double seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
     int traySize = get(map, record, "tray_size").toInt();
 
     int plantsToStart = qCeil(static_cast<double>(plantsNeeded) / (1 - greenhouseLoss / 100));
@@ -168,11 +168,11 @@ void Planting::update(int id, const QVariantMap &map) const
     // If the length, the number of rows or the in-row spacing has changed,
     // recompute the number of plants needed.
     if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants")) {
-        int length = get(newMap, record, "length").toInt();
+        double length = get(newMap, record, "length").toDouble();
         int rows = get(newMap, record, "rows").toInt();
         int spacing = get(newMap, record, "spacing_plants").toInt();
 
-        int plantsNeeded = spacing > 0 ? qCeil(static_cast<double>(length) / spacing * 100 * rows) : 0;
+        int plantsNeeded = spacing > 0 ? qCeil(length / spacing * 100 * rows) : 0;
         newMap["plants_needed"] = plantsNeeded;
     }
 
@@ -200,7 +200,7 @@ void Planting::update(int id, const QVariantMap &map) const
     if (newMap.contains("plants_to_start") || newMap.contains("tray_size")) {
         int plantsToStart = get(newMap, record, "plants_to_start").toInt();
         int traySize = get(newMap, record, "tray_size").toInt();
-        newMap["trays_to_start"] = plantsToStart / traySize;
+        newMap["trays_to_start"] = static_cast<double>(plantsToStart) / traySize;
     }
 
     if (newMap.contains("plants_to_start") || (plantingType == 2 && newMap.contains("seeds_per_hole"))) {
@@ -209,9 +209,9 @@ void Planting::update(int id, const QVariantMap &map) const
         newMap["seeds_number"] = plantsToStart * seedsPerHole;
     }
 
-    if (newMap.contains("seeds_number")) {
+    if (newMap.contains("seeds_number") || newMap.contains("seeds_per_gram")) {
         int seedsNumber = get(newMap, record, "seeds_number").toInt();
-        int seedsPerGram = get(newMap, record, "seeds_per_gram").toInt();
+        double seedsPerGram = get(newMap, record, "seeds_per_gram").toDouble();
         newMap["seeds_quantity"] = static_cast<double>(seedsNumber) / seedsPerGram;
     }
 

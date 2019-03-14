@@ -34,6 +34,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
 ### Changements
+  - Nombre décimaux au lieu d'entiers pour les longueurs de planche, graines par
+    gramme et surface.
   - *Vue, édition des séries* : si les dates sont entrées par numéro de semaine,
     on considère que la récolte se termine à la *fin* de la semaine de fin de
     récolte indiquée.

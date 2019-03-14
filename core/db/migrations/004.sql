@@ -8,8 +8,8 @@ BEGIN TRANSACTION;
 CREATE VIEW seed_list_view AS
 SELECT strftime("%Y", sowing_date) as year,
        crop_id, crop, variety, seed_company,
-       seeds_number,
-       seeds_quantity
+       sum(seeds_number) as seeds_number,
+       sum(seeds_quantity) as seeds_quantity
 FROM planting_view
 WHERE planting_type = 1 OR planting_type = 2
 GROUP BY year, variety_id
