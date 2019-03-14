@@ -111,6 +111,7 @@ ListView {
         }]
 
     signal dragFinished()
+    signal doubleClicked(int plantingId)
 
     // Ids of selected plantings
     property var selectedIds: ({})
@@ -461,6 +462,8 @@ ListView {
             id: mouseArea
             anchors.fill: parent
             hoverEnabled: true
+
+            onDoubleClicked: listView.doubleClicked(model.planting_id)
         }
 
         Column {
@@ -558,6 +561,7 @@ ListView {
                     showFamilyColor: listView.showFamilyColor
                     onPlantingMoved: listView.resetFilter()
                     onDragFinished: listView.dragFinished()
+                    onPlantingClicked: listView.doubleClicked(plantingId)
                 }
 
                 Repeater {

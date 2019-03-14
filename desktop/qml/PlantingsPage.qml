@@ -511,6 +511,7 @@ Page {
                     right: parent.right
                     bottom: parent.bottom
                 }
+                onDoubleClicked: plantingDialog.editPlantings([plantingId])
 
             }
         }

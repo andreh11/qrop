@@ -699,7 +699,7 @@ Page {
                     showOnlyActiveColor: true
                     showFamilyColor: familyColorButton.checked
                     dragActive: true
-                    tableSortColumn: 3 // planting_date
+                    tableSortColumn: 4 // planting_date
                     tableSortOrder: "ascending"
                     filterString: filterField.text
                     anchors.fill: parent

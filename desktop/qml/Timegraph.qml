@@ -91,7 +91,7 @@ Item {
         drag.target: draggable
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        cursorShape: dragActive ? (pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor) : Qt.PointingHandCursor
         onClicked: selected(plantingId)
         onPressed: parent.grabToImage(function(result) {
             draggable.Drag.imageSource = result.url
