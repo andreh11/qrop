@@ -34,6 +34,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
 ### Changements
+  - *Vue, édition des séries* : si les dates sont entrées par numéro de semaine,
+    on considère que la récolte se termine à la *fin* de la semaine de fin de
+    récolte indiquée.
   - *Édition des séries* : il est dorénavant possible d'éditer par lot les 
     étiquettes de série.
   - L'année commence maintenant par l'hiver plutôt que par le printemps.
@@ -41,6 +44,8 @@ Tous les changements importants seront documentés dans ce fichier.
     afficher les indicateurs < et > d'années.
 
 ### Corrections
+  - *Édition des séries* : les quantités sont dorénavant correctement recalculées
+    lors de l'édition d'une ou plusieurs séries.
   - *Édition des séries* : lors de l'édition d'une ou plusieurs séries (par lot),
     si la longueur, le nombre de rang ou la distance sur la rang sont modifiées,
     recalculer pour chaque série le nombre de plants nécessaires.
