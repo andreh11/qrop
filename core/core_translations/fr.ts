@@ -4,22 +4,22 @@
 <context>
     <name>MDate</name>
     <message>
-        <location filename="../mdate.cpp" line="170"/>
+        <location filename="../mdate.cpp" line="171"/>
         <source>Winter</source>
         <translation>Hiver</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="172"/>
+        <location filename="../mdate.cpp" line="173"/>
         <source>Spring</source>
         <translation>Printemps</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="174"/>
+        <location filename="../mdate.cpp" line="175"/>
         <source>Summer</source>
         <translation>Été</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="176"/>
+        <location filename="../mdate.cpp" line="177"/>
         <source>Fall</source>
         <translation>Automne</translation>
     </message>
