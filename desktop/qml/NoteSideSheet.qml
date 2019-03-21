@@ -200,7 +200,6 @@ Drawer {
                                 Layout.fillWidth: true
                                 text: "%1 − %2".arg(MDate.formatDate(model.date, 2019))
                                                .arg(MDate.formatDate(model.date, 2019, "date"))
-
                             }
                             
                             Text {
@@ -208,22 +207,24 @@ Drawer {
                                 text: model.content
                                 elide: Text.ElideRight
                                 wrapMode: Text.WordWrap
-
                             }
-
                         }
                     }
                 }
             }
         }
         
-        ThinDivider { Layout.fillWidth: true }
+        ThinDivider {
+            visible: plantingId > 0
+            Layout.fillWidth: true
+        }
         
         ScrollView {
             implicitHeight: noteSideSheet.height*0.1
             Layout.fillWidth: true
             Layout.leftMargin: Units.mediumSpacing
             Layout.rightMargin: Layout.leftMargin
+            visible: plantingId > 0
             
             ScrollBar.vertical: ScrollBar {}
             
@@ -251,6 +252,7 @@ Drawer {
         ListView {
             id: photoView
             clip: true
+            visible: plantingId > 0
             spacing: Units.smallSpacing
             model: ListModel {
                 id: photoModel
@@ -284,7 +286,8 @@ Drawer {
             Layout.fillWidth: true
             Layout.leftMargin: Units.smallSpacing
             Layout.rightMargin: Layout.leftMargin
-            
+            visible: plantingId > 0
+
             ToolButton {
                 id: addPhotoButton
                 text: "\ue439"
