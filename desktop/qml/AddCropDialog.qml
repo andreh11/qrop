@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018, 2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,18 +28,23 @@ Dialog {
 
     readonly property string cropName: cropNameField.text.trim()
     property alias color: colorPicker.color
-    property int familyId: familyModel.rowId(familyField.currentIndex)
+    property int familyId: familyField.selectedId
     property bool acceptableForm: cropNameField.acceptableInput
-                                  && (familyField.currentIndex >= 0 || alreadyAssignedFamilyId)
+                                  && (familyId >= 0 || alreadyAssignedFamilyId)
     property bool alreadyAssignedFamilyId: false
 
+    function prefill(name) {
+        cropNameField.text = name;
+    }
+
     title: qsTr("Add New Crop")
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    modal: false
 
     onAboutToShow: {
         familyModel.refresh();
         cropNameField.text = ""
-        familyField.currentIndex = -1
+        familyField.selectedId = -1;
+        familyField.text = "";
         cropNameField.forceActiveFocus();
     }
 
@@ -66,18 +71,20 @@ Dialog {
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
         }
 
-        MyComboBox {
+        ComboTextField {
             id: familyField
             visible: !alreadyAssignedFamilyId
             labelText: qsTr("Family")
-            Layout.minimumWidth: 150
-            Layout.fillWidth: true
-            editable: false
+            textRole: function (model) { return model.family; }
+            idRole: function (model) { return model.family_id; }
+            showAddItem: false
             model: FamilyModel {
                 id: familyModel
             }
-            textRole: "family"
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
+            Keys.onEnterPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
+            Layout.minimumWidth: 150
+            Layout.fillWidth: true
         }
 
         ColumnLayout {
@@ -99,5 +106,4 @@ Dialog {
             }
         }
     }
-
 }

@@ -34,6 +34,7 @@ Page {
     property int checks: 0
     property alias listView: harvestView
     property date todayDate: new Date()
+    property bool dialogOpened: false
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
@@ -54,14 +55,13 @@ Page {
 
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
-        // and view position will be reset.
+        // and the view's position will be reset.
         var currentY = harvestView.contentY
         harvestModel.refresh();
         harvestView.contentY = currentY
     }
 
     title: qsTr("Harvests")
-    focus: true
     padding: 0
 
     Material.background: Material.color(Material.Grey, Material.Shade100)
@@ -70,49 +70,49 @@ Page {
 
     Shortcut {
         sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 3 && addButton.visible && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: addButton.clicked()
     }
 
     Shortcut {
         sequences: [StandardKey.Find]
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
     }
 
     Shortcut {
         sequence: "Ctrl+Right"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.nextWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Left"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.previousWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Up"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.nextYear()
     }
 
     Shortcut {
         sequence: "Ctrl+Down"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: weekSpinBox.previousYear();
     }
 
     Shortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 3 && !harvestView.activeFocus && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !harvestView.activeFocus && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: {
             harvestView.currentIndex = 0
@@ -140,19 +140,15 @@ Page {
 
     Platform.FileDialog {
         id: saveDialog
-
-        defaultSuffix: "pdf"
         fileMode: Platform.FileDialog.SaveFile
+        defaultSuffix: "pdf"
         nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted:  Print.printHarvests(page.year, file)
+        onAccepted: Print.printHarvests(page.year, file)
     }
 
     Pane {
-        width: parent.width
-        height: parent.height
         anchors.fill: parent
         padding: 0
-        Material.elevation: 1
 
         Rectangle {
             id: buttonRectangle
@@ -167,17 +163,17 @@ Page {
                 spacing: Units.smallSpacing
                 visible: !filterMode
 
-                Label {
-                    text: qsTr("%L1 harvest(s) selected", "", checks).arg(checks)
-                    leftPadding: 16
-                    color: Material.color(Material.Blue)
-                    Layout.fillWidth: true
-                    visible: checks > 0
-                    font.family: "Roboto Regular"
-                    font.pixelSize: 16
-                    horizontalAlignment: Qt.AlignLeft
-                    verticalAlignment: Qt.AlignVCenter
-                }
+                //                Label {
+                //                    text: qsTr("%L1 harvest(s) selected", "", checks).arg(checks)
+                //                    leftPadding: 16
+                //                    color: Material.color(Material.Blue)
+                //                    Layout.fillWidth: true
+                //                    visible: checks > 0
+                //                    font.family: "Roboto Regular"
+                //                    font.pixelSize: 16
+                //                    horizontalAlignment: Qt.AlignLeft
+                //                    verticalAlignment: Qt.AlignVCenter
+                //                }
 
                 Button {
                     id: addButton
@@ -186,8 +182,11 @@ Page {
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                     Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    visible: checks === 0
-                    onClicked: harvestDialog.create()
+                    //                    visible: checks === 0
+                    onClicked: {
+                        dialogOpened = true;
+                        harvestDialog.create()
+                    }
 
                     MouseArea {
                         id: mouseArea
@@ -204,11 +203,14 @@ Page {
                         onHarvestAdded: {
                             page.refresh()
                             addHarvestSnackbar.open();
+                            dialogOpened = false;
                         }
                         onHarvestUpdated: {
                             page.refresh();
                             editHarvestsSnackBar.open();
+                            dialogOpened = false;
                         }
+                        onRejected: dialogOpened = false;
                     }
                 }
 
@@ -250,7 +252,7 @@ Page {
 
         ListView {
             id: harvestView
-            width: Math.max(rowWidth, parent.width * 0.8)
+            width: Math.min(rowWidth, parent.width * 0.8)
             clip: true
             spacing: 4
             boundsBehavior: Flickable.StopAtBounds
@@ -259,7 +261,6 @@ Page {
             anchors {
                 top: topDivider.bottom
                 bottom: parent.bottom
-
                 horizontalCenter: parent.horizontalCenter
                 topMargin: Units.smallSpacing
                 bottomMargin: Units.smallSpacing
@@ -294,7 +295,9 @@ Page {
             Keys.onPressed: {
                 switch (event.key) {
                 case Qt.Key_E:
+                    // FALLTHROUGH
                 case Qt.Key_Return:
+                    // FALLTHROUGH
                 case Qt.Key_Enter:
                     currentItem.editHarvest();
                     break;
@@ -361,6 +364,7 @@ Page {
 
                 function editHarvest() {
                     harvestDialog.edit(model.harvest_id, model.crop_id);
+                    dialogOpened = true;
                 }
 
                 function deleteHarvest() {
@@ -417,25 +421,20 @@ Page {
                         spacing: Units.smallSpacing
                         leftPadding: Units.formSpacing
 
-                        TextCheckBox {
-                            id: checkBox
-                            width: parent.height * 0.8
-                            //                            visible: !rowDelegate.checked
-                            selectionMode: checks > 0
-                            text: Planting.cropName(model.planting_id)
-                            font.pixelSize: 26
+                        Rectangle {
+                            id: textIcon
+                            height: parent.height * 0.8
+                            //            height: 40
+                            width: height
+                            radius: 80
                             color: Planting.cropColor(model.planting_id)
-                            round: true
                             anchors.verticalCenter: parent.verticalCenter
-                            //                            checked: model.harvest_id in selectedIds && selectedIds[model.harvest_id]
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    if (mouse.button !== Qt.LeftButton)
-                                        return
-                                    select();
-                                }
+                            Text {
+                                anchors.centerIn: parent
+                                text: Planting.cropName(model.planting_id).slice(0,2)
+                                color: "white"
+                                font { family: "Roboto Regular"; pixelSize: 20 }
                             }
                         }
 

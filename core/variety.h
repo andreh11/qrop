@@ -26,6 +26,7 @@ class CORESHARED_EXPORT Variety : public DatabaseUtility
 public:
     Variety(QObject *parent = nullptr);
     Q_INVOKABLE int cropId(int varietyId) const;
+    Q_INVOKABLE QString varietyName(int varietyId) const;
 };
 
 #endif // VARIETY_H

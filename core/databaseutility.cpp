@@ -46,6 +46,16 @@ void DatabaseUtility::setTable(const QString &table)
     m_table = table;
 }
 
+QString DatabaseUtility::viewTable() const
+{
+    return m_viewTable;
+}
+
+void DatabaseUtility::setViewTable(const QString &table)
+{
+    m_viewTable = table;
+}
+
 QString DatabaseUtility::idFieldName() const
 {
     if (!m_idFieldName.isEmpty())
@@ -138,6 +148,11 @@ QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
 QVariantMap DatabaseUtility::mapFromId(const QString &tableName, int id) const
 {
     return mapFromRecord(recordFromId(tableName, id));
+}
+
+QVariantMap DatabaseUtility::mapFromId(int id) const
+{
+    return mapFromId(m_viewTable, id);
 }
 
 QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,

@@ -33,6 +33,9 @@ public:
     int typeId() const;
     void setTypeId(int typeId);
 
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
 private:
     int m_typeId;
 

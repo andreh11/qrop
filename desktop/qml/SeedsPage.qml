@@ -92,15 +92,15 @@ Page {
         onActivated: weekSpinBox.previousYear();
     }
 
-    Shortcut {
-        sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            seedListView.currentIndex = 0
-            seedListView.forceActiveFocus();
-        }
-    }
+//    Shortcut {
+//        sequences: ["Up", "Down", "Left", "Right"]
+//        enabled: navigationIndex === 4
+//        context: Qt.ApplicationShortcut
+//        onActivated: {
+//            seedListView.currentIndex = 0
+//            seedListView.forceActiveFocus();
+//        }
+//    }
 
     SeedListModel {
         id: seedListModel
@@ -318,7 +318,7 @@ Page {
                     hoverEnabled: true
                     preventStealing: true
                     propagateComposedEvents: true
-                    cursorShape: Qt.PointingHandCursor
+//                    cursorShape: Qt.PointingHandCursor
 
                     Row {
                         id: summaryRow

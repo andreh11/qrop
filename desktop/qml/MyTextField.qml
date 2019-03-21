@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018, 2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ TextField {
     property bool hasError: showError && ((characterLimit && length > characterLimit) || !acceptableInput)
     property int characterLimit
     property bool showBorder: true
-//    property color placeholderTextColor
-    property int suffixTextAddedMargin: 0
+    property bool autoJumpToNextItem: true
+    property int suffixTextAddedMargin: Units.smallSpacing
 
     property color color: manuallyModified ? "red" : Material.accent
     property color errorColor: Material.color(Material.red, Material.Shade500)
@@ -55,10 +55,7 @@ TextField {
         manuallyModified = false;
     }
 
-    activeFocusOnPress: true
-    activeFocusOnTab: true
-    Layout.minimumWidth: 120
-    background.width: width
+    onAccepted: if (autoJumpToNextItem) nextItemInFocusChain().forceActiveFocus()
 
     onActiveFocusChanged: {
         if (activeFocus)
@@ -72,34 +69,39 @@ TextField {
         manuallyModified = true
     }
 
-    onAccepted: nextItemInFocusChain().forceActiveFocus()
+    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
+                             background ? background.implicitHeight : 0,
+                             topPadding + bottomPadding)
+
+    leftPadding: Units.smallSpacing
+    rightPadding: leftPadding
+
+    activeFocusOnPress: true
+    activeFocusOnTab: true
 
     Keys.onEscapePressed: event.accepted = false
+    Layout.minimumWidth: 120
 
-    Label {
-        id: fieldLabel
-        x: control.leftPadding
-        y: control.topPadding
-        width: control.width - (control.leftPadding + control.rightPadding)
-        height: control.height - (control.topPadding + control.bottomPadding)
-        text: control.labelText
-        font: control.font
-        color: control.Material.hintTextColor
-        verticalAlignment: control.verticalAlignment
-        elide: Text.ElideRight
-        renderType: control.renderType
-        visible: !control.text && !activeFocus
+    background: Rectangle {
+        height: 32
+        implicitWidth: 200
+        implicitHeight: 40
+        border.width: control.activeFocus ? 2 : 1
+        radius: 4
+        color: control.palette.base
+        border.color: control.activeFocus ? control.palette.highlight : control.palette.mid
     }
 
     Label {
         id: floatingLabel
-        anchors.verticalCenter: control.top
+        anchors.bottom: control.top
         anchors.left: parent.left
-        color: parent.enabled ? Material.accent
-                              : parent.Material.hintTextColor
+        color: parent.enabled ? Material.accent : parent.Material.hintTextColor
         text: labelText
         font.pixelSize: Units.fontSizeBodyAndButton
-        visible: control.text != "" || activeFocus
+        visible: labelText
     }
 
     Label {
@@ -140,7 +142,7 @@ TextField {
             text: hasError ? control.errorText : control.helperText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor
-                                    : Qt.darker(control.hintColor)
+                                    : Material.color(Material.Grey, Material.Shade800)
 
             Behavior on color {
                 ColorAnimation { duration: 200 }

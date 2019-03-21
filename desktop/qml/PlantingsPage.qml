@@ -39,6 +39,7 @@ Page {
     property int rowCount: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
+    property bool dialogOpened: false
 
     signal noteButtonClicked(int plantingId)
 
@@ -85,14 +86,14 @@ Page {
 
     Shortcut {
         sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && addButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: addButton.clicked()
     }
 
     Shortcut {
         sequences: ["Ctrl+T"]
-        enabled: navigationIndex === 0 && addButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && addButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: timegraphButton.toggle();
     }
@@ -100,63 +101,63 @@ Page {
 
     Shortcut {
         sequences: [StandardKey.Find]
-        enabled: navigationIndex === 0 && filterField.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && filterField.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: filterField.forceActiveFocus();
     }
 
     Shortcut {
         sequence: "Ctrl+E"
-        enabled: navigationIndex === 0 && editButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && editButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: editButton.clicked()
     }
 
     Shortcut {
         sequence: "Ctrl+D"
-        enabled: navigationIndex === 0 && duplicateButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && duplicateButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: duplicateButton.clicked()
     }
 
     Shortcut {
         sequence: StandardKey.Delete
-        enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: deleteButton.clicked()
     }
 
     Shortcut {
         sequence: StandardKey.SelectAll
-        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: plantingsView.selectAll();
     }
 
     Shortcut {
         sequence: StandardKey.Deselect
-        enabled: navigationIndex === 0 && deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: plantingsView.unselectAll()
     }
 
     Shortcut {
         sequence: "Ctrl+Right"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.nextSeason()
     }
 
     Shortcut {
         sequence: "Ctrl+Left"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.previousSeason();
     }
 
     Shortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 0 && !plantingsView.activeFocus && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !plantingsView.activeFocus && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: {
             plantingsView.currentIndex = 0
@@ -166,14 +167,14 @@ Page {
 
     Shortcut {
         sequence: "Ctrl+Up"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.nextYear()
     }
 
     Shortcut {
         sequence: "Ctrl+Down"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !plantingDialog.activeFocus
+        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
         context: Qt.ApplicationShortcut
         onActivated: seasonSpinBox.previousYear();
     }
@@ -188,6 +189,7 @@ Page {
             addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
             page.refresh();
+            dialogOpened = false
         }
 
         onPlantingsModified: {
@@ -195,9 +197,13 @@ Page {
             editPlantingsSnackBar.open();
             plantingsView.unselectAll();
             page.refresh();
+            dialogOpened = false
         }
 
-        onRejected: plantingsView.unselectAll();
+        onRejected: {
+            plantingsView.unselectAll();
+            dialogOpened = false
+        }
     }
 
     Snackbar {
@@ -307,7 +313,10 @@ Page {
                         Material.foreground: Material.accent
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks === 0
-                        onClicked: plantingDialog.createPlanting()
+                        onClicked: {
+                            plantingDialog.createPlanting()
+                            dialogOpened = true;
+                        }
                     }
 
                     IconButton {
@@ -331,7 +340,10 @@ Page {
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks > 0
                         Material.foreground: "white"
-                        onClicked: plantingDialog.editPlantings(selectedIdList())
+                        onClicked: {
+                            plantingDialog.editPlantings(selectedIdList());
+                            dialogOpened = true;
+                        }
 
                     }
 

@@ -28,15 +28,19 @@ Dialog {
     property alias unitAbbreviation: abbreviationField.text
     readonly property bool acceptableForm: unitNameField.acceptableInput && abbreviationField.acceptableInput
 
+    function prefill(text) {
+        abbreviationField.text = text;
+    }
+
     title: qsTr("Add Unit")
-    standardButtons: Dialog.Ok | Dialog.Cancel
     margins: 0
 
-    onOpened: {
+    onAboutToShow: {
         unitNameField.clear();
         abbreviationField.clear();
-        unitNameField.forceActiveFocus();
     }
+
+    onOpened: abbreviationField.forceActiveFocus();
 
     footer: AddDialogButtonBox {
         width: parent.width
@@ -57,17 +61,6 @@ Dialog {
         Keys.onBackPressed: control.reject() // especially necessary on Android
 
         MyTextField {
-            id: unitNameField
-            width: parent.width
-            validator: RegExpValidator { regExp: /\w[\w -]*/ }
-
-            labelText: qsTr("Full name")
-            Layout.fillWidth: true
-            Layout.minimumWidth: 100
-            Keys.onReturnPressed: if (acceptableForm) control.accept();
-        }
-
-        MyTextField {
             id: abbreviationField
             width: parent.width
             validator: RegExpValidator { regExp: /\w[\w -]*/ }
@@ -78,5 +71,15 @@ Dialog {
             Keys.onReturnPressed: if (acceptableForm) control.accept();
         }
 
+        MyTextField {
+            id: unitNameField
+            width: parent.width
+            validator: RegExpValidator { regExp: /\w[\w -]*/ }
+
+            labelText: qsTr("Full name")
+            Layout.fillWidth: true
+            Layout.minimumWidth: 100
+            Keys.onReturnPressed: if (acceptableForm) control.accept();
+        }
     }
 }

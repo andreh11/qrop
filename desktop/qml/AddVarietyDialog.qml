@@ -25,15 +25,20 @@ Dialog {
     id: dialog
 
     readonly property string varietyName: varietyNameField.text.trim()
-    property int seedCompanyId: seedCompanyModel.rowId(seedCompanyField.currentIndex)
-    property alias acceptableForm: varietyNameField.acceptableInput
+    property int seedCompanyId: seedCompanyField.selectedId
+    property bool acceptableForm: varietyNameField.acceptableInput && seedCompanyId > 0
+
+    function prefill(name) {
+        varietyNameField.text = name
+    }
 
     title: qsTr("Add New Variety")
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    modal: false
 
     onAboutToShow: {
         varietyNameField.clear();
-        seedCompanyField.currentIndex = 0;
+        seedCompanyField.selectedId = -1
+        seedCompanyField.text = "";
         varietyNameField.forceActiveFocus();
     }
 
@@ -46,13 +51,12 @@ Dialog {
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: Units.mediumSpacing
+        spacing: Units.smallSpacing
         focus: true
 
-        Keys.onReturnPressed: {
-            if (varietyNameField.acceptableInput)
-                dialog.accept();
-        }
+        Keys.onReturnPressed: if (acceptableForm) dialog.accept();
+        Keys.onEnterPressed: if (acceptableForm) dialog.accept();
+
         Keys.onEscapePressed: dialog.reject()
         Keys.onBackPressed: dialog.reject() // especially necessary on Android
 
@@ -66,21 +70,20 @@ Dialog {
             Layout.minimumWidth: 100
         }
 
-        MyComboBox {
+        ComboTextField {
             id: seedCompanyField
+            Layout.topMargin: Units.mediumSpacing
+            textRole: function (model) { return model.seed_company; }
+            idRole: function (model) { return model.seed_company_id; }
+            showAddItem: false
+
             labelText: qsTr("Seed Company")
             Layout.minimumWidth: 150
             Layout.fillWidth: true
-            editable: false
-            model: SeedCompanyModel {
-                id: seedCompanyModel
-            }
-            textRole: "seed_company"
+            model: SeedCompanyModel { id: seedCompanyModel }
 
-            Keys.onReturnPressed: {
-                if (varietyNameField.acceptableInput && !popup.opened)
-                    dialog.accept();
-            }
+            Keys.onReturnPressed: if (acceptableForm) dialog.accept();
+            Keys.onEnterPressed: if (acceptableForm) dialog.accept();
         }
     }
 }

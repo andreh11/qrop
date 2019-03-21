@@ -23,16 +23,8 @@ VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
     , m_cropId(-1)
 {
     setFilterCropId(1);
-    setFilterKeyColumn(2);
+    setFilterKeyStringColumn("variety");
     setSortColumn("variety");
-    //    int cropColumn = fieldColumn("crop_id");
-    //    setRelation(cropColumn, QSqlRelation("crop", "crop_id", "crop"));
-
-    //    int seedCompanyColumn = fieldColumn("seed_company_id");
-    //    setRelation(seedCompanyColumn, QSqlRelation("seed_company",
-    //                                                "seed_company_id",
-    //                                                "seed_company"));
-    //    select();
 }
 
 int VarietyModel::cropId() const
@@ -46,11 +38,12 @@ void VarietyModel::setFilterCropId(int cropId)
         return;
 
     m_cropId = cropId;
-
-    if (m_cropId >= 1) {
-        const QString filterString = QString::fromLatin1("crop_id = %1").arg(cropId);
-        m_model->setFilter(filterString);
-    }
-
+    invalidateFilter();
     emit cropIdChanged();
+}
+
+bool VarietyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    int cropId = rowValue(sourceRow, sourceParent, "crop_id").toInt();
+    return cropId == m_cropId && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

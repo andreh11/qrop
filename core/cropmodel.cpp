@@ -23,6 +23,7 @@ CropModel::CropModel(QObject *parent, const QString &tableName)
     , m_familyId(-1)
 {
     setSortColumn("crop");
+    setFilterKeyStringColumn("crop");
 }
 
 int CropModel::familyId() const

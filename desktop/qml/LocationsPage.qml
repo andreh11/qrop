@@ -562,9 +562,9 @@ Page {
             Material.elevation: 2
             Material.background: "white"
 
-            Behavior on Layout.minimumHeight {
-                NumberAnimation { duration: Units.shortDuration  }
-            }
+//            Behavior on Layout.minimumHeight {
+//                NumberAnimation { duration: Units.shortDuration  }
+//            }
 
             MouseArea {
                 id: plantingPaneMouseArea

@@ -51,6 +51,7 @@ public:
 
     void setFilterYear(int year);
     void setFilterSeason(int season);
+    void setFilterKeyStringColumn(const QString &columnName);
     void setSortColumn(const QString &columnName);
     void setSortOrder(const QString &order);
 

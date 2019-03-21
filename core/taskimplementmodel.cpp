@@ -23,9 +23,8 @@ TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName
     : SortFilterProxyModel(parent, tableName)
     , m_methodId(-1)
 {
-    int col = m_model->record().indexOf("task_method_id");
-    setFilterKeyColumn(col);
     setSortColumn("implement");
+    setFilterKeyStringColumn("implement");
 }
 
 int TaskImplementModel::methodId() const
@@ -39,6 +38,13 @@ void TaskImplementModel::setMethodId(int methodId)
         return;
 
     m_methodId = methodId;
-    setFilterFixedString(QString::number(m_methodId));
+    invalidateFilter();
     methodIdChanged();
+}
+
+bool TaskImplementModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    int taskMethodId = rowValue(sourceRow, sourceParent, "task_method_id").toInt();
+    return taskMethodId == m_methodId
+            && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

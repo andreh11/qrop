@@ -91,9 +91,11 @@ Button {
         hoverEnabled: true
         cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
-            control.toggle()
-            manuallyModified = true
-            control.clicked()
+            if (!autoExclusive || !toggled) {
+                control.toggle()
+                manuallyModified = true
+                control.clicked()
+            }
         }
     }
 }

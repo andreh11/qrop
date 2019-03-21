@@ -29,22 +29,24 @@ Flickable {
     // Initialisation mode ensures that no duration field is modified.
     property bool initMode: false
 
-    property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
-    property bool accepted: (mode === "edit" || varietyField.currentIndex >= 0) && coherentDates
 
     property int locationViewWidth: locationView.treeViewWidth
     property alias durationMode: durationCheckBox.checked
 
     property string mode: "add" // add or edit
     property bool chooseLocationMode: false
-    readonly property int varietyId: varietyModel.rowId(varietyField.currentIndex)
+    readonly property int varietyId: varietyField.selectedId
     property alias inGreenhouse: inGreenhouseCheckBox.checked
     property bool directSeeded: directSeedRadio.checked
     property bool transplantRaised: greenhouseRadio.checked
     property bool transplantBought: boughtRadio.checked
     property alias varietyField: varietyField
+    property alias plantingAmountField: plantingAmountField
     property alias addVarietyDialog: addVarietyDialog
-    property alias cropId: varietyModel.cropId
+    property int cropId: -1
+
+    property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
+    property bool accepted: (mode === "edit" || (varietyId > 0 && unitId > 0)) && coherentDates
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
@@ -61,7 +63,7 @@ Flickable {
     readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate :
                                                                 fieldPlantingDateField.calendarDate
     readonly property string plantingDateString: plantingType === 1 ? fieldSowingDateField.isoDateString :
-                                                                fieldPlantingDateField.isoDateString
+                                                                      fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: begHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
                                                                begHarvestDateField.calendarDate,
@@ -107,7 +109,8 @@ Flickable {
                                         ? 0
                                         : 1.0 * plantsToStart / traySize
 
-    readonly property alias unitText: unitField.currentText
+    readonly property alias unitId: unitField.selectedId
+    readonly property alias unitText: unitField.text
     readonly property real yieldPerBedMeter: yieldPerBedMeterField.text ? Number.fromLocaleString(Qt.locale(), yieldPerBedMeterField.text) : 0
     readonly property real estimatedYield: plantingLength * yieldPerBedMeter
     readonly property real averagePrice: averagePriceField.text ? Number.fromLocaleString(Qt.locale(), averagePriceField.text) : 0
@@ -141,7 +144,7 @@ Flickable {
         "seeds_quantity": seedsQuantity,
         "seeds_percentage": seedsExtraPercentage,
         "keyword_ids": keywordsIdList(),
-        "unit_id": unitModel.rowId(unitField.currentIndex),
+        "unit_id": unitId,
         "yield_per_bed_meter": yieldPerBedMeter,
         "average_price": averagePrice,
         "tray_size" : traySize,
@@ -169,7 +172,7 @@ Flickable {
         [seedsPerGramField, "seeds_per_gram", seedsPerGram],
         [seedsNeededField, "seeds_number", seedsNeeded],
         [seedsExtraPercentageField, "seeds_percentage", seedsExtraPercentage],
-        [unitField, "unit_id", unitModel.rowId(unitField.currentIndex)],
+        [unitField, "unit_id", unitId],
         [yieldPerBedMeterField, "yield_per_bed_meter", yieldPerBedMeter],
         [averagePriceField, "average_price", averagePrice],
         [traySizeField, "tray_size", traySize],
@@ -186,8 +189,10 @@ Flickable {
 
             if ((widget instanceof MyTextField && widget.manuallyModified)
                     || (widget instanceof ChoiceChip && widget.manuallyModified)
+                    || (widget instanceof RadioButton && widget.manuallyModified)
                     || (widget instanceof MyComboBox && widget.manuallyModified)
                     || (widget instanceof CheckBox && widget.manuallyModified)
+                    || (widget instanceof ComboTextField && widget.manuallyModified)
                     || (widget instanceof DatePicker && widget.modified)) {
                 map[name] = value;
             }
@@ -250,6 +255,7 @@ Flickable {
         unitField.reset();
         yieldPerBedMeterField.reset();
         averagePriceField.reset();
+
         selectedKeywords = []
         keywordsModified = false
         keywordOldIdList = []
@@ -263,7 +269,7 @@ Flickable {
 
         if (item instanceof MyTextField)
             item.text = value;
-        else if (item instanceof CheckBox || item instanceof ChoiceChip)
+        else if (item instanceof CheckBox || item instanceof ChoiceChip || item instanceof RadioButton)
             item.checked = value;
         else if (item instanceof MyComboBox)
             item.setRowId(value);
@@ -272,9 +278,9 @@ Flickable {
     function setFormValues(val) {
         if (mode === "edit" && 'variety_id' in val) {
             var varietyId = Number(val['variety_id'])
-            cropId = Variety.cropId(varietyId)
             varietyModel.refresh();
-            varietyField.setRowId(varietyId);
+            varietyField.selectedId = varietyId
+            varietyField.text = Variety.varietyName(varietyId)
         }
 
         if (mode === "edit") {
@@ -285,6 +291,7 @@ Flickable {
                 setFieldValue(plantingAmountField, val['length']);
             }
         }
+
         setFieldValue(inRowSpacingField, val['spacing_plants']);
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
@@ -293,7 +300,7 @@ Flickable {
                                    : Date.fromLocaleString(Qt.locale(), val["planting_date"],
                                                            "yyyy-MM-dd");
 
-        initMode = true
+        initMode = true;
         setFieldValue(harvestWindowField, val['harvest_window']);
         switch (val['planting_type']) {
         case 1:
@@ -326,14 +333,21 @@ Flickable {
             updateFromFieldPlantingDate(true, true);
             fieldPlantingDateField.modified = false;
         }
-        initMode = false
+        initMode = false;
 
         setFieldValue(traySizeField, val['tray_size']);
         setFieldValue(seedsPerHoleField, val['seeds_per_hole']);
         setFieldValue(greenhouseEstimatedLossField, val['estimated_gh_loss']);
         setFieldValue(seedsExtraPercentageField, val['seeds_percentage']);
         setFieldValue(seedsPerGramField, val['seeds_per_gram']);
-        setFieldValue(unitField, Number(val['unit_id']));
+        if ('unit_id' in val) {
+            var unitId = Number(val['unit_id'])
+            var map = Unit.mapFromId(unitId);
+
+            unitModel.refresh();
+            unitField.selectedId = unitId;
+            unitField.text = map['abbreviation'];
+        }
         setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
         setFieldValue(averagePriceField, val['average_price']);
 
@@ -379,7 +393,7 @@ Flickable {
             // don't exceed bounds
             contentY = Math.max(0, Math.min(ypos - height + item.height, contentHeight - height))
         }
-     }
+    }
 
     /**
      * Duration functions
@@ -427,7 +441,7 @@ Flickable {
         if (duration.text === "") {
             to.calendarDate = from.calendarDate;
         } else if (settings.dateType === "week"
-                 && (to === endHarvestDateField || from === endHarvestDateField)) {
+                   && (to === endHarvestDateField || from === endHarvestDateField)) {
             to.calendarDate = MDate.addDays(from.calendarDate,
                                             (Number(duration.text) - 7) * direction);
         } else {
@@ -504,8 +518,8 @@ Flickable {
     contentHeight: mainColumn.height
     contentWidth: width
 
-    onCropIdChanged: varietyField.reset()
-    onVarietyIdChanged: if (mode === "add") preFillForm("variety_id")
+    onCropIdChanged: { console.log("new crop id:", cropId); varietyField.reset() }
+    onVarietyIdChanged: { console.log("new variety id:", varietyId); if (mode === "add") preFillForm("variety_id") }
     onPlantingTypeChanged: if (mode === "add") preFillForm("planting_type")
     onInGreenhouseChanged: if (mode === "add") preFillForm("in_greenhouse")
 
@@ -523,56 +537,78 @@ Flickable {
         property bool showDurationFields
     }
 
-    VarietyModel { id: varietyModel }
+    VarietyModel {
+        id: varietyModel
+        cropId: control.cropId
+    }
     KeywordModel { id: keywordModel }
 
     Column {
         id: mainColumn
         width: control.width
         spacing: Units.smallSpacing
+//        spacing: 0
 
-        RowLayout {
+        FormGroupBox {
+            id: varietyBox
             width: parent.width
-            spacing: Units.mediumSpacing
-            visible: !chooseLocationMode
+            RowLayout {
+                width: parent.width
+                spacing: Units.mediumSpacing
+                visible: !chooseLocationMode
 
-            MyComboBox {
-                id: varietyField
-                labelText: qsTr("Variety")
-                Layout.fillWidth: true
-                editable: false
-                showAddItem: true
-                addItemText: qsTr("Add Variety")
-                model: varietyModel
-                textRole: "variety"
+                ComboTextField {
+                    id: varietyField
+                    enabled: cropId > 0
+                    Layout.topMargin: Units.mediumSpacing
+                    textRole: function (model) { return model.variety; }
+                    idRole: function (model) { return model.variety_id; }
+                    showAddItem: true
+                    addItemText: text ? qsTr('Add new variety "%1"').arg(text) : qsTr("Add new variety")
+                    autoOpenPopupOnFocus: mode === "add"
+                    onActiveFocusChanged: ensureItemVisible(varietyField)
 
-                onAddItemClicked: addVarietyDialog.open()
-                onActivated: plantingAmountField.forceActiveFocus()
-                onActiveFocusChanged: ensureItemVisible(varietyField)
+                    Layout.fillWidth: true
+                    model: varietyModel
+                    labelText: qsTr("Variety")
 
-                AddVarietyDialog {
-                    id: addVarietyDialog
-                    onAccepted: {
-                        if (seedCompanyId > 0)
-                            Variety.add({"variety" : varietyName,
-                                         "crop_id" : varietyModel.cropId,
-                                         "seed_company_id" : seedCompanyId});
-                        else
-                            Variety.add({"variety" : varietyName,
-                                         "crop_id" : varietyModel.cropId});
+                    onAddItemClicked: {
+                        addVarietyDialog.open()
+                        addVarietyDialog.prefill(text)
+                    }
 
-                        varietyModel.refresh();
-                        varietyField.currentIndex = varietyField.find(varietyName);
-                        plantingAmountField.forceActiveFocus()
+                    AddVarietyDialog {
+                        id: addVarietyDialog
+                        onRejected: {
+                            plantingAmountField.forceActiveFocus();
+                            varietyField.text = "";
+                        }
+
+                        onAccepted: {
+                            var id = -1
+                            if (seedCompanyId > 0)
+                                id = Variety.add({"variety" : varietyName,
+                                                     "crop_id" : varietyModel.cropId,
+                                                     "seed_company_id" : seedCompanyId});
+                            else
+                                id = Variety.add({"variety" : varietyName,
+                                                     "crop_id" : varietyModel.cropId});
+
+                            varietyModel.refresh();
+                            varietyField.manuallyModified = true
+                            varietyField.selectedId = id
+                            varietyField.text = varietyName
+                            inGreenhouseCheckBox.forceActiveFocus()
+                        }
                     }
                 }
-            }
 
-            CheckBox {
-                id: inGreenhouseCheckBox
-                property bool manuallyModified
-                text: qsTr("In Greenhouse")
-                onPressed: manuallyModified = true
+                CheckBox {
+                    id: inGreenhouseCheckBox
+                    property bool manuallyModified
+                    text: qsTr("In Greenhouse")
+                    onPressed: manuallyModified = true
+                }
             }
         }
 
@@ -583,6 +619,7 @@ Flickable {
             ColumnLayout {
                 width: parent.width
                 spacing: Units.mediumSpacing
+
 
                 RowLayout {
                     spacing: Units.mediumSpacing
@@ -661,27 +698,51 @@ Flickable {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             spacing: Units.smallSpacing
             visible: !chooseLocationMode
+            leftPadding: 2
+            topPadding: -directSeedRadio.padding * 2
+            bottomPadding: topPadding
 
-            ChoiceChip {
+            RadioButton {
                 id: directSeedRadio
+
+                property bool manuallyModified: false
+                function reset() {
+                    manuallyModified = false;
+                }
+
                 text: qsTr("Direct seed")
                 checked: true
                 autoExclusive: true
                 onActiveFocusChanged: ensureItemVisible(directSeedRadio)
+                onToggled: manuallyModified = true
             }
 
-            ChoiceChip {
+            RadioButton {
                 id: greenhouseRadio
+
+                property bool manuallyModified: false
+                function reset() {
+                    manuallyModified = false;
+                }
+
                 text: qsTr("Transplant, raised")
                 autoExclusive: true
                 onActiveFocusChanged: ensureItemVisible(greenhouseRadio)
+                onToggled: manuallyModified = true
             }
 
-            ChoiceChip {
+            RadioButton {
                 id: boughtRadio
+
+                property bool manuallyModified: false
+                function reset() {
+                    manuallyModified = false;
+                }
+
                 text: qsTr("Transplant, bought")
                 autoExclusive: true
                 onActiveFocusChanged: ensureItemVisible(boughtRadio)
+                onToggled: manuallyModified = true
             }
         }
 
@@ -692,16 +753,16 @@ Flickable {
             visible: plantingSettings.showDurationFields
 
             label: Switch {
-                    id: durationCheckBox
-                    bottomPadding: 0
-                    text: parent.title
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    checked: plantingSettings.durationsByDefault
-                    onActiveFocusChanged: ensureItemVisible(durationCheckBox)
+                id: durationCheckBox
+                bottomPadding: 0
+                text: parent.title
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                checked: plantingSettings.durationsByDefault
+                onActiveFocusChanged: ensureItemVisible(durationCheckBox)
 
-                    Layout.alignment: Qt.AlignRight
-                }
+                Layout.alignment: Qt.AlignRight
+            }
 
             GridLayout {
                 width: parent.width
@@ -900,7 +961,7 @@ Flickable {
 
                 Button {
                     id: locationButton
-                    flat: true
+//                    flat: true
                     visible: !chooseLocationMode
                     width: parent.width
                     text: {
@@ -1074,30 +1135,32 @@ Flickable {
                 width: parent.width
                 spacing: 16
 
-                MyComboBox {
+                ComboTextField {
                     id: unitField
                     labelText: qsTr("Unit")
-                    currentIndex: find("kg")
-                    addItemText: qsTr("Add Unit")
+                    addItemText: text ? qsTr('Add the unit "%1"').arg(text) : qsTr("Add a unit")
                     showAddItem: true
-                    model: UnitModel {
-                        id: unitModel
-                    }
-                    textRole: "abbreviation"
+                    model: UnitModel { id: unitModel }
+                    textRole: function (model) { return model.abbreviation; }
+                    idRole: function (model) { return model.unit_id; }
+
                     Layout.fillWidth: true
 
-                    onAddItemClicked: addUnitDialog.open();
-                    onActiveFocusChanged: ensureItemVisible(unitField)
-                    //                    onActivated: plantingAmountField.forceActiveFocus()
+                    onAddItemClicked: {
+                        addUnitDialog.open();
+                        addUnitDialog.prefill(text);
+                    }
+                    onActiveFocusChanged: ensureItemVisible(this)
 
                     AddUnitDialog {
                         id: addUnitDialog
                         onAccepted: {
-                            Unit.add({"fullname" : unitName,
-                                         "abbreviation": unitAbbreviation});
+                            var id = Unit.add({ "fullname" : unitName,
+                                                "abbreviation": unitAbbreviation });
+                            varietyField.manuallyModified = true
                             unitModel.refresh();
-                            unitField.currentIndex = unitField.find(unitAbbreviation);
-                            //                            plantingAmountField.forceActiveFocus()
+                            unitField.selectedId = id;
+                            unitField.text = unitAbbreviation;
                         }
                     }
                 }
@@ -1106,14 +1169,14 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
-                    suffixText: unitField.currentText
+                    suffixText: unitId > 0 ? unitField.text : ""
                     Layout.fillWidth: true
-                    onActiveFocusChanged: ensureItemVisible(yieldPerBedMeterField)
+                    onActiveFocusChanged: ensureItemVisible(this)
                 }
 
                 MyTextField {
                     id: averagePriceField
-                    labelText: qsTr("Price/") + unitField.currentText
+                    labelText: qsTr("Price/") + unitField.text
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
                     validator: QropDoubleValidator {
                         bottom: 0

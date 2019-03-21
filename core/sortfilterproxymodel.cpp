@@ -117,6 +117,11 @@ void SortFilterProxyModel::setFilterSeason(int season)
     invalidateFilter();
 }
 
+void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
+{
+    setFilterKeyColumn(m_model->roleIndex(columnName));
+}
+
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;

@@ -142,6 +142,8 @@ Column {
         width: parent.width
         height: contentHeight
 
+        onVisibleChanged: if (visible) varietyModel.refresh();
+
         model: VarietyModel {
             id: varietyModel
             cropId: crop_id

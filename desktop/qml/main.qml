@@ -34,7 +34,7 @@ ApplicationWindow {
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
         { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
         { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" }
-//        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
+        //        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
         //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
     property int navigationIndex: 0
@@ -106,9 +106,9 @@ ApplicationWindow {
         id: harvestsPage
     }
 
-    NotesPage {
-        id: notesPage
-    }
+//    NotesPage {
+//        id: notesPage
+//    }
 
     SeedsPage {
         id: seedListPage
@@ -369,32 +369,7 @@ ApplicationWindow {
                     searchMode = true
                     searchField.focus = true
                 }
-
             }
-
-
-            //                            ToolButton {
-            //                                id: menuButton
-            //                                text: "\ue5d4"
-            //                                font.family: "Material Icons"
-            //                                font.pixelSize: 24
-            //                                onClicked: optionsMenu.open()
-
-            //                                Menu {
-            //                                    id: optionsMenu
-            //                                    x: parent.width - width
-            //                                    transformOrigin: Menu.TopRight
-
-            //                                    MenuItem {
-            //                                        text: "Settings"
-            //                                    }
-            //                                    MenuItem {
-            //                                        text: "About"
-            //                                        onTriggered: aboutDialog.open()
-            //                                    }
-            //                                }
-            //                            }
-
         }
     }
 
@@ -413,11 +388,6 @@ ApplicationWindow {
         //        Material.background: Material.color(Material.Teal, Material.Shade300)
         Material.background: Material.primary
 
-        //        background: Rectangle {
-        //            anchors.fill: parent
-        //            color: "green"
-        //        }
-
         ColumnLayout {
             anchors.fill: parent
 
@@ -435,9 +405,7 @@ ApplicationWindow {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        railMode = largeDisplay && !railMode
-                    }
+                    onClicked: railMode = largeDisplay && !railMode
                 }
             }
 
@@ -451,9 +419,8 @@ ApplicationWindow {
                     iconText: modelData.iconText
                     onClicked: {
                         navigationIndex = index
-                        if (!largeDisplay) {
+                        if (!largeDisplay)
                             drawer.close()
-                        }
                     }
                 }
             }
@@ -469,9 +436,8 @@ ApplicationWindow {
 
                 onClicked: {
                     navigationIndex = navigationModel.length
-                    if (!largeDisplay) {
+                    if (!largeDisplay)
                         drawer.close()
-                    }
                 }
             }
         }
@@ -502,10 +468,8 @@ ApplicationWindow {
         anchors.rightMargin: visible ? -width/2 : 0
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
-            if(!noteSideSheet.opened) {
-                console.log("open!")
+            if (!noteSideSheet.opened)
                 noteSideSheet.open();
-            }
         }
 
         contentItem: Text {
@@ -533,6 +497,7 @@ ApplicationWindow {
 
     StackView {
         id: stackView
+        focus: true
         anchors.fill: parent
         anchors.leftMargin: largeDisplay ? drawer.width : undefined
         anchors.rightMargin: noteSideSheet.opened ? noteSideSheet.width : 0

@@ -45,7 +45,6 @@ Dialog {
         taskDialogHeader.reset();
         taskForm.reset()
         dialog.open()
-        taskDialogHeader.typeField.forceActiveFocus();
     }
 
     function editTask(taskId) {
@@ -54,17 +53,23 @@ Dialog {
         taskIdChanged(); // To update taskValueMap
 
         taskDialogHeader.reset();
-        taskDialogHeader.typeField.setRowId(taskTypeId)
+
+        var typeName = TaskType.mapFromId(taskTypeId)["type"];
+        taskDialogHeader.typeField.selectedId = taskTypeId;
+        taskDialogHeader.typeField.text = typeName;
+
         taskDialogHeader.completedDate = taskValueMap['completed_date']
         taskForm.reset();
         taskForm.setFormValues(taskValueMap)
         dialog.open();
     }
 
+    onOpened: if (mode === "add") taskDialogHeader.typeField.forceActiveFocus();
+
     title: mode === "add" ? qsTr("Add Task") : qsTr("Edit Task")
     modal: true
     focus: true
-    closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
     height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing : parent.height - 2 * Units.smallSpacing
 
@@ -103,19 +108,13 @@ Dialog {
         mode: dialog.mode
     }
 
-    onOpened: {
-        if (mode === "add") {
-            taskDialogHeader.typeComboBox.contentItem.forceActiveFocus();
-        }
-
-    }
 
     onAccepted: {
         if (mode === "add") {
-            var id = Task.add(taskForm.values)
+            console.log(taskForm.values["task_implement_id"]);
+            Task.add(taskForm.values);
         } else {
-            var id = Task.update(dialog.taskId, taskForm.values)
-            //TODO: task update
+            Task.update(dialog.taskId, taskForm.values);
         }
     }
 }

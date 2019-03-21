@@ -82,5 +82,6 @@
         <file>qml/NoteSideSheet.qml</file>
         <file>qml/PhotoPane.qml</file>
         <file>qml/SeedsPage.qml</file>
+        <file>qml/ComboTextField.qml</file>
     </qresource>
 </RCC>

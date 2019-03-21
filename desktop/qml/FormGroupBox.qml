@@ -21,25 +21,31 @@ import QtQuick.Controls.Material 2.2
 GroupBox {
     id: control
 
-    padding: Units.formSpacing
+//    padding: Units.formSpacing
+    padding: 1
 //    topPadding: padding + 8
-//    topPadding: title === "" ? 0 : 32
+//    topPadding: Units.mediumSpacing
     width: parent.width
 
     background: Rectangle {
-        anchors.fill: parent
-        radius: 4
+        height: parent.height
+//        width: 10
+        width: 0
+        implicitWidth: 10
         anchors.topMargin: control.title ? label.height : 0
-        border.color: Material.color(Material.Grey, Material.Shade300)
+        color: Material.primary
+//        border.color: Material.color(Material.Grey, Material.Shade300)
+//        border.color: "transparent"
     }
 
     label: Label {
-//        x: control.leftPadding
+        //        x: control.leftPadding
+//        x: 10 Units.smallSpacing
         x: 0
         width: control.availableWidth
         text: control.title
         font.family: "Roboto Regular"
-        font.pixelSize: Units.fontSizeBodyAndButton
+        font.pixelSize: 18
         color: Material.primary
 
     }

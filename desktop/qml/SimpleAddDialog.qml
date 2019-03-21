@@ -13,10 +13,14 @@ Dialog {
     property alias labelText: textField.labelText
     property alias placeHolderTex: textField.placeholderText
     property alias validator: textField.validator
+
+    function prefill(text) {
+        textField.text = text
+    }
     
     title: qsTr("Add New Item")
     
-    onOpened: {
+    onAboutToShow: {
         textField.clear();
         textField.forceActiveFocus();
     }

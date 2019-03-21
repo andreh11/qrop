@@ -34,3 +34,9 @@ int Variety::cropId(int varietyId) const
     QVariantMap map = mapFromId("variety", varietyId);
     return map["crop_id"].toInt();
 }
+
+QString Variety::varietyName(int varietyId) const
+{
+    QVariantMap map = mapFromId("variety", varietyId);
+    return map["variety"].toString();
+}

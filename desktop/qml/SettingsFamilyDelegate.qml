@@ -162,6 +162,8 @@ Column {
         width: parent.width
         height: contentHeight
 
+        onVisibleChanged: if (visible) cropModel.refresh();
+
         model: CropModel {
             id: cropModel
             familyId: family_id

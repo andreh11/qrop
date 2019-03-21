@@ -36,8 +36,6 @@ Item {
             }
         }
 
-        //                orientation: ListView.Horizontal
-        //                spacing: Units.smallSpacing
         model: [
             Material.color(Material.Red, Material.Shade300),
             Material.color(Material.Pink, Material.Shade300),
@@ -77,10 +75,12 @@ Item {
         ]
 
         delegate: AbstractButton {
+            id: buttonDelegate
             checkable: true
             width: 46
             height: width
             autoExclusive: true
+
             onToggled: {
                 control.color = modelData
                 newColorSelected()
@@ -90,6 +90,9 @@ Item {
                 id: buttonRectangle
                 radius: 46
                 color: modelData
+                border.color: buttonDelegate.GridView.isCurrentItem ? Material.primary : "transparent"
+                border.width: 2
+                opacity: buttonDelegate.GridView.isCurrentItem ? 1 : 0.9
 
                 Label {
                     font { family: "Material Icons"; pixelSize: Units.fontSizeHeadline }

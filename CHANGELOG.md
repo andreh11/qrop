@@ -26,8 +26,8 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to allow planting conflicts on the same location.
   - *Field map* − Add option to show full name of locations.
 
-
 ### Changed
+  - Improve combo boxes.
   - Use decimal numbers for planting length, surface and seeds per gram.
   - *Planting view/form*: When using week dates, we assume that the harvest will end
     at the *end* of the end harvest week.

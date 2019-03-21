@@ -201,6 +201,7 @@ void registerTypes()
                                                   Q_UNUSED(scriptEngine)
                                                   auto *unit = new DatabaseUtility();
                                                   unit->setTable("unit");
+                                                  unit->setViewTable("unit");
                                                   return unit;
                                               });
 
@@ -219,6 +220,7 @@ void registerTypes()
                                                   Q_UNUSED(scriptEngine)
                                                   auto *tasktype = new DatabaseUtility();
                                                   tasktype->setTable("task_type");
+                                                  tasktype->setViewTable("task_type");
                                                   return tasktype;
                                               });
 
@@ -228,6 +230,7 @@ void registerTypes()
                                                   Q_UNUSED(scriptEngine)
                                                   auto *taskmethod = new DatabaseUtility();
                                                   taskmethod->setTable("task_method");
+                                                  taskmethod->setViewTable("task_method");
                                                   return taskmethod;
                                               });
 
@@ -237,6 +240,7 @@ void registerTypes()
                                                   Q_UNUSED(scriptEngine)
                                                   auto *taskimplement = new DatabaseUtility();
                                                   taskimplement->setTable("task_implement");
+                                                  taskimplement->setViewTable("task_implement");
                                                   return taskimplement;
                                               });
 

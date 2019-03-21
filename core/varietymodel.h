@@ -32,6 +32,9 @@ public:
     int cropId() const;
     void setFilterCropId(int cropId);
 
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
 signals:
     void cropIdChanged();
 

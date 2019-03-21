@@ -42,7 +42,7 @@ Page {
 
     Settings {
         id: settings
-        property alias farmName: farmNameField.text
+//        property alias farmName: farmNameField.text
         property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
         property alias useStandardBedLength: standardBedLengthSwitch.checked
         property alias standardBedLength: standardBedLengthField.text
@@ -119,26 +119,25 @@ Page {
                     width: parent.width
                     spacing: 0
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
+//                    RowLayout {
+//                        Layout.minimumHeight: Units.rowHeight
+//                        Layout.leftMargin: Units.mediumSpacing
+//                        Layout.rightMargin: Layout.leftMargin
 
-                        Label {
-                            text: qsTr("Farm name")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
+//                        Label {
+//                            text: qsTr("Farm name")
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: Units.fontSizeBodyAndButton
+//                            Layout.fillWidth: true
+//                        }
 
-                        TextInput {
-                            id: farmNameField
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.minimumWidth: 200
-                        }
-
-                    }
+//                        MyTextField {
+//                            id: farmNameField
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: Units.fontSizeBodyAndButton
+//                            Layout.minimumWidth: 200
+//                        }
+//                    }
 
                     ThinDivider { width: parent.width }
 

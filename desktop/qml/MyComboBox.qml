@@ -68,12 +68,33 @@ ComboBox {
         if (i < model.rowCount)
             currentIndex = i;
     }
+    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                            contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0,
+                             Math.max(contentItem.implicitHeight,
+                                      indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+
+//    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+//                            leftPadding + rightPadding)
+//                            || contentWidth + leftPadding + rightPadding
+//    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
+//                             background ? background.implicitHeight : 0,
+//                             topPadding + bottomPadding)
 
     onRowIdChanged: setRowId(rowId)
 
     Material.elevation: 0
     width: parent.width
     padding: 0
+    editable: true
+    leftPadding: Units.smallSpacing
+
+    onEditTextChanged: {
+        if (activeFocus) {
+            popup.open()
+            control.forceActiveFocus()
+        }
+    }
 
     onPressedChanged: manuallyModified = true
     onActiveFocusChanged: {
@@ -86,7 +107,29 @@ ComboBox {
         }
     }
 
+    background: Rectangle {
+        height: 32
+        implicitWidth: 200
+        implicitHeight: 40
+        border.width: control.activeFocus ? 2 : 1
+        radius: 4
+        color: control.palette.base
+        border.color: control.activeFocus ? control.palette.highlight : control.palette.mid
+    }
+
+    Label {
+        id: floatingLabel
+        anchors.bottom: control.top
+        anchors.left: parent.left
+//        anchors.topMargin: -2
+        color: Material.accent
+        text: labelText
+        font.pixelSize: 14
+//        visible: control.contentItem.text !== ""
+    }
+
     popup: Popup {
+        id: popup
         y: control.editable ? control.height - 5 : 0
         width: control.width
         height: ApplicationWindow.window
@@ -128,6 +171,7 @@ ComboBox {
                 width: parent.width
                 implicitHeight: contentHeight
                 height: parent.height - addItemRectangle.height
+
 
                 model: control.delegateModel
                 highlightMoveDuration: 0
@@ -198,20 +242,11 @@ ComboBox {
         verticalAlignment: control.contentItem.verticalAlignment
         elide: Text.ElideRight
         renderType: control.contentItem.renderType
-        visible: !control.contentItem.length
+//        visible: !control.contentItem.length
         leftPadding: 10
+        visible: false
     }
 
-    Label {
-        id: floatingLabel
-        anchors.top: control.top
-        anchors.topMargin: -2
-        anchors.left: parent.left
-        color: Material.accent
-        text: labelText
-        font.pixelSize: 14
-        visible: control.contentItem.text !== ""
-    }
 
     RowLayout {
         anchors {

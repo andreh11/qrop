@@ -33,6 +33,9 @@ public:
     int methodId() const;
     void setMethodId(int methodId);
 
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
 private:
     int m_methodId;
 

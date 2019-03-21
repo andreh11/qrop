@@ -121,7 +121,7 @@ Dialog {
 
     ColumnLayout {
         id: mainColumn
-        spacing: Units.smallSpacing
+        spacing: Units.formSpacing
         width: parent.width
 
         MyTextField {
@@ -193,6 +193,8 @@ Dialog {
             id: greenhouseCheckBox
             property bool manuallyModified
             text: qsTr("Greenhouse")
+            Layout.topMargin: -padding*4
+            Layout.bottomMargin: Layout.topMargin
             onPressed: manuallyModified = true
         }
     }

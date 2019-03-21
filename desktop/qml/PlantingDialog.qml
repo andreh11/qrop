@@ -46,26 +46,26 @@ Dialog {
         refresh();
 
         plantingForm.clearAll();
-        dialog.title = qsTr("Add planting(s)")
         dialog.open()
     }
 
     function editPlantings(plantingIds) {
         mode = "edit";
-        dialog.editPlantingIdList = plantingIds;
         refresh();
         plantingForm.clearAll();
+
+        dialog.editPlantingIdList = plantingIds;
+        if (plantingIds.length === 1) {
+            plantingFormHeader.cropField.selectedId = Planting.cropId(plantingIds[0])
+            plantingFormHeader.cropField.text = Planting.cropName(plantingIds[0])
+        } else
+            plantingFormHeader.bulkEditMode = true
 
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
         plantingForm.setFormValues(editPlantingValueMap);
-        dialog.title = qsTr("Edit planting(s)")
 
         dialog.open()
-        if (plantingIds.length === 1)
-            plantingFormHeader.cropField.rowId = Planting.cropId(plantingIds[0])
-        else
-            plantingFormHeader.bulkEditMode = true
     }
 
     modal: true
@@ -75,35 +75,22 @@ Dialog {
     width: scrollView.implicitWidth
     closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
+    title: mode === "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut
-        onActivated: {
-            if (plantingForm.accepted) accept();
-        }
+        onActivated: if (plantingForm.accepted) accept();
     }
 
     header: PlantingFormHeader {
-//        visible: mode === "add"
         id: plantingFormHeader
         estimatedRevenue: plantingForm.estimatedRevenue
         mode: dialog.mode
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
-
-        onCropSelected: {
-            plantingForm.cropId = cropId;
-            plantingForm.varietyField.forceActiveFocus();
-            plantingForm.varietyField.popup.open();
-        }
-
-        onNewCropAdded: {
-            plantingForm.cropId = newCropId;
-            plantingForm.varietyField.forceActiveFocus();
-            plantingForm.addVarietyDialog.open();
-        }
+        onCropSelected: if (mode === "add") plantingForm.varietyField.forceActiveFocus();
     }
 
     footer: AddEditDialogFooter {
@@ -111,7 +98,6 @@ Dialog {
         rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
         mode: dialog.mode
     }
-
 
     ScrollView {
         id: scrollView
@@ -145,10 +131,10 @@ Dialog {
     }
 
     onOpened: {
-        if (mode === "add") {
-            plantingFormHeader.cropField.contentItem.forceActiveFocus();
-            plantingFormHeader.cropField.popup.open();
-        }
+        if (mode === "add")
+            plantingFormHeader.cropField.forceActiveFocus();
+        else
+            plantingForm.varietyField.forceActiveFocus();
     }
 
     onAccepted: {

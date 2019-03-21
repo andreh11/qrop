@@ -35,7 +35,10 @@ public:
     DatabaseUtility(QObject *parent = nullptr);
 
     QString table() const;
-    void setTable(const QString &table);
+    void setTable(const QString &name);
+
+    QString viewTable() const;
+    void setViewTable(const QString &name);
 
     QString idFieldName() const;
     void setIdFieldName(const QString &fieldName);
@@ -47,6 +50,7 @@ public:
     QList<QSqlRecord> recordListFromIdList(const QString &tableName, const QList<int> &idList) const;
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     Q_INVOKABLE QVariantMap mapFromId(const QString &tableName, int id) const;
+    Q_INVOKABLE QVariantMap mapFromId(int id) const;
     QList<QVariantMap> mapListFromIdList(const QString &tableName, const QList<int> &idList) const;
 
     virtual Q_INVOKABLE int add(const QVariantMap &map) const;

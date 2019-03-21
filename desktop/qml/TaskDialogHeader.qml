@@ -9,19 +9,19 @@ Rectangle {
     id: control
 
     property int taskId: -1
-    readonly property int taskTypeId: taskTypeModel.rowId(typeComboBox.currentIndex)
+    readonly property int taskTypeId: typeField.selectedId
     property string completedDate: ""
     readonly property bool completed: completedDate
-    property alias typeField: typeComboBox
+    property alias typeField: typeField
     property int week
     property int year
     property bool sowPlantTask: false
-    property alias typeComboBox: typeComboBox
 
     function reset() {
-        typeComboBox.currentIndex = 0;
         completedDate = "";
         taskTypeModel.refresh();
+        typeField.selectedId = -1;
+        typeField.text = "";
     }
 
     focus: true
@@ -59,7 +59,10 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: {
-                    var stringList =  typeComboBox.currentText.split(" ");
+                    if (taskTypeId <= 0)
+                        return "";
+
+                    var stringList =  typeField.text.split(" ");
                     if (stringList.length > 1)
                         return stringList[0][0] + stringList[1][0].toString().toUpperCase()
                     else
@@ -70,29 +73,33 @@ Rectangle {
             }
         }
 
-        MyComboBox {
-            id: typeComboBox
+        ComboTextField {
+            id: typeField
             labelText: qsTr("Type")
             floatingLabel: true
-            editable: false
             model: taskTypeModel
             showAddItem: true
+            addItemText: text ? qsTr('Add new type "%1"').arg(text) : qsTr("Add new type")
             enabled: !sowPlantTask
-            addItemText: qsTr("Add Type")
-            textRole: "type"
+            Layout.topMargin: Units.smallSpacing
+            textRole: function (model) { return model.type; }
+            idRole: function (model) { return model.task_type_id; }
             Layout.fillWidth: true
 
-            onAddItemClicked: addTypeDialog.open()
+            onAddItemClicked: {
+                addTypeDialog.open();
+                addTypeDialog.prefill(text);
+            }
 
             SimpleAddDialog {
                 id: addTypeDialog
                 validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                 title: qsTr("Add Type")
                 onAccepted:  {
-                    TaskType.add({"type" : text});
-
+                    var id = TaskType.add({"type" : text});
                     taskTypeModel.refresh();
-                    typeComboBox.currentIndex = typeComboBox.find(text);
+                    typeField.selectedId = id;
+                    typeField.text = text;
                 }
             }
         }

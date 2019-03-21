@@ -42,6 +42,7 @@ QtObject {
 
     readonly property int buttonHeight: 36
     readonly property int chipHeight: 32
+    readonly property int fieldHeight: 32
 
     readonly property int rowHeight: 40 // Height of rows in tables.
     readonly property int monthWidth: 60 // Width of a month in a timeline.

@@ -54,9 +54,10 @@ Dialog {
 
     function clearForm() {
         quantityField.reset();
-        datePicker.calendarDate = new Date()
-        laborTimeField.text = "00:00"
-        laborTimeField.manuallyModified = false
+        datePicker.calendarDate = new Date();
+        laborTimeField.text = "00:00";
+        laborTimeField.manuallyModified = false;
+        harvestCheckBox.checked = true;
         plantingList.reset();
         plantingFormHeader.reset();
     }
@@ -72,26 +73,26 @@ Dialog {
     function create() {
         mode = "add";
         clearForm();
-        plantingFormHeader.cropField.forceActiveFocus();
         plantingFormHeader.refresh();
         plantingList.refresh();
 
         dialog.open()
-        plantingFormHeader.cropField.popup.open();
     }
 
     function edit(harvestId) {
         mode = "edit";
         dialog.harvestId = harvestId;
 
-        plantingFormHeader.reset();
         clearForm();
-
-        var cropId = harvestValueMap["crop_id"];
-        plantingFormHeader.cropField.setRowId(cropId);
 
         setFormValues(harvestValueMap);
         dialog.open();
+
+        var cropId = harvestValueMap["crop_id"];
+        var cropName = Planting.cropName(harvestValueMap["planting_id"]);
+        plantingFormHeader.cropField.selectedId = cropId;
+        plantingFormHeader.cropField.text = cropName;
+
         quantityField.forceActiveFocus();
     }
 
@@ -99,19 +100,17 @@ Dialog {
         var qty = Number(quantity/selectedIdList.length)
         for (var i = 0; i < selectedIdList.length; i++) {
             Harvest.add({ "date": datePicker.isoDateString,
-                            "time": laborTimeField.text,
-                            "quantity": qty,
-                            "planting_id": selectedIdList[i]
-                        })
+                          "time": laborTimeField.text,
+                          "quantity": qty,
+                          "planting_id": selectedIdList[i] })
         }
         harvestAdded();
     }
 
     function updateHarvest() {
         Harvest.update(harvestId, { "date": datePicker.isoDateString,
-                           "time": laborTimeField.text,
-                           "quantity": quantity
-                       })
+                                    "time": laborTimeField.text,
+                                    "quantity": quantity })
         harvestUpdated();
     }
 
@@ -120,6 +119,11 @@ Dialog {
             addHarvest();
         else
             updateHarvest();
+    }
+
+    onOpened: {
+        if (mode === "add")
+            plantingFormHeader.cropField.forceActiveFocus();
     }
 
     focus: true
@@ -158,6 +162,7 @@ Dialog {
         id: mainColumn
         implicitHeight: 300
         spacing: Units.smallSpacing
+        enabled: cropId > 0
 
         RowLayout {
             Layout.fillWidth:  true
@@ -174,6 +179,7 @@ Dialog {
                     top: 999
                 }
 
+                Layout.preferredWidth: 80
                 Layout.fillWidth: true
 
                 Keys.onReturnPressed: if (formAccepted) dialog.accept();
@@ -197,7 +203,7 @@ Dialog {
                 id: laborTimeField
                 labelText: qsTr("Labor Time")
                 floatingLabel: true
-                Layout.minimumWidth: 80
+                Layout.preferredWidth: 80
                 inputMethodHints: Qt.ImhDigitsOnly
                 inputMask: "99:99"
                 text: "00:00"

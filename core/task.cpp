@@ -42,6 +42,8 @@ int Task::add(const QVariantMap &map) const
     if (implementId < 1)
         newMap.take("task_implement_id");
 
+    qDebug() << newMap;
+
     int id = DatabaseUtility::add(newMap);
     if (id < 1)
         return -1;

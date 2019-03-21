@@ -80,27 +80,30 @@ Item {
             id: dateHelper
             visible: showDateHelper
             text: dateHelperText
-            font { family: "Roboto Regular"; italic: true; pointSize: textField.font.pointSize - 1 }
+            font { family: "Roboto Regular"; italic: true; pointSize: textField.font.pointSize - 2 }
             color: Material.color(Material.Grey)
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
+            y: (Units.fieldHeight - height)/2
             anchors {
                 right: calendarButton.left
                 rightMargin: -8
-                bottomMargin: 12
-                bottom: parent.bottom
+//                bottomMargin: 12
+//                bottom: parent.bottom
             }
         }
 
         RoundButton {
             id: calendarButton
+            focusPolicy: Qt.NoFocus
             flat: true
             text: "\ue916" // calendar-alt
             font { pointSize: textField.font.pointSize * 1.4; family: "Material Icons" }
+            y: (Units.fieldHeight - height)/2
             anchors {
                 right: textField.right
-                rightMargin: -16
-                verticalCenter: parent.verticalCenter
+//                rightMargin: -16
+//                verticalCenter: control.verticalCenter
             }
 
             onClicked: {

@@ -31,12 +31,11 @@ Rectangle {
     property bool showAddItem: true
     property bool bulkEditMode: false
     property string unitText: ""
-    property alias currentIndex: cropField.currentIndex
     property alias cropField: cropField
-    property int cropId: cropModel.rowId(cropField.currentIndex)
+    property int cropId: cropField.selectedId
     property string mode
 
-    signal newCropAdded(int newCropId)
+//    signal newCropAdded(int newCropId)
     signal cropSelected()
 
     function refresh() {
@@ -45,7 +44,7 @@ Rectangle {
 
     function reset() {
         refresh();
-        cropField.currentIndex = 0
+        cropField.reset();
     }
 
     color: Material.color(Material.Grey, Material.Shade200)
@@ -85,50 +84,70 @@ Rectangle {
             height: 40
             width: height
             radius: 80
-            color: Material.color(Material.Green, Material.Shade400)
+            color: {
+                if (cropId > 0) {
+                    var map = Crop.mapFromId("crop", cropId);
+                    return map['color'];
+                } else {
+                    return Material.color(Material.Grey, Material.Shade400);
+                }
+            }
 
             Text {
                 anchors.centerIn: parent
-                text: cropField.currentText.slice(0,2)
+                text: cropId > 0 ? cropField.text.slice(0,2) : ""
                 color: "white"
                 font { family: "Roboto Regular"; pixelSize: 24 }
             }
         }
 
-        MyComboBox {
+        ComboTextField {
             id: cropField
-            focus: true
+            enabled: mode === "add"
+            Layout.topMargin: Units.smallSpacing
+            textRole: function (model) { return model.crop; }
+            idRole: function (model) { return model.crop_id; }
+            showAddItem: true
+            addItemText: text ? qsTr('Add new crop "%1"').arg(text) : qsTr("Add new crop")
+
             Layout.fillWidth: true
             model: cropModel
-            textRole: "crop"
-            editable: false
-            showAddItem: control.showAddItem
-            addItemText: qsTr("Add Crop")
-            enabled: mode === "add"
 
-            onActivated: control.cropSelected()
-            onAddItemClicked: addCropDialog.open()
-            onCurrentIndexChanged: {
-                var cropId = cropModel.rowId(cropField.currentIndex)
-                var map = Crop.mapFromId("crop", cropId);
-                textIcon.color = map['color']
+            onAddItemClicked: {
+                addCropDialog.open()
+                addCropDialog.prefill(text)
             }
+
+            onSelectedIdChanged: if (selectedId > 0) cropSelected()
 
             AddCropDialog {
                 id: addCropDialog
+
+                // When creating a new crop, we have to wait for dialog to close in order
+                // to not lose the focus. We use the newId property as a temporary variable
+                // to be used in onClosed.
+                property int newId: -1
+
                 width: parent.width
-                onAccepted: {
-                    Crop.add({"crop" : cropName,
-                              "family_id" : familyId,
-                              "color" : color});
-                    cropModel.refresh();
-                    cropField.currentIndex = cropField.find(cropName);
-                    var newCropId = cropModel.rowId(cropField.currentIndex)
-                    control.newCropAdded(newCropId)
+
+                onRejected: {
+                    cropField.text = "";
+                    newId = -1
                 }
+
+                onAccepted: {
+                    var id = Crop.add({"crop" : cropName,
+                                       "family_id" : familyId,
+                                       "color" : color});
+                    cropModel.refresh();
+                    cropField.text = cropName
+                    newId = id
+                }
+
+                onClosed: cropField.selectedId = newId
             }
         }
-        
+
         ColumnLayout {
             visible: showYieldAndRevenue
             Label {

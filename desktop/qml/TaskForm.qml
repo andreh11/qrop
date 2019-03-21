@@ -32,11 +32,12 @@ Flickable {
     property int taskTypeId: -1
     property bool sowPlantTask: false
 
-    property int taskMethodId: taskMethodModel.rowId(methodField.currentIndex)
-    property int taskImplementId: taskImplementModel.rowId(implementField.currentIndex)
+    property int taskMethodId: methodField.selectedId
+    property int taskImplementId: implementField.selectedId
 
-    readonly property bool accepted: (plantingTask && plantingIdList.length) ||
-                                     (locationTask && locationIdList.length)
+    readonly property bool accepted: taskTypeId > 0
+                                     && ((plantingTask && plantingIdList.length)
+                                         || (locationTask && locationIdList.length))
     readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
     readonly property alias laborTimeString: laborTimeField.text
@@ -58,35 +59,45 @@ Flickable {
         "location_ids": locationTask ? locationIdList : []
     }
 
-    function setFieldValue(item, value) {
-        if (!value)
-            return;
-
-        if (item instanceof MyTextField)
-            item.text = value;
-        else if (item instanceof CheckBox || item instanceof ChoiceChip)
-            item.checked = value;
-        else if (item instanceof MyComboBox)
-            item.setRowId(value);
-    }
-
     function setFormValues(val) {
         if ("assigned_date" in val)
-            dueDatepicker.calendarDate = Date.fromLocaleString(Qt.locale(), val['assigned_date'],
-                                                               "yyyy-MM-dd")
-        if ("duration" in val) durationField.text = val["duration"]
-        if ("labor_time" in val) laborTimeField.text = val["labor_time"]
-        if ("task_method_id" in val) methodField.setRowId(Number(val["task_method_id"]))
-        if ("task_implement_id" in val) implementField.setRowId(Number(val["task_implement_id"]))
+            dueDatepicker.calendarDate =
+                    Date.fromLocaleString(Qt.locale(), val['assigned_date'], "yyyy-MM-dd")
+
+        if ("duration" in val)
+            durationField.text = val["duration"]
+
+        if ("labor_time" in val)
+            laborTimeField.text = val["labor_time"]
+
+        if ("task_method_id" in val) {
+            var methodId = Number(val["task_method_id"])
+            if (methodId > 0) {
+                var methodName = TaskMethod.mapFromId(methodId)["method"];
+                methodField.selectedId = methodId;
+                methodField.text = methodName;
+            }
+        }
+
+        if ("task_implement_id" in val) {
+            var implementId = Number(val["task_implement_id"])
+            if (implementId > 0) {
+                var implementName = TaskImplement.mapFromId(implementId)["implement"];
+                implementField.selectedId = implementId;
+                implementField.text = implementName;
+            }
+        }
 
         // Select plantings
         if ("plantings" in val) {
             var idList = val["plantings"].split(",")
-            if (val["plantings"]) {
+
+            if (val["plantings"])
                 plantingRadioButton.checked = true
-            }
+
             for (var i = 0; i < idList.length; i++)
                 plantingList.selectedIds[idList[i]] = true
+
             plantingList.selectedIdsChanged();
         }
 
@@ -108,8 +119,10 @@ Flickable {
         plantingList.reset();
         locationView.clearSelection();
         locationView.collapseAll();
-        methodField.currentIndex = -1;
-        implementField.currentIndex = -1;
+
+        methodField.reset();
+        implementField.reset();
+
         dueDatepicker.calendarDate = MDate.dateFromWeekString(control.week);
         durationField.text = "0";
         laborTimeField.text = "00:00";
@@ -161,64 +174,80 @@ Flickable {
 
         ColumnLayout {
             width: parent.width
-            spacing: 0
+            spacing: Units.formSpacing
             visible: !sowPlantTask
 
-            MyComboBox {
+            ComboTextField {
                 id: methodField
+                enabled: taskTypeId > 0
                 labelText: qsTr("Method")
                 floatingLabel: true
-                editable: false
                 showAddItem: true
-                addItemText: qsTr("Add Method")
-                textRole: "method"
+                addItemText: text ? qsTr('Add new method "%1"').arg(text) : qsTr("Add new method")
+
+                textRole: function (model) { return model.method; }
+                idRole: function (model) { return model.task_method_id; }
                 model: TaskMethodModel {
                     id: taskMethodModel
                     typeId: control.taskTypeId
                 }
-                onAddItemClicked: addMethodDialog.open();
+
+                onAddItemClicked: {
+                    addMethodDialog.open();
+                    addMethodDialog.prefill(text);
+                }
                 Layout.fillWidth: true
 
                 SimpleAddDialog {
                     id: addMethodDialog
                     validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                     title: qsTr("Add Method")
-                    onAccepted:  {
-                        TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
 
+                    onAccepted:  {
+                        var id = TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
                         taskMethodModel.refresh();
-                        methodField.currentIndex = methodField.find(text);
+                        methodField.selectedId = id;
+                        methodField.text = text;
+                        implementField.forceActiveFocus();
                     }
+                    onRejected: methodField.reset();
                 }
             }
 
-            MyComboBox {
+            ComboTextField {
                 id: implementField
-                visible: methodField.currentIndex >= 0
+                enabled: taskMethodId > 0
                 labelText: qsTr("Implement")
                 showAddItem: true
-                addItemText: qsTr("Add Implement")
+                addItemText: text ? qsTr('Add new implement "%1"').arg(text) : qsTr("Add new implement")
                 floatingLabel: true
-                editable: false
-                textRole: "implement"
+                textRole: function (model) { return model.implement; }
+                idRole: function (model) { return model.task_implement_id; }
                 model: TaskImplementModel {
                     id: taskImplementModel
                     methodId: control.taskMethodId
                 }
-                onAddItemClicked: addImplementDialog.open();
+                onAddItemClicked: {
+                    addImplementDialog.open();
+                    addImplementDialog.prefill(text);
+                }
                 Layout.fillWidth: true
 
                 SimpleAddDialog {
                     id: addImplementDialog
                     validator: RegExpValidator { regExp: /\w[\w\d- ]*/ }
                     title: qsTr("Add Implement")
+
                     onAccepted:  {
-                        TaskImplement.add({"implement" : text,
-                                        "task_method_id" : control.taskMethodId});
+                        var id = TaskImplement.add({"implement" : text,
+                                                       "task_method_id" : control.taskMethodId});
 
                         taskImplementModel.refresh();
-                        implementField.currentIndex = implementField.find(text);
+                        implementField.selectedId = id;
+                        implementField.text = text;
+                        dueDatepicker.forceActiveFocus();
                     }
+                    onRejected: implementField.reset();
                 }
             }
         }
@@ -273,15 +302,17 @@ Flickable {
             spacing: Units.smallSpacing
             visible: !sowPlantTask && mode === "add"
             Layout.fillWidth: true
+            Layout.topMargin: -plantingRadioButton.padding * 4
+            Layout.bottomMargin: -plantingRadioButton.padding * 4
 
-            ChoiceChip {
+            RadioButton {
                 id: plantingRadioButton
                 autoExclusive: true
                 checked: true
                 text: qsTr("Plantings")
             }
 
-            ChoiceChip {
+            RadioButton {
                 id: locationRadioButton
                 text: qsTr("Locations")
                 autoExclusive: true
