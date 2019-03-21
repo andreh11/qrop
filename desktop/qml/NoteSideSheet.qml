@@ -29,6 +29,7 @@ Drawer {
     modal: false
     Material.elevation: 0
     closePolicy: Popup.NoAutoClose
+    dragMargin: 0
     
     property int selectedIndex
     property int year
