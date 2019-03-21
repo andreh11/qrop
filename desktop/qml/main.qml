@@ -373,7 +373,6 @@ ApplicationWindow {
         }
     }
 
-
     Drawer {
         id: drawer
         //        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
@@ -454,6 +453,7 @@ ApplicationWindow {
             photoPane.photoIdList = Note.photoList(noteId)
             photoPane.visible = true
         }
+        onPlantingIdChanged: console.log("new planting id:", plantingId)
         onHidePhoto: photoPane.visible = false
     }
 
