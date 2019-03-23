@@ -1,7 +1,7 @@
 -- Triggers
 
--- A task is associated to at least 1 planting or one location. If there
--- is no more planting or location associated to a task, we delete it.
+-- A task is linked to at least 1 planting or one location. If there
+-- is no more planting or location linked to a task, we delete it.
 
 CREATE TRIGGER planting_task_delete AFTER DELETE ON planting_task FOR EACH ROW
 WHEN ((SELECT COUNT(*) FROM planting_task WHERE task_id = OLD.task_id) = 0)
@@ -9,16 +9,18 @@ BEGIN
 	DELETE FROM task WHERE task_id = OLD.task_id;
 END;
 
-CREATE TRIGGER note_file_delete AFTER DELETE ON note_file FOR EACH ROW
-WHEN ((SELECT COUNT(*) FROM note_file WHERE file_id = OLD.file_id) = 0)
-BEGIN
-	DELETE FROM file WHERE file_id = OLD.file_id;
-END;
-
 CREATE TRIGGER location_task_delete AFTER DELETE ON location_task FOR EACH ROW
 WHEN ((SELECT COUNT(*) FROM location_task WHERE task_id = OLD.task_id) = 0)
 BEGIN
 	DELETE FROM task WHERE task_id = OLD.task_id;
+END;
+
+-- A file note is linked to at least one task. It there is no more note linked
+-- to a file, we delete it.
+CREATE TRIGGER note_file_delete AFTER DELETE ON note_file FOR EACH ROW
+WHEN ((SELECT COUNT(*) FROM note_file WHERE file_id = OLD.file_id) = 0)
+BEGIN
+	DELETE FROM file WHERE file_id = OLD.file_id;
 END;
 
 -- If the dtt of TP, raised planting if modified, update linked transplant task.

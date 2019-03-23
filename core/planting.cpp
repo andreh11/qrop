@@ -42,7 +42,7 @@ int Planting::add(const QVariantMap &map) const
     QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
     QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
 
-    // Check if foreign seems to be valid, otherwise remove it.
+    // Check if unit id foreign key seems to be valid. If not, remove it.
     if (newMap.contains("unit_id") && newMap.value("unit_id").toInt() < 1)
         newMap.remove("unit_id");
 
@@ -133,6 +133,7 @@ QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const Q
     else
         return {};
 }
+
 void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
 {
     int plantsNeeded = get(map, record, "plants_needed").toInt();
@@ -148,9 +149,6 @@ void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
     int seedsNumber = plantsToStart * seedsPerHole;
     double seedsQuantity = seedsNumber / seedsPerGram;
 
-    qDebug() << "[TP] n:" << seedsNumber << "q:" << seedsQuantity << "to start" << plantsToStart
-             << "trays:" << traysToStart;
-
     map["plants_to_start"] = plantsToStart;
     map["trays_to_start"] = traysToStart;
     map["seeds_number"] = seedsNumber;
@@ -161,11 +159,13 @@ void Planting::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
     QString plantingDateString;
+
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
 
     QSqlRecord record = recordFromId("planting_view", id);
-    // If the length, the number of rows or the in-row spacing has changed,
+
+    // If the length, the number of rows or the in-row spacing have changed,
     // recompute the number of plants needed.
     if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants")) {
         double length = get(newMap, record, "length").toDouble();
@@ -178,6 +178,14 @@ void Planting::update(int id, const QVariantMap &map) const
 
     int plantingType = get(newMap, record, "planting_type").toInt();
 
+    // If the planting type has changed from TP, raised to DS or TP, bought,
+    // we set the DTT to 0 and remove the nursery seeding task.
+    if ((record.value("planting_type").toInt() == 2) && (plantingType != 2)) {
+        newMap["dtt"] = 0;
+        task->removeNurseryTask(id);
+    }
+
+    // Recompute seeds number for direct seeding.
     if ((newMap.contains("plants_needed") && plantingType == 1) || newMap.contains("seeds_per_hole")
         || newMap.contains("seeds_percentage")) {
         int plantsNeeded = get(newMap, record, "plants_needed").toInt();
@@ -189,6 +197,7 @@ void Planting::update(int id, const QVariantMap &map) const
         newMap["seeds_number"] = seedsNumber;
     }
 
+    // Recompute plants to start.
     if ((newMap.contains("plants_needed") && plantingType == 2)
         || newMap.contains("estimated_gh_loss")) {
         int plantsNeeded = get(newMap, record, "plants_needed").toInt();
@@ -197,18 +206,21 @@ void Planting::update(int id, const QVariantMap &map) const
                 qCeil(plantsNeeded / (1 - static_cast<double>(greenhouseLoss) / 100));
     }
 
+    // Recompute trays to start.
     if (newMap.contains("plants_to_start") || newMap.contains("tray_size")) {
         int plantsToStart = get(newMap, record, "plants_to_start").toInt();
         int traySize = get(newMap, record, "tray_size").toInt();
         newMap["trays_to_start"] = static_cast<double>(plantsToStart) / traySize;
     }
 
+    // Recompute seeds number for raised transplants.
     if (newMap.contains("plants_to_start") || (plantingType == 2 && newMap.contains("seeds_per_hole"))) {
         int plantsToStart = get(newMap, record, "plants_to_start").toInt();
         int seedsPerHole = get(newMap, record, "seeds_per_hole").toInt();
         newMap["seeds_number"] = plantsToStart * seedsPerHole;
     }
 
+    // Recompute seeds quantity (in grams).
     if (newMap.contains("seeds_number") || newMap.contains("seeds_per_gram")) {
         int seedsNumber = get(newMap, record, "seeds_number").toInt();
         double seedsPerGram = get(newMap, record, "seeds_per_gram").toDouble();

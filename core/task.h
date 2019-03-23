@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const;
     Q_INVOKABLE void removePlantingTasks(int plantingId) const;
+    Q_INVOKABLE void removeNurseryTask(int plantingId) const;
 
     Q_INVOKABLE void addLocation(int locationId, int taskId) const;
     Q_INVOKABLE void removeLocation(int locationId, int taskId) const;

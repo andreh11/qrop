@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018, 2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ int Task::add(const QVariantMap &map) const
     if (implementId < 1)
         newMap.take("task_implement_id");
 
-    qDebug() << newMap;
-
     int id = DatabaseUtility::add(newMap);
-    if (id < 1)
+    if (id < 1) {
+        qDebug() << Q_FUNC_INFO << "Couln't create task" << newMap;
         return -1;
+    }
 
     for (const auto &idString : plantingIdList) {
         int plantingId = idString.toInt();
@@ -64,7 +64,8 @@ int Task::add(const QVariantMap &map) const
 void Task::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
-    // Set NULL values to prevent SQL foreign key error
+
+    // Set NULL values to prevent SQL foreign key error.
     if (newMap.contains("task_method_id") && newMap.value("task_method_id").toInt() < 1)
         newMap["task_method_id"] = QVariant(QVariant::Int);
     if (newMap.contains("task_implement_id") && newMap.value("task_implement_id").toInt() < 1)
@@ -137,7 +138,8 @@ void Task::removeLocation(int locationId, int taskId) const
 
 void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
 {
-    qDebug() << "[Task] Duplicate tasks of location" << sourceLocationId << "for" << newLocationId;
+    qDebug() << Q_FUNC_INFO << "Duplicate tasks of location" << sourceLocationId << "for"
+             << newLocationId;
 
     QList<int> sourceTasks = locationTasks(sourceLocationId);
     for (const int taskId : sourceTasks) {
@@ -151,7 +153,7 @@ void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
 
 void Task::removeLocationTasks(int locationId) const
 {
-    qDebug() << "[Task] Removing tasks for location: " << locationId;
+    qDebug() << Q_FUNC_INFO << "Removing tasks for location: " << locationId;
     QString queryString("DELETE FROM location_task WHERE location_id = %1");
     QSqlQuery query(queryString.arg(locationId));
     debugQuery(query);
@@ -264,7 +266,8 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
 
 void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
 {
-    qDebug() << "[Task] Updating sow & plant tasks for planting: " << plantingId << plantingDate;
+    qDebug() << Q_FUNC_INFO << "Updating sowing & planting tasks for planting: " << plantingId
+             << plantingDate;
 
     QSqlRecord plantingRecord = recordFromId("planting", plantingId);
     auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
@@ -276,7 +279,7 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     case PlantingType::DirectSeeded: {
         QString queryString = "UPDATE task SET assigned_date = :assigned_date "
                               "WHERE task_id = :task_id";
-        qDebug() << "New date for sowing task:" << plantingDate.toString(Qt::ISODate);
+        qDebug() << Q_FUNC_INFO << "New date for sowing task:" << plantingDate.toString(Qt::ISODate);
         QSqlQuery query;
         query.prepare(queryString);
         query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
@@ -325,9 +328,15 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     }
 }
 
+/**
+ * @brief Duplicate the tasks linked to \a sourcePlantingId and link them to \a newPlantingId.
+ *
+ * This method is used when duplicating plantings.
+ */
 void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
 {
-    qDebug() << "[Task] Duplicate tasks of planting" << sourcePlantingId << "for" << newPlantingId;
+    qDebug() << Q_FUNC_INFO << "Duplicate tasks of planting" << sourcePlantingId << "for"
+             << newPlantingId;
 
     QList<int> sourceTasks = plantingTasks(sourcePlantingId);
     QVariantMap map;
@@ -340,6 +349,7 @@ void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
     }
 }
 
+/** @brief Remove all the tasks linked to \a plantingId. */
 void Task::removePlantingTasks(int plantingId) const
 {
     qDebug() << "[Task] Removing tasks for planting: " << plantingId;
@@ -348,12 +358,37 @@ void Task::removePlantingTasks(int plantingId) const
     debugQuery(query);
 }
 
+/**
+ * @brief Remove the nursery task for \a plantingId.
+ *
+ * This method is used when the planting type of a planting is changed
+ * from TP, raised to DS or TP, bought.
+ */
+void Task::removeNurseryTask(int plantingId) const
+{
+    QString taskQueryString("SELECT task_id FROM planting_task "
+                            "JOIN task USING (task_id) "
+                            "WHERE planting_id = %1 AND task_type_id = 2");
+
+    QList<int> taskIdList = queryIds(taskQueryString.arg(plantingId), "task_id");
+    if (taskIdList.isEmpty())
+        return;
+
+    int taskId = taskIdList.first();
+
+    QString queryString("DELETE FROM planting_task WHERE task_id = %1");
+    QSqlQuery query(queryString.arg(taskId));
+    debugQuery(query);
+}
+
+/** @brief Return a list of template tasks ids for the the template \a templateId. */
 QList<int> Task::templateTasks(int templateId) const
 {
     QString queryString("SELECT * FROM task WHERE task_template_id = %1");
     return queryIds(queryString.arg(templateId), "task_id");
 }
 
+/** @brief Create tasks from the template \a templateId for the planting \a plantingId */
 void Task::applyTemplate(int templateId, int plantingId) const
 {
     QSqlRecord plantingRecord = recordFromId("planting", plantingId);
@@ -365,7 +400,7 @@ void Task::applyTemplate(int templateId, int plantingId) const
     int transplantTaskId = taskIds[1];
 
     if (sowTaskId == -1 && transplantTaskId == -1) {
-        qDebug() << Q_FUNC_INFO << "both sow task and tranplant task id are invalid";
+        qDebug() << Q_FUNC_INFO << "both sow task and transplant task id are invalid";
         return;
     }
 

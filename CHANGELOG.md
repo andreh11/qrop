@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to show full name of locations.
 
 ### Changed
+  - If a planting type is changed from TP, raised to DS or TP, bough, its nursery
+    task is now remove and its DTT is set to 0.
   - Improve combo boxes.
   - Use decimal numbers for planting length, surface and seeds per gram.
   - *Planting view/form*: When using week dates, we assume that the harvest will end

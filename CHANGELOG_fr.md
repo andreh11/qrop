@@ -34,6 +34,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
 ### Changements
+  - Si le type d'une série est modifiée et qu'il passe de « Plant, fait » à 
+    « Semis direct » ou « Plant, acheté », la tâche de pépinière associée est
+    dorénavant supprimée et le durée de pépinière est mise à 0.
   - Nombre décimaux au lieu d'entiers pour les longueurs de planche, graines par
     gramme et surface.
   - *Vue, édition des séries* : si les dates sont entrées par numéro de semaine,
