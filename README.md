@@ -31,9 +31,14 @@ history of every single bed to ensure good rotations.
 
 Write notes, take photos and link them to your plantings, tasks and locations.
 
+
+### Harvests tracking 
+
+Keep track of each harvest and get real-time crop yields (planned).
+
 ## Planned features
 
-* **Harvests tracking −** keep track of each harvest and get real-time crop yields.
+ - Charts and analytics
 
 ## Getting started
 
@@ -50,7 +55,6 @@ chmod u+x Qrop-x86_64.AppImage
 
 to launch the AppImage. It has been tested with Ubuntu 16.04 and Fedora 29, but
 may not work on other distributions or version.
-
 
 ### Windows
 
