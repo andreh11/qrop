@@ -219,6 +219,46 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     }
 }
 
+/** @brief Return the sowing or in-ground planting task id for \a plantingId. */
+int Task::plantingTask(int plantingId) const
+{
+    QString queryString("SELECT task_id FROM planting_task "
+                        "JOIN task USING (task_id) "
+                        "WHERE planting_id = %1 "
+                        "AND task_type_id IN (1,3)");
+
+    auto idList = queryIds(queryString.arg(plantingId), "task_id");
+    if (idList.isEmpty())
+        return -1;
+
+    return idList.first();
+}
+
+/**
+ * @brief Create the nursery task for \a plantingId.
+ *
+ * Return the id of the nursery task.
+ *
+ * This method is used when the type of the planting \a plantingId is changed
+ * from DS or TP, bought to TP, raised.
+ */
+int Task::createNurseryTask(int plantingId, const QDate &plantingDate, int dtt) const
+{
+    int plantingTaskId = plantingTask(plantingId);
+    if (plantingTaskId < 0) {
+        qDebug() << Q_FUNC_INFO << "Cannot create nursery task:"
+                 << "planting task not found for planting id" << plantingId;
+        return -1;
+    }
+
+    QDate sowDate = plantingDate.addDays(-dtt);
+    int sowTaskId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) }, { "task_type_id", 2 } });
+    addLink("planting_task", "planting_id", plantingId, "task_id", sowTaskId);
+    update(plantingTaskId, { { "link_days", dtt }, { "link_task_id", sowTaskId } });
+
+    return sowTaskId;
+}
+
 void Task::completeTask(int taskId, const QDate &date) const
 {
     update(taskId, { { "completed_date", date.toString(Qt::ISODate) } });

@@ -121,8 +121,9 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
     return {};
 }
 
-/** \brief Given a \a key, return its value in \a map if contains this key.
- *  Otherwise returs the value of the \a record for this key.
+/**
+ * \brief Given a \a key, return its value in \a map if \a map contains this key.
+ *  Otherwise, return the value of the \a record for \a key.
  */
 QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const
 {
@@ -164,6 +165,7 @@ void Planting::update(int id, const QVariantMap &map) const
         plantingDateString = newMap.take("planting_date").toString();
 
     QSqlRecord record = recordFromId("planting_view", id);
+    int plantingType = get(newMap, record, "planting_type").toInt();
 
     // If the length, the number of rows or the in-row spacing have changed,
     // recompute the number of plants needed.
@@ -176,13 +178,24 @@ void Planting::update(int id, const QVariantMap &map) const
         newMap["plants_needed"] = plantsNeeded;
     }
 
-    int plantingType = get(newMap, record, "planting_type").toInt();
-
     // If the planting type has changed from TP, raised to DS or TP, bought,
     // we set the DTT to 0 and remove the nursery seeding task.
     if ((record.value("planting_type").toInt() == 2) && (plantingType != 2)) {
         newMap["dtt"] = 0;
         task->removeNurseryTask(id);
+    }
+
+    // If the planting type has changed from DS or TP, bought to TP, raised, we
+    // create a new nursery seeding task
+    if ((record.value("planting_type").toInt() != 2) && (plantingType == 2)) {
+        QDate pdate;
+        if (plantingDateString.isNull())
+            pdate = plantingDate(id);
+        else
+            pdate = QDate::fromString(plantingDateString, Qt::ISODate);
+
+        int dtt = get(newMap, record, "dtt").toInt();
+        task->createNurseryTask(id, pdate, dtt);
     }
 
     // Recompute seeds number for direct seeding.
