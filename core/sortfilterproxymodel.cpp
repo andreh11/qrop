@@ -145,8 +145,7 @@ QPair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
-    QModelIndex index = m_model->index(row, 0, parent);
-
+    auto index = m_model->index(row, 0, parent);
     if (!index.isValid())
         return {};
 
@@ -155,7 +154,7 @@ QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, cons
 
 QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const QString &field) const
 {
-    QVariant value = rowValue(row, parent, field);
+    auto value = rowValue(row, parent, field);
     if (value.isNull())
         return {};
 
@@ -165,7 +164,7 @@ QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const 
 
 bool SortFilterProxyModel::isDateInRange(const QDate &date) const
 {
-    const QPair<QDate, QDate> dates = seasonDates();
+    const auto dates = seasonDates();
     QDate seasonBeg = dates.first;
     QDate seasonEnd = dates.second;
 

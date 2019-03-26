@@ -398,15 +398,13 @@ void SqlTreeModel::setSourceModel(SqlTableModel *model)
     m_root = new TreeItem(m_sourceModel->record());
 
     int rows = model->rowCount();
-    int id;
-    QSqlRecord record;
 
     // Create tree items.
     m_idItemMap.clear();
     m_idItemMap[-1] = m_root; // We set root item id to -1
     for (int i = 0; i < rows; i++) {
-        record = model->record(i);
-        id = record.value(m_idFieldName).toInt();
+        auto record = model->record(i);
+        auto id = record.value(m_idFieldName).toInt();
         if (!m_idItemMap.contains(id))
             m_idItemMap[id] = new TreeItem(record);
         else
@@ -421,8 +419,8 @@ void SqlTreeModel::setSourceModel(SqlTableModel *model)
         childItem = nullptr;
         parentItem = nullptr;
 
-        record = model->record(i);
-        id = record.value(m_idFieldName).toInt();
+        auto record = model->record(i);
+        auto id = record.value(m_idFieldName).toInt();
 
         if (record.isNull(m_parentIdFieldName)) // root item
             parentId = -1;

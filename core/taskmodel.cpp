@@ -61,7 +61,7 @@ QVariant TaskModel::data(const QModelIndex &idx, int role) const
 
 QHash<int, QByteArray> TaskModel::roleNames() const
 {
-    QHash<int, QByteArray> roles = SortFilterProxyModel::roleNames();
+    auto roles = SortFilterProxyModel::roleNames();
     roles.insert(Qt::UserRole + 100, "overdue");
     roles.insert(Qt::UserRole + 101, "due");
     roles.insert(Qt::UserRole + 102, "done");
@@ -158,10 +158,10 @@ void TaskModel::setShowOverdue(bool showOverdue)
 
 void TaskModel::updateWeekDates()
 {
-    QList<QDate> weekDates = MDate::weekDates(m_week, m_year);
+    auto weekDates = MDate::weekDates(m_week, m_year);
     m_mondayDate = weekDates[0];
     m_sundayDate = weekDates[1];
-    // We have to use both of these to get everything working.
+    // Strangely, we have to use both of these to get everything working.
     invalidateFilter();
     invalidate();
 }
@@ -189,7 +189,6 @@ bool TaskModel::isOverdue(int row, const QModelIndex &parent) const
 
 bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-
     bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
             || (m_showDue && isDue(sourceRow, sourceParent))
             || (m_showDone && isDone(sourceRow, sourceParent));

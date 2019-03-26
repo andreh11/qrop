@@ -278,12 +278,12 @@ QVariantMap Planting::commonValues(const QList<int> &idList) const
     QVariantMap common = DatabaseUtility::commonValues(idList);
 
     // Add common keywords
-    QList<int> commonKeywords = keyword->keywordIdList(idList.value(0));
+    auto commonKeywords = keyword->keywordIdList(idList.value(0));
     for (const auto plantingId : idList) {
-        QList<int> keywords = keyword->keywordIdList(plantingId);
-        for (const auto kid : commonKeywords) {
-            if (!keywords.contains(kid))
-                commonKeywords.removeOne(kid);
+        auto keywordIdList = keyword->keywordIdList(plantingId);
+        for (const auto keywordId : commonKeywords) {
+            if (!keywordIdList.contains(keywordId))
+                commonKeywords.removeOne(keywordId);
         }
     }
 
@@ -299,7 +299,7 @@ QVariantMap Planting::commonValues(const QList<int> &idList) const
 
 QString Planting::cropName(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("crop").toString();
@@ -307,7 +307,7 @@ QString Planting::cropName(int plantingId) const
 
 QString Planting::cropId(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("crop_id").toString();
@@ -315,7 +315,7 @@ QString Planting::cropId(int plantingId) const
 
 QString Planting::cropColor(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("crop_color").toString();
@@ -323,7 +323,7 @@ QString Planting::cropColor(int plantingId) const
 
 QString Planting::varietyName(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("variety").toString();
@@ -331,7 +331,7 @@ QString Planting::varietyName(int plantingId) const
 
 QString Planting::familyId(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("family_id").toString();
@@ -339,7 +339,7 @@ QString Planting::familyId(int plantingId) const
 
 QString Planting::familyInterval(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("family_interval").toString();
@@ -347,7 +347,7 @@ QString Planting::familyInterval(int plantingId) const
 
 QString Planting::familyColor(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("family_color").toString();
@@ -355,7 +355,7 @@ QString Planting::familyColor(int plantingId) const
 
 int Planting::type(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("planting_type").toInt();
@@ -363,7 +363,7 @@ int Planting::type(int plantingId) const
 
 QDate Planting::sowingDate(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
 
@@ -372,7 +372,7 @@ QDate Planting::sowingDate(int plantingId) const
 
 QDate Planting::plantingDate(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
 
@@ -381,7 +381,7 @@ QDate Planting::plantingDate(int plantingId) const
 
 QDate Planting::begHarvestDate(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
 
@@ -390,7 +390,7 @@ QDate Planting::begHarvestDate(int plantingId) const
 
 QDate Planting::endHarvestDate(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
 
@@ -399,7 +399,7 @@ QDate Planting::endHarvestDate(int plantingId) const
 
 int Planting::totalLength(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
     return map.value("length").toInt();
@@ -424,7 +424,7 @@ int Planting::assignedLength(int plantingId) const
 
 int Planting::lengthToAssign(int plantingId) const
 {
-    QVariantMap map = mapFromId("planting_view", plantingId);
+    auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return 0;
 
