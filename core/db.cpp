@@ -73,9 +73,13 @@ void Database::migrationCheck()
     int lastVersion = fileInfoList.last().baseName().toInt();
 
     if (dbVersion < lastVersion) {
-        qInfo() << "Migration database from version" << dbVersion << "to latest version " << lastVersion;
-        for (const auto& fileInfo : fileInfoList) {
-            if (fileInfo.baseName().toInt() > dbVersion)
+        qInfo() << "!!!! Migration database from version" << dbVersion << "to latest version "
+                << lastVersion;
+
+        for (const auto &fileInfo : fileInfoList) {
+            int version = fileInfo.baseName().toInt();
+            qInfo() << "==== Migrating to version" << version;
+            if (version > dbVersion)
                 execSqlFile(fileInfo.absoluteFilePath());
         }
     } else {
@@ -103,6 +107,7 @@ void Database::connectToDatabase()
         QFile::remove(fileName);
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
+
     QSqlQuery query("PRAGMA foreign_keys = ON");
     qInfo() << "Creating database...";
     query.exec();
@@ -112,24 +117,25 @@ void Database::connectToDatabase()
 
 void Database::execSqlFile(const QString &fileName, const QString &separator)
 {
-    Q_INIT_RESOURCE(core_resources);
+    Q_INIT_RESOURCE(core_resources); // Needed for the method to find the resource files.
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "createDatabase: cannot open" << fileName;
+        qDebug() << "execSqlFile: cannot open" << fileName;
         return;
     }
 
     QTextStream textStream(&file);
     QString fileString = textStream.readAll();
     QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
+
     QSqlQuery query;
-    for (const QString &queryString : stringList) {
-        if (queryString.isEmpty())
+    for (const auto &queryString : stringList) {
+        if (queryString.isNull() || queryString.trimmed().isEmpty())
             continue;
 
         if (!query.exec(queryString + separator))
-            qDebug() << "createDatabase: cannot execute query" << query.lastError().text()
+            qDebug() << "execSqlFile: cannot execute query" << query.lastError().text()
                      << query.lastQuery();
     }
 }

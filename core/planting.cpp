@@ -38,9 +38,9 @@ Planting::Planting(QObject *parent)
 int Planting::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
-    QString plantingDateString = newMap.take("planting_date").toString();
-    QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-    QList<QVariant> keywordIdList = newMap.take("keyword_ids").toList();
+    auto plantingDateString = newMap.take("planting_date").toString();
+    auto plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
+    auto keywordIdList = newMap.take("keyword_ids").toList();
 
     // Check if unit id foreign key seems to be valid. If not, remove it.
     if (newMap.contains("unit_id") && newMap.value("unit_id").toInt() < 1)
@@ -60,9 +60,9 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-    QDate plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
+    const auto plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
     QVariantMap newMap(map);
-    QList<int> ids;
+    QList<int> idList;
 
     QSqlDatabase::database().transaction();
     for (int i = 0; i < successions; i++) {
@@ -71,11 +71,11 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
 
         int id = add(newMap);
         if (id > 0)
-            ids.append(id);
+            idList.append(id);
     }
     QSqlDatabase::database().commit();
 
-    return ids;
+    return idList;
 }
 
 QVariantMap Planting::lastValues(const int varietyId, const int cropId, const int plantingType,
@@ -95,26 +95,21 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
                                   " AND in_greenhouse = %3"
                                   " ORDER BY planting_id DESC");
 
-    QSqlQuery query1(inGhQueryString.arg(varietyId).arg(plantingType).arg(inGreenhouse ? 1 : 0));
-    QSqlQuery query2(plantingTypeQueryString.arg(varietyId).arg(plantingType));
-    QSqlQuery query3(varietyQueryString.arg(varietyId));
-    QSqlQuery query4(cropQueryString.arg(cropId));
+    QList<QString> queryStringList;
+    queryStringList.push_back(
+            inGhQueryString.arg(varietyId).arg(plantingType).arg(inGreenhouse ? 1 : 0));
+    queryStringList.push_back(plantingTypeQueryString.arg(varietyId).arg(plantingType));
+    queryStringList.push_back(varietyQueryString.arg(varietyId));
+    queryStringList.push_back(cropQueryString.arg(cropId));
 
-    QList<QSqlQuery> queryList;
-    queryList.push_back(query1);
-    queryList.push_back(query2);
-    queryList.push_back(query3);
-    queryList.push_back(query4);
-
-    for (auto query : queryList) {
-        query.exec();
+    for (const auto &queryString : queryStringList) {
+        QSqlQuery query(queryString);
         debugQuery(query);
 
         if (query.first()) {
             int plantingId = query.record().value("planting_id").toInt();
-            if (plantingId >= 1) {
+            if (plantingId >= 1)
                 return mapFromId("planting", plantingId);
-            }
         }
     }
 
@@ -137,18 +132,16 @@ QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const Q
 
 void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
 {
-    int plantsNeeded = get(map, record, "plants_needed").toInt();
-    int greenhouseLoss = get(map, record, "estimated_gh_loss").toInt();
-    int seedsPerHole = get(map, record, "seeds_per_hole").toInt();
-    double seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
-    int traySize = get(map, record, "tray_size").toInt();
+    const int plantsNeeded = get(map, record, "plants_needed").toInt();
+    const int greenhouseLoss = get(map, record, "estimated_gh_loss").toInt();
+    const int seedsPerHole = get(map, record, "seeds_per_hole").toInt();
+    const double seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
+    const int traySize = get(map, record, "tray_size").toInt();
 
-    int plantsToStart = qCeil(static_cast<double>(plantsNeeded) / (1 - greenhouseLoss / 100));
-
-    double traysToStart = plantsToStart / traySize;
-
-    int seedsNumber = plantsToStart * seedsPerHole;
-    double seedsQuantity = seedsNumber / seedsPerGram;
+    const int plantsToStart = qCeil(static_cast<double>(plantsNeeded) / (1 - greenhouseLoss / 100));
+    const double traysToStart = plantsToStart / traySize;
+    const int seedsNumber = plantsToStart * seedsPerHole;
+    const double seedsQuantity = seedsNumber / seedsPerGram;
 
     map["plants_to_start"] = plantsToStart;
     map["trays_to_start"] = traysToStart;
@@ -164,7 +157,7 @@ void Planting::update(int id, const QVariantMap &map) const
     if (newMap.contains("planting_date"))
         plantingDateString = newMap.take("planting_date").toString();
 
-    QSqlRecord record = recordFromId("planting_view", id);
+    auto record = recordFromId("planting_view", id);
     int plantingType = get(newMap, record, "planting_type").toInt();
 
     // If the length, the number of rows or the in-row spacing have changed,
@@ -247,18 +240,18 @@ void Planting::update(int id, const QVariantMap &map) const
         QList<int> toAdd;
         QList<int> toRemove;
 
-        for (auto &newid : keywordIdList)
-            if (!oldKeywordIdList.contains(newid.toInt()))
-                toAdd.push_back(newid.toInt());
+        for (const auto &newId : keywordIdList)
+            if (!oldKeywordIdList.contains(newId.toInt()))
+                toAdd.push_back(newId.toInt());
 
-        for (auto &oldid : oldKeywordIdList)
-            if (!keywordIdList.contains(oldid))
-                toRemove.push_back(oldid.toInt());
+        for (const auto &oldId : oldKeywordIdList)
+            if (!keywordIdList.contains(oldId))
+                toRemove.push_back(oldId.toInt());
 
-        for (int keywordId : toAdd)
+        for (const int keywordId : toAdd)
             keyword->addPlanting(id, keywordId);
 
-        for (int keywordId : toRemove)
+        for (const int keywordId : toRemove)
             keyword->removePlanting(id, keywordId);
     }
 

@@ -5,8 +5,6 @@ PRAGMA foreign_keys = OFF;
 
 BEGIN TRANSACTION;
 
--- ALTER TABLE location RENAME TO location_old;
-
 CREATE TABLE IF NOT EXISTS location_new (
     location_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT NOT NULL,

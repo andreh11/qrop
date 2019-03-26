@@ -101,4 +101,4 @@ PRAGMA user_version = 5;
 COMMIT;
 
 PRAGMA foreign_keys = ON;
-
+PRAGMA legacy_alter_table = 0;

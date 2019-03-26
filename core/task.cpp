@@ -31,8 +31,8 @@ int Task::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
 
-    QList<QVariant> plantingIdList = newMap.take("planting_ids").toList();
-    QList<QVariant> locationIdList = newMap.take("location_ids").toList();
+    auto plantingIdList = newMap.take("planting_ids").toList();
+    auto locationIdList = newMap.take("location_ids").toList();
 
     int methodId = newMap.value("task_method_id").toInt();
     if (methodId < 1)
@@ -65,7 +65,7 @@ void Task::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);
 
-    // Set NULL values to prevent SQL foreign key error.
+    // Set NULL values instead of -1 to prevent SQL foreign key errors.
     if (newMap.contains("task_method_id") && newMap.value("task_method_id").toInt() < 1)
         newMap["task_method_id"] = QVariant(QVariant::Int);
     if (newMap.contains("task_implement_id") && newMap.value("task_implement_id").toInt() < 1)
@@ -73,43 +73,43 @@ void Task::update(int id, const QVariantMap &map) const
 
     if (map.contains("planting_ids")) {
         const auto &plantingIdList = newMap.take("planting_ids").toList();
-        QList<int> oldPlantingIdList = taskPlantings(id);
+        const auto &oldPlantingIdList = taskPlantings(id);
         QList<int> toAdd;
         QList<int> toRemove;
 
-        for (auto &newid : plantingIdList)
-            if (!oldPlantingIdList.contains(newid.toInt()))
-                toAdd.push_back(newid.toInt());
+        for (const auto &newId : plantingIdList)
+            if (!oldPlantingIdList.contains(newId.toInt()))
+                toAdd.push_back(newId.toInt());
 
-        for (auto &oldid : oldPlantingIdList)
-            if (!plantingIdList.contains(oldid))
-                toRemove.push_back(oldid);
+        for (const auto &oldId : oldPlantingIdList)
+            if (!plantingIdList.contains(oldId))
+                toRemove.push_back(oldId);
 
-        for (int plantingId : toAdd)
+        for (const int plantingId : toAdd)
             addPlanting(plantingId, id);
 
-        for (int plantingId : toRemove)
+        for (const int plantingId : toRemove)
             removePlanting(plantingId, id);
     }
 
     if (map.contains("location_ids")) {
         const auto &locationIdList = newMap.take("location_ids").toList();
-        QList<int> oldLocationList = taskLocations(id);
+        const auto &oldLocationList = taskLocations(id);
         QList<int> toAdd;
         QList<int> toRemove;
 
-        for (auto &newid : locationIdList)
-            if (!oldLocationList.contains(newid.toInt()))
-                toAdd.push_back(newid.toInt());
+        for (const auto &newId : locationIdList)
+            if (!oldLocationList.contains(newId.toInt()))
+                toAdd.push_back(newId.toInt());
 
-        for (auto &oldid : oldLocationList)
-            if (!locationIdList.contains(oldid))
-                toRemove.push_back(oldid);
+        for (const auto &oldId : oldLocationList)
+            if (!locationIdList.contains(oldId))
+                toRemove.push_back(oldId);
 
-        for (int locationId : toAdd)
+        for (const int locationId : toAdd)
             addLocation(locationId, id);
 
-        for (int locationId : toRemove)
+        for (const int locationId : toRemove)
             removeLocation(locationId, id);
     }
 
@@ -141,9 +141,9 @@ void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
     qDebug() << Q_FUNC_INFO << "Duplicate tasks of location" << sourceLocationId << "for"
              << newLocationId;
 
-    QList<int> sourceTasks = locationTasks(sourceLocationId);
+    auto sourceTasks = locationTasks(sourceLocationId);
     for (const int taskId : sourceTasks) {
-        QVariantMap map = mapFromId("task", taskId);
+        auto map = mapFromId("task", taskId);
         map.remove("task_id");
 
         int newTaskId = add(map);
@@ -191,9 +191,9 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
 {
     qDebug() << "[Task] Creating tasks for planting: " << plantingId << plantingDate;
 
-    QSqlRecord rec = recordFromId("planting", plantingId);
-    auto type = static_cast<PlantingType>(rec.value("planting_type").toInt());
-    int dtt = rec.value("dtt").toInt();
+    auto record = recordFromId("planting", plantingId);
+    auto type = static_cast<PlantingType>(record.value("planting_type").toInt());
+    int dtt = record.value("dtt").toInt();
 
     switch (type) {
     case PlantingType::DirectSeeded: {
@@ -282,11 +282,9 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
 {
     int sowTaskId = -1;
     int transplantTaskId = -1;
-    TaskType taskType;
-    QSqlRecord record;
     for (const int taskId : plantingTasks(plantingId)) {
-        record = recordFromId("task", taskId);
-        taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
+        auto record = recordFromId("task", taskId);
+        auto taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
 
         if (taskType == TaskType::DirectSow) {
             sowTaskId = taskId;
@@ -309,16 +307,16 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     qDebug() << Q_FUNC_INFO << "Updating sowing & planting tasks for planting: " << plantingId
              << plantingDate;
 
-    QSqlRecord plantingRecord = recordFromId("planting", plantingId);
+    auto plantingRecord = recordFromId("planting", plantingId);
     auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
-    QList<int> taskIds = sowPlantTaskIds(plantingId);
+    auto taskIds = sowPlantTaskIds(plantingId);
     int sowTaskId = taskIds[0];
     int transplantTaskId = taskIds[1];
 
     switch (plantingType) {
     case PlantingType::DirectSeeded: {
-        QString queryString = "UPDATE task SET assigned_date = :assigned_date "
-                              "WHERE task_id = :task_id";
+        QString queryString("UPDATE task SET assigned_date = :assigned_date "
+                            "WHERE task_id = :task_id");
         qDebug() << Q_FUNC_INFO << "New date for sowing task:" << plantingDate.toString(Qt::ISODate);
         QSqlQuery query;
         query.prepare(queryString);
@@ -329,11 +327,11 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         break;
     }
     case PlantingType::TransplantRaised: {
-        int dtt = plantingRecord.value("dtt").toInt();
-        QString sowDate = plantingDate.addDays(-dtt).toString(Qt::ISODate);
+        auto dtt = plantingRecord.value("dtt").toInt();
+        auto sowDate = plantingDate.addDays(-dtt).toString(Qt::ISODate);
 
-        QString queryString = "UPDATE task SET assigned_date = :assigned_date "
-                              "WHERE task_id = :task_id";
+        QString queryString("UPDATE task SET assigned_date = :assigned_date "
+                            "WHERE task_id = :task_id");
         QSqlQuery query;
         query.prepare(queryString);
         query.bindValue(":assigned_date", sowDate);
@@ -344,7 +342,6 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         QString linkQueryString("UPDATE task SET link_days = :link_days, "
                                 "assigned_date = :assigned_date "
                                 "WHERE task_id = :task_id");
-
         QSqlQuery linkQuery;
         linkQuery.prepare(linkQueryString);
         linkQuery.bindValue(":link_days", dtt);
@@ -355,8 +352,8 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
         break;
     }
     case PlantingType::TransplantBought: {
-        QString queryString = "UPDATE task SET assigned_date = :assigned_date"
-                              " WHERE task_id = :task_id";
+        QString queryString("UPDATE task SET assigned_date = :assigned_date"
+                            " WHERE task_id = :task_id");
         QSqlQuery query;
         query.prepare(queryString);
         query.bindValue(":assigned_date", plantingDate.toString(Qt::ISODate));
@@ -378,13 +375,11 @@ void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
     qDebug() << Q_FUNC_INFO << "Duplicate tasks of planting" << sourcePlantingId << "for"
              << newPlantingId;
 
-    QList<int> sourceTasks = plantingTasks(sourcePlantingId);
-    QVariantMap map;
-    int newTaskId;
+    auto sourceTasks = plantingTasks(sourcePlantingId);
     for (const int taskId : sourceTasks) {
-        map = mapFromId("task", taskId);
+        auto map = mapFromId("task", taskId);
         map.remove("task_id");
-        newTaskId = add(map);
+        int newTaskId = add(map);
         addPlanting(newPlantingId, newTaskId);
     }
 }
@@ -410,7 +405,7 @@ void Task::removeNurseryTask(int plantingId) const
                             "JOIN task USING (task_id) "
                             "WHERE planting_id = %1 AND task_type_id = 2");
 
-    QList<int> taskIdList = queryIds(taskQueryString.arg(plantingId), "task_id");
+    auto taskIdList = queryIds(taskQueryString.arg(plantingId), "task_id");
     if (taskIdList.isEmpty())
         return;
 
@@ -431,11 +426,10 @@ QList<int> Task::templateTasks(int templateId) const
 /** @brief Create tasks from the template \a templateId for the planting \a plantingId */
 void Task::applyTemplate(int templateId, int plantingId) const
 {
-    QSqlRecord plantingRecord = recordFromId("planting", plantingId);
+    auto plantingRecord = recordFromId("planting", plantingId);
     auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
 
-    QVariantMap map;
-    QList<int> taskIds = sowPlantTaskIds(plantingId);
+    auto taskIds = sowPlantTaskIds(plantingId);
     int sowTaskId = taskIds[0];
     int transplantTaskId = taskIds[1];
 
@@ -445,7 +439,7 @@ void Task::applyTemplate(int templateId, int plantingId) const
     }
 
     for (const int taskId : templateTasks(templateId)) {
-        map = mapFromId("task", taskId);
+        auto map = mapFromId("task", taskId);
         auto templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
         switch (templateDateType) {
         case TemplateDateType::FieldSowPlant:

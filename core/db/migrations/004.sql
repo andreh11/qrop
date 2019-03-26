@@ -1,4 +1,4 @@
-
+-- 004.sql
 -- * add a seed list view
 
 PRAGMA foreign_keys = OFF;
@@ -23,9 +23,6 @@ FROM planting_view
 WHERE planting_type = 3
 GROUP BY planting_date, variety_id
 ORDER BY planting_date, crop, variety, seed_company ASC;
-
--- GROUP BY year, variety_id
--- ORDER BY crop, variety, seed_company ASC;
 
 PRAGMA user_version = 4;
 
