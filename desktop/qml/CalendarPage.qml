@@ -533,15 +533,17 @@ Page {
                     if (task_type_id === 1 || task_type_id === 3) {
                         if (settings.useStandardBedLength) {
                             var beds = length/settings.standardBedLength
-                            return qsTr("%L1 bed: ", "", beds).arg(beds) + qsTr("%L1 rows X %L2 cm").arg(rows).arg(spacingPlants)
+                            return qsTr("%L1 bed @ ", "", beds).arg(beds) + qsTr("%L1 rows X %L2 cm").arg(rows).arg(spacingPlants)
                         } else {
-                            return qsTr("%L1 bed m, %L2 rows X %L3 cm").arg(length).arg(rows).arg(spacingPlants)
+                            return qsTr("%L1 bed m @ %L2 rows X %L3 cm").arg(length).arg(rows).arg(spacingPlants)
                         }
                     } else if (task_type_id === 2) {
+                        var traysToStart = Math.round(Number(map['trays_to_start']) * 100)/100
+                        var traySize = map["tray_size"];
                         if (seedsPerHole > 1)
-                            return qsTr("%L1 x %L2, %L3 seeds per cell").arg(map["trays_to_start"]).arg(map['tray_size']).arg(seedsPerHole)
+                            return qsTr("%L1 trays of %L2 @ %L3 seeds").arg(traysToStart).arg(traySize).arg(seedsPerHole)
                         else
-                            return qsTr("%L1 x %L2").arg(map["trays_to_start"]).arg(map['tray_size'])
+                            return qsTr("%L1 trays of %L2").arg(traysToStart).arg(traySize)
 
                     } else {
                         return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)

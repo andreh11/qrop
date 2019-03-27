@@ -43,7 +43,7 @@ Item {
 
     function previousSeason() {
         if (season === 0) {
-            season = 4;
+            season = 3;
             year--;
         } else {
             season--;

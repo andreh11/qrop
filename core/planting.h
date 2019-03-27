@@ -35,12 +35,13 @@ public:
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE int duplicate(int id) const override;
     Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const override;
+    Q_INVOKABLE bool sameCrop(const QList<int> &idList) const;
 
     Q_INVOKABLE QString cropName(int plantingId) const;
-    Q_INVOKABLE QString cropId(int plantingId) const;
+    Q_INVOKABLE int cropId(int plantingId) const;
     Q_INVOKABLE QString cropColor(int plantingId) const;
     Q_INVOKABLE QString varietyName(int plantingId) const;
-    Q_INVOKABLE QString familyId(int plantingId) const;
+    Q_INVOKABLE int familyId(int plantingId) const;
     Q_INVOKABLE QString familyInterval(int plantingId) const;
     Q_INVOKABLE QString familyColor(int plantingId) const;
     Q_INVOKABLE int type(int plantingId) const;

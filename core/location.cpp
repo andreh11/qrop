@@ -242,13 +242,13 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
     const QDate plantingDate = planting->plantingDate(plantingId);
     QList<int> plantingIdList = plantings(locationId, plantingDate);
     plantingIdList.removeOne(plantingId);
-    const int familyId = planting->familyId(plantingId).toInt();
+    const int familyId = planting->familyId(plantingId);
     const int intervalDays = qAbs(planting->familyInterval(plantingId).toInt()) * 365;
 
     QDate pdate;
     for (const int pid : plantingIdList) {
         pdate = planting->plantingDate(pid);
-        if (familyId == planting->familyId(pid).toInt() && pdate.daysTo(plantingDate) < intervalDays)
+        if (familyId == planting->familyId(pid) && pdate.daysTo(plantingDate) < intervalDays)
             clist.push_back(pid);
     }
 

@@ -393,6 +393,7 @@ ListView {
                         spacing: -16
                         anchors.fill: parent
                         model: tableHeaderModel.slice(2) // Don't show Crop and Variety.
+                        boundsBehavior: Flickable.StopAtBounds
 
                         delegate: CheckBox {
                             text: modelData.name

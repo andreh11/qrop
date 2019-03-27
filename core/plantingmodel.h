@@ -14,10 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SQLPLANTINGMODEL_H
-#define SQLPLANTINGMODEL_H
+#ifndef PLANTINGMODEL_H
+#define PLANTINGMODEL_H
 
-//#include <QSortFilterProxyModel>
 #include <QVariantMap>
 
 #include "core_global.h"
@@ -83,4 +82,4 @@ signals:
     void cropIdChanged();
 };
 
-#endif // SQLPLANTINGMODEL_H
+#endif // PLANTINGMODEL_H

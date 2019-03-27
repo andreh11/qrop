@@ -57,6 +57,14 @@ int Planting::add(const QVariantMap &map) const
     return id;
 }
 
+/*!
+ * Create several planting successions based on the same values.
+ *
+ * \param successions the number of successions to add
+ * \param weeksBetween the number of weeks between each succession
+ * \param map the value map used to create the plantings
+ * \return the list of the ids of the plantings created
+ */
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
@@ -65,19 +73,42 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     QList<int> idList;
 
     QSqlDatabase::database().transaction();
-    for (int i = 0; i < successions; i++) {
+    int i = 0;
+    for (; i < successions; i++) {
         int days = i * daysBetween;
         newMap["planting_date"] = plantingDate.addDays(days).toString(Qt::ISODate);
 
         int id = add(newMap);
-        if (id > 0)
+        if (id > 0) {
             idList.append(id);
+        } else {
+            qDebug() << "[addSuccesions] cannot add planting to the database. Rolling back...";
+            break;
+        }
     }
-    QSqlDatabase::database().commit();
+
+    if (i < successions)
+        QSqlDatabase::database().rollback();
+    else
+        QSqlDatabase::database().commit();
 
     return idList;
 }
 
+/*!
+ * Return a map of the last planting which shares the most common values.
+ *
+ * First try to find a planting which is in (or not in) greenhouse and has the
+ * same planting type and variety. If this planting cannot be found, try to find
+ * a planting which has the same planting type and variety. If not found, only
+ * look for the variety. As a last resort, look for the crop.
+ *
+ * \param varietyId the id of the variety
+ * \param cropId the id of the crop
+ * \param plantingType the planting type (an integer in [1,3])
+ * \param inGreenhouse a boolean (true if we look for a greenhouse planting, false otherwise)
+ * \return a value map for the planting found (which is empty of no planting is found)
+ */
 QVariantMap Planting::lastValues(const int varietyId, const int cropId, const int plantingType,
                                  const bool inGreenhouse) const
 {
@@ -116,9 +147,9 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
     return {};
 }
 
-/**
+/*!
  * \brief Given a \a key, return its value in \a map if \a map contains this key.
- *  Otherwise, return the value of the \a record for \a key.
+ * Otherwise, return the value of the \a record for \a key.
  */
 QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const
 {
@@ -297,6 +328,21 @@ QVariantMap Planting::commonValues(const QList<int> &idList) const
     return common;
 }
 
+/*!
+ * Check if all plantings in \a plantingIdList are of the same crop specie.
+ */
+bool Planting::sameCrop(const QList<int> &plantingIdList) const
+{
+    if (plantingIdList.empty())
+        return true;
+
+    int cid = cropId(plantingIdList.first());
+    for (const int plantingId : plantingIdList)
+        if (cropId(plantingId) != cid)
+            return false;
+    return true;
+}
+
 QString Planting::cropName(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
@@ -305,12 +351,12 @@ QString Planting::cropName(int plantingId) const
     return map.value("crop").toString();
 }
 
-QString Planting::cropId(int plantingId) const
+int Planting::cropId(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-    return map.value("crop_id").toString();
+    return map.value("crop_id").toInt();
 }
 
 QString Planting::cropColor(int plantingId) const
@@ -329,12 +375,12 @@ QString Planting::varietyName(int plantingId) const
     return map.value("variety").toString();
 }
 
-QString Planting::familyId(int plantingId) const
+int Planting::familyId(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-    return map.value("family_id").toString();
+    return map.value("family_id").toInt();
 }
 
 QString Planting::familyInterval(int plantingId) const
@@ -405,7 +451,7 @@ int Planting::totalLength(int plantingId) const
     return map.value("length").toInt();
 }
 
-/** \brief Return the already assigned bed length for \a plantingId */
+/** Return the already assigned bed length for \a plantingId */
 int Planting::assignedLength(int plantingId) const
 {
     if (plantingId < 1)

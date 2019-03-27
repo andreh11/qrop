@@ -55,11 +55,12 @@ Dialog {
         plantingForm.clearAll();
 
         dialog.editPlantingIdList = plantingIds;
-        if (plantingIds.length === 1) {
+        if (Planting.sameCrop(plantingIds)) {
             plantingFormHeader.cropField.selectedId = Planting.cropId(plantingIds[0])
             plantingFormHeader.cropField.text = Planting.cropName(plantingIds[0])
-        } else
+        } else {
             plantingFormHeader.bulkEditMode = true
+        }
 
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);

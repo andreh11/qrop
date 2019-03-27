@@ -29,7 +29,6 @@ Flickable {
     // Initialisation mode ensures that no duration field is modified.
     property bool initMode: false
 
-
     property int locationViewWidth: locationView.treeViewWidth
     property alias durationMode: durationCheckBox.checked
 
@@ -44,9 +43,10 @@ Flickable {
     property alias plantingAmountField: plantingAmountField
     property alias addVarietyDialog: addVarietyDialog
     property int cropId: -1
+    property bool sameCrop: false
 
     property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
-    property bool accepted: (mode === "edit" || (varietyId > 0 && unitId > 0)) && coherentDates
+    property bool accepted: mode === "edit" || (varietyId > 0 && unitId > 0 && coherentDates)
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
@@ -573,6 +573,7 @@ Flickable {
                     labelText: qsTr("Variety")
 
                     onAddItemClicked: {
+                        addVarietyDialog.seedCompanyModel.refresh();
                         addVarietyDialog.open()
                         addVarietyDialog.prefill(text)
                     }

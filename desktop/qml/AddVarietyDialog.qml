@@ -27,6 +27,7 @@ Dialog {
     readonly property string varietyName: varietyNameField.text.trim()
     property int seedCompanyId: seedCompanyField.selectedId
     property bool acceptableForm: varietyNameField.acceptableInput && seedCompanyId > 0
+    property alias seedCompanyModel: seedCompanyModel
 
     function prefill(name) {
         varietyNameField.text = name
@@ -63,7 +64,7 @@ Dialog {
         MyTextField {
             id: varietyNameField
             width: parent.width
-            validator: RegExpValidator { regExp: /\w[\w\d ]*/ }
+            validator: RegExpValidator { regExp: /\w[\w\d() ]*/ }
 
             labelText: qsTr("Variety")
             Layout.fillWidth: true

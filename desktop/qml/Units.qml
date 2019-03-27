@@ -114,4 +114,8 @@ QtObject {
         }
         return map;
     }
+
+    function toPrecision(x, decimals) {
+        return Math.round(x * (10^decimals)) / (10^decimals);
+    }
 }
