@@ -81,7 +81,7 @@ Page {
 
     Settings {
         id: settings
-        property alias tableModel: plantingsView.tableHeaderModel
+//        property alias tableModel: plantingsView.tableHeaderModel
     }
 
     Shortcut {

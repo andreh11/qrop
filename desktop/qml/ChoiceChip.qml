@@ -89,9 +89,9 @@ Button {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+        cursorShape: containsMouse && checkable ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
-            if (!autoExclusive || !toggled) {
+            if (checkable && (!autoExclusive || !toggled)) {
                 control.toggle()
                 manuallyModified = true
                 control.clicked()

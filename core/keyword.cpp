@@ -34,6 +34,29 @@ QList<int> Keyword::keywordIdList(int plantingId) const
     return queryIds(queryString.arg(plantingId), "keyword_id");
 }
 
+/*!
+ * Return a list of the names of the keywords attached to \a plantingId.
+ *
+ * The return type is QVariantList for easier interaction with QML.
+ */
+QVariantList Keyword::keywordStringList(int plantingId) const
+{
+    auto idList = keywordIdList(plantingId);
+    QVariantList vList;
+    for (const int id : idList) {
+        auto record = recordFromId("keyword", id);
+        vList.push_back(QVariant(record.value("keyword")));
+    }
+
+    return vList;
+}
+
+/*!
+ * Attach a keyword to a planting.
+ *
+ * \param plantingId the id of the planting
+ * \param keywordId the id of the keyword
+ */
 void Keyword::addPlanting(int plantingId, int keywordId) const
 {
     addLink("planting_keyword", "planting_id", plantingId, "keyword_id", keywordId);

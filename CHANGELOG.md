@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to show full name of locations.
 
 ### Changed
+  - Show tags in planting view and week calendar.
   - If a planting type is changed from TP, raised to DS or TP, bough, its nursery
     task is now remove and its DTT is set to 0.
   - Improve combo boxes.

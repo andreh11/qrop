@@ -748,6 +748,23 @@ Page {
                                 width: tableHeaderModel[3].width
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
+                            ListView {
+                                model: Keyword.keywordStringList(firstPlantingId)
+                                spacing: Units.smallSpacing
+                                orientation: Qt.Horizontal
+                                width: 120
+                                height: Units.rowHeight
+                                delegate: ChoiceChip {
+                                    text: modelData
+                                    checkable: false
+                                    font {
+                                        family: "Roboto Condensed"
+                                        pixelSize: Units.fontSizeBodyAndButton
+                                        capitalization: Font.MixedCase
+                                    }
+                                }
+                            }
                         }
 
                         Column {
