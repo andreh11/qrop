@@ -30,6 +30,7 @@
 #include "planting.h"
 #include "task.h"
 #include "mdate.h"
+#include "keyword.h"
 #include "locationmodel.h"
 
 Print::Print(QObject *parent)
@@ -43,6 +44,7 @@ Print::Print(QObject *parent)
     , m_showFamilyColor(false)
     , location(new Location(this))
     , planting(new Planting(this))
+    , keyword(new Keyword(this))
     , m_locationModel(new LocationModel(this))
     , cropPlanQueryString("SELECT *, "
                           "strftime('%Y', sowing_date) AS sowing_year, "
@@ -232,18 +234,21 @@ Print::Print(QObject *parent)
                              "<th class='tg' align=left width=20%>%2</th>"
                              "<th class='tg' align=left width=15%>%3</th>"
                              "<th class='tg' align=left width=25%>%4</th>"
-                             "<th class='tg' align=left width=30%>%5</th>"
+                             "<th class='tg' align=left width=10%>%5</th>"
+                             "<th class='tg' align=left width=30%>%6</th>"
                              "</tr>")
                              .arg(tr("Date"))
                              .arg(tr("Planting"))
                              .arg(tr("Locations"))
                              .arg(tr("Description"))
+                             .arg(tr("Tags"))
                              .arg(tr("Notes")),
                      ("<td class='tg' align=right>%1</th>"
                       "<td class='tg' align=left>%2</th>"
                       "<td class='tg' align=left>%3</th>"
                       "<td class='tg' align=left>%4</th>"
                       "<td class='tg' align=left>%5</th>"
+                      "<td class='tg' align=left>%6</th>"
                       "</tr>") };
 
     harvestInfo = { "",
@@ -575,6 +580,15 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
             int trays = map.value("trays_to_start").toInt();
             int traySize = map.value("tray_size").toInt();
             int seedsPerHole = map.value("seeds_per_hole").toInt();
+            auto keywordStringList = keyword->keywordStringList(plantingId);
+
+            QString keywordString;
+            for (const auto &variant : keywordStringList) {
+                keywordString.append(variant.toString());
+                keywordString.append(", ");
+            }
+            if (!keywordString.isEmpty())
+                keywordString.chop(2);
 
             int length = map.value("length").toInt();
             QString lengthString;
@@ -619,12 +633,14 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                                 .arg(plantingString)
                                 .arg(locationsName)
                                 .arg(description)
+                                .arg(keywordString)
                                 .arg("");
             else
                 html += calendarInfo.tableRow.arg("")
                                 .arg(plantingString)
                                 .arg(locationsName)
                                 .arg("\"")
+                                .arg(keywordString)
                                 .arg("");
 
             j++;

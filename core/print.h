@@ -28,6 +28,7 @@ class QModelIndex;
 class LocationModel;
 class Location;
 class Planting;
+class Keyword;
 
 /**
  * \brief The Print classe handles PDF export for most views.
@@ -68,6 +69,7 @@ private:
     bool m_showFamilyColor;
     Location *location;
     Planting *planting;
+    Keyword *keyword;
     LocationModel *m_locationModel;
 
     void exportPdf(const QString &html, const QUrl &path,

@@ -37,85 +37,127 @@ ListView {
             "name": qsTr("Crop"),
             "columnName": "crop",
             "width": 100,
-            "visible": false
+            "visible": false,
+            "alignment": Qt.AlignLeft
         }, {
             "name": qsTr("Variety"),
             "columnName": "variety",
             "width": 100,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignLeft
         }, {
             "name": qsTr("Locations"),
             "columnName": "locations",
             "width": 100,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignLeft
         }, {
             "name": qsTr("Sowing"),
             "columnName": "sowing_date",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
         }, {
             "name": qsTr("Planting"),
             "columnName": "planting_date",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Begin"),
             "columnName": "beg_harvest_date",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("End"),
             "columnName": "end_harvest_date",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("DTT"),
             "columnName": "dtt",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("DTM"),
             "columnName": "dtm",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Harvest Window"),
             "columnName": "harvest_window",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Length"),
             "columnName": "length",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Rows"),
             "columnName": "rows",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Spacing"),
             "columnName": "spacing_plants",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Avg. Yield"),
             "columnName": "yield_per_bed_m",
             "width": 60,
-            "visible": true
+            "visible": true,
+            "alignment": Qt.AlignRight
+
         }, {
             "name": qsTr("Avg. Price"),
             "columnName": "average_price",
             "width": 60,
-            "visible": true
-        }]
+            "visible": true,
+            "alignment": Qt.AlignRight
+
+        }, {
+            "name": qsTr("Tags"),
+            "columnName": "planting_id",
+            "width": 120,
+            "visible": true,
+            "alignment": Qt.AlignLeft
+        }
+    ]
+
+    property var visibleColumnIdList: {
+        var list = [];
+        for (var i = 0; i < tableHeaderModel.length; i++) {
+            if (tableHeaderModel[i].visible)
+                list.push(i);
+        }
+        return list;
+    }
 
     signal dragFinished()
     signal doubleClicked(int plantingId)
 
-    // Ids of selected plantings
+    //! Ids of selected plantings
     property var selectedIds: ({})
-    // Number of selected plantings
+    //! Number of selected plantings
     property int checks: numberOfTrue(selectedIds)
     property int firstSelectedIndex: -1
     property int secondSelectedIndex: -1
@@ -163,6 +205,26 @@ ListView {
         plantingModel.resetFilter();
     }
 
+    // Save visible columns setting.
+    onVisibleColumnIdListChanged: {
+        settings.visibleColumnList = visibleColumnIdList;
+    }
+
+    // Restore visible columns setting.
+    Component.onCompleted: {
+        var j = 0; // visibleColumnList index
+        for (var i = 0; i < tableHeaderModel.length; i++) {
+            while (settings.visibleColumnList[j] < i)
+                j++;
+
+            if (Number(settings.visibleColumnList[j]) === i)
+                tableHeaderModel[i].visible = true;
+            else
+                tableHeaderModel[i].visible = false;
+        }
+        tableHeaderModelChanged();
+    }
+
     focus: true
     onTableSortColumnChanged: tableSortOrder = "ascending"
     clip: true
@@ -199,6 +261,15 @@ ListView {
         }
     }
 
+    Settings {
+        id: settings
+        property bool showSeedCompanyBesideVariety
+        property bool useStandardBedLength
+        property int standardBedLength
+        property string dateType
+        property var visibleColumnList
+    }
+
     model: PlantingModel {
         id: plantingModel
         year: listView.year
@@ -207,13 +278,6 @@ ListView {
         sortOrder: tableSortOrder
     }
 
-    Settings {
-        id: settings
-        property bool showSeedCompanyBesideVariety
-        property bool useStandardBedLength
-        property int standardBedLength
-        property string dateType
-    }
 
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
@@ -350,7 +414,8 @@ ListView {
                         text: modelData.name
                         width: modelData.width
                         visible: index > 1 && tableHeaderModel[index].visible
-                        horizontalAlignment: Text.AlignRight
+//                        horizontalAlignment: Text.AlignRight
+                        horizontalAlignment: tableHeaderModel[index].alignment
                         state: listView.tableSortColumn === index ? listView.tableSortOrder : ""
                         onNewColumn: {
                             if (listView.tableSortColumn !== index) {
@@ -425,6 +490,7 @@ ListView {
         property date transplantingDate: model.planting_date
         property date beginHarvestDate: model.beg_harvest_date
         property date endHarvestDate: model.end_harvest_date
+        property var keywordStringList: Keyword.keywordStringList(model.planting_id)
 
         function select() {
             if (selectedIds[model.planting_id])
@@ -575,6 +641,24 @@ ListView {
                         elide: Text.ElideRight
                         visible: tableHeaderModel[index+2].visible
                         width: tableHeaderModel[index+2].width
+                    }
+                }
+
+                ListView {
+                    model: keywordStringList
+                    spacing: Units.smallSpacing
+                    visible: !showOnlyTimegraph && tableHeaderModel[tableHeaderModel.length-1].visible
+                    orientation: Qt.Horizontal
+                    width: tableHeaderModel[tableHeaderModel.length-1].width
+                    height: Units.rowHeight
+                    delegate: ChoiceChip {
+                        text: modelData
+                        checkable: false
+                        font {
+                            family: "Roboto Condensed"
+                            pixelSize: Units.fontSizeBodyAndButton
+                            capitalization: Font.MixedCase
+                        }
                     }
                 }
             }
