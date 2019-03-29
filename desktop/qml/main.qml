@@ -70,6 +70,8 @@ ApplicationWindow {
     visible: true
     width: 1024
     height: 768
+    flags: Qt.Window
+
 
     Material.primary: Material.Teal
     Material.accent: Material.Indigo
@@ -199,30 +201,56 @@ ApplicationWindow {
         property alias windowVisibility: window.visibility
     }
 
-    Platform.MenuBar {
-        Platform.Menu {
-            id: fileMenu
-            objectName: "fileMenu"
-            title: qsTr("File")
+//    menuBar: MenuBar {
+//        Menu {
+//            id: fileMenu
+//            objectName: "fileMenu"
+//            title: qsTr("File")
 
-            Platform.MenuItem {
-                objectName: "quitMenuButton"
-                text: qsTr("Quit")
-            }
-        }
+//            MenuItem {
+//                objectName: "openDatabaseButton"
+//                text: qsTr("Open database...")
+//            }
 
-        Platform.Menu {
-            id: helpMenu
-            objectName: "helpMenu"
-            title: qsTr("Help")
+//            MenuItem {
+//                objectName: "exportDatabaseButton"
+//                text: qsTr("Export database...")
+//            }
 
-            Platform.MenuItem {
-                objectName: "aboutMenuButton"
-                text: qsTr("About...")
-                onTriggered: aboutDialog.open()
-            }
-        }
-    }
+//            MenuItem {
+//                objectName: "quitMenuButton"
+//                text: qsTr("Quit")
+//            }
+//        }
+
+//        Menu {
+//            id: cropMenu
+//            objectName: "cropMenu"
+//            title: qsTr("Crop plan")
+
+//            MenuItem {
+//                objectName: "importCropPlanButton"
+//                text: qsTr("Import crop plan from CSV...")
+//            }
+
+//            MenuItem {
+//                objectName: "duplicateCropPlanButton"
+//                text: qsTr("Duplicate crop plan to another year")
+//            }
+//        }
+
+//        Menu {
+//            id: helpMenu
+//            objectName: "helpMenu"
+//            title: qsTr("Help")
+
+//            MenuItem {
+//                objectName: "aboutMenuButton"
+//                text: qsTr("About...")
+//                onTriggered: aboutDialog.open()
+//            }
+//        }
+//    }
 
     Component {
         id: searchBar
@@ -379,7 +407,7 @@ ApplicationWindow {
         //        width: childrenRect.width
         height: window.height
         //        height: window.height - toolBar.height
-        //        y: toolBar.height
+//        y: menuBar.height
         modal: !largeDisplay
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0

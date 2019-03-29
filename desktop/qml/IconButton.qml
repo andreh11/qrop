@@ -24,4 +24,5 @@ import io.qrop.components 1.0
 ToolButton {
     font.family: "Material Icons"
     font.pixelSize: 20
+    clip: true
 }

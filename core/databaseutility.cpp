@@ -159,7 +159,7 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
                                                       const QList<int> &idList) const
 {
     QList<QVariantMap> mapList;
-    QList<QSqlRecord> recordList = recordListFromIdList(tableName, idList);
+    auto recordList = recordListFromIdList(tableName, idList);
 
     for (const auto &record : recordList)
         if (!record.isEmpty())
@@ -249,7 +249,7 @@ int DatabaseUtility::duplicate(int id) const
     if (table().isNull())
         return -1;
 
-    QVariantMap map = mapFromId(table(), id);
+    auto map = mapFromId(table(), id);
     map.remove(idFieldName());
 
     return add(map);
@@ -295,17 +295,17 @@ QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
     if (idList.length() < 1)
         return {};
 
-    QList<QVariantMap> list = mapListFromIdList(m_viewTable, idList);
+    const auto list = mapListFromIdList(m_viewTable, idList);
     if (list.isEmpty())
         return {};
 
-    QVariantMap common = list[0];
+    auto common = list[0];
     if (list.length() == 1)
         return common;
 
     for (const auto &key : common.keys()) {
-        int i;
-        for (i = 1; i < list.length(); i++)
+        int i = 1;
+        for (; i < list.length(); i++)
             if (list[i].value(key) != common.value(key))
                 break;
         if (i != list.length())

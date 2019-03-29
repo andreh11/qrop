@@ -92,6 +92,9 @@ TextField {
         radius: 4
         color: control.palette.base
         border.color: control.activeFocus ? control.palette.highlight : control.palette.mid
+        Behavior on border.color {
+            ColorAnimation { duration: Units.mediumDuration }
+        }
     }
 
     Label {

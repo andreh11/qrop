@@ -16,10 +16,12 @@
 
 #include <QDate>
 #include <QDebug>
+#include <QSettings>
 #include <QSqlRecord>
 #include <QVariantMap>
 #include <QtMath>
 
+#include "mdate.h"
 #include "planting.h"
 #include "task.h"
 #include "keyword.h"
@@ -301,6 +303,59 @@ int Planting::duplicate(int id) const
     return newId;
 }
 
+/*!
+ * Duplicate a planting to another \a year.
+ *
+ * The seeding and planting tasks will also be duplicated.
+ *
+ * \param id the id of the planting to duplicate
+ * \param year the targeted year
+ * \return the id of the planting created
+ */
+int Planting::duplicateToYear(int id, int year) const
+{
+    if (id < 0)
+        return -1;
+
+    QDate fromDate = plantingDate(id);
+    auto map = mapFromId(table(), id);
+    map.remove(idFieldName());
+
+    QSettings settings;
+    QString dateType = settings.value("dateType", "week").toString();
+
+    if (dateType == "week") {
+        int fromWeek = fromDate.weekNumber();
+        QDate toDate = MDate::mondayOfWeek(fromWeek, year);
+        map["planting_date"] = toDate.toString(Qt::ISODate);
+
+        int newId = add(map);
+        keyword->duplicateKeywords(id, newId);
+    }
+
+    return -1;
+}
+
+void Planting::duplicateListToYear(const QList<int> &idList, int year) const
+{
+    qDebug() << "Batch duplicate to year:" << idList << year;
+    QSqlDatabase::database().transaction();
+    for (const int id : idList)
+        duplicateToYear(id, year);
+    QSqlDatabase::database().commit();
+}
+
+/** Duplicate all plantings of \a fromYear to \a toYear. */
+void Planting::duplicatePlan(int fromYear, int toYear) const
+{
+    QString queryString("SELECT *, strftime('%Y', planting_date) AS planting_year "
+                        "FROM planting_view "
+                        "WHERE planting_year = '%1'");
+
+    auto idList = queryIds(queryString.arg(fromYear), "planting_id");
+    duplicateListToYear(idList, toYear);
+}
+
 QVariantMap Planting::commonValues(const QList<int> &idList) const
 {
     if (idList.empty())
@@ -412,7 +467,6 @@ QDate Planting::sowingDate(int plantingId) const
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-
     return QDate::fromString(map.value("sowing_date").toString(), Qt::ISODate);
 }
 
@@ -421,7 +475,6 @@ QDate Planting::plantingDate(int plantingId) const
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-
     return QDate::fromString(map.value("planting_date").toString(), Qt::ISODate);
 }
 
@@ -430,7 +483,6 @@ QDate Planting::begHarvestDate(int plantingId) const
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-
     return QDate::fromString(map.value("beg_harvest_date").toString(), Qt::ISODate);
 }
 
@@ -439,7 +491,6 @@ QDate Planting::endHarvestDate(int plantingId) const
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-
     return QDate::fromString(map.value("end_harvest_date").toString(), Qt::ISODate);
 }
 
@@ -451,7 +502,7 @@ int Planting::totalLength(int plantingId) const
     return map.value("length").toInt();
 }
 
-/** Return the already assigned bed length for \a plantingId */
+/*! Return the already assigned bed length for \a plantingId */
 int Planting::assignedLength(int plantingId) const
 {
     if (plantingId < 1)
