@@ -6,6 +6,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout d'une fonctonnalité de duplication du plan de culture d'une année à une
+    autre.
   - Ajout de l'export PDF pour le plan de culture, le calendrier des tâches,
     le parcellaire, les récoltes et les listes de semences et plants à commander.
   - Ajout d'une vue des listes de semences et plants à commander.

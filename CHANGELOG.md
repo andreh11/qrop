@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Crop plan* − Add "duplicate to another year" feature.
   - Add print output for crop plan, task calendar, field map, harvests, seed and
     transplant lists.
   - Add a view for seed and planting lists to make it easier to order them.

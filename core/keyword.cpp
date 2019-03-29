@@ -51,6 +51,15 @@ QVariantList Keyword::keywordStringList(int plantingId) const
     return vList;
 }
 
+void Keyword::duplicateKeywords(int id, int newId) const
+{
+    if (id < 0 || newId < 0)
+        return;
+
+    for (const int keywordId : keywordIdList(id))
+        addPlanting(newId, keywordId);
+}
+
 /*!
  * Attach a keyword to a planting.
  *

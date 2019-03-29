@@ -27,6 +27,9 @@ public:
     Keyword(QObject *parent = nullptr);
     Q_INVOKABLE QList<int> keywordIdList(int plantingId) const;
     Q_INVOKABLE QVariantList keywordStringList(int plantingId) const;
+    void duplicateKeywords(int id, int newId) const;
+    ;
+    ;
     void addPlanting(int plantingId, int keywordId) const;
     void removePlanting(int plantingId, int keywordId) const;
     void removePlantingKeywords(int plantingId) const;

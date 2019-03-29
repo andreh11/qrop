@@ -63,6 +63,14 @@ Page {
         plantingsView.selectedIdsChanged();
     }
 
+    function duplicateSelectedNextYear() {
+        var idList = selectedIdList();
+        Planting.duplicateListToYear(idList, year + 1)
+        plantingsView.unselectAll()
+        page.refresh()
+        plantingsView.selectedIdsChanged();
+    }
+
     function removeSelected() {
         var ids = []
         for (var key in selectedIds)
@@ -223,6 +231,7 @@ Page {
         }
     }
 
+
     Snackbar {
         id: editPlantingsSnackBar
 
@@ -238,6 +247,19 @@ Page {
             Planting.rollback();
             page.refresh();
         }
+    }
+
+    Snackbar {
+        id: duplicatePlanSnackbar
+
+        property int from: 0
+        property int to: 0
+
+        z: 2
+        x: parent.width/2 - width/2
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Crop plan of %1 duplicated to %2").arg(from).arg(to)
+        visible: false
     }
 
     Platform.FileDialog {
@@ -302,8 +324,8 @@ Page {
                 RowLayout {
                     id: buttonRow
                     anchors.fill: parent
-                    spacing: Units.smallSpacing
                     visible: !filterMode
+                    spacing: 0
 
                     Button {
                         id: addButton
@@ -331,6 +353,7 @@ Page {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
+
 
                     Button {
                         id: editButton
@@ -367,6 +390,16 @@ Page {
                         onClicked: removeSelected()
                     }
 
+                    Button {
+                        id: duplicateNextYear
+                        flat: true
+                        text: qsTr("Duplicate to next year")
+                        visible: checks > 0
+                        Material.foreground: "white"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        onClicked: duplicateSelectedNextYear()
+                    }
+
                     Label {
                         visible: deleteButton.visible
                         Layout.fillWidth: true
@@ -389,6 +422,95 @@ Page {
                         Layout.rightMargin: 16
                         horizontalAlignment: Qt.AlignLeft
                         verticalAlignment: Qt.AlignVCenter
+                    }
+
+                    IconButton {
+                        id: exportDuplicateButton
+                        text: "\ue0c3"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+
+                        onClicked: cropMenu.open();
+
+                        Menu {
+                            id: cropMenu
+                            objectName: "cropMenu"
+                            title: qsTr("Crop plan")
+                            y: parent.height
+
+                            MenuItem {
+                                objectName: "duplicateCropPlanButton"
+                                text: qsTr("Duplicate crop plan...")
+                                onClicked: duplicateCropPlanDialog.open();
+                            }
+
+                            MenuItem {
+                                objectName: "importCropPlanButton"
+                                text: qsTr("Import crop plan...")
+                            }
+                        }
+
+                        Dialog {
+                            id: duplicateCropPlanDialog
+                            title: qsTr("Duplicate crop plan")
+                            y: parent.height
+
+                            readonly property bool acceptableForm: fromField.acceptableInput && toField.acceptableInput
+
+                            onAboutToShow: {
+                                fromField.text = page.year
+                                toField.text = page.year + 1
+                                fromField.forceActiveFocus()
+                            }
+
+
+                            onAccepted: {
+                                Planting.duplicatePlan(Number(fromField.text), Number(toField.text))
+                                page.refresh();
+                                duplicatePlanSnackbar.from = fromField.text
+                                duplicatePlanSnackbar.to = toField.text
+                                duplicatePlanSnackbar.open();
+                            }
+
+                            footer: AddDialogButtonBox {
+                                width: parent.width
+                                onAccept: duplicateCropPlanDialog.accept()
+                                onReject: duplicateCropPlanDialog.reject()
+                                acceptableInput: duplicateCropPlanDialog.acceptableForm
+                            }
+
+                            ColumnLayout {
+                                anchors.fill: parent
+                                spacing: Units.formSpacing
+                                focus: true
+
+                                Keys.onReturnPressed: if (acceptableForm) dialog.accept();
+                                Keys.onEnterPressed: if (acceptableForm) dialog.accept();
+
+                                Keys.onEscapePressed: dialog.reject()
+                                Keys.onBackPressed: dialog.reject() // especially necessary on Android
+
+                                MyTextField {
+                                    id: fromField
+                                    width: parent.width
+                                    validator: IntValidator { bottom: 2000; top: 3000 }
+
+                                    labelText: qsTr("From")
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 100
+                                }
+
+                                MyTextField {
+                                    id: toField
+                                    width: parent.width
+                                    validator: IntValidator { bottom: 2000; top: 3000 }
+
+                                    labelText: qsTr("To")
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 100
+                                }
+                            }
+                        }
                     }
 
                     IconButton {

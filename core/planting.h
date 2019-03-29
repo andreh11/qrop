@@ -34,6 +34,9 @@ public:
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE int duplicate(int id) const override;
+    Q_INVOKABLE int duplicateToYear(int id, int year) const;
+    Q_INVOKABLE void duplicatePlan(int fromYear, int toYear) const;
+    Q_INVOKABLE void duplicateListToYear(const QList<int> &idList, int year) const;
     Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const override;
     Q_INVOKABLE bool sameCrop(const QList<int> &idList) const;
 
