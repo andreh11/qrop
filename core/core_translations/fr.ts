@@ -4,24 +4,37 @@
 <context>
     <name>MDate</name>
     <message>
-        <location filename="../mdate.cpp" line="171"/>
+        <location filename="../mdate.cpp" line="180"/>
         <source>Winter</source>
         <translation>Hiver</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="173"/>
+        <location filename="../mdate.cpp" line="182"/>
         <source>Spring</source>
         <translation>Printemps</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="175"/>
+        <location filename="../mdate.cpp" line="184"/>
         <source>Summer</source>
         <translation>Été</translation>
     </message>
     <message>
-        <location filename="../mdate.cpp" line="177"/>
+        <location filename="../mdate.cpp" line="186"/>
         <source>Fall</source>
         <translation>Automne</translation>
+    </message>
+</context>
+<context>
+    <name>Planting</name>
+    <message>
+        <location filename="../planting.cpp" line="688"/>
+        <source>Unknown company</source>
+        <translation>Fournisseur indéfini</translation>
+    </message>
+    <message>
+        <location filename="../planting.cpp" line="694"/>
+        <source>Unkown company</source>
+        <translation>Fournisseur indéfini</translation>
     </message>
 </context>
 <context>

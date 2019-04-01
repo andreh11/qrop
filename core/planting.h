@@ -19,12 +19,16 @@
 
 #include <QDate>
 #include <QVariantMap>
+#include <QUrl>
 
 #include "core_global.h"
 #include "databaseutility.h"
 
+class Crop;
+class Family;
 class Task;
 class Keyword;
+class Variety;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility
 {
@@ -62,12 +66,21 @@ public:
     Q_INVOKABLE QVariantMap lastValues(const int varietyId, const int cropId,
                                        const int plantingType, const bool inGreenhouse) const;
 
+    Q_INVOKABLE void csvImportPlan(int year, const QUrl &path) const;
+    Q_INVOKABLE void csvExportPlan(int year, const QUrl &path) const;
+
 private:
-    Task *task;
+    DatabaseUtility *crop;
+    Family *family;
+    DatabaseUtility *seedCompany;
     Keyword *keyword;
+    Task *task;
+    DatabaseUtility *unit;
+    Variety *variety;
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
-    //    QList<int> keywordListFromString(const QString &idString) const;
+    QList<int> yearPlantingList(int year) const;
+    QDate dateFromString(const QString &string, const int targetYear) const;
 };
 
 #endif // PLANTING_H

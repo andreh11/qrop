@@ -51,6 +51,24 @@ QVariantList Keyword::keywordStringList(int plantingId) const
     return vList;
 }
 
+QList<int> Keyword::keywordListFromString(const QString &keywords) const
+{
+    QList<int> list;
+    for (const auto &keyword : keywords.split(",")) {
+        QString queryString("SELECT keyword_id FROM keyword WHERE keyword='%1'");
+        QSqlQuery query(queryString.arg(keyword.trimmed()));
+        debugQuery(query);
+        if (query.first()) {
+            list.push_back(query.record().value("keyword_id").toInt());
+        } else {
+            QVariantMap map;
+            map["keyword"] = keyword.trimmed();
+            list.push_back(add(map));
+        }
+    }
+    return list;
+}
+
 void Keyword::duplicateKeywords(int id, int newId) const
 {
     if (id < 0 || newId < 0)

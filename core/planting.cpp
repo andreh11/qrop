@@ -16,24 +16,42 @@
 
 #include <QDate>
 #include <QDebug>
+#include <QFile>
 #include <QSettings>
 #include <QSqlRecord>
 #include <QVariantMap>
 #include <QtMath>
 
+#include "databaseutility.h"
+#include "family.h"
+#include "keyword.h"
 #include "mdate.h"
 #include "planting.h"
 #include "task.h"
-#include "keyword.h"
+#include "variety.h"
 
 Planting::Planting(QObject *parent)
     : DatabaseUtility(parent)
-    , task(new Task(this))
+    , crop(new DatabaseUtility(this))
+    , family(new Family(this))
+    , seedCompany(new DatabaseUtility(this))
     , keyword(new Keyword(this))
+    , task(new Task(this))
+    , unit(new DatabaseUtility(this))
+    , variety(new Variety(this))
 {
     m_table = "planting";
     m_viewTable = "planting_view";
     m_idFieldName = "planting_id";
+
+    crop->setTable("crop");
+    crop->setViewTable("crop");
+
+    seedCompany->setTable("seed_company");
+    seedCompany->setViewTable("seed_company");
+
+    unit->setTable("unit");
+    unit->setViewTable("unit");
 }
 
 // map has planting table's fields and a "keyword_ids" field.
@@ -345,14 +363,19 @@ void Planting::duplicateListToYear(const QList<int> &idList, int year) const
     QSqlDatabase::database().commit();
 }
 
-/** Duplicate all plantings of \a fromYear to \a toYear. */
-void Planting::duplicatePlan(int fromYear, int toYear) const
+QList<int> Planting::yearPlantingList(int year) const
 {
     QString queryString("SELECT *, strftime('%Y', planting_date) AS planting_year "
                         "FROM planting_view "
                         "WHERE planting_year = '%1'");
 
-    auto idList = queryIds(queryString.arg(fromYear), "planting_id");
+    return queryIds(queryString.arg(year), "planting_id");
+}
+
+/** Duplicate all plantings of \a fromYear to \a toYear. */
+void Planting::duplicatePlan(int fromYear, int toYear) const
+{
+    auto idList = yearPlantingList(fromYear);
     duplicateListToYear(idList, toYear);
 }
 
@@ -527,4 +550,288 @@ int Planting::lengthToAssign(int plantingId) const
 
     int length = map.value("length").toInt();
     return length - assignedLength(plantingId);
+}
+
+void Planting::csvImportPlan(int year, const QUrl &path) const
+{
+    if (year < 2000 || year > 3000)
+        return;
+
+    QFile f(path.toLocalFile());
+    if (!f.open(QIODevice::ReadOnly))
+        return;
+
+    QTextStream ts(&f);
+    QList<QString> fieldList = ts.readLine().split(";");
+    QSqlDatabase::database().transaction();
+    while (!ts.atEnd()) {
+        auto line = ts.readLine().split(";");
+
+        QVariantMap map;
+        int familyId = -1;
+        int cropId = -1;
+        int seedCompanyId = -1;
+        int varietyId = -1;
+        int unitId = -1;
+        QString varietyName;
+
+        QList<int> keywordIdList;
+        int inGreenhouse = 0;
+        int plantingType = -1;
+
+        QDate sdate;
+        QDate pdate;
+        QDate bhdate;
+        QDate ehdate;
+
+        for (int i = 0; i < line.length(); i++) {
+            QString field = fieldList[i];
+
+            if (field.trimmed().isEmpty())
+                continue;
+
+            if (field == "family") {
+                QString queryString("SELECT family_id FROM family WHERE family='%1'");
+                QString familyName = line[i].trimmed();
+                QSqlQuery query(queryString.arg(familyName));
+                debugQuery(query);
+                if (query.first()) {
+                    familyId = query.record().value("family_id").toInt();
+                } else {
+                    QVariantMap m;
+                    m["family"] = familyName;
+                    m["color"] = "#000000";
+                    familyId = family->add(m);
+                }
+            } else if (field == "crop") {
+                QString queryString("SELECT crop_id FROM crop WHERE crop='%1'");
+                QString cropName = line[i].trimmed();
+                QSqlQuery query(queryString.arg(cropName));
+                debugQuery(query);
+                if (query.first()) {
+                    cropId = query.record().value("crop_id").toInt();
+                } else {
+                    QVariantMap m;
+                    m["crop"] = cropName;
+                    m["color"] = "#000000";
+                    m["family_id"] = familyId;
+                    cropId = crop->add(m);
+                }
+            } else if (field == "seed_company") {
+                QString queryString(
+                        "SELECT seed_company_id FROM seed_company WHERE seed_company='%1'");
+                QString seedCompanyName = line[i].trimmed();
+                QSqlQuery query(queryString.arg(seedCompanyName));
+                debugQuery(query);
+                if (query.first()) {
+                    seedCompanyId = query.record().value("seed_company_id").toInt();
+                } else {
+                    QVariantMap m;
+                    m["seed_company"] = seedCompanyName;
+                    seedCompanyId = seedCompany->add(m);
+                }
+            } else if (field == "variety") {
+                varietyName = line[i].trimmed();
+            } else if (field == "unit") {
+                QString queryString("SELECT unit_id FROM unit WHERE abbreviation='%1'");
+                QString unitString = line[i].trimmed();
+                QSqlQuery query(queryString.arg(unitString));
+                debugQuery(query);
+                if (query.first()) {
+                    unitId = query.record().value("unit_id").toInt();
+                } else {
+                    QVariantMap m;
+                    m["unit"] = unitString;
+                    unitId = unit->add(m);
+                }
+                map["unit_id"] = unitId;
+            } else if (field == "keywords") {
+                keywordIdList = keyword->keywordListFromString(line[i]);
+                map.take("keywords");
+            } else if (field == "planting_type") {
+                plantingType = line[i].trimmed().toInt();
+            } else if (field == "sowing_date") {
+                sdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                if (!sdate.isValid()) {
+                    qDebug() << "Bad date format, should be week number:" << line[i];
+                    return;
+                }
+            } else if (field == "planting_date") {
+                pdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                if (!pdate.isValid()) {
+                    qDebug() << "Bad date format, should be week number:" << line[i];
+                    return;
+                }
+                map[field] = pdate;
+            } else if (field == "beg_harvest_date") {
+                bhdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                if (!bhdate.isValid()) {
+                    qDebug() << "Bad date format, should be week number:" << line[i];
+                    return;
+                }
+            } else if (field == "end_harvest_date") {
+                ehdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                if (!ehdate.isValid()) {
+                    qDebug() << "Bad date format, should be week number:" << line[i];
+                    return;
+                }
+            } else if (field == "in_greenhouse") {
+                inGreenhouse = line[i].toInt();
+            } else {
+                map[field] = line[i].trimmed();
+            }
+        }
+
+        // If seed company isn't found, set one
+        if (seedCompanyId < 0) {
+            QString queryString("SELECT seed_company_id FROM seed_company WHERE seed_company='%1'");
+            QSqlQuery query(queryString.arg(tr("Unknown company")));
+            debugQuery(query);
+            if (query.first()) {
+                seedCompanyId = query.record().value("seed_company_id").toInt();
+            } else {
+                QVariantMap m;
+                m["seed_company"] = tr("Unkown company");
+                seedCompanyId = seedCompany->add(m);
+            }
+        }
+
+        // Set variety
+        QString queryString("SELECT variety_id FROM variety WHERE variety='%1'");
+        QSqlQuery query(queryString.arg(varietyName.trimmed()));
+        debugQuery(query);
+        if (query.first()) {
+            varietyId = query.record().value("variety_id").toInt();
+        } else {
+            QVariantMap m;
+            m["variety"] = varietyName.trimmed();
+            m["crop_id"] = cropId;
+            m["seed_company_id"] = seedCompanyId;
+            varietyId = variety->add(m);
+        }
+        map["variety_id"] = varietyId;
+
+        if (plantingType < 0) {
+            if (sdate < pdate)
+                plantingType = 2;
+            else
+                plantingType = 1;
+        }
+
+        if (!map.contains("unit_id")) {
+            QString queryString("SELECT unit_id FROM unit WHERE abbreviation='kg'");
+            QSqlQuery query(queryString);
+            debugQuery(query);
+            if (query.first()) {
+                unitId = query.record().value("unit_id").toInt();
+            } else {
+                QVariantMap m;
+                m["unit"] = "kg";
+                unitId = unit->add(m);
+            }
+            map["unit_id"] = unitId;
+        }
+
+        if (!map.contains("dtt"))
+            map["dtt"] = sdate.daysTo(pdate);
+        if (!map.contains("dtm"))
+            map["dtm"] = pdate.daysTo(bhdate);
+        if (!map.contains("harvest_window"))
+            map["harvest_window"] = bhdate.daysTo(ehdate);
+
+        map["planting_type"] = plantingType;
+        map["in_greenhouse"] = inGreenhouse;
+
+        int plantingId = add(map);
+        if (plantingId < 0)
+            continue;
+        for (const int keywordId : keywordIdList)
+            keyword->addPlanting(plantingId, keywordId);
+    }
+    QSqlDatabase::database().commit();
+    f.close();
+}
+
+void Planting::csvExportPlan(int year, const QUrl &path) const
+{
+    QFile f(path.toLocalFile());
+
+    if (f.exists())
+        f.remove();
+
+    if (!f.open(QIODevice::ReadWrite))
+        return;
+
+    QTextStream ts(&f);
+    auto idList = yearPlantingList(year);
+
+    QList<QString> keyList = { "family",
+                               "crop",
+                               "seed_company",
+                               "variety",
+                               "sowing_date",
+                               "planting_date",
+                               "beg_harvest_date",
+                               "end_harvest_date",
+                               "planting_type",
+                               "in_greenhouse",
+                               "dtt",
+                               "dtm",
+                               "harvest_window",
+                               "length",
+                               "rows",
+                               "surface",
+                               "spacing_rows",
+                               "spacing_plants",
+                               "plants_needed",
+                               "estimated_gh_loss",
+                               "plants_to_start",
+                               "tray_size",
+                               "trays_to_start",
+                               "yield_per_hectare",
+                               "seeds_per_hole",
+                               "seeds_per_gram",
+                               "seeds_number",
+                               "seeds_quantity",
+                               "seeds_percentage",
+                               "unit",
+                               "yield_per_bed_meter",
+                               "average_price" };
+
+    // Write headers
+    for (auto const &field : keyList)
+        ts << field << ";";
+    ts << "keywords";
+    ts << "\n";
+
+    QSettings settings;
+    QString dateType = settings.value("dateType").toString();
+    for (const int plantingId : idList) {
+        auto map = mapFromId(plantingId);
+        map.take("planting_id");
+        for (auto const &field : keyList) {
+            if (dateType == "week"
+                && (field == "sowing_date" || field == "planting_date"
+                    || field == "beg_harvest_date" || field == "end_harvest_date")) {
+                int y;
+                int w = QDate::fromString(map.value(field).toString(), Qt::ISODate).weekNumber(&y);
+                if (y < year)
+                    ts << "<";
+                else if (y > year)
+                    ts << ">";
+                ts << w << ";";
+            } else {
+                ts << map.value(field).toString() << ";";
+            }
+        }
+
+        QString keywordString;
+        for (const auto &variant : keyword->keywordStringList(plantingId))
+            keywordString += variant.toString() + QString(",");
+        keywordString.chop(1);
+        ts << keywordString;
+
+        ts << "\n";
+    }
+    f.close();
 }

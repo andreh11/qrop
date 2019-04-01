@@ -34,7 +34,7 @@ public:
     explicit MDate(QObject *parent = nullptr);
 
     static const QList<QList<int>> monthsOrder;
-    Q_INVOKABLE static QDate dateFromWeekString(const QString &s);
+    Q_INVOKABLE static QDate dateFromWeekString(const QString &s, const int targetYear = 0);
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
     static QDate firstMondayOfYear(int year);
     static QDate mondayOfWeek(int week, int year);

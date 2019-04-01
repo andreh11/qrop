@@ -110,12 +110,18 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
     return date.toString("dd/MM/yyyy");
 }
 
-QDate MDate::dateFromWeekString(const QString &s)
+QDate MDate::dateFromWeekString(const QString &s, const int targetYear)
 {
     int currentYear = 0;
-    QDate::currentDate().weekNumber(&currentYear);
+    if (targetYear == 0)
+        QDate::currentDate().weekNumber(&currentYear);
+    else
+        currentYear = targetYear;
 
     QRegExp regexp("([><]{0,1})([1-9]|[0-4]\\d|5[0-3])");
+    if (!regexp.exactMatch(s))
+        return {};
+
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
 
@@ -135,6 +141,9 @@ QDate MDate::dateFromWeekString(const QString &s)
 QDate MDate::dateFromDateString(const QString &s)
 {
     QRegExp regexp(R"((0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ](20\d\d)){,1})");
+    if (!regexp.exactMatch(s))
+        return {};
+
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
     int day = list[1].toInt();
