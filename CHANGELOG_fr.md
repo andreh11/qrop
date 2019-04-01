@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Plan de culture* Import et export du plan de culture en fichier CSV.
   - Ajout d'une fonctonnalité de duplication du plan de culture d'une année à une
     autre.
   - Ajout de l'export PDF pour le plan de culture, le calendrier des tâches,

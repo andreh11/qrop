@@ -292,6 +292,27 @@ Page {
         }
     }
 
+    Platform.FileDialog {
+        id: importCropPlanDialog
+        defaultSuffix: "csv"
+        fileMode: Platform.FileDialog.OpenFile
+        nameFilters: [qsTr("CSV (*.csv)")]
+        onAccepted: {
+            Planting.csvImportPlan(page.year, file);
+            page.refresh();
+        }
+    }
+
+    Platform.FileDialog {
+        id: exportCropPlanDialog
+        defaultSuffix: "csv"
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("CSV (*.csv)")]
+        onAccepted: {
+            Planting.csvExportPlan(page.year, file)
+        }
+    }
+
     Column {
         id: columnLayout
         anchors.fill: parent
@@ -447,6 +468,13 @@ Page {
                             MenuItem {
                                 objectName: "importCropPlanButton"
                                 text: qsTr("Import crop plan...")
+                                onClicked: importCropPlanDialog.open()
+                            }
+
+                            MenuItem {
+                                objectName: "exportCropPlanButton"
+                                text: qsTr("Export crop plan...")
+                                onClicked: exportCropPlanDialog.open()
                             }
                         }
 
