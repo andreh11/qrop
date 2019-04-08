@@ -1,6 +1,7 @@
 # Qrop
 
-A crop planning and recordkeeping free software Available on GNU/Linux, Windows and Mac and Android.
+A crop planning and recordkeeping free software Available on GNU/Linux, Windows
+and Mac and Android.
 
 **Warning:** this is alpha software with known bugs. It runs, and work at least
 some of the times, but use at your own risk.
@@ -45,8 +46,8 @@ Keep track of each harvest and get real-time crop yields (planned).
 ### Linux (AppImage)
 
 We only provide AppImages. Download the latest version at
-https://github.com/andreh11/qrop/releases. Then open a console in the right folder
-and type:
+https://github.com/andreh11/qrop/releases. Then open a console in the right
+folder and type:
 
 ```shell
 chmod u+x Qrop-x86_64.AppImage
@@ -54,7 +55,7 @@ chmod u+x Qrop-x86_64.AppImage
 ```
 
 to launch the AppImage. It has been tested with Ubuntu 16.04 and Fedora 29, but
-may not work on other distributions or version.
+may not work on other distributions or versions.
 
 ### Windows
 

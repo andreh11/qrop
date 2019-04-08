@@ -33,28 +33,29 @@ public:
     Q_INVOKABLE QList<int> children(int locationId) const;
     QList<int> childrenTree(int locationId) const;
 
+    Q_INVOKABLE qreal length(int locationId) const;
     Q_INVOKABLE bool isGreenhouse(int locationId) const;
     Q_INVOKABLE QString fullName(int locationId) const;
     QList<QString> pathName(int locationId) const;
     Q_INVOKABLE QString fullName(QList<int> locationIdList) const;
     Q_INVOKABLE QList<int> locations(int plantingId) const;
-    Q_INVOKABLE int plantingLength(int plantingId, int locationId) const;
+    Q_INVOKABLE qreal plantingLength(int plantingId, int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
                                                       const QDate &seasonEnd) const;
-    Q_INVOKABLE int availableSpace(int locationId, const QDate &plantingDate,
-                                   const QDate &endHarvestDate, const QDate &seasonBeg,
-                                   const QDate &seasonEnd) const;
-    int availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
-                       const QDate &seasonEnd) const;
+    Q_INVOKABLE qreal availableSpace(int locationId, const QDate &plantingDate,
+                                     const QDate &endHarvestDate, const QDate &seasonBeg,
+                                     const QDate &seasonEnd) const;
+    qreal availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
+                         const QDate &seasonEnd) const;
     Q_INVOKABLE void splitPlanting(int plantingId, int otherPlantingId, int locationId);
 
-    Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length) const;
-    Q_INVOKABLE int addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
-                                const QDate &seasonEnd) const;
+    Q_INVOKABLE qreal addPlanting(int plantingId, int locationId, qreal length) const;
+    Q_INVOKABLE qreal addPlanting(int plantingId, int locationId, qreal length,
+                                  const QDate &seasonBeg, const QDate &seasonEnd) const;
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 

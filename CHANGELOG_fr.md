@@ -37,6 +37,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Option pour afficher le nom complet des emplacements.
 
 ### Changements
+  - *Édition de séries* − Il est dorénatant possible d'éditer les emplacements
+    d'une série dans le dialogue d'édition des séries.
   - Affichage des étiquettes dans la vue des séries et le semainier.
   - Si le type d'une série est modifiée et qu'il passe de « Plant, fait » à 
     « Semis direct » ou « Plant, acheté », la tâche de pépinière associée est
@@ -102,8 +104,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## 0.1.1 - 2019-01-10
 
 ### Fixed
-  - AppImage building.
+  - Construction du fichier AppImage.
 
 ## 0.1 - 2019-01-09
 
-First public release.
+Première version publique.

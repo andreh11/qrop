@@ -33,7 +33,10 @@ Location::Location(QObject *parent)
     m_viewTable = "location";
 }
 
-// Return a list of all locations in the subtree whose root is locationId.
+/*!
+ * Return a list of the ids of all locations in the subtree whose root
+ * is \a locationId.
+ */
 QList<int> Location::childrenTree(int locationId) const
 {
     QList<int> list = children(locationId);
@@ -103,6 +106,15 @@ int Location::duplicateTree(int id, int parentId) const
     return 0;
 }
 
+qreal Location::length(int locationId) const
+{
+    QSqlRecord record(recordFromId("location", locationId));
+    if (record.isEmpty())
+        return 0;
+
+    return record.value("length").toReal();
+}
+
 bool Location::isGreenhouse(int locationId) const
 {
     QSqlRecord record(recordFromId("location", locationId));
@@ -160,20 +172,15 @@ QString Location::fullName(QList<int> locationIdList) const
     return name;
 }
 
+/*! Return the ids of the locations to which \a plantingId is assigned. */
 QList<int> Location::locations(int plantingId) const
 {
     QString queryString("SELECT * FROM planting_location WHERE planting_id = %1");
-    QSqlQuery query(queryString.arg(plantingId));
-    debugQuery(query);
-
-    QList<int> recordList;
-    while (query.next())
-        recordList.push_back(query.value("location_id").toInt());
-    return recordList;
+    return queryIds(queryString.arg(plantingId), "location_id");
 }
 
-/* Return the length of plantingId assigned to locationId */
-int Location::plantingLength(int plantingId, int locationId) const
+/*! Return the length of \a plantingId assigned to \a locationId. */
+qreal Location::plantingLength(int plantingId, int locationId) const
 {
     QString queryString("SELECT length FROM planting_location "
                         "WHERE planting_id = %1 AND location_id = %2");
@@ -183,10 +190,10 @@ int Location::plantingLength(int plantingId, int locationId) const
     if (!query.next())
         return 0;
 
-    return query.value("length").toInt();
+    return query.value("length").toReal();
 }
 
-/* Return the ids of all plantings assigned to locationId. */
+/*! Return the ids of all plantings assigned to \a locationId. */
 QList<int> Location::plantings(int locationId) const
 {
     QString queryString("SELECT planting_id FROM planting_location "
@@ -196,7 +203,7 @@ QList<int> Location::plantings(int locationId) const
     return queryIds(queryString.arg(locationId), "planting_id");
 }
 
-/* Return the ids of all plantings assigned to locationId before \a last. */
+/*! Return the ids of all plantings assigned to \a locationId before the \a last date. */
 QList<int> Location::plantings(int locationId, const QDate &last) const
 {
     QString lastDateString = last.toString(Qt::ISODate);
@@ -211,7 +218,10 @@ QList<int> Location::plantings(int locationId, const QDate &last) const
     return queryIds(queryString.arg(locationId).arg(lastDateString), "planting_id");
 }
 
-/* Return the ids of all plantings assigned to locationId in a given season. */
+/*!
+ * Return the ids of all plantings assigned to \a locationId in the
+ * season [\a seasonBeg, \a seasonEnd].
+ */
 QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
@@ -234,8 +244,9 @@ QList<int> Location::children(int locationId) const
 }
 
 /*!
- * Returns a list of planting ids of locationId conflicting with plantingId
-   because they don't observe the family rotation interval. */
+ * Return a list of the planting ids of \a locationId conflicting with
+ * \a plantingId because they don't observe the family rotation interval.
+ */
 QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId) const
 {
     QList<int> clist;
@@ -256,8 +267,9 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
 }
 
 /*!
- * Returns a list of planting ids of locationId conflicting because
-   of space availabilty. */
+ * Return a list of planting ids of \a locationId conflicting because
+ * of space availabilty.
+ */
 QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
                                                 const QDate &seasonEnd) const
 {
@@ -268,7 +280,7 @@ QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &sea
 
     for (int i = 0; i < plantingList.count(); i++) {
         int plantingId = plantingList.value(i);
-        int length = plantingLength(plantingId, locationId);
+        qreal length = plantingLength(plantingId, locationId);
         QDate plantingDate = planting->plantingDate(plantingId);
         QDate endHarvestDate = planting->endHarvestDate(plantingId);
         //        QList<int> conflictList;
@@ -276,7 +288,7 @@ QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &sea
             int pid = plantingList.value(j);
             QDate pdate = planting->plantingDate(pid);
             QDate edate = planting->endHarvestDate(pid);
-            int l = plantingLength(pid, locationId);
+            qreal l = plantingLength(pid, locationId);
             if (pdate < endHarvestDate && edate > plantingDate && length + l > bedLength) {
                 conflictMap[QString::number(plantingId)] = QVariant(pid);
                 //                conflictList.push_back(pid);
@@ -287,18 +299,18 @@ QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &sea
     return conflictMap;
 }
 
-int Location::availableSpace(int locationId, const QDate &plantingDate, const QDate &endHarvestDate,
-                             const QDate &seasonBeg, const QDate &seasonEnd) const
+qreal Location::availableSpace(int locationId, const QDate &plantingDate, const QDate &endHarvestDate,
+                               const QDate &seasonBeg, const QDate &seasonEnd) const
 {
     QVariantMap map = mapFromId("location", locationId);
-    int length = map.value("bed_length").toInt();
+    qreal length = map.value("bed_length").toReal();
 
     QList<int> plantingIdList = plantings(locationId, seasonBeg, seasonEnd);
 
     QDate pdate;
     QDate edate;
-    int l = 0;
-    int maxl = 0;
+    qreal l = 0.0;
+    qreal maxl = 0.0;
 
     for (int pid : plantingIdList) {
         pdate = planting->plantingDate(pid);
@@ -310,8 +322,8 @@ int Location::availableSpace(int locationId, const QDate &plantingDate, const QD
     return length - maxl;
 }
 
-int Location::availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
-                             const QDate &seasonEnd) const
+qreal Location::availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
+                               const QDate &seasonEnd) const
 {
     QDate plantingDate = planting->plantingDate(plantingId);
     QDate endHarvestDate = planting->endHarvestDate(plantingId);
@@ -320,19 +332,23 @@ int Location::availableSpace(int locationId, int plantingId, const QDate &season
 
 void Location::splitPlanting(int plantingId, int otherPlantingId, int locationId)
 {
-    int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
-    int otherLength = plantingLength(otherPlantingId, locationId);
-    int lengthToAdd = bedLength - otherLength;
+    qreal bedLength = recordFromId("location", locationId).value("bed_length").toReal();
+    qreal otherLength = plantingLength(otherPlantingId, locationId);
+    qreal lengthToAdd = bedLength - otherLength;
 
     removePlanting(plantingId, locationId);
     if (lengthToAdd > 0)
         addPlanting(plantingId, locationId, lengthToAdd);
 }
 
-/*! Add \a plantingId to \a locationId. No checking is performed.
- * Returns the length add to location.
+/*!
+ * Assign \a plantingId to \a locationId.
+ *
+ * No checking is performed.
+ *
+ * \return the planting length added to the location
  */
-int Location::addPlanting(int plantingId, int locationId, int length) const
+qreal Location::addPlanting(int plantingId, int locationId, qreal length) const
 {
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
@@ -342,26 +358,27 @@ int Location::addPlanting(int plantingId, int locationId, int length) const
     return length;
 }
 
-/*! Add \a plantingId to \a locationId between \a seasonBeg and
-    \a seasonEnd.
-
-    If the location has sublocations, assign the planting to the sublocations,
-    checking for available space if planting conflicts aren't authorized.
-    Return the length added to the location or its sublocations.
+/*!
+ * Add \a plantingId to \a locationId between \a seasonBeg and \a seasonEnd.
+ *
+ * If the location has sublocations, assign the planting to the sublocations,
+ * checking for available space if planting conflicts aren't authorized.
+ *
+ * \return the length added to the location or its sublocations.
  */
-int Location::addPlanting(int plantingId, int locationId, int length, const QDate &seasonBeg,
-                          const QDate &seasonEnd) const
+qreal Location::addPlanting(int plantingId, int locationId, qreal length, const QDate &seasonBeg,
+                            const QDate &seasonEnd) const
 {
     QSettings settings;
     bool allowConflicts = settings.value("LocationView/allowPlantingsConflict").toBool();
-    int lengthToAdd;
+    qreal lengthToAdd;
 
     // A planting cannot be assigned several times to the same location.
     if (plantings(locationId, seasonBeg, seasonEnd).contains(plantingId))
         return 0;
 
     if (allowConflicts) {
-        int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
+        qreal bedLength = recordFromId("location", locationId).value("bed_length").toReal();
         lengthToAdd = qMin(length, bedLength);
     } else {
         lengthToAdd = qMin(length, availableSpace(locationId, plantingId, seasonBeg, seasonEnd));
@@ -378,11 +395,13 @@ int Location::addPlanting(int plantingId, int locationId, int length, const QDat
     return lengthToAdd;
 }
 
+/*! Remove \a plantingId from \a locationId. */
 void Location::removePlanting(int plantingId, int locationId) const
 {
     removeLink("planting_location", "planting_id", plantingId, "location_id", locationId);
 }
 
+/*! Remove \a plantingId from all locations to which it is assigned. */
 void Location::removePlantingLocations(int plantingId) const
 {
     QString queryString = "DELETE FROM planting_location WHERY planting_id = %1)";

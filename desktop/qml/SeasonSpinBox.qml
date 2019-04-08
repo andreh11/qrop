@@ -64,36 +64,36 @@ Item {
     height: implicitHeight
     width: implicitWidth
 
+    Rectangle {
+        anchors.fill: parent
+        //        border.color: Material.accent
+        //        border.width: 1
+        color: Material.color(Material.Grey, Material.Shade400)
+        radius: 4
+        opacity: 0.1
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onWheel: {
+            if (wheel.angleDelta.y > 0) {
+                if (wheel.modifiers & Qt.ControlModifier)
+                    nextYear();
+                else
+                    nextSeason();
+            } else if (wheel.angleDelta.y < 0) {
+                if (wheel.modifiers & Qt.ControlModifier)
+                    previousYear();
+                else
+                    previousSeason();
+            }
+        }
+    }
+
     RowLayout {
         id: buttonLayout
         anchors.fill: parent
         spacing: Units.smallSpacing
-
-        RoundButton {
-            id: previousYearButton
-            text: "\ue314"
-            font.family: "Material Icons"
-            font.bold: true
-            font.pointSize: 20
-            Material.foreground: Material.accent
-            Layout.rightMargin: -padding*3
-            onClicked: year--
-            flat: true
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Previous year")
-        }
-
-        RoundButton {
-            id: previousSeasonButton
-            text: "\ue314"
-            font.family: "Material Icons"
-            Layout.rightMargin: -16
-            font.pointSize: 20
-            onClicked: previousSeason()
-            flat: true
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Previous season")
-        }
 
         Label {
             text: seasonNames[season]
@@ -101,7 +101,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: 60
-            Layout.preferredWidth: width
+            Layout.preferredWidth: 80
         }
 
         Label {
@@ -112,30 +112,57 @@ Item {
             verticalAlignment: Text.AlignVCenter
         }
 
-        RoundButton {
-            id: nextSeasonButton
-            text: "\ue315"
-            font.family: "Material Icons"
-            font.pointSize: 20
-            Layout.leftMargin: -16
-            flat: true
-            onClicked: nextSeason()
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Next season")
-        }
+        ColumnLayout {
+            spacing: -8
+            Layout.rightMargin: 4
 
-        RoundButton {
-            id: nextYearButton
-            text: "\ue315"
-            font.family: "Material Icons"
-            font.bold: true
-            Material.foreground: Material.accent
-            font.pointSize: 20
-            Layout.leftMargin: -32
-            flat: true
-            onClicked: year++
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Next year")
+            Label {
+                id: nextSeasonButton
+                text: "\ue5ce"
+                font.family: "Material Icons"
+                font.pointSize: 16
+                color: nextMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
+
+                MouseArea {
+                    id: nextMouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: {
+                        if (mouse.modifiers & Qt.ControlModifier)
+                            nextYear();
+                        else
+                            nextSeason();
+                    }
+                }
+
+                ToolTip.visible: nextMouseArea.containsMouse
+                ToolTip.text: qsTr("Next season")
+            }
+
+            Text {
+                id: previousSeasonButton
+                text: "\ue5cf"
+                font.family: "Material Icons"
+                //            Layout.rightMargin: -16
+                font.pointSize: 16
+                //            flat: true
+                ToolTip.visible: previousMouseArea.containsMouse
+                ToolTip.text: qsTr("Previous season")
+                color: previousMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
+
+                MouseArea {
+                    id: previousMouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: {
+                        if (mouse.modifiers & Qt.ControlModifier)
+                            previousYear();
+                        else
+                            previousSeason();
+                    }
+                }
+            }
+
         }
     }
 }

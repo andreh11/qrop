@@ -31,6 +31,7 @@ Flickable {
 
     property int locationViewWidth: locationView.treeViewWidth
     property alias durationMode: durationCheckBox.checked
+    property var plantingIds: []
 
     property string mode: "add" // add or edit
     property bool chooseLocationMode: false
@@ -44,6 +45,7 @@ Flickable {
     property alias addVarietyDialog: addVarietyDialog
     property int cropId: -1
     property bool sameCrop: false
+    property bool bulkEditMode: false
 
     property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
     property bool accepted: mode === "edit" || (varietyId > 0 && unitId > 0 && coherentDates)
@@ -111,15 +113,21 @@ Flickable {
 
     readonly property alias unitId: unitField.selectedId
     readonly property alias unitText: unitField.text
-    readonly property real yieldPerBedMeter: yieldPerBedMeterField.text ? Number.fromLocaleString(Qt.locale(), yieldPerBedMeterField.text) : 0
+    readonly property real yieldPerBedMeter: yieldPerBedMeterField.text
+                                             ? Number.fromLocaleString(Qt.locale(),
+                                                                       yieldPerBedMeterField.text)
+                                             : 0
     readonly property real estimatedYield: plantingLength * yieldPerBedMeter
-    readonly property real averagePrice: averagePriceField.text ? Number.fromLocaleString(Qt.locale(), averagePriceField.text) : 0
+    readonly property real averagePrice: averagePriceField.text
+                                         ? Number.fromLocaleString(Qt.locale(),
+                                                                   averagePriceField.text)
+                                         : 0
     readonly property real estimatedRevenue: averagePrice * estimatedYield
 
     property var selectedLocationIds: locationView.selectedLocationIds()
     property alias assignedLengthMap: locationView.assignedIdMap // locationId -> length
-    readonly property int assignedLength: locationView.assignedLength()
-    readonly property int remainingLength: plantingLength - assignedLength
+    readonly property real assignedLength: locationView.assignedLength()
+    readonly property real remainingLength: plantingLength - assignedLength
 
     property var selectedKeywords: [] // List of ids of the selected keywords.
     property bool keywordsModified: false
@@ -127,7 +135,8 @@ Flickable {
     readonly property var values: {
         "variety_id": varietyId,
         "planting_type": plantingType,
-        "in_greenhouse": inGreenhouse ? 1 : 0, // SQLite doesn't have bool type
+        // SQLite doesn't have a boolean type, so we use 0 for False and 1 for True.
+        "in_greenhouse": inGreenhouse ? 1 : 0,
         "planting_date": plantingDateString,
         "dtm": dtm,
         "dtt": dtt,
@@ -150,6 +159,9 @@ Flickable {
         "tray_size" : traySize,
         "trays_to_start": traysNumber
     }
+
+    property var locationOldIdList: []
+    property bool locationsModified: false
 
     readonly property var widgetField: [
         [varietyField, "variety_id", varietyId],
@@ -203,10 +215,17 @@ Flickable {
             map['keyword_old_ids'] = keywordOldIdList;
         }
 
+        if (locationsModified) {
+            map['location_new_ids'] = locationView.selectedLocationIds();
+            map['location_old_ids'] = locationOldIdList;
+        }
+
         return map;
     }
 
     function clearAll() {
+        bulkEditMode = false;
+
         // Refresh models
         varietyModel.refresh();
         locationView.reload();
@@ -215,6 +234,8 @@ Flickable {
 
         // Reset fields
         varietyField.reset();
+        locationsModified = false;
+        locationOldIdList = [];
         locationView.clearSelection();
         chooseLocationMode = false;
 
@@ -256,9 +277,9 @@ Flickable {
         yieldPerBedMeterField.reset();
         averagePriceField.reset();
 
-        selectedKeywords = []
-        keywordsModified = false
-        keywordOldIdList = []
+        selectedKeywords = [];
+        keywordsModified = false;
+        keywordOldIdList = [];
     }
 
     // Set item to value only if it has not been manually modified by
@@ -358,6 +379,12 @@ Flickable {
                 selectedKeywords[list[i]] = true;
             selectedKeywordsChanged();
         }
+
+        if ('locations' in val) {
+            locationOldIdList = val["locations"].split(",")
+            locationView.editedPlantingId = plantingIds[0]
+            locationView.selectLocationIds(locationOldIdList);
+        }
     }
 
     function preFillForm(from) {
@@ -395,9 +422,9 @@ Flickable {
         }
     }
 
-    /**
+    /*
      * Duration functions
-     **/
+     */
     function updateDuration(picker1, picker2, durationField) {
         if (initMode)
             return;
@@ -751,7 +778,7 @@ Flickable {
             id: durationsBox
             title: qsTr("Durations")
             width: parent.width
-            visible: plantingSettings.showDurationFields
+            visible: plantingSettings.showDurationFields && !chooseLocationMode
 
             label: Switch {
                 id: durationCheckBox
@@ -761,7 +788,6 @@ Flickable {
                 font.pixelSize: Units.fontSizeBodyAndButton
                 checked: plantingSettings.durationsByDefault
                 onActiveFocusChanged: ensureItemVisible(durationCheckBox)
-
                 Layout.alignment: Qt.AlignRight
             }
 
@@ -770,7 +796,6 @@ Flickable {
                 columns: smallDisplay ? 1 : (plantingType === 2 ? 4 : 3)
                 rowSpacing: 16
                 columnSpacing: 16
-
 
                 MyTextField {
                     id: sowDtmField
@@ -952,9 +977,11 @@ Flickable {
 
         FormGroupBox {
             id: locationGroupBox
-            visible: successions === 1 && mode === "add"
+            visible: (mode === "add" && successions == 1) || (mode == "edit" && !bulkEditMode)
+            width: parent.width
+            Material.background: "white"
 
-            Behavior on height { NumberAnimation { duration: 1000 } }
+//            Behavior on height { NumberAnimation { duration: 1000 } }
 
             Column {
                 id: locationColumn
@@ -966,9 +993,8 @@ Flickable {
                     visible: !chooseLocationMode
                     width: parent.width
                     text: {
-                        if (locationView.selectedLocationIds().length ===  0) {
+                        if (locationView.selectedIndexes.length === 0)
                             return qsTr("Choose locations");
-                        }
                         return qsTr("Locations: %1").arg(Location.fullName(locationView.selectedLocationIds()));
                     }
                     onClicked: chooseLocationMode = true
@@ -990,7 +1016,11 @@ Flickable {
 
                     Button {
                         text: qsTr("Unassign all beds")
-                        onClicked: locationView.clearSelection()
+                        onClicked: {
+                            var plantingId = locationView.editedPlantingId;
+                            locationView.clearSelection();
+                            locationView.editedPlantingId = plantingId;
+                        }
                         flat: true
                     }
 
@@ -1005,24 +1035,30 @@ Flickable {
                 LocationView {
                     id: locationView
                     visible: chooseLocationMode
+                    clip: true
 
                     property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
                                                                    : fieldPlantingDateField.calendarDate
                     season: MDate.season(plantingDate)
                     year: MDate.seasonYear(plantingDate)
-                    width: parent.width
-                    height: 400
+//                    width: parent.width
+//                    height: 400
+                    height: treeViewHeight + headerHeight
+                    width: treeViewWidth
                     plantingEditMode: true
 
                     editedPlantingLength: plantingLength
                     editedPlantingPlantingDate: plantingDate
                     editedPlantingEndHarvestDate: MDate.addDays(begHarvestDateField.calendarDate,
                                                                 harvestWindow)
+
+                    onSelectedIndexesChanged: locationsModified = true
                     onAddPlantingLength: {
                         if (settings.useStandardBedLength)
                             plantingAmountField.text = Number(plantingAmountField.text) + (length/settings.standardBedLength)
                         else
                             plantingAmountField.text = plantingLength + length
+                        plantingAmountField.manuallyModified = true // for editedValues()
                     }
                 }
             }
@@ -1090,7 +1126,7 @@ Flickable {
                     suffixText: "%"
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(seedsExtraPercentageField)
-                    helperText: "Number of seeds: %L1".arg(Math.round(seedsNeeded))
+                    helperText: qsTr("Number of seeds: %L1").arg(Math.round(seedsNeeded))
                 }
 
                 MyTextField {

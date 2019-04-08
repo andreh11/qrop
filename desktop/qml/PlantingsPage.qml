@@ -39,7 +39,7 @@ Page {
     property int rowCount: model.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
-    property bool dialogOpened: false
+    property alias dialogOpened: plantingDialog.opened
 
     signal noteButtonClicked(int plantingId)
 
@@ -191,13 +191,13 @@ Page {
         id: plantingDialog
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
+        height: parent.height - 2 * Units.smallSpacing
         model: plantingsView.model
         currentYear: page.season === 3 ? page.year + 1 : page.year
         onPlantingsAdded: {
             addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
             page.refresh();
-            dialogOpened = false
         }
 
         onPlantingsModified: {
@@ -205,12 +205,10 @@ Page {
             editPlantingsSnackBar.open();
             plantingsView.unselectAll();
             page.refresh();
-            dialogOpened = false
         }
 
         onRejected: {
             plantingsView.unselectAll();
-            dialogOpened = false
         }
     }
 
@@ -267,6 +265,7 @@ Page {
 
         defaultSuffix: "pdf"
         fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
             var type
@@ -295,6 +294,7 @@ Page {
     Platform.FileDialog {
         id: importCropPlanDialog
         defaultSuffix: "csv"
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         fileMode: Platform.FileDialog.OpenFile
         nameFilters: [qsTr("CSV (*.csv)")]
         onAccepted: {
@@ -306,6 +306,7 @@ Page {
     Platform.FileDialog {
         id: exportCropPlanDialog
         defaultSuffix: "csv"
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("CSV (*.csv)")]
         onAccepted: {
@@ -346,19 +347,18 @@ Page {
                     id: buttonRow
                     anchors.fill: parent
                     visible: !filterMode
-                    spacing: 0
+                    spacing: Units.smallSpacing
 
                     Button {
                         id: addButton
                         text: qsTr("Add plantings")
                         flat: true
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        Material.foreground: Material.accent
                         font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks === 0
+                        highlighted: true
                         onClicked: {
                             plantingDialog.createPlanting()
-                            dialogOpened = true;
                         }
                     }
 
@@ -386,7 +386,6 @@ Page {
                         Material.foreground: "white"
                         onClicked: {
                             plantingDialog.editPlantings(selectedIdList());
-                            dialogOpened = true;
                         }
 
                     }
@@ -445,9 +444,16 @@ Page {
                         verticalAlignment: Qt.AlignVCenter
                     }
 
+                    SeasonSpinBox {
+                        id: seasonSpinBox
+                        visible: checks === 0
+                        season: MDate.season(todayDate)
+                        year: MDate.seasonYear(todayDate)
+                    }
+
                     IconButton {
-                        id: exportDuplicateButton
-                        text: "\ue0c3"
+                        id: menuButton
+                        text: "\ue5d4"
                         hoverEnabled: true
                         visible: largeDisplay && checks == 0
 
@@ -458,6 +464,12 @@ Page {
                             objectName: "cropMenu"
                             title: qsTr("Crop plan")
                             y: parent.height
+
+                            MenuItem {
+                                text: qsTr("Export as PDF...")
+                                leftPadding: 15
+                                onClicked: printDialog.open();
+                            }
 
                             MenuItem {
                                 objectName: "duplicateCropPlanButton"
@@ -479,9 +491,70 @@ Page {
                         }
 
                         Dialog {
+                            id: printDialog
+                            title: qsTr("Print crop plan")
+                            y: parent.height
+                            margins: 0
+
+                            onAccepted: saveCropPlanDialog.open();
+
+                            ColumnLayout {
+                                width: parent.width
+                                spacing: Units.formSpacing
+
+                                MyComboBox {
+                                    id: printTypeComboBox
+                                    editable: false
+                                    labelText: qsTr("Type")
+                                    Layout.fillWidth: true
+                                    showAddItem: false
+                                    model: [
+                                        qsTr("Entire plan"),
+                                        qsTr("Greenhouse plan"),
+                                        qsTr("Field sowing plan"),
+                                        qsTr("Transplanting plan")
+                                    ]
+                                }
+
+                                MyComboBox {
+                                    id: printDateRangeComboBox
+                                    editable: false
+                                    labelText: qsTr("Date range")
+                                    showAddItem: false
+                                    model: [
+                                        qsTr("Current week"),
+                                        qsTr("Current month"),
+                                        qsTr("Current year"),
+                                    ]
+                                    Layout.fillWidth: true
+                                }
+                            }
+
+                            footer: DialogButtonBox {
+                                Button {
+                                    id: rejectButton
+                                    flat: true
+                                    text: qsTr("Cancel")
+                                    Material.foreground: Material.accent
+                                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                                }
+
+                                Button {
+                                    id: applyButton
+                                    Material.background: Material.accent
+                                    Material.foreground: "white"
+                                    text: qsTr("Print")
+
+                                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                                }
+                            }
+                        }
+
+                        Dialog {
                             id: duplicateCropPlanDialog
                             title: qsTr("Duplicate crop plan")
                             y: parent.height
+                            margins: 0
 
                             readonly property bool acceptableForm: fromField.acceptableInput && toField.acceptableInput
 
@@ -541,84 +614,6 @@ Page {
                         }
                     }
 
-                    IconButton {
-                        id: printButton
-                        text: "\ue8ad"
-                        hoverEnabled: true
-                        visible: largeDisplay && checks == 0
-                        Layout.rightMargin: -padding*2
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Print the crop plan")
-
-//                        onClicked: Print.printCropPlan(page.year)
-                        onClicked: printDialog.open();
-
-                        Dialog {
-                            id: printDialog
-                            title: qsTr("Print crop plan")
-                            width: 200
-                            margins: 0
-
-                            onAccepted: saveCropPlanDialog.open();
-
-                            ColumnLayout {
-                                width: parent.width
-
-                                MyComboBox {
-                                    id: printTypeComboBox
-                                    labelText: qsTr("Type")
-                                    Layout.fillWidth: true
-                                    showAddItem: false
-                                    model: [
-                                        qsTr("Entire plan"),
-                                        qsTr("Greenhouse plan"),
-                                        qsTr("Field sowing plan"),
-                                        qsTr("Transplanting plan")
-                                    ]
-                                }
-
-                                MyComboBox {
-                                    id: printDateRangeComboBox
-                                    labelText: qsTr("Date range")
-                                    showAddItem: false
-                                    model: [
-                                        qsTr("Current week"),
-                                        qsTr("Current month"),
-                                        qsTr("Current year"),
-                                    ]
-                                    Layout.fillWidth: true
-                                }
-                            }
-
-                            footer: DialogButtonBox {
-                                Button {
-                                    id: rejectButton
-                                    flat: true
-                                    text: qsTr("Cancel")
-                                    Material.foreground: Material.accent
-                                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-                                }
-
-                                Button {
-                                    id: applyButton
-                                    Material.background: Material.accent
-                                    Material.foreground: "white"
-                                    text: qsTr("Print")
-
-                                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                                }
-                            }
-                        }
-                    }
-
-                    SeasonSpinBox {
-                        id: seasonSpinBox
-                        visible: checks === 0
-                        season: MDate.season(todayDate)
-                        year: MDate.seasonYear(todayDate)
-                    }
                 }
 
             }
@@ -674,7 +669,6 @@ Page {
                     bottom: parent.bottom
                 }
                 onDoubleClicked: plantingDialog.editPlantings([plantingId])
-
             }
         }
     }

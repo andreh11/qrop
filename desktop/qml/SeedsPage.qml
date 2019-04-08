@@ -123,6 +123,7 @@ Page {
 
         defaultSuffix: "pdf"
         fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
             if (seedsRadioButton.checked)

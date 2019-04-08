@@ -78,9 +78,10 @@ void Database::migrationCheck()
 
         for (const auto &fileInfo : fileInfoList) {
             int version = fileInfo.baseName().toInt();
-            qInfo() << "==== Migrating to version" << version;
-            if (version > dbVersion)
+            if (version > dbVersion) {
+                qInfo() << "==== Migrating to version" << version;
                 execSqlFile(fileInfo.absoluteFilePath());
+            }
         }
     } else {
         qInfo() << "Latest database version:" << dbVersion;

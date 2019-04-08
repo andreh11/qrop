@@ -41,11 +41,17 @@ int LocationModel::locationId(const QModelIndex &idx) const
     if (!idx.isValid())
         return -1;
 
-    /* Here we assume that location_id if on first column. This is a
-     * reasonable assumption, but database schema update or API update
-     * might break the code...*/
+    // Here we assume that location_id if on first column. This is a
+    // reasonable assumption, but database schema update or API update
+    // might break the code...
     int id = data(index(idx.row(), 0, idx.parent())).toInt();
     return id;
+}
+
+/*! Return the bed length of \a index. */
+qreal LocationModel::length(const QModelIndex &index) const
+{
+    return location->length(locationId(index));
 }
 
 void LocationModel::refresh()
@@ -57,7 +63,7 @@ void LocationModel::refresh()
     countChanged();
 }
 
-/** \brief Emit dataChanged signal for all indexes of the tree. */
+/*! Emit dataChanged signal for all indexes of the tree. */
 void LocationModel::refreshTree()
 {
     QModelIndex root;
@@ -105,6 +111,16 @@ QVariantList LocationModel::plantings(const QModelIndex &index) const
     return plantings(index, m_season, m_year);
 }
 
+qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return 0;
+    if (plantingId < 1)
+        return 0;
+
+    return location->plantingLength(plantingId, locationId(index));
+}
+
 void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int length)
 {
     if (!idx.isValid())
@@ -131,8 +147,8 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int leng
     }
 }
 
-int LocationModel::availableSpace(const QModelIndex &index, const QDate &plantingDate,
-                                  const QDate &endHarvestDate) const
+qreal LocationModel::availableSpace(const QModelIndex &index, const QDate &plantingDate,
+                                    const QDate &endHarvestDate) const
 {
     if (!index.isValid())
         return false;
@@ -143,7 +159,10 @@ int LocationModel::availableSpace(const QModelIndex &index, const QDate &plantin
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
 }
 
-/*! Returns true if there is some space left for the planting \a plantingId. */
+/*!
+ * Return true iff there is some space left for the planting \a plantingId
+ * on the location \a index.
+ */
 bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
                                    const QDate &endHarvestDate) const
 {
@@ -156,7 +175,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &planti
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
 }
 
-/*! Returns true if there is some space left for the planting \a plantingId. */
+/*! Return true iff there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -168,7 +187,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
     return location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
 }
 
-/*! Returns true if the planting \a plantingId respects the rotation. */
+/*! Returns true iff the planting \a plantingId respects the rotation. */
 bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -178,10 +197,10 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
     return location->rotationConflictingPlantings(lid, plantingId).count() == 0;
 }
 
-/**
- * \brief Returns a list all plantings conflicting on the location represented
- * by \a index for the given \a season of \a year because they don't respect the
- * family rotation interval.
+/*!
+ * Return a list of the ids of the plantings conflicting on the location
+ * represented by \a index for the given \a season of \a year because they
+ * don't respect the family rotation interval.
  */
 QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index, int season, int year) const
 {
@@ -200,10 +219,11 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
     return list;
 }
 
-/*! Returns a map such as map[id] is a list of all plantings conflicting
-    with planting id on the location represented by \a index because they
-    don't observe the family rotation interval.
-*/
+/*!
+ * Return a map such as map[id] is a list of all plantings conflicting
+ * with planting id on the location represented by \a index because they
+ * don't observe the family rotation interval.
+ */
 QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index, int season, int year) const
 {
     if (!index.isValid())
@@ -417,7 +437,7 @@ QModelIndexList LocationModel::treeIndexes(int depth, bool includeParent) const
         for (int row = 0; row < rowCount(parent); row++) {
             QModelIndex idx = index(row, 0, parent);
             indexDepth[idx] = indexDepth.value(parent) + 1;
-            if (indexDepth[idx] < depth)
+            if (depth < 0 || indexDepth[idx] < depth)
                 tmpList.push_back(idx);
             if (depth < 0 || indexDepth[idx] == depth || (indexDepth[idx] < depth && includeParent))
                 indexList.push_back(idx);
@@ -498,22 +518,39 @@ void LocationModel::selectTree(QItemSelectionModel &selectionModel)
     }
 }
 
-/** Return a list of QModelIndex which ids are in \a idList. Useful for
- *  selecting indexes. */
+/*!
+ * Return a list of QModelIndexes whose ids are in \a idList. Useful for
+ * selecting indexes.
+ */
 QModelIndexList LocationModel::treeHasIds(const QVariantList &idList) const
 {
-    QModelIndexList treeList = treeIndexes();
-    QModelIndexList matchIndexes;
-    QList<int> intList;
+    if (idList.isEmpty())
+        return {};
 
+    // Convert the list.
+    QList<int> intList;
     for (const auto &val : idList)
         intList.push_back(val.toInt());
 
+    QModelIndexList treeList = treeIndexes();
+
+    QModelIndexList indexList;
     for (int i = 0; i < treeList.count(); i++) {
         QModelIndex idx = treeList[i];
         if (intList.contains(locationId(idx)))
-            matchIndexes.push_back(idx);
+            indexList.push_back(idx);
     }
 
-    return matchIndexes;
+    return indexList;
+}
+
+/*!
+ * Return the path from root to \a index.
+ */
+QModelIndexList LocationModel::treePath(const QModelIndex &index) const
+{
+    QModelIndexList list;
+    for (auto p = parent(index); p.isValid(); p = parent(p))
+        list.push_back(p);
+    return list;
 }
