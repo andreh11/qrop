@@ -25,6 +25,7 @@
 #include "databaseutility.h"
 #include "family.h"
 #include "keyword.h"
+#include "location.h"
 #include "mdate.h"
 #include "planting.h"
 #include "task.h"
@@ -202,6 +203,11 @@ void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
 
 void Planting::update(int id, const QVariantMap &map) const
 {
+    update(id, map, {});
+}
+
+void Planting::update(int id, const QVariantMap &map, const QVariantMap &locationLengthMap) const
+{
     QVariantMap newMap(map);
     QString plantingDateString;
 
@@ -304,6 +310,32 @@ void Planting::update(int id, const QVariantMap &map) const
 
         for (const int keywordId : toRemove)
             keyword->removePlanting(id, keywordId);
+    }
+
+    if (newMap.contains("location_new_ids")) {
+        const auto &locationIdList = newMap.take("location_new_ids").toList();
+        const auto &oldLocationIdList = newMap.take("location_old_ids").toList();
+        QList<int> toAdd;
+        QList<int> toRemove;
+        for (const auto &newId : locationIdList)
+            if (!oldLocationIdList.contains(newId.toInt()))
+                toAdd.push_back(newId.toInt());
+
+        for (const auto &oldId : oldLocationIdList)
+            if (!locationIdList.contains(oldId))
+                toRemove.push_back(oldId.toInt());
+
+        Location location;
+        for (const int locationId : toAdd) {
+            auto locationString = QString::number(locationId);
+            if (locationLengthMap.contains(locationString))
+                location.addPlanting(id, locationId, locationLengthMap.value(locationString).toInt());
+            else
+                qDebug() << "Planting::update() Cannot find length for location" << locationId;
+        }
+
+        for (const int locationId : toRemove)
+            location.removePlanting(id, locationId);
     }
 
     DatabaseUtility::update(id, newMap);

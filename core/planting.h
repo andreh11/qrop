@@ -29,6 +29,7 @@ class Family;
 class Task;
 class Keyword;
 class Variety;
+class Location;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility
 {
@@ -37,6 +38,7 @@ public:
     Planting(QObject *parent = nullptr);
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
+    Q_INVOKABLE void update(int id, const QVariantMap &map, const QVariantMap &locationLengthMap) const;
     Q_INVOKABLE int duplicate(int id) const override;
     Q_INVOKABLE int duplicateToYear(int id, int year) const;
     Q_INVOKABLE void duplicatePlan(int fromYear, int toYear) const;

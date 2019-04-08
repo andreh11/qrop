@@ -546,28 +546,22 @@ ListView {
                 leftPadding: listView.rowPadding
 
                 readonly property var labelList: [
-                    [Location.fullName(model.locations.split(",")), Text.AlignRight],
-                    [model.planting_type !== 3 ? MDate.formatDate(seedingDate, year) : "",
-                     Text.AlignRight],
-                    [model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
-                     Text.AlignRight],
-                    [MDate.formatDate(beginHarvestDate, year), Text.AlignRight],
-                    [settings.dateType === "week" ? MDate.formatDate(MDate.addDays(endHarvestDate, -7), year)
-                                                   : MDate.formatDate(endHarvestDate, year),
-                     Text.AlignRight],
-                    [model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt)
-                                               : "",
-                     Text.AlignRight],
-                    [qsTr("%L1 d", "Abbreviation for day").arg(model.dtm), Text.AlignRight],
-                    [qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),
-                     Text.AlignRight],
-                    [settings.useStandardBedLength
-                     ? qsTr("%L1 bed", "", model.length/settings.standardBedLength).arg(model.length/settings.standardBedLength)
-                     : qsTr("%L1 m", "Abbreviation for meter").arg(model.length), Text.AlignRight],
-                    [model.rows, Text.AlignRight],
-                    [model.spacing_plants + " cm", Text.AlignRight],
-                    [model.yield_per_bed_meter + " " + model.unit, Text.AlignRight],
-                    ["%L1 €".arg(model.average_price), Text.AlignRight]
+                    model.locations ? Location.fullName(model.locations.split(",")) : "",
+                    model.planting_type !== 3 ? MDate.formatDate(seedingDate, year) : "",
+                    model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
+                    MDate.formatDate(beginHarvestDate, year),
+                    settings.dateType === "week" ? MDate.formatDate(MDate.addDays(endHarvestDate, -7), year)
+                                                 : MDate.formatDate(endHarvestDate, year),
+                    model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt) : "",
+                    qsTr("%L1 d", "Abbreviation for day").arg(model.dtm),
+                    qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),
+                    settings.useStandardBedLength
+                    ? qsTr("%L1 bed", "", model.length/settings.standardBedLength).arg(model.length/settings.standardBedLength)
+                    : qsTr("%L1 m", "Abbreviation for meter").arg(model.length),
+                    model.rows,
+                    model.spacing_plants + " cm",
+                    model.yield_per_bed_meter + " " + model.unit,
+                    "%L1 €".arg(model.average_price)
                 ]
 
                 TextCheckBox {
@@ -635,9 +629,9 @@ ListView {
                     model: listView.showOnlyTimegraph ? [] : parent.labelList
 
                     TableLabel {
-                        text: modelData[0]
+                        text: modelData
                         anchors.verticalCenter: parent.verticalCenter
-                        horizontalAlignment: modelData[1]
+                        horizontalAlignment: tableHeaderModel[index+2].alignment
                         elide: Text.ElideRight
                         visible: tableHeaderModel[index+2].visible
                         width: tableHeaderModel[index+2].width

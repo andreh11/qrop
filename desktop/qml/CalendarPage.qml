@@ -148,6 +148,7 @@ Page {
         id: saveCalendarDialog
 
         defaultSuffix: "pdf"
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
@@ -255,9 +256,9 @@ Page {
                     text: qsTr("Add task")
                     flat: true
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.foreground: Material.accent
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
+                    highlighted: true
                     MouseArea {
                         id: mouseArea
                         hoverEnabled: true
@@ -532,7 +533,7 @@ Page {
 
                     if (task_type_id === 1 || task_type_id === 3) {
                         if (settings.useStandardBedLength) {
-                            var beds = length/settings.standardBedLength
+                            var beds = Number(length/settings.standardBedLength)
                             return qsTr("%L1 bed @ ", "", beds).arg(beds) + qsTr("%L1 rows X %L2 cm").arg(rows).arg(spacingPlants)
                         } else {
                             return qsTr("%L1 bed m @ %L2 rows X %L3 cm").arg(length).arg(rows).arg(spacingPlants)

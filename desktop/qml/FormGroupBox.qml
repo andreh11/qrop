@@ -34,8 +34,6 @@ GroupBox {
         implicitWidth: 10
         anchors.topMargin: control.title ? label.height : 0
         color: Material.primary
-//        border.color: Material.color(Material.Grey, Material.Shade300)
-//        border.color: "transparent"
     }
 
     label: Label {

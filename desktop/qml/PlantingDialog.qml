@@ -26,7 +26,6 @@ Dialog {
 
     property var model
     property string mode: "add"
-    property string plantingIds: ""
     property alias formAccepted: plantingForm.accepted
     property alias plantingForm: plantingForm
     property alias currentYear: plantingForm.currentYear
@@ -62,8 +61,12 @@ Dialog {
             plantingFormHeader.bulkEditMode = true
         }
 
+        if (plantingIds.length > 1)
+            plantingForm.bulkEditMode = true
+
         // TODO: there's probably a bottleneck here.
         editPlantingValueMap = Planting.commonValues(plantingIds);
+        plantingForm.plantingIds = plantingIds
         plantingForm.setFormValues(editPlantingValueMap);
 
         dialog.open()
@@ -159,12 +162,20 @@ Dialog {
             var values = plantingForm.editedValues()
             for (var key in values)
                 console.log(key, values[key])
-            Planting.updateList(dialog.editPlantingIdList, plantingForm.editedValues());
+
+            if (dialog.editPlantingIdList.length === 1)
+                Planting.update(dialog.editPlantingIdList[0],
+                                plantingForm.editedValues(),
+                                plantingForm.assignedLengthMap);
+            else
+                Planting.updateListLength(dialog.editPlantingIdList,
+                                          plantingForm.editedValues(),
+                                          plantingForm.assignedLengthMap);
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
     }
 
-    Behavior on width { NumberAnimation { duration: 100 } }
-    Behavior on height { NumberAnimation { duration: 100 } }
+//    Behavior on width { NumberAnimation { duration: 100 } }
+//    Behavior on height { NumberAnimation { duration: 100 } }
 }

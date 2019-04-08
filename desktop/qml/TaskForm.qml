@@ -101,12 +101,13 @@ Flickable {
             plantingList.selectedIdsChanged();
         }
 
-        // TODO: select locations
         if ("locations" in val) {
             if (val["locations"]) {
                 locationRadioButton.checked = true
                 var list = val["locations"].split(",")
+                locationView.visible = false
                 locationView.selectLocationIds(list)
+                locationView.visible = true
             }
         }
     }

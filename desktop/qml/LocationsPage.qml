@@ -158,6 +158,7 @@ Page {
         id: saveCropMapDialog
 
         defaultSuffix: "pdf"
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
@@ -401,6 +402,14 @@ Page {
                 Layout.fillWidth: true
             }
 
+
+            SeasonSpinBox {
+                id: seasonSpinBox
+                visible: !editMode
+                season: MDate.season(todayDate)
+                year: MDate.seasonYear(todayDate)
+            }
+
             IconButton {
                 id: printButton
                 text: "\ue8ad"
@@ -412,63 +421,7 @@ Page {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Print the task calendar")
 
-//                onClicked: printDialog.open();
                 onClicked: saveCropMapDialog.open()
-
-//                Dialog {
-//                    id: printDialog
-//                    title: qsTr("Print the task calendar")
-//                    width: 200
-//                    margins: 0
-
-//                    onAccepted: saveCalendarDialog.open()
-
-//                    ColumnLayout {
-//                        width: parent.width
-
-//                        RadioButton {
-//                            id: weekRadioButton
-//                            text: qsTr("Current week")
-//                            checked: true
-//                        }
-
-//                        RadioButton {
-//                            id: monthRadioButton
-//                            text: qsTr("Current month")
-//                        }
-
-//                        RadioButton {
-//                            id: yearRadioButton
-//                            text: qsTr("Current year")
-//                        }
-//                    }
-
-//                    footer: DialogButtonBox {
-//                        Button {
-//                            id: rejectButton
-//                            flat: true
-//                            text: qsTr("Cancel")
-//                            Material.foreground: Material.accent
-//                            DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-//                        }
-
-//                        Button {
-//                            id: applyButton
-//                            Material.background: Material.accent
-//                            Material.foreground: "white"
-//                            text: qsTr("Print")
-
-//                            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-//                        }
-//                    }
-//                }
-            }
-
-            SeasonSpinBox {
-                id: seasonSpinBox
-                visible: !editMode
-                season: MDate.season(todayDate)
-                year: MDate.seasonYear(todayDate)
 
             }
         }

@@ -42,12 +42,13 @@ public:
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
     Q_INVOKABLE int locationId(const QModelIndex &index) const;
+    Q_INVOKABLE qreal length(const QModelIndex &index) const;
 
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
     Q_INVOKABLE void refreshTree();
 
-    Q_INVOKABLE int availableSpace(const QModelIndex &index, const QDate &plantingDate,
-                                   const QDate &endHarvestDate) const;
+    Q_INVOKABLE qreal availableSpace(const QModelIndex &index, const QDate &plantingDate,
+                                     const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
                                     const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, int plantingId) const;
@@ -59,6 +60,7 @@ public:
                                                       int year) const;
     Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index, int season, int year) const;
 
+    Q_INVOKABLE qreal plantingLength(int plantingId, const QModelIndex &index) const;
     Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   const QModelIndexList &parentList = { QModelIndex() });
@@ -71,6 +73,7 @@ public:
     Q_INVOKABLE void selectTree(QItemSelectionModel &selectionModel);
     Q_INVOKABLE QItemSelection treeSelection() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
+    Q_INVOKABLE QModelIndexList treePath(const QModelIndex &index) const;
     Q_INVOKABLE virtual void refresh() override;
 
     bool showOnlyEmptyLocations() const;
@@ -90,7 +93,7 @@ signals:
 
 private:
     bool m_showOnlyEmptyLocations;
-    bool m_showOnlyGreenhouseLocations{};
+    bool m_showOnlyGreenhouseLocations {};
     SqlTreeModel *m_treeModel;
     Planting *planting;
     Location *location;

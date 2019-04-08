@@ -141,6 +141,7 @@ Page {
     Platform.FileDialog {
         id: saveDialog
         fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         defaultSuffix: "pdf"
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: Print.printHarvests(page.year, file)
@@ -180,9 +181,9 @@ Page {
                     text: qsTr("Add harvest")
                     flat: true
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.foreground: Material.accent
+                    highlighted: true
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    //                    visible: checks === 0
+
                     onClicked: {
                         dialogOpened = true;
                         harvestDialog.create()

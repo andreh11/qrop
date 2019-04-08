@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   - Add print output for crop plan, task calendar, field map, harvests, seed and
     transplant lists.
   - Add a view for seed and planting lists to make it easier to order them.
-  - *Planting view* - Shift selection of planting intervals with mouse or keyboard.
+  - *Planting view* - Shift selection of planting intervals with mouse or
+    keyboard.
   - *Field map* − Add button show family or crop color.
   - Basic note taking feature for plantings.
   - Harvest page.
@@ -29,13 +30,15 @@ All notable changes to this project will be documented in this file.
   - *Field map* − Add option to show full name of locations.
 
 ### Changed
+  - *Planting form* − When editing a planting, it is now possible to change its
+    locations.
   - Show tags in planting view and week calendar.
   - If a planting type is changed from TP, raised to DS or TP, bough, its nursery
     task is now remove and its DTT is set to 0.
   - Improve combo boxes.
   - Use decimal numbers for planting length, surface and seeds per gram.
-  - *Planting view/form*: When using week dates, we assume that the harvest will end
-    at the *end* of the end harvest week.
+  - *Planting view/form*: When using week dates, we assume that the harvest will
+    end at the *end* of the end harvest week.
   - *Planting form* : it is now possible to bulk edit keywords.
   - The year now begins with winter instead of spring.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
@@ -55,9 +58,10 @@ All notable changes to this project will be documented in this file.
 ## 0.1.2 − 2019-01-23
 
 ### Added
-  - *Field map* − Add button, menu and shortcuts to expand/collapse location level.
+  - *Field map* − Add button, menu and shortcuts to expand/collapse location
+    level.
   - Keyboard shortcuts for the most common actions (see user guide in the wiki
-   for more details).
+    for more details).
   - *Settings* − Add restart snackbar.
   - *Planting form* − Add a checkbox for duration fields to enable or disable
     date calculation from durations. Add setting options to enable or disable

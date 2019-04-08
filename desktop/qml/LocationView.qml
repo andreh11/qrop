@@ -26,7 +26,7 @@ import Qt.labs.settings 1.0
 import io.qrop.components 1.0
 
 Item {
-    id: locationView
+    id: view
 
     property alias year: locationModel.year
     property alias season: locationModel.season
@@ -34,6 +34,7 @@ Item {
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
     property date todayDate: new Date()
     property int firstColumnWidth
+    property int editedPlantingId: -1
 
     property alias rowCount: locationModel.rowCount
     property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
@@ -44,6 +45,7 @@ Item {
     property bool showFamilyColor: false
 
     property alias treeDepth: locationModel.depth
+    property int headerHeight: headerRow.height
     property int treeViewHeight: treeView.flickableItem.contentHeight
     property int treeViewWidth: treeView.implicitWidth
     property bool alwaysShowCheckbox: false
@@ -118,8 +120,10 @@ Item {
     }
 
     function clearSelection() {
+        editedPlantingId = -1;
+
         // We have to manually refresh selected indexes, because isSelected() isn't properly
-        // called after dataChanged().
+        // called after dataChanged(). Is ItemSelectionModel buggy regarding signals?
 
         // Copy selected indexes.
         var selectedIndexes = [];
@@ -129,28 +133,42 @@ Item {
         }
 
         selectionModel.clearSelection();
+        // It seems that selectionModel.clearSelection() doesn't emit selectedIndexesChanged().
+        // We have to do it manually.
+        selectedIndexesChanged();
         assignedLengthMap = ({})
 
-        // Refresh indexes to uncheck checkboxes.
+        // Refresh the unselected indexes to uncheck checkboxes.
         for (var j in selectedIndexes)
             locationModel.refreshIndex(selectedIndexes[j]);
-
     }
 
     function selectLocationIds(idList) {
         var indexList = locationModel.treeHasIds(idList);
+
         for (var i = 0; i < indexList.length; i++) {
-            var idx = indexList[i]
-            var parent = locationModel.parent(idx)
+            var idx = indexList[i];
             selectionModel.select(idx, ItemSelectionModel.Select);
-            treeView.expand(parent)
+            expandPath(idx);
+
+            if (editedPlantingId > 0)
+                assignedLengthMap[idx] = locationModel.plantingLength(editedPlantingId, idx);
+        }
+        assignedLengthMapChanged();
+    }
+
+    //! Expand all nodes from root to index's parent.
+    function expandPath(index) {
+        var path = locationModel.treePath(index);
+        for (var i = 0; i < path.length; i++) {
+            if (!treeView.isExpanded(path[i]))
+                treeView.expand(path[i]);
         }
     }
 
     function selectedLocationIds() {
         var list = [];
         var selectedIndexes = selectionModel.selectedIndexes;
-
         for (var i = 0; i < selectedIndexes.length; i++) {
             list.push(locationModel.locationId(selectedIndexes[i]));
         }
@@ -159,7 +177,6 @@ Item {
 
     function selectedLocationIdMap() {
         var map = ({});
-
         for (var i = 0; i < selectedIndexes.length; i++) {
             var index = selectedIndexes[i]
             var locationId = locationModel.locationId(index)
@@ -178,7 +195,7 @@ Item {
     }
 
     function addLocations(name, lenght, width, quantity) {
-        if (locationView.hasSelection)
+        if (view.hasSelection)
             locationModel.addLocations(name, lenght, width, quantity, selectionModel.selectedIndexes)
         else
             locationModel.addLocations(name, lenght, width, quantity)
@@ -195,6 +212,7 @@ Item {
         locationModel.removeIndexes(indexList)
         plantingsView.resetFilter();
     }
+
 
     Settings {
         id: locationSettings
@@ -236,12 +254,12 @@ Item {
             id: headerRow
             height: Units.rowHeight
             spacing: Units.smallSpacing
-            leftPadding: 16 + locationView.indentation
+            leftPadding: 16 + view.indentation
 
             CheckBox {
                 id: headerRowCheckBox
                 anchors.verticalCenter: headerRow.verticalCenter
-                visible: locationView.editMode
+                visible: view.editMode
                 height: parent.height * 0.8
                 width: height
                 contentItem: Text {}
@@ -256,10 +274,10 @@ Item {
                         return;
 
                     if (checkState == Qt.Checked) {
-                        locationView.deselectAll()
+                        view.deselectAll()
                         return Qt.Unchecked
                     } else {
-                        locationView.selectAll()
+                        view.selectAll()
                         return Qt.Checked
                     }
                 }
@@ -267,18 +285,17 @@ Item {
 
             TableHeaderLabel {
                 text: qsTr("Name")
-                width: 120 - (locationView.editMode ? headerRowCheckBox.width + headerRow.spacing
-                                                    : 0)
+                width: 120 - (view.editMode ? headerRowCheckBox.width + headerRow.spacing : 0)
             }
 
             Row {
                 id: headerTimelineRow
-                visible: locationView.showTimeline
+                visible: view.showTimeline
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
 
                 Repeater {
-                    model: monthsOrder[locationView.season]
+                    model: monthsOrder[view.season]
                     Item {
                         width: Units.monthWidth
                         height: parent.height
@@ -325,7 +342,6 @@ Item {
             bottom: parent.bottom
         }
 
-
         //                property int _scrollingDirection: {
         //                    var yCoord = treeView.mapFromItem(dragArea, 0, dragArea.mouseY).y;
         //                    if (yCoord < scrollEdgeSize) {
@@ -347,8 +363,8 @@ Item {
         property int draggedPlantingId: -1
         property date plantingDate: Planting.plantingDate(draggedPlantingId)
         property date endHarvestDate: Planting.endHarvestDate(draggedPlantingId)
-        readonly property date seasonBegin: MDate.seasonBeginning(locationView.season,
-                                                                  locationView.year)
+        readonly property date seasonBegin: MDate.seasonBeginning(view.season,
+                                                                  view.year)
 
         property var expandIndex: null
         property var draggedOnIndex: null
@@ -426,7 +442,7 @@ Item {
 
         style: Styles1.TreeViewStyle {
             id: treeViewStyle
-            indentation: locationView.indentation
+            indentation: view.indentation
             rowDelegate: Rectangle {
                 height: Units.rowHeight + 1
                 color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
@@ -445,9 +461,9 @@ Item {
                 id: branchRectangle
                 color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
                                  selectionModel.isSelected(styleData.index) ? 1.1 :  1)
-                width: locationView.indentation
+                width: view.indentation
                 height: Units.rowHeight + 1
-                x: - styleData.depth * locationView.indentation
+                x: - styleData.depth * view.indentation
 
                 ThinDivider {
                     anchors {
@@ -479,7 +495,7 @@ Item {
                                  selectionModel.isSelected(styleData.index) ? 1.1 :  1)
 
                 //                        opacity: dropArea.containsDrag ? 1 : 0.8
-                x: - styleData.depth * locationView.indentation
+                x: - styleData.depth * view.indentation
 
                 DropArea {
                     id: dropArea
@@ -552,28 +568,34 @@ Item {
                     hoverEnabled: true
 
                     onClicked: {
-                        if (styleData.hasChildren || !locationView.plantingEditMode)
+                        if (styleData.hasChildren || !view.plantingEditMode)
                             return;
-                        if (!locationModel.acceptPlanting(styleData.index,
-                                                          editedPlantingPlantingDate,
-                                                          editedPlantingEndHarvestDate))
+
+                        var plantings = locationModel.plantings(styleData.index, view.season, view.year)
+                        if (!selectionModel.isSelected(styleData.index)
+                                && !locationModel.acceptPlanting(styleData.index,
+                                                                 editedPlantingPlantingDate,
+                                                                 editedPlantingEndHarvestDate)
+                                && !plantings.includes(editedPlantingId)) {
                             return;
+                        }
 
                         if (selectionModel.isSelected(styleData.index)) {
                             assignedLengthMap[styleData.index] = 0
+                        } else if (plantings.includes(editedPlantingId)) {
+                            assignedLengthMap[styleData.index] =
+                                    locationModel.plantingLength(editedPlantingId, styleData.index);
+
                         } else {
-                            if (remainingLength === 0) {
-                                assignedLengthMap[styleData.index] =
-                                        locationModel.availableSpace(styleData.index,
-                                                                     editedPlantingPlantingDate,
-                                                                     editedPlantingEndHarvestDate);
-                                locationView.addPlantingLength(assignedLengthMap[styleData.index]);
-                            } else {
-                                assignedLengthMap[styleData.index] =
-                                        Math.min(remainingLength,
-                                                 locationModel.availableSpace(styleData.index,
+                            var availableSpace = locationModel.availableSpace(styleData.index,
                                                                               editedPlantingPlantingDate,
-                                                                              editedPlantingEndHarvestDate));
+                                                                              editedPlantingEndHarvestDate);
+
+                            if (remainingLength === 0) {
+                                assignedLengthMap[styleData.index] = availableSpace;
+                                view.addPlantingLength(assignedLengthMap[styleData.index]);
+                            } else {
+                                assignedLengthMap[styleData.index] = Math.min(remainingLength, availableSpace);
                             }
                         }
 
@@ -594,7 +616,7 @@ Item {
                             CheckBox {
                                 id: rowCheckBox
                                 anchors.verticalCenter: row.verticalCenter
-                                visible: locationView.editMode || locationView.alwaysShowCheckbox
+                                visible: view.editMode || view.alwaysShowCheckbox
                                 height: parent.height * 0.8
                                 width: height
                                 contentItem: Text {}
@@ -672,14 +694,14 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: locationModel.hasSpaceConflict(styleData.index, season, year)
                                 conflictList: locationModel.spaceConflictingPlantings(styleData.index, season, year)
-                                year: locationView.year
+                                year: view.year
                                 locationId: locationModel.locationId(styleData.index)
                                 onPlantingModified: {
                                     locationModel.refreshIndex(styleData.index)
                                     timeline.refresh();
                                 }
                                 onPlantingRemoved: {
-                                    locationView.plantingRemoved()
+                                    view.plantingRemoved()
                                     locationModel.refreshIndex(styleData.index)
                                     timeline.refresh();
                                 }
@@ -729,24 +751,24 @@ Item {
                             Timeline {
                                 id: timeline
                                 height: parent.height
-                                visible: locationView.showTimeline
-                                year: locationView.year
-                                season: locationView.season
+                                visible: view.showTimeline
+                                year: view.year
+                                season: view.season
                                 showGreenhouseSow: false
                                 showNames: true
                                 showOnlyActiveColor: true
-                                showFamilyColor: locationView.showFamilyColor
+                                showFamilyColor: view.showFamilyColor
                                 dragActive: true
                                 plantingIdList: locationModel.plantings(styleData.index, season, year)
                                 locationId: locationModel.locationId(styleData.index)
                                 onDragFinished: treeView.draggedPlantingId = -1
                                 onPlantingMoved: {
                                     locationModel.refreshIndex(styleData.index)
-                                    locationView.plantingMoved()
+                                    view.plantingMoved()
                                 }
                                 onPlantingRemoved: {
                                     locationModel.refreshIndex(styleData.index)
-                                    locationView.plantingRemoved()
+                                    view.plantingRemoved()
                                 }
                             }
                         }
