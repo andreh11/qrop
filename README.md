@@ -8,7 +8,7 @@ some of the times, but use at your own risk.
 
 ![Screenshot of Qrop](qrop.png)
 
-## Features
+## ✨ Features
 
 ### Plan your season
 
@@ -23,19 +23,24 @@ Get a week-to-week list of your tasks: sowing, planting, weeding, pruning,
 irrigating... Quickly filter overdue, due and done tasks. Track your labor cost
 by task.
 
-### Effectively manage your crop rotations
+### Manage your field map and crop rotations
 
 Define your crop map: drag n' drop your plantings on your crop map. Get the crop
 history of every single bed to ensure good rotations.
 
 ### Take notes and photos
 
-Write notes, take photos and link them to your plantings, tasks and locations.
+Write notes, take photos and link them to your plantings. In a near future, it
+will also be possible to take notes for tasks and locations.
 
-
-### Harvests tracking 
+### Track your harvests and crop yields
 
 Keep track of each harvest and get real-time crop yields (planned).
+
+### Seeds and transplants list
+
+Qrop autogenerates a list of the seeds and transplants to buy based on your crop
+plan.
 
 ## Planned features
 
@@ -43,7 +48,7 @@ Keep track of each harvest and get real-time crop yields (planned).
 
 ## Getting started
 
-### Linux (AppImage)
+### GNU/Linux (AppImage)
 
 We only provide AppImages. Download the latest version at
 https://github.com/andreh11/qrop/releases. Then open a console in the right
@@ -70,7 +75,14 @@ There is no installer yet, but this will be provided as soon as possible.
 
 ### OS X
 
-Not tested yet, please contact me if you own a Mac and would like to try Qrop!
+Not tested yet, please contact us if you own a Mac and would like to try Qrop!
+
+### Android
+
+Qrop should compile and run on Android, but we haven't tested it yet. The user
+interface should be usable on tablets, but do not expect to run it on
+smartphone. If you would like to use Qrop on smartphone and you are willing to
+help us to design a nice user interface, please contact us!
 
 ## Built With
 
@@ -85,8 +97,9 @@ conduct, and the process for submitting bug reports and merge requests to us.
 
 ## Authors
 
-* **André Hoarau** @ah − developer
+See [AUTHORS](AUTHORS).
 
 ## License
 
-This project is licensed under the GNU GPLv3 − see [LICENSE](LICENSE) for more details.
+This project Free Software, licensed under the GNU General Public License v3. See
+[LICENSE](LICENSE) for more details.
