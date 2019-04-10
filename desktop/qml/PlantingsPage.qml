@@ -340,6 +340,7 @@ Page {
                 visible: true
                 width: parent.width
                 height: 48
+                Material.elevation: 2
 
                 Behavior on color { ColorAnimation { duration: 150 } }
 
@@ -425,11 +426,19 @@ Page {
                         Layout.fillWidth: true
                     }
 
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
                     SearchField {
                         id: filterField
                         Layout.fillWidth: true
                         inputMethodHints: Qt.ImhPreferLowercase
                         visible: !checks
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
                     }
 
 
@@ -461,30 +470,25 @@ Page {
 
                         Menu {
                             id: cropMenu
-                            objectName: "cropMenu"
                             title: qsTr("Crop plan")
                             y: parent.height
 
                             MenuItem {
                                 text: qsTr("Export as PDF...")
-                                leftPadding: 15
                                 onClicked: printDialog.open();
                             }
 
                             MenuItem {
-                                objectName: "duplicateCropPlanButton"
                                 text: qsTr("Duplicate crop plan...")
                                 onClicked: duplicateCropPlanDialog.open();
                             }
 
                             MenuItem {
-                                objectName: "importCropPlanButton"
                                 text: qsTr("Import crop plan...")
                                 onClicked: importCropPlanDialog.open()
                             }
 
                             MenuItem {
-                                objectName: "exportCropPlanButton"
                                 text: qsTr("Export crop plan...")
                                 onClicked: exportCropPlanDialog.open()
                             }

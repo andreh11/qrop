@@ -219,9 +219,34 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     }
 }
 
-/** @brief Return the sowing or in-ground planting task id for \a plantingId. */
+/*!
+ * Return the greenhouse sowing task id for \a plantingId.
+ *
+ * If \a plantingId is not a TP, raised planting, return -1.
+ */
+int Task::greenhouseSowingTask(int plantingId) const
+{
+    if (plantingId < 1)
+        return -1;
+
+    QString queryString("SELECT task_id FROM planting_task "
+                        "JOIN task USING (task_id) "
+                        "WHERE planting_id = %1 "
+                        "AND task_type_id = 2");
+
+    auto idList = queryIds(queryString.arg(plantingId), "task_id");
+    if (idList.isEmpty())
+        return -1;
+
+    return idList.first();
+}
+
+/*! Return the sowing or in-ground planting task id for \a plantingId. */
 int Task::plantingTask(int plantingId) const
 {
+    if (plantingId < 1)
+        return -1;
+
     QString queryString("SELECT task_id FROM planting_task "
                         "JOIN task USING (task_id) "
                         "WHERE planting_id = %1 "
@@ -234,8 +259,14 @@ int Task::plantingTask(int plantingId) const
     return idList.first();
 }
 
+/*! Set the task type of \a taskId to \a type. */
+void Task::updateType(int taskId, TaskType type) const
+{
+    update(taskId, { { "task_type_id", static_cast<int>(type) } });
+}
+
 /**
- * @brief Create the nursery task for \a plantingId.
+ * Create the nursery task for \a plantingId.
  *
  * Return the id of the nursery task.
  *

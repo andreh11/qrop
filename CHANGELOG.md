@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
   - *Timeline* − For week date format, don't show year indicators < and > anymore.
 
 ### Fixed
+  - Fix planting type change bug (#84)
   - Fix note view.
   - *Planting form*: quantities are correctly recomputed when (bulk) editing 
     plantings.

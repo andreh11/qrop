@@ -83,6 +83,7 @@ private:
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     QList<int> yearPlantingList(int year) const;
     QDate dateFromString(const QString &string, const int targetYear) const;
+    void updateTaskType(int plantingId, PlantingType oldType, PlantingType newType) const;
 };
 
 #endif // PLANTING_H

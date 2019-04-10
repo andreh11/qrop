@@ -55,7 +55,8 @@ Tous les changements importants seront documentés dans ce fichier.
     afficher les indicateurs < et > d'années.
 
 ### Corrections
-  - Correction d'un bug d'affichage des notes de séries.
+  - Correction du bogue de changement de type de série (#84)
+  - Correction d'un bogue d'affichage des notes de séries.
   - *Édition des séries* : les quantités sont dorénavant correctement recalculées
     lors de l'édition d'une ou plusieurs séries.
   - *Édition des séries* : lors de l'édition d'une ou plusieurs séries (par lot),

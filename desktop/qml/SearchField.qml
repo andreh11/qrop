@@ -68,6 +68,7 @@ TextField {
         id: clearButton
         flat: true
         visible: filterField.text
+        focusPolicy: Qt.NoFocus
         Material.foreground: Material.color(Material.Grey,
                                             Material.Shade500)
         anchors.right: parent.right

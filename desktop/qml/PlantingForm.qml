@@ -56,16 +56,14 @@ Flickable {
     readonly property int harvestWindow: Number(harvestWindowField.text)
     readonly property string sowingDate: {
         if (plantingType === 1)
-            fieldSowingDateField.isoDateString;
+            fieldPlantingDateField.isoDateString;
         else if (plantingType === 2)
             greenhouseStartDateField.isoDateString;
         else
             fieldPlantingDateField.isoDateString;
     }
-    readonly property string plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate :
-                                                                fieldPlantingDateField.calendarDate
-    readonly property string plantingDateString: plantingType === 1 ? fieldSowingDateField.isoDateString :
-                                                                      fieldPlantingDateField.isoDateString
+    readonly property string plantingDate: fieldPlantingDateField.calendarDate
+    readonly property string plantingDateString: fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: begHarvestDateField.isoDateString
     readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
                                                                begHarvestDateField.calendarDate,
@@ -169,7 +167,7 @@ Flickable {
         [greenhouseRadio, "planting_type", plantingType],
         [boughtRadio, "planting_type", plantingType],
         [inGreenhouseCheckBox, "in_greenhouse", inGreenhouse],
-        [fieldSowingDateField, "planting_date", plantingDateString],
+        [fieldPlantingDateField, "planting_date", plantingDateString],
         [fieldPlantingDateField, "planting_date", plantingDateString],
         [sowDtmField, "dtm", dtm],
         [plantingDtmField, "dtm", dtm],
@@ -254,12 +252,12 @@ Flickable {
 
         durationCheckBox.checked = plantingSettings.durationsByDefault
         fieldPlantingDateField.clear();
-        fieldSowingDateField.clear();
+        fieldPlantingDateField.clear();
         greenhouseStartDateField.clear();
         begHarvestDateField.clear();
         endHarvestDateField.clear();
 
-        fieldSowingDateField.modified = false;
+        fieldPlantingDateField.modified = false;
         fieldPlantingDateField.modified = false;
 
         sowDtmField.reset();
@@ -329,10 +327,10 @@ Flickable {
             if ('dtm' in val)
                 setFieldValue(sowDtmField, val['dtm']);
 
-            fieldSowingDateField.calendarDate = pDate;
+            fieldPlantingDateField.calendarDate = pDate;
             if ('dtm' in val)
                 updateFromFieldSowingDate();
-            fieldSowingDateField.modified = false;
+            fieldPlantingDateField.modified = false;
             break;
         case 2:
             setFieldValue(greenhouseRadio, true);
@@ -437,7 +435,7 @@ Flickable {
 
         // Mark sow/planting field date as modified (for proper update).
         if (directSeeded)
-            fieldSowingDateField.modified = true
+            fieldPlantingDateField.modified = true
         else
             fieldPlantingDateField.modified = true
     }
@@ -448,7 +446,7 @@ Flickable {
 
     function updateDtm() {
         if (directSeeded) {
-            updateDuration(fieldSowingDateField, begHarvestDateField, sowDtmField);
+            updateDuration(fieldPlantingDateField, begHarvestDateField, sowDtmField);
         }  else {
             updateDuration(fieldPlantingDateField, begHarvestDateField, plantingDtmField);
         }
@@ -480,7 +478,7 @@ Flickable {
     function updateFromFieldSowingDate() {
         if (!durationMode && !initMode)
             return;
-        updateDateField(fieldSowingDateField, sowDtmField, begHarvestDateField, 1);
+        updateDateField(fieldPlantingDateField, sowDtmField, begHarvestDateField, 1);
 
         updateFromFirstHarvestDate(true, false);
     }
@@ -519,9 +517,9 @@ Flickable {
             return;
 
         if (directSeeded) {
-            updateDateField(begHarvestDateField, sowDtmField, fieldSowingDateField, -1);
+            updateDateField(begHarvestDateField, sowDtmField, fieldPlantingDateField, -1);
             if (!initMode)
-                fieldSowingDateField.modified = true;
+                fieldPlantingDateField.modified = true;
         }  else {
             updateDateField(begHarvestDateField, plantingDtmField, fieldPlantingDateField, -1);
             if (!initMode)
@@ -742,7 +740,12 @@ Flickable {
                 checked: true
                 autoExclusive: true
                 onActiveFocusChanged: ensureItemVisible(directSeedRadio)
-                onToggled: manuallyModified = true
+                onToggled: {
+                    manuallyModified = true
+                    if (!checked) {
+                        fieldPlantingDateField.calendarDate = fieldPlantingDateField.calendarDate;
+                    }
+                }
             }
 
             RadioButton {
@@ -799,7 +802,7 @@ Flickable {
 
                 MyTextField {
                     id: sowDtmField
-                    visible: fieldSowingDateField.visible && !chooseLocationMode
+                    visible: plantingType === 1 && !chooseLocationMode
 
                     enabled: durationMode
                     text: "1"
@@ -834,7 +837,7 @@ Flickable {
 
                 MyTextField {
                     id: plantingDtmField
-                    visible: fieldPlantingDateField.visible && !chooseLocationMode
+                    visible: plantingType != 1 && !chooseLocationMode
                     enabled: durationMode
                     text: "1"
                     labelText: qsTr("Days to maturity")
@@ -879,26 +882,26 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                DatePicker {
-                    id: fieldSowingDateField
+//                DatePicker {
+//                    id: fieldPlantingDateField
 
-                    property bool modified: false
+//                    property bool modified: false
 
-                    visible: directSeedRadio.checked
-                    Layout.fillWidth: true
-                    floatingLabel: true
-                    labelText: qsTr("Field Sowing")
-                    currentYear: control.currentYear
+//                    visible: directSeedRadio.checked
+//                    Layout.fillWidth: true
+//                    floatingLabel: true
+//                    labelText: qsTr("Field Sowing")
+//                    currentYear: control.currentYear
 
-                    onEditingFinished: {
-                        if (durationMode)
-                            updateFromFieldSowingDate();
-                        else
-                            updateDtm();
-                    }
-                    onActiveFocusChanged: ensureItemVisible(fieldSowingDateField)
-                    onCalendarDateChanged: modified = true
-                }
+//                    onEditingFinished: {
+//                        if (durationMode)
+//                            updateFromFieldSowingDate();
+//                        else
+//                            updateDtm();
+//                    }
+//                    onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
+//                    onCalendarDateChanged: modified = true
+//                }
 
                 DatePicker {
                     id: greenhouseStartDateField
@@ -921,17 +924,20 @@ Flickable {
 
                     property bool modified: false
 
-                    visible: !directSeedRadio.checked
+//                    visible: !directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
-                    labelText: qsTr("Field planting")
+                    labelText: plantingType == 1 ? qsTr("Field sowing") : qsTr("Field planting")
                     currentYear: control.currentYear
 
                     onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
                     onEditingFinished: {
-                        if (durationMode)
-                            updateFromFieldPlantingDate(true, true)
-                        else {
+                        if (durationMode) {
+                            if (plantingType === 1)
+                                updateFromFieldSowingDate();
+                            else
+                                updateFromFieldPlantingDate(true, true)
+                        } else {
                             if (plantingType == 2)
                                 updateGHDuration();
                             updateDtm();
@@ -1037,7 +1043,7 @@ Flickable {
                     visible: chooseLocationMode
                     clip: true
 
-                    property date plantingDate: plantingType === 1 ? fieldSowingDateField.calendarDate
+                    property date plantingDate: plantingType === 1 ? fieldPlantingDateField.calendarDate
                                                                    : fieldPlantingDateField.calendarDate
                     season: MDate.season(plantingDate)
                     year: MDate.seasonYear(plantingDate)
@@ -1206,6 +1212,12 @@ Flickable {
                     id: yieldPerBedMeterField
                     labelText: qsTr("Yield/bed m")
                     inputMethodHints: Qt.ImhDigitsOnly
+                    validator: QropDoubleValidator {
+                        bottom: 0
+                        decimals: 2
+                        top: 999
+                        notation: DoubleValidator.StandardNotation
+                    }
                     suffixText: unitId > 0 ? unitField.text : ""
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(this)

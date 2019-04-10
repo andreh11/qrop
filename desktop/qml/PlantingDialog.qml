@@ -168,14 +168,11 @@ Dialog {
                                 plantingForm.editedValues(),
                                 plantingForm.assignedLengthMap);
             else
-                Planting.updateListLength(dialog.editPlantingIdList,
-                                          plantingForm.editedValues(),
-                                          plantingForm.assignedLengthMap);
+                Planting.updateList(dialog.editPlantingIdList,
+                                    plantingForm.editedValues(),
+                                    plantingForm.assignedLengthMap);
             dialog.plantingsModified(dialog.editPlantingIdList.length);
         }
 
     }
-
-//    Behavior on width { NumberAnimation { duration: 100 } }
-//    Behavior on height { NumberAnimation { duration: 100 } }
 }

@@ -8,6 +8,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(QROP_MAJOR_VERSION 0)
+set(QROP_MINOR_VERSION 2)
+set(QROP_PATCH_VERSION 0)
+
+string(TIMESTAMP BUILD_DATE %Y%m)
+
 include_directories("${PROJECT_SOURCE_DIR}/core")
 add_subdirectory(core)
 

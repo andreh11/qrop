@@ -58,9 +58,12 @@ public:
     Q_INVOKABLE void applyTemplate(int templateId, int plantingId) const;
     Q_INVOKABLE void removeTemplate(int templateId, int plantingId) const;
 
+    int greenhouseSowingTask(int plantingId) const;
+    int plantingTask(int plantingId) const;
+    void updateType(int taskId, TaskType type) const;
+
 private:
     QList<int> templateTasks(int templateId) const;
-    int plantingTask(int plantingId) const;
 };
 
 #endif // TASK_H

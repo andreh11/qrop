@@ -83,7 +83,7 @@ int Planting::add(const QVariantMap &map) const
  *
  * \param successions the number of successions to add
  * \param weeksBetween the number of weeks between each succession
- * \param map the value map used to create the plantings
+ * \param map the value map used to create the planting successions
  * \return the list of the ids of the plantings created
  */
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
@@ -215,7 +215,6 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
         plantingDateString = newMap.take("planting_date").toString();
 
     auto record = recordFromId("planting_view", id);
-    int plantingType = get(newMap, record, "planting_type").toInt();
 
     // If the length, the number of rows or the in-row spacing have changed,
     // recompute the number of plants needed.
@@ -228,29 +227,48 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
         newMap["plants_needed"] = plantsNeeded;
     }
 
-    // If the planting type has changed from TP, raised to DS or TP, bought,
-    // we set the DTT to 0 and remove the nursery seeding task.
-    if ((record.value("planting_type").toInt() == 2) && (plantingType != 2)) {
-        newMap["dtt"] = 0;
-        task->removeNurseryTask(id);
-    }
+    auto newPlantingType = static_cast<PlantingType>(get(newMap, record, "planting_type").toInt());
+    auto oldPlantingType = static_cast<PlantingType>(record.value("planting_type").toInt());
+    int plantingTaskId = task->plantingTask(id);
 
-    // If the planting type has changed from DS or TP, bought to TP, raised, we
-    // create a new nursery seeding task
-    if ((record.value("planting_type").toInt() != 2) && (plantingType == 2)) {
-        QDate pdate;
-        if (plantingDateString.isNull())
-            pdate = plantingDate(id);
-        else
-            pdate = QDate::fromString(plantingDateString, Qt::ISODate);
+    if (oldPlantingType == PlantingType::DirectSeeded) {
+        if (newPlantingType == PlantingType::TransplantRaised) {
+            task->updateType(plantingTaskId, TaskType::Transplant);
 
-        int dtt = get(newMap, record, "dtt").toInt();
-        task->createNurseryTask(id, pdate, dtt);
+            // Create greenhouse sowing task.
+            int dtt = get(newMap, record, "dtt").toInt();
+            QDate pdate = plantingDateString.isNull()
+                    ? plantingDate(id)
+                    : QDate::fromString(plantingDateString, Qt::ISODate);
+            task->createNurseryTask(id, pdate, dtt);
+        } else if (newPlantingType == PlantingType::TransplantBought) {
+            task->updateType(plantingTaskId, TaskType::Transplant);
+        }
+    } else if (oldPlantingType == PlantingType::TransplantRaised) {
+        if (newPlantingType == PlantingType::DirectSeeded) {
+            newMap["dtt"] = 0;
+            task->updateType(plantingTaskId, TaskType::DirectSow);
+            task->removeNurseryTask(id);
+        } else if (newPlantingType == PlantingType::TransplantBought) {
+            newMap["dtt"] = 0;
+            task->removeNurseryTask(id);
+        }
+    } else if (oldPlantingType == PlantingType::TransplantBought) {
+        if (newPlantingType == PlantingType::DirectSeeded) {
+            task->updateType(plantingTaskId, TaskType::DirectSow);
+        } else if (newPlantingType == PlantingType::TransplantRaised) {
+            // Create greenhouse sowing task.
+            int dtt = get(newMap, record, "dtt").toInt();
+            QDate pdate = plantingDateString.isNull()
+                    ? plantingDate(id)
+                    : QDate::fromString(plantingDateString, Qt::ISODate);
+            task->createNurseryTask(id, pdate, dtt);
+        }
     }
 
     // Recompute seeds number for direct seeding.
-    if ((newMap.contains("plants_needed") && plantingType == 1) || newMap.contains("seeds_per_hole")
-        || newMap.contains("seeds_percentage")) {
+    if ((newMap.contains("plants_needed") && newPlantingType == PlantingType::DirectSeeded)
+        || newMap.contains("seeds_per_hole") || newMap.contains("seeds_percentage")) {
         int plantsNeeded = get(newMap, record, "plants_needed").toInt();
         int seedsPerHole = get(newMap, record, "seeds_per_hole").toInt();
         int seedsPercentage = get(newMap, record, "seeds_percentage").toInt();
@@ -261,7 +279,7 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
     }
 
     // Recompute plants to start.
-    if ((newMap.contains("plants_needed") && plantingType == 2)
+    if ((newMap.contains("plants_needed") && newPlantingType == PlantingType::TransplantRaised)
         || newMap.contains("estimated_gh_loss")) {
         int plantsNeeded = get(newMap, record, "plants_needed").toInt();
         int greenhouseLoss = get(newMap, record, "estimated_gh_loss").toInt();
@@ -277,7 +295,8 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
     }
 
     // Recompute seeds number for raised transplants.
-    if (newMap.contains("plants_to_start") || (plantingType == 2 && newMap.contains("seeds_per_hole"))) {
+    if (newMap.contains("plants_to_start")
+        || (newPlantingType == PlantingType::TransplantRaised && newMap.contains("seeds_per_hole"))) {
         int plantsToStart = get(newMap, record, "plants_to_start").toInt();
         int seedsPerHole = get(newMap, record, "seeds_per_hole").toInt();
         newMap["seeds_number"] = plantsToStart * seedsPerHole;
@@ -312,6 +331,7 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
             keyword->removePlanting(id, keywordId);
     }
 
+    // Update locations.
     if (newMap.contains("location_new_ids")) {
         const auto &locationIdList = newMap.take("location_new_ids").toList();
         const auto &oldLocationIdList = newMap.take("location_old_ids").toList();
