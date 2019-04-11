@@ -139,7 +139,9 @@ Page {
         anchors.fill: parent
         padding: 0
         Material.elevation: 1
+
         Label {
+            id: seedBlankLabel
             anchors.centerIn: parent
             visible: seedsRadioButton.checked && !seedsRowCount
             text:  qsTr('No seeds to order for %1').arg(page.year)
@@ -150,6 +152,7 @@ Page {
         }
 
         Label {
+            id: transplantBlankLabel
             anchors.centerIn: parent
             visible: transplantsRadioButton.checked && !transplantsRowCount
             text:  qsTr('No transplants to order for %1').arg(page.year)
@@ -172,16 +175,24 @@ Page {
                 spacing: Units.smallSpacing
                 visible: !filterMode
 
-                RadioButton {
-                    id: seedsRadioButton
-                    checked: true
-                    text: qsTr("Seeds")
-                    Layout.leftMargin: 16 - padding
+                ButtonGroup {
+                    buttons: checkButtonRow.children
                 }
 
-                RadioButton {
-                    id: transplantsRadioButton
-                    text: qsTr("Transplants")
+                Row {
+                    id: checkButtonRow
+                    Layout.leftMargin: 16 - padding
+
+                    ButtonCheckBox {
+                        id: seedsRadioButton
+                        checked: true
+                        text: qsTr("Seeds")
+                    }
+
+                    ButtonCheckBox {
+                        id: transplantsRadioButton
+                        text: qsTr("Transplants")
+                    }
                 }
 
                 SearchField {
@@ -193,12 +204,20 @@ Page {
                     visible: !checks
                 }
 
+                WeekSpinBox {
+                    id: weekSpinBox
+                    showOnlyYear: true
+                    visible: checks === 0
+                    week: MDate.currentWeek();
+                    year: MDate.currentYear();
+                }
+
                 IconButton {
                     id: printButton
                     text: "\ue8ad"
                     hoverEnabled: true
-                    Layout.rightMargin: -padding*2
 
+                    Layout.rightMargin: 16 - padding
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
@@ -207,13 +226,6 @@ Page {
                     onClicked: saveDialog.open()
                 }
 
-                WeekSpinBox {
-                    id: weekSpinBox
-                    showOnlyYear: true
-                    visible: checks === 0
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
-                }
             }
         }
 

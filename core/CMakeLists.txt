@@ -3,7 +3,8 @@ find_package(Qt5 COMPONENTS Core Quick Gui Sql PrintSupport LinguistTools REQUIR
 add_definitions(-DCORE_LIBRARY)
 
 add_library(core SHARED
-	sqltablemodel.cpp 
+        buildinfo.cpp
+        sqltablemodel.cpp
 	taskmodel.cpp 
 	notemodel.cpp 
 	locationmodel.cpp 

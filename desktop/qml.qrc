@@ -83,5 +83,7 @@
         <file>qml/PhotoPane.qml</file>
         <file>qml/SeedsPage.qml</file>
         <file>qml/ComboTextField.qml</file>
+        <file>qml/ButtonCheckBox.qml</file>
+        <file>qml/AboutDialog.qml</file>
     </qresource>
 </RCC>

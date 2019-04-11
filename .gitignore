@@ -2,3 +2,4 @@
 *.qrc.autosave
 *.txt.user*
 *.swp
+core/version.h

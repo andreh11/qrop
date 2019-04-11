@@ -414,9 +414,9 @@ Page {
                 id: printButton
                 text: "\ue8ad"
                 hoverEnabled: true
-//                visible: largeDisplay && checks == 0
-                Layout.rightMargin: -padding*2
+                visible: !editMode
 
+                Layout.rightMargin: 16 - padding
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Print the task calendar")

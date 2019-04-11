@@ -34,6 +34,7 @@
 #include <QtAndroid>
 #endif
 
+#include "buildinfo.h"
 #include "db.h"
 #include "family.h"
 #include "keyword.h"
@@ -45,6 +46,7 @@
 #include "print.h"
 #include "task.h"
 #include "variety.h"
+#include "version.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -111,6 +113,13 @@ void registerTypes()
     qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
 
     qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
+
+    qmlRegisterSingletonType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
+                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                            Q_UNUSED(engine)
+                                            Q_UNUSED(scriptEngine)
+                                            return new BuildInfo;
+                                        });
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -256,6 +265,8 @@ void registerTypes()
 
 int main(int argc, char *argv[])
 {
+    qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     QApplication::setApplicationName("Qrop");

@@ -465,6 +465,7 @@ Page {
                         text: "\ue5d4"
                         hoverEnabled: true
                         visible: largeDisplay && checks == 0
+                        Layout.rightMargin: 16 - padding
 
                         onClicked: cropMenu.open();
 

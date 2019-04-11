@@ -236,14 +236,14 @@ Page {
             RowLayout {
                 id: buttonRow
                 anchors.fill: parent
-                spacing: Units.smallSpacing
+                spacing: Units.formSpacing
                 visible: !filterMode
 
                 Label {
                     text: qsTr("%L1 task(s) selected", "", checks).arg(checks)
-                    leftPadding: 16
                     color: Material.color(Material.Blue)
                     Layout.fillWidth: true
+                    Layout.leftMargin: 16
                     visible: checks > 0
                     font.family: "Roboto Regular"
                     font.pixelSize: 16
@@ -277,20 +277,33 @@ Page {
                     visible: !checks
                 }
 
-                CheckBox {
-                    id: showDoneCheckBox
-                    text: qsTr("Done")
+
+                Row {
+                    id: checkButtonRow
+                    spacing: 0
+
+                    ButtonCheckBox {
+                        id: showDoneCheckBox
+                        text: qsTr("Done")
+                    }
+
+                    ButtonCheckBox {
+                        id: showDueCheckBox
+                        checked: true
+                        text: qsTr("Due")
+                    }
+
+                    ButtonCheckBox {
+                        id: showOverdueCheckBox
+                        text: qsTr("Overdue")
+                        checked: false
+                    }
                 }
 
-                CheckBox {
-                    id: showDueCheckBox
-                    checked: true
-                    text: qsTr("Due")
-                }
-
-                CheckBox {
-                    id: showOverdueCheckBox
-                    text: qsTr("Overdue")
+                WeekSpinBox {
+                    id: weekSpinBox
+                    week: MDate.currentWeek();
+                    year: MDate.currentYear();
                 }
 
                 IconButton {
@@ -298,7 +311,8 @@ Page {
                     text: "\ue8ad"
                     hoverEnabled: true
                     visible: largeDisplay && checks == 0
-                    Layout.rightMargin: -padding*2
+//                    Layout.rightMargin: -padding*2
+                    Layout.rightMargin: 16 - padding
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -355,11 +369,6 @@ Page {
                     }
                 }
 
-                WeekSpinBox {
-                    id: weekSpinBox
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
-                }
             }
         }
 
@@ -380,9 +389,39 @@ Page {
             Label {
                 id: emptyStateLabel
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr('No tasks for this week')
+                text: {
+                    if (showDoneCheckBox.checked && showDueCheckBox.checked && showOverdueCheckBox.checked)
+                        return qsTr('No tasks done, due or overdue for week %1').arg(page.week)
+                    else if (showDoneCheckBox.checked && showDueCheckBox.checked)
+                        return qsTr('No tasks done or due for week %1').arg(page.week)
+                    else if (showDoneCheckBox.checked && showOverdueCheckBox.checked)
+                        return qsTr('No tasks done or overdue for week %1').arg(page.week)
+                    else if (showDueCheckBox.checked && showOverdueCheckBox.checked)
+                        return qsTr('No tasks due or overdue for week %1').arg(page.week)
+                    else if (showDueCheckBox.checked && showOverdueCheckBox.checked)
+                        return qsTr('No tasks due or overdue for week %1').arg(page.week)
+                    else if (showDoneCheckBox.checked)
+                        return qsTr('No tasks done week %1').arg(page.week)
+                    else if(showDueCheckBox.checked)
+                        return qsTr("No task due for week %1").arg(page.week)
+                    else if (showOverdueCheckBox.checked)
+                        return qsTr("No tasks overdue for week %1").arg(page.week)
+                    else
+                        return qsTr("No tasks to show")
+                }
                 font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
                 color: Qt.rgba(0, 0, 0, 0.8)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Label {
+                id: noneLabel
+                visible: !showDoneCheckBox.checked && !showDueCheckBox.checked && !showOverdueCheckBox.checked
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:  qsTr("Check at least one type to see them")
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
+                color: Qt.rgba(0, 0, 0, 0.6)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }

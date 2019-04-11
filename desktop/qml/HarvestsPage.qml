@@ -28,7 +28,7 @@ Page {
 
     property alias week: weekSpinBox.week
     property alias year: weekSpinBox.year
-    property alias rowsNumber: harvestModel.rowCount
+    property alias rowCount: harvestModel.rowCount
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
@@ -151,6 +151,37 @@ Page {
         anchors.fill: parent
         padding: 0
 
+        Column {
+            id: blankStateColumn
+            z: 1
+            spacing: Units.smallSpacing
+            visible: !page.rowCount
+            anchors {
+                centerIn: parent
+            }
+
+            Label {
+                id: emptyStateLabel
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr('No harvests for week %1').arg(page.week)
+                font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
+                color: Qt.rgba(0, 0, 0, 0.8)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Button {
+                text: qsTr("Add")
+                flat: true
+                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                Material.background: Material.accent
+                Material.foreground: "white"
+                font.pixelSize: Units.fontSizeBodyAndButton
+                onClicked: addButton.clicked()
+            }
+        }
+
         Rectangle {
             id: buttonRectangle
             color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
@@ -223,25 +254,26 @@ Page {
                     visible: !checks
                 }
 
-                IconButton {
-                    id: printButton
-                    text: "\ue8ad"
-                    hoverEnabled: true
-                    Layout.rightMargin: -padding*2
-
-                    ToolTip.visible: hovered
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: qsTr("Print the task calendar")
-
-                    onClicked: saveDialog.open()
-                }
-
                 WeekSpinBox {
                     id: weekSpinBox
                     visible: checks === 0
                     week: MDate.currentWeek();
                     year: MDate.currentYear();
                 }
+
+                IconButton {
+                    id: printButton
+                    text: "\ue8ad"
+                    hoverEnabled: true
+
+                    Layout.rightMargin: 16 - padding
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: qsTr("Print the harvests list")
+
+                    onClicked: saveDialog.open()
+                }
+
             }
         }
 

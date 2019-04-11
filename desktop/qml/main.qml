@@ -418,23 +418,23 @@ ApplicationWindow {
         ColumnLayout {
             anchors.fill: parent
 
-            Label {
-                id: programLabel
-                visible: false
-                height: toolBar.height
-                text: "Qrop"
-                color: "white"
-                font.family: "Roboto Bold"
-                font.pixelSize: 20
-                padding: 12
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
+//            Label {
+//                id: programLabel
+////                visible: false
+//                height: toolBar.height
+//                text: "Qrop"
+//                color: "white"
+//                font.family: "Roboto Bold"
+//                font.pixelSize: 20
+//                padding: 12
+//                horizontalAlignment: Text.AlignLeft
+//                verticalAlignment: Text.AlignVCenter
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: railMode = largeDisplay && !railMode
-                }
-            }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    onClicked: railMode = largeDisplay && !railMode
+//                }
+//            }
 
             Repeater {
                 model: navigationModel
@@ -455,6 +455,7 @@ ApplicationWindow {
             Item { Layout.fillHeight: true }
 
             DrawerItemDelegate {
+                id: settingsDrawerButton
                 Layout.fillWidth: true
                 width: drawer.width
                 text: qsTr("Settings")
@@ -465,6 +466,19 @@ ApplicationWindow {
                     navigationIndex = navigationModel.length
                     if (!largeDisplay)
                         drawer.close()
+                }
+            }
+
+            DrawerItemDelegate {
+                id: aboutDrawerDelegate
+                Layout.fillWidth: true
+                width: drawer.width
+                text: qsTr("About")
+                iconText: "\ue887"
+                isActive: false
+
+                onClicked: {
+                    aboutDialog.open();
                 }
             }
         }
@@ -568,41 +582,10 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
+    AboutDialog {
         id: aboutDialog
-        modal: true
-        focus: true
-        title: qsTr("About Qrop")
         x: (window.width - width) / 2
-        y: window.height / 6
-        width: Math.min(window.width, window.height) / 3 * 2
-        contentHeight: aboutColumn.height
-
-        Column {
-            id: aboutColumn
-            spacing: 20
-
-            Image {
-                source: "/icon.png"
-                width: 100
-                height: width
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "Qrop"
-                font.family: "Roboto Medium"
-                wrapMode: Label.Wrap
-                font.pixelSize: Units.fontSizeSubheading
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: qsTr("A modern, cross-platform tool for planning and recordkeeping. Made by farmers, for farmers.")
-                font.family: "Roboto Regular"
-                wrapMode: Label.Wrap
-                font.pixelSize: Units.fontSizeBodyAndButton
-            }
-        }
+        y: (window.height - height) / 2
+        width: 500
     }
 }
