@@ -194,11 +194,11 @@ Item {
         return length;
     }
 
-    function addLocations(name, lenght, width, quantity) {
+    function addLocations(name, length, width, quantity) {
         if (view.hasSelection)
-            locationModel.addLocations(name, lenght, width, quantity, selectionModel.selectedIndexes)
+            locationModel.addLocations(name, length, width, quantity, selectionModel.selectedIndexes)
         else
-            locationModel.addLocations(name, lenght, width, quantity)
+            locationModel.addLocations(name, length, width, quantity)
         clearSelection();
     }
 
@@ -342,23 +342,12 @@ Item {
             bottom: parent.bottom
         }
 
-        //                property int _scrollingDirection: {
-        //                    var yCoord = treeView.mapFromItem(dragArea, 0, dragArea.mouseY).y;
-        //                    if (yCoord < scrollEdgeSize) {
-        //                        -1;
-        //                    } else if (yCoord > _listView.height - scrollEdgeSize) {
-        //                        1;
-        //                    } else {
-        //                        0;
-        //                    }
-        //                }
-
-        // Size of the are of the bottom and top of TreeView where the drag-scrolling
+        // Size of the area of the bottom and top of TreeView where the drag-scrolling
         // happens.
-        property int scrollEdgeSize: 6
+        property int scrollEdgeSize: Units.rowHeight
 
         // Internal: set to -1 when drag-scrolling up and 1 when drag-scrolling down
-        //                property int _scrollingDirection: 0
+        property int _scrollingDirection: 0
 
         property int draggedPlantingId: -1
         property date plantingDate: Planting.plantingDate(draggedPlantingId)
@@ -370,23 +359,56 @@ Item {
         property var draggedOnIndex: null
         property alias expandTimer: expandTimer
 
-        //                SmoothedAnimation {
-        //                    id: upAnimation
-        //                    target: treeView
-        //                    property: "contentY"
-        //                    to: 0
-        //                    running: _scrollingDirection == 1
-        //                }
+//        DropArea {
+//            anchors.top: parent.top
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            height: 16
+//            onEntered: {
+//                if (!upAnimation.running)
+//                    upAnimation.start();
+//            }
+//            onPositionChanged: {
+//                if (!upAnimation.running)
+//                    upAnimation.start();
+//            }
 
-        //                treeView.__listView.contentY.
+//            onExited: upAnimation.stop()
+//        }
 
-        SmoothedAnimation {
-            id: downAnimation
-            target: treeView
-            property: "height"
-            to: 30
-            running: true
-        }
+//        DropArea {
+//            anchors.bottom: parent.bottom
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            height: 16
+//            onEntered: {
+//                if (!downAnimation.running)
+//                    downAnimation.start();
+//            }
+//            onPositionChanged: {
+//                if (!downAnimation.running)
+//                    downAnimation.start();
+//            }
+//            onExited: downAnimation.stop()
+//        }
+
+        // BUG: badly crashing, don't know why
+//        NumberAnimation {
+//            id: upAnimation
+//            target: treeView.__listView
+//            property: "contentY"
+//            to: Math.max(0, treeView.__listView.contentY - Units.rowHeight)
+//            duration: 50
+//        }
+
+//        NumberAnimation {
+//            id: downAnimation
+//            target: treeView.__listView
+//            property: "contentY"
+//            to: Math.min(treeView.__listView.contentHeight - treeView.__listView.height,
+//                         treeView.__listView.contentY + Units.rowHeight)
+//            duration: 50
+//        }
 
         Timer {
             id: expandTimer
@@ -487,21 +509,37 @@ Item {
         }
 
         itemDelegate:  Column {
+            id: itemDelegate
             property int locationId: locationModel.locationId(styleData.index)
+
+            function scrollIfNeeded(yDrag) {
+                var yCoord = treeView.mapFromItem(dropArea, 0, yDrag).y
+                if (yCoord < Units.rowHeight) {
+                    if (!upAnimation.running)
+                        upAnimation.start();
+                } else if (yCoord > treeView.height - Units.rowHeight) {
+                    if (!downAnimation.running)
+                        downAnimation.start();
+                }
+            }
+
             Rectangle {
                 width: parent.width
                 height: Units.rowHeight + 1
                 color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
                                  selectionModel.isSelected(styleData.index) ? 1.1 :  1)
 
-                //                        opacity: dropArea.containsDrag ? 1 : 0.8
                 x: - styleData.depth * view.indentation
 
                 DropArea {
                     id: dropArea
                     anchors.fill: parent
 
+//                    onPositionChanged: itemDelegate.scrollIfNeeded(drag.y)
                     onEntered: {
+                        // TODO: crashing unexpectedly when scrolling, don't know why.
+                        // itemDelegate.scrollIfNeeded(drag.y)
+
                         var list = drag.text.split(";")
                         var plantingId = Number(list[0])
                         var sourceLocationId = Number(list[1])
@@ -529,6 +567,15 @@ Item {
                     onExited: {
                         treeView.draggedPlantingId = -1;
                         treeView.draggedOnIndex = null
+//                        treeView._scrollingDirection = 0
+
+//                        if (upAnimation.running) {
+//                            upAnimation.stop();
+//                        }
+
+//                        if (downAnimation.running) {
+//                            downAnimation.stop();
+//                        }
                     }
 
                     onDropped: {
@@ -542,10 +589,6 @@ Item {
                             var list = drop.text.split(";")
                             var plantingId = Number(list[0])
                             var sourceLocationId = Number(list[1])
-
-                            //                                    if (!locationModel.rotationRespected(styleData.index, plantingId)) {
-                            //                                        rotationSnackbar.open();
-                            //                                    }
 
                             drop.acceptProposedAction()
 

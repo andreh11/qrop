@@ -12,6 +12,8 @@ set(QROP_MAJOR_VERSION 0)
 set(QROP_MINOR_VERSION 2)
 set(QROP_PATCH_VERSION 0)
 
+option(MAKE_TESTS "Make the tests" ON)
+
 # Get the current working branch
 execute_process(
   COMMAND git rev-parse --abbrev-ref HEAD
@@ -57,3 +59,9 @@ set(desktop_SRCS
 add_executable(${PROJECT_NAME} ${desktop_SRCS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
+
+if (MAKE_TESTS)
+    enable_testing(true)
+    include_directories("${PROJECT_SOURCE_DIR}/tests")
+    add_subdirectory(tests)
+endif()

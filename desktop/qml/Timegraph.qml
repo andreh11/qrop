@@ -31,7 +31,7 @@ Item {
     property real lengthLeft: Planting.lengthToAssign(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
     readonly property string bedUnit: settings.useStandardBedLength ? qsTr("beds") : qsTr("m")
     readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
-    readonly property alias hovered: mouseArea.containsMouse
+    readonly property alias hovered: dragArea.containsMouse
     readonly property bool displaySow: showGreenhouseSow && plantingDate > seasonBegin
 
     signal selected(int id)
@@ -54,12 +54,14 @@ Item {
     width: harvestBar.x + harvestBar.width
 
     x: Units.position(seasonBegin, displaySow ? seedingDate : plantingDate)
-    z: mouseArea.containsMouse ? 4 : 1
+    z: dragArea.containsMouse ? 4 : 1
 
     ToolTip.text: locationId > 0
-                  ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName).arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
-                  : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName).arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
-    ToolTip.visible: mouseArea.containsMouse
+                  ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName)
+                    .arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
+                  : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName)
+                    .arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
+    ToolTip.visible: dragArea.containsMouse
     ToolTip.delay: 200
 
     Item {
@@ -67,12 +69,14 @@ Item {
 
         anchors.fill: parent
 
-        Drag.active: control.dragActive && mouseArea.drag.active
-        Drag.hotSpot.x: width/2
-        Drag.hotSpot.y: height/2
+        Drag.active: control.dragActive && dragArea.drag.active
+        Drag.source: dragArea
+        Drag.hotSpot.x: dragArea.mouseX
+        Drag.hotSpot.y: dragArea.mouseY
         Drag.mimeData: { "text/plain": plantingId + ";" + locationId }
         Drag.dragType: Drag.Automatic
         Drag.onDragFinished: {
+            console.log("DRAG FINISHED")
             control.dragFinished();
             if (dropAction === Qt.MoveAction) {
                 plantingIdChanged();
@@ -84,15 +88,16 @@ Item {
                 }
             }
         }
+
     }
 
     MouseArea {
-        id: mouseArea
-        drag.target: draggable
+        id: dragArea
         anchors.fill: parent
+        drag.target: draggable
         hoverEnabled: true
         cursorShape: dragActive ? (pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor) : Qt.PointingHandCursor
-        onClicked: selected(plantingId)
+        onClicked: if (!dragActive) selected(plantingId)
         onPressed: parent.grabToImage(function(result) {
             draggable.Drag.imageSource = result.url
         })
