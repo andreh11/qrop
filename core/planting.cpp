@@ -206,6 +206,34 @@ void Planting::update(int id, const QVariantMap &map) const
     update(id, map, {});
 }
 
+int Planting::plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const
+{
+    double length = get(map, record, "length").toDouble();
+    int rows = get(map, record, "rows").toInt();
+    int spacing = get(map, record, "spacing_plants").toInt();
+    return spacing > 0 ? qCeil(length / spacing * 100 * rows) : 0;
+}
+
+void Planting::updateKeywords(int plantingId, const QVariantList newList, const QVariantList oldList) const
+{
+    QList<int> toAdd;
+    QList<int> toRemove;
+
+    for (const auto &newId : newList)
+        if (!oldList.contains(newId.toInt()))
+            toAdd.push_back(newId.toInt());
+
+    for (const auto &oldId : oldList)
+        if (!newList.contains(oldId))
+            toRemove.push_back(oldId.toInt());
+
+    for (const int keywordId : toAdd)
+        keyword->addPlanting(plantingId, keywordId);
+
+    for (const int keywordId : toRemove)
+        keyword->removePlanting(plantingId, keywordId);
+}
+
 void Planting::update(int id, const QVariantMap &map, const QVariantMap &locationLengthMap) const
 {
     QVariantMap newMap(map);
@@ -218,14 +246,8 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
 
     // If the length, the number of rows or the in-row spacing have changed,
     // recompute the number of plants needed.
-    if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants")) {
-        double length = get(newMap, record, "length").toDouble();
-        int rows = get(newMap, record, "rows").toInt();
-        int spacing = get(newMap, record, "spacing_plants").toInt();
-
-        int plantsNeeded = spacing > 0 ? qCeil(length / spacing * 100 * rows) : 0;
-        newMap["plants_needed"] = plantsNeeded;
-    }
+    if (newMap.contains("length") || newMap.contains("rows") || newMap.contains("spacing_plants"))
+        newMap["plants_needed"] = plantsNeeded(newMap, record);
 
     auto newPlantingType = static_cast<PlantingType>(get(newMap, record, "planting_type").toInt());
     auto oldPlantingType = static_cast<PlantingType>(record.value("planting_type").toInt());
@@ -311,24 +333,9 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
 
     // Handle bulk editing of keywords.
     if (newMap.contains("keyword_new_ids")) {
-        const auto &keywordIdList = newMap.take("keyword_new_ids").toList();
+        const auto &newKeywordIdList = newMap.take("keyword_new_ids").toList();
         const auto &oldKeywordIdList = newMap.take("keyword_old_ids").toList();
-        QList<int> toAdd;
-        QList<int> toRemove;
-
-        for (const auto &newId : keywordIdList)
-            if (!oldKeywordIdList.contains(newId.toInt()))
-                toAdd.push_back(newId.toInt());
-
-        for (const auto &oldId : oldKeywordIdList)
-            if (!keywordIdList.contains(oldId))
-                toRemove.push_back(oldId.toInt());
-
-        for (const int keywordId : toAdd)
-            keyword->addPlanting(id, keywordId);
-
-        for (const int keywordId : toRemove)
-            keyword->removePlanting(id, keywordId);
+        updateKeywords(id, newKeywordIdList, oldKeywordIdList);
     }
 
     // Update locations.

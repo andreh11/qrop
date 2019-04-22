@@ -84,6 +84,9 @@ private:
     QList<int> yearPlantingList(int year) const;
     QDate dateFromString(const QString &string, const int targetYear) const;
     void updateTaskType(int plantingId, PlantingType oldType, PlantingType newType) const;
+
+    int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
+    void updateKeywords(int plantingId, const QVariantList newList, const QVariantList oldList) const;
 };
 
 #endif // PLANTING_H
