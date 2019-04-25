@@ -18,6 +18,7 @@ add_library(core SHARED
 	harvestmodel.cpp 
 	rolemodel.cpp 
 	usermodel.cpp 
+        templatetaskmodel.cpp
 	tasktemplatemodel.cpp 
 	tasktypemodel.cpp 
 	taskmethodmodel.cpp 
@@ -28,6 +29,7 @@ add_library(core SHARED
 	databaseutility.cpp 
 	planting.cpp 
 	task.cpp 
+        tasktemplate.cpp
 	location.cpp 
 	sortfilterproxymodel.cpp 
 	variety.cpp 

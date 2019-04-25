@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SQLTASKMODEL_H
-#define SQLTASKMODEL_H
+#ifndef TASKMODEL_H
+#define TASKMODEL_H
 
 #include <QDate>
 
@@ -82,4 +82,4 @@ private:
     bool isOverdue(int row, const QModelIndex &parent) const;
 };
 
-#endif // SQLTASKMODEL_H
+#endif // TASKMODEL_H

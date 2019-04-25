@@ -214,7 +214,7 @@ Page {
         color: page.hasSelection ? Material.accent : "white"
         visible: true
         width: parent.width
-        height: 48
+        height: Units.toolBarHeight
 
         Behavior on color { ColorAnimation { duration: 150 } }
 

@@ -31,12 +31,13 @@ Flickable {
     property var taskValueMap
     property int taskTypeId: -1
     property bool sowPlantTask: false
+    property bool templateMode: false
 
     property int taskMethodId: methodField.selectedId
     property int taskImplementId: implementField.selectedId
 
     readonly property bool accepted: taskTypeId > 0
-                                     && ((plantingTask && plantingIdList.length)
+                                     && (templateMode || (plantingTask && plantingIdList.length)
                                          || (locationTask && locationIdList.length))
     readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
@@ -46,6 +47,20 @@ Flickable {
     readonly property alias plantingIdList: plantingList.plantingIdList
     readonly property var locationIdList: locationView.selectedLocationIds()
     property string completedDate: ""
+
+    property int taskTemplateId: -1
+    property int templateDateType: {
+        if (greenhouseSowingButton.checked)
+            return 1;
+        else if (plantingButton.checked)
+            return 0;
+        else if (firstHarvestButton.checked)
+            return 2;
+        else if (lastHarvestButton.checked)
+            return 3;
+    }
+    readonly property int linkDays: Number(daysField.text)
+
 
     readonly property var values: {
         "assigned_date": dueDateString,
@@ -57,6 +72,17 @@ Flickable {
         "task_implement_id": taskImplementId,
         "planting_ids": plantingTask ? plantingIdList : [],
         "location_ids": locationTask ? locationIdList : []
+    }
+
+    readonly property var templateValues: {
+        "assigned_date": " ",
+        "template_date_type": templateDateType,
+        "task_template_id": taskTemplateId,
+        "link_days": linkDays * (beforeButton.checked ? -1 : 1),
+        "duration": duration,
+        "task_type_id": taskTypeId,
+        "task_method_id": taskMethodId,
+        "task_implement_id": taskImplementId
     }
 
     function setFormValues(val) {
@@ -108,6 +134,35 @@ Flickable {
                 locationView.visible = false
                 locationView.selectLocationIds(list)
                 locationView.visible = true
+            }
+        }
+
+        if ("link_days" in val) {
+            var days = val["link_days"]
+            if (days < 0) {
+                daysField.text = -days ;
+                beforeButton.checked = true;
+            } else {
+                daysField.text = days ;
+                afterButton.checked = true;
+            }
+        }
+
+        if ("template_date_type" in val) {
+            var type = Number(val["template_date_type"]);
+            switch (type) {
+            case 0:
+                plantingButton.checked = true;
+                break;
+            case 1:
+                greenhouseSowingButton.checked = true;
+                break;
+            case 2:
+                firstHarvestButton.checked = true;
+                break;
+            case 3:
+                lastHarvestButton.checked = true;
+                break;
             }
         }
     }
@@ -176,7 +231,7 @@ Flickable {
         ColumnLayout {
             width: parent.width
             spacing: Units.formSpacing
-            visible: !sowPlantTask
+            visible: templateMode || !sowPlantTask
 
             ComboTextField {
                 id: methodField
@@ -264,6 +319,7 @@ Flickable {
 
                 DatePicker {
                     id: dueDatepicker
+                    visible: !templateMode
                     labelText: qsTr("Due Date")
                     floatingLabel: true
                     Layout.minimumWidth: 100
@@ -273,10 +329,10 @@ Flickable {
 
                 MyTextField {
                     id: durationField
-                    visible: !sowPlantTask
+                    visible: templateMode || !sowPlantTask
                     text: "0"
                     suffixText: qsTr("days")
-                    labelText: qsTr("Duration")
+                    labelText: qsTr("Duration in field")
                     floatingLabel: true
                     validator: IntValidator { bottom: 0; top: 999 }
                     Layout.minimumWidth: 80
@@ -285,6 +341,7 @@ Flickable {
 
                 MyTextField {
                     id: laborTimeField
+                    visible: !templateMode
                     labelText: qsTr("Labor Time")
                     floatingLabel: true
                     Layout.minimumWidth: 80
@@ -301,7 +358,7 @@ Flickable {
             id: radioRow
             width: parent.width
             spacing: Units.smallSpacing
-            visible: !sowPlantTask && mode === "add"
+            visible: !templateMode && !sowPlantTask && mode === "add"
             Layout.fillWidth: true
             Layout.topMargin: -plantingRadioButton.padding * 4
             Layout.bottomMargin: -plantingRadioButton.padding * 4
@@ -321,7 +378,7 @@ Flickable {
         }
 
         FormGroupBox {
-            visible: plantingRadioButton.checked && !sowPlantTask
+            visible: !templateMode && plantingRadioButton.checked && !sowPlantTask
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
 
@@ -391,7 +448,7 @@ Flickable {
         }
 
         FormGroupBox {
-            visible: locationRadioButton.checked && !sowPlantTask
+            visible: !templateMode && locationRadioButton.checked && !sowPlantTask
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
 
@@ -422,6 +479,77 @@ Flickable {
                     text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds()))
                     Layout.minimumHeight: 26
                     Layout.fillWidth: true
+                }
+            }
+        }
+
+        FormGroupBox {
+            visible: templateMode
+            topPadding: Units.smallSpacing
+            bottomPadding: Units.smallSpacing
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: Units.smallSpacing
+
+                MyTextField {
+                    id: daysField
+                    text: "0"
+                    suffixText: qsTr("days")
+                    labelText: qsTr("Plan for")
+                    floatingLabel: true
+                    validator: IntValidator { bottom: 0; top: 999 }
+                    Layout.minimumWidth: 80
+                    Layout.fillWidth: true
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        RadioButton {
+                            id: beforeButton
+                            text: qsTr("Before")
+                            checked: true
+                        }
+
+                        RadioButton {
+                            id: afterButton
+                            text: qsTr("After")
+                        }
+
+                        VerticalFiller { }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        RadioButton {
+                            id: greenhouseSowingButton
+                            text: qsTr("Greenhouse sowing")
+                            checked: true
+                        }
+
+                        RadioButton {
+                            id: plantingButton
+                            text: qsTr("Sowing/planting")
+                        }
+
+                        RadioButton {
+                            id: firstHarvestButton
+                            text: qsTr("First harvest")
+                        }
+
+                        RadioButton {
+                            id: lastHarvestButton
+                            text: qsTr("Last harvest")
+                        }
+
+                        VerticalFiller { }
+                    }
                 }
             }
         }

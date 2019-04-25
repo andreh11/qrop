@@ -45,6 +45,7 @@
 #include "planting.h"
 #include "print.h"
 #include "task.h"
+#include "tasktemplate.h"
 #include "variety.h"
 #include "version.h"
 
@@ -62,7 +63,9 @@
 #include "taskimplementmodel.h"
 #include "taskmethodmodel.h"
 #include "taskmodel.h"
+#include "tasktemplatemodel.h"
 #include "tasktypemodel.h"
+#include "templatetaskmodel.h"
 #include "transplantlistmodel.h"
 #include "treemodel.h"
 #include "unitmodel.h"
@@ -92,7 +95,6 @@ void registerFonts()
 
 void registerTypes()
 {
-    qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
     qmlRegisterType<HarvestModel>("io.qrop.components", 1, 0, "HarvestModel");
@@ -100,17 +102,20 @@ void registerTypes()
     qmlRegisterType<LocationModel>("io.qrop.components", 1, 0, "LocationModel");
     qmlRegisterType<NoteModel>("io.qrop.components", 1, 0, "NoteModel");
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
+    qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
+    qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
     qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
+    qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
     qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");
     qmlRegisterType<TaskModel>("io.qrop.components", 1, 0, "TaskModel");
+    qmlRegisterType<TemplateTaskModel>("io.qrop.components", 1, 0, "TemplateTaskModel");
+    qmlRegisterType<TaskTemplateModel>("io.qrop.components", 1, 0, "TaskTemplateModel");
     qmlRegisterType<TaskTypeModel>("io.qrop.components", 1, 0, "TaskTypeModel");
     qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
-    qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
-    qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
 
     qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
 
@@ -159,6 +164,16 @@ void registerTypes()
                                        Q_UNUSED(engine)
                                        Q_UNUSED(scriptEngine)
                                        auto *task = new Task();
+                                       return task;
+                                   });
+
+    qmlRegisterSingletonType<Task>("io.qrop.components", 1, 0, "TemplateTask",
+                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                       Q_UNUSED(engine)
+                                       Q_UNUSED(scriptEngine)
+                                       auto *task = new Task();
+                                       task->setTable("task");
+                                       task->setViewTable("template_task_view");
                                        return task;
                                    });
 
@@ -222,6 +237,14 @@ void registerTypes()
                                                   seedCompany->setTable("seed_company");
                                                   return seedCompany;
                                               });
+
+    qmlRegisterSingletonType<TaskTemplate>("io.qrop.components", 1, 0, "TaskTemplate",
+                                           [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                               Q_UNUSED(engine)
+                                               Q_UNUSED(scriptEngine)
+                                               auto *tasktemplate = new TaskTemplate();
+                                               return tasktemplate;
+                                           });
 
     qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskType",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {

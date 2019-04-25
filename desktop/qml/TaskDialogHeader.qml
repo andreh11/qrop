@@ -16,6 +16,7 @@ Rectangle {
     property int week
     property int year
     property bool sowPlantTask: false
+    property bool templateMode: false
 
     function reset() {
         completedDate = "";
@@ -80,7 +81,7 @@ Rectangle {
             model: taskTypeModel
             showAddItem: true
             addItemText: text ? qsTr('Add new type "%1"').arg(text) : qsTr("Add new type")
-            enabled: !sowPlantTask
+            enabled: templateMode || !sowPlantTask
             Layout.topMargin: Units.smallSpacing
             textRole: function (model) { return model.type; }
             idRole: function (model) { return model.task_type_id; }

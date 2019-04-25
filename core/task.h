@@ -55,15 +55,9 @@ public:
     Q_INVOKABLE void duplicateLocationTasks(int sourceLocationId, int newLocationId) const;
     Q_INVOKABLE void removeLocationTasks(int locationId) const;
 
-    Q_INVOKABLE void applyTemplate(int templateId, int plantingId) const;
-    Q_INVOKABLE void removeTemplate(int templateId, int plantingId) const;
-
     int greenhouseSowingTask(int plantingId) const;
     int plantingTask(int plantingId) const;
     void updateType(int taskId, TaskType type) const;
-
-private:
-    QList<int> templateTasks(int templateId) const;
 };
 
 #endif // TASK_H

@@ -150,7 +150,7 @@ Page {
             color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
             visible: true
             width: parent.width
-            height: 48
+            height: Units.toolBarHeight
 
             RowLayout {
                 id: buttonRow

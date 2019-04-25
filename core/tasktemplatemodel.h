@@ -20,14 +20,14 @@
 #include <QObject>
 
 #include "core_global.h"
-#include "sqltablemodel.h"
+#include "sortfilterproxymodel.h"
 
-class CORESHARED_EXPORT TaskTemplateModel : public SqlTableModel
+class CORESHARED_EXPORT TaskTemplateModel : public SortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    TaskTemplateModel(QObject *parent = nullptr);
+    TaskTemplateModel(QObject *parent = nullptr, const QString &tableName = "task_template");
     //    Q_INVOKABLE void applyTemplate(int templateId, int plantingId);
     //    Q_INVOKABLE void removeTemplate(int templateId, int plantingId);
 };

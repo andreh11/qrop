@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,13 @@ Dialog {
     property int taskTypeId: Number(taskValueMap['task_type_id'])
     property bool sowPlantTask: mode === "edit" && dialog.taskTypeId <= 3
 
+    property bool templateMode: false
+    property int taskTemplateId: -1
+
     function reset() {
         taskDialogHeader.reset();
         taskForm.reset();
+        taskTemplateId = -1;
     }
 
     function addTask() {
@@ -54,13 +58,24 @@ Dialog {
 
         taskDialogHeader.reset();
 
-        var typeName = TaskType.mapFromId(taskTypeId)["type"];
-        taskDialogHeader.typeField.selectedId = taskTypeId;
-        taskDialogHeader.typeField.text = typeName;
+        if (templateMode) {
+            var templateTaskId = TemplateTask.mapFromId(taskId)["task_type_id"]
+            var templateTypeName = TaskType.mapFromId(templateTaskId)["type"];
+            taskDialogHeader.typeField.selectedId = templateTaskId;
+            taskDialogHeader.typeField.text = templateTypeName;
 
-        taskDialogHeader.completedDate = taskValueMap['completed_date']
-        taskForm.reset();
-        taskForm.setFormValues(taskValueMap)
+            var valueMap = TemplateTask.mapFromId("template_task_view", taskId);
+            taskForm.reset();
+            taskForm.setFormValues(valueMap)
+        } else {
+            var typeName = TaskType.mapFromId(taskTypeId)["type"];
+            taskDialogHeader.typeField.selectedId = taskTypeId;
+            taskDialogHeader.typeField.text = typeName;
+            taskDialogHeader.completedDate = taskValueMap['completed_date']
+            taskForm.reset();
+            taskForm.setFormValues(taskValueMap)
+        }
+
         dialog.open();
     }
 
@@ -71,7 +86,8 @@ Dialog {
     focus: true
     closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
-    height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing : parent.height - 2 * Units.smallSpacing
+    height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing
+                         : parent.height - 2 * Units.smallSpacing
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
@@ -88,6 +104,7 @@ Dialog {
         week: dialog.week
         year: dialog.year
         sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
+        templateMode: dialog.templateMode
     }
 
     TaskForm {
@@ -101,6 +118,8 @@ Dialog {
         taskId: dialog.taskId
         mode: dialog.mode
         sowPlantTask: dialog.mode === "edit" && dialog.taskTypeId <= 3
+        templateMode: dialog.templateMode
+        taskTemplateId: dialog.taskTemplateId
     }
 
     footer: AddEditDialogFooter {
@@ -108,13 +127,11 @@ Dialog {
         mode: dialog.mode
     }
 
-
     onAccepted: {
         if (mode === "add") {
-            console.log(taskForm.values["task_implement_id"]);
-            Task.add(taskForm.values);
+            Task.add(templateMode ? taskForm.templateValues : taskForm.values);
         } else {
-            Task.update(dialog.taskId, taskForm.values);
+            Task.update(dialog.taskId, templateMode ? taskForm.templateValues : taskForm.values);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2018 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QString>
+import QtQuick 2.11
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 
-#include "tasktemplatemodel.h"
+Item {
+    id: control
 
-TaskTemplateModel::TaskTemplateModel(QObject *parent, const QString &tableName)
-    : SortFilterProxyModel(parent, tableName)
-{
-    setSortColumn("name");
+    property alias text: label.text
+
+    implicitHeight: Units.rowHeight
+
+    Label {
+        id: label
+        width: parent.width
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        anchors.verticalCenter: parent.verticalCenter
+    }
 }

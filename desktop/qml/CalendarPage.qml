@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -220,8 +220,7 @@ Page {
     }
 
     Pane {
-        width: parent.width
-        height: parent.height
+        id: mainPane
         anchors.fill: parent
         padding: 0
         Material.elevation: 1
@@ -231,7 +230,7 @@ Page {
             color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
             visible: true
             width: parent.width
-            height: 48
+            height: Units.toolBarHeight
 
             RowLayout {
                 id: buttonRow
@@ -267,6 +266,28 @@ Page {
                         onPressed:  mouse.accepted = false
                     }
                     onClicked:  taskDialog.addTask()
+                }
+
+                Button {
+                    id: templatesButton
+                    text: qsTr("Templates")
+                    flat: true
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    visible: checks === 0
+                    highlighted: true
+
+                    MouseArea {
+                        id: tmouseArea
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        anchors.fill: parent
+                        onPressed:  mouse.accepted = false
+                    }
+
+                    onClicked: {
+                        mainPane.visible = false;
+                        templatePane.visible = true;
+                    }
                 }
 
                 SearchField {
@@ -311,7 +332,7 @@ Page {
                     text: "\ue8ad"
                     hoverEnabled: true
                     visible: largeDisplay && checks == 0
-//                    Layout.rightMargin: -padding*2
+                    //                    Layout.rightMargin: -padding*2
                     Layout.rightMargin: 16 - padding
 
                     ToolTip.visible: hovered
@@ -634,21 +655,6 @@ Page {
                             spacing: -16
                             anchors.verticalCenter: parent.verticalCenter
 
-                            // TODO: notes handling
-                            //                            MyToolButton {
-
-                            //                                id: noteButton
-                            //                                anchors.verticalCenter: parent.verticalCenter
-                            //                                text: "\uf249"
-                            //                                font.family: "Font Awesome 5 Free Solid"
-                            //                                visible: !model.done
-                            //                                onClicked: {
-                            //                                    Task.delay(model.task_id, -1);
-                            //                                    refresh();
-                            //                                }
-                            //                                ToolTip.text: qsTr("Show notes")
-                            //                                ToolTip.visible: hovered
-                            //                            }
 
                             MyToolButton {
                                 id: backwardDelayButton
@@ -845,6 +851,17 @@ Page {
                 }
             }
 
+        }
+    }
+
+    TemplatePane {
+        id: templatePane
+        visible: false
+        anchors.fill: parent
+
+        onGoBack:  {
+            mainPane.visible = true;
+            templatePane.visible = false;
         }
     }
 }

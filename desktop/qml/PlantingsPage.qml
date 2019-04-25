@@ -339,7 +339,7 @@ Page {
                 color: checks > 0 ? Material.accent : "white"
                 visible: true
                 width: parent.width
-                height: 48
+                height: Units.toolBarHeight
                 Material.elevation: 2
 
                 Behavior on color { ColorAnimation { duration: 150 } }

@@ -47,6 +47,7 @@ QtObject {
     readonly property int rowHeight: 40 // Height of rows in tables.
     readonly property int monthWidth: 60 // Width of a month in a timeline.
     readonly property int timegraphWidth: monthWidth * 12
+    readonly property int toolBarHeight: 48
 
     function coordinate(day) {
         if (day < 0)

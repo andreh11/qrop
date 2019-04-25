@@ -85,5 +85,10 @@
         <file>qml/ComboTextField.qml</file>
         <file>qml/ButtonCheckBox.qml</file>
         <file>qml/AboutDialog.qml</file>
+        <file>qml/TemplateDateSection.qml</file>
+        <file>qml/VerticalFiller.qml</file>
+        <file>qml/TemplatePane.qml</file>
+        <file>qml/TemplateListView.qml</file>
+        <file>qml/VerticalThinDivider.qml</file>
     </qresource>
 </RCC>
