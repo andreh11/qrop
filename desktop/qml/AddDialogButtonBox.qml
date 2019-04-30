@@ -25,8 +25,8 @@ Item {
     property alias acceptText: acceptButton.text
     property alias rejectText: rejectButton.text
 
-    signal accept()
-    signal reject()
+    signal accepted()
+    signal rejected()
 
     implicitHeight: childrenRect.height
 
@@ -38,7 +38,7 @@ Item {
         flat: true
         text: qsTr("Add")
         enabled: acceptableInput
-        onClicked: control.accept();
+        onClicked: control.accepted();
         Keys.onReturnPressed: clicked()
     }
     
@@ -47,7 +47,7 @@ Item {
         flat: true
         text: qsTr("Cancel")
         anchors.right: acceptButton.left
-        onClicked: control.reject();
+        onClicked: control.rejected();
         Material.foreground: Material.accent
         Keys.onReturnPressed: clicked()
     }

@@ -136,7 +136,7 @@ Page {
     TaskDialog {
         id: taskDialog
         width: parent.width / 2
-        //        height: parent.height
+//        height: parent.height - 2 * Units.mediumSpacing
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         onAccepted: page.refresh()

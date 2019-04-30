@@ -108,6 +108,7 @@ Rectangle {
         TaskCompleteButton {
             id: taskCompleteButton
             done: control.completedDate
+            visible: !templateMode
 
             ToolTip.text: control.completedDate
                           ? qsTr("Done on %1. Click to undo.").arg(Date.fromLocaleDateString(Qt.locale(), control.completedDate, "yyyy-MM-dd").toLocaleDateString(Qt.locale(), Locale.ShortFormat))

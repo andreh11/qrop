@@ -86,8 +86,10 @@ Dialog {
     focus: true
     closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
-    height: sowPlantTask ? taskForm.implicitHeight + Units.smallSpacing
-                         : parent.height - 2 * Units.smallSpacing
+    padding: Units.mediumSpacing
+    implicitHeight: taskDialogHeader.implicitHeight + taskForm.implicitHeight
+//    implicitHeight: (!templateMode && sowPlantTask) ? taskForm.implicitHeight + Units.smallSpacing
+//                                            : parent.height - 2 * Units.smallSpacing
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
@@ -132,6 +134,8 @@ Dialog {
             Task.add(templateMode ? taskForm.templateValues : taskForm.values);
         } else {
             Task.update(dialog.taskId, templateMode ? taskForm.templateValues : taskForm.values);
+            if (templateMode && taskTemplateId > 0 && taskForm.templateApplyCurrent)
+                Task.updateTemplateTasks(taskTemplateId, taskForm.templateValues);
         }
     }
 }

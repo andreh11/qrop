@@ -44,8 +44,8 @@ Dialog {
 
     footer: AddDialogButtonBox {
         width: parent.width
-        onAccept: control.accept()
-        onReject: control.reject()
+        onAccepted: control.accept()
+        onRejected: control.reject()
         acceptableInput: acceptableForm
     }
 

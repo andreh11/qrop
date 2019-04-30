@@ -18,21 +18,41 @@
 #include <QDebug>
 #include <QVariantMap>
 
+#include "planting.h"
 #include "tasktemplate.h"
 #include "task.h"
 
 TaskTemplate::TaskTemplate(QObject *parent)
     : DatabaseUtility(parent)
+    , mPlanting(new Planting(this))
     , mTask(new Task(this))
 {
     m_table = "task_template";
     m_viewTable = "task_template";
 }
 
-/*! Return a list of template tasks ids for the the template \a templateId. */
+/*!
+ * Return a list of template tasks ids for the the template
+ * \a templateId.
+ */
 QList<int> TaskTemplate::tasks(int templateId) const
 {
-    QString queryString("SELECT * FROM task WHERE assigned_date = \" \" AND task_template_id = %1");
+    QString queryString("SELECT * FROM task "
+                        "WHERE assigned_date = \" \" "
+                        "AND task_template_id = %1");
+    return queryIds(queryString.arg(templateId), "task_id");
+}
+
+/*!
+ * Return a list of the ids of the uncompleted tasks created from
+ * the task template \a templateId.
+ */
+QList<int> TaskTemplate::uncompletedTasks(int templateId) const
+{
+    QString queryString("SELECT task_id FROM task "
+                        "WHERE assigned_date != \" \" "
+                        "AND completed_date IS NULL "
+                        "AND template_task_id = %1");
     return queryIds(queryString.arg(templateId), "task_id");
 }
 
@@ -50,7 +70,7 @@ int TaskTemplate::duplicate(int id) const
 
 void TaskTemplate::remove(int id) const
 {
-    QString queryString = "DELETE FROM task WHERE task_template_id = %1";
+    QString queryString = "DELETE FROM task WHERE assigned_date = \" \" AND task_template_id = %1";
     QSqlQuery query(queryString.arg(id));
     query.exec();
     debugQuery(query);
@@ -60,40 +80,54 @@ void TaskTemplate::remove(int id) const
 /*! Create tasks from the template \a templateId for the planting \a plantingId */
 void TaskTemplate::apply(int templateId, int plantingId) const
 {
+    if (templateId < 0)
+        return;
+    if (plantingId < 0)
+        return;
+
     auto plantingRecord = recordFromId("planting", plantingId);
     auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
 
     auto taskIds = mTask->sowPlantTaskIds(plantingId);
-    int sowTaskId = taskIds[0];
-    int transplantTaskId = taskIds[1];
+    int sowTaskId = taskIds.first;
+    int transplantTaskId = taskIds.second;
 
     if (sowTaskId == -1 && transplantTaskId == -1) {
-        qDebug() << Q_FUNC_INFO << "both sow task and transplant task id are invalid";
+        qDebug() << "[TaskTemplate::apply] both sow task and transplant task ids are invalid";
         return;
     }
 
     for (const int taskId : tasks(templateId)) {
         auto map = mapFromId("task", taskId);
+        map.remove("task_id");
+        map.remove("assigned_date");
+        map.remove("link_task_id");
+
         auto templateDateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
-        switch (templateDateType) {
-        case TemplateDateType::FieldSowPlant:
-            map["link_task_id"] =
-                    plantingType == PlantingType::DirectSeeded ? sowTaskId : transplantTaskId;
-            break;
-        case TemplateDateType::GreenhouseStart:
+        int linkDays = map["link_days"].toInt();
+        QDate assignedDate;
+        if (templateDateType == TemplateDateType::FieldSowPlant) {
+            if (plantingType == PlantingType::DirectSeeded)
+                map["link_task_id"] = sowTaskId;
+            else
+                map["link_task_id"] = transplantTaskId;
+            assignedDate = mPlanting->plantingDate(plantingId).addDays(linkDays);
+        } else if (templateDateType == TemplateDateType::GreenhouseStart) {
             map["link_task_id"] = plantingType == PlantingType::TransplantRaised ? sowTaskId : -1;
-            break;
-        case TemplateDateType::FirstHarvest:
+            assignedDate = mPlanting->sowingDate(plantingId).addDays(linkDays);
+        } else if (templateDateType == TemplateDateType::FirstHarvest) {
             map["link_task_id"] = -1;
-            break;
-        case TemplateDateType::LastHarvest:
+            assignedDate = mPlanting->begHarvestDate(plantingId).addDays(linkDays);
+        } else if (templateDateType == TemplateDateType::LastHarvest) {
             map["link_task_id"] = -1;
-            break;
+            assignedDate = mPlanting->endHarvestDate(plantingId).addDays(linkDays);
         }
 
+        map["assigned_date"] = assignedDate.toString(Qt::ISODate);
         if (map["link_task_id"] != -1) {
-            int id = add(map);
-            mTask->addPlanting(plantingId, id);
+            int taskId = mTask->add(map);
+            if (taskId > 0)
+                mTask->addPlanting(plantingId, taskId);
         }
     }
 }
@@ -105,4 +139,46 @@ void TaskTemplate::unapply(int templateId, int plantingId) const
                         "(SELECT task.task_id FROM task JOIN planting_task WHERE planting_id = %2");
     QSqlQuery query(queryString.arg(templateId).arg(plantingId));
     debugQuery(query);
+}
+
+/*!  */
+void TaskTemplate::updateTemplateTasks(int taskId, const QVariantMap &map) const
+{
+    //    for (const int taskId : uncompletedTasks(templateId)) {
+    //        auto taskMap = mapFromId("task", taskId);
+    //        const auto assignedDate = QDate::fromString(taskMap["assigned_date"].toString(), Qt::ISODate);
+    //        const auto dateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
+    //        const int linkDays = map["link_days"].toInt();
+
+    //        auto plantingIdList = mTask->taskPlantings(taskId);
+    //        if (plantingIdList.length() > 1) {
+    //            qDebug() << "[updateTemplateTasks] Template tasks must be linked to only one
+    //            planting."; continue;
+    //        }
+
+    //        int plantingId = plantingIdList.first();
+    //        auto plantingRecord = recordFromId("planting", plantingId);
+    //        auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
+
+    //        auto taskIds = mTask->sowPlantTaskIds(plantingId);
+    //        int sowTaskId = taskIds.first;
+    //        int transplantTaskId = taskIds.second;
+
+    //        QDate newDate;
+    //        if (dateType == TemplateDateType::FieldSowPlant) {
+    //            if (plantingType == PlantingType::DirectSeeded)
+    //                taskMap["link_task_id"] = sowTaskId;
+    //            else
+    //                taskMap["link_task_id"] = transplantTaskId;
+    //            newDate = mPlanting->plantingDate(plantingId).addDays(linkDays);
+    //        } else if (dateType == TemplateDateType::GreenhouseStart) {
+    //            taskMap["link_task_id"] = plantingType == PlantingType::TransplantRaised ?
+    //            sowTaskId : -1; newDate = mPlanting->sowingDate(plantingId).addDays(linkDays);
+    //        } else {
+    //            // TODO:
+    //            //        TemplateDateType::FirstHarvest
+    //            //        TemplateDateType::LastHarvest:
+    //            taskMap["link_task_id"] = -1;
+    //        }
+    //    }
 }

@@ -25,12 +25,14 @@ DialogButtonBox {
     property string mode: "add"
     property string rejectToolTip: ""
 
+    signal leftButtonClicked()
+
     Button {
         id: rejectButton
         flat: true
         text: qsTr("Cancel")
-        anchors.right: applyButton.left
-        anchors.rightMargin: Units.smallSpacing
+//        anchors.right: applyButton.left
+//        anchors.rightMargin: Units.mediumSpacing
         Material.foreground: Material.accent
         DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
     }
@@ -39,8 +41,8 @@ DialogButtonBox {
         id: applyButton
         Material.background: Material.accent
         Material.foreground: "white"
-        anchors.right: parent.right
-        anchors.rightMargin: Units.mediumSpacing
+//        anchors.right: parent.right
+//        anchors.rightMargin: Units.mediumSpacing
         text: mode === "add" ? qsTr("Add") : qsTr("Edit")
 
         DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
@@ -48,4 +50,16 @@ DialogButtonBox {
         ToolTip.text: control.rejectToolTip
         ToolTip.visible: ToolTip.text && hovered && !enabled
     }
+
+//    Button {
+//        id: leftButton
+////        visible: showLeftButton
+//        Material.foreground: Material.accent
+//        anchors.left: parent.left
+//        anchors.leftMargin: Units.smallSpacing
+//        flat: true
+//        onClicked: leftButtonClicked()
+//        Keys.onReturnPressed: clicked()
+//    }
+
 }

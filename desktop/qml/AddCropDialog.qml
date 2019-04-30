@@ -50,8 +50,8 @@ Dialog {
 
     footer: AddDialogButtonBox {
         width: parent.width
-        onAccept: addCropDialog.accept()
-        onReject: addCropDialog.reject()
+        onAccepted: addCropDialog.accept()
+        onRejected: addCropDialog.reject()
         acceptableInput: acceptableForm
     }
 

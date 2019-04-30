@@ -21,6 +21,8 @@ import QtQuick.Controls.Material 2.2
 GroupBox {
     id: control
 
+    property alias backgroundColor: backgroundRectangle.color
+
 //    padding: Units.formSpacing
     padding: 1
 //    topPadding: padding + 8
@@ -28,12 +30,13 @@ GroupBox {
     width: parent.width
 
     background: Rectangle {
+        id: backgroundRectangle
         height: parent.height
 //        width: 10
-        width: 0
+//        width: 0
         implicitWidth: 10
         anchors.topMargin: control.title ? label.height : 0
-        color: Material.primary
+        color: "transparent"
     }
 
     label: Label {

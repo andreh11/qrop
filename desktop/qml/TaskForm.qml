@@ -32,6 +32,7 @@ Flickable {
     property int taskTypeId: -1
     property bool sowPlantTask: false
     property bool templateMode: false
+    readonly property alias templateApplyCurrent: applyCurrentCheckBox.checked
 
     property int taskMethodId: methodField.selectedId
     property int taskImplementId: implementField.selectedId
@@ -60,7 +61,6 @@ Flickable {
             return 3;
     }
     readonly property int linkDays: Number(daysField.text)
-
 
     readonly property var values: {
         "assigned_date": dueDateString,
@@ -184,6 +184,7 @@ Flickable {
         laborTimeField.text = "00:00";
         plantingRadioButton.checked = true;
         locationRadioButton.checked = false;
+        applyCurrentCheckBox.checked = false;
     }
 
     focus: true
@@ -192,7 +193,8 @@ Flickable {
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
-    implicitHeight: 200
+//    implicitHeight: 200
+    implicitHeight: !templateMode && sowPlantTask ? datesGroupBox.implicitHeight + 100 : mainColumn.implicitHeight + 100
     Layout.minimumHeight: implicitHeight
 
     Shortcut {
@@ -260,7 +262,8 @@ Flickable {
                     title: qsTr("Add Method")
 
                     onAccepted:  {
-                        var id = TaskMethod.add({"method" : text, "task_type_id" : control.taskTypeId});
+                        var id = TaskMethod.add({"method" : text,
+                                                 "task_type_id" : control.taskTypeId});
                         taskMethodModel.refresh();
                         methodField.selectedId = id;
                         methodField.text = text;
@@ -305,6 +308,13 @@ Flickable {
                     }
                     onRejected: implementField.reset();
                 }
+            }
+
+            MyTextArea {
+                id: descriptionTextArea
+                labelText: qsTr("Description")
+                Layout.fillWidth: true
+//                Layout.preferredHeight: 200
             }
         }
 
@@ -378,9 +388,11 @@ Flickable {
         }
 
         FormGroupBox {
+            id: plantingGroupBox
             visible: !templateMode && plantingRadioButton.checked && !sowPlantTask
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
+            backgroundColor: "white"
 
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -409,9 +421,9 @@ Flickable {
                                 return Qt.Checked
                             }
                         }
+                        ToolTip.visible: hovered
                         ToolTip.text: checkState == Qt.Checked ? qsTr("Unelect all plantings")
                                                                : qsTr("Select all plantings")
-                        ToolTip.visible: hovered
                     }
 
                     SearchField {
@@ -439,10 +451,11 @@ Flickable {
                     implicitHeight: 30
                     showActivePlantings: currentPlantingsCheckbox.checked
 
-                    Layout.minimumHeight: 30
+                    Layout.minimumHeight: 400
                     Layout.minimumWidth: 100
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    Layout.leftMargin: Units.smallSpacing
                 }
             }
         }
@@ -470,6 +483,7 @@ Flickable {
                     editMode: false
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.minimumHeight: 400
                 }
 
                 Label {
@@ -488,8 +502,8 @@ Flickable {
             topPadding: Units.smallSpacing
             bottomPadding: Units.smallSpacing
 
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
             ColumnLayout {
                 anchors.fill: parent
@@ -511,6 +525,7 @@ Flickable {
 
                     ColumnLayout {
                         Layout.fillWidth: true
+                        spacing: -beforeButton.padding
                         RadioButton {
                             id: beforeButton
                             text: qsTr("Before")
@@ -526,6 +541,7 @@ Flickable {
                     }
 
                     ColumnLayout {
+                        spacing: -greenhouseSowingButton.padding
                         Layout.fillWidth: true
                         RadioButton {
                             id: greenhouseSowingButton
@@ -550,6 +566,14 @@ Flickable {
 
                         VerticalFiller { }
                     }
+                }
+
+                CheckBox {
+                    id: applyCurrentCheckBox
+                    text: qsTr("Apply update to all current applications of this template.")
+                    Layout.minimumHeight: implicitHeight
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
             }
         }

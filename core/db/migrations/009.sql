@@ -14,7 +14,8 @@ SELECT task.task_id as template_task_view_id, task.*,
 FROM task
 LEFT JOIN task_type using(task_type_id)
 LEFT JOIN task_method using (task_method_id)
-LEFT JOIN task_implement using (task_implement_id);
+LEFT JOIN task_implement using (task_implement_id)
+WHERE assigned_date = " ";
 
 PRAGMA user_version = 9;
 

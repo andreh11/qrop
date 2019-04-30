@@ -10,5 +10,5 @@ cp -R core/* qrop deploy/usr/bin
 cp logo.png deploy/qrop.png
 cp dist/Qrop.desktop deploy/usr/share/applications
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
-macdeployqt deploy/usr/bin/desktop.app -libpath=$BUILD_DIR/core -qmldir=$BUILD_DIR/desktop/qml
+macdeployqt deploy/usr/bin/qrop.app -libpath=$BUILD_DIR/core -qmldir=$BUILD_DIR/desktop/qml
 tree

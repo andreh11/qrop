@@ -580,8 +580,8 @@ Page {
 
                             footer: AddDialogButtonBox {
                                 width: parent.width
-                                onAccept: duplicateCropPlanDialog.accept()
-                                onReject: duplicateCropPlanDialog.reject()
+                                onAccepted: duplicateCropPlanDialog.accept()
+                                onRejected: duplicateCropPlanDialog.reject()
                                 acceptableInput: duplicateCropPlanDialog.acceptableForm
                             }
 

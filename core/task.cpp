@@ -15,6 +15,7 @@
  */
 
 #include <QDate>
+#include <QPair>
 #include <QDebug>
 #include <QVariantMap>
 
@@ -167,21 +168,18 @@ QList<int> Task::plantingTasks(int plantingId) const
 
 QList<int> Task::taskPlantings(int taskId) const
 {
-
     QString queryString = "SELECT * FROM planting_task WHERE task_id = %1";
     return queryIds(queryString.arg(taskId), "planting_id");
 }
 
 QList<int> Task::locationTasks(int locationId) const
 {
-
     QString queryString = "SELECT * FROM location_task WHERE location_id = %1";
     return queryIds(queryString.arg(locationId), "task_id");
 }
 
 QList<int> Task::taskLocations(int taskId) const
 {
-
     QString queryString = "SELECT * FROM location_task WHERE task_id = %1";
     return queryIds(queryString.arg(taskId), "location_id");
 }
@@ -309,10 +307,11 @@ void Task::delay(int taskId, int weeks)
     update(taskId, { { "assigned_date", newDateString } });
 }
 
-QList<int> Task::sowPlantTaskIds(int plantingId) const
+QPair<int, int> Task::sowPlantTaskIds(int plantingId) const
 {
     int sowTaskId = -1;
     int transplantTaskId = -1;
+
     for (const int taskId : plantingTasks(plantingId)) {
         auto record = recordFromId("task", taskId);
         auto taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
@@ -330,7 +329,7 @@ QList<int> Task::sowPlantTaskIds(int plantingId) const
         }
     }
 
-    return QList<int>({ sowTaskId, transplantTaskId });
+    return { sowTaskId, transplantTaskId };
 }
 
 void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
@@ -341,8 +340,8 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
     auto plantingRecord = recordFromId("planting", plantingId);
     auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
     auto taskIds = sowPlantTaskIds(plantingId);
-    int sowTaskId = taskIds[0];
-    int transplantTaskId = taskIds[1];
+    int sowTaskId = taskIds.first;
+    int transplantTaskId = taskIds.second;
 
     switch (plantingType) {
     case PlantingType::DirectSeeded: {

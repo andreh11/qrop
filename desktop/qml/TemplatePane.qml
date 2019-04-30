@@ -41,6 +41,7 @@ Pane {
         afterFirstHarvestModel.refresh();
         beforeLastHarvestModel.refresh();
         afterLastHarvestModel.refresh();
+        templateView.currentIndexChanged();
     }
 
     padding: 0
@@ -92,14 +93,14 @@ Pane {
     TemplateTaskModel {
         id: beforeLastHarvestModel
         taskTemplateId: pane.taskTemplateId
-        templateDateType: 2
+        templateDateType: 3
         beforeDate: true
     }
 
     TemplateTaskModel {
         id: afterLastHarvestModel
         taskTemplateId: pane.taskTemplateId
-        templateDateType: 2
+        templateDateType: 3
         beforeDate: false
     }
 
@@ -173,6 +174,7 @@ Pane {
 
                 ListView {
                     id: templateView
+
                     anchors.fill: parent
                     model: TaskTemplateModel {
                         id: taskTemplateModel
@@ -188,9 +190,17 @@ Pane {
                         radius: 2
                     }
 
+                    onCurrentIndexChanged: currentItem.setTemplate()
+
                     focus: true
                     delegate: Rectangle {
                         id: delegate
+
+                        function setTemplate() {
+                            pane.taskTemplateId = task_template_id
+                            pane.taskTemplateName = name
+                        }
+
                         //                        onClicked: templatePane.taskTemplateId = task_template_id
                         width: parent.width
                         height: Units.rowHeight
@@ -201,14 +211,8 @@ Pane {
                             hoverEnabled: true
                             preventStealing: true
                             propagateComposedEvents: true
-                            //                    z: 3
-                            //                            cursorShape: Qt.PointingHandCursor
 
-                            onClicked: {
-                                templateView.currentIndex = index
-                                pane.taskTemplateId = task_template_id
-                                pane.taskTemplateName = name
-                            }
+                            onClicked: templateView.currentIndex = index
 
                             onDoubleClicked: {
                                 taskNameLabel.visible = false;
@@ -251,8 +255,9 @@ Pane {
                                     TaskTemplate.update(task_template_id, {"name": text});
                                     taskNameField.visible = false;
                                     taskNameLabel.visible = true;
-                                    taskTemplateModel.refresh();
+                                    pane.refresh();
                                 }
+
                                 Keys.onEscapePressed: {
                                     text = name;
                                     taskNameLabel.visible = true;
@@ -304,6 +309,7 @@ Pane {
                                         anchors.verticalCenter: parent.verticalCenter
                                         onClicked: {
                                             TaskTemplate.remove(task_template_id);
+                                            updateDialog.open();
                                             pane.refresh();
                                         }
                                         ToolTip.text: qsTr("Delete template")
@@ -353,7 +359,7 @@ Pane {
                     highlighted: true
                     text: qsTr("Add task")
                     z: 1
-                    onClicked: addTemplateTaskDialog.open();
+                    onClicked: taskDialog.open();
                     anchors {
                         right: parent.right
                         rightMargin: 16 - ((background.width - contentItem.width) / 4)
@@ -364,25 +370,43 @@ Pane {
 
             ThinDivider { Layout.fillWidth: true }
 
-            TaskDialog {
-                id: addTemplateTaskDialog
-                mode: "add"
-                templateMode: true
-                taskTemplateId: pane.taskTemplateId
-                width: parent.width / 2
-                height: parent.height
-                x: (parent.width - width) / 2
-                y: (parent.height - height) / 2
-                week: 0
-                year: 0
-                onAccepted: pane.refresh();
-            }
 
             Pane {
                 id: taskPane
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Material.background: Material.color(Material.Grey, Material.Shade100)
+
+                TaskDialog {
+                    id: taskDialog
+                    mode: "add"
+                    templateMode: true
+                    taskTemplateId: pane.taskTemplateId
+                    width: parent.width / 2
+                    //                height: parent.height
+//                    x: (parent.width - width) / 2
+//                    y: (parent.height - height) / 2
+                    week: 0
+                    year: 0
+                    onAccepted: {
+                        updateDialog.open();
+                        pane.refresh();
+                    }
+                }
+
+                Dialog {
+                    id: updateDialog
+
+                    title: qsTr("Apply update to all current applications of this template?")
+                    standardButtons: Dialog.No | Dialog.Yes
+
+                    onAccepted: console.log("Ok clicked")
+                    onRejected: console.log("Cancel clicked")
+
+                    // add
+                    // update
+                    // delete
+                }
 
                 ScrollView {
                     id: scrollView
@@ -408,7 +432,7 @@ Pane {
                                 Layout.fillWidth: true
 
                                 onEditTask: {
-                                    addTemplateTaskDialog.editTask(taskId)
+                                    taskDialog.editTask(taskId)
                                     pane.refresh();
                                 }
                                 onDeleteTask: {
@@ -436,7 +460,7 @@ Pane {
                                 Layout.fillWidth: true
 
                                 onEditTask: {
-                                    addTemplateTaskDialog.editTask(taskId)
+                                    taskDialog.editTask(taskId)
                                     pane.refresh();
                                 }
                                 onDeleteTask: {
@@ -464,7 +488,7 @@ Pane {
                                 Layout.fillWidth: true
 
                                 onEditTask: {
-                                    addTemplateTaskDialog.editTask(taskId)
+                                    taskDialog.editTask(taskId)
                                     pane.refresh();
                                 }
                                 onDeleteTask: {
@@ -492,7 +516,7 @@ Pane {
                                 Layout.fillWidth: true
 
                                 onEditTask: {
-                                    addTemplateTaskDialog.editTask(taskId)
+                                    taskDialog.editTask(taskId)
                                     pane.refresh();
                                 }
                                 onDeleteTask: {
@@ -520,7 +544,7 @@ Pane {
                                 Layout.fillWidth: true
 
                                 onEditTask: {
-                                    addTemplateTaskDialog.editTask(taskId)
+                                    taskDialog.editTask(taskId)
                                     pane.refresh();
                                 }
                                 onDeleteTask: {

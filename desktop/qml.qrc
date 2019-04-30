@@ -90,5 +90,6 @@
         <file>qml/TemplatePane.qml</file>
         <file>qml/TemplateListView.qml</file>
         <file>qml/VerticalThinDivider.qml</file>
+        <file>qml/MyTextArea.qml</file>
     </qresource>
 </RCC>

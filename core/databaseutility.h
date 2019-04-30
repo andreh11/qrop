@@ -26,7 +26,7 @@
 
 enum class PlantingType { DirectSeeded = 1, TransplantRaised, TransplantBought };
 enum class TaskType { DirectSow = 1, GreenhouseSow, Transplant };
-enum class TemplateDateType { FieldSowPlant = 1, GreenhouseStart, FirstHarvest, LastHarvest };
+enum class TemplateDateType { FieldSowPlant = 0, GreenhouseStart, FirstHarvest, LastHarvest };
 
 class CORESHARED_EXPORT DatabaseUtility : public QObject
 {

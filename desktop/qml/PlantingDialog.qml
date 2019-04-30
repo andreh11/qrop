@@ -81,6 +81,12 @@ Dialog {
     Material.background: Material.color(Material.Grey, Material.Shade100)
     title: mode === "add" ? qsTr("Add planting(s)") : qsTr("Edit planting(s)")
 
+    topPadding: 0
+    bottomPadding: topPadding
+    leftPadding: Units.mediumSpacing
+    rightPadding: leftPadding
+
+
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
@@ -101,6 +107,11 @@ Dialog {
         applyEnabled: plantingForm.accepted
         rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
         mode: dialog.mode
+        width: parent.width
+        height: 48
+
+//        showLeftButton: false
+//        leftButtonText: qsTr("Templates")
     }
 
     ScrollView {
