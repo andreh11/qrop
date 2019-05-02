@@ -323,13 +323,14 @@ Page {
                     Dialog {
                         id: printDialog
                         title: qsTr("Print the task calendar")
-                        width: 200
+                        width: 300
                         margins: 0
 
                         onAccepted: saveCalendarDialog.open()
 
                         ColumnLayout {
                             width: parent.width
+                            spacing: -weekRadioButton.padding
 
                             RadioButton {
                                 id: weekRadioButton

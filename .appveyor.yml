@@ -17,7 +17,7 @@ environment:
 
 install:
   - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
-  - set QTDIR=C:\Qt\5.12.1\%suffix%
+  - set QTDIR=C:\Qt\5.12.2\%suffix%
   - set PATH=%PATH%;%QTDIR%\bin;
   - cmd: mkdir C:\Code
   - cmd: cd C:\Code
