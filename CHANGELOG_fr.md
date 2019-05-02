@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.2 - 2019-05-02
+
 ### Ajouts
   - *Plan de culture* Import et export du plan de culture en fichier CSV.
   - Ajout d'une fonctonnalité de duplication du plan de culture d'une année à une

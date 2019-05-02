@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.2 - 2019-05-02
+
 ### Added
   - *Crop plan* - Import and export from/to CSV file.
   - *Crop plan* − Add "duplicate to another year" feature.
