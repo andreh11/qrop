@@ -31,6 +31,7 @@ public:
     static void connectToDatabase();
     static void execSqlFile(const QString &fileName, const QString &separator = ";");
     static void migrationCheck();
+    static void backupDatabase();
     static Q_INVOKABLE void createDatabase();
     static Q_INVOKABLE void deleteDatabase();
     static Q_INVOKABLE void createFakeData();

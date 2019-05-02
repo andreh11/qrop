@@ -60,6 +60,17 @@ int Database::databaseVersion()
     return query.value(0).toInt();
 }
 
+void Database::backupDatabase()
+{
+
+    QFileInfo fileInfo(databasePath());
+    auto today = QDate::currentDate();
+    QString backupFileName =
+            QString("%1-%2.sqlite").arg(fileInfo.baseName()).arg(today.toString(Qt::ISODate));
+    qDebug() << backupFileName;
+    QFile::copy(fileInfo.absoluteFilePath(), fileInfo.absolutePath() + "/" + backupFileName);
+}
+
 void Database::migrationCheck()
 {
     QSqlDatabase database = QSqlDatabase::database();
@@ -73,6 +84,10 @@ void Database::migrationCheck()
     int lastVersion = fileInfoList.last().baseName().toInt();
 
     if (dbVersion < lastVersion) {
+        qInfo() << "Backup database...";
+        backupDatabase();
+        qInfo() << "done.";
+
         qInfo() << "!!!! Migration database from version" << dbVersion << "to latest version "
                 << lastVersion;
 
