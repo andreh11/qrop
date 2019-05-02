@@ -143,10 +143,6 @@ CREATE TABLE IF NOT EXISTS task_type (
     color        TEXT DEFAULT '#000000' NOT NULL
 );
 
-INSERT INTO task_type (task_type_id, type) values (1, "Direct sow");
-INSERT INTO task_type (task_type_id, type) values (2, "Greenhouse sow");
-INSERT INTO task_type (task_type_id, type) values (3, "Transplant");
-
 CREATE TABLE IF NOT EXISTS task_method (
     task_method_id INTEGER PRIMARY KEY AUTOINCREMENT,
     method TEXT NOT NULL,

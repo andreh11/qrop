@@ -34,6 +34,7 @@ public:
     static void backupDatabase();
     static Q_INVOKABLE void createDatabase();
     static Q_INVOKABLE void deleteDatabase();
+    static Q_INVOKABLE void createData();
     static Q_INVOKABLE void createFakeData();
     static Q_INVOKABLE void resetDatabase();
 

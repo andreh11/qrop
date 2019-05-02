@@ -2,6 +2,364 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr" sourcelanguage="en">
 <context>
+    <name>BuildInfo</name>
+    <message>
+        <location filename="../buildinfo.cpp" line="11"/>
+        <source>Unkown build version</source>
+        <translation>Version de build inconnue</translation>
+    </message>
+</context>
+<context>
+    <name>Database</name>
+    <message>
+        <location filename="../db.cpp" line="175"/>
+        <location filename="../db.cpp" line="186"/>
+        <location filename="../db.cpp" line="187"/>
+        <location filename="../db.cpp" line="188"/>
+        <source>Alliaceae</source>
+        <translation>Alliacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="176"/>
+        <location filename="../db.cpp" line="189"/>
+        <location filename="../db.cpp" line="190"/>
+        <location filename="../db.cpp" line="191"/>
+        <location filename="../db.cpp" line="192"/>
+        <source>Apiaceae</source>
+        <translation>Apiacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="177"/>
+        <location filename="../db.cpp" line="193"/>
+        <location filename="../db.cpp" line="194"/>
+        <location filename="../db.cpp" line="195"/>
+        <source>Asteraceae</source>
+        <translation>Astéracées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="178"/>
+        <location filename="../db.cpp" line="196"/>
+        <location filename="../db.cpp" line="197"/>
+        <location filename="../db.cpp" line="198"/>
+        <location filename="../db.cpp" line="199"/>
+        <location filename="../db.cpp" line="200"/>
+        <location filename="../db.cpp" line="201"/>
+        <location filename="../db.cpp" line="202"/>
+        <source>Brassicaceae</source>
+        <translation>Brassicacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="179"/>
+        <location filename="../db.cpp" line="203"/>
+        <location filename="../db.cpp" line="204"/>
+        <location filename="../db.cpp" line="205"/>
+        <source>Chenopodiaceae</source>
+        <translation>Chénopodiacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="180"/>
+        <location filename="../db.cpp" line="206"/>
+        <location filename="../db.cpp" line="207"/>
+        <location filename="../db.cpp" line="208"/>
+        <location filename="../db.cpp" line="209"/>
+        <location filename="../db.cpp" line="210"/>
+        <source>Cucurbitaceae</source>
+        <translation>Cucurbitacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="181"/>
+        <location filename="../db.cpp" line="211"/>
+        <location filename="../db.cpp" line="212"/>
+        <location filename="../db.cpp" line="213"/>
+        <source>Fabaceae</source>
+        <translation>Fabacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="182"/>
+        <location filename="../db.cpp" line="214"/>
+        <location filename="../db.cpp" line="215"/>
+        <location filename="../db.cpp" line="216"/>
+        <location filename="../db.cpp" line="217"/>
+        <source>Solanaceae</source>
+        <translation>Solanacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="183"/>
+        <location filename="../db.cpp" line="218"/>
+        <source>Valerianaceae</source>
+        <translation>Valérianacées</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="186"/>
+        <source>Garlic</source>
+        <translation>Ail</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="187"/>
+        <source>Onion</source>
+        <translation>Ognon</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="188"/>
+        <source>Leek</source>
+        <translation>Poireau</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="189"/>
+        <source>Carrot</source>
+        <translation>Carotte</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="190"/>
+        <source>Celery</source>
+        <translation>Céleri</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="191"/>
+        <source>Fennel</source>
+        <translation>Fenouil</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="192"/>
+        <source>Parsnip</source>
+        <translation>Panais</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="193"/>
+        <source>Chicory</source>
+        <translation>Chicorée</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="194"/>
+        <source>Belgian endive</source>
+        <translation>Endive</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="195"/>
+        <source>Lettuce</source>
+        <translation>Laitue</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="196"/>
+        <source>Cabbage</source>
+        <translation>Chou pommé</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="197"/>
+        <source>Brussel Sprouts</source>
+        <translation>Chou de Bruxelles</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="198"/>
+        <source>Kohlrabi</source>
+        <translation>Chou-rave</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="199"/>
+        <source>Cauliflower</source>
+        <translation>Chou-fleur</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="200"/>
+        <source>Broccoli</source>
+        <translation>Brocoli</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="201"/>
+        <source>Turnip</source>
+        <translation>Navet</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="202"/>
+        <source>Radish</source>
+        <translation>Radis rose</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="203"/>
+        <source>Beetroot</source>
+        <translation>Betterave</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="204"/>
+        <source>Chard</source>
+        <translation>Blette</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="205"/>
+        <source>Spinach</source>
+        <translation>Épinard</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="206"/>
+        <source>Cucumber</source>
+        <translation>Concombre</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="207"/>
+        <source>Zucchini</source>
+        <translation>Courgette</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="208"/>
+        <source>Melon</source>
+        <translation>Melon</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="209"/>
+        <source>Watermelon</source>
+        <translation>Pastèque</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="210"/>
+        <source>Winter squash</source>
+        <translation>Courge</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="211"/>
+        <source>Bean</source>
+        <translation>Haricot</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="212"/>
+        <source>Fava bean</source>
+        <translation>Fève</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="213"/>
+        <source>Pea</source>
+        <translation>Pois</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="214"/>
+        <source>Eggplant</source>
+        <translation>Aubergine</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="215"/>
+        <source>Pepper</source>
+        <translation>Poivron</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="216"/>
+        <source>Potatoe</source>
+        <translation>Pomme de terre</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="217"/>
+        <source>Tomato</source>
+        <translation>Tomate</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="218"/>
+        <source>Mâche</source>
+        <translation>Mâche</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="220"/>
+        <source>Cultivation and Tillage</source>
+        <translation>Travail du sol</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="221"/>
+        <source>Fertilize and Amend</source>
+        <translation>Fertilisation et amendement</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="222"/>
+        <source>Irrigate</source>
+        <translation>Irrigation</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="223"/>
+        <source>Maintenance</source>
+        <translation>Maintenance</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="224"/>
+        <source>Pest and Disease</source>
+        <translation>Parasites et maladies</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="225"/>
+        <source>Prune</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="226"/>
+        <source>Row Cover and Mulch</source>
+        <translation>Bâches</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="227"/>
+        <source>Stale Bed</source>
+        <translation>Faux semis</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="228"/>
+        <source>Thin</source>
+        <translation>Éclaircissage</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="229"/>
+        <source>Trellis</source>
+        <translation>Palissage</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="230"/>
+        <source>Weed</source>
+        <translation>Désherbage</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="232"/>
+        <source>kilogram</source>
+        <translation>kilogramme</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="232"/>
+        <source>kg</source>
+        <translation>kg</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="233"/>
+        <source>bunch</source>
+        <translation>botte</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="233"/>
+        <source>bn</source>
+        <translation>bte</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="234"/>
+        <source>head</source>
+        <translation>pièce</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="234"/>
+        <source>hd</source>
+        <translation>pc</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="253"/>
+        <source>Direct sow</source>
+        <translation>Semis direct</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="254"/>
+        <source>Greenhouse sow</source>
+        <translation>Semis en pépinière</translation>
+    </message>
+    <message>
+        <location filename="../db.cpp" line="255"/>
+        <source>Transplant</source>
+        <translation>Plantation</translation>
+    </message>
+    <message>
+        <source>Transplant sow</source>
+        <translation type="vanished">Plantation</translation>
+    </message>
+</context>
+<context>
     <name>MDate</name>
     <message>
         <location filename="../mdate.cpp" line="180"/>
@@ -27,12 +385,12 @@
 <context>
     <name>Planting</name>
     <message>
-        <location filename="../planting.cpp" line="688"/>
+        <location filename="../planting.cpp" line="747"/>
         <source>Unknown company</source>
         <translation>Fournisseur indéfini</translation>
     </message>
     <message>
-        <location filename="../planting.cpp" line="694"/>
+        <location filename="../planting.cpp" line="753"/>
         <source>Unkown company</source>
         <translation>Fournisseur indéfini</translation>
     </message>

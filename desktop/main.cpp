@@ -292,7 +292,6 @@ int main(int argc, char *argv[])
     Database db;
     Database::connectToDatabase();
     Database::migrationCheck();
-    Database::backupDatabase();
 
 #if defined(Q_OS_ANDROID)
     QtAndroid::runOnAndroidThread([=]() {
