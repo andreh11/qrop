@@ -36,5 +36,5 @@ build_script:
 
 artifacts:
   - path: release\
-    name: qrop-0.1.3-%arch%
+    name: Qrop-0.2-%arch%
     type: zip

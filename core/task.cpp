@@ -447,14 +447,14 @@ void Task::removeNurseryTask(int plantingId) const
     debugQuery(query);
 }
 
-/** @brief Return a list of template tasks ids for the the template \a templateId. */
+/*! Return a list of template tasks ids for the the template \a templateId. */
 QList<int> Task::templateTasks(int templateId) const
 {
     QString queryString("SELECT * FROM task WHERE task_template_id = %1");
     return queryIds(queryString.arg(templateId), "task_id");
 }
 
-/** @brief Create tasks from the template \a templateId for the planting \a plantingId */
+/*! Create tasks from the template \a templateId for the planting \a plantingId */
 void Task::applyTemplate(int templateId, int plantingId) const
 {
     auto plantingRecord = recordFromId("planting", plantingId);
