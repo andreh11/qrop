@@ -1,10 +1,11 @@
-### Résumé
-
-<!--- Résumer de façon concise le bogue que vous avez trouvé. -->
-
 ### Étapes à reproduire
 
-<!--- Comment reproduire le bogue ; très important ! -->
+<!---
+Comment reproduire le bogue, par exemple :
+1. Ouvrir la fenêtre d'ajout de série.
+2. Entrer les information nécessaire.
+3. Cliquer sur « Ajouter ».
+ -->
 
 ### Quel est le comportement actuel du bogue ?
 
@@ -16,12 +17,11 @@
 
 ### Copies d'écran, informations supplémentaires
 
-<!--- Si nécessaires, copier/coller ici toute sortie console ; merci d'utiliser
-les blocs de code (```), car c'est très difficle à lire sinon. -->
+<!--- Si nécessaire. -->
 
 ### Corrections possibles
 
-<!--- Si vous le pouvez, indiquez la ou les lignes de code qui peuvent être 
+<!--- Si vous le pouvez, indiquez la ou les lignes de code qui peuvent être
 responsables du problème. -->
 
 /label ~bug

@@ -13,6 +13,6 @@
 ### À quoi ressemblerait un résultat satisfaisant, comment le mesurer ?
 
 
-### Liens, références
+### Liens, références, captures d'écran
 
-/label #feature-proposal
+/label ~"feature\-request"
