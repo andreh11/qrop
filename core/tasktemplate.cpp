@@ -32,8 +32,7 @@ TaskTemplate::TaskTemplate(QObject *parent)
 }
 
 /*!
- * Return a list of template tasks ids for the the template
- * \a templateId.
+ * Return a list of template tasks ids for the the template \a templateId.
  */
 QList<int> TaskTemplate::tasks(int templateId) const
 {
@@ -44,8 +43,8 @@ QList<int> TaskTemplate::tasks(int templateId) const
 }
 
 /*!
- * Return a list of the ids of the uncompleted tasks created from
- * the task template \a templateId.
+ * Return a list of the ids of the uncompleted tasks created from * the task
+ * template \a templateId.
  */
 QList<int> TaskTemplate::uncompletedTasks(int templateId) const
 {
