@@ -157,7 +157,6 @@ void Database::connectToDatabase(const QUrl &url)
     }
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
-    qInfo() << "Creating database...";
     query.exec();
     if (create)
         createDatabase();
@@ -190,6 +189,7 @@ void Database::execSqlFile(const QString &fileName, const QString &separator)
 
 void Database::createDatabase()
 {
+    qInfo() << "Creating database...";
     execSqlFile(":/db/tables.sql");
     execSqlFile(":/db/triggers.sql", "END;");
     Database::createData();
