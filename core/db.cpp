@@ -15,14 +15,15 @@
  */
 
 #include <QDate>
+#include <QDebug>
 #include <QDir>
-#include <QSqlQuery>
+#include <QDirIterator>
+#include <QFileInfo>
 #include <QSqlError>
 #include <QSqlField>
+#include <QSqlQuery>
 #include <QStandardPaths>
-#include <QDebug>
-#include <QFileInfo>
-#include <QDirIterator>
+#include <QUrl>
 
 #include "db.h"
 #include "location.h"
@@ -64,13 +65,32 @@ int Database::databaseVersion()
 
 void Database::backupDatabase()
 {
-
     QFileInfo fileInfo(databasePath());
     auto today = QDate::currentDate();
     QString backupFileName =
             QString("%1-%2.sqlite").arg(fileInfo.baseName()).arg(today.toString(Qt::ISODate));
     qDebug() << backupFileName;
     QFile::copy(fileInfo.absoluteFilePath(), fileInfo.absolutePath() + "/" + backupFileName);
+}
+
+void Database::removeFileIfExists(const QUrl &url)
+{
+    QFileInfo fileInfo(url.toLocalFile());
+    if (fileInfo.exists())
+        QFile::remove(url.toLocalFile());
+}
+
+void Database::saveAs(const QUrl &url)
+{
+    removeFileIfExists(url);
+    QFileInfo fileInfo(databasePath());
+    QFile::copy(fileInfo.absoluteFilePath(), url.toLocalFile());
+}
+
+void Database::copy(const QUrl &from, const QUrl &to)
+{
+    removeFileIfExists(to);
+    QFile::copy(from.toLocalFile(), to.toLocalFile());
 }
 
 void Database::migrationCheck()
@@ -105,7 +125,7 @@ void Database::migrationCheck()
     }
 }
 
-void Database::connectToDatabase()
+void Database::connectToDatabase(const QUrl &url)
 {
     QSqlDatabase database = QSqlDatabase::database();
     if (!database.isValid()) {
@@ -114,9 +134,19 @@ void Database::connectToDatabase()
             qFatal("Cannot add database: %s", qPrintable(database.lastError().text()));
     }
 
-    QString fileName = databasePath();
+    if (database.isOpen())
+        database.close();
+
+    QString fileName;
+    bool create = false;
+    if (url.isEmpty()) { // default database path
+        fileName = databasePath();
+    } else {
+        fileName = url.toLocalFile();
+    }
+
     QFileInfo fileInfo(fileName);
-    bool create = !fileInfo.exists();
+    create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     qInfo() << "Database file:" << fileName;

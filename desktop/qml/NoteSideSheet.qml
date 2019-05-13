@@ -39,6 +39,10 @@ Drawer {
     signal showPhoto(int noteId)
     signal hidePhoto()
 
+    function refresh() {
+        noteView.refresh();
+    }
+
     Platform.FileDialog {
         id: addPhotoDialog
         fileMode: Platform.FileDialog.OpenFiles

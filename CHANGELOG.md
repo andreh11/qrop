@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+  - It is now possible to work with two databases at the same time, and switch
+    between them by clicking on the button "1" and "2" on the left panel. The
+    user can create, open and export databases.
+
 ## 0.2 - 2019-05-02
 
 ### Added
@@ -48,12 +52,12 @@ All notable changes to this project will be documented in this file.
 ### Fixed
   - Fix planting type change bug (#94)
   - Fix note view.
-  - *Planting form*: quantities are correctly recomputed when (bulk) editing 
+  - *Planting form*: quantities are correctly recomputed when (bulk) editing
     plantings.
-  - *Planting form* : when (bulk) editing planting(s), if the length, the number 
-    of rows or the in-row spacing have changed, recompute the number of plants 
+  - *Planting form* : when (bulk) editing planting(s), if the length, the number
+    of rows or the in-row spacing have changed, recompute the number of plants
     needed for each planting.
-  - *Planting view/form*: when creating a planting for which locations has been 
+  - *Planting view/form*: when creating a planting for which locations has been
     selected, the locations are now immediately visible in the planting view.
   - *Planting form*: fields are now always visible when nagivating with tab.
   - Deployment error  on Linux.
