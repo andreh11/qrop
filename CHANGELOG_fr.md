@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.2 - 2019-05-13
+
   - Il est maintenant possible de travailler avec deux bases de données en même
     temps en cliquant sur les boutons « 1 » (base de données principale) et « 2
     » du panneau de gauche. L'utilisateur-ice peut créer, ouvrir et exporter des

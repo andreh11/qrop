@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.2.1 - 2019-05-13 
+
   - It is now possible to work with two databases at the same time, and switch
     between them by clicking on the button "1" and "2" on the left panel. The
     user can create, open and export databases.
