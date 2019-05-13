@@ -47,6 +47,8 @@ ApplicationWindow {
     property string searchString: searchField.text
     property alias stackView: stackView
     property int oldWindowVisibility: Window.Windowed
+    property string currentDatabaseFile: "" // "" is main database
+    property string secondDatabaseFile: ""
 
     // TODO: put this in a separate file
     readonly property var monthsOrder : [
@@ -89,6 +91,69 @@ ApplicationWindow {
             width: parent.width*0.8
             height: parent.height*0.8
             fillMode: Image.PreserveAspectFit
+        }
+    }
+
+    function switchToDatabase(db) {
+        if (db === "main") {
+            Database.connectToDatabase();
+            currentDatabaseFile = "";
+        }  else if (db === "second") {
+            Database.connectToDatabase(secondDatabaseFile);
+            currentDatabaseFile = secondDatabaseFile;
+        }
+        locationsPage.reload();
+        noteSideSheet.refresh();
+        stackView.currentItem.refresh();
+    }
+
+    Platform.FileDialog {
+        id: openDatabaseDialog
+
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.OpenFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        onAccepted: {
+            secondDatabaseFile = file;
+            switchToDatabase("second");
+        }
+    }
+
+    Platform.FileDialog {
+        id: newDatabaseDialog
+
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        onAccepted: {
+            secondDatabaseFile = file;
+            switchToDatabase("second");
+        }
+    }
+
+    Platform.FileDialog {
+        id: saveMainDatabaseDialog
+
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        onAccepted: {
+            Database.saveAs(file);
+        }
+    }
+
+    Platform.FileDialog {
+        id: saveSecondDatabaseDialog
+
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        onAccepted: {
+            Database.copy(secondDatabaseFile, file);
         }
     }
 
@@ -200,57 +265,6 @@ ApplicationWindow {
         property alias windowWidth: window.width
         property alias windowVisibility: window.visibility
     }
-
-//    menuBar: MenuBar {
-//        Menu {
-//            id: fileMenu
-//            objectName: "fileMenu"
-//            title: qsTr("File")
-
-//            MenuItem {
-//                objectName: "openDatabaseButton"
-//                text: qsTr("Open database...")
-//            }
-
-//            MenuItem {
-//                objectName: "exportDatabaseButton"
-//                text: qsTr("Export database...")
-//            }
-
-//            MenuItem {
-//                objectName: "quitMenuButton"
-//                text: qsTr("Quit")
-//            }
-//        }
-
-//        Menu {
-//            id: cropMenu
-//            objectName: "cropMenu"
-//            title: qsTr("Crop plan")
-
-//            MenuItem {
-//                objectName: "importCropPlanButton"
-//                text: qsTr("Import crop plan from CSV...")
-//            }
-
-//            MenuItem {
-//                objectName: "duplicateCropPlanButton"
-//                text: qsTr("Duplicate crop plan to another year")
-//            }
-//        }
-
-//        Menu {
-//            id: helpMenu
-//            objectName: "helpMenu"
-//            title: qsTr("Help")
-
-//            MenuItem {
-//                objectName: "aboutMenuButton"
-//                text: qsTr("About...")
-//                onTriggered: aboutDialog.open()
-//            }
-//        }
-//    }
 
     Component {
         id: searchBar
@@ -418,24 +432,6 @@ ApplicationWindow {
         ColumnLayout {
             anchors.fill: parent
 
-//            Label {
-//                id: programLabel
-////                visible: false
-//                height: toolBar.height
-//                text: "Qrop"
-//                color: "white"
-//                font.family: "Roboto Bold"
-//                font.pixelSize: 20
-//                padding: 12
-//                horizontalAlignment: Text.AlignLeft
-//                verticalAlignment: Text.AlignVCenter
-
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: railMode = largeDisplay && !railMode
-//                }
-//            }
-
             Repeater {
                 model: navigationModel
 
@@ -453,6 +449,68 @@ ApplicationWindow {
             }
 
             Item { Layout.fillHeight: true }
+
+            DrawerItemDelegate {
+                id: mainDatabase
+                Layout.fillWidth: true
+                width: drawer.width
+                text: qsTr("Settings")
+                iconText: "\ue400"
+                isActive: currentDatabaseFile == ""
+
+                onClicked: switchToDatabase("main");
+                onPressAndHold: {
+                    saveMainDatabaseDialog.open();
+                }
+            }
+
+            DrawerItemDelegate {
+                id: secondDatabaseButton
+                Layout.fillWidth: true
+                width: drawer.width
+                text: qsTr("Settings")
+                iconText: "\ue401"
+                isActive: currentDatabaseFile != ""
+
+                onClicked: {
+                    if (secondDatabaseFile != "")
+                        switchToDatabase("second");
+                    else
+                        databaseMenu.open();
+                }
+
+                onPressAndHold: {
+                    databaseMenu.open();
+                }
+
+                ToolTip.text: secondDatabaseFile == "" ? qsTr("No other database opened")
+                                                       : secondDatabaseFile
+                ToolTip.visible: hovered
+
+                Menu {
+                    id: databaseMenu
+                    title: qsTr("Database menu")
+                    x: parent.width
+                    margins: 0
+
+                    MenuItem {
+                        text: qsTr("New")
+                        onClicked: newDatabaseDialog.open();
+                    }
+
+                    MenuItem {
+                        text: qsTr("Open")
+                        onClicked: openDatabaseDialog.open();
+                    }
+
+                    MenuItem {
+                        text: qsTr("Export")
+                        onClicked: saveSecondDatabaseDialog.open();
+                        enabled: secondDatabaseFile !== ""
+                    }
+                }
+            }
+
 
             DrawerItemDelegate {
                 id: settingsDrawerButton

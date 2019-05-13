@@ -38,6 +38,10 @@ Page {
         plantingsView.refresh()
     }
 
+    function reload() {
+        locationView.reload();
+    }
+
     function previousSeason() {
         seasonSpinBox.previousSeason();
     }

@@ -5,6 +5,11 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+  - Il est maintenant possible de travailler avec deux bases de données en même
+    temps en cliquant sur les boutons « 1 » (base de données principale) et « 2
+    » du panneau de gauche. L'utilisateur-ice peut créer, ouvrir et exporter des
+    bases de données.
+
 ## 0.2 - 2019-05-02
 
 ### Ajouts
@@ -42,7 +47,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Édition de séries* − Il est dorénatant possible d'éditer les emplacements
     d'une série dans le dialogue d'édition des séries.
   - Affichage des étiquettes dans la vue des séries et le semainier.
-  - Si le type d'une série est modifiée et qu'il passe de « Plant, fait » à 
+  - Si le type d'une série est modifiée et qu'il passe de « Plant, fait » à
     « Semis direct » ou « Plant, acheté », la tâche de pépinière associée est
     dorénavant supprimée et le durée de pépinière est mise à 0.
   - Nombre décimaux au lieu d'entiers pour les longueurs de planche, graines par
@@ -50,7 +55,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Vue, édition des séries* : si les dates sont entrées par numéro de semaine,
     on considère que la récolte se termine à la *fin* de la semaine de fin de
     récolte indiquée.
-  - *Édition des séries* : il est dorénavant possible d'éditer par lot les 
+  - *Édition des séries* : il est dorénavant possible d'éditer par lot les
     étiquettes de série.
   - L'année commence maintenant par l'hiver plutôt que par le printemps.
   - *Diagramme des séries* − Pour le format de date « semaine », ne plus
