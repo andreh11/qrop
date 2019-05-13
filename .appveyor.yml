@@ -26,15 +26,20 @@ install:
   - set PATH=%PATH%;C:/jom/;
 
 build_script:
+  - if defined APPVEYOR_REPO_TAG_NAME (set QROP_RELEASE=true) else (set QROP_SNAPSHOT=true)
+  - if defined QROP_RELEASE set QROP_VERSION=%APPVEYOR_REPO_TAG_NAME:~1%
+  - if defined QROP_RELEASE echo Building QROP %QROP_VERSION%...
+  - if defined QROP_SNAPSHOT set QROP_VERSION=%APPVEYOR_BUILD_VERSION%
+  - if defined QROP_SNAPSHOT echo Building QROP snapshot %QROP_VERSION%...
   - cmd: cd C:\projects\qrop
   - cmd: cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
-  - cmd: jom -j4 
+  - cmd: jom -j4
   - cmd: mkdir release
   - cmd: cp core/*.dll release/
   - cmd: cp qrop.exe release/
-  - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release 
+  - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release
 
 artifacts:
   - path: release\
-    name: Qrop-0.2-%arch%
+    name: Qrop-$(QROP_VERSION)-%arch%
     type: zip
