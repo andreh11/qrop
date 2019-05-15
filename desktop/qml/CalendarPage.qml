@@ -169,6 +169,7 @@ Page {
         property bool showSeedCompanyBesideVariety
         property bool useStandardBedLength
         property int standardBedLength
+        property bool showPlantingSuccessionNumber
     }
 
     Component {
@@ -750,6 +751,7 @@ Page {
                                     showOnlyDates: true
                                     sowingDate: Planting.sowingDate(plantingId)
                                     endHarvestDate: Planting.endHarvestDate(plantingId)
+                                    showRank: true
                                     year: page.year
                                 }
 
@@ -831,6 +833,7 @@ Page {
                                     PlantingLabel {
                                         width: tableHeaderModel[0].width
                                         plantingId: Number(modelData)
+                                        showRank: true
                                         year: page.year
                                         sowingDate: Planting.sowingDate(plantingId)
                                         endHarvestDate: Planting.endHarvestDate(plantingId)

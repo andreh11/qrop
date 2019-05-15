@@ -58,12 +58,18 @@ QList<int> TaskTemplate::uncompletedTasks(int templateId) const
 int TaskTemplate::duplicate(int id) const
 {
     int newId = DatabaseUtility::duplicate(id);
+    if (newId < 0) {
+        qDebug() << "Cannot duplicate task template" << id;
+        return -1;
+    }
+
     for (const int taskId : tasks(id)) {
         auto map = mapFromId("task", taskId);
         map.take("task_id");
         map["task_template_id"] = newId;
         mTask->add(map);
     }
+
     return newId;
 }
 

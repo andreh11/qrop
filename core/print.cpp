@@ -24,6 +24,7 @@
 #include <QString>
 #include <QTextDocument>
 #include <QModelIndex>
+#include <QSettings>
 
 #include "print.h"
 #include "location.h"
@@ -46,6 +47,7 @@ Print::Print(QObject *parent)
     , planting(new Planting(this))
     , keyword(new Keyword(this))
     , m_locationModel(new LocationModel(this))
+    , mSettings(new QSettings(this))
     , cropPlanQueryString("SELECT *, "
                           "strftime('%Y', sowing_date) AS sowing_year, "
                           "CAST(strftime('%m', sowing_date) AS INTEGER) AS sowing_month, "
@@ -413,6 +415,7 @@ void Print::exportPdf(const QString &html, const QUrl &path, const QPageLayout::
 
 QString Print::cropPlanHtml(int year, int month, int week, const QString &type) const
 {
+    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
     QString titleMW;
     if (month >= 1 && month <= 12)
         titleMW.append(QString(" (%1)").arg(MDate::monthName(month)));
@@ -433,6 +436,7 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
     Location location;
     while (query.next()) {
         QString crop = query.value("crop").toString();
+        int successionNumber = query.value("planting_rank").toInt();
         QString variety = query.value("variety").toString();
         int length = query.value("length").toInt();
         int rows = query.value("rows").toInt();
@@ -466,7 +470,10 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
 
         if (type == "entire")
             html += cropPlanMap[type]
-                            .tableRow.arg(crop)
+                            .tableRow
+                            .arg(crop
+                                 + (showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber)
+                                                                 : ""))
                             .arg(variety)
                             .arg(MDate::formatDate(sowingDate, year))
                             .arg(MDate::formatDate(plantingDate, year))
@@ -519,9 +526,9 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
 
 QString Print::calendarHtml(int year, int week, bool showOverdue) const
 {
-    QSettings settings;
-    bool useStandardBedLength = settings.value("useStandardBedLength").toBool();
-    int standardBedLength = settings.value("standardBedLength").toInt();
+    bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
+    int standardBedLength = mSettings->value("standardBedLength").toInt();
+    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
 
     QString titleMW;
     if (week >= 1 && week <= 53) {
@@ -575,6 +582,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
             QList<int> locationList = location.locations(plantingId);
             QString locationsName = location.fullName(locationList);
             QVariantMap map = planting.mapFromId("planting_view", plantingId);
+            int successionNumber = planting.rank(plantingId);
             int rows = map.value("rows").toInt();
             int spacing = map.value("spacing_plants").toInt();
             int trays = map.value("trays_to_start").toInt();
@@ -619,7 +627,10 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
             }
 
             QString plantingString =
-                    QString("%1, %2").arg(planting.cropName(plantingId)).arg(planting.varietyName(plantingId));
+                    QString("%1%2, %3")
+                            .arg(planting.cropName(plantingId))
+                            .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
+                            .arg(planting.varietyName(plantingId));
             if (i % 2 == 1) {
                 html += QString("<tr style='font-weight: %1; background-color: #e0e0e0'>")
                                 .arg(overdue ? "bold" : "normal");
@@ -670,6 +681,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
 QString Print::harvestHtml(int year) const
 {
+    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
     QString html = harvestInfo.title.arg(year);
     html.append(harvestInfo.tableHeader);
 
@@ -688,6 +700,8 @@ QString Print::harvestHtml(int year) const
         double quantity = query.value("quantity").toDouble();
         QString laborTime = query.value("time").toString();
         QString locationString = query.value("locations").toString();
+        int plantingId = query.value("planting_id").toInt();
+        int successionNumber = planting->rank(plantingId);
 
         QList<int> locationIdList;
         for (QString idString : locationString.split(","))
@@ -702,7 +716,12 @@ QString Print::harvestHtml(int year) const
                         .arg(QString("%1 %2")
                                      .arg(MDate::formatDate(date, year, "", false))
                                      .arg(date.toString("ddd")))
-                        .arg(QString("%1, %2").arg(crop, variety))
+                        .arg(QString("%1%2, %3")
+                                     .arg(crop)
+                                     .arg(showPlantingSuccessionNumber
+                                                  ? QString(" %1").arg(successionNumber)
+                                                  : "")
+                                     .arg(variety))
                         .arg(location->fullName(locationIdList))
                         .arg(QString("%1 %2").arg(quantity).arg(unit))
                         .arg(laborTime);
@@ -872,6 +891,7 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
     QDate plantingDate = planting->plantingDate(plantingId);
     QDate begHarvestDate = planting->begHarvestDate(plantingId);
     QDate endHarvestDate = planting->endHarvestDate(plantingId);
+    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
 
     QString colorString;
 
@@ -883,6 +903,7 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
     QColor cropColor(colorString);
     QString cropName = planting->cropName(plantingId);
     QString varietyName = planting->varietyName(plantingId);
+    int successionNumber = planting->rank(plantingId);
 
     int y = (2 + row) * m_rowHeight;
     int p = static_cast<int>(m_rowHeight * 0.1);
@@ -899,9 +920,10 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
     QPen pen(QColor("white"));
     painter.setPen(pen);
     painter.drawText(QRectF(point1, point4).adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
-                     QString("%1 %2, %3")
+                     QString("%1 %2%3, %4")
                              .arg(MDate::formatDate(plantingDate, year, "", false))
                              .arg(cropName)
+                             .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
                              .arg(varietyName));
     painter.restore();
 }

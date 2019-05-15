@@ -26,6 +26,7 @@ Item {
     property date endHarvestDate: Planting.endHarvestDate(plantingId)
     property string cropName: Planting.cropName(plantingId)
     property string varietyName: Planting.varietyName(plantingId)
+    property int rank: Planting.rank(plantingId)
     property real totalLength: Planting.totalLength(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
     property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
     property real lengthLeft: Planting.lengthToAssign(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
@@ -47,6 +48,7 @@ Item {
         id: settings
         property bool useStandardBedLength
         property int standardBedLength
+        property bool showPlantingSuccessionNumber
     }
 
     height: Units.rowHeight
@@ -163,8 +165,12 @@ Item {
         }
 
         Label {
-            text: MDate.formatDate(plantingDate, year, null, false) + (showNames ? " " + cropName.slice(0,2) + ", " + varietyName
-                                                                    : "")
+            text: MDate.formatDate(plantingDate, year, null, false)
+                  + (showNames
+                     ? " %1%2, %3".arg(showNames ? cropName.slice(0,2) : "")
+                                  .arg(settings.showPlantingSuccessionNumber ? (" " + rank) : "")
+                                  .arg(varietyName)
+                     : "")
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true

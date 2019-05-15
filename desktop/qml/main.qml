@@ -470,6 +470,9 @@ ApplicationWindow {
                 width: drawer.width
                 text: qsTr("Settings")
                 iconText: "\ue401"
+                iconColor: secondDatabaseFile === "" ?  Material.color(Material.Grey,
+                                                                       Material.Shade400)
+                                                     : "white"
                 isActive: currentDatabaseFile != ""
 
                 onClicked: {

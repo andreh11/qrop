@@ -17,6 +17,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
+import Qt.labs.settings 1.0
 
 CheckBox {
     id: control
@@ -24,9 +25,17 @@ CheckBox {
     property bool round: false
     property bool selectionMode: false
     property alias color: textBox.color
+    property alias rank: rankText.text
+    property bool showRank: settings.showPlantingSuccessionNumber
 
     indicator.visible: hovered || selectionMode
     indicator.x: textBox.x + textBox.width / 2 - indicator.width / 2
+    checkable: false
+
+    Settings {
+        id: settings
+        property bool showPlantingSuccessionNumber
+    }
 
     Rectangle {
         id: textBox
@@ -53,6 +62,34 @@ CheckBox {
             color: "white"
             font.family: "Material Icons"
             font.pixelSize: 16
+        }
+    }
+
+    Rectangle {
+        id: rankBox
+        visible: !control.checked && !hovered && showRank
+        antialiasing: true
+        anchors.right: parent.right
+        anchors.rightMargin: -width/4 -2
+        anchors.bottomMargin: width/4
+        anchors.bottom: parent.bottom
+        width: parent.width*0.5
+        height: width
+        radius: 50
+        color: "white"
+
+        Text {
+            id: rankText
+            visible: !control.checked && !hovered
+//            anchors.left: parent.left
+//            anchors.top: parent.top
+//            anchors.leftMargin: 4
+//            anchors.topMargin: 2
+            anchors.centerIn: parent
+            text: "1"
+            color: "black"
+            font.family: "Roboto Bold"
+            font.pixelSize: 11
         }
     }
 

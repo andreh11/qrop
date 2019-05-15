@@ -163,6 +163,7 @@ ListView {
             visible: !rowDelegate.checked
             selectionMode: checks > 0
             text: model.crop
+            rank: model.planting_rank
             font.pixelSize: 26
             color: model.crop_color
             round: true
@@ -192,6 +193,7 @@ ListView {
             year: listView.year
             length: model.length
             locations: model.locations.split(",").map(Number)
+            showRank: false
         }
     }
 }

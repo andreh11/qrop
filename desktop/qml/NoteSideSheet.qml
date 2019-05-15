@@ -67,6 +67,7 @@ Drawer {
                 year: noteSideSheet.year
                 anchors.verticalCenter: parent.verticalCenter
                 plantingId: section
+                showRank: true
             }
 
         }

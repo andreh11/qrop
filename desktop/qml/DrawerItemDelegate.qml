@@ -25,7 +25,8 @@ ItemDelegate {
 
     property string page
     property bool isActive: index === navigationIndex
-    property string iconText
+    property alias iconText: iconLabel.text
+    property alias iconColor: iconLabel.color
 
     focusPolicy: Qt.NoFocus
     height: 48
@@ -38,11 +39,10 @@ ItemDelegate {
         spacing: largeDisplay && railMode ? 0 : 24
 
         Label {
+            id: iconLabel
             color: "white"
             width: 28
             anchors.verticalCenter: parent.verticalCenter
-            id: iconLabel
-            text: iconText
             font.family: "Material Icons"
             font.pixelSize: 28
             horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft

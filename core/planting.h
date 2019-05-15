@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE QString familyInterval(int plantingId) const;
     Q_INVOKABLE QString familyColor(int plantingId) const;
     Q_INVOKABLE int type(int plantingId) const;
+    Q_INVOKABLE int rank(int plantingId) const;
 
     Q_INVOKABLE QDate sowingDate(int plantingId) const;
     Q_INVOKABLE QDate plantingDate(int plantingId) const;

@@ -29,6 +29,7 @@ class LocationModel;
 class Location;
 class Planting;
 class Keyword;
+class QSettings;
 
 /**
  * \brief The Print classe handles PDF export for most views.
@@ -71,6 +72,7 @@ private:
     Planting *planting;
     Keyword *keyword;
     LocationModel *m_locationModel;
+    QSettings *mSettings;
 
     void exportPdf(const QString &html, const QUrl &path,
                    const QPageLayout::Orientation orientation = QPageLayout::Landscape);

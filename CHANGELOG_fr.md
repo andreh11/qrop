@@ -4,6 +4,7 @@
 Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
+  - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ## 0.2 - 2019-05-13
 

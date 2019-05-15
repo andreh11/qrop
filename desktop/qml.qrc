@@ -91,5 +91,6 @@
         <file>qml/TemplateListView.qml</file>
         <file>qml/VerticalThinDivider.qml</file>
         <file>qml/MyTextArea.qml</file>
+        <file>qml/SettingsSwitch.qml</file>
     </qresource>
 </RCC>

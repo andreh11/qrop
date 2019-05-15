@@ -15,10 +15,12 @@ Item {
     property string variety: Planting.varietyName(plantingId)
     property date sowingDate: Planting.sowingDate(plantingId)
     property date endHarvestDate: Planting.endHarvestDate(plantingId)
+    property int rank: Planting.rank(plantingId)
     property int year
     property int length: Planting.totalLength(plantingId)
     property var locations: Location.locations(plantingId)
     property bool showOnlyDates: false
+    property bool showRank: false
 
     implicitHeight: childrenRect.height
     implicitWidth: childrenRect.width
@@ -37,6 +39,7 @@ Item {
         id: settings
         property bool useStandardBedLength
         property int standardBedLength
+        property bool showPlantingSuccessionNumber
     }
 
     Column {
@@ -51,8 +54,13 @@ Item {
                 if (!validId)
                     return "";
 
-                var txt = qsTr("%1 − %2").arg(MDate.formatDate(sowingDate, year))
-                                         .arg(MDate.formatDate(endHarvestDate, year))
+                var txt = ""
+
+                if (showRank && settings.showPlantingSuccessionNumber) {
+                    txt += "#%1 ".arg(rank)
+                }
+
+                txt += qsTr("%1−%2").arg(MDate.formatDate(sowingDate, year)).arg(MDate.formatDate(endHarvestDate, year))
 
                 if (!showOnlyDates) {
                     if (settings.useStandardBedLength) {

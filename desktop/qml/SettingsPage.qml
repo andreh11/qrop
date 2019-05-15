@@ -46,6 +46,7 @@ Page {
         property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
         property alias useStandardBedLength: standardBedLengthSwitch.checked
         property alias standardBedLength: standardBedLengthField.text
+        property alias showPlantingSuccessionNumber: showPlantingSuccessionNumberSwitch.checked
         property string dateType
     }
 
@@ -235,6 +236,14 @@ Page {
                             Layout.minimumWidth: 200
                             horizontalAlignment: Text.AlignRight
                         }
+                    }
+
+                    ThinDivider { width: parent.width }
+
+                    SettingsSwitch {
+                        id: showPlantingSuccessionNumberSwitch
+                        text: qsTr("Show planting succession numbers")
+                        onToggled: restartSnackbar.open();
                     }
 
                     Item { Layout.fillHeight: true }

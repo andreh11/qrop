@@ -566,8 +566,8 @@ ListView {
 
                 TextCheckBox {
                     id: checkBox
-
                     text: model.crop
+                    rank: model.planting_rank
                     selectionMode: checks > 0
                     anchors.verticalCenter: row.verticalCenter
                     //                                width: 24

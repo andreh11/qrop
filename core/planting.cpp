@@ -544,6 +544,14 @@ int Planting::type(int plantingId) const
     return map.value("planting_type").toInt();
 }
 
+int Planting::rank(int plantingId) const
+{
+    auto map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("planting_rank").toInt();
+}
+
 QDate Planting::sowingDate(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
