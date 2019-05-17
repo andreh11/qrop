@@ -437,10 +437,23 @@ Page {
                         visible: !checks
                     }
 
-                    Item {
-                        Layout.fillWidth: true
+                    Column {
+                        id: revenueColumn
+                        visible: !checks
+                        Layout.leftMargin: Units.smallSpacing
+                        Layout.rightMargin: Units.smallSpacing
+                        Label {
+                            text: qsTr("Revenue")
+                            color: Material.color(Material.Blue)
+                            font.family: "Roboto Regular"
+                            font.pixelSize: 10
+                        }
+                        Label {
+                            text: "%1 €".arg(plantingsView.revenue)
+                            font.family: "Roboto Regular"
+                            font.pixelSize: Units.fontSizeTitle
+                        }
                     }
-
 
                     Label {
                         text: qsTr("planting(s) selected", "", checks)

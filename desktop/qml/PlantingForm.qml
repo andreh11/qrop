@@ -87,6 +87,7 @@ Flickable {
     }
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
+    readonly property real plantsBySquareMeter: 1 / ((1.65 / rowsPerBed) * inRowSpacing / 100)
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
     readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
@@ -687,6 +688,7 @@ Flickable {
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
                         onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
+                        helperText: qsTr("Plants/m2: %1").arg(plantsBySquareMeter)
                     }
                 }
 

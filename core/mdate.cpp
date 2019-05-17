@@ -88,7 +88,7 @@ int MDate::currentYear()
     return year;
 }
 
-/*! Format date according to preferred format. If \a showIndicator if
+/** Format date according to preferred format. If \a showIndicator if
  * false, the year indicators < and > will never be shown. */
 QString MDate::formatDate(const QDate &date, int currentYear, const QString &type, bool showIndicator)
 {

@@ -48,7 +48,7 @@ int LocationModel::locationId(const QModelIndex &idx) const
     return id;
 }
 
-/*! Return the bed length of \a index. */
+/** Return the bed length of \a index. */
 qreal LocationModel::length(const QModelIndex &index) const
 {
     return location->length(locationId(index));
@@ -63,7 +63,7 @@ void LocationModel::refresh()
     countChanged();
 }
 
-/*! Emit dataChanged signal for all indexes of the tree. */
+/** Emit dataChanged signal for all indexes of the tree. */
 void LocationModel::refreshTree()
 {
     QModelIndex root;
@@ -159,7 +159,7 @@ qreal LocationModel::availableSpace(const QModelIndex &index, const QDate &plant
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
 }
 
-/*!
+/**
  * Return true iff there is some space left for the planting \a plantingId
  * on the location \a index.
  */
@@ -175,7 +175,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &planti
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
 }
 
-/*! Return true iff there is some space left for the planting \a plantingId. */
+/** Return true iff there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -187,7 +187,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
     return location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
 }
 
-/*! Returns true iff the planting \a plantingId respects the rotation. */
+/** Returns true iff the planting \a plantingId respects the rotation. */
 bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) const
 {
     if (!index.isValid())
@@ -197,7 +197,7 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
     return location->rotationConflictingPlantings(lid, plantingId).count() == 0;
 }
 
-/*!
+/**
  * Return a list of the ids of the plantings conflicting on the location
  * represented by \a index for the given \a season of \a year because they
  * don't respect the family rotation interval.
@@ -219,7 +219,7 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
     return list;
 }
 
-/*!
+/**
  * Return a map such as map[id] is a list of all plantings conflicting
  * with planting id on the location represented by \a index because they
  * don't observe the family rotation interval.
@@ -329,7 +329,7 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
     return true;
 }
 
-/*!
+/**
  * Insert duplicates of the locations (and their subtree) represented by
  * \a indexList in database and underlying TreeModel.
  *
@@ -411,7 +411,7 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
     return tmodel->removeIndexes(sourceIndexList);
 }
 
-/*!
+/**
  * Return a list of all QModelIndex of location tree.
  *
  * If \a depth is greater or equal to 0, only indexes of this depth
@@ -518,7 +518,7 @@ void LocationModel::selectTree(QItemSelectionModel &selectionModel)
     }
 }
 
-/*!
+/**
  * Return a list of QModelIndexes whose ids are in \a idList. Useful for
  * selecting indexes.
  */
@@ -544,7 +544,7 @@ QModelIndexList LocationModel::treeHasIds(const QVariantList &idList) const
     return indexList;
 }
 
-/*!
+/**
  * Return the path from root to \a index.
  */
 QModelIndexList LocationModel::treePath(const QModelIndex &index) const

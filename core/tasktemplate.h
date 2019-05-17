@@ -35,12 +35,14 @@ public:
     Q_INVOKABLE void apply(int templateId, int plantingId) const;
     Q_INVOKABLE void unapply(int templateId, int plantingId) const;
     Q_INVOKABLE void updateTemplateTasks(int taskId, const QVariantMap &map) const;
+    Q_INVOKABLE void removeUncompletedTasks(int templateId) const;
 
 private:
     Planting *mPlanting;
     Task *mTask;
-    QList<int> tasks(int templateId) const;
+    QList<int> templateTasks(int templateId) const;
     QList<int> uncompletedTasks(int templateId) const;
+    void removeTemplateTasks(int templateId) const;
 };
 
 #endif // TASKTEMPLATE_H

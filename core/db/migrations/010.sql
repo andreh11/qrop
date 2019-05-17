@@ -12,6 +12,8 @@ DROP VIEW planting_view;
 CREATE VIEW IF NOT EXISTS planting_view AS
 SELECT planting_id as planting_view_id,
        planting.*,
+       planting.length*yield_per_bed_meter*average_price as bed_revenue,
+       planting.surface*yield_per_hectare*average_price as surface_revenue,
        family, family_id, family.color as family_color,
        family.interval as family_interval,
        crop, crop_id, crop.color as crop_color, variety,

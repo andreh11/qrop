@@ -217,7 +217,7 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
     }
 }
 
-/*!
+/**
  * Return the greenhouse sowing task id for \a plantingId.
  *
  * If \a plantingId is not a TP, raised planting, return -1.
@@ -239,7 +239,7 @@ int Task::greenhouseSowingTask(int plantingId) const
     return idList.first();
 }
 
-/*! Return the sowing or in-ground planting task id for \a plantingId. */
+/** Return the sowing or in-ground planting task id for \a plantingId. */
 int Task::plantingTask(int plantingId) const
 {
     if (plantingId < 1)
@@ -257,7 +257,7 @@ int Task::plantingTask(int plantingId) const
     return idList.first();
 }
 
-/*! Set the task type of \a taskId to \a type. */
+/** Set the task type of \a taskId to \a type. */
 void Task::updateType(int taskId, TaskType type) const
 {
     update(taskId, { { "task_type_id", static_cast<int>(type) } });

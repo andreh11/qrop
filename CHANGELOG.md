@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+  - *Crop plan* - Show estimated revenue.
   - Add planting succession numbering by crop and planting date.
 
 ## 0.2.1 - 2019-05-13

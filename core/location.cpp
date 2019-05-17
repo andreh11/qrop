@@ -33,7 +33,7 @@ Location::Location(QObject *parent)
     m_viewTable = "location";
 }
 
-/*!
+/**
  * Return a list of the ids of all locations in the subtree whose root
  * is \a locationId.
  */
@@ -172,14 +172,14 @@ QString Location::fullName(QList<int> locationIdList) const
     return name;
 }
 
-/*! Return the ids of the locations to which \a plantingId is assigned. */
+/** Return the ids of the locations to which \a plantingId is assigned. */
 QList<int> Location::locations(int plantingId) const
 {
     QString queryString("SELECT * FROM planting_location WHERE planting_id = %1");
     return queryIds(queryString.arg(plantingId), "location_id");
 }
 
-/*! Return the length of \a plantingId assigned to \a locationId. */
+/** Return the length of \a plantingId assigned to \a locationId. */
 qreal Location::plantingLength(int plantingId, int locationId) const
 {
     QString queryString("SELECT length FROM planting_location "
@@ -193,7 +193,7 @@ qreal Location::plantingLength(int plantingId, int locationId) const
     return query.value("length").toReal();
 }
 
-/*! Return the ids of all plantings assigned to \a locationId. */
+/** Return the ids of all plantings assigned to \a locationId. */
 QList<int> Location::plantings(int locationId) const
 {
     QString queryString("SELECT planting_id FROM planting_location "
@@ -203,7 +203,7 @@ QList<int> Location::plantings(int locationId) const
     return queryIds(queryString.arg(locationId), "planting_id");
 }
 
-/*! Return the ids of all plantings assigned to \a locationId before the \a last date. */
+/** Return the ids of all plantings assigned to \a locationId before the \a last date. */
 QList<int> Location::plantings(int locationId, const QDate &last) const
 {
     QString lastDateString = last.toString(Qt::ISODate);
@@ -218,7 +218,7 @@ QList<int> Location::plantings(int locationId, const QDate &last) const
     return queryIds(queryString.arg(locationId).arg(lastDateString), "planting_id");
 }
 
-/*!
+/**
  * Return the ids of all plantings assigned to \a locationId in the
  * season [\a seasonBeg, \a seasonEnd].
  */
@@ -243,7 +243,7 @@ QList<int> Location::children(int locationId) const
     return queryIds(queryString.arg(locationId), "location_id");
 }
 
-/*!
+/**
  * Return a list of the planting ids of \a locationId conflicting with
  * \a plantingId because they don't observe the family rotation interval.
  */
@@ -266,7 +266,7 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
     return clist;
 }
 
-/*!
+/**
  * Return a list of planting ids of \a locationId conflicting because
  * of space availabilty.
  */
@@ -341,7 +341,7 @@ void Location::splitPlanting(int plantingId, int otherPlantingId, int locationId
         addPlanting(plantingId, locationId, lengthToAdd);
 }
 
-/*!
+/**
  * Assign \a plantingId to \a locationId.
  *
  * No checking is performed.
@@ -358,7 +358,7 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length) const
     return length;
 }
 
-/*!
+/**
  * Add \a plantingId to \a locationId between \a seasonBeg and \a seasonEnd.
  *
  * If the location has sublocations, assign the planting to the sublocations,
@@ -395,13 +395,13 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length, const 
     return lengthToAdd;
 }
 
-/*! Remove \a plantingId from \a locationId. */
+/** Remove \a plantingId from \a locationId. */
 void Location::removePlanting(int plantingId, int locationId) const
 {
     removeLink("planting_location", "planting_id", plantingId, "location_id", locationId);
 }
 
-/*! Remove \a plantingId from all locations to which it is assigned. */
+/** Remove \a plantingId from all locations to which it is assigned. */
 void Location::removePlantingLocations(int plantingId) const
 {
     QString queryString = "DELETE FROM planting_location WHERY planting_id = %1)";

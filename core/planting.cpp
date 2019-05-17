@@ -78,7 +78,7 @@ int Planting::add(const QVariantMap &map) const
     return id;
 }
 
-/*!
+/**
  * Create several planting successions based on the same values.
  *
  * \param successions the number of successions to add
@@ -116,7 +116,7 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
     return idList;
 }
 
-/*!
+/**
  * Return a map of the last planting which shares the most common values.
  *
  * First try to find a planting which is in (or not in) greenhouse and has the
@@ -168,7 +168,7 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
     return {};
 }
 
-/*!
+/**
  * \brief Given a \a key, return its value in \a map if \a map contains this key.
  * Otherwise, return the value of the \a record for \a key.
  */
@@ -380,7 +380,7 @@ int Planting::duplicate(int id) const
     return newId;
 }
 
-/*!
+/**
  * Duplicate a planting to another \a year.
  *
  * The seeding and planting tasks will also be duplicated.
@@ -465,7 +465,7 @@ QVariantMap Planting::commonValues(const QList<int> &idList) const
     return common;
 }
 
-/*!
+/**
  * Check if all plantings in \a plantingIdList are of the same crop specie.
  */
 bool Planting::sameCrop(const QList<int> &plantingIdList) const
@@ -592,7 +592,7 @@ int Planting::totalLength(int plantingId) const
     return map.value("length").toInt();
 }
 
-/*! Return the already assigned bed length for \a plantingId */
+/** Return the already assigned bed length for \a plantingId */
 int Planting::assignedLength(int plantingId) const
 {
     if (plantingId < 1)

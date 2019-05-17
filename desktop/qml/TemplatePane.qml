@@ -29,7 +29,7 @@ Pane {
     property int taskTemplateId: -1
     property string taskTemplateName: ""
 
-    signal goBack()
+    signal goBack
 
     function refresh() {
         taskTemplateModel.refresh();

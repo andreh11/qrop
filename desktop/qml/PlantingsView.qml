@@ -17,6 +17,7 @@ ListView {
     property int rowSpacing: Units.smallSpacing
     property int checkBoxWidth: Units.rowHeight * 0.8
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
+    property alias revenue: plantingModel.revenue
 
     property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
@@ -133,7 +134,12 @@ ListView {
             "width": 60,
             "visible": true,
             "alignment": Qt.AlignRight
-
+        }, {
+            "name": qsTr("Revenue"),
+            "columnName": "bed_revenue",
+            "width": 60,
+            "visible": true,
+            "alignment": Qt.AlignRight
         }, {
             "name": qsTr("Tags"),
             "columnName": "planting_id",
@@ -561,7 +567,8 @@ ListView {
                     model.rows,
                     model.spacing_plants + " cm",
                     model.yield_per_bed_meter + " " + model.unit,
-                    "%L1 €".arg(model.average_price)
+                    "%L1 €".arg(model.average_price),
+                    "%L1 €".arg(model.bed_revenue)
                 ]
 
                 TextCheckBox {

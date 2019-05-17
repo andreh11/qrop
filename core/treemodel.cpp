@@ -336,7 +336,7 @@ bool SqlTreeModel::addRecord(const QSqlRecord &record, const QModelIndex &parent
     return true;
 }
 
-/*! Insert a subtree below \a parent whose root is the first item of
+/** Insert a subtree below \a parent whose root is the first item of
  * \a recordList. We assume that parent nodes appear before children.
  */
 bool SqlTreeModel::addRecordTree(QList<QSqlRecord> &recordList, const QModelIndex &parent)

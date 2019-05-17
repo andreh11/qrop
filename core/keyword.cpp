@@ -34,7 +34,7 @@ QList<int> Keyword::keywordIdList(int plantingId) const
     return queryIds(queryString.arg(plantingId), "keyword_id");
 }
 
-/*!
+/**
  * Return a list of the names of the keywords attached to \a plantingId.
  *
  * The return type is QVariantList for easier interaction with QML.
@@ -78,7 +78,7 @@ void Keyword::duplicateKeywords(int id, int newId) const
         addPlanting(newId, keywordId);
 }
 
-/*!
+/**
  * Attach a keyword to a planting.
  *
  * \param plantingId the id of the planting

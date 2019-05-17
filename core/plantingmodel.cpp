@@ -36,6 +36,7 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     , planting(new Planting(this))
 {
     setSortColumn("crop");
+    connect(this, SIGNAL(countChanged()), this, SIGNAL(revenueChanged()));
 }
 
 int PlantingModel::week() const
@@ -126,6 +127,15 @@ void PlantingModel::setCropId(int cropId)
     m_cropId = cropId;
     invalidateFilter();
     emit cropIdChanged();
+}
+
+int PlantingModel::revenue() const
+{
+    QString queryString("SELECT SUM(bed_revenue) "
+                        "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
+    QSqlQuery query(queryString.arg(m_year));
+    query.next();
+    return query.value(0).toInt();
 }
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
