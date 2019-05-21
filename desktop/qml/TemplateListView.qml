@@ -47,7 +47,7 @@ ListView {
             propagateComposedEvents: true
             cursorShape: Qt.PointingHandCursor
 
-            onClicked: editTask(task_id)
+            onClicked: editTask(template_task_id)
 
             Rectangle {
                 id: taskButtonRectangle
@@ -75,7 +75,7 @@ ListView {
                         text: "\ue254"
                         font.family: "Material Icons"
                         font.pointSize: Units.fontSizeBodyAndButton
-                        onClicked: editTask(task_id)
+                        onClicked: editTask(template_task_id)
                         ToolTip.text: qsTr("Edit task")
                         ToolTip.visible: hovered
                     }
@@ -87,7 +87,7 @@ ListView {
                         text: "\ue14d"
                         font.family: "Material Icons"
                         font.pointSize: Units.fontSizeBodyAndButton
-                        onClicked: duplicateTask(task_id)
+                        onClicked: duplicateTask(template_task_id)
                         ToolTip.text: qsTr("Duplicate template")
                         ToolTip.visible: hovered
                     }
@@ -98,7 +98,7 @@ ListView {
                         font.family: "Material Icons"
                         font.pointSize: Units.fontSizeBodyAndButton
                         anchors.verticalCenter: parent.verticalCenter
-                        onClicked: deleteTask(task_id)
+                        onClicked: deleteTask(template_task_id)
                         ToolTip.text: qsTr("Delete task")
                         ToolTip.visible: hovered
                     }
@@ -116,9 +116,17 @@ ListView {
                     text: "%1, %2 with %3".arg(type).arg(method).arg(implement)
                 }
                 Label {
-                    text: link_days == 0 ? qsTr("Same day")
-                                         : link_days > 0 ? qsTr("%L1 days after").arg(link_days)
-                                                         : qsTr("%L1 days before").arg(link_days * -1)
+                    readonly property string dayString: {
+                        if (link_days == 0)
+                            qsTr("Same day")
+                        else if (link_days > 0)
+                            qsTr("%L1 days after").arg(link_days)
+                        else
+                            qsTr("%L1 days before").arg(link_days * -1)
+                    }
+
+                    text: "%1%2".arg(dayString).arg(description.trim() ? ", %1".arg(description.trim())
+                                                                       : "")
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeCaption
                     color: Qt.rgba(0,0,0,0.6)

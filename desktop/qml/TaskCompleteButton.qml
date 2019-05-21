@@ -13,7 +13,6 @@ MyToolButton {
     property bool overdue
 
     checked: done
-    //                            flat: true
     checkable: true
     Text {
         anchors.fill: parent
@@ -22,10 +21,15 @@ MyToolButton {
         font.pixelSize: 30
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        color: parent.checked ? Material.color(Material.Green)
-                              : overdue
-                                ? Material.color(Material.Red)
-                                : Material.color(Material.Grey,
-                                                 Material.Shade300)
+        color: {
+            if (!enabled)
+                Material.color(Material.Grey, Material.Shade100)
+            else if (parent.checked)
+                 Material.color(Material.Green)
+            else if (overdue)
+                Material.color(Material.Red)
+            else
+                Material.color(Material.Grey, Material.Shade300)
+        }
     }
 }

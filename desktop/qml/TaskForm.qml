@@ -32,7 +32,6 @@ Flickable {
     property int taskTypeId: -1
     property bool sowPlantTask: false
     property bool templateMode: false
-    readonly property alias templateApplyCurrent: applyCurrentCheckBox.checked
 
     property int taskMethodId: methodField.selectedId
     property int taskImplementId: implementField.selectedId
@@ -48,6 +47,7 @@ Flickable {
     readonly property alias plantingIdList: plantingList.plantingIdList
     readonly property var locationIdList: locationView.selectedLocationIds()
     property string completedDate: ""
+    readonly property alias descriptionText: descriptionTextArea.text
 
     property int taskTemplateId: -1
     property int templateDateType: {
@@ -65,6 +65,7 @@ Flickable {
     readonly property var values: {
         "assigned_date": dueDateString,
         "completed_date": completedDate,
+        "description": descriptionText,
         "duration": duration,
         "labor_time": laborTimeString,
         "task_type_id": taskTypeId,
@@ -75,14 +76,14 @@ Flickable {
     }
 
     readonly property var templateValues: {
-        "assigned_date": " ",
         "template_date_type": templateDateType,
-        "task_template_id": taskTemplateId,
         "link_days": linkDays * (beforeButton.checked ? -1 : 1),
         "duration": duration,
+        "description": descriptionText,
         "task_type_id": taskTypeId,
         "task_method_id": taskMethodId,
-        "task_implement_id": taskImplementId
+        "task_implement_id": taskImplementId,
+        "task_template_id": taskTemplateId
     }
 
     function setFormValues(val) {
@@ -92,6 +93,9 @@ Flickable {
 
         if ("duration" in val)
             durationField.text = val["duration"]
+
+        if ("description" in val)
+            descriptionTextArea.text = val["description"]
 
         if ("labor_time" in val)
             laborTimeField.text = val["labor_time"]
@@ -182,9 +186,9 @@ Flickable {
         dueDatepicker.calendarDate = MDate.dateFromWeekString(control.week);
         durationField.text = "0";
         laborTimeField.text = "00:00";
+        descriptionTextArea.clear();
         plantingRadioButton.checked = true;
         locationRadioButton.checked = false;
-        applyCurrentCheckBox.checked = false;
     }
 
     focus: true
@@ -566,14 +570,6 @@ Flickable {
 
                         VerticalFiller { }
                     }
-                }
-
-                CheckBox {
-                    id: applyCurrentCheckBox
-                    text: qsTr("Apply update to all current applications of this template.")
-                    Layout.minimumHeight: implicitHeight
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
                 }
             }
         }

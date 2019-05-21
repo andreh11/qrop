@@ -204,6 +204,7 @@ Page {
             editPlantingsSnackBar.successions = successions;
             editPlantingsSnackBar.open();
             plantingsView.unselectAll();
+            taskSideSheet.refresh();
             page.refresh();
         }
 
@@ -211,6 +212,7 @@ Page {
             plantingsView.unselectAll();
         }
     }
+
 
     Snackbar {
         id: addPlantingSnackbar
@@ -326,6 +328,7 @@ Page {
             width: parent.width
         }
 
+
         Pane {
             width: parent.width
             padding: 0
@@ -376,6 +379,26 @@ Page {
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
+                    IconButton {
+                        id: taskButton
+                        text: "\ue614"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: taskSideSheet.visible
+
+                        onToggled: {
+                            if (checked)
+                                taskSideSheet.visible = true
+                            else
+                                taskSideSheet.visible = false
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide planting's tasks")
+                                              : qsTr("Show planting's tasks")
+                    }
 
                     Button {
                         id: editButton
@@ -449,7 +472,7 @@ Page {
                             font.pixelSize: 10
                         }
                         Label {
-                            text: "%1 €".arg(plantingsView.revenue)
+                            text: qsTr("$%L1").arg(plantingsView.revenue)
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeTitle
                         }
@@ -683,11 +706,28 @@ Page {
                 anchors {
                     top: topDivider.bottom
                     left: parent.left
-                    right: parent.right
+                    right: taskSideSheet.left
                     bottom: parent.bottom
                 }
                 onDoubleClicked: plantingDialog.editPlantings([plantingId])
             }
+
+            PlantingTaskSideSheet {
+                id: taskSideSheet
+                z: 0
+                Material.elevation: 8
+                visible: false
+                height: parent.height
+                year: MDate.isoYear(todayDate)
+                week: MDate.isoWeek(todayDate)
+                plantingId: checks ? selectedIdList()[0] : -1
+                anchors {
+                    right: parent.right
+                    top: topDivider.bottom
+                    bottom: parent.bottom
+                }
+            }
+
         }
     }
 }

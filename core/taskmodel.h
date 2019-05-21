@@ -31,6 +31,7 @@ class CORESHARED_EXPORT TaskModel : public SortFilterProxyModel
     Q_PROPERTY(bool showDone READ showDone WRITE setShowDone NOTIFY showDoneChanged)
     Q_PROPERTY(bool showDue READ showDue WRITE setShowDue NOTIFY showDueChanged)
     Q_PROPERTY(bool showOverdue READ showOverdue WRITE setShowOverdue NOTIFY showOverdueChanged)
+    Q_PROPERTY(int plantingId READ plantingId WRITE setPlantingId NOTIFY plantingIdChanged)
 
 public:
     TaskModel(QObject *parent = nullptr, const QString &tableName = "task_view");
@@ -56,6 +57,9 @@ public:
     bool showOverdue() const;
     void setShowOverdue(bool showOverdue);
 
+    int plantingId() const;
+    void setPlantingId(int id);
+
 signals:
     void dateChanged();
     void weekChanged();
@@ -63,6 +67,7 @@ signals:
     void showDoneChanged();
     void showDueChanged();
     void showOverdueChanged();
+    void plantingIdChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -75,6 +80,7 @@ private:
     bool m_showDone;
     bool m_showDue;
     bool m_showOverdue;
+    int m_plantingId;
 
     void updateWeekDates();
     bool isDone(int row, const QModelIndex &parent) const;

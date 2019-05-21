@@ -22,6 +22,7 @@ add_library(core SHARED
 	tasktemplatemodel.cpp 
 	tasktypemodel.cpp 
 	taskmethodmodel.cpp 
+        templatetask.cpp
 	expensecategorymodel.cpp 
 	inputmodel.cpp 
 	expensemodel.cpp 

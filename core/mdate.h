@@ -56,6 +56,7 @@ public:
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
     Q_INVOKABLE static QDate addDays(const QDate &date, qint64 days) { return date.addDays(days); }
     Q_INVOKABLE static QString dayName(const QDate &date);
+    Q_INVOKABLE static QString shortDayName(const QDate &date);
     Q_INVOKABLE static QString monthName(int month);
     Q_INVOKABLE static QString shortMonthName(int month);
 };

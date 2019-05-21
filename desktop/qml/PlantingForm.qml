@@ -1175,31 +1175,6 @@ Flickable {
         FormGroupBox {
             width: parent.width
             title: qsTr("Harvest & revenue rate")
-            visible: !chooseLocationMode && !bulkEditMode
-
-            RowLayout {
-                width: parent.width
-                spacing: 16
-                ComboTextField {
-                    id: templateComboBox
-                    model: TaskTemplateModel {
-                        id: taskTemplateModel
-                    }
-                    textRole: function (model) { return model.name; }
-                    idRole: function (model) { return model.task_template_id; }
-                }
-
-                Button {
-                    text: qsTr("Apply")
-                    onClicked: TaskTemplate.apply(templateComboBox.selectedId, plantingIds[0]);
-                }
-            }
-        }
-
-
-        FormGroupBox {
-            width: parent.width
-            title: qsTr("Harvest & revenue rate")
             visible: !chooseLocationMode
 
             RowLayout {
@@ -1262,7 +1237,7 @@ Flickable {
                         notation: DoubleValidator.StandardNotation
                     }
                     floatingLabel: true
-                    suffixText: "€"
+                    suffixText: qsTr("$")
                     Layout.fillWidth: true
                     onActiveFocusChanged: ensureItemVisible(averagePriceField)
                 }

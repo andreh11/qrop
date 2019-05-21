@@ -43,6 +43,10 @@ int Task::add(const QVariantMap &map) const
     if (implementId < 1)
         newMap.take("task_implement_id");
 
+    auto completedDate = newMap.value("completed_date").toString();
+    if (completedDate.isEmpty())
+        newMap["completed_date"] = QVariant(QVariant::String); // Set NULL value.
+
     int id = DatabaseUtility::add(newMap);
     if (id < 1) {
         qDebug() << Q_FUNC_INFO << "Couln't create task" << newMap;
@@ -309,27 +313,28 @@ void Task::delay(int taskId, int weeks)
 
 QPair<int, int> Task::sowPlantTaskIds(int plantingId) const
 {
-    int sowTaskId = -1;
-    int transplantTaskId = -1;
+    int sowingTaskId = -1;
+    int plantingTaskId = -1;
 
     for (const int taskId : plantingTasks(plantingId)) {
         auto record = recordFromId("task", taskId);
         auto taskType = static_cast<TaskType>(record.value("task_type_id").toInt());
 
         if (taskType == TaskType::DirectSow) {
-            sowTaskId = taskId;
+            sowingTaskId = plantingTaskId = taskId;
+            break;
         } else if (taskType == TaskType::GreenhouseSow) {
-            sowTaskId = taskId;
-            if (transplantTaskId > 0)
+            sowingTaskId = taskId;
+            if (plantingTaskId > 0)
                 break;
         } else if (taskType == TaskType::Transplant) {
-            transplantTaskId = taskId;
-            if (sowTaskId > 0)
+            plantingTaskId = taskId;
+            if (sowingTaskId > 0)
                 break;
         }
     }
 
-    return { sowTaskId, transplantTaskId };
+    return { sowingTaskId, plantingTaskId };
 }
 
 void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
@@ -396,21 +401,37 @@ void Task::updateTaskDates(int plantingId, const QDate &plantingDate) const
 }
 
 /**
- *  Duplicate the tasks linked to \a sourcePlantingId and link them to \a newPlantingId.
+ * Duplicate the tasks linked to \a sourcePlantingId and link them to \a newPlantingId.
  *
  * This method is used when duplicating plantings.
  */
 void Task::duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const
 {
-    qDebug() << Q_FUNC_INFO << "Duplicate tasks of planting" << sourcePlantingId << "for"
-             << newPlantingId;
+    QList<int> linkedTaskList;
+    QMap<int, int> taskIdMap;
 
-    auto sourceTasks = plantingTasks(sourcePlantingId);
-    for (const int taskId : sourceTasks) {
+    for (const int taskId : plantingTasks(sourcePlantingId)) {
         auto map = mapFromId("task", taskId);
         map.remove("task_id");
+        map["completed_date"] = "";
         int newTaskId = add(map);
         addPlanting(newPlantingId, newTaskId);
+        taskIdMap[taskId] = newTaskId;
+
+        auto linkTaskId = map.value("link_task_id").toInt();
+        if (linkTaskId > 0) {
+            linkedTaskList.push_back(newTaskId);
+        }
+    }
+
+    for (const int taskId : linkedTaskList) {
+        auto map = mapFromId("task", taskId);
+        auto linkTaskId = map.value("link_task_id").toInt();
+        if (!taskIdMap.contains(linkTaskId)) {
+            qDebug() << "Task::duplicate() : cannot find link task";
+            break;
+        }
+        update(taskId, { { "link_task_id", taskIdMap[linkTaskId] } });
     }
 }
 
@@ -424,7 +445,7 @@ void Task::removePlantingTasks(int plantingId) const
 }
 
 /**
- *  Remove the nursery task for \a plantingId.
+ * Remove the nursery task for \a plantingId.
  *
  * This method is used when the planting type of a planting is changed
  * from TP, raised to DS or TP, bought.

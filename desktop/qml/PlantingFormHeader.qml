@@ -175,7 +175,7 @@ Rectangle {
             }
             Label {
                 id: estimatedRevenueLabel
-                text: "%L1 €".arg(estimatedRevenue)
+                text: qsTr("$%L1").arg(estimatedRevenue)
                 horizontalAlignment: Text.AlignHCenter
                 font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
                 color: Qt.rgba(0,0,0, 0.87)

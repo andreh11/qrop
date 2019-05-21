@@ -149,24 +149,5 @@ Rectangle {
                 }
             }
         }
-
-
-
-        //        ColumnLayout {
-        //            Label {
-        //                text: qsTr("Revenue")
-        //                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
-        //                color: Qt.rgba(0,0,0, 0.50)
-        //                Layout.alignment: Qt.AlignRight
-        //            }
-        //            Label {
-        //                id: estimatedRevenueLabel
-        //                text: "%L1 €".arg(estimatedRevenue)
-        //                horizontalAlignment: Text.AlignHCenter
-        //                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
-        //                color: Qt.rgba(0,0,0, 0.87)
-        //                Layout.alignment: Qt.AlignRight
-        //            }
-        //        }
     }
 }

@@ -92,5 +92,10 @@
         <file>qml/VerticalThinDivider.qml</file>
         <file>qml/MyTextArea.qml</file>
         <file>qml/SettingsSwitch.qml</file>
+        <file>qml/TaskView.qml</file>
+        <file>qml/PlantingTaskView.qml</file>
+        <file>qml/TaskTemplateView.qml</file>
+        <file>qml/PlantingTaskTemplateView.qml</file>
+        <file>qml/PlantingTaskSideSheet.qml</file>
     </qresource>
 </RCC>

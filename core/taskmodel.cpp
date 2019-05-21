@@ -28,6 +28,7 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
     , m_showDone(false)
     , m_showDue(false)
     , m_showOverdue(false)
+    , m_plantingId(-1)
 {
     setSortColumn("assigned_date");
     m_filterDate = QDate();
@@ -36,12 +37,17 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
 
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    int leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
-    int rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
     QDate leftDate = fieldDate(left.row(), left.parent(), "assigned_date");
     QDate rightDate = fieldDate(right.row(), right.parent(), "assigned_date");
+    bool before = leftDate < rightDate;
 
-    return (leftType < rightType) || (leftType == rightType && leftDate < rightDate);
+    if (m_plantingId > 0)
+        return before;
+
+    int leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
+    int rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
+
+    return (leftType < rightType) || (leftType == rightType && before);
 }
 
 QVariant TaskModel::data(const QModelIndex &idx, int role) const
@@ -156,6 +162,21 @@ void TaskModel::setShowOverdue(bool showOverdue)
     showOverdueChanged();
 }
 
+int TaskModel::plantingId() const
+{
+    return m_plantingId;
+}
+
+void TaskModel::setPlantingId(int id)
+{
+    if (m_plantingId == id)
+        return;
+
+    m_plantingId = id;
+    plantingIdChanged();
+    invalidateFilter();
+}
+
 void TaskModel::updateWeekDates()
 {
     auto weekDates = MDate::weekDates(m_week, m_year);
@@ -189,6 +210,16 @@ bool TaskModel::isOverdue(int row, const QModelIndex &parent) const
 
 bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    if (m_plantingId > 0) {
+        auto plantingString = rowValue(sourceRow, sourceParent, "plantings").toString();
+        QList<int> plantingIdList;
+        for (const auto &plantingId : plantingString.split(","))
+            plantingIdList.push_back(plantingId.toInt());
+
+        return plantingIdList.contains(m_plantingId)
+                && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    }
+
     bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
             || (m_showDue && isDue(sourceRow, sourceParent))
             || (m_showDone && isDone(sourceRow, sourceParent));

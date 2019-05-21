@@ -219,6 +219,11 @@ QString MDate::dayName(const QDate &date)
     return date.toString("dddd");
 }
 
+QString MDate::shortDayName(const QDate &date)
+{
+    return date.toString("ddd");
+}
+
 QString MDate::monthName(int month)
 {
     if (month < 1 || month > 12)

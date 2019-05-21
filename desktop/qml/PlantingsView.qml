@@ -241,7 +241,7 @@ ListView {
     rightMargin: verticalScrollBar.width
     bottomMargin: horizontalScrollBar.height
     contentWidth: contentItem.childrenRect.width
-//    contentHeight: contentItem.childrenRect.height
+    //    contentHeight: contentItem.childrenRect.height
     highlightMoveDuration: 0
     highlightResizeDuration: 0
     highlight: Rectangle {
@@ -295,7 +295,7 @@ ListView {
             bottom: horizontalScrollBar.top
         }
         active: horizontalScrollBar.active
-//        policy: ScrollBar.AlwaysOn
+        //        policy: ScrollBar.AlwaysOn
     }
 
     ScrollBar.horizontal: ScrollBar {
@@ -309,7 +309,7 @@ ListView {
             right: verticalScrollBar.left
         }
         orientation: Qt.Horizontal
-//        policy: ScrollBar.AlwaysOn
+        //        policy: ScrollBar.AlwaysOn
     }
 
     headerPositioning: ListView.OverlayHeader
@@ -339,7 +339,7 @@ ListView {
                     anchors.verticalCenter: headerRow.verticalCenter
                     tristate: true
                     checkState: rowsNumber && checks == rowsNumber ? Qt.Checked
-                                                     : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                                                                   : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                     nextCheckState: function () {
                         if (!rowsNumber)
                             return;
@@ -420,7 +420,7 @@ ListView {
                         text: modelData.name
                         width: modelData.width
                         visible: index > 1 && tableHeaderModel[index].visible
-//                        horizontalAlignment: Text.AlignRight
+                        //                        horizontalAlignment: Text.AlignRight
                         horizontalAlignment: tableHeaderModel[index].alignment
                         state: listView.tableSortColumn === index ? listView.tableSortOrder : ""
                         onNewColumn: {
@@ -567,8 +567,8 @@ ListView {
                     model.rows,
                     model.spacing_plants + " cm",
                     model.yield_per_bed_meter + " " + model.unit,
-                    "%L1 €".arg(model.average_price),
-                    "%L1 €".arg(model.bed_revenue)
+                    qsTr("$%L1").arg(model.average_price),
+                    qsTr("$%L1").arg(model.bed_revenue)
                 ]
 
                 TextCheckBox {
@@ -637,10 +637,10 @@ ListView {
 
                     TableLabel {
                         text: modelData
+                        visible: tableHeaderModel[index+2].visible
                         anchors.verticalCenter: parent.verticalCenter
                         horizontalAlignment: tableHeaderModel[index+2].alignment
                         elide: Text.ElideRight
-                        visible: tableHeaderModel[index+2].visible
                         width: tableHeaderModel[index+2].width
                     }
                 }

@@ -49,6 +49,10 @@ QtObject {
     readonly property int timegraphWidth: monthWidth * 12
     readonly property int toolBarHeight: 48
 
+    readonly property color colorHighEmphasis: Qt.rgba(0, 0, 0, 0.87)
+    readonly property color colorMediumEmphasis: Qt.rgba(0, 0, 0, 0.6)
+    readonly property color colorDisabledEmphasis: Qt.rgba(0, 0, 0, 0.38)
+
     function coordinate(day) {
         if (day < 0)
             return 0;

@@ -37,13 +37,15 @@ Dialog {
     property bool templateMode: false
     property int taskTemplateId: -1
 
-    function reset() {
+    function reset()
+    {
         taskDialogHeader.reset();
         taskForm.reset();
         taskTemplateId = -1;
     }
 
-    function addTask() {
+    function addTask()
+    {
         mode = "add";
         dialog.taskId = -1
         taskDialogHeader.reset();
@@ -51,7 +53,8 @@ Dialog {
         dialog.open()
     }
 
-    function editTask(taskId) {
+    function editTask(taskId)
+    {
         mode = "edit";
         dialog.taskId = taskId;
         taskIdChanged(); // To update taskValueMap
@@ -131,11 +134,19 @@ Dialog {
 
     onAccepted: {
         if (mode === "add") {
-            Task.add(templateMode ? taskForm.templateValues : taskForm.values);
+            if (templateMode) {
+                TemplateTask.add(taskForm.templateValues)
+            }
+            else
+                Task.add(taskForm.values);
         } else {
-            Task.update(dialog.taskId, templateMode ? taskForm.templateValues : taskForm.values);
-            if (templateMode && taskTemplateId > 0 && taskForm.templateApplyCurrent)
-                Task.updateTemplateTasks(taskTemplateId, taskForm.templateValues);
+            if (templateMode) {
+                TemplateTask.update(dialog.taskId, taskForm.templateValues)
+                //                if (taskTemplateId > 0 && taskForm.templateApplyCurrent)
+                //                    TaskTemplate.updateTemplateTasks(taskTemplateId, taskForm.templateValues);
+            } else {
+                Task.update(dialog.taskId, taskForm.values);
+            }
         }
     }
 }

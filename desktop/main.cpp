@@ -65,6 +65,7 @@
 #include "taskmodel.h"
 #include "tasktemplatemodel.h"
 #include "tasktypemodel.h"
+#include "templatetask.h"
 #include "templatetaskmodel.h"
 #include "transplantlistmodel.h"
 #include "treemodel.h"
@@ -167,16 +168,6 @@ void registerTypes()
                                        return task;
                                    });
 
-    qmlRegisterSingletonType<Task>("io.qrop.components", 1, 0, "TemplateTask",
-                                   [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                       Q_UNUSED(engine)
-                                       Q_UNUSED(scriptEngine)
-                                       auto *task = new Task();
-                                       task->setTable("task");
-                                       task->setViewTable("template_task_view");
-                                       return task;
-                                   });
-
     qmlRegisterSingletonType<Location>("io.qrop.components", 1, 0, "Location",
                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                            Q_UNUSED(engine)
@@ -218,6 +209,14 @@ void registerTypes()
                                                   crop->setTable("crop");
                                                   return crop;
                                               });
+
+    qmlRegisterSingletonType<TemplateTask>("io.qrop.components", 1, 0, "TemplateTask",
+                                           [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                               Q_UNUSED(engine)
+                                               Q_UNUSED(scriptEngine)
+                                               auto *db = new TemplateTask();
+                                               return db;
+                                           });
 
     qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Unit",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
