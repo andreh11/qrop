@@ -13,8 +13,7 @@ Pane {
 
     property alias year: plantingTaskView.year
     property alias week: plantingTaskView.week
-    property alias plantingId: plantingTaskView.plantingId
-
+    property alias plantingIdList: plantingTaskTemplateView.plantingIdList
 
     function refresh() {
         plantingTaskView.refresh();
@@ -57,31 +56,15 @@ Pane {
         }
     }
 
-    Column {
-        visible: plantingId <= 0
+    BlankLabel {
+        visible: plantingIdList.length <= 0
         anchors.centerIn: parent
-        Label {
-            text: qsTr("No planting selected")
-            color: Units.colorHighEmphasis
-            font.pixelSize: Units.fontSizeTitle
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-
-        }
-        Label {
-            text: qsTr("Please select at least one planting")
-            color: Units.colorMediumEmphasis
-            font.pixelSize: Units.fontSizeSubheading
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+        primaryText: qsTr("No planting selected")
+        secondaryText: qsTr("Please select at least one planting")
     }
 
-
     ColumnLayout {
-        visible: plantingId > 0
+        visible: plantingIdList.length > 0
         anchors {
             top: header.bottom
             left: parent.left
@@ -92,12 +75,27 @@ Pane {
 
         PlantingTaskView {
             id: plantingTaskView
+            visible: plantingIdList.length === 1
             Layout.fillWidth: true
             Layout.fillHeight: true
             taskTemplateId: plantingTaskTemplateView.taskTemplateId
             Layout.leftMargin: 16
             Layout.rightMargin: Layout.leftMargin
+            plantingId: visible ? plantingIdList[0] : -1
         }
+
+        Item {
+            visible: plantingIdList.length > 1
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            BlankLabel {
+                anchors.centerIn: parent
+                primaryText: qsTr("Several plantings selected")
+                secondaryText: qsTr("Select templates to bulk apply")
+            }
+        }
+
         
         ThinDivider {
             Layout.fillWidth: true
@@ -117,7 +115,6 @@ Pane {
             id: plantingTaskTemplateView
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height/3
-            plantingId: plantingTaskView.plantingId
             onTemplateListChanged: plantingTaskView.refresh();
         }
     }

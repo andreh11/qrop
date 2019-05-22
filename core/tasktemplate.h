@@ -32,11 +32,14 @@ class CORESHARED_EXPORT TaskTemplate : public DatabaseUtility
 public:
     TaskTemplate(QObject *parent = nullptr);
     Q_INVOKABLE int duplicate(int id) const override;
-    Q_INVOKABLE void apply(int templateId, int plantingId) const;
+    Q_INVOKABLE void apply(int templateId, int plantingId, bool transaction = false) const;
+    Q_INVOKABLE void applyList(int templateId, QList<int> plantingIdList) const;
     Q_INVOKABLE void unapply(int templateId, int plantingId) const;
+    Q_INVOKABLE void unapplyList(int templateId, QList<int> plantingIdList) const;
     Q_INVOKABLE void updateTemplateTasks(int taskId, const QVariantMap &map) const;
     Q_INVOKABLE void removeUncompletedTasks(int templateId) const;
-    QList<int> plantingTemplates(int templateId) const;
+    QList<int> plantingTemplates(int plantingId) const;
+    QList<int> plantingsCommonTemplates(QList<int> plantingIdList) const;
 
 private:
     Planting *mPlanting;
@@ -44,6 +47,7 @@ private:
     TemplateTask *mTemplateTask;
     QList<int> templateTasks(int templateId) const;
     QList<int> plantingTemplateTasks(int templateId, int plantingId) const;
+    bool templateApplied(int templateId, int plantingId) const;
     QList<int> uncompletedPlantingTemplateTasks(int templateId, int plantingId) const;
     QList<int> uncompletedTasks(int templateId) const;
     void removeTemplateTasks(int templateId) const;

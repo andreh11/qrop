@@ -54,6 +54,11 @@ QList<int> TaskTemplate::plantingTemplateTasks(int templateId, int plantingId) c
     return queryIds(queryString.arg(templateId).arg(plantingId), "task_id");
 }
 
+bool TaskTemplate::templateApplied(int templateId, int plantingId) const
+{
+    return plantingTemplates(plantingId).contains(templateId);
+}
+
 QList<int> TaskTemplate::uncompletedPlantingTemplateTasks(int templateId, int plantingId) const
 {
     QString queryString("SELECT task_view.task_id "
@@ -118,12 +123,35 @@ QList<int> TaskTemplate::plantingTemplates(int plantingId) const
     return queryIds(queryString.arg(plantingId), "task_template_id");
 }
 
+QList<int> TaskTemplate::plantingsCommonTemplates(QList<int> plantingIdList) const
+{
+    if (plantingIdList.empty())
+        return {};
+
+    auto common = plantingTemplates(plantingIdList.first());
+    std::sort(common.begin(), common.end());
+
+    for (const int plantingId : plantingIdList.mid(1)) {
+        auto templates = plantingTemplates(plantingId);
+        std::sort(templates.begin(), templates.end());
+
+        auto i = common.begin();
+        while (i != common.end()) {
+            if (templates.contains(*i))
+                i++;
+            else
+                i = common.erase(i);
+        }
+    }
+    return common;
+}
+
 /**
  * Create tasks from the template \a templateId for the planting \a plantingId.
  */
-void TaskTemplate::apply(int templateId, int plantingId) const
+void TaskTemplate::apply(int templateId, int plantingId, bool transaction) const
 {
-    if (templateId < 0 || plantingId < 0)
+    if (templateId < 0 || plantingId < 0 || templateApplied(templateId, plantingId))
         return;
 
     auto plantingRecord = recordFromId("planting", plantingId);
@@ -137,6 +165,9 @@ void TaskTemplate::apply(int templateId, int plantingId) const
         qDebug() << "[TaskTemplate::apply] both sow task and transplant task ids are invalid";
         return;
     }
+
+    if (!transaction)
+        QSqlDatabase::database().transaction();
 
     for (const int templateTaskId : templateTasks(templateId)) {
         auto map = mapFromId("template_task", templateTaskId);
@@ -181,11 +212,27 @@ void TaskTemplate::apply(int templateId, int plantingId) const
         }
         mTask->addPlanting(plantingId, taskId);
     }
+    if (!transaction)
+        QSqlDatabase::database().transaction();
+}
+
+void TaskTemplate::applyList(int templateId, QList<int> plantingIdList) const
+{
+    QSqlDatabase::database().transaction();
+    for (const int plantingId : plantingIdList)
+        apply(templateId, plantingId, true);
+    QSqlDatabase::database().transaction();
 }
 
 void TaskTemplate::unapply(int templateId, int plantingId) const
 {
     mTask->removeList(uncompletedPlantingTemplateTasks(templateId, plantingId));
+}
+
+void TaskTemplate::unapplyList(int templateId, QList<int> plantingIdList) const
+{
+    for (const int plantingId : plantingIdList)
+        unapply(templateId, plantingId);
 }
 
 void TaskTemplate::updateTemplateTasks(int templateTaskId, const QVariantMap &map) const

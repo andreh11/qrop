@@ -10,8 +10,6 @@ import io.qrop.components 1.0
 ListView {
     id: templateView
 
-    property alias plantingId: taskTemplateModel.plantingId
-    
     model: TaskTemplateModel {
         id: taskTemplateModel
     }

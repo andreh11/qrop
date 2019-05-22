@@ -27,29 +27,27 @@ class TaskTemplate;
 class CORESHARED_EXPORT TaskTemplateModel : public SortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(int plantingId READ plantingId WRITE setPlantingId NOTIFY plantingIdChanged)
+    Q_PROPERTY(QList<int> plantingIdList READ plantingIdList WRITE setPlantingIdList NOTIFY plantingIdListChanged)
 
 public:
     TaskTemplateModel(QObject *parent = nullptr, const QString &tableName = "task_template");
     QVariant data(const QModelIndex &idx, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    int plantingId() const;
-    void setPlantingId(int id);
+    QList<int> plantingIdList() const;
+    void setPlantingIdList(QList<int> id);
     Q_INVOKABLE void toggle(int row);
 
 signals:
-    void plantingIdChanged();
+    void plantingIdListChanged();
 
 private:
-    int m_plantingId;
+    enum { AppliedRole = Qt::UserRole + 100 };
+    QList<int> m_plantingIdList;
     QList<int> m_plantingTemplateList;
     TaskTemplate *mTaskTemplate;
     bool isApplied(int templateId) const;
-    enum { AppliedRole = Qt::UserRole + 100 };
     void refreshTemplateList();
-    //    Q_INVOKABLE void applyTemplate(int templateId, int plantingId);
-    //    Q_INVOKABLE void removeTemplate(int templateId, int plantingId);
 };
 
 #endif // TASKTEMPLATEMODEL_H

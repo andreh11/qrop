@@ -97,5 +97,6 @@
         <file>qml/TaskTemplateView.qml</file>
         <file>qml/PlantingTaskTemplateView.qml</file>
         <file>qml/PlantingTaskSideSheet.qml</file>
+        <file>qml/BlankLabel.qml</file>
     </qresource>
 </RCC>

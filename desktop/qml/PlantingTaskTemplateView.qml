@@ -10,7 +10,7 @@ import io.qrop.components 1.0
 ListView {
     id: templateView
 
-    property alias plantingId: taskTemplateModel.plantingId
+    property alias plantingIdList: taskTemplateModel.plantingIdList
     property int taskTemplateId: -1
     property string taskTemplateName: ""
 
@@ -21,7 +21,7 @@ ListView {
         currentIndexChanged();
     }
 
-    onPlantingIdChanged: {
+    onPlantingIdListChanged: {
         templateView.currentIndex = -1;
     }
 

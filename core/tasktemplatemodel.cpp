@@ -23,32 +23,31 @@
 
 TaskTemplateModel::TaskTemplateModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_plantingId(-1)
     , mTaskTemplate(new TaskTemplate(this))
 {
     setSortColumn("name");
 }
 
-int TaskTemplateModel::plantingId() const
+QList<int> TaskTemplateModel::plantingIdList() const
 {
-    return m_plantingId;
+    return m_plantingIdList;
 }
 
-void TaskTemplateModel::setPlantingId(int id)
+void TaskTemplateModel::setPlantingIdList(QList<int> idList)
 {
-    if (m_plantingId == id)
+    if (m_plantingIdList == idList)
         return;
 
-    m_plantingId = id;
+    m_plantingIdList = idList;
     refreshTemplateList();
-    plantingIdChanged();
+    plantingIdListChanged();
     refresh();
 }
 
 void TaskTemplateModel::refreshTemplateList()
 {
     m_plantingTemplateList.clear();
-    m_plantingTemplateList.append(mTaskTemplate->plantingTemplates(m_plantingId));
+    m_plantingTemplateList.append(mTaskTemplate->plantingsCommonTemplates(m_plantingIdList));
 }
 
 void TaskTemplateModel::toggle(int row)
@@ -58,9 +57,9 @@ void TaskTemplateModel::toggle(int row)
 
     auto templateId = rowValue(row, QModelIndex(), "task_template_id").toInt();
     if (isApplied(templateId))
-        mTaskTemplate->unapply(templateId, m_plantingId);
+        mTaskTemplate->unapplyList(templateId, m_plantingIdList);
     else
-        mTaskTemplate->apply(templateId, m_plantingId);
+        mTaskTemplate->applyList(templateId, m_plantingIdList);
 
     auto idx = index(row, 0, QModelIndex());
     refreshTemplateList();

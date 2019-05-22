@@ -720,7 +720,7 @@ Page {
                 height: parent.height
                 year: MDate.isoYear(todayDate)
                 week: MDate.isoWeek(todayDate)
-                plantingId: checks ? selectedIdList()[0] : -1
+                plantingIdList: selectedIdList()
                 anchors {
                     right: parent.right
                     top: topDivider.bottom
