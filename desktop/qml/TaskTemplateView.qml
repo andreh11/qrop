@@ -10,6 +10,10 @@ import io.qrop.components 1.0
 ListView {
     id: templateView
 
+    function refresh() {
+        taskTemplateModel.refresh();
+    }
+
     model: TaskTemplateModel {
         id: taskTemplateModel
     }

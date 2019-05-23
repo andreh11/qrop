@@ -45,6 +45,7 @@ Page {
 
     function refresh() {
         plantingsView.refresh();
+        taskSideSheet.refresh();
     }
 
     function selectedIdList() {
@@ -714,20 +715,21 @@ Page {
 
             PlantingTaskSideSheet {
                 id: taskSideSheet
-                z: 0
-                Material.elevation: 8
-                visible: false
-                height: parent.height
-                year: MDate.isoYear(todayDate)
-                week: MDate.isoWeek(todayDate)
-                plantingIdList: selectedIdList()
                 anchors {
                     right: parent.right
                     top: topDivider.bottom
                     bottom: parent.bottom
                 }
-            }
+                z: 0
+                visible: false
+                height: parent.height
+                year: MDate.isoYear(todayDate)
+                week: MDate.isoWeek(todayDate)
+                plantingIdList: selectedIdList()
 
+                Material.elevation: 8
+                onTaskDateModified: plantingsView.refresh();
+            }
         }
     }
 }

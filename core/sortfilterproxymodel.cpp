@@ -68,6 +68,16 @@ void SortFilterProxyModel::refresh()
     countChanged();
 }
 
+// TODO: not working
+void SortFilterProxyModel::refreshRow(int row)
+{
+    if (row < 0 && row >= rowCount())
+        return;
+
+    auto idx = mapToSource(index(row, 0));
+    m_model->selectRow(idx.row());
+}
+
 QString SortFilterProxyModel::filterString() const
 {
     return m_string;

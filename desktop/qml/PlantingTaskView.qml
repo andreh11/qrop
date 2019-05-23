@@ -21,6 +21,8 @@ ListView {
     property alias plantingId: taskModel.plantingId
     property int taskTemplateId: -1
 
+    signal taskDateModified
+
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
         // and view position will be reset.
@@ -85,6 +87,7 @@ ListView {
                 calendarPopup.close();
                 Task.completeTask(calendarPopup.taskId, newDate)
                 taskView.refresh();
+                taskDateModified();
             }
         }
     }
@@ -256,6 +259,7 @@ ListView {
                             Task.uncompleteTask(model.task_id);
                         else
                             Task.completeTask(model.task_id);
+                        taskDateModified();
                         taskView.refresh();
                     }
                     onPressAndHold: {
@@ -294,9 +298,12 @@ ListView {
                 }
 
                 Label {
-                    text: MDate.isoWeek(model.assigned_date) !== week
-                          ? MDate.formatDate(model.assigned_date, year, "")
-                          : MDate.shortDayName(model.assigned_date)
+                    property date displayDate: MDate.isValid(model.completed_date)
+                                               ? model.completed_date
+                                               : model.assigned_date
+                    text: MDate.isoWeek(displayDate) !== week
+                          ? MDate.formatDate(displayDate, year, "")
+                          : MDate.shortDayName(displayDate)
                     elide: Text.ElideRight
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton

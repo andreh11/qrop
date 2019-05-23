@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE int rowId(int row) const;
     Q_INVOKABLE void resetFilter() { invalidateFilter(); }
     Q_INVOKABLE virtual void refresh();
+    Q_INVOKABLE void refreshRow(int row);
 
     QString filterString() const;
     int filterYear() const;

@@ -15,6 +15,8 @@ Pane {
     property alias week: plantingTaskView.week
     property alias plantingIdList: plantingTaskTemplateView.plantingIdList
 
+    signal taskDateModified
+
     function refresh() {
         plantingTaskView.refresh();
         plantingTaskTemplateView.refresh();
@@ -82,6 +84,7 @@ Pane {
             Layout.leftMargin: 16
             Layout.rightMargin: Layout.leftMargin
             plantingId: visible ? plantingIdList[0] : -1
+            onTaskDateModified: taskSideSheet.taskDateModified();
         }
 
         Item {

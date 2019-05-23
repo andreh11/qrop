@@ -32,7 +32,7 @@ Pane {
     signal goBack
 
     function refresh() {
-        taskTemplateModel.refresh();
+        templateView.refresh();
         beforeGHModel.refresh();
         afterGHModel.refresh();
         beforePlantingModel.refresh();
@@ -42,6 +42,23 @@ Pane {
         beforeLastHarvestModel.refresh();
         afterLastHarvestModel.refresh();
         templateView.currentIndexChanged();
+    }
+
+    function editTask(taskId) {
+        taskDialog.editTask(taskId)
+        pane.refresh();
+    }
+
+    function removeTask(taskId) {
+        removeTaskDialog.taskId = taskId
+        removeTaskDialog.open();
+    }
+
+    function duplicateTask(taskId) {
+        var newId = TemplateTask.duplicate(taskId);
+        addTaskDialog.taskId = newId;
+        addTaskDialog.open();
+        pane.refresh();
     }
 
     padding: 0
@@ -158,7 +175,7 @@ Pane {
                         title: qsTr("Add template")
                         onAccepted: {
                             TaskTemplate.add({"name": text});
-                            taskTemplateModel.refresh();
+                            templateView.refresh();
                         }
                     }
                 }
@@ -225,7 +242,6 @@ Pane {
 
             ThinDivider { Layout.fillWidth: true }
 
-
             Pane {
                 id: taskPane
                 Layout.fillWidth: true
@@ -239,8 +255,8 @@ Pane {
                     taskTemplateId: pane.taskTemplateId
                     width: parent.width / 2
                     //                height: parent.height
-//                    x: (parent.width - width) / 2
-//                    y: (parent.height - height) / 2
+                    //                    x: (parent.width - width) / 2
+                    //                    y: (parent.height - height) / 2
                     week: 0
                     year: 0
                     onAccepted: {
@@ -250,17 +266,37 @@ Pane {
                 }
 
                 Dialog {
-                    id: updateDialog
-
-                    title: qsTr("Apply update to all current applications of this template?")
+                    id: addTaskDialog
+                    property int taskId: -1
+                    title: qsTr("Add this task to all current applications of this template?")
                     standardButtons: Dialog.No | Dialog.Yes
+                    onAccepted: TemplateTask.addToCurrentApplications(taskId)
+                }
+
+                Dialog {
+                    id: removeTaskDialog
+                    property int taskId: -1
+                    title: qsTr("Remove this task from all current applications of this template?")
+                    standardButtons: Dialog.No | Dialog.Yes
+                    onAccepted: {
+                        TemplateTask.removeFromCurrentApplications(taskId)
+                        TemplateTask.remove(taskId);
+                        pane.refresh();
+                    }
+                    onRejected: {
+                        TemplateTask.remove(taskId);
+                        pane.refresh();
+                    }
+                }
+
+                Dialog {
+                    id: updateDialog
+                    property int taskId: -1
+                    title: qsTr("Apply update to all current applications of this template?")
+                    standardButtons: Dialog.No | Dialog.Apply
 
                     onAccepted: console.log("Ok clicked")
                     onRejected: console.log("Cancel clicked")
-
-                    // add
-                    // update
-                    // delete
                 }
 
                 ScrollView {
@@ -286,18 +322,9 @@ Pane {
                                 width: parent.width
                                 Layout.fillWidth: true
 
-                                onEditTask: {
-                                    taskDialog.editTask(taskId)
-                                    pane.refresh();
-                                }
-                                onDeleteTask: {
-                                    TemplateTask.remove(taskId);
-                                    pane.refresh();
-                                }
-                                onDuplicateTask: {
-                                    TemplateTask.duplicate(taskId);
-                                    pane.refresh();
-                                }
+                                onEditTask: pane.editTask(taskId)
+                                onDeleteTask: pane.removeTask(taskId)
+                                onDuplicateTask: pane.duplicateTask(taskId)
                             }
                         }
 
@@ -313,19 +340,9 @@ Pane {
                                 model: modelData
                                 width: parent.width
                                 Layout.fillWidth: true
-
-                                onEditTask: {
-                                    taskDialog.editTask(taskId)
-                                    pane.refresh();
-                                }
-                                onDeleteTask: {
-                                    TemplateTask.remove(taskId);
-                                    pane.refresh();
-                                }
-                                onDuplicateTask: {
-                                    TemplateTask.duplicate(taskId);
-                                    pane.refresh();
-                                }
+                                onEditTask: pane.editTask(taskId)
+                                onDeleteTask: pane.removeTask(taskId)
+                                onDuplicateTask: pane.duplicateTask(taskId)
                             }
                         }
 
@@ -341,19 +358,9 @@ Pane {
                                 model: modelData
                                 width: parent.width
                                 Layout.fillWidth: true
-
-                                onEditTask: {
-                                    taskDialog.editTask(taskId)
-                                    pane.refresh();
-                                }
-                                onDeleteTask: {
-                                    TemplateTask.remove(taskId);
-                                    pane.refresh();
-                                }
-                                onDuplicateTask: {
-                                    TemplateTask.duplicate(taskId);
-                                    pane.refresh();
-                                }
+                                onEditTask: pane.editTask(taskId)
+                                onDeleteTask: pane.removeTask(taskId)
+                                onDuplicateTask: pane.duplicateTask(taskId)
                             }
                         }
 
@@ -369,19 +376,9 @@ Pane {
                                 model: modelData
                                 width: parent.width
                                 Layout.fillWidth: true
-
-                                onEditTask: {
-                                    taskDialog.editTask(taskId)
-                                    pane.refresh();
-                                }
-                                onDeleteTask: {
-                                    TemplateTask.remove(taskId);
-                                    pane.refresh();
-                                }
-                                onDuplicateTask: {
-                                    TemplateTask.duplicate(taskId);
-                                    pane.refresh();
-                                }
+                                onEditTask: pane.editTask(taskId)
+                                onDeleteTask: pane.removeTask(taskId)
+                                onDuplicateTask: pane.duplicateTask(taskId)
                             }
                         }
 
@@ -397,19 +394,9 @@ Pane {
                                 model: modelData
                                 width: parent.width
                                 Layout.fillWidth: true
-
-                                onEditTask: {
-                                    taskDialog.editTask(taskId)
-                                    pane.refresh();
-                                }
-                                onDeleteTask: {
-                                    TemplateTask.remove(taskId);
-                                    pane.refresh();
-                                }
-                                onDuplicateTask: {
-                                    TemplateTask.duplicate(taskId);
-                                    pane.refresh();
-                                }
+                                onEditTask: pane.editTask(taskId)
+                                onDeleteTask: pane.removeTask(taskId)
+                                onDuplicateTask: pane.duplicateTask(taskId)
                             }
                         }
                     }

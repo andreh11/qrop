@@ -163,10 +163,15 @@ ListView {
 
     //! Ids of selected plantings
     property var selectedIds: ({})
+    property int lastSelectedRow: -1
     //! Number of selected plantings
     property int checks: numberOfTrue(selectedIds)
     property int firstSelectedIndex: -1
     property int secondSelectedIndex: -1
+
+    function refreshCurrentRow() {
+        plantingModel.refreshRow(lastSelectedRow);
+    }
 
     function numberOfTrue(array) {
         var n = 0
@@ -505,6 +510,7 @@ ListView {
                 firstSelectedIndex = index;
 
             selectedIds[model.planting_id] = !selectedIds[model.planting_id];
+            lastSelectedRow = firstSelectedIndex
 
             secondSelectedIndex = -1;
             selectedIdsChanged();
@@ -514,6 +520,7 @@ ListView {
             selectedIds[model.planting_id] = !selectedIds[model.planting_id]
             if (firstSelectedIndex >= 0) {
                 secondSelectedIndex = index;
+                lastSelectedRow = secondSelectedIndex
                 shiftSelectBetween();
             } else {
                 delegate.select();

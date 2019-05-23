@@ -37,8 +37,13 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
 
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    QDate leftDate = fieldDate(left.row(), left.parent(), "assigned_date");
-    QDate rightDate = fieldDate(right.row(), right.parent(), "assigned_date");
+    QDate leftAssignedDate = fieldDate(left.row(), left.parent(), "assigned_date");
+    QDate rightAssignedDate = fieldDate(right.row(), right.parent(), "assigned_date");
+    QDate leftCompletedDate = fieldDate(left.row(), left.parent(), "completed_date");
+    QDate rightCompletedDate = fieldDate(right.row(), right.parent(), "completed_date");
+
+    auto leftDate = leftCompletedDate.isValid() ? leftCompletedDate : leftAssignedDate;
+    auto rightDate = rightCompletedDate.isValid() ? rightCompletedDate : rightAssignedDate;
     bool before = leftDate < rightDate;
 
     if (m_plantingId > 0)
@@ -55,11 +60,11 @@ QVariant TaskModel::data(const QModelIndex &idx, int role) const
     QModelIndex sourceIndex = mapToSource(idx);
     switch (role) {
     case Qt::UserRole + 100:
-        return isOverdue(sourceIndex.row(), sourceIndex.parent());
+        return overdue(sourceIndex.row(), sourceIndex.parent());
     case Qt::UserRole + 101:
-        return isDue(sourceIndex.row(), sourceIndex.parent());
+        return due(sourceIndex.row(), sourceIndex.parent());
     case Qt::UserRole + 102:
-        return isDone(sourceIndex.row(), sourceIndex.parent());
+        return done(sourceIndex.row(), sourceIndex.parent());
     default:
         return SortFilterProxyModel::data(idx, role);
     }
@@ -187,24 +192,30 @@ void TaskModel::updateWeekDates()
     invalidate();
 }
 
-bool TaskModel::isDone(int row, const QModelIndex &parent) const
+bool TaskModel::done(int row, const QModelIndex &parent) const
 {
     QDate completedDate = fieldDate(row, parent, "completed_date");
     bool completed = completedDate.isValid();
-    return completed && m_mondayDate <= completedDate && completedDate <= m_sundayDate;
+    return completed
+            && (m_plantingId > 0
+                || ((m_mondayDate <= completedDate) && (completedDate <= m_sundayDate)));
 }
 
-bool TaskModel::isDue(int row, const QModelIndex &parent) const
+bool TaskModel::due(int row, const QModelIndex &parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
+    if (m_plantingId > 0)
+        return !completed && assignedDate >= QDate::currentDate();
     return !completed && m_mondayDate <= assignedDate && assignedDate <= m_sundayDate;
 }
 
-bool TaskModel::isOverdue(int row, const QModelIndex &parent) const
+bool TaskModel::overdue(int row, const QModelIndex &parent) const
 {
     QDate assignedDate = fieldDate(row, parent, "assigned_date");
     bool completed = rowValue(row, parent, "completed_date").toString() != "";
+    if (m_plantingId > 0)
+        return !completed && assignedDate < QDate::currentDate();
     return !completed && assignedDate < m_mondayDate && MDate::isoYear(assignedDate) == m_year;
 }
 
@@ -220,8 +231,8 @@ bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
                 && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     }
 
-    bool inRange = (m_showOverdue && isOverdue(sourceRow, sourceParent))
-            || (m_showDue && isDue(sourceRow, sourceParent))
-            || (m_showDone && isDone(sourceRow, sourceParent));
+    bool inRange = (m_showOverdue && overdue(sourceRow, sourceParent))
+            || (m_showDue && due(sourceRow, sourceParent))
+            || (m_showDone && done(sourceRow, sourceParent));
     return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

@@ -39,6 +39,7 @@ public:
     static QDate firstMondayOfYear(int year);
     static QDate mondayOfWeek(int week, int year);
     static QList<QDate> weekDates(int week, int year);
+    Q_INVOKABLE static bool isValid(const QDate &date) { return date.isValid(); }
     Q_INVOKABLE static int isoWeek(const QDate &date);
     Q_INVOKABLE static int isoYear(const QDate &date);
     Q_INVOKABLE static int currentWeek();

@@ -83,9 +83,9 @@ private:
     int m_plantingId;
 
     void updateWeekDates();
-    bool isDone(int row, const QModelIndex &parent) const;
-    bool isDue(int row, const QModelIndex &parent) const;
-    bool isOverdue(int row, const QModelIndex &parent) const;
+    bool done(int row, const QModelIndex &parent) const;
+    bool due(int row, const QModelIndex &parent) const;
+    bool overdue(int row, const QModelIndex &parent) const;
 };
 
 #endif // TASKMODEL_H

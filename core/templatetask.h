@@ -22,12 +22,31 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
+class Planting;
+class Task;
+
 class CORESHARED_EXPORT TemplateTask : public DatabaseUtility
 {
     Q_OBJECT
 public:
     TemplateTask(QObject *parent = nullptr);
     Q_INVOKABLE int add(const QVariantMap &map) const override;
+    Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
+    Q_INVOKABLE void addToCurrentApplications(int templateTaskId) const;
+    Q_INVOKABLE void removeFromCurrentApplications(int templateTaskId) const;
+
+    Q_INVOKABLE void apply(int templateTaskId, int plantingId) const;
+    Q_INVOKABLE void applyList(int templateTaskId, QList<int> plantingIdList) const;
+    //    Q_INVOKABLE void unapply(int templateTaskId, int plantingId) const;
+    //    Q_INVOKABLE void unapplyList(int templateTaskId, QList<int> plantingIdList) const;
+
+private:
+    Planting *mPlanting;
+    Task *mTask;
+    int templateId(int templateTaskId) const;
+    QList<int> plantings(int templateTaskId) const;
+    QList<int> uncompletedTasks(int templateTaskId) const;
+    QVariantMap removeInvalidIds(const QVariantMap &map) const;
 };
 
 #endif // TEMPLATE_TASK_H

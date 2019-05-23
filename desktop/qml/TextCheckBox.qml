@@ -67,7 +67,7 @@ CheckBox {
 
     Rectangle {
         id: rankBox
-        visible: !control.checked && !hovered && showRank
+        visible: textBox.visible && showRank
         antialiasing: true
         anchors.right: parent.right
         anchors.rightMargin: -width/4 -2
@@ -80,11 +80,6 @@ CheckBox {
 
         Text {
             id: rankText
-            visible: !control.checked && !hovered
-//            anchors.left: parent.left
-//            anchors.top: parent.top
-//            anchors.leftMargin: 4
-//            anchors.topMargin: 2
             anchors.centerIn: parent
             text: "1"
             color: "black"
@@ -94,11 +89,4 @@ CheckBox {
     }
 
     contentItem: Text {}
-//        text: control.text
-//        font: control.font
-//        opacity: enabled ? 1.0 : 0.3
-//        color: control.down ? "#17a81a" : "#21be2b"
-//        verticalAlignment: Text.AlignVCenter
-//        leftPadding: control.indicator.width + control.spacing
-//    }
 }
