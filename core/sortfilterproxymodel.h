@@ -56,14 +56,14 @@ public:
     void setSortColumn(const QString &columnName);
     void setSortOrder(const QString &order);
 
-    QPair<QDate, QDate> seasonDates() const;
+    std::pair<QDate, QDate> seasonDates() const;
 
 protected:
     SqlTableModel *m_model;
     bool isDateInRange(const QDate &date) const;
     virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
-    //    QPair<QDate, QDate> seasonDates(int season, int year) const;
+    //    std::pair<QDate, QDate> seasonDates(int season, int year) const;
     int m_year;
     int m_season;
 

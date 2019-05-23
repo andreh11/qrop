@@ -1,14 +1,13 @@
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QDate>
-#include <QPair>
 
 #include "tst_mdate.h"
 #include "mdate.h"
 
-tst_MDate::tst_MDate() {}
+tst_MDate::tst_MDate() = default;
 
-tst_MDate::~tst_MDate() {}
+tst_MDate::~tst_MDate() = default;
 
 void tst_MDate::dateFromWeekString()
 {

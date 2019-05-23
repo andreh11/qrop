@@ -38,7 +38,6 @@ public:
     Q_INVOKABLE void unapply(int templateId, int plantingId) const;
     Q_INVOKABLE void unapplyList(int templateId, QList<int> plantingIdList) const;
 
-    Q_INVOKABLE void updateTemplateTasks(int taskId, const QVariantMap &map) const;
     Q_INVOKABLE void removeUncompletedTasks(int templateId) const;
     QList<int> plantingTemplates(int plantingId) const;
     QList<int> plantingsCommonTemplates(QList<int> plantingIdList) const;

@@ -147,7 +147,7 @@ ListView {
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
                             TaskTemplate.remove(task_template_id);
-                            updateDialog.open();
+                            updateTaskDialog.open();
                             pane.refresh();
                         }
                         ToolTip.text: qsTr("Delete template")

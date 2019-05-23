@@ -37,6 +37,9 @@ Dialog {
     property bool templateMode: false
     property int taskTemplateId: -1
 
+    signal taskAdded(int taskId)
+    signal taskUpdated(int taskId)
+
     function reset()
     {
         taskDialogHeader.reset();
@@ -91,8 +94,8 @@ Dialog {
     Material.background: Material.color(Material.Grey, Material.Shade100)
     padding: Units.mediumSpacing
     implicitHeight: taskDialogHeader.implicitHeight + taskForm.implicitHeight
-//    implicitHeight: (!templateMode && sowPlantTask) ? taskForm.implicitHeight + Units.smallSpacing
-//                                            : parent.height - 2 * Units.smallSpacing
+    //    implicitHeight: (!templateMode && sowPlantTask) ? taskForm.implicitHeight + Units.smallSpacing
+    //                                            : parent.height - 2 * Units.smallSpacing
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
@@ -133,20 +136,19 @@ Dialog {
     }
 
     onAccepted: {
+        var newId;
         if (mode === "add") {
-            if (templateMode) {
-                TemplateTask.add(taskForm.templateValues)
-            }
+            if (templateMode)
+                newId = TemplateTask.add(taskForm.templateValues)
             else
-                Task.add(taskForm.values);
+                newId = Task.add(taskForm.values);
+            taskAdded(newId)
         } else {
-            if (templateMode) {
-                TemplateTask.update(dialog.taskId, taskForm.templateValues)
-                //                if (taskTemplateId > 0 && taskForm.templateApplyCurrent)
-                //                    TaskTemplate.updateTemplateTasks(taskTemplateId, taskForm.templateValues);
-            } else {
-                Task.update(dialog.taskId, taskForm.values);
-            }
+            if (templateMode)
+                newId = TemplateTask.update(dialog.taskId, taskForm.templateValues)
+            else
+                newId = Task.update(dialog.taskId, taskForm.values);
+            taskUpdated(taskId);
         }
     }
 }

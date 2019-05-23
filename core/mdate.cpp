@@ -188,7 +188,7 @@ QString MDate::seasonName(int season)
         return {};
 }
 
-QPair<QDate, QDate> MDate::seasonDates(int season, int year)
+std::pair<QDate, QDate> MDate::seasonDates(int season, int year)
 {
     switch (season) {
     case Season::Spring:

@@ -872,7 +872,7 @@ void Print::paintRowGrid(QPainter &painter, int row)
 int Print::datePosition(const QDate &date)
 {
     int x = 0;
-    QPair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
+    std::pair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
     QDate seasonBeg = seasonDates.first;
     QDate seasonEnd = seasonDates.second;
 
@@ -932,7 +932,7 @@ void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent,
 {
     int locationId = m_locationModel->locationId(parent);
 
-    QPair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
+    std::pair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
     QDate seasonBeg = seasonDates.first;
     QDate seasonEnd = seasonDates.second;
 

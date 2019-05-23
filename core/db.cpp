@@ -202,7 +202,7 @@ void Database::createData()
 {
 
     // name, rotation interval
-    QList<QPair<QString, int>> familyList({ { tr("Alliaceae"), 4 },
+    QList<std::pair<QString, int>> familyList({ { tr("Alliaceae"), 4 },
                                             { tr("Apiaceae"), 3 },
                                             { tr("Asteraceae"), 2 },
                                             { tr("Brassicaceae"), 4 },
@@ -213,7 +213,7 @@ void Database::createData()
                                             { tr("Valerianaceae"), 2 } });
 
     // crop, family
-    QList<QPair<QString, QString>> cropList({ { tr("Garlic"), tr("Alliaceae") },
+    QList<std::pair<QString, QString>> cropList({ { tr("Garlic"), tr("Alliaceae") },
                                               { tr("Onion"), tr("Alliaceae") },
                                               { tr("Leek"), tr("Alliaceae") },
                                               { tr("Carrot"), tr("Apiaceae") },
@@ -259,7 +259,7 @@ void Database::createData()
                                 tr("Trellis"),
                                 tr("Weed") };
 
-    QList<QPair<QString, QString>> unitList = { { tr("kilogram"), tr("kg") },
+    QList<std::pair<QString, QString>> unitList = { { tr("kilogram"), tr("kg") },
                                                 { tr("bunch"), tr("bn") },
                                                 { tr("head"), tr("hd") } };
 

@@ -20,7 +20,6 @@
 
 VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_cropId(-1)
 {
     setFilterCropId(1);
     setFilterKeyStringColumn("variety");

@@ -148,7 +148,7 @@ void SortFilterProxyModel::setSortOrder(const QString &order)
     sortOrderChanged();
 }
 
-QPair<QDate, QDate> SortFilterProxyModel::seasonDates() const
+std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 {
     return MDate::seasonDates(m_season, m_year);
 }

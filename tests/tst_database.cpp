@@ -1,7 +1,6 @@
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QDate>
-#include <QPair>
 
 #include "tst_database.h"
 #include "db.h"
@@ -11,7 +10,7 @@ tst_Database::tst_Database()
 {
 }
 
-tst_Database::~tst_Database() {}
+tst_Database::~tst_Database() = default;
 
 void tst_Database::init()
 {

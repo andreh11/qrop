@@ -100,7 +100,7 @@ QVariantList LocationModel::plantings(const QModelIndex &index, int season, int 
 
     int lid = locationId(index);
     QVariantList list;
-    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
+    std::pair<QDate, QDate> dates = MDate::seasonDates(season, year);
     for (int id : location->plantings(lid, dates.first, dates.second))
         list.push_back(id);
     return list;
@@ -128,7 +128,7 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int leng
     if (length < 1)
         return;
 
-    QPair<QDate, QDate> dates = seasonDates();
+    std::pair<QDate, QDate> dates = seasonDates();
     if (hasChildren(idx)) {
         int l = length;
         int row = 0;
@@ -154,7 +154,7 @@ qreal LocationModel::availableSpace(const QModelIndex &index, const QDate &plant
         return false;
 
     int lid = locationId(index);
-    QPair<QDate, QDate> dates = seasonDates();
+    std::pair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
 }
@@ -170,7 +170,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &planti
         return false;
 
     int lid = locationId(index);
-    QPair<QDate, QDate> dates = seasonDates();
+    std::pair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
 }
@@ -182,7 +182,7 @@ bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) con
         return false;
 
     int lid = locationId(index);
-    QPair<QDate, QDate> dates = seasonDates();
+    std::pair<QDate, QDate> dates = seasonDates();
 
     return location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
 }
@@ -208,7 +208,7 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
         return {};
 
     const int lid = locationId(index);
-    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
+    std::pair<QDate, QDate> dates = MDate::seasonDates(season, year);
     QList<int> plantingIdList = location->plantings(lid, dates.first, dates.second);
     QList<int> list;
     for (const int pid : plantingIdList) {
@@ -230,7 +230,7 @@ QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index, i
         return {};
 
     const int lid = locationId(index);
-    QPair<QDate, QDate> dates = MDate::seasonDates(season, year);
+    std::pair<QDate, QDate> dates = MDate::seasonDates(season, year);
     return location->spaceConflictingPlantings(lid, dates.first, dates.second);
 }
 

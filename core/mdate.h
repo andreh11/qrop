@@ -51,7 +51,7 @@ public:
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);
     static QString seasonName(int season);
-    static QPair<QDate, QDate> seasonDates(int season, int year);
+    static std::pair<QDate, QDate> seasonDates(int season, int year);
     Q_INVOKABLE static QDate seasonBeginning(int season, int year);
 
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }

@@ -259,8 +259,16 @@ Pane {
                     //                    y: (parent.height - height) / 2
                     week: 0
                     year: 0
+
+                    onTaskAdded: {
+                        addTaskDialog.taskId = taskId;
+                        addTaskDialog.open();
+                    }
+                    onTaskUpdated: {
+                        updateTaskDialog.taskId = taskId;
+                        updateTaskDialog.open();
+                    }
                     onAccepted: {
-                        updateDialog.open();
                         pane.refresh();
                     }
                 }
@@ -271,6 +279,14 @@ Pane {
                     title: qsTr("Add this task to all current applications of this template?")
                     standardButtons: Dialog.No | Dialog.Yes
                     onAccepted: TemplateTask.addToCurrentApplications(taskId)
+                }
+
+                Dialog {
+                    id: updateTaskDialog
+                    property int taskId: -1
+                    title: qsTr("Apply update to all current applications of this template?")
+                    standardButtons: Dialog.No | Dialog.Yes
+                    onAccepted: TemplateTask.updateTasks(taskId)
                 }
 
                 Dialog {
@@ -287,16 +303,6 @@ Pane {
                         TemplateTask.remove(taskId);
                         pane.refresh();
                     }
-                }
-
-                Dialog {
-                    id: updateDialog
-                    property int taskId: -1
-                    title: qsTr("Apply update to all current applications of this template?")
-                    standardButtons: Dialog.No | Dialog.Apply
-
-                    onAccepted: console.log("Ok clicked")
-                    onRejected: console.log("Cancel clicked")
                 }
 
                 ScrollView {

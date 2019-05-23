@@ -15,7 +15,6 @@
  */
 
 #include <QDate>
-#include <QPair>
 #include <QDebug>
 #include <QVariantMap>
 
@@ -32,8 +31,12 @@ int Task::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
 
+    qDebug() << newMap.value("planting_ids");
+
     auto plantingIdList = newMap.take("planting_ids").toList();
     auto locationIdList = newMap.take("location_ids").toList();
+
+    qDebug() << plantingIdList;
 
     int methodId = newMap.value("task_method_id").toInt();
     if (methodId < 1)
@@ -311,7 +314,7 @@ void Task::delay(int taskId, int weeks)
     update(taskId, { { "assigned_date", newDateString } });
 }
 
-QPair<int, int> Task::sowPlantTaskIds(int plantingId) const
+std::pair<int, int> Task::sowPlantTaskIds(int plantingId) const
 {
     int sowingTaskId = -1;
     int plantingTaskId = -1;

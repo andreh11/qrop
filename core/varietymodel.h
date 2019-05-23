@@ -39,7 +39,7 @@ signals:
     void cropIdChanged();
 
 private:
-    int m_cropId;
+    int m_cropId{-1};
 };
 
 #endif // VARIETYMODEL_H
