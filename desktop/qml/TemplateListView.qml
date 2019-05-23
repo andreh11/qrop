@@ -113,7 +113,14 @@ ListView {
                 Label {
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    text: "%1, %2 with %3".arg(type).arg(method).arg(implement)
+                    text: {
+                        if (type && method && implement)
+                            qsTr("%1, %2, %3").arg(type).arg(method).arg(implement)
+                        else if (type && method)
+                            qsTr("%1, %2").arg(type).arg(method)
+                        else
+                            qsTr("%1").arg(type)
+                    }
                 }
                 Label {
                     readonly property string dayString: {

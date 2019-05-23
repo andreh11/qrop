@@ -55,13 +55,14 @@ void TaskTemplateModel::toggle(int row)
     if (row < 0 || row > rowCount())
         return;
 
-    auto templateId = rowValue(row, QModelIndex(), "task_template_id").toInt();
+    auto idx = index(row, 0);
+
+    auto templateId = rowValue(mapToSource(idx).row(), QModelIndex(), "task_template_id").toInt();
     if (isApplied(templateId))
         mTaskTemplate->unapplyList(templateId, m_plantingIdList);
     else
         mTaskTemplate->applyList(templateId, m_plantingIdList);
 
-    auto idx = index(row, 0, QModelIndex());
     refreshTemplateList();
     dataChanged(idx, idx);
 }

@@ -50,14 +50,21 @@ Pane {
     }
 
     function removeTask(taskId) {
-        removeTaskDialog.taskId = taskId
-        removeTaskDialog.open();
+        if (TaskTemplate.hasTasks(taskTemplateId)) {
+            removeTaskDialog.taskId = taskId
+            removeTaskDialog.open();
+        } else {
+            TemplateTask.remove(taskId);
+            pane.refresh();
+        }
     }
 
     function duplicateTask(taskId) {
         var newId = TemplateTask.duplicate(taskId);
-        addTaskDialog.taskId = newId;
-        addTaskDialog.open();
+        if (TaskTemplate.hasTasks(taskTemplateId)) {
+            addTaskDialog.taskId = newId;
+            addTaskDialog.open();
+        }
         pane.refresh();
     }
 
@@ -261,12 +268,16 @@ Pane {
                     year: 0
 
                     onTaskAdded: {
-                        addTaskDialog.taskId = taskId;
-                        addTaskDialog.open();
+                        if (TaskTemplate.hasTasks(taskTemplateId)) {
+                            addTaskDialog.taskId = taskId;
+                            addTaskDialog.open();
+                        }
                     }
                     onTaskUpdated: {
-                        updateTaskDialog.taskId = taskId;
-                        updateTaskDialog.open();
+                        if (TaskTemplate.hasTasks(taskTemplateId)) {
+                            updateTaskDialog.taskId = taskId;
+                            updateTaskDialog.open();
+                        }
                     }
                     onAccepted: {
                         pane.refresh();

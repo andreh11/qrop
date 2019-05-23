@@ -70,6 +70,13 @@ QList<int> TaskTemplate::uncompletedPlantingTemplateTasks(int templateId, int pl
     return queryIds(queryString.arg(templateId).arg(plantingId), "task_id");
 }
 
+QList<int> TaskTemplate::tasks(int templateId) const
+{
+    QString queryString("SELECT task_id FROM task_view "
+                        "WHERE task_template_id = %1");
+    return queryIds(queryString.arg(templateId), "task_id");
+}
+
 /**
  * Return a list of the ids of the uncompleted tasks created from the task
  * template \a templateId.
@@ -173,6 +180,11 @@ void TaskTemplate::applyList(int templateId, QList<int> plantingIdList) const
 void TaskTemplate::unapply(int templateId, int plantingId) const
 {
     mTask->removeList(uncompletedPlantingTemplateTasks(templateId, plantingId));
+}
+
+bool TaskTemplate::hasTasks(int templateId) const
+{
+    return tasks(templateId).length() > 0;
 }
 
 void TaskTemplate::unapplyList(int templateId, QList<int> plantingIdList) const

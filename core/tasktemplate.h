@@ -37,6 +37,7 @@ public:
     Q_INVOKABLE void applyList(int templateId, QList<int> plantingIdList) const;
     Q_INVOKABLE void unapply(int templateId, int plantingId) const;
     Q_INVOKABLE void unapplyList(int templateId, QList<int> plantingIdList) const;
+    Q_INVOKABLE bool hasTasks(int templateId) const;
 
     Q_INVOKABLE void removeUncompletedTasks(int templateId) const;
     QList<int> plantingTemplates(int plantingId) const;
@@ -51,6 +52,7 @@ private:
     bool templateApplied(int templateId, int plantingId) const;
     QList<int> uncompletedPlantingTemplateTasks(int templateId, int plantingId) const;
     QList<int> uncompletedTasks(int templateId) const;
+    QList<int> tasks(int templateId) const;
     void removeTemplateTasks(int templateId) const;
     void duplicateTemplateTasks(int fromId, int toId) const;
 };

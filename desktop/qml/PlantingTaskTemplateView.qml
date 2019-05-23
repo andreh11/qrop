@@ -53,8 +53,8 @@ ListView {
         id: delegate
 
         function setTemplate() {
-            templateView.taskTemplateId = task_template_id
-            templateView.taskTemplateName = name
+            templateView.taskTemplateId = model.task_template_id
+            templateView.taskTemplateName = model.name
         }
 
         //                        onClicked: templatePane.taskTemplateId = task_template_id
