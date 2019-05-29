@@ -48,6 +48,8 @@ Flickable {
     readonly property var locationIdList: locationView.selectedLocationIds()
     property string completedDate: ""
     readonly property alias descriptionText: descriptionTextArea.text
+    property int successions: Number(successionsField.text)
+    property int weeksBetween: Number(timeBetweenSuccessionsField.text)
 
     property int taskTemplateId: -1
     property int templateDateType: {
@@ -197,7 +199,7 @@ Flickable {
     boundsBehavior: Flickable.StopAtBounds
     Material.background: "white"
 
-//    implicitHeight: 200
+    //    implicitHeight: 200
     implicitHeight: !templateMode && sowPlantTask ? datesGroupBox.implicitHeight + 100 : mainColumn.implicitHeight + 100
     Layout.minimumHeight: implicitHeight
 
@@ -267,7 +269,7 @@ Flickable {
 
                     onAccepted:  {
                         var id = TaskMethod.add({"method" : text,
-                                                 "task_type_id" : control.taskTypeId});
+                                                    "task_type_id" : control.taskTypeId});
                         taskMethodModel.refresh();
                         methodField.selectedId = id;
                         methodField.text = text;
@@ -318,7 +320,7 @@ Flickable {
                 id: descriptionTextArea
                 labelText: qsTr("Description")
                 Layout.fillWidth: true
-//                Layout.preferredHeight: 200
+                //                Layout.preferredHeight: 200
             }
         }
 
@@ -327,43 +329,74 @@ Flickable {
             width: parent.width
             Layout.fillWidth: true
 
-            RowLayout {
-                spacing: Units.formSpacing
+            ColumnLayout {
                 width: parent.width
+                spacing: Units.mediumSpacing
+                RowLayout {
+                    spacing: Units.formSpacing
+                    width: parent.width
 
-                DatePicker {
-                    id: dueDatepicker
-                    visible: !templateMode
-                    labelText: qsTr("Due Date")
-                    floatingLabel: true
-                    Layout.minimumWidth: 100
-                    Layout.fillWidth: true
-                    calendarDate: MDate.dateFromWeekString(control.week)
+                    DatePicker {
+                        id: dueDatepicker
+                        visible: !templateMode
+                        labelText: qsTr("Due Date")
+                        floatingLabel: true
+                        Layout.minimumWidth: 100
+                        Layout.fillWidth: true
+                        calendarDate: MDate.dateFromWeekString(control.week)
+                    }
+
+                    MyTextField {
+                        id: durationField
+                        visible: templateMode || !sowPlantTask
+                        text: "0"
+                        suffixText: qsTr("days")
+                        labelText: qsTr("Duration in field")
+                        floatingLabel: true
+                        validator: IntValidator { bottom: 0; top: 999 }
+                        Layout.minimumWidth: 80
+                        Layout.fillWidth: true
+                    }
+
+                    MyTextField {
+                        id: laborTimeField
+                        visible: !templateMode
+                        labelText: qsTr("Labor Time")
+                        floatingLabel: true
+                        Layout.minimumWidth: 80
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "99:99"
+                        text: "00:00"
+                        suffixText: qsTr("h", "Abbreviaton for hour")
+                        Layout.fillWidth: true
+                    }
                 }
-
-                MyTextField {
-                    id: durationField
-                    visible: templateMode || !sowPlantTask
-                    text: "0"
-                    suffixText: qsTr("days")
-                    labelText: qsTr("Duration in field")
-                    floatingLabel: true
-                    validator: IntValidator { bottom: 0; top: 999 }
-                    Layout.minimumWidth: 80
+                RowLayout {
+                    spacing: Units.mediumSpacing
+                    visible: mode === "add" && !chooseLocationMode
                     Layout.fillWidth: true
-                }
 
-                MyTextField {
-                    id: laborTimeField
-                    visible: !templateMode
-                    labelText: qsTr("Labor Time")
-                    floatingLabel: true
-                    Layout.minimumWidth: 80
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "99:99"
-                    text: "00:00"
-                    suffixText: qsTr("h", "Abbreviaton for hour")
-                    Layout.fillWidth: true
+                    MyTextField {
+                        id: successionsField
+                        text: "1"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        validator: IntValidator { bottom: 1; top: 99 }
+                        floatingLabel: true
+                        labelText: qsTr("Successions")
+                        Layout.fillWidth: true
+                        onActiveFocusChanged: if (!activeFocus && text === "") text = "1"
+                    }
+
+                    MyTextField {
+                        id: timeBetweenSuccessionsField
+                        enabled: successions > 1
+                        text: successions > 1 ? "1" : qsTr("Single planting")
+                        floatingLabel: true
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        validator: IntValidator { bottom: 1; top: 99 }
+                        labelText: qsTr("Weeks between")
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }

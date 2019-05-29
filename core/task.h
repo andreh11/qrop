@@ -22,6 +22,8 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
+// class TemplateTask;
+
 class CORESHARED_EXPORT Task : public DatabaseUtility
 {
     Q_OBJECT
@@ -35,10 +37,7 @@ public:
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void completeTask(int taskId, const QDate &date) const;
     Q_INVOKABLE void completeTask(int taskId) const { completeTask(taskId, QDate::currentDate()); }
-    Q_INVOKABLE void uncompleteTask(int taskId) const
-    {
-        update(taskId, { { "completed_date", QVariant(QVariant::String) } });
-    }
+    Q_INVOKABLE void uncompleteTask(int taskId) const;
     Q_INVOKABLE void delay(int taskId, int weeks);
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE QList<int> taskPlantings(int taskId) const;
@@ -58,6 +57,14 @@ public:
     int greenhouseSowingTask(int plantingId) const;
     int plantingTask(int plantingId) const;
     void updateType(int taskId, TaskType type) const;
+
+    std::pair<QDate, int> assignedDateAndLinkTask(int plantingId, const QVariantMap &map) const;
+    void updateLinkedTask(int plantingId, int taskId, QVariantMap &map) const;
+    void updateHarvestLinkedTasks(int taskId) const;
+    QList<int> uncompletedHarvestLinkedTasks(int plantingId) const;
+
+private:
+    int typeId(int taskId) const;
 };
 
 #endif // TASK_H

@@ -22,7 +22,6 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class Planting;
 class Task;
 
 class CORESHARED_EXPORT TemplateTask : public DatabaseUtility
@@ -42,13 +41,12 @@ public:
     //    Q_INVOKABLE void unapplyList(int templateTaskId, QList<int> plantingIdList) const;
 
 private:
-    Planting *mPlanting;
     Task *mTask;
     int templateId(int templateTaskId) const;
     QList<int> plantings(int templateTaskId) const;
     QList<int> uncompletedTasks(int templateTaskId) const;
+    int uncompletedPlantingTask(int templateTaskId, int plantingId) const;
     QVariantMap removeInvalidIds(const QVariantMap &map) const;
-    std::pair<QDate, int> assignedDateAndLinkTask(int plantingId, const QVariantMap &map) const;
 };
 
 #endif // TEMPLATE_TASK_H

@@ -44,6 +44,26 @@ QList<int> TaskTemplate::templateTasks(int templateId) const
     return queryIds(queryString.arg(templateId), "template_task_id");
 }
 
+bool TaskTemplate::templateApplied(int templateId, int plantingId) const
+{
+    return plantingTemplates(plantingId).contains(templateId);
+}
+
+/**
+ * Return a list of the ids of all tasks created from the task
+ * template \a templateId.
+ */
+QList<int> TaskTemplate::tasks(int templateId) const
+{
+    QString queryString("SELECT task_id FROM task_view "
+                        "WHERE task_template_id = %1");
+    return queryIds(queryString.arg(templateId), "task_id");
+}
+
+/**
+ * Return a list of the ids of all tasks of \a plantingId created
+ * from the task template \a templateId.
+ */
 QList<int> TaskTemplate::plantingTemplateTasks(int templateId, int plantingId) const
 {
     QString queryString("SELECT task.task_id "
@@ -52,29 +72,6 @@ QList<int> TaskTemplate::plantingTemplateTasks(int templateId, int plantingId) c
                         "WHERE task_template_id = %1 "
                         "AND planting_id = %2 ");
     return queryIds(queryString.arg(templateId).arg(plantingId), "task_id");
-}
-
-bool TaskTemplate::templateApplied(int templateId, int plantingId) const
-{
-    return plantingTemplates(plantingId).contains(templateId);
-}
-
-QList<int> TaskTemplate::uncompletedPlantingTemplateTasks(int templateId, int plantingId) const
-{
-    QString queryString("SELECT task_view.task_id "
-                        "FROM task_view "
-                        "JOIN planting_task USING (task_id) "
-                        "WHERE task_template_id = %1 "
-                        "AND planting_id = %2 "
-                        "AND completed_date IS NULL");
-    return queryIds(queryString.arg(templateId).arg(plantingId), "task_id");
-}
-
-QList<int> TaskTemplate::tasks(int templateId) const
-{
-    QString queryString("SELECT task_id FROM task_view "
-                        "WHERE task_template_id = %1");
-    return queryIds(queryString.arg(templateId), "task_id");
 }
 
 /**
@@ -87,6 +84,21 @@ QList<int> TaskTemplate::uncompletedTasks(int templateId) const
                         "WHERE completed_date IS NULL "
                         "AND task_template_id = %1");
     return queryIds(queryString.arg(templateId), "task_id");
+}
+
+/**
+ * Return a list of the ids of the uncompleted tasks of \a plantingId
+ * created from the task template \a templateId.
+ */
+QList<int> TaskTemplate::uncompletedPlantingTemplateTasks(int templateId, int plantingId) const
+{
+    QString queryString("SELECT task_view.task_id "
+                        "FROM task_view "
+                        "JOIN planting_task USING (task_id) "
+                        "WHERE task_template_id = %1 "
+                        "AND planting_id = %2 "
+                        "AND completed_date IS NULL");
+    return queryIds(queryString.arg(templateId).arg(plantingId), "task_id");
 }
 
 void TaskTemplate::duplicateTemplateTasks(int fromId, int toId) const

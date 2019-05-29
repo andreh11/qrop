@@ -26,10 +26,10 @@
 
 class Crop;
 class Family;
-class Task;
 class Keyword;
-class Variety;
 class Location;
+class Task;
+class Variety;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility
 {

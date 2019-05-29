@@ -108,11 +108,12 @@ ListView {
             Column {
                 id: column
                 width: parent.width
-                //            height: parent.height
                 padding: Units.smallSpacing
+
                 Label {
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
+                    color: Units.colorHighEmphasis
                     text: {
                         if (type && method && implement)
                             qsTr("%1, %2, %3").arg(type).arg(method).arg(implement)
@@ -122,6 +123,7 @@ ListView {
                             qsTr("%1").arg(type)
                     }
                 }
+
                 Label {
                     readonly property string dayString: {
                         if (link_days == 0)
@@ -136,7 +138,7 @@ ListView {
                                                                        : "")
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeCaption
-                    color: Qt.rgba(0,0,0,0.6)
+                    color: Units.colorMediumEmphasis
                 }
             }
         }

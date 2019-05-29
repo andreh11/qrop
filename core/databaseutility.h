@@ -52,6 +52,7 @@ public:
     Q_INVOKABLE QVariantMap mapFromId(const QString &tableName, int id) const;
     Q_INVOKABLE QVariantMap mapFromId(int id) const;
     QList<QVariantMap> mapListFromIdList(const QString &tableName, const QList<int> &idList) const;
+    QDate dateFromField(const QString &tableName, const QString &fieldName, int id) const;
 
     virtual Q_INVOKABLE int add(const QVariantMap &map) const;
     void addLink(const QString &table, const QString &field1, int id1, const QString &field2,

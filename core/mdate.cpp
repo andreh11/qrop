@@ -98,7 +98,7 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
     if (!type.isEmpty())
         dateType = type;
 
-    int year;
+    int year = 0;
     int week = date.weekNumber(&year);
     if (dateType == "week") {
         if (year == currentYear || !showIndicator)

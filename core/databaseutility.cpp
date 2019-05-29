@@ -18,6 +18,7 @@
 #include <QSqlError>
 #include <QSqlField>
 #include <QSqlRecord>
+#include <QDate>
 
 #include "databaseutility.h"
 
@@ -165,6 +166,14 @@ QList<QVariantMap> DatabaseUtility::mapListFromIdList(const QString &tableName,
         if (!record.isEmpty())
             mapList.push_back(mapFromRecord(record));
     return mapList;
+}
+
+QDate DatabaseUtility::dateFromField(const QString &tableName, const QString &fieldName, int id) const
+{
+    auto map = mapFromId(tableName, id);
+    if (map.isEmpty())
+        return {};
+    return QDate::fromString(map.value(fieldName).toString(), Qt::ISODate);
 }
 
 int DatabaseUtility::add(const QVariantMap &map) const

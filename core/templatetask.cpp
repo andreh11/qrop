@@ -25,7 +25,6 @@
 
 TemplateTask::TemplateTask(QObject *parent)
     : DatabaseUtility(parent)
-    , mPlanting(new Planting(this))
     , mTask(new Task(this))
 {
     m_table = "template_task";
@@ -42,85 +41,6 @@ void TemplateTask::update(int id, const QVariantMap &map) const
     DatabaseUtility::update(id, removeInvalidIds(map));
 }
 
-void TemplateTask::addToCurrentApplications(int templateTaskId) const
-{
-    applyList(templateTaskId, plantings(templateTaskId));
-}
-
-void TemplateTask::removeFromCurrentApplications(int templateTaskId) const
-{
-    mTask->removeList(uncompletedTasks(templateTaskId));
-}
-
-std::pair<QDate, int> TemplateTask::assignedDateAndLinkTask(int plantingId, const QVariantMap &map) const
-{
-    auto plantingRecord = recordFromId("planting", plantingId);
-    auto plantingType = static_cast<PlantingType>(plantingRecord.value("planting_type").toInt());
-    auto dateType = static_cast<TemplateDateType>(map["template_date_type"].toInt());
-    int linkDays = map["link_days"].toInt();
-    int linkTaskId = -1;
-    QDate assignedDate;
-
-    auto taskIds = mTask->sowPlantTaskIds(plantingId);
-    int sowingTaskId = taskIds.first;
-    int plantingTaskId = taskIds.second;
-
-    if (sowingTaskId == -1 && plantingTaskId == -1) {
-        qDebug() << "[TaskTemplate::apply] both sow task and transplant task ids are invalid";
-        return {};
-    }
-
-    switch (dateType) {
-    case TemplateDateType::FieldSowPlant: {
-        if (plantingType == PlantingType::DirectSeeded)
-            linkTaskId = sowingTaskId;
-        else
-            linkTaskId = plantingTaskId;
-        assignedDate = mPlanting->plantingDate(plantingId).addDays(linkDays);
-        break;
-    }
-    case TemplateDateType::GreenhouseStart: {
-        if (plantingType == PlantingType::TransplantRaised)
-            linkTaskId = sowingTaskId;
-        assignedDate = mPlanting->sowingDate(plantingId).addDays(linkDays);
-        break;
-    }
-    case TemplateDateType::FirstHarvest:
-        assignedDate = mPlanting->begHarvestDate(plantingId).addDays(linkDays);
-        break;
-    case TemplateDateType::LastHarvest:
-        assignedDate = mPlanting->endHarvestDate(plantingId).addDays(linkDays);
-        break;
-    }
-    return { assignedDate, linkTaskId };
-}
-
-void TemplateTask::apply(int templateTaskId, int plantingId) const
-{
-    if (templateTaskId < 0 || plantingId < 0)
-        return;
-
-    auto map = mapFromId("template_task", templateTaskId);
-    map.take("task_template_id"); // not needed, since we can get it from template_task_id
-
-    QDate assignedDate;
-    int linkTaskId;
-    std::tie(assignedDate, linkTaskId) = assignedDateAndLinkTask(plantingId, map);
-    if (linkTaskId > 0)
-        map["link_task_id"] = linkTaskId;
-    map["assigned_date"] = assignedDate.toString(Qt::ISODate);
-    map["planting_ids"] = QVariantList({ QString::number(plantingId) });
-    mTask->add(map);
-}
-
-void TemplateTask::applyList(int templateTaskId, QList<int> plantingIdList) const
-{
-    QSqlDatabase::database().transaction();
-    for (const int plantingId : plantingIdList)
-        apply(templateTaskId, plantingId);
-    QSqlDatabase::database().commit();
-}
-
 void TemplateTask::updateTasks(int templateTaskId) const
 {
     const auto templateMap = mapFromId("template_task", templateTaskId);
@@ -134,14 +54,44 @@ void TemplateTask::updateTasks(int templateTaskId) const
             continue;
 
         const int plantingId = plantingIdList.first();
-        QDate assignedDate;
-        int linkTaskId;
-        std::tie(assignedDate, linkTaskId) = assignedDateAndLinkTask(plantingId, map);
-        if (linkTaskId > 0)
-            map["link_task_id"] = linkTaskId;
-        map["assigned_date"] = assignedDate.toString(Qt::ISODate);
-        mTask->update(taskId, map);
+        mTask->updateLinkedTask(plantingId, taskId, map);
     }
+    QSqlDatabase::database().commit();
+}
+
+void TemplateTask::addToCurrentApplications(int templateTaskId) const
+{
+    applyList(templateTaskId, plantings(templateTaskId));
+}
+
+void TemplateTask::removeFromCurrentApplications(int templateTaskId) const
+{
+    mTask->removeList(uncompletedTasks(templateTaskId));
+}
+
+void TemplateTask::apply(int templateTaskId, int plantingId) const
+{
+    if (templateTaskId < 0 || plantingId < 0)
+        return;
+
+    auto map = mapFromId("template_task", templateTaskId);
+    map.take("task_template_id"); // not needed, since we can get it from template_task_id
+
+    QDate assignedDate;
+    int linkTaskId;
+    std::tie(assignedDate, linkTaskId) = mTask->assignedDateAndLinkTask(plantingId, map);
+    if (linkTaskId > 0)
+        map["link_task_id"] = linkTaskId;
+    map["assigned_date"] = assignedDate.toString(Qt::ISODate);
+    map["planting_ids"] = QVariantList({ QString::number(plantingId) });
+    mTask->add(map);
+}
+
+void TemplateTask::applyList(int templateTaskId, QList<int> plantingIdList) const
+{
+    QSqlDatabase::database().transaction();
+    for (const int plantingId : plantingIdList)
+        apply(templateTaskId, plantingId);
     QSqlDatabase::database().commit();
 }
 
@@ -178,6 +128,19 @@ QList<int> TemplateTask::uncompletedTasks(int templateTaskId) const
                         "WHERE completed_date IS NULL "
                         "AND template_task_id = %1");
     return queryIds(queryString.arg(templateTaskId), "task_id");
+}
+
+int TemplateTask::uncompletedPlantingTask(int templateTaskId, int plantingId) const
+{
+    QString queryString("SELECT task_id FROM task "
+                        "JOIN planting_task USING (task_id) "
+                        "WHERE completed_date IS NULL "
+                        "AND template_task_id = %1 "
+                        "AND planting_id = %2");
+    auto list = queryIds(queryString.arg(templateTaskId).arg(plantingId), "task_id");
+    if (list.length())
+        return list.first();
+    return -1;
 }
 
 QVariantMap TemplateTask::removeInvalidIds(const QVariantMap &map) const

@@ -87,7 +87,7 @@ Flickable {
     }
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
-    readonly property real plantsBySquareMeter: 1 / ((1.65 / rowsPerBed) * inRowSpacing / 100)
+    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((1.65 / rowsPerBed) * inRowSpacing / 100)) : 0
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
     readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
@@ -574,7 +574,7 @@ Flickable {
         width: control.width
         spacing: Units.smallSpacing
         padding: 0
-//        spacing: 0
+        //        spacing: 0
 
         FormGroupBox {
             id: varietyBox
@@ -648,7 +648,6 @@ Flickable {
                 width: parent.width
                 spacing: Units.mediumSpacing
 
-
                 RowLayout {
                     spacing: Units.mediumSpacing
 
@@ -688,13 +687,14 @@ Flickable {
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
                         onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
-                        helperText: qsTr("Plants/m2: %1").arg(plantsBySquareMeter)
+                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %1").arg(plantsBySquareMeter) : ""
                     }
                 }
 
                 RowLayout {
                     spacing: Units.mediumSpacing
-                    visible: mode === "add" && !chooseLocationMode
+                    //                    visible: mode === "add" && !chooseLocationMode
+                    visible: true
                     Layout.fillWidth: true
 
                     MyTextField {
@@ -885,26 +885,26 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-//                DatePicker {
-//                    id: fieldPlantingDateField
+                //                DatePicker {
+                //                    id: fieldPlantingDateField
 
-//                    property bool modified: false
+                //                    property bool modified: false
 
-//                    visible: directSeedRadio.checked
-//                    Layout.fillWidth: true
-//                    floatingLabel: true
-//                    labelText: qsTr("Field Sowing")
-//                    currentYear: control.currentYear
+                //                    visible: directSeedRadio.checked
+                //                    Layout.fillWidth: true
+                //                    floatingLabel: true
+                //                    labelText: qsTr("Field Sowing")
+                //                    currentYear: control.currentYear
 
-//                    onEditingFinished: {
-//                        if (durationMode)
-//                            updateFromFieldSowingDate();
-//                        else
-//                            updateDtm();
-//                    }
-//                    onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
-//                    onCalendarDateChanged: modified = true
-//                }
+                //                    onEditingFinished: {
+                //                        if (durationMode)
+                //                            updateFromFieldSowingDate();
+                //                        else
+                //                            updateDtm();
+                //                    }
+                //                    onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
+                //                    onCalendarDateChanged: modified = true
+                //                }
 
                 DatePicker {
                     id: greenhouseStartDateField
@@ -927,7 +927,7 @@ Flickable {
 
                     property bool modified: false
 
-//                    visible: !directSeedRadio.checked
+                    //                    visible: !directSeedRadio.checked
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: plantingType == 1 ? qsTr("Field sowing") : qsTr("Field planting")
@@ -990,7 +990,7 @@ Flickable {
             width: parent.width
             Material.background: "white"
 
-//            Behavior on height { NumberAnimation { duration: 1000 } }
+            //            Behavior on height { NumberAnimation { duration: 1000 } }
 
             Column {
                 id: locationColumn
@@ -998,7 +998,7 @@ Flickable {
 
                 Button {
                     id: locationButton
-//                    flat: true
+                    //                    flat: true
                     visible: !chooseLocationMode
                     width: parent.width
                     text: {
@@ -1050,8 +1050,8 @@ Flickable {
                                                                    : fieldPlantingDateField.calendarDate
                     season: MDate.season(plantingDate)
                     year: MDate.seasonYear(plantingDate)
-//                    width: parent.width
-//                    height: 400
+                    //                    width: parent.width
+                    //                    height: 400
                     height: treeViewHeight + headerHeight
                     width: treeViewWidth
                     plantingEditMode: true
@@ -1202,7 +1202,7 @@ Flickable {
                         id: addUnitDialog
                         onAccepted: {
                             var id = Unit.add({ "fullname" : unitName,
-                                                "abbreviation": unitAbbreviation });
+                                                  "abbreviation": unitAbbreviation });
                             varietyField.manuallyModified = true
                             unitModel.refresh();
                             unitField.selectedId = id;

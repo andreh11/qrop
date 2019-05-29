@@ -169,7 +169,7 @@ QVariantMap Planting::lastValues(const int varietyId, const int cropId, const in
 }
 
 /**
- * \brief Given a \a key, return its value in \a map if \a map contains this key.
+ * Given a \a key, return its value in \a map if \a map contains this key.
  * Otherwise, return the value of the \a record for \a key.
  */
 QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const
@@ -201,11 +201,6 @@ void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
     map["seeds_quantity"] = seedsQuantity;
 }
 
-void Planting::update(int id, const QVariantMap &map) const
-{
-    update(id, map, {});
-}
-
 int Planting::plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const
 {
     double length = get(map, record, "length").toDouble();
@@ -232,6 +227,11 @@ void Planting::updateKeywords(int plantingId, const QVariantList newList, const 
 
     for (const int keywordId : toRemove)
         keyword->removePlanting(plantingId, keywordId);
+}
+
+void Planting::update(int id, const QVariantMap &map) const
+{
+    update(id, map, {});
 }
 
 void Planting::update(int id, const QVariantMap &map, const QVariantMap &locationLengthMap) const
@@ -370,6 +370,9 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
     if (!plantingDateString.isNull()) {
         QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
         task->updateTaskDates(id, plantingDate);
+        task->updateHarvestLinkedTasks(id);
+    } else if (newMap.contains("dtm") || newMap.contains("harvest_window")) {
+        task->updateHarvestLinkedTasks(id);
     }
 }
 
@@ -554,34 +557,22 @@ int Planting::rank(int plantingId) const
 
 QDate Planting::sowingDate(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return QDate::fromString(map.value("sowing_date").toString(), Qt::ISODate);
+    return dateFromField("planting_view", "sowing_date", plantingId);
 }
 
 QDate Planting::plantingDate(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return QDate::fromString(map.value("planting_date").toString(), Qt::ISODate);
+    return dateFromField("planting_view", "planting_date", plantingId);
 }
 
 QDate Planting::begHarvestDate(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return QDate::fromString(map.value("beg_harvest_date").toString(), Qt::ISODate);
+    return dateFromField("planting_view", "beg_harvest_date", plantingId);
 }
 
 QDate Planting::endHarvestDate(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return QDate::fromString(map.value("end_harvest_date").toString(), Qt::ISODate);
+    return dateFromField("planting_view", "end_harvest_date", plantingId);
 }
 
 int Planting::totalLength(int plantingId) const

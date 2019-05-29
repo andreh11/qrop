@@ -21,6 +21,9 @@ SELECT planting_id as planting_view_id,
        crop, crop_id, crop.color as crop_color, variety,
        unit.abbreviation as unit,
        group_concat(location_id) as locations,
+       date(task.assigned_date, "-" || dtt || " days") as planned_sowing_date,
+       date(task.assigned_date, dtm || " days") as planned_beg_harvest_date,
+       date(task.assigned_date, (dtm + harvest_window) || " days") as planned_end_harvest_date,
        CASE
            WHEN task.completed_date IS NULL THEN task.assigned_date
            ELSE task.completed_date
@@ -37,13 +40,10 @@ SELECT planting_id as planting_view_id,
            WHEN task.completed_date IS NULL THEN date(task.assigned_date, (dtm + harvest_window) || " days")
            ELSE date(task.completed_date, (dtm + harvest_window) || " days")
        END end_harvest_date,
-       -- date(task.assigned_date, "-" || dtt || " days") as sowing_date,
-       -- date(task.assigned_date, dtm || " days") as beg_harvest_date,
-       -- date(task.assigned_date, (dtm + harvest_window) || " days") as end_harvest_date,
        seed_company_id, seed_company,
        dense_rank() over (
-         partition by crop_id, strftime('%Y', task.assigned_date)
-         order by task.assigned_date)
+         PARTITION BY crop_id, strftime('%Y', task.assigned_date)
+         ORDER BY task.assigned_date)
        planting_rank
 FROM planting
 LEFT JOIN planting_location using(planting_id)
