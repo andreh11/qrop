@@ -61,6 +61,13 @@ public:
     Q_INVOKABLE QDate begHarvestDate(int plantingId) const;
     Q_INVOKABLE QDate endHarvestDate(int plantingId) const;
 
+    Q_INVOKABLE QDate plannedSowingDate(int plantingId) const;
+    Q_INVOKABLE QDate plannedPlantingDate(int plantingId) const;
+    Q_INVOKABLE QDate plannedBegHarvestDate(int plantingId) const;
+    Q_INVOKABLE QDate plannedEndHarvestDate(int plantingId) const;
+
+    Q_INVOKABLE bool isActive(int plantingId) const;
+
     Q_INVOKABLE int assignedLength(int plantingId) const;
     Q_INVOKABLE int totalLength(int plantingId) const;
     Q_INVOKABLE int lengthToAssign(int plantingId) const;

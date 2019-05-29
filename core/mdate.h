@@ -36,6 +36,10 @@ public:
     static const QList<QList<int>> monthsOrder;
     Q_INVOKABLE static QDate dateFromWeekString(const QString &s, const int targetYear = 0);
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
+    Q_INVOKABLE static QDate dateFromIsoString(const QString &s)
+    {
+        return QDate::fromString(s, Qt::ISODate);
+    }
     static QDate firstMondayOfYear(int year);
     static QDate mondayOfWeek(int week, int year);
     static QList<QDate> weekDates(int week, int year);

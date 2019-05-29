@@ -30,6 +30,7 @@ Item {
     property int currentYear: MDate.currentYear()
 
     property date calendarDate: new Date()
+    property date effectiveDate
     readonly property int week: MDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
@@ -55,6 +56,9 @@ Item {
         id: textField
 
         width: parent.width
+        helperText: MDate.isValid(effectiveDate) && effectiveDate !== calendarDate
+                    ? qsTr("Done on %1").arg(MDate.formatDate(effectiveDate, currentYear))
+                    : ""
         text: MDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         validator: RegExpValidator {

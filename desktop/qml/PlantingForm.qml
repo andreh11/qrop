@@ -316,9 +316,14 @@ Flickable {
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
 
-        var pDate = mode === "add" ? new Date()
-                                   : Date.fromLocaleString(Qt.locale(), val["planting_date"],
-                                                           "yyyy-MM-dd");
+        var pDate = mode === "add" ? new Date() : MDate.dateFromIsoString(val["planned_planting_date"])
+
+        if (mode === "edit") {
+            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
+            greenhouseStartDateField.effectiveDate = MDate.dateFromIsoString(val["sowing_date"])
+//            begHarvestDateField.effectiveDate
+//            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
+        }
 
         initMode = true;
         setFieldValue(harvestWindowField, val['harvest_window']);
@@ -687,14 +692,14 @@ Flickable {
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
                         onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
-                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %1").arg(plantsBySquareMeter) : ""
+                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
                     }
                 }
 
                 RowLayout {
                     spacing: Units.mediumSpacing
                     //                    visible: mode === "add" && !chooseLocationMode
-                    visible: true
+                    visible: mode === "add"
                     Layout.fillWidth: true
 
                     MyTextField {

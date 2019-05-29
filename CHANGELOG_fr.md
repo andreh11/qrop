@@ -4,8 +4,15 @@
 Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
+
+### Ajouts
+  - *Tâches* − Ajout des itinéraires de cultures.
   - *Plan de culture* - Affichage du chiffre d'affaire escompté.
   - Ajout de la numérotation des séries par espèce et date de plantation.
+
+### Changements
+  - *Plan de culture* − N'afficher la couleur des séries que lorsque elles ont
+    été plantées ou semées.
 
 ## 0.2 - 2019-05-13
 
@@ -18,7 +25,7 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ### Ajouts
   - *Plan de culture* Import et export du plan de culture en fichier CSV.
-  - Ajout d'une fonctonnalité de duplication du plan de culture d'une année à une
+  - Ajout d'une fonctionnalité de duplication du plan de culture d'une année à une
     autre.
   - Ajout de l'export PDF pour le plan de culture, le calendrier des tâches,
     le parcellaire, les récoltes et les listes de semences et plants à commander.

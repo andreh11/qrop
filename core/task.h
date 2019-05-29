@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE void completeTask(int taskId, const QDate &date) const;
     Q_INVOKABLE void completeTask(int taskId) const { completeTask(taskId, QDate::currentDate()); }
     Q_INVOKABLE void uncompleteTask(int taskId) const;
+    bool isComplete(int taskId) const;
     Q_INVOKABLE void delay(int taskId, int weeks);
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE QList<int> taskPlantings(int taskId) const;

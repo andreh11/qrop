@@ -31,7 +31,8 @@ Item {
     property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
     property real lengthLeft: Planting.lengthToAssign(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
     readonly property string bedUnit: settings.useStandardBedLength ? qsTr("beds") : qsTr("m")
-    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
+//    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
+    readonly property bool current: Planting.isActive(plantingId)
     readonly property alias hovered: dragArea.containsMouse
     readonly property bool displaySow: showGreenhouseSow && plantingDate > seasonBegin
 

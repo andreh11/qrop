@@ -314,6 +314,12 @@ void Task::uncompleteTask(int taskId) const
     updateHarvestLinkedTasks(taskId);
 }
 
+bool Task::isComplete(int taskId) const
+{
+    auto date = dateFromField("task", "completed_date", taskId);
+    return date.isValid();
+}
+
 void Task::delay(int taskId, int weeks)
 {
     if (taskId < 0)

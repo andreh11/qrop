@@ -575,6 +575,34 @@ QDate Planting::endHarvestDate(int plantingId) const
     return dateFromField("planting_view", "end_harvest_date", plantingId);
 }
 
+QDate Planting::plannedSowingDate(int plantingId) const
+{
+    return dateFromField("planting_view", "planned_sowing_date", plantingId);
+}
+
+QDate Planting::plannedPlantingDate(int plantingId) const
+{
+    return dateFromField("planting_view", "planned_planting_date", plantingId);
+}
+
+QDate Planting::plannedBegHarvestDate(int plantingId) const
+{
+    return dateFromField("planting_view", "planned_beg_harvest_date", plantingId);
+}
+
+QDate Planting::plannedEndHarvestDate(int plantingId) const
+{
+    return dateFromField("planting_view", "planned_end_harvest_date", plantingId);
+}
+
+bool Planting::isActive(int plantingId) const
+{
+    int sowingTaskId;
+    int plantingTaskId;
+    std::tie(sowingTaskId, plantingTaskId) = task->sowPlantTaskIds(plantingId);
+    return task->isComplete(sowingTaskId) || task->isComplete(plantingTaskId);
+}
+
 int Planting::totalLength(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);

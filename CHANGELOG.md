@@ -3,11 +3,19 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+### Added
+  - *Tasks* − Add task templates, which enables the user to define several tasks
+    and apply them to plantings.
   - *Crop plan* - Show estimated revenue.
   - Add planting succession numbering by crop and planting date.
 
+### Changed
+  - *Crop plan* − Show planting's color only when it has been seeded or planted.
+
 ## 0.2.1 - 2019-05-13
 
+### Added
   - It is now possible to work with two databases at the same time, and switch
     between them by clicking on the button "1" and "2" on the left panel. The
     user can create, open and export databases.
