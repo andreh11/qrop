@@ -52,7 +52,6 @@ Pane {
             SimpleAddDialog {
                 id: addTypeDialog
                 title: qsTr("Add type")
-                labelText: "Type"
 
                 onAccepted: {
                     TaskType.add({"type" : text})

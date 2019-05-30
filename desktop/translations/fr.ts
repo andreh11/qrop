@@ -101,7 +101,7 @@
     <message>
         <location filename="../qml/AddKeywordDialog.qml" line="33"/>
         <source>Keyword</source>
-        <translation>Mot-clef</translation>
+        <translation>Étiquette</translation>
     </message>
 </context>
 <context>
@@ -2363,30 +2363,29 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../qml/SettingsKeywordPane.qml" line="37"/>
         <source>Keywords</source>
-        <translation>Mots-clefs</translation>
+        <translation>Étiquettes</translation>
     </message>
     <message>
         <location filename="../qml/SettingsKeywordPane.qml" line="44"/>
-        <source>Add keyword</source>
-        <translation>Ajouter un mot-clef</translation>
-    </message>
-    <message>
         <location filename="../qml/SettingsKeywordPane.qml" line="54"/>
+        <source>Add keyword</source>
+        <translation>Ajouter une étiquette</translation>
+    </message>
+    <message>
         <source>Keyword</source>
-        <translation>Mot-clef</translation>
+        <translation type="vanished">Mot-clef</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsKeywordPane.qml" line="55"/>
         <source>Add New Keyword</source>
-        <translation>Ajouter un mot-clef</translation>
+        <translation type="vanished">Ajouter un mot-clef</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsKeywordPane.qml" line="114"/>
+        <location filename="../qml/SettingsKeywordPane.qml" line="113"/>
         <source>Remove keyword</source>
-        <translation>Supprimer le mot-clef</translation>
+        <translation>Supprimer l&apos;étiquette</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsKeywordPane.qml" line="124"/>
+        <location filename="../qml/SettingsKeywordPane.qml" line="123"/>
         <source>Delete %1?</source>
         <translation>Supprimer %1 ?</translation>
     </message>
@@ -2509,7 +2508,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../qml/SettingsPage.qml" line="385"/>
         <source>Keywords</source>
-        <translation>Mot-clefs</translation>
+        <translation>Étiquettes</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="412"/>
@@ -2554,6 +2553,15 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation>Ajouter un fournisseur de semences</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsSeedCompanyPane.qml" line="54"/>
+        <source>Add a seed company</source>
+        <translation>Ajouter un fournisseur</translation>
+    </message>
+    <message>
+        <source>Company</source>
+        <translation type="vanished">Fournisseur</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsSeedCompanyPane.qml" line="111"/>
         <source>Remove seed company</source>
         <translation>Supprimer le fournisseur de semences</translation>
@@ -2592,8 +2600,8 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation>Afficher les outils</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsTaskMethodDelegate.qml" line="123"/>
-        <location filename="../qml/SettingsTaskMethodDelegate.qml" line="128"/>
+        <location filename="../qml/SettingsTaskMethodDelegate.qml" line="122"/>
+        <location filename="../qml/SettingsTaskMethodDelegate.qml" line="127"/>
         <source>Add implement</source>
         <translation>Ajouter un outil</translation>
     </message>

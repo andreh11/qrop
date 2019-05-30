@@ -51,7 +51,7 @@ Pane {
             
             SimpleAddDialog {
                 id: addDialog
-                labelText: "Company name"
+                title: qsTr("Add a seed company")
                 onAccepted: {
                     SeedCompany.add({"seed_company" : text})
                     seedCompanyModel.refresh();
