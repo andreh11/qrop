@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Field map* − Show tasks.
   - *Tasks* − Add task templates, which enables the user to define several tasks
     and apply them to plantings.
   - *Crop plan* - Show estimated revenue.

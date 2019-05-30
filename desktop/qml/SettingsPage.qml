@@ -62,6 +62,7 @@ Page {
         category: "LocationView"
         property alias showFullName: showFullNameSwitch.checked
         property alias allowPlantingsConflict: allowPlantingsConflictSwitch.checked
+        property alias showTasks: showTaskOnFieldMap.checked
     }
 
     Settings {
@@ -172,44 +173,18 @@ Page {
 
                     ThinDivider { width: parent.width }
 
-                    RowLayout {
-                        width: parent.width
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            Layout.fillWidth: true
-                            text: qsTr("Show seed company beside variety names")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-
-                        }
-
-                        Switch {
-                            id: showSeedCompanySwitch
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: showSeedCompanySwitch
+                        text: qsTr("Show seed company beside variety names")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
 
-                    RowLayout {
-                        width: parent.width
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            Layout.fillWidth: true
-                            text: qsTr("Standard bed length")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-
-                        }
-
-                        Switch {
-                            id: standardBedLengthSwitch
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: standardBedLengthSwitch
+                        text: qsTr("Standard bed length")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
@@ -268,45 +243,18 @@ Page {
                     width: parent.width
                     spacing: 0
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            text: qsTr("Compute from durations by default")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
-
-                        Switch {
-                            id: durationsByDefaultSwitch
-                            checked: true
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: durationsByDefaultSwitch
+                        text: qsTr("Compute from durations by default")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            text: qsTr("Show duration fields")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
-
-
-                        Switch {
-                            id: showDurationFieldSwitch
-                            checked: true
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: showDurationFieldSwitch
+                        text: qsTr("Show duration fields")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
@@ -330,44 +278,26 @@ Page {
                     width: parent.width
                     spacing: 0
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            text: qsTr("Show complete name of locations")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
-
-                        Switch {
-                            id: showFullNameSwitch
-                            checked: true
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: showFullNameSwitch
+                        text: qsTr("Show complete name of locations")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
+                    SettingsSwitch {
+                        id: allowPlantingsConflictSwitch
+                        text: qsTr("Allow plantings conflicts on same location")
+                        onToggled: restartSnackbar.open();
+                    }
 
-                        Label {
-                            text: qsTr("Allow plantings conflicts on same location")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
+                    ThinDivider { width: parent.width }
 
-                        Switch {
-                            id: allowPlantingsConflictSwitch
-                            checked: true
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: showTaskOnFieldMap
+                        text: qsTr("Show tasks")
+                        onToggled: restartSnackbar.open();
                     }
 
                     ThinDivider { width: parent.width }
@@ -391,23 +321,10 @@ Page {
                     width: parent.width
                     spacing: 0
 
-                    RowLayout {
-                        Layout.minimumHeight: Units.rowHeight
-                        Layout.leftMargin: Units.mediumSpacing
-                        Layout.rightMargin: Layout.leftMargin
-
-                        Label {
-                            text: qsTr("Show all plantings if there is none in harvest window")
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            Layout.fillWidth: true
-                        }
-
-                        Switch {
-                            id: showAllPlantingIfNoneInWindonSwitch
-                            checked: true
-                            onToggled: restartSnackbar.open();
-                        }
+                    SettingsSwitch {
+                        id: showAllPlantingIfNoneInWindonSwitch
+                        text: qsTr("Show all plantings if there is none in harvest window")
+                        onToggled: restartSnackbar.open();
                     }
                 }
             }

@@ -71,7 +71,8 @@ Item {
             Material.color(Material.Orange, Material.Shade700),
             Material.color(Material.DeepOrange, Material.Shade700),
             Material.color(Material.Brown, Material.Shade700),
-            Material.color(Material.BlueGrey, Material.Shade700)
+            Material.color(Material.BlueGrey, Material.Shade700),
+            Units.colorHighEmphasis
         ]
 
         delegate: AbstractButton {

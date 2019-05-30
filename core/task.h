@@ -29,22 +29,33 @@ class CORESHARED_EXPORT Task : public DatabaseUtility
     Q_OBJECT
 public:
     Task(QObject *parent = nullptr);
+
     Q_INVOKABLE std::pair<int, int> sowPlantTaskIds(int plantingId) const;
+
     Q_INVOKABLE int add(const QVariantMap &map) const override;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
+
+    Q_INVOKABLE QString type(int taskId) const;
+    Q_INVOKABLE QString color(int taskId) const;
+    Q_INVOKABLE QDate assignedDate(int taskId) const;
+    Q_INVOKABLE int duration(int taskId) const;
+
     Q_INVOKABLE void createTasks(int plantingId, const QDate &plantingDate) const;
+
     Q_INVOKABLE void completeTask(int taskId, const QDate &date) const;
     Q_INVOKABLE void completeTask(int taskId) const { completeTask(taskId, QDate::currentDate()); }
     Q_INVOKABLE void uncompleteTask(int taskId) const;
     bool isComplete(int taskId) const;
+
     Q_INVOKABLE void delay(int taskId, int weeks);
     Q_INVOKABLE QList<int> plantingTasks(int plantingId) const;
     Q_INVOKABLE QList<int> taskPlantings(int taskId) const;
     Q_INVOKABLE void updateTaskDates(int plantingId, const QDate &plantingDate) const;
     Q_INVOKABLE void duplicatePlantingTasks(int sourcePlantingId, int newPlantingId) const;
     Q_INVOKABLE void removePlantingTasks(int plantingId) const;
+
     int createNurseryTask(int plantingId, const QDate &plantingDate, int dtt) const;
     Q_INVOKABLE void removeNurseryTask(int plantingId) const;
 

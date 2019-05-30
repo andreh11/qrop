@@ -19,6 +19,8 @@ import QtQuick 2.0
 import Qt.labs.settings 1.0
 import QtQuick.Controls 2.4
 
+import io.qrop.components 1.0
+
 QtObject {
     // font sizes - defaults from Google Material Design Guide
     readonly property int fontSizeDisplay4: 112
@@ -64,19 +66,13 @@ QtObject {
 
     function widthBetween(pos, seasonBegin, date) {
         var width = position(seasonBegin, date) - pos;
-        if (width > 0)
-            return width;
-        else
+        if (width < 0)
             return 0;
-    }
-
-    function daysDelta(beg, end) {
-        var msPerDay = 1000 * 60 * 60 * 24;
-        return (end - beg) / msPerDay;
+        return width;
     }
 
     function position(seasonBegin, date) {
-        return coordinate(daysDelta(seasonBegin, date))
+        return coordinate(MDate.daysTo(seasonBegin, date))
     }
 
     function bedLength(length) {

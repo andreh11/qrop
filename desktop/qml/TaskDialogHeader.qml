@@ -63,7 +63,7 @@ Rectangle {
                     if (taskTypeId <= 0)
                         return "";
 
-                    var stringList =  typeField.text.split(" ");
+                    var stringList = typeField.text.split(" ");
                     if (stringList.length > 1)
                         return stringList[0][0] + stringList[1][0].toString().toUpperCase()
                     else
