@@ -30,6 +30,7 @@ class Location;
 class Planting;
 class Keyword;
 class QSettings;
+class Task;
 
 /**
  * \brief The Print classe handles PDF export for most views.
@@ -72,6 +73,7 @@ private:
     Planting *planting;
     Keyword *keyword;
     LocationModel *m_locationModel;
+    Task *task;
     QSettings *mSettings;
 
     void exportPdf(const QString &html, const QUrl &path,
@@ -100,7 +102,8 @@ private:
     void paintHeader(QPainter &painter, int season, int year);
     void paintRowGrid(QPainter &painter, int row);
     int datePosition(const QDate &date);
-    void paintTimegraph(QPainter &painter, int row, int plantingId, int year);
+    void paintPlantingTimegraph(QPainter &painter, int row, int plantingId, int year);
+    void paintTaskTimeGraph(QPainter &painter, int row, int taskId);
     void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year);
     void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
                    int season, int year);

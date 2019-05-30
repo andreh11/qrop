@@ -227,14 +227,37 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
 
-    QString queryString("SELECT * FROM planting_location "
+    QString queryString("SELECT planting_id FROM planting_location "
                         "LEFT JOIN planting_view USING (planting_id) "
                         "WHERE location_id = %1 "
                         "AND (('%2' <= planting_date AND planting_date <= '%3') "
-                        "     OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
-                        "     OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
+                        "  OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
+                        "  OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
                         "ORDER BY (planting_date)");
     return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "planting_id");
+}
+
+QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString("SELECT task_id, assigned_date FROM task "
+                        "JOIN location_task USING (task_id) "
+                        "WHERE location_id = %1 "
+                        "AND (('%2' <= assigned_date AND assigned_date <= '%3')"
+                        "  OR ('%2' <= date(assigned_date, duration || ' days') "
+                        "      AND date(assigned_date, duration || ' days') <= '%3')) "
+                        "UNION "
+                        "SELECT task_id, assigned_date FROM task "
+                        "JOIN planting_task USING (task_id) "
+                        "JOIN planting_location USING (planting_id) "
+                        "WHERE location_id = %1 "
+                        "AND (('%2' <= assigned_date AND assigned_date <= '%3')"
+                        "  OR ('%2' <= date(assigned_date, duration || ' days') "
+                        "      AND date(assigned_date, duration || ' days') <= '%3')) "
+                        "ORDER BY (assigned_date) ");
+    return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "task_id");
 }
 
 QList<int> Location::children(int locationId) const

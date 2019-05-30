@@ -31,7 +31,30 @@ Column {
                 width: parent.width
                 height: Units.rowHeight
                 spacing: Units.formSpacing
-                
+
+                TextDisk {
+                    id: colorDisk
+                    text: type.slice(0,2)
+                    color: model.color
+                    Layout.leftMargin: Units.mediumSpacing
+                    onClicked: colorPickerDialog.open()
+
+                    Dialog {
+                        id: colorPickerDialog
+                        width: 400
+                        height: 400
+                        margins: 0
+                        ColorPicker {
+                            anchors.fill: parent
+                            onNewColorSelected: {
+                                colorPickerDialog.close()
+                                TaskType.update(model.task_type_id, {"color": color});
+                                refresh();
+                            }
+                        }
+                    }
+                }
+
                 TextInput {
                     text: type
                     font.family: "Roboto Regular"

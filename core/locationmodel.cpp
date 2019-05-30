@@ -99,9 +99,12 @@ QVariantList LocationModel::plantings(const QModelIndex &index, int season, int 
         return {};
 
     int lid = locationId(index);
+    QDate beg;
+    QDate end;
+    std::tie(beg, end) = MDate::seasonDates(season, year);
+
     QVariantList list;
-    std::pair<QDate, QDate> dates = MDate::seasonDates(season, year);
-    for (int id : location->plantings(lid, dates.first, dates.second))
+    for (int id : location->plantings(lid, beg, end))
         list.push_back(id);
     return list;
 }
@@ -109,6 +112,27 @@ QVariantList LocationModel::plantings(const QModelIndex &index, int season, int 
 QVariantList LocationModel::plantings(const QModelIndex &index) const
 {
     return plantings(index, m_season, m_year);
+}
+
+QVariantList LocationModel::tasks(const QModelIndex &index, int season, int year) const
+{
+    if (!index.isValid())
+        return {};
+
+    int lid = locationId(index);
+    QDate beg;
+    QDate end;
+    std::tie(beg, end) = MDate::seasonDates(season, year);
+
+    QVariantList list;
+    for (int id : location->tasks(lid, beg, end))
+        list.push_back(id);
+    return list;
+}
+
+QVariantList LocationModel::tasks(const QModelIndex &index) const
+{
+    return tasks(index, m_season, m_year);
 }
 
 qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) const

@@ -39,8 +39,12 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 
 public:
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
+
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
+    Q_INVOKABLE QVariantList tasks(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QVariantList tasks(const QModelIndex &index) const;
+
     Q_INVOKABLE int locationId(const QModelIndex &index) const;
     Q_INVOKABLE qreal length(const QModelIndex &index) const;
 

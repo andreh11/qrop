@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Parcellaire* − Ajout de l'affichage des tâches.
   - *Tâches* − Ajout des itinéraires de cultures.
   - *Plan de culture* - Affichage du chiffre d'affaire escompté.
   - Ajout de la numérotation des séries par espèce et date de plantation.

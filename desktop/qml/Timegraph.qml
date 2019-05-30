@@ -19,7 +19,7 @@ Item {
     property bool showFamilyColor: false
     property int year
     property date seasonBegin
-    property color cropColor: showFamilyColor ? Planting.familyColor(plantingId) :Planting.cropColor(plantingId)
+    property color cropColor: showFamilyColor ? Planting.familyColor(plantingId) : Planting.cropColor(plantingId)
     property date seedingDate: Planting.sowingDate(plantingId)
     property date plantingDate: Planting.plantingDate(plantingId)
     property date beginHarvestDate: Planting.begHarvestDate(plantingId)
@@ -74,12 +74,11 @@ Item {
 
         Drag.active: control.dragActive && dragArea.drag.active
         Drag.source: dragArea
-        Drag.hotSpot.x: dragArea.mouseX
-        Drag.hotSpot.y: dragArea.mouseY
+        Drag.hotSpot.x: width/2
+        Drag.hotSpot.y: height/2
         Drag.mimeData: { "text/plain": plantingId + ";" + locationId }
         Drag.dragType: Drag.Automatic
         Drag.onDragFinished: {
-            console.log("DRAG FINISHED")
             control.dragFinished();
             if (dropAction === Qt.MoveAction) {
                 plantingIdChanged();
@@ -134,10 +133,10 @@ Item {
     
     Rectangle {
         id: seedingLine
+        x: seedingCircle.x
         width: Units.widthBetween(x+control.x, seasonBegin, plantingDate)
         visible: showGreenhouseSow && width > 0 && seedingDate < plantingDate
         height: 1
-        x: seedingCircle.x
         color: current ? Material.color(Material.Green, Material.Shade200)
                        : Material.color(Material.Grey, control.hovered ? Material.Shade500
                                                                        : Material.Shade400)

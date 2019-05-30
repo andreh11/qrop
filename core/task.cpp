@@ -28,6 +28,35 @@ Task::Task(QObject *parent)
     m_viewTable = "task_view";
 }
 
+QString Task::type(int taskId) const
+{
+    auto record = recordFromId("task_view", taskId);
+    if (record.isEmpty())
+        return {};
+    return record.value("type").toString();
+}
+
+QString Task::color(int taskId) const
+{
+    auto record = recordFromId("task_view", taskId);
+    if (record.isEmpty())
+        return {};
+    return record.value("color").toString();
+}
+
+QDate Task::assignedDate(int taskId) const
+{
+    return dateFromField("task", "assigned_date", taskId);
+}
+
+int Task::duration(int taskId) const
+{
+    auto record = recordFromId("task", taskId);
+    if (record.isEmpty())
+        return {};
+    return record.value("duration").toInt();
+}
+
 int Task::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);

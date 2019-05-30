@@ -33,6 +33,7 @@
 #include "mdate.h"
 #include "keyword.h"
 #include "locationmodel.h"
+#include "task.h"
 
 Print::Print(QObject *parent)
     : QObject(parent)
@@ -886,7 +887,7 @@ int Print::datePosition(const QDate &date)
     return m_firstColumnWidth + x;
 }
 
-void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
+void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, int year)
 {
     QDate plantingDate = planting->plantingDate(plantingId);
     QDate begHarvestDate = planting->begHarvestDate(plantingId);
@@ -928,6 +929,28 @@ void Print::paintTimegraph(QPainter &painter, int row, int plantingId, int year)
     painter.restore();
 }
 
+void Print::paintTaskTimeGraph(QPainter &painter, int row, int taskId)
+{
+    int duration = task->duration(taskId);
+    QDate assignedDate = task->assignedDate(taskId);
+    QDate taskEndDate = assignedDate.addDays(duration);
+    QString type = task->type(taskId);
+    QString color = task->color(taskId);
+
+    int y = (2 + row) * m_rowHeight;
+    int p = static_cast<int>(m_rowHeight * 0.1);
+
+    QPoint point1(datePosition(assignedDate), y + p);
+    QPoint point2(datePosition(taskEndDate), y + m_rowHeight - p);
+    painter.fillRect(QRectF(point1, point2), color);
+    painter.save();
+    QPen pen(QColor("white"));
+    painter.setPen(pen);
+    painter.drawText(QRectF(point1, point2).adjusted(m_textPadding, 0, -m_textPadding, 0),
+                     Qt::AlignVCenter, QString("%1").arg(type));
+    painter.restore();
+}
+
 void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year)
 {
     int locationId = m_locationModel->locationId(parent);
@@ -936,8 +959,13 @@ void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent,
     QDate seasonBeg = seasonDates.first;
     QDate seasonEnd = seasonDates.second;
 
+    if (mSettings->value("LocationView/showTasks", false).toBool()) {
+        for (int taskId : location->tasks(locationId, seasonBeg, seasonEnd))
+            paintTaskTimeGraph(painter, row, taskId);
+    }
+
     for (int plantingId : location->plantings(locationId, seasonBeg, seasonEnd))
-        paintTimegraph(painter, row, plantingId, year);
+        paintPlantingTimegraph(painter, row, plantingId, year);
 }
 
 void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
