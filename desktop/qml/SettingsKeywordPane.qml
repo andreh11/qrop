@@ -51,8 +51,7 @@ Pane {
 
             SimpleAddDialog {
                 id: addKeywordDialog
-                labelText: qsTr("Keyword")
-                title: qsTr("Add New Keyword")
+                title: qsTr("Add keyword")
 
                 onAccepted: {
                     Keyword.add({"keyword" : text});

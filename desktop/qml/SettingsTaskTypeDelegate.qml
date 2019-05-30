@@ -8,23 +8,23 @@ import io.qrop.components 1.0
 
 Column {
     id: control
-    
+
     property int firstColumnWidth
     property int secondColumnWidth
-    
+
     signal refresh()
-    
+
     Rectangle {
         color: Material.color(Material.Grey, Material.Shade100)
         width: parent.width
         height: childrenRect.height
-        
+
         MouseArea {
             id: taskTypeMouseArea
             height: Units.rowHeight
             width: parent.width
             hoverEnabled: true
-            
+
             RowLayout {
                 id: headerRow
                 anchors.verticalCenter: parent.verticalCenter
@@ -66,9 +66,9 @@ Column {
                         refresh();
                     }
                 }
-                
+
                 Item { Layout.fillWidth: true }
-                
+
                 MyToolButton {
                     visible: taskTypeMouseArea.containsMouse
                     text: enabled ? "\ue872" : ""
@@ -78,29 +78,29 @@ Column {
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    
+
                     onClicked: deleteDialog.open()
-                    
+
                     Dialog {
                         id: deleteDialog
                         title: qsTr("Delete %1?").arg(type)
                         standardButtons: Dialog.Ok | Dialog.Cancel
-                        
+
                         Text {
                             width: parent.width
                             wrapMode: Text.WordWrap
                             text: qsTr("All related tasks will be lost.")
                         }
-                        
+
                         onAccepted: {
                             TaskType.remove(task_type_id)
                             refresh();
                         }
-                        
+
                         onRejected: deleteDialog.close()
                     }
                 }
-                
+
                 MyToolButton {
                     id: showCropsButton
                     Layout.leftMargin: -28
@@ -117,7 +117,7 @@ Column {
             }
         }
     }
-    
+
     ListView {
         id: view
         boundsBehavior: Flickable.StopAtBounds
@@ -126,7 +126,7 @@ Column {
         visible: showCropsButton.checked
         width: parent.width
         height: contentHeight
-        
+
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
         ScrollBar.vertical: ScrollBar { id: scrollBar }
@@ -143,7 +143,7 @@ Column {
             secondColumnWidth: control.secondColumnWidth
         }
     }
-    
+
     Button {
         id: addMethodButton
         visible: showCropsButton.checked
@@ -159,16 +159,13 @@ Column {
         SimpleAddDialog {
             id: addDialog
             title: qsTr("Add method")
-            labelText: "Method"
 
             onAccepted: {
                 TaskMethod.add({"method" : text,
-                                "task_type_id" : model.task_type_id});
+                                   "task_type_id" : model.task_type_id});
 
                 taskImplementModel.refresh();
             }
         }
-
-
     }
 }

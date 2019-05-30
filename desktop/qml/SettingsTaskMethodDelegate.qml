@@ -114,7 +114,6 @@ Column {
     }
 
     Button {
-
         visible: showButton.checked
         id: addVarietyButton
         anchors.right: parent.right
@@ -126,12 +125,9 @@ Column {
         SimpleAddDialog {
             id: addDialog
             title: qsTr("Add implement")
-            labelText: "Implement"
 
             onAccepted: {
-                TaskImplement.add({"implement" : text,
-                                   "task_method_id" : model.task_method_id});
-
+                TaskImplement.add({"implement" : text, "task_method_id" : model.task_method_id});
                 taskImplementModel.refresh();
             }
         }

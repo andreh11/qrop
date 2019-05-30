@@ -373,7 +373,7 @@ Flickable {
                 }
                 RowLayout {
                     spacing: Units.mediumSpacing
-                    visible: mode === "add" && !chooseLocationMode
+                    visible: mode === "add"
                     Layout.fillWidth: true
 
                     MyTextField {
