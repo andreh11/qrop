@@ -491,52 +491,53 @@ Page {
                     }
                 }
             }
-        }
 
-        SettingsFamilyPane {
-            id: familyPane
-            height: parent.height
-            width: paneWidth
-            visible: showFamilyPane
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClose: showFamilyPane = false
-        }
-
-        SettingsKeywordPane {
-            id: keywordPane
-            height: parent.height
-            width: paneWidth
-            visible: showKeywordPane
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClose: showKeywordPane = false
-        }
-
-
-        SettingsSeedCompanyPane {
-            id: seedCompanyPane
-            height: parent.height
-            width: paneWidth
-            visible: showSeedCompanyPane
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClose: showSeedCompanyPane = false
-        }
-
-        SettingsUnitPane {
-            id: unitPane
-            height: parent.height
-            width: paneWidth
-            visible: showUnitPane
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClose: showUnitPane = false
-        }
-
-        SettingsTaskPane {
-            id: taskTypePane
-            height: parent.height
-            width: paneWidth
-            visible: showTaskTypePane
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClose: showTaskTypePane = false
         }
     }
+    SettingsFamilyPane {
+        id: familyPane
+        height: parent.height
+        width: paneWidth
+        visible: showFamilyPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showFamilyPane = false
+    }
+
+    SettingsKeywordPane {
+        id: keywordPane
+        height: parent.height
+        width: paneWidth
+        visible: showKeywordPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showKeywordPane = false
+    }
+
+
+    SettingsSeedCompanyPane {
+        id: seedCompanyPane
+        height: parent.height
+        width: paneWidth
+        visible: showSeedCompanyPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showSeedCompanyPane = false
+    }
+
+    SettingsUnitPane {
+        id: unitPane
+        height: parent.height
+        width: paneWidth
+        visible: showUnitPane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showUnitPane = false
+    }
+
+    SettingsTaskPane {
+        id: taskTypePane
+        height: parent.height
+        width: paneWidth
+        visible: showTaskTypePane
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClose: showTaskTypePane = false
+    }
 }
+
