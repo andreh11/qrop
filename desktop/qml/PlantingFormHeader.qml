@@ -35,7 +35,6 @@ Rectangle {
     property int cropId: cropField.selectedId
     property string mode
 
-//    signal newCropAdded(int newCropId)
     signal cropSelected()
 
     function refresh() {
@@ -51,7 +50,7 @@ Rectangle {
     Material.elevation: 2
     radius: 2
     clip: true
-    implicitHeight: 60
+    implicitHeight: Units.dialogHeaderHeight
     width: parent.width
 
     CropModel {
@@ -109,6 +108,8 @@ Rectangle {
             idRole: function (model) { return model.crop_id; }
             showAddItem: true
             addItemText: text ? qsTr('Add new crop "%1"').arg(text) : qsTr("Add new crop")
+            hasError: selectedId < 0
+            errorText: qsTr("Choose a crop")
 
             Layout.fillWidth: true
             model: cropModel

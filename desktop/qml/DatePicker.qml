@@ -27,6 +27,8 @@ Item {
 
     property alias floatingLabel: textField.floatingLabel
     property alias labelText: textField.labelText
+    property alias errorText: textField.errorText
+    property alias hasError: textField.hasError
     property int currentYear: MDate.currentYear()
 
     property date calendarDate: new Date()

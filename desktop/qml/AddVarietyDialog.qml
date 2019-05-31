@@ -77,6 +77,8 @@ Dialog {
             textRole: function (model) { return model.seed_company; }
             idRole: function (model) { return model.seed_company_id; }
             showAddItem: false
+            hasError: selectedId < 0
+            errorText: qsTr("Choose a company")
 
             labelText: qsTr("Seed Company")
             Layout.minimumWidth: 150

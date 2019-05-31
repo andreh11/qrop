@@ -26,7 +26,7 @@ Rectangle {
     }
 
     focus: true
-    implicitHeight: 60
+    implicitHeight: Units.dialogHeaderHeight
     color: Material.color(Material.Grey, Material.Shade200)
     radius: 2
     clip: true
@@ -85,6 +85,8 @@ Rectangle {
             Layout.topMargin: Units.smallSpacing
             textRole: function (model) { return model.type; }
             idRole: function (model) { return model.task_type_id; }
+            hasError: selectedId < 0
+            errorText: qsTr("Choose a type")
             Layout.fillWidth: true
 
             onAddItemClicked: {

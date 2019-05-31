@@ -12,6 +12,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ### Changements
+  - Afficher les messages d'erreurs pour les champs obligatoires.
   - Amélioration des champs de durée : passage des heures au minutes avec la
     touche tabulation (#99).
   - *Plan de culture* − N'afficher la couleur des séries que lorsque elles ont
