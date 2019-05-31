@@ -37,6 +37,7 @@ Flickable {
     property int taskImplementId: implementField.selectedId
 
     readonly property bool accepted: taskTypeId > 0
+                                     && laborTimeField.acceptableInput
                                      && (templateMode || (plantingTask && plantingIdList.length)
                                          || (locationTask && locationIdList.length))
     readonly property alias dueDateString: dueDatepicker.isoDateString
@@ -187,7 +188,7 @@ Flickable {
 
         dueDatepicker.calendarDate = MDate.dateFromWeekString(control.week);
         durationField.text = "0";
-        laborTimeField.text = "00:00";
+        laborTimeField.reset();
         descriptionTextArea.clear();
         plantingRadioButton.checked = true;
         locationRadioButton.checked = false;
@@ -316,7 +317,7 @@ Flickable {
                 }
             }
 
-            MyTextArea {
+            MyTextField {
                 id: descriptionTextArea
                 labelText: qsTr("Description")
                 Layout.fillWidth: true
@@ -358,17 +359,13 @@ Flickable {
                         Layout.fillWidth: true
                     }
 
-                    MyTextField {
+
+                    TimeEdit {
                         id: laborTimeField
-                        visible: !templateMode
                         labelText: qsTr("Labor Time")
-                        floatingLabel: true
-                        Layout.minimumWidth: 80
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "99:99"
-                        text: "00:00"
-                        suffixText: qsTr("h", "Abbreviaton for hour")
+                        visible: !templateMode
                         Layout.fillWidth: true
+                        Layout.minimumWidth: 80
                     }
                 }
                 RowLayout {

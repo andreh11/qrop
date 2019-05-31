@@ -29,6 +29,9 @@ TextArea {
 
     leftPadding: Units.smallSpacing
     rightPadding: leftPadding
+    KeyNavigation.tab: nextItemInFocusChain(true);
+    KeyNavigation.backtab: nextItemInFocusChain(false);
+    KeyNavigation.priority: KeyNavigation.BeforeItem
 
     Label {
         id: floatingLabel
