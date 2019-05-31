@@ -190,6 +190,7 @@ Flickable {
         durationField.text = "0";
         laborTimeField.reset();
         descriptionTextArea.clear();
+        plantingSearchField.clear();
         plantingRadioButton.checked = true;
         locationRadioButton.checked = false;
     }
@@ -232,6 +233,8 @@ Flickable {
         onActivated: plantingList.unselectAll();
     }
 
+    onTaskTypeIdChanged: methodField.reset()
+
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
@@ -249,6 +252,7 @@ Flickable {
                 floatingLabel: true
                 showAddItem: true
                 addItemText: text ? qsTr('Add new method "%1"').arg(text) : qsTr("Add new method")
+                onSelectedIdChanged: implementField.reset();
 
                 textRole: function (model) { return model.method; }
                 idRole: function (model) { return model.task_method_id; }
@@ -491,6 +495,15 @@ Flickable {
                     Layout.fillHeight: true
                     Layout.leftMargin: Units.smallSpacing
                 }
+
+                Label {
+                    visible: plantingTask && !plantingIdList.length
+                    text: qsTr("Choose at least one planting")
+                    color: Units.colorError
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    Layout.leftMargin: Units.smallSpacing
+                }
             }
         }
 
@@ -527,6 +540,15 @@ Flickable {
                     text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds()))
                     Layout.minimumHeight: 26
                     Layout.fillWidth: true
+                }
+
+                Label {
+                    visible: locationTask && !locationIdList.length
+                    text: qsTr("Choose at least one location")
+                    color: Units.colorError
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    Layout.leftMargin: Units.smallSpacing
                 }
             }
         }

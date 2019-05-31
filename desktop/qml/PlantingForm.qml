@@ -600,7 +600,7 @@ Flickable {
                     autoOpenPopupOnFocus: mode === "add"
                     onActiveFocusChanged: ensureItemVisible(varietyField)
                     hasError: selectedId < 1
-                    errorText: qsTr("Choose a valid variety")
+                    errorText: qsTr("Choose a variety")
 
                     Layout.fillWidth: true
                     model: varietyModel
@@ -819,6 +819,8 @@ Flickable {
                     labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
                     floatingLabel: true
+                    hasError: Number(text) < 0
+                    errorText: qsTr("Negative duration")
 
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -836,6 +838,8 @@ Flickable {
                     labelText: qsTr("Greenhouse duration")
                     suffixText: qsTr("days")
                     floatingLabel: true
+                    hasError: Number(text) < 0
+                    errorText: qsTr("Negative duration")
 
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -853,6 +857,8 @@ Flickable {
                     labelText: qsTr("Days to maturity")
                     suffixText: qsTr("days")
                     floatingLabel: true
+                    hasError: Number(text) < 0
+                    errorText: qsTr("Negative duration")
 
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -870,6 +876,8 @@ Flickable {
                     labelText: qsTr("Harvest window")
                     suffixText: qsTr("days")
                     floatingLabel: true
+                    hasError: Number(text) < 0
+                    errorText: qsTr("Negative duration")
 
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 1; top: 999 }
@@ -919,6 +927,9 @@ Flickable {
                     Layout.fillWidth: true
                     floatingLabel: true
                     labelText: qsTr("Greenhouse start date")
+                    hasError: greenhouseGrowTimeField.hasError
+                    errorText: qsTr("Sowing after planting")
+
                     currentYear: control.currentYear
                     onActiveFocusChanged: ensureItemVisible(greenhouseStartDateField)
                     onEditingFinished: {
@@ -939,6 +950,8 @@ Flickable {
                     floatingLabel: true
                     labelText: plantingType == 1 ? qsTr("Field sowing") : qsTr("Field planting")
                     currentYear: control.currentYear
+                    hasError: dtm < 0
+                    errorText: qsTr("Harvest before planting")
 
                     onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
                     onEditingFinished: {
@@ -961,6 +974,8 @@ Flickable {
                     floatingLabel: true
                     labelText: qsTr("First harvest")
                     currentYear: control.currentYear
+                    hasError: harvestWindow < 0
+                    errorText: qsTr("Harvest end before begin")
 
                     onActiveFocusChanged: ensureItemVisible(begHarvestDateField)
                     onEditingFinished: {
@@ -1196,6 +1211,8 @@ Flickable {
                     model: UnitModel { id: unitModel }
                     textRole: function (model) { return model.abbreviation; }
                     idRole: function (model) { return model.unit_id; }
+                    hasError: selectedId < 0
+                    errorText: qsTr("Choose a unit")
 
                     Layout.fillWidth: true
 
