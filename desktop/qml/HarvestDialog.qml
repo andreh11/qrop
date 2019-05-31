@@ -199,16 +199,9 @@ Dialog {
                 Keys.onEnterPressed: if (formAccepted) dialog.accept();
             }
 
-            MyTextField {
+            TimeEdit {
                 id: laborTimeField
                 labelText: qsTr("Labor Time")
-                floatingLabel: true
-                Layout.preferredWidth: 80
-                inputMethodHints: Qt.ImhDigitsOnly
-                inputMask: "99:99"
-                text: "00:00"
-                suffixText: qsTr("h", "Abbreviaton for hour")
-
                 Layout.fillWidth: true
 
                 Keys.onReturnPressed: if (formAccepted) dialog.accept();

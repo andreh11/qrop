@@ -12,7 +12,13 @@ All notable changes to this project will be documented in this file.
   - Add planting succession numbering by crop and planting date.
 
 ### Changed
+  - Improve time edit field behavior: switch between hours and minutes with 
+    (back)tab (#99).
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
+
+### Fixed
+  - Fix time edit field behavior: it is no longer possible to enter minutes > 60
+    (#102).
 
 ## 0.2.1 - 2019-05-13
 

@@ -101,7 +101,10 @@ TextField {
         id: floatingLabel
         anchors.bottom: control.top
         anchors.left: parent.left
-        color: parent.enabled ? Material.accent : parent.Material.hintTextColor
+        color: parent.enabled
+               ? (control.hasError ? control.errorColor : Material.accent)
+               : parent.Material.hintTextColor
+
         text: labelText
         font.pixelSize: Units.fontSizeBodyAndButton
         visible: labelText
@@ -141,7 +144,7 @@ TextField {
 
         Label {
             id: helperTextLabel
-            visible: control.helperText
+            visible: control.helperText || hasError
             text: hasError ? control.errorText : control.helperText
             font.pixelSize: 12
             color: control.hasError ? control.errorColor

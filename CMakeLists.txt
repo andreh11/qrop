@@ -53,6 +53,7 @@ find_package(Qt5 COMPONENTS Core Quick Gui Widgets Qml Quick Sql REQUIRED)
 set(desktop_SRCS
     desktop/main.cpp
     desktop/qropdoublevalidator.cpp
+    desktop/timevalidator.cpp
     desktop/qml.qrc
     desktop/resources.qrc)
 

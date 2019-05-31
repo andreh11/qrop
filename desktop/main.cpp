@@ -74,6 +74,7 @@
 #include "varietymodel.h"
 
 #include "qropdoublevalidator.h"
+#include "timevalidator.h"
 
 static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -105,6 +106,7 @@ void registerTypes()
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
+    qmlRegisterType<TimeValidator>("io.qrop.components", 1, 0, "TimeValidator");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
     qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
     qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");

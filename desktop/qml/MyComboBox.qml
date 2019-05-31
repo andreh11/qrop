@@ -172,7 +172,6 @@ ComboBox {
                 implicitHeight: contentHeight
                 height: parent.height - addItemRectangle.height
 
-
                 model: control.delegateModel
                 highlightMoveDuration: 0
                 keyNavigationEnabled: true

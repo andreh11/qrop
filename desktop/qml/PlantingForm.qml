@@ -599,6 +599,8 @@ Flickable {
                     addItemText: text ? qsTr('Add new variety "%1"').arg(text) : qsTr("Add new variety")
                     autoOpenPopupOnFocus: mode === "add"
                     onActiveFocusChanged: ensureItemVisible(varietyField)
+                    hasError: selectedId < 1
+                    errorText: qsTr("Choose a valid variety")
 
                     Layout.fillWidth: true
                     model: varietyModel
