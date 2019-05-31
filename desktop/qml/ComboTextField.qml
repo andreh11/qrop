@@ -78,6 +78,12 @@ MyTextField {
             }
             model.filterString = "";
         } else {
+            if (selectedId < 0 &&
+                    (focusReason === Qt.TabFocusReason
+                     || focusReason === Qt.BacktabFocusReason
+                     || focusReason === Qt.MouseFocusReason )) {
+               clear();
+            }
             popup.close();
         }
     }

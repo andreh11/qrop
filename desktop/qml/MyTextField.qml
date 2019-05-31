@@ -43,7 +43,7 @@ TextField {
     property int suffixTextAddedMargin: Units.smallSpacing
 
     property color color: manuallyModified ? "red" : Material.accent
-    property color errorColor: Material.color(Material.red, Material.Shade500)
+    property color errorColor: Units.colorError
     property color hintColor: shade(0.38)
 
     function shade(alpha) {
@@ -77,6 +77,7 @@ TextField {
 
     leftPadding: Units.smallSpacing
     rightPadding: leftPadding
+    hoverEnabled: true
 
     activeFocusOnPress: true
     activeFocusOnTab: true
@@ -91,7 +92,16 @@ TextField {
         border.width: control.activeFocus ? 2 : 1
         radius: 4
         color: control.palette.base
-        border.color: control.activeFocus ? control.palette.highlight : control.palette.mid
+        border.color: {
+            if (control.hasError)
+                Units.colorError
+            else if (control.activeFocus)
+                control.palette.highlight
+            else if (control.hovered)
+                Qt.rgba(0, 0, 0, 0.87)
+            else
+                control.palette.mid
+        }
         Behavior on border.color {
             ColorAnimation { duration: Units.mediumDuration }
         }
@@ -105,7 +115,7 @@ TextField {
                ? (control.hasError ? control.errorColor : Material.accent)
                : parent.Material.hintTextColor
 
-        text: labelText
+        text: labelText + (control.hasError ? "*" : "")
         font.pixelSize: Units.fontSizeBodyAndButton
         visible: labelText
     }

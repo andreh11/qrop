@@ -54,6 +54,9 @@ QtObject {
     readonly property color colorHighEmphasis: Qt.rgba(0, 0, 0, 0.87)
     readonly property color colorMediumEmphasis: Qt.rgba(0, 0, 0, 0.6)
     readonly property color colorDisabledEmphasis: Qt.rgba(0, 0, 0, 0.38)
+    readonly property color colorError: Qt.rgba(176/255., 0, 32/255., 1)
+
+    readonly property int dialogHeaderHeight: 72
 
     function coordinate(day) {
         if (day < 0)
