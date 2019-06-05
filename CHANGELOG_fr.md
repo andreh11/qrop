@@ -14,6 +14,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ### Changements
+  - *Dialogue des récoltes* − Affiche les séries en cours de récoltes. 
+    Lorsqu'une série est sélecitonnée, n'afficher que les séries de la même
+    espèce.
   - Afficher les messages d'erreurs pour les champs obligatoires.
   - Amélioration des champs de durée : passage des heures au minutes avec la
     touche tabulation (#99).
@@ -21,6 +24,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - *Dialogue des récoltes* − Afficher la bonne unité pour le ou la série(s)
+    sélectionnée(s), en supposant qu'elles ont toutes la même unité (#100).
   - Correction du comportement des champs de durée : il n'est plus possible 
     d'entrer des minutes > 60 (#102).
 
