@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 
 ### Fixed
+  - Simple dialogs : fixed bad positioning (#107).
   - *Harvest dialog* − Refresh quantity in editing twice the same harvest (#101).
   - *Harvest dialog* − Show the right unit for the selected planting(s), assuming
     they all have the same unit (#100).

@@ -39,6 +39,7 @@ Dialog {
 
     title: qsTr("Add New Crop")
     modal: false
+    margins: 0
 
     onAboutToShow: {
         familyModel.refresh();
