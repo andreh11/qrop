@@ -61,7 +61,6 @@ Dialog {
         laborTimeField.manuallyModified = false;
         harvestCheckBox.checked = true;
         plantingList.reset();
-//        plantingFormHeader.reset();
     }
 
     function setFormValues(val) {
@@ -75,7 +74,6 @@ Dialog {
     function create() {
         mode = "add";
         clearForm();
-//        plantingFormHeader.refresh();
         plantingList.refresh();
 
         dialog.open()
@@ -84,17 +82,12 @@ Dialog {
     function edit(harvestId) {
         mode = "edit";
         dialog.harvestId = harvestId;
+        harvestIdChanged();
 
         clearForm();
 
         setFormValues(harvestValueMap);
         dialog.open();
-
-//        var cropId = harvestValueMap["crop_id"];
-//        var cropName = Planting.cropName(harvestValueMap["planting_id"]);
-//        plantingFormHeader.cropField.selectedId = cropId;
-//        plantingFormHeader.cropField.text = cropName;
-
         quantityField.forceActiveFocus();
     }
 
