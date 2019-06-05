@@ -24,6 +24,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - *Dialogue des récoltes* − Mise à jour de la quantité lorsqu'une récolte est
+    modifiée deux fois de suite (#101).
   - *Dialogue des récoltes* − Afficher la bonne unité pour le ou la série(s)
     sélectionnée(s), en supposant qu'elles ont toutes la même unité (#100).
   - Correction du comportement des champs de durée : il n'est plus possible 
