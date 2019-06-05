@@ -53,6 +53,7 @@ public:
     Q_INVOKABLE int familyId(int plantingId) const;
     Q_INVOKABLE QString familyInterval(int plantingId) const;
     Q_INVOKABLE QString familyColor(int plantingId) const;
+    Q_INVOKABLE QString unit(int plantingId) const;
     Q_INVOKABLE int type(int plantingId) const;
     Q_INVOKABLE int rank(int plantingId) const;
 
@@ -93,7 +94,7 @@ private:
     DatabaseUtility *seedCompany;
     Keyword *keyword;
     Task *task;
-    DatabaseUtility *unit;
+    DatabaseUtility *mUnit;
     Variety *variety;
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);

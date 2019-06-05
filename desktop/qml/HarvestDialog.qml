@@ -31,14 +31,16 @@ Dialog {
     property int season
     property int year
     property int plantingId: -1
-    property alias cropId: plantingFormHeader.cropId
+//    property alias cropId: plantingFormHeader.cropId
     property int quantity: Number(quantityField.text)
     property alias dateString: datePicker.isoDateString
     property alias time: laborTimeField.text
     property var selectedIdList: plantingList.selectedIdList()
     property alias showOnlyHarvested: harvestCheckBox.checked
 
-    property bool formAccepted: cropId > 0 && quantityField.acceptableInput && selectedIdList.length
+    property bool formAccepted: quantityField.acceptableInput
+                                && laborTimeField.acceptableInput
+                                && selectedIdList.length
     property int harvestId: -1
     property var harvestValueMap: Harvest.mapFromId("harvest_view", harvestId)
     property int harvestTypeId: Number(harvestValueMap['harvest_type_id'])
@@ -47,10 +49,10 @@ Dialog {
     signal harvestAdded()
     signal harvestUpdated()
 
-    onCropIdChanged: {
-        if (!plantingList.count && showOnlyHarvested && harvestSettings.showAllPlantingIfNoneInWindow)
-            harvestCheckBox.checked = false;
-    }
+//    onCropIdChanged: {
+//        if (!plantingList.count && showOnlyHarvested && harvestSettings.showAllPlantingIfNoneInWindow)
+//            harvestCheckBox.checked = false;
+//    }
 
     function clearForm() {
         quantityField.reset();
@@ -59,7 +61,7 @@ Dialog {
         laborTimeField.manuallyModified = false;
         harvestCheckBox.checked = true;
         plantingList.reset();
-        plantingFormHeader.reset();
+//        plantingFormHeader.reset();
     }
 
     function setFormValues(val) {
@@ -73,7 +75,7 @@ Dialog {
     function create() {
         mode = "add";
         clearForm();
-        plantingFormHeader.refresh();
+//        plantingFormHeader.refresh();
         plantingList.refresh();
 
         dialog.open()
@@ -88,10 +90,10 @@ Dialog {
         setFormValues(harvestValueMap);
         dialog.open();
 
-        var cropId = harvestValueMap["crop_id"];
-        var cropName = Planting.cropName(harvestValueMap["planting_id"]);
-        plantingFormHeader.cropField.selectedId = cropId;
-        plantingFormHeader.cropField.text = cropName;
+//        var cropId = harvestValueMap["crop_id"];
+//        var cropName = Planting.cropName(harvestValueMap["planting_id"]);
+//        plantingFormHeader.cropField.selectedId = cropId;
+//        plantingFormHeader.cropField.text = cropName;
 
         quantityField.forceActiveFocus();
     }
@@ -121,11 +123,6 @@ Dialog {
             updateHarvest();
     }
 
-    onOpened: {
-        if (mode === "add")
-            plantingFormHeader.cropField.forceActiveFocus();
-    }
-
     focus: true
     title: mode === "add" ? qsTr("Add Harvest") : qsTr("Edit Harvest")
     padding: Units.mediumSpacing
@@ -145,14 +142,6 @@ Dialog {
         onActivated: if (formAccepted) accept();
     }
 
-    header: PlantingFormHeader {
-        id: plantingFormHeader
-        showAddItem: false
-        showYieldAndRevenue: false
-        mode: dialog.mode
-        onCropSelected: quantityField.forceActiveFocus()
-    }
-
     footer: AddEditDialogFooter {
         applyEnabled: dialog.formAccepted
         mode: dialog.mode
@@ -162,7 +151,6 @@ Dialog {
         id: mainColumn
         implicitHeight: 300
         spacing: Units.smallSpacing
-        enabled: cropId > 0
 
         RowLayout {
             Layout.fillWidth:  true
@@ -171,7 +159,7 @@ Dialog {
             MyTextField {
                 id: quantityField
                 labelText: qsTr("Quantity")
-                suffixText: qsTr("kg")
+                suffixText: selectedIdList ? Planting.unit(selectedIdList[0]) : ""
                 floatingLabel: true
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: IntValidator {
@@ -269,7 +257,7 @@ Dialog {
                 week: datePicker.week
                 filterString: plantingSearchField.text
                 width: parent.widh
-                cropId: plantingFormHeader.cropId
+                cropId: plantingIdList.length ? Planting.cropId(plantingIdList[0]) : -1
                 showActivePlantings: false
                 showOnlyHarvested: harvestCheckBox.checked
 

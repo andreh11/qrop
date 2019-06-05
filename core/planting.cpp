@@ -38,7 +38,7 @@ Planting::Planting(QObject *parent)
     , seedCompany(new DatabaseUtility(this))
     , keyword(new Keyword(this))
     , task(new Task(this))
-    , unit(new DatabaseUtility(this))
+    , mUnit(new DatabaseUtility(this))
     , variety(new Variety(this))
 {
     m_table = "planting";
@@ -51,8 +51,8 @@ Planting::Planting(QObject *parent)
     seedCompany->setTable("seed_company");
     seedCompany->setViewTable("seed_company");
 
-    unit->setTable("unit");
-    unit->setViewTable("unit");
+    mUnit->setTable("unit");
+    mUnit->setViewTable("unit");
 }
 
 // map has planting table's fields and a "keyword_ids" field.
@@ -539,6 +539,14 @@ QString Planting::familyColor(int plantingId) const
     return map.value("family_color").toString();
 }
 
+QString Planting::unit(int plantingId) const
+{
+    auto map = mapFromId("planting_view", plantingId);
+    if (map.isEmpty())
+        return {};
+    return map.value("unit").toString();
+}
+
 int Planting::type(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
@@ -838,7 +846,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                 } else {
                     QVariantMap m;
                     m["unit"] = unitString;
-                    unitId = unit->add(m);
+                    unitId = mUnit->add(m);
                 }
                 map["unit_id"] = unitId;
             } else if (field == "keywords") {
@@ -923,7 +931,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             } else {
                 QVariantMap m;
                 m["unit"] = "kg";
-                unitId = unit->add(m);
+                unitId = mUnit->add(m);
             }
             map["unit_id"] = unitId;
         }

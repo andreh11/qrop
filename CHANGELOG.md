@@ -13,12 +13,16 @@ All notable changes to this project will be documented in this file.
   - Add planting succession numbering by crop and planting date.
 
 ### Changed
+  - *Harvest dialog* − Show currently harvested crops. When one planting is 
+    selected, show only the plantings of the same specie.
   - Show error messages for mandatory fields.
   - Improve time edit field behavior: switch between hours and minutes with 
     (back)tab (#99).
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 
 ### Fixed
+  - *Harvest dialog* − Show the right unit for the selected planting(s), assuming
+    they all have the same unit (#100).
   - Fix time edit field behavior: it is no longer possible to enter minutes > 60
     (#102).
 
