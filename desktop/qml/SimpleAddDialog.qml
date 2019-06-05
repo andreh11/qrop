@@ -7,7 +7,7 @@ import io.qrop.components 1.0
 
 Dialog {
     id: dialog
-    
+
     readonly property string text: textField.text.trim()
     readonly property alias acceptableForm: textField.acceptableInput
     property alias labelText: textField.labelText
@@ -17,40 +17,31 @@ Dialog {
     function prefill(text) {
         textField.text = text
     }
-    
+
     title: qsTr("Add New Item")
-    
+    margins: 0
+
     onAboutToShow: {
         textField.clear();
         textField.forceActiveFocus();
     }
-    
+
     footer: AddDialogButtonBox {
         width: parent.width
         onAccepted: dialog.accept()
         onRejected: dialog.reject()
         acceptableInput: acceptableForm
     }
-    
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: Units.mediumSpacing
+
+    MyTextField {
+        id: textField
         focus: true
-        
+        width: parent.width
         Keys.onReturnPressed: {
             if (textField.acceptableInput)
                 dialog.accept();
         }
         Keys.onEscapePressed: dialog.reject()
         Keys.onBackPressed: dialog.reject() // especially necessary on Android
-        
-        MyTextField {
-            id: textField
-            width: parent.width
-            Layout.fillWidth: true
-            Layout.minimumWidth: 100
-        }
-        
-        Layout.fillWidth: true
     }
 }

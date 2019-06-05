@@ -61,6 +61,7 @@ Column {
                         id: deleteDialog
                         title: qsTr("Delete %1?").arg(model.method)
                         standardButtons: Dialog.Ok | Dialog.Cancel
+                        margins: 0
 
                         Text {
                             width: parent.width
