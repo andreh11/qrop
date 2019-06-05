@@ -565,7 +565,7 @@ Page {
                 Column {
                     id: emptyPlantingStateColumn
                     spacing: Units.smallSpacing
-                    visible: !plantingsView.rowsNumber && showPlantingsPane
+                    visible: !plantingsView.rowCount && showPlantingsPane
                     z:2
                     anchors {
                         centerIn: parent

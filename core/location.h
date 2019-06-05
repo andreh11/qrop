@@ -62,6 +62,8 @@ public:
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 
+    Q_INVOKABLE int totalBedLength(bool greenhouse = false) const;
+
 private:
     Planting *planting;
     int duplicateTree(int id, int parentId) const;

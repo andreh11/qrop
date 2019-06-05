@@ -53,9 +53,9 @@ void tst_MDate::weekDates_data()
     QTest::addColumn<QList<QDate>>("expected");
 
     QTest::newRow("") << MDate::weekDates(2, 2019)
-                      << QList<QDate>({ QDate(2019, 1, 7), QDate(2019, 1, 13) });
+                      << std::pair<QDate, QDate>({ QDate(2019, 1, 7), QDate(2019, 1, 13) });
     QTest::newRow("") << MDate::weekDates(33, 2019)
-                      << QList<QDate>({ QDate(2019, 8, 12), QDate(2019, 8, 18) });
+                      << std::pair<QDate, QDate>({ QDate(2019, 8, 12), QDate(2019, 8, 18) });
 }
 
 void tst_MDate::weekDates()

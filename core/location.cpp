@@ -431,3 +431,23 @@ void Location::removePlantingLocations(int plantingId) const
     QSqlQuery query(queryString.arg(plantingId));
     debugQuery(query);
 }
+
+int Location::totalBedLength(bool greenhouse) const
+{
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QString queryString("SELECT SUM(bed_length) "
+                        "FROM location "
+                        "WHERE greenhouse = %1 "
+                        "AND location_id IN "
+                        "(SELECT location_id "
+                        " FROM location "
+                        " EXCEPT "
+                        " SELECT parent_id "
+                        " FROM location "
+                        " WHERE parent_id IS NOT NULL)");
+    QSqlQuery query(queryString.arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    query.first();
+    return query.value(0).toInt();
+}

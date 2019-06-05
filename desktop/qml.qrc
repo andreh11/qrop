@@ -100,5 +100,9 @@
         <file>qml/BlankLabel.qml</file>
         <file>qml/TaskTimegraph.qml</file>
         <file>qml/TimeEdit.qml</file>
+        <file>qml/ChartsPage.qml</file>
+        <file>qml/DistributionChart.qml</file>
+        <file>qml/CropRevenueChart.qml</file>
+        <file>qml/HorizontalBarView.qml</file>
     </qresource>
 </RCC>

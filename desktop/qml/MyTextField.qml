@@ -160,9 +160,7 @@ TextField {
             color: control.hasError ? control.errorColor
                                     : Material.color(Material.Grey, Material.Shade800)
 
-            Behavior on color {
-                ColorAnimation { duration: 200 }
-            }
+            Behavior on color { ColorAnimation { duration: 200 } }
         }
 
         Label {

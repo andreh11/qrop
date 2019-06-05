@@ -27,11 +27,11 @@ Item {
     property string cropName: Planting.cropName(plantingId)
     property string varietyName: Planting.varietyName(plantingId)
     property int rank: Planting.rank(plantingId)
-    property real totalLength: Planting.totalLength(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
-    property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
-    property real lengthLeft: Planting.lengthToAssign(plantingId) / (settings.useStandardBedLength ? settings.standardBedLength : 1)
-    readonly property string bedUnit: settings.useStandardBedLength ? qsTr("beds") : qsTr("m")
-//    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
+    property real totalLength: Planting.totalLength(plantingId) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
+    property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
+    property real lengthLeft: Planting.lengthToAssign(plantingId) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
+    readonly property string bedUnit: mainSettings.useStandardBedLength ? qsTr("beds") : qsTr("m")
+    //    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
     readonly property bool current: Planting.isActive(plantingId)
     readonly property alias hovered: dragArea.containsMouse
     readonly property bool displaySow: showGreenhouseSow && plantingDate > seasonBegin
@@ -41,29 +41,26 @@ Item {
     signal plantingRemoved()
     signal dragFinished();
 
+    property bool useStandardBedLength
+    property int standardBedLength
+    property bool showPlantingSuccessionNumber
+
     function refresh() {
         plantingIdChanged();
-    }
-
-    Settings {
-        id: settings
-        property bool useStandardBedLength
-        property int standardBedLength
-        property bool showPlantingSuccessionNumber
     }
 
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
 
-    x: Units.position(seasonBegin, displaySow ? seedingDate : plantingDate)
+    x: Helpers.position(seasonBegin, displaySow ? seedingDate : plantingDate)
     z: dragArea.containsMouse ? 4 : 1
 
     ToolTip.text: locationId > 0
                   ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName)
                     .arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
                   : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName)
-                    .arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
+    .arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
     ToolTip.visible: dragArea.containsMouse
     ToolTip.delay: 200
 
@@ -112,15 +109,15 @@ Item {
         font.family: "Roboto Condensed"
         font.pixelSize: Units.fontSizeBodyAndButton
         visible: seedingCircle.visible
-        
+
         anchors.right: seedingCircle.left
         anchors.verticalCenter: seedingCircle.verticalCenter
         anchors.rightMargin: 4
     }
-    
+
     Rectangle {
         id: seedingCircle
-        x: Units.position(seasonBegin, seedingDate) - width/4 - control.x
+        x: -width/4
         visible: showGreenhouseSow && seedingDate < plantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
@@ -130,11 +127,11 @@ Item {
                        : Material.color(Material.Grey, control.hovered ? Material.Shade500
                                                                        : Material.Shade400)
     }
-    
+
     Rectangle {
         id: seedingLine
         x: seedingCircle.x
-        width: Units.widthBetween(x+control.x, seasonBegin, plantingDate)
+        width: Helpers.widthBetween(x+control.x, seasonBegin, plantingDate)
         visible: showGreenhouseSow && width > 0 && seedingDate < plantingDate
         height: 1
         color: current ? Material.color(Material.Green, Material.Shade200)
@@ -142,11 +139,11 @@ Item {
                                                                        : Material.Shade400)
         anchors.verticalCenter: parent.verticalCenter
     }
-    
+
     Rectangle {
         id: growBar
-        x: Units.position(seasonBegin, plantingDate) - control.x
-        width: Units.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
+        x: Helpers.widthBetween(control.x, seasonBegin, plantingDate)
+        width: Helpers.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
         visible: width > 0
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
@@ -168,8 +165,8 @@ Item {
             text: MDate.formatDate(plantingDate, year, null, false)
                   + (showNames
                      ? " %1%2, %3".arg(showNames ? cropName.slice(0,2) : "")
-                                  .arg(settings.showPlantingSuccessionNumber ? (" " + rank) : "")
-                                  .arg(varietyName)
+                       .arg(mainSettings.showPlantingSuccessionNumber ? (" " + rank) : "")
+                       .arg(varietyName)
                      : "")
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
@@ -180,11 +177,11 @@ Item {
             anchors.leftMargin: 4
         }
     }
-    
+
     Rectangle {
         id: harvestBar
-        x: Units.position(seasonBegin, beginHarvestDate) - control.x
-        width: Units.widthBetween(x+control.x, seasonBegin, endHarvestDate)
+        x: Helpers.widthBetween(control.x, seasonBegin, beginHarvestDate)
+        width: Helpers.widthBetween(x+control.x, seasonBegin, endHarvestDate)
         visible: width > 0
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter

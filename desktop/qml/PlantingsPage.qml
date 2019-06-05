@@ -29,14 +29,14 @@ Page {
 
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
-    property string filterString: filterField.text
-    property int year: seasonSpinBox.year
+    property alias filterString: filterField.text
+    property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
     property date todayDate: new Date()
     property alias searchField: filterField
 
     property alias model: plantingsView.model
-    property int rowCount: model.rowCount
+    property alias rowCount: plantingsView.rowCount
     property alias selectedIds: plantingsView.selectedIds
     property alias checks: plantingsView.checks
     property alias dialogOpened: plantingDialog.opened
@@ -46,6 +46,7 @@ Page {
     function refresh() {
         plantingsView.refresh();
         taskSideSheet.refresh();
+        chartPane.refresh();
     }
 
     function selectedIdList() {
@@ -323,13 +324,6 @@ Page {
 
         spacing: 8
 
-        PlantingsChartPane {
-            id: chartPane
-            visible: false
-            width: parent.width
-        }
-
-
         Pane {
             width: parent.width
             padding: 0
@@ -399,6 +393,19 @@ Page {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide planting's tasks")
                                               : qsTr("Show planting's tasks")
+                    }
+
+                    IconButton {
+                        id: chartButton
+                        text: "\ue801"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide chart")
+                                              : qsTr("Show chart")
                     }
 
                     Button {
@@ -666,6 +673,7 @@ Page {
                 width: parent.width
             }
 
+
             Column {
                 id: blankStateColumn
                 z: 1
@@ -697,6 +705,7 @@ Page {
                 }
             }
 
+
             PlantingsView {
                 id: plantingsView
                 year: page.year
@@ -708,9 +717,32 @@ Page {
                     top: topDivider.bottom
                     left: parent.left
                     right: taskSideSheet.left
-                    bottom: parent.bottom
+                    bottom: chartPane.top
+//                    bottom: parent.bottom
                 }
                 onDoubleClicked: plantingDialog.editPlantings([plantingId])
+            }
+
+            ThinDivider {
+                id: middleDivider
+                visible: chartPane.visible
+                anchors.top: chartPane.top
+                width: parent.width
+            }
+
+            PlantingsChartPane {
+                id: chartPane
+                visible: chartButton.checked
+                width: parent.width
+                height: visible ? parent.height/3 : 0
+                year: page.year
+                season: page.season
+                anchors {
+//                    top: topDivider.bottom
+                    left: parent.left
+                    right: taskSideSheet.left
+                    bottom: parent.bottom
+                }
             }
 
             PlantingTaskSideSheet {

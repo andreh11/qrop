@@ -41,8 +41,8 @@ public:
         return QDate::fromString(s, Qt::ISODate);
     }
     static QDate firstMondayOfYear(int year);
-    static QDate mondayOfWeek(int week, int year);
-    static QList<QDate> weekDates(int week, int year);
+    Q_INVOKABLE static QDate mondayOfWeek(int week, int year);
+    static std::pair<QDate, QDate> weekDates(int week, int year);
     Q_INVOKABLE static bool isValid(const QDate &date) { return date.isValid(); }
     Q_INVOKABLE static int isoWeek(const QDate &date);
     Q_INVOKABLE static int isoYear(const QDate &date);
@@ -56,7 +56,9 @@ public:
     Q_INVOKABLE static int seasonYear(const QDate &date);
     static QString seasonName(int season);
     static std::pair<QDate, QDate> seasonDates(int season, int year);
+    Q_INVOKABLE static QVariantList seasonMondayDates(int season, int year);
     Q_INVOKABLE static QDate seasonBeginning(int season, int year);
+    Q_INVOKABLE static QDate seasonEnd(int season, int year);
 
     Q_INVOKABLE static qint64 daysTo(const QDate &from, const QDate &to) { return from.daysTo(to); }
     Q_INVOKABLE static QDate addDays(const QDate &date, qint64 days) { return date.addDays(days); }

@@ -65,7 +65,7 @@ QDate MDate::mondayOfWeek(int week, int year)
     return first.addDays((week - 1) * 7);
 }
 
-QList<QDate> MDate::weekDates(int week, int year)
+std::pair<QDate, QDate> MDate::weekDates(int week, int year)
 {
     QDate monday = mondayOfWeek(week, year);
     return { monday, monday.addDays(6) };
@@ -202,9 +202,32 @@ std::pair<QDate, QDate> MDate::seasonDates(int season, int year)
     }
 }
 
+QVariantList MDate::seasonMondayDates(int season, int year)
+{
+    QDate beg;
+    QDate end;
+    std::tie(beg, end) = seasonDates(season, year);
+    QVariantList list;
+
+    while (beg <= end) {
+        int w;
+        int y;
+        w = beg.weekNumber(&y);
+        list.push_back(mondayOfWeek(w, y));
+        beg = beg.addDays(7);
+    }
+
+    return list;
+}
+
 QDate MDate::seasonBeginning(int season, int year)
 {
     return seasonDates(season, year).first;
+}
+
+QDate MDate::seasonEnd(int season, int year)
+{
+    return seasonDates(season, year).second;
 }
 
 int MDate::seasonYear(const QDate &date)

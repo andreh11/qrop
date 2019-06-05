@@ -195,18 +195,6 @@ Page {
                 spacing: Units.smallSpacing
                 visible: !filterMode
 
-                //                Label {
-                //                    text: qsTr("%L1 harvest(s) selected", "", checks).arg(checks)
-                //                    leftPadding: 16
-                //                    color: Material.color(Material.Blue)
-                //                    Layout.fillWidth: true
-                //                    visible: checks > 0
-                //                    font.family: "Roboto Regular"
-                //                    font.pixelSize: 16
-                //                    horizontalAlignment: Qt.AlignLeft
-                //                    verticalAlignment: Qt.AlignVCenter
-                //                }
-
                 Button {
                     id: addButton
                     text: qsTr("Add harvest")

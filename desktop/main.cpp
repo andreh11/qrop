@@ -48,6 +48,7 @@
 #include "tasktemplate.h"
 #include "variety.h"
 #include "version.h"
+#include "helpers.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -136,6 +137,14 @@ void registerTypes()
                                         auto *print = new Print();
                                         return print;
                                     });
+
+    qmlRegisterSingletonType<Helpers>("io.qrop.components", 1, 0, "Helpers",
+                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                          Q_UNUSED(engine)
+                                          Q_UNUSED(scriptEngine)
+                                          auto *helpers = new Helpers();
+                                          return helpers;
+                                      });
 
     qmlRegisterSingletonType<Family>("io.qrop.components", 1, 0, "Family",
                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {

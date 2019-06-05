@@ -154,8 +154,6 @@ Page {
         property bool showPlantingSuccessionNumber
     }
 
-
-
     Pane {
         id: mainPane
         anchors.fill: parent

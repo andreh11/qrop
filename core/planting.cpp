@@ -638,6 +638,116 @@ int Planting::lengthToAssign(int plantingId) const
     return length - assignedLength(plantingId);
 }
 
+qreal Planting::totalLengthForWeek(int week, int year, bool greenhouse) const
+{
+    QDate date;
+    std::tie(date, std::ignore) = MDate::weekDates(week, year);
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QString queryString("select sum(length) "
+                        "from planting_view "
+                        "where planting_date <= '%1' "
+                        "and '%1' <= end_harvest_date "
+                        "and in_greenhouse = %2");
+    QSqlQuery query(queryString.arg(date.toString(Qt::ISODate)).arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    query.first();
+    return query.value(0).toInt();
+}
+
+QVariantList Planting::totalLengthByWeek(int season, int year, bool greenhouse) const
+{
+    QVariantList list;
+    QDate beg;
+    QDate end;
+    std::tie(beg, end) = MDate::seasonDates(season, year);
+
+    while (beg <= end) {
+        int w;
+        int y;
+        w = beg.weekNumber(&y);
+        list.push_back(totalLengthForWeek(w, y, greenhouse));
+        beg = beg.addDays(7);
+    }
+    return list;
+}
+
+QVariantList Planting::longestCropNames(int year, bool greenhouse) const
+{
+    QString queryString("select crop, sum(length), sum(bed_revenue), "
+                        "strftime('%Y', planting_date) as year "
+                        "from planting_view "
+                        "where year = '%1' "
+                        "and in_greenhouse = %2 "
+                        "group by year, crop_id "
+                        "order by year, sum(length) asc");
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    QVariantList list;
+    while (query.next())
+        list.push_back(query.value(0));
+    return list;
+}
+
+QVariantList Planting::longestCropLengths(int year, bool greenhouse) const
+{
+    QString queryString("select crop, sum(length), sum(bed_revenue), "
+                        "strftime('%Y', planting_date) as year "
+                        "from planting_view "
+                        "where year = '%1' "
+                        "and in_greenhouse = %2 "
+                        "group by crop_id "
+                        "order by sum(length) asc");
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    QVariantList list;
+    while (query.next())
+        list.push_back(query.value(1));
+    return list;
+}
+
+QVariantList Planting::highestRevenueCropNames(int year, bool greenhouse) const
+{
+    QString queryString("select crop, sum(bed_revenue), "
+                        "strftime('%Y', planting_date) as year "
+                        "from planting_view "
+                        "where year = '%1' "
+                        "and in_greenhouse = %2 "
+                        "group by year, crop_id "
+                        "order by year, sum(bed_revenue) asc");
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    QVariantList list;
+    while (query.next())
+        list.push_back(query.value(0));
+    return list;
+}
+
+QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) const
+{
+    QString queryString("select crop, sum(bed_revenue), "
+                        "strftime('%Y', planting_date) as year "
+                        "from planting_view "
+                        "where year = '%1' "
+                        "and in_greenhouse = %2 "
+                        "group by year, crop_id "
+                        "order by year, sum(bed_revenue) asc");
+    int inGreenhouse = greenhouse ? 1 : 0;
+    QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
+    query.exec();
+    debugQuery(query);
+    QVariantList list;
+    while (query.next())
+        list.push_back(query.value(1));
+    return list;
+}
+
 void Planting::csvImportPlan(int year, const QUrl &path) const
 {
     if (year < 2000 || year > 3000)

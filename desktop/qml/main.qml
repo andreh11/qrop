@@ -33,7 +33,8 @@ ApplicationWindow {
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
         { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" }
+        { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" },
+        { source: chartsPage,  name: qsTr("Charts"),  iconText: "\ue801" }
         //        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
         //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
@@ -173,6 +174,10 @@ ApplicationWindow {
         id: harvestsPage
     }
 
+    ChartsPage {
+        id: chartsPage
+    }
+
 //    NotesPage {
 //        id: notesPage
 //    }
@@ -183,6 +188,13 @@ ApplicationWindow {
 
     SettingsPage {
         id: settingsPage
+    }
+
+    Settings {
+        id: mainSettings
+        property bool useStandardBedLength
+        property int standardBedLength
+        property bool showPlantingSuccessionNumber
     }
 
     Shortcut {
@@ -610,7 +622,6 @@ ApplicationWindow {
         bottomPadding: 20
 
         initialItem: plantingsPage
-
         replaceEnter: null
         replaceExit: null
 
@@ -637,6 +648,10 @@ ApplicationWindow {
                 seedListPage.refresh();
                 break
             case 5:
+                stackView.replace(chartsPage)
+                chartsPage.refresh();
+                break
+            case 6:
                 stackView.replace(settingsPage)
                 break
             }

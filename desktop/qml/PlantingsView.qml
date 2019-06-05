@@ -21,7 +21,7 @@ ListView {
 
     property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
-    property alias rowsNumber: plantingModel.rowCount
+    property alias rowCount: plantingModel.rowCount
     property bool showOnlyActiveColor: false
     property bool showFamilyColor: false
     property bool showOnlyTimegraph: false
@@ -216,6 +216,30 @@ ListView {
         plantingModel.resetFilter();
     }
 
+    function select(plantingId, index) {
+        if (selectedIds[plantingId])
+            firstSelectedIndex = -1;
+        else
+            firstSelectedIndex = index;
+
+        selectedIds[plantingId] = !selectedIds[plantingId];
+        lastSelectedRow = firstSelectedIndex
+
+        secondSelectedIndex = -1;
+        selectedIdsChanged();
+    }
+
+    function shiftSelect(plantingId, index) {
+        selectedIds[plantingId] = !selectedIds[plantingId]
+        if (firstSelectedIndex >= 0) {
+            secondSelectedIndex = index;
+            lastSelectedRow = secondSelectedIndex
+            shiftSelectBetween();
+        } else {
+            select(plantingId, index);
+        }
+    }
+
     // Save visible columns setting.
     onVisibleColumnIdListChanged: {
         settings.visibleColumnList = visibleColumnIdList;
@@ -266,9 +290,9 @@ ListView {
     Keys.onPressed: {
         if (event.key === Qt.Key_Space) {
             if (event.modifiers & Qt.ShiftModifier)
-                currentItem.shiftSelect();
+                shiftSelect(currentItem.plantingId, currentIndex)
             else
-                currentItem.select()
+                select(currentItem.plantingId, currentIndex)
         }
     }
 
@@ -293,12 +317,12 @@ ListView {
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
         visible: showVerticalScrollBar
-        parent: listView.parent
-        anchors {
-            top: listView.top
-            right: listView.right
-            bottom: horizontalScrollBar.top
-        }
+//        parent: listView.parent
+//        anchors {
+//            top: listView.top
+//            right: listView.right
+//            bottom: horizontalScrollBar.top
+//        }
         active: horizontalScrollBar.active
         //        policy: ScrollBar.AlwaysOn
     }
@@ -307,12 +331,12 @@ ListView {
         id: horizontalScrollBar
         visible: showHorizontalScrollBar
         active: verticalScrollBar.active
-        parent: listView.parent
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            right: verticalScrollBar.left
-        }
+//        parent: listView.parent
+//        anchors {
+//            bottom: parent.bottom
+//            left: parent.left
+//            right: verticalScrollBar.left
+//        }
         orientation: Qt.Horizontal
         //        policy: ScrollBar.AlwaysOn
     }
@@ -343,10 +367,10 @@ ListView {
                     width: parent.height * 0.8
                     anchors.verticalCenter: headerRow.verticalCenter
                     tristate: true
-                    checkState: rowsNumber && checks == rowsNumber ? Qt.Checked
+                    checkState: rowCount && checks == rowCount ? Qt.Checked
                                                                    : (checks > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                     nextCheckState: function () {
-                        if (!rowsNumber)
+                        if (!rowCount)
                             return;
 
                         if (checkState == Qt.Checked) {
@@ -502,33 +526,10 @@ ListView {
         property date beginHarvestDate: model.beg_harvest_date
         property date endHarvestDate: model.end_harvest_date
         property var keywordStringList: Keyword.keywordStringList(model.planting_id)
+        property int plantingId: model.planting_id
 
-        function select() {
-            if (selectedIds[model.planting_id])
-                firstSelectedIndex = -1;
-            else
-                firstSelectedIndex = index;
-
-            selectedIds[model.planting_id] = !selectedIds[model.planting_id];
-            lastSelectedRow = firstSelectedIndex
-
-            secondSelectedIndex = -1;
-            selectedIdsChanged();
-        }
-
-        function shiftSelect() {
-            selectedIds[model.planting_id] = !selectedIds[model.planting_id]
-            if (firstSelectedIndex >= 0) {
-                secondSelectedIndex = index;
-                lastSelectedRow = secondSelectedIndex
-                shiftSelectBetween();
-            } else {
-                delegate.select();
-            }
-        }
-
-        height: row.height
-        width: headerColumn.width
+        height: delegateColumn.height
+        width: delegateColumn.width
         color: {
             if (checkBox.checked)
                 Material.color(Material.Grey, Material.Shade200);
@@ -547,7 +548,7 @@ ListView {
         }
 
         Column {
-            id: headerColumn
+            id: delegateColumn
             width: row.width
 
             ThinDivider { width: parent.width }
@@ -598,9 +599,9 @@ ListView {
                                 return;
 
                             if (mouse.modifiers & Qt.ShiftModifier)
-                                delegate.shiftSelect();
+                                shiftSelect(model.planting_id, index);
                             else
-                                delegate.select();
+                                select(model.planting_id, index);
                         }
                     }
                 }

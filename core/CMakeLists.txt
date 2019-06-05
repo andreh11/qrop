@@ -27,6 +27,7 @@ add_library(core SHARED
 	inputmodel.cpp 
 	expensemodel.cpp 
 	db.cpp 
+        helpers.cpp
 	databaseutility.cpp 
 	planting.cpp 
 	task.cpp 

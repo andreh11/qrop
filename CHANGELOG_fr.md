@@ -6,6 +6,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout de graphiques de distribution des séries (longueur de planche) et
+    de chiffre d'affaire.
   - *Parcellaire* − Ajout de l'affichage des tâches.
   - *Tâches* − Ajout des itinéraires de cultures.
   - *Plan de culture* - Affichage du chiffre d'affaire escompté.

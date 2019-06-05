@@ -184,9 +184,7 @@ void TaskModel::setPlantingId(int id)
 
 void TaskModel::updateWeekDates()
 {
-    auto weekDates = MDate::weekDates(m_week, m_year);
-    m_mondayDate = weekDates[0];
-    m_sundayDate = weekDates[1];
+    std::tie(m_mondayDate, m_sundayDate) = MDate::weekDates(m_week, m_year);
     // Strangely, we have to use both of these to get everything working.
     invalidateFilter();
     invalidate();

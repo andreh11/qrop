@@ -71,6 +71,14 @@ public:
     Q_INVOKABLE int assignedLength(int plantingId) const;
     Q_INVOKABLE int totalLength(int plantingId) const;
     Q_INVOKABLE int lengthToAssign(int plantingId) const;
+    qreal totalLengthForWeek(int week, int year, bool greenhouse = false) const;
+    Q_INVOKABLE QVariantList totalLengthByWeek(int season, int year, bool greenhouse = false) const;
+
+    Q_INVOKABLE QVariantList longestCropNames(int year, bool greenhouse = false) const;
+    Q_INVOKABLE QVariantList longestCropLengths(int year, bool greenhouse = false) const;
+
+    Q_INVOKABLE QVariantList highestRevenueCropNames(int year, bool greenhouse = false) const;
+    Q_INVOKABLE QVariantList highestRevenueCropRevenues(int year, bool greenhouse = false) const;
 
     Q_INVOKABLE QList<int> addSuccessions(int successions, int daysBetween, const QVariantMap &map) const;
     Q_INVOKABLE QVariantMap lastValues(const int varietyId, const int cropId,
