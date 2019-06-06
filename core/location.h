@@ -45,6 +45,8 @@ public:
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
 
     Q_INVOKABLE QList<int> tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
+    bool overlap(int plantingId1, int plantingId2) const;
+    bool overlap(int plantingId1, const QDate &plantingDate, const QDate &endHarvestDate) const;
 
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,

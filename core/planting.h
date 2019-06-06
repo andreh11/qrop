@@ -51,6 +51,7 @@ public:
     Q_INVOKABLE QString cropColor(int plantingId) const;
     Q_INVOKABLE QString varietyName(int plantingId) const;
     Q_INVOKABLE int familyId(int plantingId) const;
+    bool hasSameFamily(int plantingId1, int plantingId2) const;
     Q_INVOKABLE QString familyInterval(int plantingId) const;
     Q_INVOKABLE QString familyColor(int plantingId) const;
     Q_INVOKABLE QString unit(int plantingId) const;

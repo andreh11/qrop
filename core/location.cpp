@@ -276,17 +276,33 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
     const QDate plantingDate = planting->plantingDate(plantingId);
     QList<int> plantingIdList = plantings(locationId, plantingDate);
     plantingIdList.removeOne(plantingId);
-    const int familyId = planting->familyId(plantingId);
     const int intervalDays = qAbs(planting->familyInterval(plantingId).toInt()) * 365;
 
     QDate pdate;
     for (const int pid : plantingIdList) {
         pdate = planting->plantingDate(pid);
-        if (familyId == planting->familyId(pid) && pdate.daysTo(plantingDate) < intervalDays)
+        if (planting->hasSameFamily(plantingId, pid) && pdate.daysTo(plantingDate) < intervalDays
+            && !overlap(plantingId, pid))
             clist.push_back(pid);
     }
 
     return clist;
+}
+
+bool Location::overlap(int plantingId1, int plantingId2) const
+{
+    auto pdate1 = planting->plantingDate(plantingId1);
+    auto pdate2 = planting->plantingDate(plantingId2);
+    auto edate1 = planting->endHarvestDate(plantingId1);
+    auto edate2 = planting->endHarvestDate(plantingId2);
+    return pdate2 < edate1 && pdate1 < edate2;
+}
+
+bool Location::overlap(int plantingId, const QDate &plantingDate, const QDate &endHarvestDate) const
+{
+    auto pdate1 = planting->plantingDate(plantingId);
+    auto edate1 = planting->endHarvestDate(plantingId);
+    return plantingDate < edate1 && pdate1 < endHarvestDate;
 }
 
 /**
@@ -298,24 +314,17 @@ QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &sea
 {
     QList<int> plantingList = plantings(locationId, seasonBeg, seasonEnd);
     QVariantMap conflictMap;
-
     int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
 
     for (int i = 0; i < plantingList.count(); i++) {
         int plantingId = plantingList.value(i);
         qreal length = plantingLength(plantingId, locationId);
-        QDate plantingDate = planting->plantingDate(plantingId);
-        QDate endHarvestDate = planting->endHarvestDate(plantingId);
-        //        QList<int> conflictList;
+
         for (int j = i + 1; j < plantingList.count(); j++) {
             int pid = plantingList.value(j);
-            QDate pdate = planting->plantingDate(pid);
-            QDate edate = planting->endHarvestDate(pid);
             qreal l = plantingLength(pid, locationId);
-            if (pdate < endHarvestDate && edate > plantingDate && length + l > bedLength) {
+            if (overlap(plantingId, pid) && length + l > bedLength)
                 conflictMap[QString::number(plantingId)] = QVariant(pid);
-                //                conflictList.push_back(pid);
-            }
         }
     }
 
@@ -327,22 +336,12 @@ qreal Location::availableSpace(int locationId, const QDate &plantingDate, const 
 {
     QVariantMap map = mapFromId("location", locationId);
     qreal length = map.value("bed_length").toReal();
-
-    QList<int> plantingIdList = plantings(locationId, seasonBeg, seasonEnd);
-
-    QDate pdate;
-    QDate edate;
     qreal l = 0.0;
-    qreal maxl = 0.0;
 
-    for (int pid : plantingIdList) {
-        pdate = planting->plantingDate(pid);
-        edate = planting->endHarvestDate(pid);
-        l = plantingLength(pid, locationId);
-        if (pdate < endHarvestDate && edate > plantingDate && l > maxl)
-            maxl = l;
-    }
-    return length - maxl;
+    for (int pid : plantings(locationId, seasonBeg, seasonEnd))
+        if (overlap(pid, plantingDate, endHarvestDate))
+            l += plantingLength(pid, locationId);
+    return length - l;
 }
 
 qreal Location::availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
