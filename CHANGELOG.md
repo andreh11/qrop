@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   - Add planting succession numbering by crop and planting date.
 
 ### Changed
+  - Field map output: more space for long location names (#141).
   - *Harvest dialog* − Show currently harvested crops. When one planting is 
     selected, show only the plantings of the same specie.
   - Show error messages for mandatory fields.

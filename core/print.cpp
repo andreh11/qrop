@@ -37,10 +37,10 @@
 
 Print::Print(QObject *parent)
     : QObject(parent)
-    , m_firstColumnWidth(1500)
+    , m_firstColumnWidth(2000)
     , m_rowHeight(500)
-    , m_monthWidth(950)
-    , m_textPadding(100)
+    , m_monthWidth(925)
+    , m_textPadding(80)
     , m_locationRows(0)
     , m_pageNumber(0)
     , m_showFamilyColor(false)
@@ -981,7 +981,7 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
             paintRowGrid(painter, m_locationRows);
 
             QRectF locationRect(0, (m_locationRows + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
-            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
+            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
                              location->fullName(locationId));
 
             paintTimeline(painter, m_locationRows, index, year);

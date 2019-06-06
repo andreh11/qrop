@@ -14,6 +14,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ### Changements
+  - Sortie papier de l'assolement : plus d'espace pour les nom d'emplacements 
+    longs (#141).
   - *Dialogue des récoltes* − Affiche les séries en cours de récoltes. 
     Lorsqu'une série est sélecitonnée, n'afficher que les séries de la même
     espèce.
