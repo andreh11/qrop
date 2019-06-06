@@ -26,6 +26,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - *Assolement* − Ne pas afficher de conflit de rotation lorsque deux séries
+    se croisent sur le même emplacement (#117).
   - Fenêtre de dialogue simples : résolution du problème de positionnement (#107).
   - *Dialogue des récoltes* − Mise à jour de la quantité lorsqu'une récolte est
     modifiée deux fois de suite (#101).

@@ -523,6 +523,11 @@ int Planting::familyId(int plantingId) const
     return map.value("family_id").toInt();
 }
 
+bool Planting::hasSameFamily(int plantingId1, int plantingId2) const
+{
+    return familyId(plantingId1) == familyId(plantingId2);
+}
+
 QString Planting::familyInterval(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
