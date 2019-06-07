@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - Add a default variety feature ; create an unknown variety when creating a crop. The
+    default varierty is automatically chosen when the user choose a crop in the
+    planting form (#128).
   - Add charts for planting distribution and revenue.
   - *Field map* − Show tasks.
   - *Tasks* − Add task templates, which enables the user to define several tasks
@@ -14,10 +17,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
   - Field map output: more space for long location names (#141).
-  - *Harvest dialog* − Show currently harvested crops. When one planting is 
+  - *Harvest dialog* − Show currently harvested crops. When one planting is
     selected, show only the plantings of the same specie.
   - Show error messages for mandatory fields.
-  - Improve time edit field behavior: switch between hours and minutes with 
+  - Improve time edit field behavior: switch between hours and minutes with
     (back)tab (#99).
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 

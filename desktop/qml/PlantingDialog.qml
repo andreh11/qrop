@@ -86,7 +86,6 @@ Dialog {
     leftPadding: Units.mediumSpacing
     rightPadding: leftPadding
 
-
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
@@ -109,9 +108,6 @@ Dialog {
         mode: dialog.mode
         width: parent.width
         height: 48
-
-//        showLeftButton: false
-//        leftButtonText: qsTr("Templates")
     }
 
     ScrollView {

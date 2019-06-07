@@ -6,6 +6,10 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - Ajout d'une fonctionnalité de variété par défaut : lorsqu'une espèce est
+    choisie dans le formulaire des séries, l'espèce par défaut est automatiquement
+    sélectionnée. De plus, lorsqu'une nouvelle espèce est créée, une série
+    « Inconnue » est créée automatiquement (#128).
   - Ajout de graphiques de distribution des séries (longueur de planche) et
     de chiffre d'affaire.
   - *Parcellaire* − Ajout de l'affichage des tâches.
@@ -14,9 +18,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ### Changements
-  - Sortie papier de l'assolement : plus d'espace pour les nom d'emplacements 
+  - Sortie papier de l'assolement : plus d'espace pour les nom d'emplacements
     longs (#141).
-  - *Dialogue des récoltes* − Affiche les séries en cours de récoltes. 
+  - *Dialogue des récoltes* − Affiche les séries en cours de récoltes.
     Lorsqu'une série est sélecitonnée, n'afficher que les séries de la même
     espèce.
   - Afficher les messages d'erreurs pour les champs obligatoires.
@@ -33,7 +37,7 @@ Tous les changements importants seront documentés dans ce fichier.
     modifiée deux fois de suite (#101).
   - *Dialogue des récoltes* − Afficher la bonne unité pour le ou la série(s)
     sélectionnée(s), en supposant qu'elles ont toutes la même unité (#100).
-  - Correction du comportement des champs de durée : il n'est plus possible 
+  - Correction du comportement des champs de durée : il n'est plus possible
     d'entrer des minutes > 60 (#102).
 
 ## 0.2 - 2019-05-13

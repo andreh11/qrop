@@ -25,6 +25,7 @@ import io.qrop.components 1.0
 Column {
     property int firstColumnWidth
     property int secondColumnWidth
+    property ButtonGroup buttonGroup
 
     signal refresh()
 
@@ -44,11 +45,19 @@ Column {
                 width: parent.width
                 spacing: Units.formSpacing
 
+                RadioButton {
+                    autoExclusive: true
+                    Layout.leftMargin: Units.mediumSpacing
+                    ButtonGroup.group: buttonGroup
+                    onCheckedChanged: Variety.setDefault(model.variety_id, checked)
+                    checked: Variety.isDefault(model.variety_id)
+                }
+
                 TextInput {
                     text: model.variety
                     color: Qt.rgba(0, 0, 0, 0.7)
                     font.family: "Roboto Regular"
-                    Layout.leftMargin: Units.mediumSpacing + Units.formSpacing + 48
+//                    Layout.leftMargin: Units.mediumSpacing + Units.formSpacing + 48
                     maximumLength: 25
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: firstColumnWidth
@@ -86,6 +95,7 @@ Column {
                 }
 
                 Item { height: 1; Layout.fillWidth: true }
+
 
                 MyToolButton {
                     height: parent.height * 0.8

@@ -32,7 +32,7 @@ Rectangle {
     property bool bulkEditMode: false
     property string unitText: ""
     property alias cropField: cropField
-    property int cropId: cropField.selectedId
+    property alias cropId: cropField.selectedId
     property string mode
 
     signal cropSelected()

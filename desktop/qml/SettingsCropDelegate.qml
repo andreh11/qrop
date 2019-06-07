@@ -137,6 +137,7 @@ Column {
     }
 
     ListView {
+        id: varietyView
         spacing: 0
         visible: showVarietiesButton.checked
         width: parent.width
@@ -149,11 +150,16 @@ Column {
             cropId: crop_id
         }
 
+        ButtonGroup {
+            id: buttonGroupL
+        }
+
         delegate: SettingsVarietyDelegate {
             width: parent.width
             onRefresh: varietyModel.refresh()
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
+            buttonGroup: buttonGroupL
         }
     }
 

@@ -26,9 +26,10 @@
 #include <QUrl>
 
 #include "db.h"
-#include "location.h"
 #include "family.h"
+#include "location.h"
 #include "task.h"
+#include "variety.h"
 
 Database::Database(QObject *parent)
     : QObject(parent)
@@ -93,7 +94,7 @@ void Database::copy(const QUrl &from, const QUrl &to)
     QFile::copy(from.toLocalFile(), to.toLocalFile());
 }
 
-void Database::migrationCheck()
+void Database::migrate()
 {
     QSqlDatabase database = QSqlDatabase::database();
     if (!database.isValid())
@@ -160,6 +161,8 @@ void Database::connectToDatabase(const QUrl &url)
     query.exec();
     if (create)
         createDatabase();
+    else
+        migrate();
 }
 
 void Database::execSqlFile(const QString &fileName, const QString &separator)
@@ -178,10 +181,16 @@ void Database::execSqlFile(const QString &fileName, const QString &separator)
 
     QSqlQuery query;
     for (const auto &queryString : stringList) {
-        if (queryString.isNull() || queryString.trimmed().isEmpty())
+        QString end = separator;
+        if (queryString.isNull() || queryString.trimmed().isEmpty()
+            || queryString.trimmed().startsWith("END")) {
             continue;
+        }
 
-        if (!query.exec(queryString + separator))
+        if (queryString.trimmed().startsWith("CREATE TRIGGER"))
+            end = "; END;";
+
+        if (!query.exec(queryString + end))
             qDebug() << "execSqlFile: cannot execute query" << query.lastError().text()
                      << query.lastQuery();
     }
@@ -191,61 +200,60 @@ void Database::createDatabase()
 {
     qInfo() << "Creating database...";
     execSqlFile(":/db/tables.sql");
-    execSqlFile(":/db/triggers.sql", "END;");
-    Database::createData();
-    //    execSqlFile(":/db/data.sql");
+    execSqlFile(":/db/triggers.sql");
     qInfo() << "Database created.";
-    migrationCheck();
+    migrate();
+    createData();
 }
 
 void Database::createData()
 {
-
+    qInfo() << "Adding default data...";
     // name, rotation interval
     QList<std::pair<QString, int>> familyList({ { tr("Alliaceae"), 4 },
-                                            { tr("Apiaceae"), 3 },
-                                            { tr("Asteraceae"), 2 },
-                                            { tr("Brassicaceae"), 4 },
-                                            { tr("Chenopodiaceae"), 3 },
-                                            { tr("Cucurbitaceae"), 4 },
-                                            { tr("Fabaceae"), 2 },
-                                            { tr("Solanaceae"), 4 },
-                                            { tr("Valerianaceae"), 2 } });
+                                                { tr("Apiaceae"), 3 },
+                                                { tr("Asteraceae"), 2 },
+                                                { tr("Brassicaceae"), 4 },
+                                                { tr("Chenopodiaceae"), 3 },
+                                                { tr("Cucurbitaceae"), 4 },
+                                                { tr("Fabaceae"), 2 },
+                                                { tr("Solanaceae"), 4 },
+                                                { tr("Valerianaceae"), 2 } });
 
     // crop, family
     QList<std::pair<QString, QString>> cropList({ { tr("Garlic"), tr("Alliaceae") },
-                                              { tr("Onion"), tr("Alliaceae") },
-                                              { tr("Leek"), tr("Alliaceae") },
-                                              { tr("Carrot"), tr("Apiaceae") },
-                                              { tr("Celery"), tr("Apiaceae") },
-                                              { tr("Fennel"), tr("Apiaceae") },
-                                              { tr("Parsnip"), tr("Apiaceae") },
-                                              { tr("Chicory"), tr("Asteraceae") },
-                                              { tr("Belgian endive"), tr("Asteraceae") },
-                                              { tr("Lettuce"), tr("Asteraceae") },
-                                              { tr("Cabbage"), tr("Brassicaceae") },
-                                              { tr("Brussel Sprouts"), tr("Brassicaceae") },
-                                              { tr("Kohlrabi"), tr("Brassicaceae") },
-                                              { tr("Cauliflower"), tr("Brassicaceae") },
-                                              { tr("Broccoli"), tr("Brassicaceae") },
-                                              { tr("Turnip"), tr("Brassicaceae") },
-                                              { tr("Radish"), tr("Brassicaceae") },
-                                              { tr("Beetroot"), tr("Chenopodiaceae") },
-                                              { tr("Chard"), tr("Chenopodiaceae") },
-                                              { tr("Spinach"), tr("Chenopodiaceae") },
-                                              { tr("Cucumber"), tr("Cucurbitaceae") },
-                                              { tr("Zucchini"), tr("Cucurbitaceae") },
-                                              { tr("Melon"), tr("Cucurbitaceae") },
-                                              { tr("Watermelon"), tr("Cucurbitaceae") },
-                                              { tr("Winter squash"), tr("Cucurbitaceae") },
-                                              { tr("Bean"), tr("Fabaceae") },
-                                              { tr("Fava bean"), tr("Fabaceae") },
-                                              { tr("Pea"), tr("Fabaceae") },
-                                              { tr("Eggplant"), tr("Solanaceae") },
-                                              { tr("Pepper"), tr("Solanaceae") },
-                                              { tr("Potatoe"), tr("Solanaceae") },
-                                              { tr("Tomato"), tr("Solanaceae") },
-                                              { tr("Mâche"), tr("Valerianaceae") } });
+                                                  { tr("Onion"), tr("Alliaceae") },
+                                                  { tr("Leek"), tr("Alliaceae") },
+                                                  { tr("Carrot"), tr("Apiaceae") },
+                                                  { tr("Celery"), tr("Apiaceae") },
+                                                  { tr("Fennel"), tr("Apiaceae") },
+                                                  { tr("Parsnip"), tr("Apiaceae") },
+                                                  { tr("Chicory"), tr("Asteraceae") },
+                                                  { tr("Belgian endive"), tr("Asteraceae") },
+                                                  { tr("Lettuce"), tr("Asteraceae") },
+                                                  { tr("Cabbage"), tr("Brassicaceae") },
+                                                  { tr("Brussel Sprouts"), tr("Brassicaceae") },
+                                                  { tr("Kohlrabi"), tr("Brassicaceae") },
+                                                  { tr("Cauliflower"), tr("Brassicaceae") },
+                                                  { tr("Broccoli"), tr("Brassicaceae") },
+                                                  { tr("Turnip"), tr("Brassicaceae") },
+                                                  { tr("Radish"), tr("Brassicaceae") },
+                                                  { tr("Beetroot"), tr("Chenopodiaceae") },
+                                                  { tr("Chard"), tr("Chenopodiaceae") },
+                                                  { tr("Spinach"), tr("Chenopodiaceae") },
+                                                  { tr("Cucumber"), tr("Cucurbitaceae") },
+                                                  { tr("Zucchini"), tr("Cucurbitaceae") },
+                                                  { tr("Melon"), tr("Cucurbitaceae") },
+                                                  { tr("Watermelon"), tr("Cucurbitaceae") },
+                                                  { tr("Winter squash"), tr("Cucurbitaceae") },
+                                                  { tr("Bean"), tr("Fabaceae") },
+                                                  { tr("Fava bean"), tr("Fabaceae") },
+                                                  { tr("Pea"), tr("Fabaceae") },
+                                                  { tr("Eggplant"), tr("Solanaceae") },
+                                                  { tr("Pepper"), tr("Solanaceae") },
+                                                  { tr("Potatoe"), tr("Solanaceae") },
+                                                  { tr("Tomato"), tr("Solanaceae") },
+                                                  { tr("Mâche"), tr("Valerianaceae") } });
 
     QList<QString> taskList = { tr("Cultivation and Tillage"),
                                 tr("Fertilize and Amend"),
@@ -260,8 +268,8 @@ void Database::createData()
                                 tr("Weed") };
 
     QList<std::pair<QString, QString>> unitList = { { tr("kilogram"), tr("kg") },
-                                                { tr("bunch"), tr("bn") },
-                                                { tr("head"), tr("hd") } };
+                                                    { tr("bunch"), tr("bn") },
+                                                    { tr("head"), tr("hd") } };
 
     QList<QString> companyList(
             { tr("Unknown company"), "Agrosemens", "Essembio", "Voltz", "Gautier", "Sativa" });
@@ -275,10 +283,12 @@ void Database::createData()
 
     QMap<QString, int> cropMap;
     DatabaseUtility crop;
+    Variety variety;
     crop.setTable("crop");
     for (auto pair : cropList) {
         cropMap[pair.first] =
                 crop.add({ { "crop", pair.first }, { "family_id", familyMap.value(pair.second) } });
+        variety.addDefault(cropMap[pair.first]);
     }
 
     DatabaseUtility taskType;
@@ -303,25 +313,7 @@ void Database::createData()
     }
 
     QSqlDatabase::database().commit();
-}
-
-void Database::createFakeData()
-{
-    Location location;
-    int parentId0;
-
-    QSqlDatabase::database().transaction();
-    for (int i = 0; i < 10; i++) {
-        parentId0 =
-                location.add({ { "name", QString::number(i) }, { "bed_length", 30 }, { "level", 0 } });
-        for (int j = 0; j < 10; j++) {
-            location.add({ { "name", QString::number(j) },
-                           { "parent_id", parentId0 },
-                           { "bed_length", 30 },
-                           { "level", 1 } });
-        }
-    }
-    QSqlDatabase::database().commit();
+    qInfo() << "Default data added.";
 }
 
 void Database::resetDatabase()

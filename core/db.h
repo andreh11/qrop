@@ -31,14 +31,13 @@ public:
     static QString databasePath();
     static Q_INVOKABLE void connectToDatabase(const QUrl &url = QUrl());
     static void execSqlFile(const QString &fileName, const QString &separator = ";");
-    static void migrationCheck();
+    static void migrate();
     static void backupDatabase();
     static Q_INVOKABLE void saveAs(const QUrl &url);
     static Q_INVOKABLE void copy(const QUrl &from, const QUrl &to);
     static Q_INVOKABLE void createDatabase();
     static Q_INVOKABLE void deleteDatabase();
     static Q_INVOKABLE void createData();
-    static Q_INVOKABLE void createFakeData();
     static Q_INVOKABLE void resetDatabase();
 
 private:

@@ -49,7 +49,7 @@ QList<int> SortFilterProxyModel::idList() const
     for (int row = 0; row < rowCount(); row++) {
         QModelIndex idx = index(row, 0);
         QModelIndex sourceIndex = mapToSource(idx);
-        int id = m_model->data(sourceIndex, "planting_id").toInt();
+        int id = m_model->data(sourceIndex, Qt::UserRole).toInt();
         list.append(id);
     }
     return list;
@@ -60,6 +60,11 @@ int SortFilterProxyModel::rowId(int row) const
     QModelIndex sourceIndex = mapToSource(index(row, 0));
     int id = m_model->data(sourceIndex, Qt::UserRole).toInt();
     return id;
+}
+
+int SortFilterProxyModel::idRow(int id) const
+{
+    return idList().indexOf(id);
 }
 
 void SortFilterProxyModel::refresh()
