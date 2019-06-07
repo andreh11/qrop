@@ -30,6 +30,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - *Dialogue des récoltes* − Diviser le temps de récoltes entre plusieurs
+    séries (#97).
   - *Assolement* − Ne pas afficher de conflit de rotation lorsque deux séries
     se croisent sur le même emplacement (#117).
   - Fenêtre de dialogue simples : résolution du problème de positionnement (#107).

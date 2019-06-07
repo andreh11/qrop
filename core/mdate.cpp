@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <QDebug>
 #include <QRegExp>
 #include <QSettings>
@@ -159,6 +161,25 @@ QDate MDate::dateFromDateString(const QString &s)
         return {};
 
     return date;
+}
+
+QString MDate::stringFromTime(const QTime &time)
+{
+    return time.toString("hh:mm");
+}
+
+QTime MDate::divided(const QTime &time, int d)
+{
+    qreal hi;
+    qreal mi;
+    qreal msi;
+
+    qreal hf = std::modf(time.hour() / d, &hi);
+    qreal mf = std::modf(time.minute() / d, &mi);
+    std::modf(time.msec() / d, &msi);
+
+    return QTime(static_cast<int>(hi), static_cast<int>((hf * 60) + mi),
+                 static_cast<int>((mf * 60) + msi));
 }
 
 int MDate::season(const QDate &date)

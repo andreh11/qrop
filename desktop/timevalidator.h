@@ -10,7 +10,7 @@ class TimeValidator : public QValidator
 
 public:
     TimeValidator(QObject *parent = nullptr);
-    //    void fixup(QString &input) const override;
+    void fixup(QString &input) const override;
     QValidator::State validate(QString &input, int &pos) const override;
 };
 

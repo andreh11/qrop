@@ -92,10 +92,13 @@ Dialog {
     }
 
     function addHarvest() {
-        var qty = Number(quantity/selectedIdList.length)
+        var d = selectedIdList.length
+        var qty = Number(quantity/d)
+        var time = MDate.stringFromTime(MDate.divided(MDate.timeFromString(laborTimeField.text), d))
+        console.log("TIME", time)
         for (var i = 0; i < selectedIdList.length; i++) {
             Harvest.add({ "date": datePicker.isoDateString,
-                          "time": laborTimeField.text,
+                          "time": time,
                           "quantity": qty,
                           "planting_id": selectedIdList[i] })
         }
