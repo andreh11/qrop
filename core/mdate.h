@@ -40,6 +40,12 @@ public:
     {
         return QDate::fromString(s, Qt::ISODate);
     }
+    Q_INVOKABLE static QTime timeFromString(const QString &s)
+    {
+        return QTime::fromString(s, "hh:mm");
+    }
+    Q_INVOKABLE static QString stringFromTime(const QTime &time);
+    Q_INVOKABLE static QTime divided(const QTime &time, int d);
     static QDate firstMondayOfYear(int year);
     Q_INVOKABLE static QDate mondayOfWeek(int week, int year);
     static std::pair<QDate, QDate> weekDates(int week, int year);
