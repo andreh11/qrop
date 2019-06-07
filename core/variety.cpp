@@ -40,3 +40,31 @@ QString Variety::varietyName(int varietyId) const
     QVariantMap map = mapFromId("variety", varietyId);
     return map["variety"].toString();
 }
+
+bool Variety::isDefault(int varietyId) const
+{
+    QVariantMap map = mapFromId("variety", varietyId);
+    return map["is_default"].toInt() == 1;
+}
+
+void Variety::setDefault(int varietyId, bool def)
+{
+    update(varietyId, { { "is_default", def ? 1 : 0 } });
+}
+
+int Variety::defaultVariety(int cropId) const
+{
+    QString queryString("SELECT variety_id "
+                        "FROM variety "
+                        "WHERE crop_id = %1 "
+                        "AND is_default = 1");
+    auto list = queryIds(queryString.arg(cropId), "variety_id");
+    if (list.length() < 1)
+        return -1;
+    return list.first();
+}
+
+void Variety::addDefault(int cropId) const
+{
+    add({ { "variety", tr("Unknown") }, { "crop_id", cropId }, { "is_default", 1 } });
+}

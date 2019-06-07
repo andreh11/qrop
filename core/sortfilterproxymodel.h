@@ -40,6 +40,7 @@ public:
 
     Q_INVOKABLE QList<int> idList() const;
     Q_INVOKABLE int rowId(int row) const;
+    Q_INVOKABLE int idRow(int id) const;
     Q_INVOKABLE void resetFilter() { invalidateFilter(); }
     Q_INVOKABLE virtual void refresh();
     Q_INVOKABLE void refreshRow(int row);

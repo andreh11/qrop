@@ -549,8 +549,7 @@ Flickable {
     contentHeight: mainColumn.height
     contentWidth: width
 
-    onCropIdChanged: { console.log("new crop id:", cropId); varietyField.reset() }
-    onVarietyIdChanged: { console.log("new variety id:", varietyId); if (mode === "add") preFillForm("variety_id") }
+    onVarietyIdChanged: if (mode === "add") preFillForm("variety_id")
     onPlantingTypeChanged: if (mode === "add") preFillForm("planting_type")
     onInGreenhouseChanged: if (mode === "add") preFillForm("in_greenhouse")
 
@@ -571,7 +570,20 @@ Flickable {
     VarietyModel {
         id: varietyModel
         cropId: control.cropId
+
+        onCropIdChanged: {
+            varietyField.reset()
+
+            if (cropId < 0)
+                return;
+            var defaultVarietyId = Variety.defaultVariety(cropId);
+            if (defaultVarietyId > 0) {
+                varietyField.setSelectedId(defaultVarietyId);
+                varietyField.text = Variety.varietyName(defaultVarietyId)
+            }
+        }
     }
+
     KeywordModel { id: keywordModel }
 
     Column {

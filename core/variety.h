@@ -27,6 +27,11 @@ public:
     Variety(QObject *parent = nullptr);
     Q_INVOKABLE int cropId(int varietyId) const;
     Q_INVOKABLE QString varietyName(int varietyId) const;
+
+    Q_INVOKABLE bool isDefault(int varietyId) const;
+    Q_INVOKABLE void setDefault(int varietyId, bool def = true);
+    Q_INVOKABLE int defaultVariety(int cropId) const;
+    Q_INVOKABLE void addDefault(int cropId) const;
 };
 
 #endif // VARIETY_H

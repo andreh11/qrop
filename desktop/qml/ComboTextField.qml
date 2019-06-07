@@ -41,10 +41,15 @@ MyTextField {
         text = "";
     }
 
+    function setSelectedId(id) {
+        selectedId = id;
+        listView.currentIndex = model.idRow(id);
+    }
+
     focus: true
+    autoJumpToNextItem: false
     Keys.priority: Keys.AfterItem
     Keys.forwardTo: [listView.currentItem, listView]
-    autoJumpToNextItem: false
 
     onTextEdited: {
         if (activeFocus) {
@@ -144,21 +149,19 @@ MyTextField {
                 width: parent.width
                 implicitHeight: contentHeight
                 height: parent.height - addItemRectangle.height
-                model: control.delegateModel
                 highlightMoveDuration: 0
                 keyNavigationEnabled: true
                 boundsBehavior: Flickable.StopAtBounds
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
 
-                ScrollBar.vertical: ScrollBar {
-                    policy: ScrollBar.AlwaysOn
-                }
+                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AlwaysOn }
 
                 delegate: ItemDelegate {
                     function selectItem() {
                         control.text = text
                         control.manuallyModified = true
                         control.selectedId = idRole(model)
+                        listView.currentIndex = index
                         popup.close()
                         control.nextItemInFocusChain().forceActiveFocus()
                     }

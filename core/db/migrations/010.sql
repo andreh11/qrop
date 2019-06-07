@@ -162,6 +162,7 @@ BEGIN
   AND completed_date IS NULL;
 END;
 
+DROP TRIGGER IF EXISTS task_completed_update_linked_tasks;
 CREATE TRIGGER task_completed_update_linked_tasks AFTER UPDATE on task FOR EACH ROW
 WHEN
   (NEW.completed_date IS NOT NULL) AND (OLD.completed_date IS NULL)
@@ -172,6 +173,7 @@ BEGIN
   AND completed_date IS NULL;
 END;
 
+DROP TRIGGER IF EXISTS task_uncompleted_update_linked_tasks;
 CREATE TRIGGER task_uncompleted_update_linked_tasks AFTER UPDATE on task FOR EACH ROW
 WHEN
   (NEW.completed_date IS NULL) AND (OLD.completed_date IS NOT NULL)

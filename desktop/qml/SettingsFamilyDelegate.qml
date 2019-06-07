@@ -194,7 +194,8 @@ Column {
             margins: 0
             alreadyAssignedFamilyId: true
             onAccepted: {
-                Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
+                var id = Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
+                Variety.add({ "variety": qsTr("Unknown"), "crop_id": id, "is_default" : 1 });
                 cropModel.refresh();
             }
         }

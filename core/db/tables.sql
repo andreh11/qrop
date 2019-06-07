@@ -31,9 +31,6 @@ CREATE TABLE IF NOT EXISTS unit (
     conversion_rate FLOAT -- from unit to kilogram
 );
 
-INSERT INTO unit values (1, "kilogram", "kg", 1.0);
-INSERT INTO unit values (2, "bunch", "bn", 1.0);
-
 CREATE TABLE IF NOT EXISTS keyword (
     keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
     keyword    TEXT UNIQUE NOT NULL,

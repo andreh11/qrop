@@ -43,7 +43,7 @@ ListView {
         if (currentIndex == -1) {
             templateView.taskTemplateId = -1
             templateView.taskTemplateName = ""
-        } else {
+        } else if (currentItem) {
             currentItem.setTemplate();
         }
     }
