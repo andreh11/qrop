@@ -35,6 +35,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - Correction du bogue des mois 10-11-12 pour les sélectionneur de dates 
+    complètes (#114).
   - *Plan de culture* − Dupliquer les étiquettes lorsque les séries sont
     dupliquées.
   - *Dialogue des récoltes* − Diviser le temps de récoltes entre plusieurs

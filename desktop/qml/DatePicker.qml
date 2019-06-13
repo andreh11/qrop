@@ -69,10 +69,7 @@ Item {
                     : /^[><]{0,1}([1-9]|[0-4]\d|5[0-3])$/
         }
 
-        onTextEdited: {
-            if (!textField.acceptableInput)
-                return;
-
+        function setDate() {
             var newDate = mode === "date" ? MDate.dateFromDateString(text)
                                           : MDate.dateFromWeekString(text);
             if (newDate.toLocaleString(Qt.locale()))
@@ -81,6 +78,19 @@ Item {
             calendarDateChanged();
             control.editingFinished();
         }
+
+        onEditingFinished: {
+            if (!textField.acceptableInput || mode == "week")
+                return;
+            setDate();
+        }
+
+        onTextEdited: {
+            if (!textField.acceptableInput || mode == "date")
+                return;
+            setDate();
+        }
+
 
         Label {
             id: dateHelper
