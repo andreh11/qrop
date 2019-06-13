@@ -3,49 +3,50 @@ find_package(Qt5 COMPONENTS Core Quick Gui Sql PrintSupport LinguistTools REQUIR
 add_definitions(-DCORE_LIBRARY)
 
 add_library(core SHARED
+        cropmodel.cpp
+        databaseutility.cpp
+        db.cpp
+        expensecategorymodel.cpp
+        expensemodel.cpp
+        family.cpp
+        familymodel.cpp
+        harvestmodel.cpp
+        inputmodel.cpp
+        keyword.cpp
+        keywordmodel.cpp
+        location.cpp
+        locationmodel.cpp
+        mdate.cpp
+        nametree.cpp
+        note.cpp
+        notemodel.cpp
+        pictureimageprovider.cpp
+        planting.cpp
+        plantingmodel.cpp
+        print.cpp
+        rolemodel.cpp
+        seedcompanymodel.cpp
+        seedlistmodel.cpp
+        sortfilterproxymodel.cpp
+        task.cpp
+        taskimplementmodel.cpp
+        taskmethodmodel.cpp
+        taskmodel.cpp
+        tasktemplatemodel.cpp
+        tasktypemodel.cpp
+        transplantlistmodel.cpp
+        treemodel.cpp
+        unitmodel.cpp
+        usermodel.cpp
+        variety.cpp
+        varietymodel.cpp
         buildinfo.cpp
-        sqltablemodel.cpp
-	taskmodel.cpp 
-	notemodel.cpp 
-	locationmodel.cpp 
-	plantingmodel.cpp 
-	cropmodel.cpp 
-	familymodel.cpp 
-	varietymodel.cpp 
-	seedcompanymodel.cpp 
-	unitmodel.cpp 
-	keywordmodel.cpp 
-	harvestmodel.cpp 
-	rolemodel.cpp 
-	usermodel.cpp 
-        templatetaskmodel.cpp
-	tasktemplatemodel.cpp 
-	tasktypemodel.cpp 
-	taskmethodmodel.cpp 
-        templatetask.cpp
-	expensecategorymodel.cpp 
-	inputmodel.cpp 
-	expensemodel.cpp 
-	db.cpp 
         helpers.cpp
-	databaseutility.cpp 
-	planting.cpp 
-	task.cpp 
+        seedcompany.cpp
+        sqltablemodel.cpp
         tasktemplate.cpp
-	location.cpp 
-	sortfilterproxymodel.cpp 
-	variety.cpp 
-	keyword.cpp 
-	mdate.cpp 
-	taskimplementmodel.cpp 
-	treemodel.cpp 
-	nametree.cpp 
-	family.cpp 
-	note.cpp 
-	pictureimageprovider.cpp 
-	seedlistmodel.cpp 
-	transplantlistmodel.cpp 
-	print.cpp
+        templatetask.cpp
+        templatetaskmodel.cpp
 	core_resources.qrc)
 
 target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)

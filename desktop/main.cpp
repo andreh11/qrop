@@ -49,6 +49,7 @@
 #include "variety.h"
 #include "version.h"
 #include "helpers.h"
+#include "seedcompany.h"
 
 #include "cropmodel.h"
 #include "familymodel.h"
@@ -159,9 +160,16 @@ void registerTypes()
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
                                           auto *variety = new Variety();
-                                          variety->setTable("variety");
                                           return variety;
                                       });
+
+    qmlRegisterSingletonType<SeedCompany>("io.qrop.components", 1, 0, "SeedCompany",
+                                          [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                              Q_UNUSED(engine)
+                                              Q_UNUSED(scriptEngine)
+                                              auto *seedCompany = new SeedCompany();
+                                              return seedCompany;
+                                          });
 
     qmlRegisterSingletonType<Keyword>("io.qrop.components", 1, 0, "Keyword",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -237,15 +245,6 @@ void registerTypes()
                                                   unit->setTable("unit");
                                                   unit->setViewTable("unit");
                                                   return unit;
-                                              });
-
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "SeedCompany",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                                  Q_UNUSED(engine)
-                                                  Q_UNUSED(scriptEngine)
-                                                  auto *seedCompany = new DatabaseUtility();
-                                                  seedCompany->setTable("seed_company");
-                                                  return seedCompany;
                                               });
 
     qmlRegisterSingletonType<TaskTemplate>("io.qrop.components", 1, 0, "TaskTemplate",
