@@ -53,34 +53,12 @@ ListView {
             onClicked: templateView.currentIndex = index
             
             onDoubleClicked: {
-                taskNameLabel.visible = false;
-                taskNameField.visible = true;
-                taskNameField.forceActiveFocus();
+                taskNameLabel.state = "edit"
             }
             
-            Label {
+            EditableLabel {
                 id: taskNameLabel
-                text: taskNameField.text
-                elide: Text.ElideRight
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
-                
-                anchors {
-                    left: parent.left
-                    leftMargin: Units.smallSpacing
-                    right: parent.right
-                    rightMargin: anchors.leftMargin
-                    verticalCenter: parent.verticalCenter
-                }
-            }
-            
-            TextField {
-                id: taskNameField
-                visible: false
                 text: name
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
-                
                 anchors {
                     left: parent.left
                     leftMargin: Units.smallSpacing
@@ -88,18 +66,9 @@ ListView {
                     rightMargin: anchors.leftMargin
                     verticalCenter: parent.verticalCenter
                 }
-                
                 onEditingFinished: {
                     TaskTemplate.update(task_template_id, {"name": text});
-                    taskNameField.visible = false;
-                    taskNameLabel.visible = true;
                     pane.refresh();
-                }
-                
-                Keys.onEscapePressed: {
-                    text = name;
-                    taskNameLabel.visible = true;
-                    taskNameField.visible = false;
                 }
             }
             

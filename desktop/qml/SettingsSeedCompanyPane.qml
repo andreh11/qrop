@@ -11,7 +11,7 @@ Pane {
     
     property int firstColumnWidth: 200
     property int secondColumnWidth: 150
-    
+
     signal close();
     
     Material.elevation: 2
@@ -59,6 +59,10 @@ Pane {
             }
         }
     }
+
+    ButtonGroup {
+        id: buttonGroup
+    }
     
     ListView {
         id: seedCompanyView
@@ -83,6 +87,8 @@ Pane {
             height: Units.rowHeight
             width: parent.width
             hoverEnabled: true
+            onDoubleClicked: editableLabel.state = "edit"
+            onClicked: seedCompanyView.currentIndex = index
             
             RowLayout {
                 id: headerRow
@@ -90,13 +96,20 @@ Pane {
                 width: parent.width
                 height: Units.rowHeight
                 spacing: Units.formSpacing
-                
-                TextInput {
-                    text: seed_company
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    Layout.minimumWidth: pane.firstColumnWidth
+
+                RadioButton {
+                    autoExclusive: true
                     Layout.leftMargin: Units.mediumSpacing
+                    ButtonGroup.group: buttonGroup
+                    onCheckedChanged: SeedCompany.setDefault(model.seed_company_id, checked)
+                    checked: SeedCompany.isDefault(model.seed_company_id)
+                }
+
+                EditableLabel {
+                    id: editableLabel
+                    text: seed_company
+                    Layout.minimumWidth: pane.firstColumnWidth
+                    Layout.fillWidth: true
                     onEditingFinished: {
                         SeedCompany.update(seed_company_id, {"seed_company": text})
                         seedCompanyModel.refresh();

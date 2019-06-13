@@ -6,6 +6,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Fournisseur de semences* − Ajout d'un bouton radio pour choisir le fournisseur
+    de semence par défaut (#111).
   - *Dialogue des tâches* − Création de plusieurs tâches en même temps (#133).
   - Ajout d'une fonctionnalité de variété par défaut : lorsqu'une espèce est
     choisie dans le formulaire des séries, l'espèce par défaut est automatiquement

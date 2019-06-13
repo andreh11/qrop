@@ -31,6 +31,11 @@ Dialog {
 
     function prefill(name) {
         varietyNameField.text = name
+        var defaultSeedCompanyId = SeedCompany.defaultSeedCompany(cropId);
+        if (defaultSeedCompanyId > 0) {
+            seedCompanyField.setSelectedId(defaultSeedCompanyId);
+            seedCompanyField.text = SeedCompany.name(defaultSeedCompanyId)
+        }
     }
 
     title: qsTr("Add New Variety")
@@ -79,7 +84,6 @@ Dialog {
             showAddItem: false
             hasError: selectedId < 0
             errorText: qsTr("Choose a company")
-
             labelText: qsTr("Seed Company")
             Layout.minimumWidth: 150
             Layout.fillWidth: true

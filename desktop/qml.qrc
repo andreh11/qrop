@@ -104,5 +104,6 @@
         <file>qml/DistributionChart.qml</file>
         <file>qml/CropRevenueChart.qml</file>
         <file>qml/HorizontalBarView.qml</file>
+        <file>qml/EditableLabel.qml</file>
     </qresource>
 </RCC>
