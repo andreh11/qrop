@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 
 ### Fixed
+  - Fixed month selection bug in date picker for comlete dates (#114).
   - *Planting map* − Duplicate keywords when plantings are duplicated.
   - *Harvest dialog* − Split harvest time between multiple plantings (#96).
   - *Field map* − Don't show rotation conflict when two plantings overlaps on the
