@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Dialogue des tâches* − Création de plusieurs tâches en même temps (#133).
   - Ajout d'une fonctionnalité de variété par défaut : lorsqu'une espèce est
     choisie dans le formulaire des séries, l'espèce par défaut est automatiquement
     sélectionnée. De plus, lorsqu'une nouvelle espèce est créée, une série
@@ -30,6 +31,8 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
+  - *Plan de culture* − Dupliquer les étiquettes lorsque les séries sont
+    dupliquées.
   - *Dialogue des récoltes* − Diviser le temps de récoltes entre plusieurs
     séries (#97).
   - *Assolement* − Ne pas afficher de conflit de rotation lorsque deux séries

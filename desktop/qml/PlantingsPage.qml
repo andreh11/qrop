@@ -195,7 +195,7 @@ Page {
         y: (parent.height - height) / 2
         height: parent.height - 2 * Units.smallSpacing
         model: plantingsView.model
-        currentYear: page.season === 3 ? page.year + 1 : page.year
+        currentYear: page.year
         onPlantingsAdded: {
             addPlantingSnackbar.successions = successions;
             addPlantingSnackbar.open();
@@ -210,9 +210,7 @@ Page {
             page.refresh();
         }
 
-        onRejected: {
-            plantingsView.unselectAll();
-        }
+        onRejected: plantingsView.unselectAll()
     }
 
 

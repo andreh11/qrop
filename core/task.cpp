@@ -99,6 +99,44 @@ int Task::add(const QVariantMap &map) const
     return id;
 }
 
+/**
+ * Create several planting successions based on the same values.
+ *
+ * \param successions the number of successions to add
+ * \param weeksBetween the number of weeks between each succession
+ * \param map the value map used to create the planting successions
+ * \return the list of the ids of the plantings created
+ */
+QList<int> Task::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
+{
+    const int daysBetween = weeksBetween * 7;
+    const auto assignedDate = QDate::fromString(map["assigned_date"].toString(), Qt::ISODate);
+    QVariantMap newMap(map);
+    QList<int> idList;
+
+    QSqlDatabase::database().transaction();
+    int i = 0;
+    for (; i < successions; i++) {
+        int days = i * daysBetween;
+        newMap["assigned_date"] = assignedDate.addDays(days).toString(Qt::ISODate);
+
+        int id = add(newMap);
+        if (id > 0) {
+            idList.append(id);
+        } else {
+            qDebug() << "[addSuccesions] cannot add task to the database. Rolling back...";
+            break;
+        }
+    }
+
+    if (i < successions)
+        QSqlDatabase::database().rollback();
+    else
+        QSqlDatabase::database().commit();
+
+    return idList;
+}
+
 void Task::update(int id, const QVariantMap &map) const
 {
     QVariantMap newMap(map);

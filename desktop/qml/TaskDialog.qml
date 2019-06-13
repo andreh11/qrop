@@ -139,9 +139,9 @@ Dialog {
         var newId;
         if (mode === "add") {
             if (templateMode)
-                newId = TemplateTask.add(taskForm.templateValues)
+                newId = TemplateTask.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.templateValues);
             else
-                newId = Task.add(taskForm.values);
+                newId = Task.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.values);
             taskAdded(newId)
         } else {
             if (templateMode)

@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE std::pair<int, int> sowPlantTaskIds(int plantingId) const;
 
     Q_INVOKABLE int add(const QVariantMap &map) const override;
+    Q_INVOKABLE QList<int> addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE void addPlanting(int plantingId, int taskId) const;
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;

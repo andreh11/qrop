@@ -36,6 +36,7 @@ Flickable {
     property int taskMethodId: methodField.selectedId
     property int taskImplementId: implementField.selectedId
 
+
     readonly property bool accepted: taskTypeId > 0
                                      && laborTimeField.acceptableInput
                                      && (templateMode || (plantingTask && plantingIdList.length)
@@ -372,6 +373,7 @@ Flickable {
                         Layout.minimumWidth: 80
                     }
                 }
+
                 RowLayout {
                     spacing: Units.mediumSpacing
                     visible: mode === "add"
@@ -383,7 +385,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 99 }
                         floatingLabel: true
-                        labelText: qsTr("Successions")
+                        labelText: qsTr("Repeat")
                         Layout.fillWidth: true
                         onActiveFocusChanged: if (!activeFocus && text === "") text = "1"
                     }
@@ -391,9 +393,9 @@ Flickable {
                     MyTextField {
                         id: timeBetweenSuccessionsField
                         enabled: successions > 1
-                        text: successions > 1 ? "1" : qsTr("Single planting")
                         floatingLabel: true
                         inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "00"
                         validator: IntValidator { bottom: 1; top: 99 }
                         labelText: qsTr("Weeks between")
                         Layout.fillWidth: true
