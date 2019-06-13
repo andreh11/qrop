@@ -48,7 +48,7 @@ Flickable {
     property bool bulkEditMode: false
 
     property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
-    property bool accepted: mode === "edit" || (varietyId > 0 && unitId > 0 && coherentDates)
+    property bool accepted: mode === "edit" || (varietyId > 0 && coherentDates)
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
@@ -366,13 +366,16 @@ Flickable {
         setFieldValue(greenhouseEstimatedLossField, val['estimated_gh_loss']);
         setFieldValue(seedsExtraPercentageField, val['seeds_percentage']);
         setFieldValue(seedsPerGramField, val['seeds_per_gram']);
-        if ('unit_id' in val) {
-            var unitId = Number(val['unit_id'])
-            var map = Unit.mapFromId(unitId);
 
-            unitModel.refresh();
-            unitField.selectedId = unitId;
-            unitField.text = map['abbreviation'];
+        // Check for valid unit id.
+        if ('unit_id' in val && val['unit_id']) {
+            var unitId = Number(val['unit_id'])
+            if (unitId > 0) {
+                var map = Unit.mapFromId(unitId);
+                unitModel.refresh();
+                unitField.selectedId = unitId;
+                unitField.text = map['abbreviation'];
+            }
         }
         setFieldValue(yieldPerBedMeterField, val['yield_per_bed_meter']);
         setFieldValue(averagePriceField, val['average_price']);
@@ -1204,8 +1207,6 @@ Flickable {
                     model: UnitModel { id: unitModel }
                     textRole: function (model) { return model.abbreviation; }
                     idRole: function (model) { return model.unit_id; }
-                    hasError: selectedId < 0
-                    errorText: qsTr("Choose a unit")
 
                     Layout.fillWidth: true
 

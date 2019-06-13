@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   - Add planting succession numbering by crop and planting date.
 
 ### Changed
+  - *Plantings* − It is now possible for a planting not to have a unit (#106).
   - Field map output: more space for long location names (#141).
   - *Harvest dialog* − Show currently harvested crops. When one planting is
     selected, show only the plantings of the same specie.
