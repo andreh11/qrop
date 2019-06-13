@@ -30,6 +30,7 @@ class CORESHARED_EXPORT TemplateTask : public DatabaseUtility
 public:
     TemplateTask(QObject *parent = nullptr);
     Q_INVOKABLE int add(const QVariantMap &map) const override;
+    Q_INVOKABLE QList<int> addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const;
     Q_INVOKABLE void update(int id, const QVariantMap &map) const override;
     Q_INVOKABLE void updateTasks(int templateTaskId) const;
     Q_INVOKABLE void addToCurrentApplications(int templateTaskId) const;

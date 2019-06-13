@@ -380,6 +380,7 @@ int Planting::duplicate(int id) const
 {
     int newId = DatabaseUtility::duplicate(id);
     task->duplicatePlantingTasks(id, newId);
+    keyword->duplicateKeywords(id, newId);
     return newId;
 }
 

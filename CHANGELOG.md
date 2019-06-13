@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Task dialog* − Create several tasks at once (#133).
   - Add a default variety feature ; create an unknown variety when creating a crop. The
     default varierty is automatically chosen when the user choose a crop in the
     planting form (#128).
@@ -25,6 +26,7 @@ All notable changes to this project will be documented in this file.
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 
 ### Fixed
+  - *Planting map* − Duplicate keywords when plantings are duplicated.
   - *Harvest dialog* − Split harvest time between multiple plantings (#96).
   - *Field map* − Don't show rotation conflict when two plantings overlaps on the
     same location (#117).

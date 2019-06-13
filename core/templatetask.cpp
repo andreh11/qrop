@@ -36,6 +36,37 @@ int TemplateTask::add(const QVariantMap &map) const
     return DatabaseUtility::add(removeInvalidIds(map));
 }
 
+QList<int> TemplateTask::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
+{
+    const int daysBetween = weeksBetween * 7;
+    int linkDays = map["link_days"].toInt();
+
+    QVariantMap newMap(map);
+    QList<int> idList;
+
+    QSqlDatabase::database().transaction();
+    int i = 0;
+    for (; i < successions; i++) {
+        int days = i * daysBetween;
+        newMap["link_days"] = linkDays + days;
+
+        int id = add(newMap);
+        if (id > 0) {
+            idList.append(id);
+        } else {
+            qDebug() << "[addSuccesions] cannot add task to the database. Rolling back...";
+            break;
+        }
+    }
+
+    if (i < successions)
+        QSqlDatabase::database().rollback();
+    else
+        QSqlDatabase::database().commit();
+
+    return idList;
+}
+
 void TemplateTask::update(int id, const QVariantMap &map) const
 {
     DatabaseUtility::update(id, removeInvalidIds(map));

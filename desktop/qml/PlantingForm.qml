@@ -271,6 +271,7 @@ Flickable {
         seedsNeededField.reset();
         seedsExtraPercentageField.reset();
         seedsPerGramField.reset();
+        seedsPerHoleField.reset();
 
         unitField.reset();
         yieldPerBedMeterField.reset();
@@ -912,27 +913,6 @@ Flickable {
                 rowSpacing: 16
                 columnSpacing: 16
 
-                //                DatePicker {
-                //                    id: fieldPlantingDateField
-
-                //                    property bool modified: false
-
-                //                    visible: directSeedRadio.checked
-                //                    Layout.fillWidth: true
-                //                    floatingLabel: true
-                //                    labelText: qsTr("Field Sowing")
-                //                    currentYear: control.currentYear
-
-                //                    onEditingFinished: {
-                //                        if (durationMode)
-                //                            updateFromFieldSowingDate();
-                //                        else
-                //                            updateDtm();
-                //                    }
-                //                    onActiveFocusChanged: ensureItemVisible(fieldPlantingDateField)
-                //                    onCalendarDateChanged: modified = true
-                //                }
-
                 DatePicker {
                     id: greenhouseStartDateField
                     visible: greenhouseRadio.checked
@@ -978,6 +958,7 @@ Flickable {
                             updateDtm();
                         }
                     }
+                    onCalendarDateChanged: modified = true
                 }
 
                 DatePicker {
