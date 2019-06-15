@@ -11,6 +11,9 @@ Item {
     id: control
 
     property alias text: textField.text
+    property alias inputMethodHints: textField.inputMethodHints
+    property alias validator: textField.validator
+    property alias horizontalAlignment: textField.horizontalAlignment
 
     signal editingFinished()
 

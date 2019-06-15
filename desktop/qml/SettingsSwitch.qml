@@ -22,7 +22,7 @@ RowLayout {
         Layout.fillWidth: true
         font.family: "Roboto Regular"
         font.pixelSize: Units.fontSizeBodyAndButton
-        
+        elide: Text.ElideRight
     }
     
     Switch {

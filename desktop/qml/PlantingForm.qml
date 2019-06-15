@@ -87,7 +87,8 @@ Flickable {
     }
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
-    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((1.65 / rowsPerBed) * inRowSpacing / 100)) : 0
+    readonly property real standardTotalWidth: (settings.standardBedWidth + settings.standardPathWidth) / 100.0
+    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((standardTotalWidth / rowsPerBed) * inRowSpacing / 100)) : 0
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
     readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
@@ -561,6 +562,8 @@ Flickable {
         id: settings
         property bool useStandardBedLength
         property int standardBedLength
+        property int standardBedWidth
+        property int standardPathWidth
         property string dateType
     }
 

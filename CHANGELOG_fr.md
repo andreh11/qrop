@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.3 - 2019-06-15
+
 ### Ajouts
   - *Calendrier* − Ajout de fonctions de tri pour les tâches (#122).
   - *Fournisseur de semences* − Ajout d'un bouton radio pour choisir le fournisseur
@@ -34,11 +36,11 @@ Tous les changements importants seront documentés dans ce fichier.
   - Afficher les messages d'erreurs pour les champs obligatoires.
   - Amélioration des champs de durée : passage des heures au minutes avec la
     touche tabulation (#99).
-  - *Plan de culture* − N'afficher la couleur des séries que lorsque elles ont
+  - *Plan de culture* − N'afficher la couleur des séries que lorsqu'elles ont
     été plantées ou semées.
 
 ### Corrections
-  - Correction du bogue des mois 10-11-12 pour les sélectionneur de dates 
+  - Correction du bogue des mois 10-11-12 pour les sélectionneurs de dates 
     complètes (#114).
   - *Plan de culture* − Dupliquer les étiquettes lorsque les séries sont
     dupliquées.

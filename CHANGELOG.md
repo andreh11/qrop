@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.3 - 2019-06-15 
+
 ### Added
   - *Task calendar* − Add sorting function for tasks (#122).
   - *Seed company* − Add a radio button to choose default seed company (#111).

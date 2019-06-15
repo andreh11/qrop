@@ -147,20 +147,14 @@ void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    QTime t;
-    t.start();
     sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug("Time elapsed: %d ms", t.elapsed());
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    QTime t;
-    t.start();
     sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug("Time elapsed: %d ms", t.elapsed());
     sortOrderChanged();
 }
 

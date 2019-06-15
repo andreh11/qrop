@@ -188,6 +188,7 @@ ApplicationWindow {
 
     SettingsPage {
         id: settingsPage
+        paneWidth: Math.min(600, stackView.width * 0.8)
     }
 
     Settings {

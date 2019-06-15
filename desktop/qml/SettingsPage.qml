@@ -45,7 +45,9 @@ Page {
         //        property alias farmName: farmNameField.text
         property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
         property alias useStandardBedLength: standardBedLengthSwitch.checked
-        property alias standardBedLength: standardBedLengthField.text
+        property alias standardBedLength: standardBedLengthField.value
+        property alias standardBedWidth: standardBedWidthField.value
+        property alias standardPathWidth: standardPathWidthField.value
         property alias showPlantingSuccessionNumber: showPlantingSuccessionNumberSwitch.checked
         property string dateType
     }
@@ -124,26 +126,6 @@ Page {
                         width: parent.width
                         spacing: 0
 
-                        //                    RowLayout {
-                        //                        Layout.minimumHeight: Units.rowHeight
-                        //                        Layout.leftMargin: Units.mediumSpacing
-                        //                        Layout.rightMargin: Layout.leftMargin
-
-                        //                        Label {
-                        //                            text: qsTr("Farm name")
-                        //                            font.family: "Roboto Regular"
-                        //                            font.pixelSize: Units.fontSizeBodyAndButton
-                        //                            Layout.fillWidth: true
-                        //                        }
-
-                        //                        MyTextField {
-                        //                            id: farmNameField
-                        //                            font.family: "Roboto Regular"
-                        //                            font.pixelSize: Units.fontSizeBodyAndButton
-                        //                            Layout.minimumWidth: 200
-                        //                        }
-                        //                    }
-
                         ThinDivider { width: parent.width }
 
                         RowLayout {
@@ -156,6 +138,7 @@ Page {
                                 text: qsTr("Date type")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                             }
 
                             ComboBox {
@@ -185,6 +168,36 @@ Page {
                         ThinDivider { width: parent.width }
 
                         SettingsSwitch {
+                            id: showPlantingSuccessionNumberSwitch
+                            text: qsTr("Show planting succession numbers")
+                            onToggled: restartSnackbar.open();
+                        }
+
+                        Item { Layout.fillHeight: true }
+                    }
+
+                }
+
+                Label {
+                    text: qsTr("Beds")
+                    font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeBodyAndButton
+                    topPadding: Units.mediumSpacing
+                }
+
+                Pane {
+                    width: parent.width
+                    Material.elevation: 2
+                    Material.background: "white"
+                    padding: 0
+
+                    ColumnLayout {
+                        width: parent.width
+                        spacing: 0
+
+                        ThinDivider { width: parent.width }
+
+                        SettingsSwitch {
                             id: standardBedLengthSwitch
                             text: qsTr("Standard bed length")
                             onToggled: restartSnackbar.open();
@@ -204,29 +217,88 @@ Page {
                                 text: qsTr("Bed length")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
-
+                                elide: Text.ElideRight
                             }
 
-                            TextInput {
+                            SpinBox {
                                 id: standardBedLengthField
-                                inputMethodHints: Qt.ImhDigitsOnly
-                                validator: IntValidator { bottom: 0; top: 999 }
-                                Layout.minimumWidth: 200
-                                horizontalAlignment: Text.AlignRight
+                                from: 0
+                                to: 999
+                                textFromValue: function(value, locale) {
+                                    return "%1 %2".arg(value).arg(qsTr("m"))
+                                }
+                                valueFromText: function(text, locale) {
+                                    var s = text.split(" ");
+                                    return Number(s[0]);
+                                }
+                                Layout.preferredWidth: 180
                             }
                         }
 
                         ThinDivider { width: parent.width }
 
-                        SettingsSwitch {
-                            id: showPlantingSuccessionNumberSwitch
-                            text: qsTr("Show planting succession numbers")
-                            onToggled: restartSnackbar.open();
+                        RowLayout {
+                            width: parent.width
+                            enabled: standardBedLengthSwitch.checked
+                            Layout.leftMargin: Units.mediumSpacing
+                            Layout.rightMargin: Layout.leftMargin
+                            Layout.minimumHeight: Units.rowHeight
+
+                            Label {
+                                Layout.fillWidth: true
+                                text: qsTr("Bed width")
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
+                            }
+
+                            SpinBox {
+                                id: standardBedWidthField
+                                from: 0
+                                to: 999
+                                textFromValue: function(value, locale) {
+                                    return "%1 %2".arg(value).arg(qsTr("cm"))
+                                }
+                                valueFromText: function(text, locale) {
+                                    var s = text.split(" ");
+                                    return Number(s[0]);
+                                }
+                                Layout.preferredWidth: 180
+                            }
                         }
 
-                        Item { Layout.fillHeight: true }
-                    }
+                        ThinDivider { width: parent.width }
 
+                        RowLayout {
+                            width: parent.width
+                            enabled: standardBedLengthSwitch.checked
+                            Layout.leftMargin: Units.mediumSpacing
+                            Layout.rightMargin: Layout.leftMargin
+                            Layout.minimumHeight: Units.rowHeight
+
+                            Label {
+                                Layout.fillWidth: true
+                                text: qsTr("Path width")
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
+                            }
+
+                            SpinBox {
+                                id: standardPathWidthField
+                                from: 0
+                                to: 999
+                                textFromValue: function(value, locale) {
+                                    return "%1 %2".arg(value).arg(qsTr("cm"))
+                                }
+                                valueFromText: function(text, locale) {
+                                    var s = text.split(" ");
+                                    return Number(s[0]);
+                                }
+                                Layout.preferredWidth: 180
+                            }
+                        }
+                    }
                 }
 
                 Label {
@@ -361,6 +433,7 @@ Page {
                                 text: qsTr("Families, crops and varieties")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: showFamilyPane = true
@@ -388,6 +461,7 @@ Page {
                                 text: qsTr("Keywords")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: showKeywordPane = true
@@ -415,6 +489,7 @@ Page {
                                 text: qsTr("Seed companies")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: showSeedCompanyPane = true
@@ -442,6 +517,7 @@ Page {
                                 text: qsTr("Task types")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: showTaskTypePane = true
@@ -469,6 +545,7 @@ Page {
                                 text: qsTr("Units")
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: showUnitPane = true
