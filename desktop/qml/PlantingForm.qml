@@ -48,7 +48,7 @@ Flickable {
     property bool bulkEditMode: false
 
     property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
-    property bool accepted: mode === "edit" || (varietyId > 0 && coherentDates)
+    property bool accepted: bulkEditMode || (varietyId > 0 && coherentDates)
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)

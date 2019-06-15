@@ -21,6 +21,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - Ajout de la numérotation des séries par espèce et date de plantation.
 
 ### Changements
+  - *Édition des séries* − Vérification de la cohérence des dates lors de l'édition
+    d'une seule série (#119).
   - *Série* − Il est dorénavant possible pour une série de ne pas avoir d'unité
     (#106).
   - Sortie papier de l'assolement : plus d'espace pour les nom d'emplacements
