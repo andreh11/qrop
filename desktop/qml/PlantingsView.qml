@@ -32,8 +32,9 @@ ListView {
     property bool showTimegraph: true
     property bool dragActive: false
     property string filterColumn: "crop"
-    property int tableSortColumn: 0
-    property string tableSortOrder: "descending"
+    property int tableSortColumn: 5
+    property string tableSortOrder: "ascending"
+
     property var tableHeaderModel: [{
             "name": qsTr("Crop"),
             "columnName": "crop",
@@ -240,13 +241,7 @@ ListView {
         }
     }
 
-    // Save visible columns setting.
-    onVisibleColumnIdListChanged: {
-        settings.visibleColumnList = visibleColumnIdList;
-    }
-
-    // Restore visible columns setting.
-    Component.onCompleted: {
+    function restoreVisibleColumnsSettings() {
         var j = 0; // visibleColumnList index
         for (var i = 0; i < tableHeaderModel.length; i++) {
             while (settings.visibleColumnList[j] < i)
@@ -260,8 +255,12 @@ ListView {
         tableHeaderModelChanged();
     }
 
+    // Save visible columns setting.
+    onVisibleColumnIdListChanged: settings.visibleColumnList = visibleColumnIdList
+
+    Component.onCompleted: restoreVisibleColumnsSettings()
+
     focus: true
-    onTableSortColumnChanged: tableSortOrder = "ascending"
     clip: true
     width: parent.width - verticalScrollBar.width
     spacing: 0
@@ -313,16 +312,9 @@ ListView {
         sortOrder: tableSortOrder
     }
 
-
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
         visible: showVerticalScrollBar
-//        parent: listView.parent
-//        anchors {
-//            top: listView.top
-//            right: listView.right
-//            bottom: horizontalScrollBar.top
-//        }
         active: horizontalScrollBar.active
         //        policy: ScrollBar.AlwaysOn
     }
@@ -331,12 +323,6 @@ ListView {
         id: horizontalScrollBar
         visible: showHorizontalScrollBar
         active: verticalScrollBar.active
-//        parent: listView.parent
-//        anchors {
-//            bottom: parent.bottom
-//            left: parent.left
-//            right: verticalScrollBar.left
-//        }
         orientation: Qt.Horizontal
         //        policy: ScrollBar.AlwaysOn
     }
@@ -394,7 +380,6 @@ ListView {
                         onNewColumn: {
                             if (listView.tableSortColumn !== index) {
                                 listView.tableSortColumn = index
-                                listView.tableSortOrder = "descending"
                             }
                         }
                         onNewOrder: listView.tableSortOrder = order
@@ -405,6 +390,7 @@ ListView {
                     height: parent.height
                     width: headerTimelineRow.width
                     visible: showTimegraph
+
                     Row {
                         id: headerTimelineRow
                         anchors.verticalCenter: parent.verticalCenter
@@ -413,6 +399,7 @@ ListView {
 
                         Repeater {
                             model: monthsOrder[listView.season]
+
                             Item {
                                 width: Units.monthWidth
                                 height: parent.height
@@ -449,14 +436,11 @@ ListView {
                         text: modelData.name
                         width: modelData.width
                         visible: index > 1 && tableHeaderModel[index].visible
-                        //                        horizontalAlignment: Text.AlignRight
                         horizontalAlignment: tableHeaderModel[index].alignment
                         state: listView.tableSortColumn === index ? listView.tableSortOrder : ""
                         onNewColumn: {
-                            if (listView.tableSortColumn !== index) {
+                            if (listView.tableSortColumn !== index)
                                 listView.tableSortColumn = index
-                                listView.tableSortOrder = "descending"
-                            }
                         }
                         onNewOrder: listView.tableSortOrder = order
                     }

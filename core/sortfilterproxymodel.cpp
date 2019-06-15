@@ -62,6 +62,13 @@ int SortFilterProxyModel::rowId(int row) const
     return id;
 }
 
+int SortFilterProxyModel::roleIndex(const QString &roleName) const
+{
+    if (!m_model)
+        return -1;
+    return m_model->roleIndex(roleName);
+}
+
 int SortFilterProxyModel::idRow(int id) const
 {
     return idList().indexOf(id);
@@ -134,22 +141,26 @@ void SortFilterProxyModel::setFilterSeason(int season)
 
 void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
 {
-    setFilterKeyColumn(m_model->roleIndex(columnName));
+    setFilterKeyColumn(roleIndex(columnName));
 }
 
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    sort(m_model->roleIndex(m_sortColumn),
-         m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    QTime t;
+    t.start();
+    sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug("Time elapsed: %d ms", t.elapsed());
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    sort(m_model->roleIndex(m_sortColumn),
-         m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    QTime t;
+    t.start();
+    sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug("Time elapsed: %d ms", t.elapsed());
     sortOrderChanged();
 }
 

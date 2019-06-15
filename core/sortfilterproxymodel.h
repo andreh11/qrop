@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE QList<int> idList() const;
     Q_INVOKABLE int rowId(int row) const;
     Q_INVOKABLE int idRow(int id) const;
+    int roleIndex(const QString &roleName) const;
     Q_INVOKABLE void resetFilter() { invalidateFilter(); }
     Q_INVOKABLE virtual void refresh();
     Q_INVOKABLE void refreshRow(int row);
@@ -54,8 +55,8 @@ public:
     void setFilterYear(int year);
     void setFilterSeason(int season);
     void setFilterKeyStringColumn(const QString &columnName);
-    void setSortColumn(const QString &columnName);
-    void setSortOrder(const QString &order);
+    virtual void setSortColumn(const QString &columnName);
+    virtual void setSortOrder(const QString &order);
 
     std::pair<QDate, QDate> seasonDates() const;
 
@@ -67,12 +68,12 @@ protected:
     //    std::pair<QDate, QDate> seasonDates(int season, int year) const;
     int m_year;
     int m_season;
+    QString m_sortColumn;
+    QString m_sortOrder;
 
 private:
     QString m_tableName;
     QString m_string;
-    QString m_sortColumn;
-    QString m_sortOrder;
 
 signals:
     void filterStringChanged();

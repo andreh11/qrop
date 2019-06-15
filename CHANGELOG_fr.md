@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Ajouts
+  - *Calendrier* − Ajout de fonctions de tri pour les tâches (#122).
   - *Fournisseur de semences* − Ajout d'un bouton radio pour choisir le fournisseur
     de semence par défaut (#111).
   - *Dialogue des tâches* − Création de plusieurs tâches en même temps (#133).

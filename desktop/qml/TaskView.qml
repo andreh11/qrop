@@ -27,8 +27,8 @@ ListView {
         { name: qsTr("Due Date"),    columnName: "assigned_date", width: 100}
     ]
 
-    property int tableSortColumn: 0
-    property string tableSortOrder: "descending"
+    property int tableSortColumn: 3
+    property string tableSortOrder: "ascending"
 
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
@@ -113,14 +113,12 @@ ListView {
         Rectangle {
             width: parent.width
             height: Units.rowHeight
-            //            color: Material.color(Material.Green, Material.Shade200)
             color: Material.color(Material.Grey, Material.Shade100)
             radius: 4
 
             Text {
-                anchors.verticalCenter: parent.verticalCenter
-                //                leftPadding: 16
                 text: section
+                anchors.verticalCenter: parent.verticalCenter
                 color: Material.accent
                 font.bold: true
                 font.pixelSize: Units.fontSizeTitle
@@ -136,8 +134,8 @@ ListView {
     
     model: TaskModel {
         id: taskModel
-        //                sortColumn: tableHeaderModel[tableSortColumn].columnName
-        //                sortOrder: tableSortOrder
+        sortColumn: tableHeaderModel[tableSortColumn].columnName
+        sortOrder: tableSortOrder
     }
     
     headerPositioning: ListView.OverlayHeader
@@ -172,6 +170,13 @@ ListView {
                         anchors.verticalCenter: headerRow.verticalCenter
                         width: modelData.width
                         state: taskView.tableSortColumn === index ? taskView.tableSortOrder : ""
+                        onNewColumn: {
+                            if (taskView.tableSortColumn !== index) {
+                                taskView.tableSortColumn = index
+                                taskView.tableSortOrder = "descending"
+                            }
+                        }
+                        onNewOrder: taskView.tableSortOrder = order
                     }
                 }
             }
@@ -189,35 +194,6 @@ ListView {
         
         function editTask() {
             taskDialog.editTask(model.task_id)
-        }
-        
-        function labelText() {
-            var planting_ids = model.plantings.split(',')
-            var planting_id = Number(planting_ids[0])
-            var map = Planting.mapFromId("planting_view", planting_id);
-            var length = map['length']
-            var rows = map['rows']
-            var spacingPlants = map['spacing_plants']
-            var seedsPerHole = map['seeds_per_hole']
-            
-            if (task_type_id === 1 || task_type_id === 3) {
-                if (settings.useStandardBedLength) {
-                    var beds = Number(length/settings.standardBedLength)
-                    return qsTr("%L1 bed @ ", "", beds).arg(beds) + qsTr("%L1 rows X %L2 cm").arg(rows).arg(spacingPlants)
-                } else {
-                    return qsTr("%L1 bed m @ %L2 rows X %L3 cm").arg(length).arg(rows).arg(spacingPlants)
-                }
-            } else if (task_type_id === 2) {
-                var traysToStart = Math.round(Number(map['trays_to_start']) * 100)/100
-                var traySize = map["tray_size"];
-                if (seedsPerHole > 1)
-                    return qsTr("%L1 trays of %L2 @ %L3 seeds").arg(traysToStart).arg(traySize).arg(seedsPerHole)
-                else
-                    return qsTr("%L1 trays of %L2").arg(traysToStart).arg(traySize)
-                
-            } else {
-                return qsTr("%1%2%3").arg(model.method).arg(model.implement ? ", " : "").arg(model.implement)
-            }
         }
         
         color: "white"
@@ -262,7 +238,6 @@ ListView {
                 Row {
                     spacing: -16
                     anchors.verticalCenter: parent.verticalCenter
-                    
                     
                     MyToolButton {
                         id: backwardDelayButton
@@ -383,16 +358,8 @@ ListView {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     
-                    //                        TableLabel {
-                    //                            text: model.type
-                    //                            elide: Text.ElideRight
-                    //                            width: tableHeaderModel[0].width
-                    //                            anchors.verticalCenter: parent.verticalCenter
-                    //                        }
-                    
-                    
                     Label {
-                        text: labelText()
+                        text: Task.description(model.task_id)
                         elide: Text.ElideRight
                         width: tableHeaderModel[2].width
                         anchors.verticalCenter: parent.verticalCenter
@@ -458,8 +425,6 @@ ListView {
                     }
                 }
             }
-            
         }
     }
-    
 }

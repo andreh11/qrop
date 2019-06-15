@@ -41,27 +41,28 @@ Item {
         text: "\ue5db"
         visible: mouseArea.containsMouse
         horizontalAlignment: control.horizontalAlignment
-        color: "black"
+        color: Units.colorMediumEmphasis
         font.family: "Material Icons"
         font.pixelSize: 16
         anchors.left: horizontalAlignment === Text.AlignLeft ? headerLabel.right : undefined
         anchors.right: horizontalAlignment === Text.AlignRight ? headerLabel.left : undefined
+        rotation: 0
     }
 
     Label {
         id: headerLabel
-        width: parent.width - iconLabel.width
+        width: Math.min(implicitWidth, parent.width - iconLabel.width)
         anchors.left: horizontalAlignment === Text.AlignLeft ? parent.left : undefined
         anchors.right: horizontalAlignment === Text.AlignRight ? parent.right : undefined
         elide: Text.ElideRight
-        color: Material.color(Material.Grey, Material.Shade700)
+        color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
         font.family: "Roboto Condensed"
         font.pixelSize: 14
         horizontalAlignment: control.horizontalAlignment
     }
 
     ToolTip {
-        visible: mouseArea.containsMouse
+        visible: mouseArea.containsMouse && headerLabel.implicitWidth > headerLabel.width
         delay: Qt.styleHints.mousePressAndHoldInterval
         text: control.text
         font.family: "Robo Regular"
@@ -69,16 +70,19 @@ Item {
         y: headerLabel.height + 16
     }
 
+    state: ""
     states: [
         State {
             name: ""
             PropertyChanges {
                 target: iconLabel
                 visible: mouseArea.containsMouse
+                color: Units.colorMediumEmphasis
+                rotation: 0
             }
             PropertyChanges {
                 target: headerLabel
-                color: Material.color(Material.Grey, Material.Shade700)
+                color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
             }
         },
 
@@ -88,10 +92,11 @@ Item {
                 target: iconLabel
                 visible: true
                 rotation: 0
+                color: Units.colorHighEmphasis
             }
             PropertyChanges {
                 target: headerLabel
-                color: "black"
+                color: Units.colorHighEmphasis
             }
 
         },
@@ -103,10 +108,11 @@ Item {
                 visible: true
                 text: "\ue5db"
                 rotation: 180
+                color: Units.colorHighEmphasis
             }
             PropertyChanges {
                 target: headerLabel
-                color: "black"
+                color: Units.colorHighEmphasis
             }
         }
     ]
@@ -117,7 +123,7 @@ Item {
 
             RotationAnimation {
                 target: iconLabel
-                duration: 200
+                duration: Units.mediumDuration
             }
         },
 
@@ -126,7 +132,7 @@ Item {
 
             RotationAnimation {
                 target: iconLabel
-                duration: 200
+                duration: Units.mediumDuration
             }
         }
     ]
