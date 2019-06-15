@@ -22,7 +22,7 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-// class TemplateTask;
+class QSettings;
 
 class CORESHARED_EXPORT Task : public DatabaseUtility
 {
@@ -39,6 +39,9 @@ public:
     Q_INVOKABLE void removePlanting(int plantingId, int taskId) const;
 
     Q_INVOKABLE QString type(int taskId) const;
+    Q_INVOKABLE QString method(int taskId) const;
+    Q_INVOKABLE QString implement(int taskId) const;
+    Q_INVOKABLE QString description(int taskId) const;
     Q_INVOKABLE QString color(int taskId) const;
     Q_INVOKABLE QDate assignedDate(int taskId) const;
     Q_INVOKABLE int duration(int taskId) const;
@@ -78,6 +81,7 @@ public:
 
 private:
     int typeId(int taskId) const;
+    QSettings *mSettings;
 };
 
 #endif // TASK_H

@@ -19,6 +19,10 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
+#include "location.h"
+#include "planting.h"
+#include "task.h"
+
 #include "mdate.h"
 #include "taskmodel.h"
 
@@ -29,30 +33,99 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
     , m_showDue(false)
     , m_showOverdue(false)
     , m_plantingId(-1)
+    , mLocation(new Location(this))
+    , mPlanting(new Planting(this))
+    , mTask(new Task(this))
 {
     setSortColumn("assigned_date");
     m_filterDate = QDate();
     setDynamicSortFilter(true);
 }
 
+void TaskModel::setSortColumn(const QString &columnName)
+{
+    m_sortColumn = columnName;
+    sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    sortColumnChanged();
+}
+
+void TaskModel::setSortOrder(const QString &order)
+{
+    m_sortOrder = order;
+    sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    sortOrderChanged();
+}
+
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    QDate leftAssignedDate = fieldDate(left.row(), left.parent(), "assigned_date");
-    QDate rightAssignedDate = fieldDate(right.row(), right.parent(), "assigned_date");
-    QDate leftCompletedDate = fieldDate(left.row(), left.parent(), "completed_date");
-    QDate rightCompletedDate = fieldDate(right.row(), right.parent(), "completed_date");
+    bool before = true;
+    if (m_sortColumn == "assigned_date") {
+        auto leftAssignedDate = fieldDate(left.row(), left.parent(), "assigned_date");
+        auto rightAssignedDate = fieldDate(right.row(), right.parent(), "assigned_date");
+        auto leftCompletedDate = fieldDate(left.row(), left.parent(), "completed_date");
+        auto rightCompletedDate = fieldDate(right.row(), right.parent(), "completed_date");
 
-    auto leftDate = leftCompletedDate.isValid() ? leftCompletedDate : leftAssignedDate;
-    auto rightDate = rightCompletedDate.isValid() ? rightCompletedDate : rightAssignedDate;
-    bool before = leftDate < rightDate;
+        auto leftDate = leftCompletedDate.isValid() ? leftCompletedDate : leftAssignedDate;
+        auto rightDate = rightCompletedDate.isValid() ? rightCompletedDate : rightAssignedDate;
+        before = leftDate < rightDate;
+    } else if (m_sortColumn == "plantings") {
+        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
+        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
+        auto leftPlantingList = mTask->taskPlantings(leftId);
+        auto rightPlantingList = mTask->taskPlantings(rightId);
+
+        int leftPlantingId = leftPlantingList.isEmpty() ? -1 : leftPlantingList.first();
+        int rightPlantingId = rightPlantingList.isEmpty() ? -1 : rightPlantingList.first();
+
+        if (leftPlantingId < 0 || rightPlantingId < 0) {
+            before = true;
+        } else {
+            QString leftCrop = mPlanting->cropName(leftPlantingId);
+            QString rightCrop = mPlanting->cropName(rightPlantingId);
+            QString leftVariety = mPlanting->varietyName(leftPlantingId);
+            QString rightVariety = mPlanting->varietyName(rightPlantingId);
+
+            before = (leftCrop < rightCrop)
+                    || ((leftCrop == rightCrop) && (leftVariety < rightVariety));
+        }
+    } else if (m_sortColumn == "locations") {
+        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
+        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
+        auto leftLocationList = mTask->taskLocations(leftId);
+        auto rightLocationList = mTask->taskLocations(rightId);
+
+        if (leftLocationList.isEmpty()) { // planting task
+            auto leftPlantingList = mTask->taskPlantings(leftId);
+            if (!leftPlantingList.isEmpty())
+                leftLocationList = mLocation->locations(leftPlantingList.first());
+        }
+
+        if (rightLocationList.isEmpty()) { // planting task
+            auto rightPlantingList = mTask->taskPlantings(rightId);
+            if (!rightPlantingList.isEmpty())
+                rightLocationList = mLocation->locations(rightPlantingList.first());
+        }
+
+        int leftLocationId = leftLocationList.isEmpty() ? -1 : leftLocationList.first();
+        int rightLocationId = rightLocationList.isEmpty() ? -1 : rightLocationList.first();
+
+        before = mLocation->fullName(leftLocationId) < mLocation->fullName(rightLocationId);
+    } else if (m_sortColumn == "descr") {
+        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
+        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
+        before = mTask->description(leftId) < mTask->description(rightId);
+    }
 
     if (m_plantingId > 0)
         return before;
 
-    int leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
-    int rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
+    auto leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
+    auto rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
 
-    return (leftType < rightType) || (leftType == rightType && before);
+    // Keep same sorting for task types.
+    if (m_sortOrder == "ascending")
+        return (leftType < rightType) || (leftType == rightType && before);
+    return (leftType > rightType) || (leftType == rightType && before);
 }
 
 QVariant TaskModel::data(const QModelIndex &idx, int role) const

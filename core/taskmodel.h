@@ -22,6 +22,10 @@
 #include "core_global.h"
 #include "sortfilterproxymodel.h"
 
+class Location;
+class Planting;
+class Task;
+
 class CORESHARED_EXPORT TaskModel : public SortFilterProxyModel
 {
     Q_OBJECT
@@ -38,6 +42,8 @@ public:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
     QVariant data(const QModelIndex &idx, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
+    virtual void setSortColumn(const QString &columnName) override;
+    virtual void setSortOrder(const QString &order) override;
 
     QDate date() const;
     void setFilterDate(const QDate &date);
@@ -86,6 +92,10 @@ private:
     bool done(int row, const QModelIndex &parent) const;
     bool due(int row, const QModelIndex &parent) const;
     bool overdue(int row, const QModelIndex &parent) const;
+
+    Location *mLocation;
+    Planting *mPlanting;
+    Task *mTask;
 };
 
 #endif // TASKMODEL_H
