@@ -17,12 +17,14 @@
 #include <QDate>
 #include <QDebug>
 #include <QVariantMap>
+#include <QSettings>
 
 #include "task.h"
 #include "templatetask.h"
 
 Task::Task(QObject *parent)
     : DatabaseUtility(parent)
+    , mSettings(new QSettings(this))
 {
     m_table = "task";
     m_viewTable = "task_view";
@@ -34,6 +36,69 @@ QString Task::type(int taskId) const
     if (record.isEmpty())
         return {};
     return record.value("type").toString();
+}
+
+QString Task::method(int taskId) const
+{
+    auto record = recordFromId("task_view", taskId);
+    if (record.isEmpty())
+        return {};
+    return record.value("method").toString();
+}
+
+QString Task::implement(int taskId) const
+{
+    auto record = recordFromId("task_view", taskId);
+    if (record.isEmpty())
+        return {};
+    return record.value("implement").toString();
+}
+
+QString Task::description(int taskId) const
+{
+    int taskTypeId = typeId(taskId);
+    bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
+    int standardBedLength = mSettings->value("standardBedLength").toInt();
+
+    if (taskTypeId > 3) {
+        QString t = type(taskId);
+        QString m = method(taskId);
+        QString i = implement(taskId);
+
+        if (m.isEmpty())
+            return "";
+        else if (i.isEmpty())
+            return m;
+        return QString("%1, %2").arg(m, i);
+    }
+
+    auto plantingIdList = taskPlantings(taskId);
+    int plantingId = plantingIdList.first();
+
+    QVariantMap map = mapFromId("planting_view", plantingId);
+    int rows = map.value("rows").toInt();
+    int spacing = map.value("spacing_plants").toInt();
+    int trays = map.value("trays_to_start").toInt();
+    int traySize = map.value("tray_size").toInt();
+    int seedsPerHole = map.value("seeds_per_hole").toInt();
+
+    int length = map.value("length").toInt();
+    QString lengthString;
+    if (useStandardBedLength)
+        lengthString = tr("%L1 beds").arg(length * 1.0 / standardBedLength);
+    else
+        lengthString = tr("%L1 bed m.").arg(length);
+
+    QString description;
+    if (taskTypeId == 1) {
+        return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
+    } else if (taskTypeId == 2) {
+        if (seedsPerHole > 1)
+            return QString(tr("%L1 x %L2, %L3 seeds per hole")).arg(trays).arg(traySize).arg(seedsPerHole);
+        else
+            return QString(tr("%L1 x %L2")).arg(trays).arg(traySize);
+    }
+    return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
 }
 
 QString Task::color(int taskId) const

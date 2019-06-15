@@ -42,6 +42,7 @@ class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
 
 public:
     PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
     int week() const;
     void setWeek(int week);

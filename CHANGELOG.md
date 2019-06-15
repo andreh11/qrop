@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+  - *Task calendar* − Add sorting function for tasks (#122).
   - *Seed company* − Add a radio button to choose default seed company (#111).
   - *Task dialog* − Create several tasks at once (#133).
   - Add a default variety feature ; create an unknown variety when creating a crop. The

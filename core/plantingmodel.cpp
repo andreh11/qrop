@@ -39,6 +39,25 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     connect(this, SIGNAL(countChanged()), this, SIGNAL(revenueChanged()));
 }
 
+bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    if (m_sortColumn == "variety") {
+        auto leftCrop = rowValue(left.row(), left.parent(), "crop").toString();
+        auto rightCrop = rowValue(right.row(), right.parent(), "crop").toString();
+
+        auto leftVariety = rowValue(left.row(), left.parent(), "variety").toString();
+        auto rightVariety = rowValue(right.row(), right.parent(), "variety").toString();
+
+        return (leftCrop < rightCrop) || ((leftCrop == rightCrop) && (leftVariety < rightVariety));
+    } else if (m_sortColumn == "locations") {
+        int leftId = rowValue(left.row(), left.parent(), "planting_id").toInt();
+        int rightId = rowValue(right.row(), right.parent(), "planting_id").toInt();
+        return location->fullName(location->locations(leftId))
+                < location->fullName(location->locations(rightId));
+    }
+    return SortFilterProxyModel::lessThan(left, right);
+}
+
 int PlantingModel::week() const
 {
     return m_week;

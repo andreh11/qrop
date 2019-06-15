@@ -334,6 +334,7 @@ Page {
             anchors.top: buttonRectangle.bottom
             width: parent.width
         }
+
         Column {
             id: blankStateColumn
             z: 1
@@ -348,23 +349,23 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: {
                     if (showDoneCheckBox.checked && showDueCheckBox.checked && showOverdueCheckBox.checked)
-                        return qsTr('No tasks done, due or overdue for week %1').arg(page.week)
+                        qsTr('No tasks done, due or overdue for week %1').arg(page.week)
                     else if (showDoneCheckBox.checked && showDueCheckBox.checked)
-                        return qsTr('No tasks done or due for week %1').arg(page.week)
+                        qsTr('No tasks done or due for week %1').arg(page.week)
                     else if (showDoneCheckBox.checked && showOverdueCheckBox.checked)
-                        return qsTr('No tasks done or overdue for week %1').arg(page.week)
+                        qsTr('No tasks done or overdue for week %1').arg(page.week)
                     else if (showDueCheckBox.checked && showOverdueCheckBox.checked)
-                        return qsTr('No tasks due or overdue for week %1').arg(page.week)
+                        qsTr('No tasks due or overdue for week %1').arg(page.week)
                     else if (showDueCheckBox.checked && showOverdueCheckBox.checked)
-                        return qsTr('No tasks due or overdue for week %1').arg(page.week)
+                        qsTr('No tasks due or overdue for week %1').arg(page.week)
                     else if (showDoneCheckBox.checked)
-                        return qsTr('No tasks done week %1').arg(page.week)
+                        qsTr('No tasks done week %1').arg(page.week)
                     else if(showDueCheckBox.checked)
-                        return qsTr("No task due for week %1").arg(page.week)
+                        qsTr("No task due for week %1").arg(page.week)
                     else if (showOverdueCheckBox.checked)
-                        return qsTr("No tasks overdue for week %1").arg(page.week)
+                        qsTr("No tasks overdue for week %1").arg(page.week)
                     else
-                        return qsTr("No tasks to show")
+                        qsTr("No tasks to show")
                 }
                 font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
                 color: Qt.rgba(0, 0, 0, 0.8)
