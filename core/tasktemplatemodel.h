@@ -35,7 +35,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     QList<int> plantingIdList() const;
-    void setPlantingIdList(QList<int> id);
+    void setPlantingIdList(const QList<int> &idList);
     Q_INVOKABLE void toggle(int row);
 
 signals:

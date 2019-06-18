@@ -61,15 +61,12 @@ QString Task::description(int taskId) const
     int standardBedLength = mSettings->value("standardBedLength").toInt();
 
     if (taskTypeId > 3) {
-        QString t = type(taskId);
         QString m = method(taskId);
         QString i = implement(taskId);
 
-        if (m.isEmpty())
-            return "";
-        else if (i.isEmpty())
+        if (i.isEmpty())
             return m;
-        return QString("%1, %2").arg(m, i);
+        return m + QString(", ") + i;
     }
 
     auto plantingIdList = taskPlantings(taskId);
@@ -90,13 +87,12 @@ QString Task::description(int taskId) const
         lengthString = tr("%L1 bed m.").arg(length);
 
     QString description;
-    if (taskTypeId == 1) {
+    if (taskTypeId == 1)
         return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
-    } else if (taskTypeId == 2) {
+    if (taskTypeId == 2) {
         if (seedsPerHole > 1)
             return QString(tr("%L1 x %L2, %L3 seeds per hole")).arg(trays).arg(traySize).arg(seedsPerHole);
-        else
-            return QString(tr("%L1 x %L2")).arg(trays).arg(traySize);
+        return QString(tr("%L1 x %L2")).arg(trays).arg(traySize);
     }
     return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
 }

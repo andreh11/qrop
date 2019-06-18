@@ -37,16 +37,10 @@
 
 Print::Print(QObject *parent)
     : QObject(parent)
-    , m_firstColumnWidth(2000)
-    , m_rowHeight(500)
-    , m_monthWidth(925)
-    , m_textPadding(80)
-    , m_locationRows(0)
-    , m_pageNumber(0)
-    , m_showFamilyColor(false)
-    , location(new Location(this))
-    , planting(new Planting(this))
-    , keyword(new Keyword(this))
+    , mLocation(new Location(this))
+    , mPlanting(new Planting(this))
+    , mKeyword(new Keyword(this))
+    , mTask(new Task(this))
     , m_locationModel(new LocationModel(this))
     , mSettings(new QSettings(this))
     , cropPlanQueryString("SELECT *, "
@@ -381,7 +375,7 @@ void Print::printTransplantList(int year, const QUrl &path)
     exportPdf(html, path, QPageLayout::Portrait);
 }
 
-void Print::exportPdf(const QString &html, const QUrl &path, const QPageLayout::Orientation orientation)
+void Print::exportPdf(const QString &html, const QUrl &path, QPageLayout::Orientation orientation)
 {
     QPdfWriter writer(path.toLocalFile());
     writer.setPageSize(QPagedPaintDevice::A4);
@@ -547,9 +541,6 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
     queryString.append(calendarInfo.orderClause);
     QSqlQuery query(queryString);
 
-    Location location;
-    Planting planting;
-    Task task;
     int lastTaskTypeId = -1;
     int i = 0;
     while (query.next()) {
@@ -564,8 +555,8 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         int taskId = query.value("task_id").toInt();
         int taskTypeId = query.value("task_type_id").toInt();
         QString taskType = query.value("type").toString();
-        QList<int> plantingIdList = task.taskPlantings(taskId);
-        QList<int> locationIdList = task.taskLocations(taskId);
+        QList<int> plantingIdList = mTask->taskPlantings(taskId);
+        QList<int> locationIdList = mTask->taskLocations(taskId);
 
         QString taskMethod = query.value("method").toString();
         QString taskImplement = query.value("implement").toString();
@@ -580,16 +571,16 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
         // Plantings
         for (auto plantingId : plantingIdList) {
-            QList<int> locationList = location.locations(plantingId);
-            QString locationsName = location.fullName(locationList);
-            QVariantMap map = planting.mapFromId("planting_view", plantingId);
-            int successionNumber = planting.rank(plantingId);
+            QList<int> locationList = mLocation->locations(plantingId);
+            QString locationsName = mLocation->fullName(locationList);
+            QVariantMap map = mPlanting->mapFromId("planting_view", plantingId);
+            int successionNumber = mPlanting->rank(plantingId);
             int rows = map.value("rows").toInt();
             int spacing = map.value("spacing_plants").toInt();
             int trays = map.value("trays_to_start").toInt();
             int traySize = map.value("tray_size").toInt();
             int seedsPerHole = map.value("seeds_per_hole").toInt();
-            auto keywordStringList = keyword->keywordStringList(plantingId);
+            auto keywordStringList = mKeyword->keywordStringList(plantingId);
 
             QString keywordString;
             for (const auto &variant : keywordStringList) {
@@ -629,9 +620,9 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
             QString plantingString =
                     QString("%1%2, %3")
-                            .arg(planting.cropName(plantingId))
+                            .arg(mPlanting->cropName(plantingId))
                             .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
-                            .arg(planting.varietyName(plantingId));
+                            .arg(mPlanting->varietyName(plantingId));
             if (i % 2 == 1) {
                 html += QString("<tr style='font-weight: %1; background-color: #e0e0e0'>")
                                 .arg(overdue ? "bold" : "normal");
@@ -660,7 +651,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
         if (!locationIdList.empty()) {
             QString description = QString("%1, %2").arg(taskMethod).arg(taskImplement);
-            QString locationsName = location.fullName(locationIdList);
+            QString locationsName = mLocation->fullName(locationIdList);
 
             if (i % 2 == 1)
                 html.append("<tr style='background-color: #e0e0e0'>");
@@ -702,10 +693,10 @@ QString Print::harvestHtml(int year) const
         QString laborTime = query.value("time").toString();
         QString locationString = query.value("locations").toString();
         int plantingId = query.value("planting_id").toInt();
-        int successionNumber = planting->rank(plantingId);
+        int successionNumber = mPlanting->rank(plantingId);
 
         QList<int> locationIdList;
-        for (QString idString : locationString.split(","))
+        for (auto idString : locationString.splitRef(","))
             locationIdList.append(idString.toInt());
 
         if (i % 2 == 0)
@@ -723,7 +714,7 @@ QString Print::harvestHtml(int year) const
                                                   ? QString(" %1").arg(successionNumber)
                                                   : "")
                                      .arg(variety))
-                        .arg(location->fullName(locationIdList))
+                        .arg(mLocation->fullName(locationIdList))
                         .arg(QString("%1 %2").arg(quantity).arg(unit))
                         .arg(laborTime);
         i++;
@@ -889,22 +880,22 @@ int Print::datePosition(const QDate &date)
 
 void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, int year)
 {
-    QDate plantingDate = planting->plantingDate(plantingId);
-    QDate begHarvestDate = planting->begHarvestDate(plantingId);
-    QDate endHarvestDate = planting->endHarvestDate(plantingId);
+    QDate plantingDate = mPlanting->plantingDate(plantingId);
+    QDate begHarvestDate = mPlanting->begHarvestDate(plantingId);
+    QDate endHarvestDate = mPlanting->endHarvestDate(plantingId);
     auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
 
     QString colorString;
 
     if (m_showFamilyColor)
-        colorString = planting->familyColor(plantingId);
+        colorString = mPlanting->familyColor(plantingId);
     else
-        colorString = planting->cropColor(plantingId);
+        colorString = mPlanting->cropColor(plantingId);
 
     QColor cropColor(colorString);
-    QString cropName = planting->cropName(plantingId);
-    QString varietyName = planting->varietyName(plantingId);
-    int successionNumber = planting->rank(plantingId);
+    QString cropName = mPlanting->cropName(plantingId);
+    QString varietyName = mPlanting->varietyName(plantingId);
+    int successionNumber = mPlanting->rank(plantingId);
 
     int y = (2 + row) * m_rowHeight;
     int p = static_cast<int>(m_rowHeight * 0.1);
@@ -931,11 +922,11 @@ void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, i
 
 void Print::paintTaskTimeGraph(QPainter &painter, int row, int taskId)
 {
-    int duration = task->duration(taskId);
-    QDate assignedDate = task->assignedDate(taskId);
+    int duration = mTask->duration(taskId);
+    QDate assignedDate = mTask->assignedDate(taskId);
     QDate taskEndDate = assignedDate.addDays(duration);
-    QString type = task->type(taskId);
-    QString color = task->color(taskId);
+    QString type = mTask->type(taskId);
+    QString color = mTask->color(taskId);
 
     int y = (2 + row) * m_rowHeight;
     int p = static_cast<int>(m_rowHeight * 0.1);
@@ -960,11 +951,11 @@ void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent,
     QDate seasonEnd = seasonDates.second;
 
     if (mSettings->value("LocationView/showTasks", false).toBool()) {
-        for (int taskId : location->tasks(locationId, seasonBeg, seasonEnd))
+        for (int taskId : mLocation->tasks(locationId, seasonBeg, seasonEnd))
             paintTaskTimeGraph(painter, row, taskId);
     }
 
-    for (int plantingId : location->plantings(locationId, seasonBeg, seasonEnd))
+    for (int plantingId : mLocation->plantings(locationId, seasonBeg, seasonEnd))
         paintPlantingTimegraph(painter, row, plantingId, year);
 }
 
@@ -982,7 +973,7 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
 
             QRectF locationRect(0, (m_locationRows + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
             painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
-                             location->fullName(locationId));
+                             mLocation->fullName(locationId));
 
             paintTimeline(painter, m_locationRows, index, year);
 

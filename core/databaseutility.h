@@ -35,10 +35,10 @@ public:
     DatabaseUtility(QObject *parent = nullptr);
 
     QString table() const;
-    void setTable(const QString &name);
+    void setTable(const QString &table);
 
     QString viewTable() const;
-    void setViewTable(const QString &name);
+    void setViewTable(const QString &table);
 
     QString idFieldName() const;
     void setIdFieldName(const QString &fieldName);

@@ -31,7 +31,7 @@ class CORESHARED_EXPORT TemplateTaskModel : public SortFilterProxyModel
 
 public:
     TemplateTaskModel(QObject *parent = nullptr, const QString &tableName = "template_task_view");
-//    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+    //    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
     int taskTemplateId() const;
     void setTaskTemplateId(int taskTemplateId);
@@ -51,9 +51,9 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    int m_taskTemplateId;
-    int m_templateDateType;
-    bool m_beforeDate;
+    int m_taskTemplateId { -1 };
+    int m_templateDateType { -1 };
+    bool m_beforeDate { false };
 };
 
 #endif // TEMPLATETASKMODEL_H

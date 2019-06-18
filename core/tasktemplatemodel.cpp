@@ -33,7 +33,7 @@ QList<int> TaskTemplateModel::plantingIdList() const
     return m_plantingIdList;
 }
 
-void TaskTemplateModel::setPlantingIdList(QList<int> idList)
+void TaskTemplateModel::setPlantingIdList(const QList<int> &idList)
 {
     if (m_plantingIdList == idList)
         return;

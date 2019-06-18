@@ -112,7 +112,7 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
     return date.toString("dd/MM/yyyy");
 }
 
-QDate MDate::dateFromWeekString(const QString &s, const int targetYear)
+QDate MDate::dateFromWeekString(const QString &s, int targetYear)
 {
     int currentYear = 0;
     if (targetYear == 0)
@@ -178,8 +178,7 @@ QTime MDate::divided(const QTime &time, int d)
     qreal mf = std::modf(time.minute() / d, &mi);
     std::modf(time.msec() / d, &msi);
 
-    return QTime(static_cast<int>(hi), static_cast<int>((hf * 60) + mi),
-                 static_cast<int>((mf * 60) + msi));
+    return { static_cast<int>(hi), static_cast<int>((hf * 60) + mi), static_cast<int>((mf * 60) + msi) };
 }
 
 int MDate::season(const QDate &date)
@@ -205,8 +204,7 @@ QString MDate::seasonName(int season)
         return tr("Summer");
     else if (season == 3)
         return tr("Fall");
-    else
-        return {};
+    return {};
 }
 
 std::pair<QDate, QDate> MDate::seasonDates(int season, int year)

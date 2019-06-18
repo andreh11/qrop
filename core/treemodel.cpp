@@ -97,7 +97,6 @@ int TreeItem::columnCount() const
 
 SqlTreeModel::SqlTreeModel(QString idFieldName, QString parentIdFieldName, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_root(nullptr)
     , m_idFieldName(std::move(idFieldName))
     , m_parentIdFieldName(std::move(parentIdFieldName))
 {
@@ -186,10 +185,10 @@ QVariant SqlTreeModel::data(const QModelIndex &index, int role) const
 
 QVariant SqlTreeModel::data(const QModelIndex &index, const QString &role) const
 {
-    if (m_rolesIndexes.find(role) == m_rolesIndexes.end())
-        return QVariant();
-
-    return data(index, m_rolesIndexes[role]);
+    const auto &it = m_rolesIndexes.constFind(role);
+    if (it == m_rolesIndexes.constEnd())
+        return {};
+    return data(index, it.value());
 }
 
 bool SqlTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -210,10 +209,10 @@ bool SqlTreeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 bool SqlTreeModel::setData(const QModelIndex &index, const QVariant &value, const QString &role)
 {
-    if (m_rolesIndexes.find(role) == m_rolesIndexes.end())
+    const auto &it = m_rolesIndexes.constFind(role);
+    if (it == m_rolesIndexes.constEnd())
         return false;
-
-    return setData(index, value, m_rolesIndexes[role]);
+    return setData(index, value, it.value());
 }
 
 Qt::ItemFlags SqlTreeModel::flags(const QModelIndex &index) const

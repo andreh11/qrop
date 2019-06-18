@@ -45,7 +45,7 @@ public:
     Q_INVOKABLE QVariantList tasks(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList tasks(const QModelIndex &index) const;
 
-    Q_INVOKABLE int locationId(const QModelIndex &index) const;
+    Q_INVOKABLE int locationId(const QModelIndex &idx) const;
     Q_INVOKABLE qreal length(const QModelIndex &index) const;
 
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
@@ -59,13 +59,17 @@ public:
     Q_INVOKABLE bool rotationRespected(const QModelIndex &index, int plantingId) const;
     Q_INVOKABLE QList<int> rotationConflictingPlantings(const QModelIndex &index, int season,
                                                         int year) const;
+
+    Q_INVOKABLE QString historyDescription(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QString rotationConflictingDescription(const QModelIndex &index, int season,
+                                                       int year) const;
     Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(const QModelIndex &index, int season,
                                                       int year) const;
     Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index, int season, int year) const;
 
     Q_INVOKABLE qreal plantingLength(int plantingId, const QModelIndex &index) const;
-    Q_INVOKABLE void addPlanting(const QModelIndex &index, int plantingId, int length);
+    Q_INVOKABLE void addPlanting(const QModelIndex &idx, int plantingId, qreal length);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   const QModelIndexList &parentList = { QModelIndex() });
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
@@ -78,7 +82,7 @@ public:
     Q_INVOKABLE QItemSelection treeSelection() const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE QModelIndexList treePath(const QModelIndex &index) const;
-    Q_INVOKABLE virtual void refresh() override;
+    Q_INVOKABLE void refresh() override;
 
     bool showOnlyEmptyLocations() const;
     void setShowOnlyEmptyLocations(bool show);
@@ -96,8 +100,8 @@ signals:
     void depthChanged();
 
 private:
-    bool m_showOnlyEmptyLocations;
-    bool m_showOnlyGreenhouseLocations {};
+    bool m_showOnlyEmptyLocations { false };
+    bool m_showOnlyGreenhouseLocations { false };
     SqlTreeModel *m_treeModel;
     Planting *planting;
     Location *location;

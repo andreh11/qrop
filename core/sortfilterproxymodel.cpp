@@ -25,11 +25,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     : QSortFilterProxyModel(parent)
     , m_model(new SqlTableModel(this))
     , m_year(QDate::currentDate().year())
-    , m_season(1) // default: summer
     , m_tableName(tableName)
-    , m_string("")
-    , m_sortColumn("")
-    , m_sortOrder("ascending")
 {
     m_model->setTable(tableName);
     m_model->select();

@@ -33,8 +33,8 @@ public:
     SqlTableModel(QObject *parent = nullptr);
 
     bool insertRecord(int row, const QSqlRecord &record);
-    QVariant data(const QModelIndex &idx, int role) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex &idx, const QString &role) const;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &index, const QString &role) const;
     int fieldColumn(const QString &field) const;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     Q_INVOKABLE void setSortColumn(const QString &fieldName, const QString &order);

@@ -26,12 +26,6 @@
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_week(-1)
-    , m_showActivePlantings(false)
-    , m_showOnlyUnassigned(false)
-    , m_showOnlyGreenhouse(false)
-    , m_showOnlyHarvested(false)
-    , m_cropId(-1)
     , location(new Location(this))
     , planting(new Planting(this))
 {
@@ -49,12 +43,15 @@ bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
         auto rightVariety = rowValue(right.row(), right.parent(), "variety").toString();
 
         return (leftCrop < rightCrop) || ((leftCrop == rightCrop) && (leftVariety < rightVariety));
-    } else if (m_sortColumn == "locations") {
+    }
+
+    if (m_sortColumn == "locations") {
         int leftId = rowValue(left.row(), left.parent(), "planting_id").toInt();
         int rightId = rowValue(right.row(), right.parent(), "planting_id").toInt();
         return location->fullName(location->locations(leftId))
                 < location->fullName(location->locations(rightId));
     }
+
     return SortFilterProxyModel::lessThan(left, right);
 }
 

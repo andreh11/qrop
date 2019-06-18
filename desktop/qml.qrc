@@ -105,5 +105,6 @@
         <file>qml/CropRevenueChart.qml</file>
         <file>qml/HorizontalBarView.qml</file>
         <file>qml/EditableLabel.qml</file>
+        <file>qml/SimpleChip.qml</file>
     </qresource>
 </RCC>

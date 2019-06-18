@@ -65,11 +65,10 @@ protected:
     bool isDateInRange(const QDate &date) const;
     virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
-    //    std::pair<QDate, QDate> seasonDates(int season, int year) const;
     int m_year;
-    int m_season;
+    int m_season { 1 }; // default: summer
     QString m_sortColumn;
-    QString m_sortOrder;
+    QString m_sortOrder { "ascending" };
 
 private:
     QString m_tableName;

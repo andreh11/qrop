@@ -28,7 +28,6 @@ ApplicationWindow {
     id: window
 
     property var navigationModel: [
-        //        { source: "OverviewPage.qml",  name: qsTr("Dashboard"), iconText: "\ue871" },
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
@@ -36,7 +35,6 @@ ApplicationWindow {
         { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" },
         { source: chartsPage,  name: qsTr("Charts"),  iconText: "\ue801" }
         //        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
-        //        { source: "ChartsPage.qml",    name: qsTr("Charts"),    iconText: "\ue801" },
     ]
     property int navigationIndex: 0
 
@@ -62,8 +60,7 @@ ApplicationWindow {
     function toggleFullScreen() {
         if (window.visibility === Window.FullScreen) {
             window.visibility = oldWindowVisibility
-        }
-        else {
+        } else {
             oldWindowVisibility = window.visibility
             window.visibility = Window.FullScreen
         }
@@ -74,7 +71,6 @@ ApplicationWindow {
     width: 1024
     height: 768
     flags: Qt.Window
-
 
     Material.primary: Material.Teal
     Material.accent: Material.Indigo

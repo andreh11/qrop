@@ -79,11 +79,11 @@ public:
     bool addRecordTree(QList<QSqlRecord> &recordList, const QModelIndex &parent = QModelIndex());
 
 private:
-    TreeItem *m_root;
+    TreeItem *m_root { nullptr };
     QMap<int, TreeItem *> m_idItemMap;
     QString m_idFieldName;
     QString m_parentIdFieldName;
-    SqlTableModel *m_sourceModel{};
+    SqlTableModel *m_sourceModel {};
     QHash<QString, int> m_rolesIndexes;
     void buildRolesIndexes();
 };

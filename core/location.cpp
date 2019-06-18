@@ -66,7 +66,7 @@ void Location::remove(int id) const
         idString += QString::number(childId) + ", ";
     idString.chop(2);
 
-    QSqlQuery query(queryString.arg(table()).arg(idColumnName).arg(idString));
+    QSqlQuery query(queryString.arg(table(), idColumnName, idString));
     query.exec();
     debugQuery(query);
 }

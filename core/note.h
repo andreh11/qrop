@@ -29,13 +29,13 @@ public:
     Q_INVOKABLE void removePlantingNote(int plantingId, int noteId) const;
     Q_INVOKABLE void removePlantingNotes(int plantingId) const;
 
-    Q_INVOKABLE void addLocationNote(int locationid, int noteId) const;
-    Q_INVOKABLE void removeLocationNote(int locationid, int noteId) const;
-    Q_INVOKABLE void removeLocationNotes(int plantingId) const;
+    Q_INVOKABLE void addLocationNote(int locationId, int noteId) const;
+    Q_INVOKABLE void removeLocationNote(int locationId, int noteId) const;
+    Q_INVOKABLE void removeLocationNotes(int locationId) const;
 
     Q_INVOKABLE void addTaskNote(int taskId, int noteId) const;
     Q_INVOKABLE void removeTaskNote(int taskId, int noteId) const;
-    Q_INVOKABLE void removeTaskNotes(int plantingId) const;
+    Q_INVOKABLE void removeTaskNotes(int taskId) const;
 
     Q_INVOKABLE void addNoteFile(int noteId, int fileId) const;
     Q_INVOKABLE void removeNoteFile(int noteId, int fileId) const;

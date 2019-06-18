@@ -31,11 +31,10 @@ qreal Helpers::coordinate(qint64 dayNumber)
         return 0;
     else if (dayNumber > 365)
         return mGraphWidth;
-    else
-        return (dayNumber / 365.0) * mGraphWidth;
+    return (dayNumber / 365.0) * mGraphWidth;
 }
 
-qreal Helpers::position(const QDate seasonBegin, const QDate &date)
+qreal Helpers::position(const QDate &seasonBegin, const QDate &date)
 {
     return coordinate(MDate::daysTo(seasonBegin, date));
 }

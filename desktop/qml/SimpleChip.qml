@@ -16,9 +16,29 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 
-Label {
-    id: label
-    font.family: "Roboto Condensed"
-    font.pixelSize: Units.fontSizeBodyAndButton
+Rectangle {
+    id: control
+
+    property alias text: label.text
+    property color defaultColor: Material.color(Material.Grey, Material.Shade300)
+    property bool hasFocus: false
+
+    implicitWidth: label.implicitWidth + 2 * Units.chipPadding
+    implicitHeight: Units.chipHeight
+
+    radius: 32
+    color: defaultColor
+
+    Label {
+        id: label
+
+        anchors.centerIn: parent
+        verticalAlignment: Qt.AlignVCenter
+
+        color: Material.color(Material.Grey, Material.Shade800)
+        text: control.text
+        font { family: "Roboto Condensed"; pixelSize: 14; capitalization: Font.MixedCase }
+    }
 }

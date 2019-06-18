@@ -42,8 +42,8 @@ public:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
     QVariant data(const QModelIndex &idx, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
-    virtual void setSortColumn(const QString &columnName) override;
-    virtual void setSortOrder(const QString &order) override;
+    void setSortColumn(const QString &columnName) override;
+    void setSortOrder(const QString &order) override;
 
     QDate date() const;
     void setFilterDate(const QDate &date);
@@ -80,13 +80,13 @@ protected:
 
 private:
     QDate m_filterDate;
-    int m_week;
+    int m_week { 0 };
     QDate m_mondayDate;
     QDate m_sundayDate;
-    bool m_showDone;
-    bool m_showDue;
-    bool m_showOverdue;
-    int m_plantingId;
+    bool m_showDone { false };
+    bool m_showDue { false };
+    bool m_showOverdue { false };
+    int m_plantingId { -1 };
 
     void updateWeekDates();
     bool done(int row, const QModelIndex &parent) const;

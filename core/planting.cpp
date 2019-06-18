@@ -130,8 +130,7 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
  * \param inGreenhouse a boolean (true if we look for a greenhouse planting, false otherwise)
  * \return a value map for the planting found (which is empty of no planting is found)
  */
-QVariantMap Planting::lastValues(const int varietyId, const int cropId, const int plantingType,
-                                 const bool inGreenhouse) const
+QVariantMap Planting::lastValues(int varietyId, int cropId, int plantingType, bool inGreenhouse) const
 {
     const QString cropQueryString("SELECT planting_id FROM planting_view"
                                   " WHERE crop_id = %1 ORDER BY planting_id DESC");
@@ -178,8 +177,7 @@ QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const Q
         return map.value(key);
     else if (record.contains(key))
         return record.value(key);
-    else
-        return {};
+    return {};
 }
 
 void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
@@ -187,13 +185,13 @@ void Planting::setGreenhouseValues(QVariantMap &map, const QSqlRecord &record)
     const int plantsNeeded = get(map, record, "plants_needed").toInt();
     const int greenhouseLoss = get(map, record, "estimated_gh_loss").toInt();
     const int seedsPerHole = get(map, record, "seeds_per_hole").toInt();
-    const double seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
+    const qreal seedsPerGram = get(map, record, "seeds_per_gram").toDouble();
     const int traySize = get(map, record, "tray_size").toInt();
 
     const int plantsToStart = qCeil(static_cast<double>(plantsNeeded) / (1 - greenhouseLoss / 100));
     const double traysToStart = plantsToStart / traySize;
     const int seedsNumber = plantsToStart * seedsPerHole;
-    const double seedsQuantity = seedsNumber / seedsPerGram;
+    const qreal seedsQuantity = seedsNumber * 1.0 / seedsPerGram;
 
     map["plants_to_start"] = plantsToStart;
     map["trays_to_start"] = traysToStart;
@@ -209,7 +207,7 @@ int Planting::plantsNeeded(const QVariantMap &map, const QSqlRecord &record) con
     return spacing > 0 ? qCeil(length / spacing * 100 * rows) : 0;
 }
 
-void Planting::updateKeywords(int plantingId, const QVariantList newList, const QVariantList oldList) const
+void Planting::updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const
 {
     QList<int> toAdd;
     QList<int> toRemove;

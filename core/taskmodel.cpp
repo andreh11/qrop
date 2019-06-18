@@ -28,11 +28,6 @@
 
 TaskModel::TaskModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_week(0)
-    , m_showDone(false)
-    , m_showDue(false)
-    , m_showOverdue(false)
-    , m_plantingId(-1)
     , mLocation(new Location(this))
     , mPlanting(new Planting(this))
     , mTask(new Task(this))
@@ -77,9 +72,7 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
         int leftPlantingId = leftPlantingList.isEmpty() ? -1 : leftPlantingList.first();
         int rightPlantingId = rightPlantingList.isEmpty() ? -1 : rightPlantingList.first();
 
-        if (leftPlantingId < 0 || rightPlantingId < 0) {
-            before = true;
-        } else {
+        if (leftPlantingId > 0 && rightPlantingId > 0) {
             QString leftCrop = mPlanting->cropName(leftPlantingId);
             QString rightCrop = mPlanting->cropName(rightPlantingId);
             QString leftVariety = mPlanting->varietyName(leftPlantingId);

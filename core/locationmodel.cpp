@@ -27,7 +27,6 @@
 
 LocationModel::LocationModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_showOnlyEmptyLocations(false)
     , m_treeModel(new SqlTreeModel("location_id", "parent_id", this))
     , planting(new Planting(this))
     , location(new Location(this))
@@ -145,7 +144,7 @@ qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) co
     return location->plantingLength(plantingId, locationId(index));
 }
 
-void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int length)
+void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal length)
 {
     if (!idx.isValid())
         return;
@@ -154,7 +153,7 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, int leng
 
     std::pair<QDate, QDate> dates = seasonDates();
     if (hasChildren(idx)) {
-        int l = length;
+        qreal l = length;
         int row = 0;
         for (; row < rowCount(idx) && l > 0; row++) {
             QModelIndex child = index(row, 0, idx);
@@ -241,6 +240,41 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
             list.push_back(pid);
     }
     return list;
+}
+
+QString LocationModel::historyDescription(const QModelIndex &index, int season, int year) const
+{
+    QString text;
+    for (const int plantingId : location->plantings(locationId(index)))
+        text += QString("%1, %2 %3\n")
+                        .arg(planting->cropName(plantingId))
+                        .arg(planting->varietyName(plantingId))
+                        .arg(planting->plantingDate(plantingId).year());
+    text.chop(1);
+    return text;
+}
+
+QString LocationModel::rotationConflictingDescription(const QModelIndex &index, int season, int year) const
+{
+    const auto &list = rotationConflictingPlantings(index, season, year);
+    const int lid = locationId(index);
+    QString text;
+    QList<int> conflictList;
+    for (int plantingId : list) {
+        text += QString("%1, %2 %3")
+                        .arg(planting->cropName(plantingId))
+                        .arg(planting->varietyName(plantingId))
+                        .arg(planting->plantingDate(plantingId).year());
+
+        for (int conflictId : location->rotationConflictingPlantings(lid, plantingId))
+            text += QString(" ⋅ %1, %2 %3")
+                            .arg(planting->cropName(conflictId))
+                            .arg(planting->varietyName(conflictId))
+                            .arg(planting->plantingDate(conflictId).year());
+        text += "\n";
+    }
+    text.chop(1);
+    return text;
 }
 
 /**
@@ -390,8 +424,10 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
     for (auto idx : indexList) {
         id = data(index(idx.row(), 0, idx.parent()), 0).toInt();
         location->update(id, map);
-        for (const auto &key : map.keys())
-            tmodel->setData(mapToSource(idx), map.value(key), key);
+
+        const auto end = map.cend();
+        for (auto it = map.cbegin(); it != end; it++)
+            tmodel->setData(mapToSource(idx), it.value(), it.key());
         dataChanged(idx, idx);
     }
 

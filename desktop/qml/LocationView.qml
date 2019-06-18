@@ -681,7 +681,6 @@ Item {
                                 }
                             }
 
-
                             ToolButton {
                                 id: locationNameLabel
                                 text: hovered ? "\ue889"
@@ -690,30 +689,12 @@ Item {
                                                 : styleData.value
                                 font.family: hovered ? "Material Icons" : "Roboto Regular"
                                 font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
-                                //                                    showToolTip: true
-                                //                                        anchors.verticalCenter: parent.verticalCenter
-                                //                                    elide: Text.ElideRight
-                                //                                    leftPadding: styleData.depth * 20
-
-                                //                                    MouseArea {
-                                //                                        id: labelMouseArea
-                                //                                        hoverEnabled: true
-                                //                                        anchors.fill: parent
-                                //                                    }
 
                                 ToolTip.visible: hovered && ToolTip.text
-                                ToolTip.text: {
-                                    var text = ""
-                                    var plantingIdList = Location.plantings(locationModel.locationId(styleData.index))
-                                    var plantingId
-                                    for (var i = 0; i < plantingIdList.length; i++) {
-                                        plantingId = plantingIdList[i]
-                                        text += Planting.cropName(plantingId)
-                                                + ", " + Planting.varietyName(plantingId)
-                                                + " " + Planting.plantingDate(plantingId).getFullYear()
-                                                + "\n"
-                                    }
-                                    return text.slice(0, -1)
+                                ToolTip.text: ""
+                                onHoveredChanged: {
+                                    if (hovered && !ToolTip.text)
+                                        ToolTip.text = locationModel.historyDescription(styleData.index, season, year)
                                 }
                             }
 
@@ -764,32 +745,7 @@ Item {
 
                                 Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
                                 ToolTip.visible: hovered
-                                ToolTip.text: {
-                                    var list = locationModel.rotationConflictingPlantings(styleData.index, season, year)
-
-                                    var text = ""
-                                    var plantingId = -1
-                                    var locationId = locationModel.locationId(styleData.index)
-                                    var conflictList = []
-                                    for (var i = 0; i < list.length; i++) {
-                                        plantingId = list[i]
-
-                                        text += Planting.cropName(plantingId)
-                                                + ", " + Planting.varietyName(plantingId)
-                                                + " " + Planting.plantingDate(plantingId).getFullYear()
-
-                                        conflictList = Location.rotationConflictingPlantings(locationId, plantingId)
-                                        for (var j = 0; j < conflictList.length; j++) {
-                                            var conflictId = conflictList[j]
-                                            text += " ⋅ " + Planting.cropName(conflictId)
-                                                    + ", " + Planting.varietyName(conflictId)
-                                                    + " " + Planting.plantingDate(conflictId).getFullYear()
-                                        }
-                                        text += "\n"
-                                    }
-                                    return text.slice(0, -1)
-                                }
-
+                                ToolTip.text: locationModel.rotationConflictingDescription(styleData.index, season, year)
                             }
 
                             Timeline {

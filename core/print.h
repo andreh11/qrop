@@ -62,22 +62,22 @@ private:
         QString tableRow;
     } TableInfo;
 
-    int m_firstColumnWidth;
-    int m_rowHeight;
-    int m_monthWidth;
-    int m_textPadding;
-    int m_locationRows;
-    int m_pageNumber;
-    bool m_showFamilyColor;
-    Location *location;
-    Planting *planting;
-    Keyword *keyword;
+    int m_firstColumnWidth { 2000 };
+    int m_rowHeight { 500 };
+    int m_monthWidth { 925 };
+    int m_textPadding { 80 };
+    int m_locationRows { 0 };
+    int m_pageNumber { 0 };
+    bool m_showFamilyColor { false };
+    Location *mLocation;
+    Planting *mPlanting;
+    Keyword *mKeyword;
+    Task *mTask;
     LocationModel *m_locationModel;
-    Task *task;
     QSettings *mSettings;
 
     void exportPdf(const QString &html, const QUrl &path,
-                   const QPageLayout::Orientation orientation = QPageLayout::Landscape);
+                   QPageLayout::Orientation orientation = QPageLayout::Landscape);
 
     QMap<QString, TableInfo> cropPlanMap;
     QString cropPlanQueryString;

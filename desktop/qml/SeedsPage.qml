@@ -36,8 +36,8 @@ Page {
     property alias listView: seedListView
     property date todayDate: new Date()
 
-    property int tableSortColumn: 0
-    property string tableSortOrder: "descending"
+    property int tableSortColumn: 1
+    property string tableSortOrder: "ascending"
     property var tableHeaderModel: [
         { name: qsTr("Date"),   columnName: "crop", width: 100, alignment: Text.AlignLeft },
         { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft },

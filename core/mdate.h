@@ -34,7 +34,7 @@ public:
     explicit MDate(QObject *parent = nullptr);
 
     static const QList<QList<int>> monthsOrder;
-    Q_INVOKABLE static QDate dateFromWeekString(const QString &s, const int targetYear = 0);
+    Q_INVOKABLE static QDate dateFromWeekString(const QString &s, int targetYear = 0);
     Q_INVOKABLE static QDate dateFromDateString(const QString &s);
     Q_INVOKABLE static QDate dateFromIsoString(const QString &s)
     {
@@ -56,7 +56,7 @@ public:
     Q_INVOKABLE static int currentMonth();
     Q_INVOKABLE static int currentYear();
     Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear,
-                                          const QString &type = "", const bool showIndicator = true);
+                                          const QString &type = "", bool showIndicator = true);
 
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);

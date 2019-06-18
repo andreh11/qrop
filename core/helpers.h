@@ -29,7 +29,7 @@ class CORESHARED_EXPORT Helpers : public QObject
 public:
     explicit Helpers(QObject *parent = nullptr);
     Q_INVOKABLE static qreal coordinate(qint64 dayNumber);
-    Q_INVOKABLE static qreal position(const QDate seasonBegin, const QDate &date);
+    Q_INVOKABLE static qreal position(const QDate &seasonBegin, const QDate &date);
     Q_INVOKABLE static qreal widthBetween(qreal pos, const QDate &seasonBegin, const QDate &date);
 
 private:

@@ -37,7 +37,7 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    bool m_showPlantingTasks;
+    bool m_showPlantingTasks { true };
 
 signals:
     void showPlantingTasksChanged();

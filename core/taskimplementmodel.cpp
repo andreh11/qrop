@@ -21,7 +21,6 @@
 
 TaskImplementModel::TaskImplementModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_methodId(-1)
 {
     setSortColumn("implement");
     setFilterKeyStringColumn("implement");

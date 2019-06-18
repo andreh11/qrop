@@ -53,15 +53,12 @@ bool SqlTableModel::insertRecord(int row, const QSqlRecord &record)
 
 QVariant SqlTableModel::data(const QModelIndex &index, int role) const
 {
-    QVariant value;
-
     if (role < Qt::UserRole)
         return QSqlTableModel::data(index, role);
 
-    const QSqlRecord sqlRecord = record(index.row());
-    value = sqlRecord.value(role - Qt::UserRole);
-
-    QDate date = QDate::fromString(value.toString(), Qt::ISODate);
+    const auto &sqlRecord = record(index.row());
+    const auto &value = sqlRecord.value(role - Qt::UserRole);
+    const auto &date = QDate::fromString(value.toString(), Qt::ISODate);
     if (date.isValid()) // fromString(string) returns invalid date if string cannot be parsed
         return date;
     return value;
@@ -69,10 +66,10 @@ QVariant SqlTableModel::data(const QModelIndex &index, int role) const
 
 QVariant SqlTableModel::data(const QModelIndex &index, const QString &role) const
 {
-    if (m_rolesIndexes.find(role) == m_rolesIndexes.end())
-        return QVariant();
-
-    return data(index, m_rolesIndexes[role]);
+    const auto &it = m_rolesIndexes.constFind(role);
+    if (it == m_rolesIndexes.constEnd())
+        return {};
+    return data(index, it.value());
 }
 
 int SqlTableModel::fieldColumn(const QString &field) const

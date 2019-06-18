@@ -68,12 +68,12 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    int m_week;
-    bool m_showActivePlantings;
-    bool m_showOnlyUnassigned;
-    bool m_showOnlyGreenhouse;
-    bool m_showOnlyHarvested;
-    int m_cropId;
+    int m_week { -1 };
+    bool m_showActivePlantings { false };
+    bool m_showOnlyUnassigned { false };
+    bool m_showOnlyGreenhouse { false };
+    bool m_showOnlyHarvested { false };
+    int m_cropId { -1 };
     Location *location;
     Planting *planting;
 

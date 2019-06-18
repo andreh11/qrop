@@ -373,20 +373,11 @@ ListView {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     
-                    ListView {
+                    Repeater {
                         model: Keyword.keywordStringList(firstPlantingId)
-                        spacing: Units.smallSpacing
-                        orientation: Qt.Horizontal
-                        width: 120
-                        height: Units.rowHeight
-                        delegate: ChoiceChip {
+                        delegate: SimpleChip {
                             text: modelData
-                            checkable: false
-                            font {
-                                family: "Roboto Condensed"
-                                pixelSize: Units.fontSizeBodyAndButton
-                                capitalization: Font.MixedCase
-                            }
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
                 }

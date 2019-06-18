@@ -19,7 +19,6 @@
 
 HarvestModel::HarvestModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_week(0)
 {
 }
 

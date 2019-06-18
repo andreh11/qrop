@@ -46,7 +46,7 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    int m_week;
+    int m_week { 0 };
     QDate m_mondayDate;
     QDate m_sundayDate;
 

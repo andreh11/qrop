@@ -7,8 +7,6 @@
 
 NoteModel::NoteModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_plantingId(-1)
-
 {
 }
 

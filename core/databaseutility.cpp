@@ -199,8 +199,9 @@ int DatabaseUtility::add(const QVariantMap &map) const
     QSqlQuery query;
     query.prepare(queryString);
 
-    for (const auto &key : map.keys())
-        query.bindValue(QString(":%1").arg(key), map[key]);
+    const auto end = map.end();
+    for (auto it = map.cbegin(); it != end; it++)
+        query.bindValue(QString(":%1").arg(it.key()), it.value());
 
     query.exec();
     debugQuery(query);

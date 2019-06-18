@@ -69,8 +69,7 @@ void Database::backupDatabase()
     QFileInfo fileInfo(databasePath());
     auto today = QDate::currentDate();
     QString backupFileName =
-            QString("%1-%2.sqlite").arg(fileInfo.baseName()).arg(today.toString(Qt::ISODate));
-    qDebug() << backupFileName;
+            QString("%1-%2.sqlite").arg(fileInfo.baseName(), today.toString(Qt::ISODate));
     QFile::copy(fileInfo.absoluteFilePath(), fileInfo.absolutePath() + "/" + backupFileName);
 }
 

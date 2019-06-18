@@ -21,7 +21,6 @@
 
 TaskMethodModel::TaskMethodModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_typeId(-1)
 {
     setSortColumn("method");
     setFilterKeyStringColumn("method");

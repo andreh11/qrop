@@ -24,7 +24,7 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    int m_plantingId;
+    int m_plantingId { -1 };
 };
 
 #endif // SQLNOTEMODEL_H

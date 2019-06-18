@@ -24,9 +24,6 @@
 
 TemplateTaskModel::TemplateTaskModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_taskTemplateId(-1)
-    , m_templateDateType(-1)
-    , m_beforeDate(false)
 {
     setSortColumn("link_days");
     setSortOrder("ascending");

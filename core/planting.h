@@ -82,9 +82,9 @@ public:
     Q_INVOKABLE QVariantList highestRevenueCropNames(int year, bool greenhouse = false) const;
     Q_INVOKABLE QVariantList highestRevenueCropRevenues(int year, bool greenhouse = false) const;
 
-    Q_INVOKABLE QList<int> addSuccessions(int successions, int daysBetween, const QVariantMap &map) const;
-    Q_INVOKABLE QVariantMap lastValues(const int varietyId, const int cropId,
-                                       const int plantingType, const bool inGreenhouse) const;
+    Q_INVOKABLE QList<int> addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const;
+    Q_INVOKABLE QVariantMap lastValues(int varietyId, int cropId, int plantingType,
+                                       bool inGreenhouse) const;
 
     Q_INVOKABLE void csvImportPlan(int year, const QUrl &path) const;
     Q_INVOKABLE void csvExportPlan(int year, const QUrl &path) const;
@@ -100,11 +100,9 @@ private:
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     QList<int> yearPlantingList(int year) const;
-    QDate dateFromString(const QString &string, const int targetYear) const;
     void updateTaskType(int plantingId, PlantingType oldType, PlantingType newType) const;
-
     int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
-    void updateKeywords(int plantingId, const QVariantList newList, const QVariantList oldList) const;
+    void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
 };
 
 #endif // PLANTING_H

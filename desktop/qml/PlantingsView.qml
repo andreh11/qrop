@@ -527,7 +527,6 @@ ListView {
             id: mouseArea
             anchors.fill: parent
             hoverEnabled: true
-
             onDoubleClicked: listView.doubleClicked(model.planting_id)
         }
 
@@ -594,7 +593,6 @@ ListView {
                     text: settings.showSeedCompanyBesideVariety
                           ? "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3))
                           : "%1".arg(model.variety)
-                    showToolTip: true
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight
                     width: 100
@@ -637,21 +635,12 @@ ListView {
                     }
                 }
 
-                ListView {
+                Repeater {
                     model: keywordStringList
-                    spacing: Units.smallSpacing
-                    visible: !showOnlyTimegraph && tableHeaderModel[tableHeaderModel.length-1].visible
-                    orientation: Qt.Horizontal
-                    width: tableHeaderModel[tableHeaderModel.length-1].width
-                    height: Units.rowHeight
-                    delegate: ChoiceChip {
+                    delegate: SimpleChip {
                         text: modelData
-                        checkable: false
-                        font {
-                            family: "Roboto Condensed"
-                            pixelSize: Units.fontSizeBodyAndButton
-                            capitalization: Font.MixedCase
-                        }
+                        visible: !showOnlyTimegraph && tableHeaderModel[tableHeaderModel.length-1].visible
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
             }

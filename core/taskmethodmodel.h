@@ -37,7 +37,7 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    int m_typeId;
+    int m_typeId { -1 };
 
 signals:
     void typeIdChanged();
