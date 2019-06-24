@@ -16,6 +16,7 @@
 
 #include <QDate>
 #include <QDebug>
+#include <QElapsedTimer>
 
 #include "sortfilterproxymodel.h"
 #include "sqltablemodel.h"
@@ -37,6 +38,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 
     setFilterKeyColumn(-1);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
+    setSortLocaleAware(true);
 }
 
 QList<int> SortFilterProxyModel::idList() const
@@ -142,15 +144,23 @@ void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
 
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
+    QElapsedTimer t;
+    t.start();
     m_sortColumn = columnName;
-    sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    sort(roleIndex(m_sortColumn),
+         m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug() << "[setSortColumn]" << t.elapsed() << "ms";
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
+    QElapsedTimer t;
+    t.start();
     m_sortOrder = order;
-    sort(roleIndex(m_sortColumn), m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    sort(roleIndex(m_sortColumn),
+         m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug() << "[setSortOrder]" << t.elapsed() << "ms";
     sortOrderChanged();
 }
 

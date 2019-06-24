@@ -30,6 +30,7 @@ class Keyword;
 class Location;
 class Task;
 class Variety;
+class QSettings;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility
 {
@@ -58,6 +59,7 @@ public:
     Q_INVOKABLE int type(int plantingId) const;
     Q_INVOKABLE int rank(int plantingId) const;
 
+    QVector<QDate> dates(int plantingId) const;
     Q_INVOKABLE QDate sowingDate(int plantingId) const;
     Q_INVOKABLE QDate plantingDate(int plantingId) const;
     Q_INVOKABLE QDate begHarvestDate(int plantingId) const;
@@ -70,9 +72,9 @@ public:
 
     Q_INVOKABLE bool isActive(int plantingId) const;
 
-    Q_INVOKABLE int assignedLength(int plantingId) const;
-    Q_INVOKABLE int totalLength(int plantingId) const;
-    Q_INVOKABLE int lengthToAssign(int plantingId) const;
+    Q_INVOKABLE qreal assignedLength(int plantingId) const;
+    Q_INVOKABLE qreal totalLength(int plantingId) const;
+    Q_INVOKABLE qreal lengthToAssign(int plantingId) const;
     qreal totalLengthForWeek(int week, int year, bool greenhouse = false) const;
     Q_INVOKABLE QVariantList totalLengthByWeek(int season, int year, bool greenhouse = false) const;
 
@@ -89,6 +91,12 @@ public:
     Q_INVOKABLE void csvImportPlan(int year, const QUrl &path) const;
     Q_INVOKABLE void csvExportPlan(int year, const QUrl &path) const;
 
+    Q_INVOKABLE QString toolTip(int plantingId, int locationId) const;
+    Q_INVOKABLE QString growBarDescription(int plantingId, int year, bool showNames) const;
+    Q_INVOKABLE QVariantMap drawInfoMap(int plantingId, int season, int year,
+                                        bool showGreenhouseSow = true,
+                                        bool showFamilyColor = false) const;
+
 private:
     DatabaseUtility *crop;
     Family *family;
@@ -97,12 +105,14 @@ private:
     Task *task;
     DatabaseUtility *mUnit;
     Variety *variety;
+    QSettings *mSettings;
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     QList<int> yearPlantingList(int year) const;
     void updateTaskType(int plantingId, PlantingType oldType, PlantingType newType) const;
     int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
     void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
+    qreal convertedLength(qreal length) const;
 };
 
 #endif // PLANTING_H

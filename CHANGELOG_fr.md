@@ -5,6 +5,13 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Changements
+  - Amélioration de la performance des vues séries et tâches.
+
+### Corrections
+  - Correction de la longueur à assigner lors d'une assignation multiple à un 
+    emplacement.
+
 ## 0.3 - 2019-06-15
 
 ### Ajouts

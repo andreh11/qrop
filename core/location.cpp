@@ -291,17 +291,21 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
 
 bool Location::overlap(int plantingId1, int plantingId2) const
 {
-    auto pdate1 = planting->plantingDate(plantingId1);
-    auto pdate2 = planting->plantingDate(plantingId2);
-    auto edate1 = planting->endHarvestDate(plantingId1);
-    auto edate2 = planting->endHarvestDate(plantingId2);
+    auto dates1 = planting->dates(plantingId1);
+    auto dates2 = planting->dates(plantingId2);
+
+    auto pdate1 = dates1[1];
+    auto pdate2 = dates2[1];
+    auto edate1 = dates1[3];
+    auto edate2 = dates2[3];
     return pdate2 < edate1 && pdate1 < edate2;
 }
 
 bool Location::overlap(int plantingId, const QDate &plantingDate, const QDate &endHarvestDate) const
 {
-    auto pdate1 = planting->plantingDate(plantingId);
-    auto edate1 = planting->endHarvestDate(plantingId);
+    auto dates1 = planting->dates(plantingId);
+    auto pdate1 = dates1[1];
+    auto edate1 = dates1[3];
     return plantingDate < edate1 && pdate1 < endHarvestDate;
 }
 

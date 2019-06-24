@@ -102,7 +102,7 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
 
     int year = 0;
     int week = date.weekNumber(&year);
-    if (dateType == "week") {
+    if (dateType == QLatin1String("week")) {
         if (year == currentYear || !showIndicator)
             return QString::number(week);
         return QString("%1%2").arg(year < currentYear ? "<" : ">").arg(week);
@@ -130,9 +130,9 @@ QDate MDate::dateFromWeekString(const QString &s, int targetYear)
     const QString prefix = list[1];
     int week = list[2].toInt();
     int year;
-    if (prefix == "<")
+    if (prefix == QLatin1String("<"))
         year = currentYear - 1;
-    else if (prefix == ">")
+    else if (prefix == QLatin1String(">"))
         year = currentYear + 1;
     else
         year = currentYear;

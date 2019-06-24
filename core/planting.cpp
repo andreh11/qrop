@@ -21,6 +21,9 @@
 #include <QSqlRecord>
 #include <QVariantMap>
 #include <QtMath>
+#include <QSettings>
+#include <QStringRef>
+#include <QStringBuilder>
 
 #include "databaseutility.h"
 #include "family.h"
@@ -30,6 +33,7 @@
 #include "planting.h"
 #include "task.h"
 #include "variety.h"
+#include "helpers.h"
 
 Planting::Planting(QObject *parent)
     : DatabaseUtility(parent)
@@ -40,6 +44,7 @@ Planting::Planting(QObject *parent)
     , task(new Task(this))
     , mUnit(new DatabaseUtility(this))
     , variety(new Variety(this))
+    , mSettings(new QSettings(this))
 {
     m_table = "planting";
     m_viewTable = "planting_view";
@@ -567,6 +572,17 @@ int Planting::rank(int plantingId) const
     return map.value("planting_rank").toInt();
 }
 
+QVector<QDate> Planting::dates(int plantingId) const
+{
+    auto record = recordFromId("planting_view", plantingId);
+    if (record.isEmpty())
+        return {};
+    return { MDate::dateFromIsoString(record.value("sowing_date").toString()),
+             MDate::dateFromIsoString(record.value("planting_date").toString()),
+             MDate::dateFromIsoString(record.value("beg_harvest_date").toString()),
+             MDate::dateFromIsoString(record.value("end_harvest_date").toString()) };
+}
+
 QDate Planting::sowingDate(int plantingId) const
 {
     return dateFromField("planting_view", "sowing_date", plantingId);
@@ -615,16 +631,24 @@ bool Planting::isActive(int plantingId) const
     return task->isComplete(sowingTaskId) || task->isComplete(plantingTaskId);
 }
 
-int Planting::totalLength(int plantingId) const
+/** Convert length to bed numbers if needed. */
+qreal Planting::convertedLength(qreal length) const
+{
+    if (mSettings->value("useStandardBedLength").toBool())
+        return length / mSettings->value("standardBedLength", 1).toDouble();
+    return length;
+}
+
+qreal Planting::totalLength(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
         return {};
-    return map.value("length").toInt();
+    return map.value("length").toDouble();
 }
 
 /** Return the already assigned bed length for \a plantingId */
-int Planting::assignedLength(int plantingId) const
+qreal Planting::assignedLength(int plantingId) const
 {
     if (plantingId < 1)
         return 0;
@@ -637,10 +661,10 @@ int Planting::assignedLength(int plantingId) const
     if (!query.next())
         return 0;
 
-    return query.value(0).toInt();
+    return query.value(0).toDouble();
 }
 
-int Planting::lengthToAssign(int plantingId) const
+qreal Planting::lengthToAssign(int plantingId) const
 {
     auto map = mapFromId("planting_view", plantingId);
     if (map.isEmpty())
@@ -1042,4 +1066,78 @@ void Planting::csvExportPlan(int year, const QUrl &path) const
         ts << "\n";
     }
     f.close();
+}
+
+QString Planting::toolTip(int plantingId, int locationId) const
+{
+    auto record = recordFromId("planting_view", plantingId);
+    const QString crop = record.value("crop").toString();
+    const QString variety = record.value("variety").toString();
+    const QString bedUnit = mSettings->value("useStandardBedLength").toBool() ? tr("beds") : tr("m");
+    if (locationId > 0) {
+        return tr("%1, %2 (%L3/%L4 %5 assigned)")
+                .arg(crop)
+                .arg(variety)
+                .arg(convertedLength(assignedLength(plantingId)))
+                .arg(convertedLength(totalLength(plantingId)))
+                .arg(bedUnit);
+    }
+    return tr("%1, %2 (%L3/%L4 %5 to assign)")
+            .arg(crop)
+            .arg(variety)
+            .arg(convertedLength(lengthToAssign(plantingId)))
+            .arg(convertedLength(totalLength(plantingId)))
+            .arg(bedUnit);
+}
+
+QString Planting::growBarDescription(int plantingId, int year, bool showNames) const
+{
+    auto record = recordFromId("planting_view", plantingId);
+    const QDate plantingDate = QDate::fromString(record.value("planting_date").toString(), Qt::ISODate);
+
+    if (!showNames)
+        return MDate::formatDate(plantingDate, year, "", false);
+
+    const auto crop = record.value("crop").toString();
+    const auto variety = record.value("variety").toString();
+    const auto crop2 = QStringRef(&crop, 0, 2);
+    const QString rank = record.value("planting_rank").toString();
+
+    return MDate::formatDate(plantingDate, year, "", false) % QStringLiteral(" ") % crop2
+            % QStringLiteral(" ") % rank % QStringLiteral(" ") % variety;
+}
+
+QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showGreenhouseSow,
+                                  bool showFamilyColor) const
+{
+    auto record = recordFromId("planting_view", plantingId);
+    QDate sowingDate =
+            QDate::fromString(record.value(QStringLiteral("sowing_date")).toString(), Qt::ISODate);
+    QDate plantingDate =
+            QDate::fromString(record.value(QStringLiteral("planting_date")).toString(), Qt::ISODate);
+    QDate begHarvestDate =
+            QDate::fromString(record.value(QStringLiteral("beg_harvest_date")).toString(), Qt::ISODate);
+    QDate endHarvestDate =
+            QDate::fromString(record.value(QStringLiteral("end_harvest_date")).toString(), Qt::ISODate);
+
+    const auto seasonBegin = MDate::seasonBeginning(season, year);
+    const qreal graphStart =
+            Helpers::position(seasonBegin, showGreenhouseSow ? sowingDate : plantingDate);
+    const qreal growStart = Helpers::position(seasonBegin, plantingDate) - graphStart;
+    const qreal harvestStart = Helpers::position(seasonBegin, begHarvestDate) - graphStart;
+
+    const qreal greenhouseWidth = Helpers::widthBetween(graphStart, seasonBegin, plantingDate);
+    const qreal growWidth = Helpers::widthBetween(growStart + graphStart, seasonBegin, begHarvestDate);
+    const qreal harvestWidth =
+            Helpers::widthBetween(harvestStart + graphStart, seasonBegin, endHarvestDate);
+
+    return { { "graphStart", graphStart },
+             { "growStart", growStart },
+             { "harvestStart", harvestStart },
+             { "greenhouseWidth", greenhouseWidth },
+             { "growWidth", growWidth },
+             { "harvestWidth", harvestWidth },
+             { "sowingDate", MDate::formatDate(sowingDate, year, "", false) },
+             { "begHarvestDate", MDate::formatDate(begHarvestDate, year, "", false) },
+             { "color", showFamilyColor ? record.value("family_color") : record.value("crop_color") } };
 }

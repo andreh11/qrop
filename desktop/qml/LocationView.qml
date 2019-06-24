@@ -718,7 +718,7 @@ Item {
                                 id: conflictAlertButton
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: locationModel.hasSpaceConflict(styleData.index, season, year)
-                                conflictList: locationModel.spaceConflictingPlantings(styleData.index, season, year)
+                                conflictList: visible ? [] : locationModel.spaceConflictingPlantings(styleData.index, season, year)
                                 year: view.year
                                 locationId: locationModel.locationId(styleData.index)
                                 onPlantingModified: {
@@ -744,8 +744,13 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
 
                                 Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-                                ToolTip.visible: hovered
-                                ToolTip.text: locationModel.rotationConflictingDescription(styleData.index, season, year)
+                                ToolTip.visible: hovered && ToolTip.text
+                                ToolTip.text: ""
+
+                                onHoveredChanged: {
+                                    if (hovered && !ToolTip.text)
+                                        ToolTip.text = locationModel.rotationConflictingDescription(styleData.index, season, year)
+                                }
                             }
 
                             Timeline {

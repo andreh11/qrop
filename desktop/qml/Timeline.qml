@@ -103,22 +103,32 @@ Item {
         anchors.fill: parent
         Repeater {
             model: plantingIdList
+//            TimeGraphItem {
+//                x: 0
+//                y: 0
+//                plantingId: modelData
+//                year: control.year
+//                season: control.season
+//            }
 
             Timegraph {
                 plantingId: modelData
+                locationId: control.locationId
                 todayDate: control.todayDate
                 seasonBegin: control.seasonBegin
+                season: control.season
                 year: control.year
+                dragActive: control.dragActive
+
                 showGreenhouseSow: control.showGreenhouseSow
                 showNames: control.showNames
-                dragActive: control.dragActive
+                showOnlyActiveColor: control.showOnlyActiveColor
+                showFamilyColor: control.showFamilyColor
+
                 onSelected: control.plantingClicked(plantingId)
-                locationId: control.locationId
                 onPlantingMoved: control.plantingMoved();
                 onPlantingRemoved: control.plantingRemoved();
                 onDragFinished: control.dragFinished();
-                showOnlyActiveColor: control.showOnlyActiveColor
-                showFamilyColor: control.showFamilyColor
             }
         }
     }

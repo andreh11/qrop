@@ -14,8 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
 #include <utility>
+
+#include <QDebug>
+#include <QStringBuilder>
+
 #include "nametree.h"
 
 NameTree::NameTree(QString name, int level)
@@ -46,17 +49,17 @@ QString NameTree::fullName() const
         return m_name;
 
     QString name(m_name);
-    for (auto child : m_childrenName) {
-        name += child->fullName();
+    for (const auto child : m_childrenName) {
+        name = name % child->fullName();
         switch (m_level) {
         case 0:
-            name += " ";
+            name = name % QStringLiteral(" ");
             break;
         case 1:
-            name += "|";
+            name = name % QStringLiteral("|");
             break;
         default:
-            name += ",";
+            name = name % QStringLiteral(",");
         }
     }
     name.chop(1);

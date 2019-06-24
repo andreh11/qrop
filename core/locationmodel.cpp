@@ -159,7 +159,7 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
             QModelIndex child = index(row, 0, idx);
             if (!hasChildren(child)) {
                 int lid = locationId(child);
-                l -= location->addPlanting(plantingId, lid, length, dates.first, dates.second);
+                l -= location->addPlanting(plantingId, lid, l, dates.first, dates.second);
             }
         }
         dataChanged(index(0, 0, idx), index(row - 1, 0, idx));

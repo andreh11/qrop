@@ -54,18 +54,19 @@ void TaskModel::setSortOrder(const QString &order)
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     bool before = true;
-    if (m_sortColumn == "assigned_date") {
-        auto leftAssignedDate = fieldDate(left.row(), left.parent(), "assigned_date");
-        auto rightAssignedDate = fieldDate(right.row(), right.parent(), "assigned_date");
-        auto leftCompletedDate = fieldDate(left.row(), left.parent(), "completed_date");
-        auto rightCompletedDate = fieldDate(right.row(), right.parent(), "completed_date");
+    if (m_sortColumn == QStringLiteral("assigned_date")) {
+        auto leftDate = fieldDate(left.row(), left.parent(), "completed_date");
+        auto rightDate = fieldDate(right.row(), right.parent(), "completed_date");
 
-        auto leftDate = leftCompletedDate.isValid() ? leftCompletedDate : leftAssignedDate;
-        auto rightDate = rightCompletedDate.isValid() ? rightCompletedDate : rightAssignedDate;
+        if (!leftDate.isValid())
+            leftDate = fieldDate(left.row(), left.parent(), "assigned_date");
+        if (!rightDate.isValid())
+            rightDate = fieldDate(right.row(), right.parent(), "assigned_date");
+
         before = leftDate < rightDate;
-    } else if (m_sortColumn == "plantings") {
-        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
-        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
+    } else if (m_sortColumn == QStringLiteral("plantings")) {
+        int leftId = rowValue(left.row(), left.parent(), QStringLiteral("task_id")).toInt();
+        int rightId = rowValue(right.row(), right.parent(), QStringLiteral("task_id")).toInt();
         auto leftPlantingList = mTask->taskPlantings(leftId);
         auto rightPlantingList = mTask->taskPlantings(rightId);
 
@@ -73,15 +74,23 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
         int rightPlantingId = rightPlantingList.isEmpty() ? -1 : rightPlantingList.first();
 
         if (leftPlantingId > 0 && rightPlantingId > 0) {
-            QString leftCrop = mPlanting->cropName(leftPlantingId);
-            QString rightCrop = mPlanting->cropName(rightPlantingId);
-            QString leftVariety = mPlanting->varietyName(leftPlantingId);
-            QString rightVariety = mPlanting->varietyName(rightPlantingId);
+            auto leftRecord = mPlanting->recordFromId(QStringLiteral("planting_view"), leftPlantingId);
+            auto rightRecord =
+                    mPlanting->recordFromId(QStringLiteral("planting_view"), rightPlantingId);
 
-            before = (leftCrop < rightCrop)
-                    || ((leftCrop == rightCrop) && (leftVariety < rightVariety));
+            QString leftCrop = leftRecord.value(QStringLiteral("crop")).toString();
+            QString rightCrop = rightRecord.value(QStringLiteral("crop")).toString();
+
+            int comp = leftCrop.compare(rightCrop);
+            if (comp == -1)
+                before = true;
+            else if (comp == 1)
+                before = false;
+            else
+                before = (leftRecord.value(QStringLiteral("variety"))
+                          < rightRecord.value(QStringLiteral("variety")));
         }
-    } else if (m_sortColumn == "locations") {
+    } else if (m_sortColumn == QStringLiteral("locations")) {
         int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
         int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
         auto leftLocationList = mTask->taskLocations(leftId);
@@ -116,7 +125,7 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
     auto rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
 
     // Keep same sorting for task types.
-    if (m_sortOrder == "ascending")
+    if (QSortFilterProxyModel::sortOrder() == Qt::AscendingOrder)
         return (leftType < rightType) || (leftType == rightType && before);
     return (leftType > rightType) || (leftType == rightType && before);
 }

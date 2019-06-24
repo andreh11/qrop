@@ -35,21 +35,29 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
 
 bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    if (m_sortColumn == "variety") {
-        auto leftCrop = rowValue(left.row(), left.parent(), "crop").toString();
-        auto rightCrop = rowValue(right.row(), right.parent(), "crop").toString();
+    if (m_sortColumn == QStringLiteral("variety")) {
+        auto leftCrop = rowValue(left.row(), left.parent(), QStringLiteral("crop")).toString();
+        auto rightCrop = rowValue(right.row(), right.parent(), QStringLiteral("crop")).toString();
 
-        auto leftVariety = rowValue(left.row(), left.parent(), "variety").toString();
-        auto rightVariety = rowValue(right.row(), right.parent(), "variety").toString();
+        int cmp = leftCrop.localeAwareCompare(rightCrop);
+        if (cmp == -1)
+            return true;
+        if (cmp == 1)
+            return false;
 
-        return (leftCrop < rightCrop) || ((leftCrop == rightCrop) && (leftVariety < rightVariety));
+        auto leftVariety = rowValue(left.row(), left.parent(), QStringLiteral("variety")).toString();
+        auto rightVariety =
+                rowValue(right.row(), right.parent(), QStringLiteral("variety")).toString();
+
+        return leftVariety.localeAwareCompare(rightVariety) == -1;
     }
 
-    if (m_sortColumn == "locations") {
-        int leftId = rowValue(left.row(), left.parent(), "planting_id").toInt();
-        int rightId = rowValue(right.row(), right.parent(), "planting_id").toInt();
+    if (m_sortColumn == QStringLiteral("locations")) {
+        int leftId = rowValue(left.row(), left.parent(), QStringLiteral("planting_id")).toInt();
+        int rightId = rowValue(right.row(), right.parent(), QStringLiteral("planting_id")).toInt();
         return location->fullName(location->locations(leftId))
-                < location->fullName(location->locations(rightId));
+                       .localeAwareCompare(location->fullName(location->locations(rightId)))
+                == -1;
     }
 
     return SortFilterProxyModel::lessThan(left, right);

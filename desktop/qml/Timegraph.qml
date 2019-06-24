@@ -17,24 +17,15 @@ Item {
     property bool showOnlyActiveColor: false
     property bool dragActive: false
     property bool showFamilyColor: false
+    property int season
     property int year
     property date seasonBegin
-    property color cropColor: showFamilyColor ? Planting.familyColor(plantingId) : Planting.cropColor(plantingId)
-    property date seedingDate: Planting.sowingDate(plantingId)
-    property date plantingDate: Planting.plantingDate(plantingId)
-    property date beginHarvestDate: Planting.begHarvestDate(plantingId)
-    property date endHarvestDate: Planting.endHarvestDate(plantingId)
-    property string cropName: Planting.cropName(plantingId)
-    property string varietyName: Planting.varietyName(plantingId)
-    property int rank: Planting.rank(plantingId)
-    property real totalLength: Planting.totalLength(plantingId) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
-    property real assignedLength: (locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
-    property real lengthLeft: Planting.lengthToAssign(plantingId) / (mainSettings.useStandardBedLength ? mainSettings.standardBedLength : 1)
-    readonly property string bedUnit: mainSettings.useStandardBedLength ? qsTr("beds") : qsTr("m")
-    //    readonly property bool current: seedingDate <= todayDate && todayDate <= endHarvestDate
+
+    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showFamilyColor)
+    property color cropColor: drawMap["color"]
+
     readonly property bool current: Planting.isActive(plantingId)
     readonly property alias hovered: dragArea.containsMouse
-    readonly property bool displaySow: showGreenhouseSow && plantingDate > seasonBegin
 
     signal selected(int id)
     signal plantingMoved()
@@ -53,16 +44,17 @@ Item {
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
 
-    x: Helpers.position(seasonBegin, displaySow ? seedingDate : plantingDate)
+//    anchors {
+//        left: parent.left
+////        leftMargin: Helpers.position(seasonBegin, showGreenhouseSow ? seedingDate : plantingDate)
+//        leftMargin: positions[0]
+//    }
+    x: drawMap["graphStart"]
     z: dragArea.containsMouse ? 4 : 1
 
-    ToolTip.text: locationId > 0
-                  ? qsTr("%1, %2 (%L3/%L4 %5 assigned)").arg(cropName)
-                    .arg(varietyName).arg(assignedLength).arg(totalLength).arg(bedUnit)
-                  : qsTr("%1, %2 (%L3/%L4 %5 to assign)").arg(cropName)
-    .arg(varietyName).arg(lengthLeft).arg(totalLength).arg(bedUnit)
     ToolTip.visible: dragArea.containsMouse
     ToolTip.delay: 200
+    ToolTip.onVisibleChanged: ToolTip.text = Planting.toolTip(plantingId, locationId)
 
     Item {
         id: draggable
@@ -87,7 +79,6 @@ Item {
                 }
             }
         }
-
     }
 
     MouseArea {
@@ -100,11 +91,15 @@ Item {
         onPressed: parent.grabToImage(function(result) {
             draggable.Drag.imageSource = result.url
         })
+        onHoveredChanged: {
+            if (hovered)
+                control.ToolTip.text = Planting.toolTip(plantingId, locationId)
+        }
     }
 
     Label {
         id: seedingLabel
-        text: MDate.formatDate(seedingDate, year, null, false)
+        text: drawMap["sowingDate"]
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         font.pixelSize: Units.fontSizeBodyAndButton
@@ -118,7 +113,8 @@ Item {
     Rectangle {
         id: seedingCircle
         x: -width/4
-        visible: showGreenhouseSow && seedingDate < plantingDate && x < growBar.x
+        visible: showGreenhouseSow && drawMap["greenhouseWidth"]
+//        visible: showGreenhouseSow && seedingDate < plantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
         height: width
@@ -130,9 +126,9 @@ Item {
 
     Rectangle {
         id: seedingLine
-        x: seedingCircle.x
-        width: Helpers.widthBetween(x+control.x, seasonBegin, plantingDate)
-        visible: showGreenhouseSow && width > 0 && seedingDate < plantingDate
+        x: 0
+        visible: seedingCircle.visible
+        width: drawMap["greenhouseWidth"]
         height: 1
         color: current ? Material.color(Material.Green, Material.Shade200)
                        : Material.color(Material.Grey, control.hovered ? Material.Shade500
@@ -142,8 +138,10 @@ Item {
 
     Rectangle {
         id: growBar
-        x: Helpers.widthBetween(control.x, seasonBegin, plantingDate)
-        width: Helpers.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
+//        x: Helpers.widthBetween(control.x, seasonBegin, plantingDate)
+        x: drawMap["growStart"]
+//        width: Helpers.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
+        width: drawMap["growWidth"]
         visible: width > 0
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
@@ -162,12 +160,7 @@ Item {
         }
 
         Label {
-            text: MDate.formatDate(plantingDate, year, null, false)
-                  + (showNames
-                     ? " %1%2, %3".arg(showNames ? cropName.slice(0,2) : "")
-                       .arg(mainSettings.showPlantingSuccessionNumber ? (" " + rank) : "")
-                       .arg(varietyName)
-                     : "")
+            text: Planting.growBarDescription(plantingId, year, showNames)
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
@@ -180,8 +173,10 @@ Item {
 
     Rectangle {
         id: harvestBar
-        x: Helpers.widthBetween(control.x, seasonBegin, beginHarvestDate)
-        width: Helpers.widthBetween(x+control.x, seasonBegin, endHarvestDate)
+//        x: Helpers.widthBetween(control.x, seasonBegin, beginHarvestDate)
+        x: drawMap["harvestStart"]
+//        width: Helpers.widthBetween(x+control.x, seasonBegin, endHarvestDate)
+        width: drawMap["harvestWidth"]
         visible: width > 0
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
@@ -200,7 +195,7 @@ Item {
         }
 
         Label {
-            text: MDate.formatDate(beginHarvestDate, year, null, false)
+            text: drawMap["begHarvestDate"]
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Changed
+  - Improve planting and task views performance.
+
+### Fixed
+  - Fix planting length when assigning to multiple locations.
+
 ## 0.3 - 2019-06-15 
 
 ### Added

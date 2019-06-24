@@ -40,7 +40,7 @@ Pane {
         anchors.centerIn: parent
         width: parent.width * 0.9
         height: parent.height * 0.9
-        transitions: null
+//        transitions: null
         Repeater {
             model: photoModel
             Loader {
