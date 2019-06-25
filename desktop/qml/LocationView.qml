@@ -717,8 +717,10 @@ Item {
                             ConflictAlertButton {
                                 id: conflictAlertButton
                                 anchors.verticalCenter: parent.verticalCenter
-                                visible: locationModel.hasSpaceConflict(styleData.index, season, year)
-                                conflictList: visible ? [] : locationModel.spaceConflictingPlantings(styleData.index, season, year)
+                                visible: false
+                                conflictList: []
+//                                visible: locationModel.hasSpaceConflict(styleData.index, season, year)
+//                                conflictList: visible ? [] : locationModel.spaceConflictingPlantings(styleData.index, season, year)
                                 year: view.year
                                 locationId: locationModel.locationId(styleData.index)
                                 onPlantingModified: {
@@ -735,7 +737,8 @@ Item {
 
                             ToolButton {
                                 id: rotationAlertLabel
-                                visible: locationModel.hasRotationConflict(styleData.index, season, year)
+                                visible: false
+//                                visible: locationModel.hasRotationConflict(styleData.index, season, year)
                                 opacity: visible ? 1 : 0
                                 text: "\ue160"
                                 font.pixelSize: Units.fontSizeTitle

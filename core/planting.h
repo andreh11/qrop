@@ -92,10 +92,11 @@ public:
     Q_INVOKABLE void csvExportPlan(int year, const QUrl &path) const;
 
     Q_INVOKABLE QString toolTip(int plantingId, int locationId) const;
-    Q_INVOKABLE QString growBarDescription(int plantingId, int year, bool showNames) const;
+    QString growBarDescription(const QSqlRecord &record, int year, bool showNames) const;
+    QString growBarDescription(int plantingId, int year, bool showNames) const;
     Q_INVOKABLE QVariantMap drawInfoMap(int plantingId, int season, int year,
-                                        bool showGreenhouseSow = true,
-                                        bool showFamilyColor = false) const;
+                                        bool showGreenhouseSow = true, bool showFamilyColor = false,
+                                        bool showNames = false) const;
 
 private:
     DatabaseUtility *crop;

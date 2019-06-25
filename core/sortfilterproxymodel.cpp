@@ -144,23 +144,23 @@ void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
 
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
-    QElapsedTimer t;
-    t.start();
+    //    QElapsedTimer t;
+    //    t.start();
     m_sortColumn = columnName;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug() << "[setSortColumn]" << t.elapsed() << "ms";
+    //    qDebug() << "[setSortColumn]" << t.elapsed() << "ms";
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
-    QElapsedTimer t;
-    t.start();
+    //    QElapsedTimer t;
+    //    t.start();
     m_sortOrder = order;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug() << "[setSortOrder]" << t.elapsed() << "ms";
+    //    qDebug() << "[setSortOrder]" << t.elapsed() << "ms";
     sortOrderChanged();
 }
 

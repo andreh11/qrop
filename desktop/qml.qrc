@@ -106,5 +106,6 @@
         <file>qml/HorizontalBarView.qml</file>
         <file>qml/EditableLabel.qml</file>
         <file>qml/SimpleChip.qml</file>
+        <file>qml/LocationFormBox.qml</file>
     </qresource>
 </RCC>

@@ -16,8 +16,8 @@ private slots:
     void dateFromDateString();
     void firstMondayOfYear_data();
     void firstMondayOfYear();
-    void weekDates_data();
-    void weekDates();
+    //    void weekDates_data();
+    //    void weekDates();
     void formatDate();
     void season();
     void seasonYear();

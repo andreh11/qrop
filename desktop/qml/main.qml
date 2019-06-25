@@ -154,23 +154,30 @@ ApplicationWindow {
         }
     }
 
+
+    BusyIndicator {
+        visible: running
+        running: plantingsPage.status === Loader.Loading
+        anchors.centerIn: parent
+    }
+
     PlantingsPage {
         id: plantingsPage
     }
 
-    CalendarPage {
+    Loader {
         id: calendarPage
     }
 
-    LocationsPage {
+    Loader {
         id: locationsPage
     }
 
-    HarvestsPage {
+    Loader {
         id: harvestsPage
     }
 
-    ChartsPage {
+    Loader {
         id: chartsPage
     }
 
@@ -178,13 +185,12 @@ ApplicationWindow {
 //        id: notesPage
 //    }
 
-    SeedsPage {
+    Loader {
         id: seedListPage
     }
 
-    SettingsPage {
+    Loader {
         id: settingsPage
-        paneWidth: Math.min(600, stackView.width * 0.8)
     }
 
     Settings {
@@ -607,6 +613,16 @@ ApplicationWindow {
         z: 3
     }
 
+    Component {
+        id: busyPage
+        Page {
+            BusyIndicator {
+                anchors.centerIn: parent
+                running: true
+            }
+        }
+    }
+
     StackView {
         id: stackView
         focus: true
@@ -629,26 +645,41 @@ ApplicationWindow {
                 plantingsPage.refresh();
                 break;
             case 1:
-                stackView.replace(calendarPage)
-                calendarPage.refresh();
+                if (calendarPage.status === Loader.Null)
+                    calendarPage.source = "CalendarPage.qml";
+                stackView.replace(calendarPage);
+                calendarPage.item.refresh();
                 break
             case 2:
+                if (locationsPage.status === Loader.Null) {
+                    stackView.replace(busyPage);
+                    locationsPage.source = "LocationsPage.qml";
+                }
                 stackView.replace(locationsPage)
-                locationsPage.refresh();
+                locationsPage.item.refresh();
                 break
             case 3:
+                if (harvestsPage.status === Loader.Null)
+                    harvestsPage.source = "HarvestsPage.qml";
                 stackView.replace(harvestsPage)
-                harvestsPage.refresh();
+                harvestsPage.item.refresh();
                 break
             case 4:
+                if (seedListPage.status === Loader.Null)
+                    seedListPage.source = "SeedsPage.qml";
                 stackView.replace(seedListPage)
-                seedListPage.refresh();
+                seedListPage.item.refresh();
                 break
             case 5:
+                if (chartsPage.status === Loader.Null)
+                    chartsPage.source = "ChartsPage.qml";
                 stackView.replace(chartsPage)
-                chartsPage.refresh();
+                chartsPage.item.refresh();
                 break
             case 6:
+                if (settingsPage.status === Loader.Null)
+                    settingsPage.setSource("SettingsPage.qml",
+                                           { "paneWidth": Math.min(600, stackView.width * 0.8) })
                 stackView.replace(settingsPage)
                 break
             }

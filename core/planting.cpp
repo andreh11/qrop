@@ -1090,9 +1090,11 @@ QString Planting::toolTip(int plantingId, int locationId) const
             .arg(bedUnit);
 }
 
-QString Planting::growBarDescription(int plantingId, int year, bool showNames) const
+QString Planting::growBarDescription(const QSqlRecord &record, int year, bool showNames) const
 {
-    auto record = recordFromId("planting_view", plantingId);
+    if (record.isEmpty())
+        return {};
+
     const QDate plantingDate = QDate::fromString(record.value("planting_date").toString(), Qt::ISODate);
 
     if (!showNames)
@@ -1107,8 +1109,13 @@ QString Planting::growBarDescription(int plantingId, int year, bool showNames) c
             % QStringLiteral(" ") % rank % QStringLiteral(" ") % variety;
 }
 
+QString Planting::growBarDescription(int plantingId, int year, bool showNames) const
+{
+    return growBarDescription(recordFromId("planting_view", plantingId), year, showNames);
+}
+
 QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showGreenhouseSow,
-                                  bool showFamilyColor) const
+                                  bool showFamilyColor, bool showNames) const
 {
     auto record = recordFromId("planting_view", plantingId);
     QDate sowingDate =
@@ -1139,5 +1146,6 @@ QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool sho
              { "harvestWidth", harvestWidth },
              { "sowingDate", MDate::formatDate(sowingDate, year, "", false) },
              { "begHarvestDate", MDate::formatDate(begHarvestDate, year, "", false) },
-             { "color", showFamilyColor ? record.value("family_color") : record.value("crop_color") } };
+             { "color", showFamilyColor ? record.value("family_color") : record.value("crop_color") },
+             { "growBarDescription", growBarDescription(record, year, showNames) } };
 }

@@ -21,7 +21,7 @@ Item {
     property int year
     property date seasonBegin
 
-    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showFamilyColor)
+    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showFamilyColor, showNames)
     property color cropColor: drawMap["color"]
 
     readonly property bool current: Planting.isActive(plantingId)
@@ -160,7 +160,7 @@ Item {
         }
 
         Label {
-            text: Planting.growBarDescription(plantingId, year, showNames)
+            text: drawMap["growBarDescription"]
             font.family: "Roboto Condensed"
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
