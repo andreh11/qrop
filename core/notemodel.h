@@ -13,6 +13,7 @@ class CORESHARED_EXPORT NoteModel : public SortFilterProxyModel
 
 public:
     NoteModel(QObject *parent = nullptr, const QString &tableName = "note_view");
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
     int plantingId() const;
     void setPlantingId(int plantingId);

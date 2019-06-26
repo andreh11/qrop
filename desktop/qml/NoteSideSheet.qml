@@ -58,20 +58,42 @@ Frame {
 
     Component {
         id: sectionHeading
+
         Rectangle {
             width: parent.width
-            height: Units.rowHeight
-            //            color: Material.color(Material.Green, Material.Shade200)
+            height: Units.rowHeight + Units.smallSpacing
+//            color: Material.color(Material.Green, Material.Shade200)
             color: Material.color(Material.Grey, Material.Shade100)
-            radius: 4
 
-            PlantingLabel {
-                year: noteSideSheet.year
+            Row {
+                id: summaryRow
                 anchors.verticalCenter: parent.verticalCenter
-                plantingId: section
-                showRank: true
-            }
+                height: Units.rowHeight
+                spacing: Units.smallSpacing
+                leftPadding: Units.formSpacing
+                rightPadding: leftPadding
 
+                TextCheckBox {
+                    id: checkBox
+                    width: parent.height * 0.8
+                    text: Planting.cropName(section).slice(0,2)
+                    rank: Planting.rank(section)
+                    font.pixelSize: 26
+                    color: Planting.cropColor(section)
+                    round: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    hoverEnabled: false
+                    checkable: false
+                    showRank: true
+                }
+
+                PlantingLabel {
+                    year: noteSideSheet.year
+                    anchors.verticalCenter: parent.verticalCenter
+                    plantingId: section
+                    showRank: false
+                }
+            }
         }
     }
 
@@ -115,8 +137,8 @@ Frame {
         }
 
         ColumnLayout {
-            Layout.leftMargin: Units.mediumSpacing
-            Layout.rightMargin: Layout.leftMargin
+//            Layout.leftMargin: Units.mediumSpacing
+//            Layout.rightMargin: Layout.leftMargin
             
             ListView {
                 id: noteView
@@ -129,6 +151,7 @@ Frame {
 
                 clip: true
                 spacing: Units.mediumSpacing
+                boundsBehavior: Flickable.StopAtBounds
                 model: NoteModel {
                     id: noteModel
                 }
@@ -170,7 +193,7 @@ Frame {
                         anchors {
                             right: parent.right
                             top: parent.top
-                            leftMargin: -padding
+                            rightMargin: -padding + Units.formSpacing
                             topMargin: -padding
                         }
 
@@ -184,9 +207,9 @@ Frame {
                         font.family: "Material Icons"
                         font.pixelSize: Units.fontSizeHeadline
                         anchors {
-                            right: parent.right
+                            right: showPhotoButton.left
                             top: parent.top
-                            rightMargin: -padding + showPhotoButton.width
+                            rightMargin: -padding
                             topMargin: -padding
                         }
                         Layout.alignment: Qt.AlignTop
@@ -203,34 +226,30 @@ Frame {
                         width: parent.width
                         spacing: Units.smallSpacing
 
-                        Image {
-                            visible: false
-                            Layout.preferredWidth: 40
-                            Layout.preferredHeight: Layout.preferredWidth
-                            source: "/icon.png"
-                            fillMode: Image.PreserveAspectFit
-
-                            Layout.alignment: Qt.AlignTop
-                            Layout.leftMargin: Units.smallSpacing
-                            Layout.topMargin: Units.smallSpacing
-                        }
-                        
                         ColumnLayout {
                             Layout.fillWidth: true
                             Layout.minimumHeight: Units.rowHeight * 1.2
                             Layout.topMargin: Units.smallSpacing
+                            Layout.leftMargin: Units.formSpacing
+                            Layout.rightMargin: Units.formSpacing
 
                             Label {
                                 Layout.fillWidth: true
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
                                 text: "%1 − %2".arg(MDate.formatDate(model.date, 2019))
                                                .arg(MDate.formatDate(model.date, 2019, "date"))
+                                color: Units.colorMediumEmphasis
                             }
-                            
+
                             Text {
                                 Layout.fillWidth: true
                                 text: model.content
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
                                 elide: Text.ElideRight
                                 wrapMode: Text.WordWrap
+                                color: Units.colorHighEmphasis
                             }
                         }
                     }
