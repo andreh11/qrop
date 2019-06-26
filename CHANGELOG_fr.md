@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+  - *Plan de culture* − Amélioration de l'apparence des panneaux latéraux.
   - Amélioration de la performance des vues séries et tâches.
 
 ### Corrections

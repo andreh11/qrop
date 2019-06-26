@@ -100,7 +100,6 @@ ApplicationWindow {
             currentDatabaseFile = secondDatabaseFile;
         }
         locationsPage.reload();
-        noteSideSheet.refresh();
         stackView.currentItem.refresh();
     }
 
@@ -560,58 +559,6 @@ ApplicationWindow {
         }
     }
 
-    NoteSideSheet {
-        id: noteSideSheet
-        year: plantingsPage.year
-        height: window.height
-        width: Math.min(300, window.width*0.3)
-        plantingId: plantingsPage.checks ? plantingsPage.selectedIdList()[0] : -1
-        onClosed: photoPane.visible = false
-        onShowPhoto: {
-            photoPane.photoIdList = Note.photoList(noteId)
-            photoPane.visible = true
-        }
-        onPlantingIdChanged: console.log("new planting id:", plantingId)
-        onHidePhoto: photoPane.visible = false
-    }
-
-    RoundButton {
-        id: noteButton
-        z:3
-        visible: navigationIndex === 0
-        Material.background: "white"
-        width: 72
-        height: width
-        anchors.right: parent.right
-        anchors.rightMargin: visible ? -width/2 : 0
-        anchors.verticalCenter: parent.verticalCenter
-        onClicked: {
-            if (!noteSideSheet.opened)
-                noteSideSheet.open();
-        }
-
-        contentItem: Text {
-            text: "\ue24d"
-            font.family: "Material Icons"
-            font.pixelSize: 24
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
-
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Show the note pane")
-        ToolTip.delay: Units.shortDuration
-    }
-
-    PhotoPane {
-        id: photoPane
-        anchors.fill: parent
-        anchors.leftMargin: largeDisplay ? drawer.width : undefined
-        anchors.rightMargin: noteSideSheet.opened ? noteSideSheet.width : 0
-        visible: false
-        z: 3
-    }
 
     Component {
         id: busyPage
@@ -628,7 +575,7 @@ ApplicationWindow {
         focus: true
         anchors.fill: parent
         anchors.leftMargin: largeDisplay ? drawer.width : undefined
-        anchors.rightMargin: noteSideSheet.opened ? noteSideSheet.width : 0
+        anchors.rightMargin: 0
         topPadding: 20
         leftPadding: 20
         rightPadding: 20

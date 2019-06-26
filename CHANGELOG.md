@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Changed
+  - *Planting map* − Improve side sheets look.
   - Improve planting and task views performance.
 
 ### Fixed

@@ -147,7 +147,7 @@ ListView {
         Rectangle {
             id: highlightRectangle
             anchors.fill: parent
-            visible: rowMouseArea.containsMouse || inTemplate
+            visible: inTemplate
             z:3;
             opacity: 0.1;
             color: Material.primary
@@ -160,7 +160,7 @@ ListView {
             hoverEnabled: true
             preventStealing: true
             propagateComposedEvents: true
-            cursorShape: Qt.PointingHandCursor
+//            cursorShape: Qt.PointingHandCursor
 
             onClicked: editTask()
 
@@ -175,9 +175,9 @@ ListView {
                     top: parent.top
                     bottom: parent.bottom
                     right: parent.right
-                    topMargin: delegate.border.width
-                    bottomMargin: delegate.border.width
-                    rightMargin: delegate.border.width
+//                    topMargin: delegate.border.width
+//                    bottomMargin: delegate.border.width
+                    rightMargin: -backwardDelayButton.padding
                 }
 
                 Row {
@@ -241,12 +241,11 @@ ListView {
                 TaskCompleteButton {
                     id: completeButton
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                    Layout.leftMargin: -padding
                     width: height
                     overdue: model.overdue
                     done: model.done
                     due: model.due
-                    //                    Layout.leftMargin: -completeButton.padding/2
-                    //                    Layout.rightMargin: Layout.leftMargin
 
                     ToolTip.text:
                         done ? qsTr("Done on %1. Click to undo."

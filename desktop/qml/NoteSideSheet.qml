@@ -23,13 +23,10 @@ import QtQuick.Window 2.10
 
 import io.qrop.components 1.0
 
-Drawer {
+Frame {
     id: noteSideSheet
-    edge: Qt.RightEdge
-    modal: false
     Material.elevation: 0
-    closePolicy: Popup.NoAutoClose
-    dragMargin: 0
+    padding: 0
     
     property int selectedIndex
     property int year
@@ -54,6 +51,11 @@ Drawer {
         }
     }
 
+    background: Rectangle {
+        color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
+        width: 1
+    }
+
     Component {
         id: sectionHeading
         Rectangle {
@@ -73,32 +75,48 @@ Drawer {
         }
     }
 
+    RowLayout {
+        id: header
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            leftMargin: 16
+            rightMargin: 16
+        }
+
+        Label {
+            text: qsTr("Notes")
+            font.family: "Roboto Regular"
+            font.pixelSize: Units.fontSizeTitle
+            Layout.fillWidth: true
+            color: Units.colorHighEmphasis
+        }
+
+        ToolButton {
+            text: "\ue14c"
+            font.family: "Material Icons"
+            font.pixelSize: Units.fontSizeHeadline
+            onClicked: noteSideSheet.visible = false
+            Layout.rightMargin: -padding
+            Material.foreground: Units.closeButtonColor
+        }
+    }
+
     ColumnLayout {
-        anchors.fill: parent
         spacing: Units.smallSpacing
-        
+        anchors {
+            top: header.bottom
+            topMargin: Units.smallSpacing
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            margins: 0
+        }
+
         ColumnLayout {
             Layout.leftMargin: Units.mediumSpacing
             Layout.rightMargin: Layout.leftMargin
-            
-            RowLayout {
-                Layout.fillWidth: true
-                
-                Label {
-                    text: qsTr("Notes")
-                    font.family: "Roboto Regular"
-                    font.bold: true
-                    font.pixelSize: Units.fontSizeSubheading
-                    Layout.fillWidth: true
-                }
-                
-                ToolButton {
-                    text: "\ue14c"
-                    font.family: "Material Icons"
-                    font.pixelSize: Units.fontSizeHeadline
-                    onClicked: noteSideSheet.close()
-                }
-            }
             
             ListView {
                 id: noteView

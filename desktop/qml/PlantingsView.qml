@@ -332,7 +332,7 @@ ListView {
         id: verticalScrollBar
         visible: showVerticalScrollBar
         active: horizontalScrollBar.active
-        //        policy: ScrollBar.AlwaysOn
+//        policy: ScrollBar.AlwaysOn
     }
 
     ScrollBar.horizontal: ScrollBar {
@@ -340,7 +340,7 @@ ListView {
         visible: showHorizontalScrollBar
         active: verticalScrollBar.active
         orientation: Qt.Horizontal
-        //        policy: ScrollBar.AlwaysOn
+//        policy: ScrollBar.AlwaysOn
     }
 
     headerPositioning: ListView.OverlayHeader

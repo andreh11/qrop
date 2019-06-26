@@ -38,6 +38,9 @@ QtObject {
     readonly property int mediumSpacing: 20
     readonly property int largeSpacing: 24
 
+    readonly property int desktopSideSheetWidth: 320
+    readonly property color closeButtonColor: Qt.rgba(0.459, 0.459, 0.459)
+
     readonly property int shortDuration: 100
     readonly property int mediumDuration: 200
     readonly property int longDuration: 400

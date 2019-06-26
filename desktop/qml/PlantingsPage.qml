@@ -209,6 +209,8 @@ Page {
     }
 
 
+
+
     Snackbar {
         id: addPlantingSnackbar
 
@@ -376,16 +378,47 @@ Page {
                         checked: taskSideSheet.visible
 
                         onToggled: {
-                            if (checked)
+                            if (checked) {
+                                if (noteSideSheet.visible)
+                                    noteSideSheet.visible = false;
+                                if (chartButton.checked)
+                                    chartButton.checked = false;
                                 taskSideSheet.visible = true
-                            else
+                            } else {
                                 taskSideSheet.visible = false
+                            }
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide planting's tasks")
                                               : qsTr("Show planting's tasks")
+                    }
+
+                    IconButton {
+                        id: noteButton
+
+                        text: "\ue24d"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: noteSideSheet.visible
+
+                        onToggled: {
+                            if (checked) {
+                                if (taskSideSheet.visible)
+                                    taskSideSheet.visible = false;
+                                if (chartButton.checked)
+                                    chartButton.checked = false;
+                                noteSideSheet.visible = true;
+                            } else {
+                                noteSideSheet.visible = false;
+                            }
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Show the note pane")
+                        ToolTip.delay: Units.shortDuration
                     }
 
                     IconButton {
@@ -399,6 +432,15 @@ Page {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide chart")
                                               : qsTr("Show chart")
+
+                        onToggled: {
+                            if (!checked)
+                                return;
+                            if (taskSideSheet.visible)
+                                taskSideSheet.visible = false;
+                            if (noteSideSheet.visible)
+                                noteSideSheet.visible = false;
+                        }
                     }
 
                     Button {
@@ -709,9 +751,15 @@ Page {
                 anchors {
                     top: topDivider.bottom
                     left: parent.left
-                    right: taskSideSheet.left
                     bottom: chartPane.top
-//                    bottom: parent.bottom
+                    right: {
+                        if (taskSideSheet.visible)
+                           taskSideSheet.left
+                        else if (noteSideSheet.visible)
+                            noteSideSheet.left
+                        else
+                            parent.right
+                    }
                 }
                 onDoubleClicked: plantingDialog.editPlantings([plantingId])
             }
@@ -733,13 +781,15 @@ Page {
                 anchors {
 //                    top: topDivider.bottom
                     left: parent.left
-                    right: taskSideSheet.left
+                    right: parent.right
                     bottom: parent.bottom
                 }
             }
 
             PlantingTaskSideSheet {
                 id: taskSideSheet
+                y: plantingsView.y
+                height: plantingsView.height
                 anchors {
                     right: parent.right
                     top: topDivider.bottom
@@ -747,13 +797,46 @@ Page {
                 }
                 z: 0
                 visible: false
-                height: parent.height
+                width: Math.min(Units.desktopSideSheetWidth, window.width*0.3)
                 year: MDate.isoYear(todayDate)
                 week: MDate.isoWeek(todayDate)
                 plantingIdList: selectedIdList()
 
-                Material.elevation: 8
+                Material.elevation: 0
                 onTaskDateModified: plantingsView.refresh();
+            }
+
+            NoteSideSheet {
+                id: noteSideSheet
+                anchors {
+                    right: parent.right
+                    top: topDivider.bottom
+                    bottom: parent.bottom
+                }
+                visible: false
+                year: page.year
+                y: plantingsView.y
+                height: plantingsView.height
+                width: visible ? Math.min(Units.desktopSideSheetWidth, window.width*0.3) : 0
+                plantingId: page.checks ? page.selectedIdList()[0] : -1
+//                onClosed: photoPane.visible = false
+                onShowPhoto: {
+                    photoPane.photoIdList = Note.photoList(noteId)
+                    photoPane.visible = true
+                }
+                onPlantingIdChanged: console.log("new planting id:", plantingId)
+                onHidePhoto: photoPane.visible = false
+            }
+
+            PhotoPane {
+                id: photoPane
+                visible: false
+                anchors {
+                    top: topDivider.bottom
+                    left: parent.left
+                    right: noteSideSheet.left
+                    bottom: parent.bottom
+                }
             }
         }
     }

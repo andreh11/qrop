@@ -8,7 +8,7 @@ import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
 
-Pane {
+Frame {
     id: taskSideSheet
 
     property alias year: plantingTaskView.year
@@ -21,21 +21,19 @@ Pane {
         plantingTaskView.refresh();
         plantingTaskTemplateView.refresh();
     }
+
+    Material.elevation: 0
     padding: 0
 
-    width: visible ? 320 : 0
-//    edge: Qt.RightEdge
-//    modal: false
-    Material.elevation: 0
-//    closePolicy: Popup.NoAutoClose
-//    dragMargin: 0
+    background: Rectangle {
+        color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
+        width: 1
+    }
 
     RowLayout {
         id: header
-
         anchors {
             top: parent.top
-            topMargin: 16
             left: parent.left
             right: parent.right
             leftMargin: 16
@@ -47,6 +45,7 @@ Pane {
             font.family: "Roboto Regular"
             font.pixelSize: Units.fontSizeTitle
             Layout.fillWidth: true
+            color: Units.colorHighEmphasis
         }
 
         ToolButton {
@@ -55,12 +54,14 @@ Pane {
             font.pixelSize: Units.fontSizeHeadline
             onClicked: taskSideSheet.visible = false;
             Layout.rightMargin: -padding
+            Material.foreground: Qt.rgba(0.459, 0.459, 0.459)
         }
     }
 
     BlankLabel {
         visible: plantingIdList.length <= 0
         anchors.centerIn: parent
+        width: parent.width - Units.formSpacing * 2
         primaryText: qsTr("No planting selected")
         secondaryText: qsTr("Please select at least one planting")
     }
@@ -68,7 +69,8 @@ Pane {
     ColumnLayout {
         visible: plantingIdList.length > 0
         anchors {
-            top: header.bottom
+            top: parent.top
+            topMargin: 64
             left: parent.left
             right: parent.right
             bottom: parent.bottom

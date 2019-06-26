@@ -25,6 +25,8 @@ ListView {
         templateView.currentIndex = -1;
     }
 
+    clip: true
+    boundsBehavior: Flickable.StopAtBounds
     model: TaskTemplateModel {
         id: taskTemplateModel
     }
@@ -38,6 +40,8 @@ ListView {
         color: Material.primary
         radius: 2
     }
+
+    ScrollBar.vertical: ScrollBar { }
 
     onCurrentIndexChanged: {
         if (currentIndex == -1) {
