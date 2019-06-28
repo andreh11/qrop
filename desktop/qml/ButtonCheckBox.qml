@@ -12,21 +12,25 @@ Button {
     checkable: true
 
     property bool manuallyModified: false
-    property color checkedColor: Material.color(Material.Indigo, Material.Shade400)
+//    property color checkedColor: Material.color(Material.Indigo, Material.Shade400)
+    property color checkedColor: Material.color(Material.Grey, Material.Shade300)
     property color focusCheckedColor: Material.color(Material.Indigo, Material.Shade300)
     property color activeFocusColor: Material.color(Material.Grey, Material.Shade500)
-    property color hoveredColor: Material.color(Material.Grey, Material.Shade400)
-    property color defaultColor: Material.color(Material.Grey, Material.Shade300)
+//    property color hoveredColor: Material.color(Material.Grey, Material.Shade400)
+    property color hoveredColor: Material.color(Material.Grey, Material.Shade100)
+    property color defaultColor: "white"
+//    property color defaultColor: Material.color(Material.Grey, Material.Shade300)
 
     property bool hasFocus: false
 
-    font { family: "Roboto Regular"; pixelSize: 14; capitalization: Font.MixedCase }
+    font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton; capitalization: Font.MixedCase }
 
     contentItem: Text {
         anchors.verticalCenter: control.verticalCenter
         verticalAlignment: Qt.AlignVCenter
 
-        color: checked ? "white " : Material.accent
+//        color: checked ? "white " : Material.accent
+        color: Units.colorHighEmphasis
         text: control.text
         font: control.font
 
@@ -40,12 +44,12 @@ Button {
         implicitHeight: Units.chipHeight
         anchors.verticalCenter: control.verticalCenter
         radius: 0
+        border.width: 1
+        border.color: checked ? Material.color(Material.Grey, Material.Shade500)
+                              : Material.color(Material.Grey, Material.Shade300)
         color: checked ? (hasFocus ? focusCheckedColor : checkedColor)
                        : hasFocus ? activeFocusColor
                                   : hovered ? hoveredColor
                                             : defaultColor
-        ColorAnimation on color {
-            duration: 2000
-        }
     }
 }

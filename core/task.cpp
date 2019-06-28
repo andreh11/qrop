@@ -18,9 +18,11 @@
 #include <QDebug>
 #include <QVariantMap>
 #include <QSettings>
+#include <QStringBuilder>
 
 #include "task.h"
 #include "templatetask.h"
+#include "mdate.h"
 
 Task::Task(QObject *parent)
     : DatabaseUtility(parent)
@@ -57,8 +59,6 @@ QString Task::implement(int taskId) const
 QString Task::description(int taskId) const
 {
     int taskTypeId = typeId(taskId);
-    bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
-    int standardBedLength = mSettings->value("standardBedLength").toInt();
 
     if (taskTypeId > 3) {
         QString m = method(taskId);
@@ -66,34 +66,40 @@ QString Task::description(int taskId) const
 
         if (i.isEmpty())
             return m;
-        return m + QString(", ") + i;
+        return m % QString(", ") % i;
     }
 
-    auto plantingIdList = taskPlantings(taskId);
-    int plantingId = plantingIdList.first();
+    int plantingId = taskPlantings(taskId).first();
+    auto record = recordFromId("planting_view", plantingId);
 
-    QVariantMap map = mapFromId("planting_view", plantingId);
-    int rows = map.value("rows").toInt();
-    int spacing = map.value("spacing_plants").toInt();
-    int trays = map.value("trays_to_start").toInt();
-    int traySize = map.value("tray_size").toInt();
-    int seedsPerHole = map.value("seeds_per_hole").toInt();
+    if (taskTypeId == 2) {
+        double trays = record.value("trays_to_start").toDouble();
+        int traySize = record.value("tray_size").toInt();
+        int seedsPerHole = record.value("seeds_per_hole").toInt();
+        QDate plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
+        QString plantingDateString = MDate::formatDate(plantingDate, 2019, "week", true);
 
-    int length = map.value("length").toInt();
+        if (seedsPerHole > 1)
+            return QString(tr("%L1 x %L2, %L3 seeds [%4]"))
+                    .arg(trays, 0, 'g', 2)
+                    .arg(traySize)
+                    .arg(seedsPerHole)
+                    .arg(plantingDateString);
+        return QString(tr("%L1 x %L2 [%4]")).arg(trays, 0, 'g', 2).arg(traySize).arg(plantingDateString);
+    }
+
+    int rows = record.value("rows").toInt();
+    int spacing = record.value("spacing_plants").toInt();
+    int length = record.value("length").toInt();
+    bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
+    int standardBedLength = mSettings->value("standardBedLength").toInt();
+
     QString lengthString;
     if (useStandardBedLength)
-        lengthString = tr("%L1 beds").arg(length * 1.0 / standardBedLength);
+        lengthString = tr("%L1 beds").arg(length * 1.0 / standardBedLength, 0, 'g', 2);
     else
         lengthString = tr("%L1 bed m.").arg(length);
 
-    QString description;
-    if (taskTypeId == 1)
-        return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
-    if (taskTypeId == 2) {
-        if (seedsPerHole > 1)
-            return QString(tr("%L1 x %L2, %L3 seeds per hole")).arg(trays).arg(traySize).arg(seedsPerHole);
-        return QString(tr("%L1 x %L2")).arg(trays).arg(traySize);
-    }
     return QString(tr("%L1, %L2 rows x %L3 cm")).arg(lengthString).arg(rows).arg(spacing);
 }
 

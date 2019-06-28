@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Changed
+  - *PDF* − Minor improvements of PDF output for calendar and field map.
   - *Planting map* − Improve side sheets look.
   - Improve planting and task views performance.
 

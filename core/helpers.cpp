@@ -46,3 +46,11 @@ qreal Helpers::widthBetween(qreal pos, const QDate &seasonBegin, const QDate &da
         return 0;
     return width;
 }
+
+QList<int> Helpers::listOfInt(const QString &s, const QString &sep)
+{
+    QList<int> list;
+    for (const auto &elt : s.split(sep, QString::SkipEmptyParts))
+        list.push_back(elt.toInt());
+    return list;
+}

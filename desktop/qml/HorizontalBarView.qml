@@ -26,14 +26,17 @@ ChartView {
     
     HorizontalBarSeries {
         id: barSeries
+
         
         axisX: ValueAxis {
             id: xBarCategory
             min: 0
+            labelsFont: Qt.font({ family: "Roboto Condensed", pixelSize: Units.fontSizeBodyAndButton} )
         }
         
         axisY: BarCategoryAxis {
             id: barCategories
+            labelsFont: Qt.font({ family: "Roboto Condensed", pixelSize: Units.fontSizeBodyAndButton} )
         }
     }
 }

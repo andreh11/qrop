@@ -31,6 +31,7 @@ public:
     Q_INVOKABLE static qreal coordinate(qint64 dayNumber);
     Q_INVOKABLE static qreal position(const QDate &seasonBegin, const QDate &date);
     Q_INVOKABLE static qreal widthBetween(qreal pos, const QDate &seasonBegin, const QDate &date);
+    static QList<int> listOfInt(const QString &s, const QString &sep = ",");
 
 private:
     const static int mGraphWidth { 60 * 12 };

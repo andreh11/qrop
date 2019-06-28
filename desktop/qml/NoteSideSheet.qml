@@ -64,6 +64,7 @@ Frame {
             height: Units.rowHeight + Units.smallSpacing
 //            color: Material.color(Material.Green, Material.Shade200)
             color: Material.color(Material.Grey, Material.Shade100)
+            Layout.leftMargin: 1
 
             Row {
                 id: summaryRow
