@@ -34,8 +34,8 @@ Button {
         text: control.text
         font: control.font
 
-        ColorAnimation on color {
-            duration: 2000
+        Behavior on color {
+            ColorAnimation { duration: Units.shortDuration  }
         }
     }
 

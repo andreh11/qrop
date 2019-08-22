@@ -335,7 +335,7 @@ Page {
                 height: Units.toolBarHeight
                 Material.elevation: 2
 
-                Behavior on color { ColorAnimation { duration: 150 } }
+                Behavior on color { ColorAnimation { duration: Units.mediumDuration } }
 
                 RowLayout {
                     id: buttonRow
@@ -356,6 +356,18 @@ Page {
                         }
                     }
 
+                    ToolButton {
+                        id: greenhouseButton
+                        checkable: true
+                        visible: !checks
+                        flat: true
+                        text: qsTr("GH", "Abbreviation for \"greenhouse\"")
+                        font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+                    }
+
                     IconButton {
                         id: timegraphButton
                         text: "\ue0b8"
@@ -364,84 +376,14 @@ Page {
                         checkable: true
                         checked: true
 
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
-                    IconButton {
-                        id: taskButton
-                        text: "\ue614"
-                        hoverEnabled: true
-                        visible: largeDisplay && checks == 0
-                        checkable: true
-                        checked: taskSideSheet.visible
-
-                        onToggled: {
-                            if (checked) {
-                                if (noteSideSheet.visible)
-                                    noteSideSheet.visible = false;
-                                if (chartButton.checked)
-                                    chartButton.checked = false;
-                                taskSideSheet.visible = true
-                            } else {
-                                taskSideSheet.visible = false
-                            }
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Hide planting's tasks")
-                                              : qsTr("Show planting's tasks")
-                    }
-
-                    IconButton {
-                        id: noteButton
-
-                        text: "\ue24d"
-                        hoverEnabled: true
-                        visible: largeDisplay && checks == 0
-                        checkable: true
-                        checked: noteSideSheet.visible
-
-                        onToggled: {
-                            if (checked) {
-                                if (taskSideSheet.visible)
-                                    taskSideSheet.visible = false;
-                                if (chartButton.checked)
-                                    chartButton.checked = false;
-                                noteSideSheet.visible = true;
-                            } else {
-                                noteSideSheet.visible = false;
-                            }
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Show the note pane")
-                        ToolTip.delay: Units.shortDuration
-                    }
-
-                    IconButton {
-                        id: chartButton
-                        text: "\ue801"
-                        hoverEnabled: true
-                        visible: largeDisplay && checks == 0
-                        checkable: true
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Hide chart")
-                                              : qsTr("Show chart")
-
-                        onToggled: {
-                            if (!checked)
-                                return;
-                            if (taskSideSheet.visible)
-                                taskSideSheet.visible = false;
-                            if (noteSideSheet.visible)
-                                noteSideSheet.visible = false;
-                        }
-                    }
 
                     Button {
                         id: editButton
@@ -503,23 +445,124 @@ Page {
                         visible: !checks
                     }
 
-                    Column {
-                        id: revenueColumn
-                        visible: !checks
-                        Layout.leftMargin: Units.smallSpacing
-                        Layout.rightMargin: Units.smallSpacing
-                        Label {
-                            text: qsTr("Revenue")
-                            color: Material.color(Material.Blue)
-                            font.family: "Roboto Regular"
-                            font.pixelSize: 10
+                    IconButton {
+                        id: taskButton
+                        text: "\ue614"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: taskSideSheet.visible
+
+                        onToggled: {
+                            if (checked) {
+                                if (noteSideSheet.visible)
+                                    noteSideSheet.visible = false;
+                                if (chartButton.checked)
+                                    chartButton.checked = false;
+                                taskSideSheet.visible = true
+                            } else {
+                                taskSideSheet.visible = false
+                            }
                         }
-                        Label {
-                            text: qsTr("$%L1").arg(plantingsView.revenue)
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeTitle
+
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide planting's tasks")
+                                              : qsTr("Show planting's tasks")
+                    }
+
+                    IconButton {
+                        id: noteButton
+
+                        text: "\ue24d"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: noteSideSheet.visible
+
+                        onToggled: {
+                            if (checked) {
+                                if (taskSideSheet.visible)
+                                    taskSideSheet.visible = false;
+                                if (chartButton.checked)
+                                    chartButton.checked = false;
+                                noteSideSheet.visible = true;
+                            } else {
+                                noteSideSheet.visible = false;
+                            }
+                        }
+
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Show the note pane")
+                        ToolTip.delay: Units.shortDuration
+                    }
+
+                    IconButton {
+                        id: chartButton
+                        text: "\ue801"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide chart")
+                                              : qsTr("Show chart")
+
+                        onToggled: {
+                            if (!checked)
+                                return;
+                            if (taskSideSheet.visible)
+                                taskSideSheet.visible = false;
+                            if (noteSideSheet.visible)
+                                noteSideSheet.visible = false;
                         }
                     }
+
+//                    Column {
+//                        id: revenueColumn
+//                        visible: !checks
+//                        Layout.leftMargin: Units.smallSpacing
+//                        Layout.rightMargin: Units.smallSpacing
+//                        Label {
+//                            text: qsTr("Revenue")
+//                            color: Material.color(Material.Blue)
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: 10
+//                        }
+//                        Label {
+//                            text: qsTr("$%L1").arg(plantingsView.revenue)
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: Units.fontSizeTitle
+//                        }
+//                    }
+
+//                    Column {
+//                        id: bedLength
+//                        visible: !checks
+//                        Layout.leftMargin: Units.smallSpacing
+//                        Layout.rightMargin: Units.smallSpacing
+//                        Label {
+//                            text: qsTr("Total Bed Length")
+//                            color: Material.color(Material.Blue)
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: 10
+//                        }
+//                        Label {
+//                            text: qsTr("%L1 beds").arg(Helpers.bedLength(plantingsView.totalBedLength))
+//                            font.family: "Roboto Regular"
+//                            font.pixelSize: Units.fontSizeTitle
+//                        }
+//                    }
 
                     Label {
                         text: qsTr("planting(s) selected", "", checks)
@@ -546,12 +589,19 @@ Page {
                         visible: largeDisplay && checks == 0
                         Layout.rightMargin: 16 - padding
 
-                        onClicked: cropMenu.open();
+                        onClicked: {
+                            if (cropMenu.opened) {
+                                cropMenu.close();
+                            } else {
+                                cropMenu.open();
+                            }
+                        }
 
                         Menu {
                             id: cropMenu
                             title: qsTr("Crop plan")
                             y: parent.height
+                            closePolicy: Popup.CloseOnPressOutsideParent
 
                             MenuItem {
                                 text: qsTr("Export as PDF...")
@@ -745,7 +795,9 @@ Page {
                 id: plantingsView
                 year: page.year
                 season: page.season
+                keywordId: chartPane.keywordId
                 showTimegraph: page.showTimegraph
+                showOnlyGreenhouse: greenhouseButton.checked
                 filterString: page.filterString
                 dragActive: false
                 anchors {
@@ -775,7 +827,7 @@ Page {
                 id: chartPane
                 visible: chartButton.checked
                 width: parent.width
-                height: visible ? parent.height/3 : 0
+                height: visible ? parent.height/2 : 0
                 year: page.year
                 season: page.season
                 anchors {

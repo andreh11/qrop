@@ -23,6 +23,7 @@
 #include "sqltablemodel.h"
 #include "location.h"
 #include "planting.h"
+#include "helpers.h"
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -31,6 +32,7 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
 {
     setSortColumn("crop");
     connect(this, SIGNAL(countChanged()), this, SIGNAL(revenueChanged()));
+    connect(this, SIGNAL(countChanged()), this, SIGNAL(totalBedLengthChanged()));
 }
 
 bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -153,9 +155,33 @@ void PlantingModel::setCropId(int cropId)
     emit cropIdChanged();
 }
 
+int PlantingModel::keywordId() const
+{
+    return m_keywordId;
+}
+
+void PlantingModel::setKeywordId(int keywordId)
+{
+    if (m_keywordId == keywordId)
+        return;
+
+    m_keywordId = keywordId;
+    invalidateFilter();
+    emit keywordIdChanged();
+}
+
 int PlantingModel::revenue() const
 {
     QString queryString("SELECT SUM(bed_revenue) "
+                        "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
+    QSqlQuery query(queryString.arg(m_year));
+    query.next();
+    return query.value(0).toInt();
+}
+
+qreal PlantingModel::totalBedLength() const
+{
+    QString queryString("SELECT SUM(length) "
                         "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
     QSqlQuery query(queryString.arg(m_year));
     query.next();
@@ -181,7 +207,10 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             && (!m_showOnlyGreenhouse || inGreenhouse)
             && (!m_showOnlyHarvested
                 || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
-            && (m_cropId < 1 || cropId == m_cropId);
+            && (m_cropId < 1 || cropId == m_cropId)
+            && (m_keywordId < 1
+                || Helpers::listOfInt(rowValue(sourceRow, sourceParent, "keyword_ids").toString())
+                           .contains(m_keywordId));
 
     return inRange && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

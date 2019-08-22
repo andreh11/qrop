@@ -107,5 +107,6 @@
         <file>qml/EditableLabel.qml</file>
         <file>qml/SimpleChip.qml</file>
         <file>qml/LocationFormBox.qml</file>
+        <file>qml/StatCard.qml</file>
     </qresource>
 </RCC>

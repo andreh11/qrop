@@ -19,6 +19,7 @@
 #include <QSqlRecord>
 #include <QVariantMap>
 
+#include "mdate.h"
 #include "keyword.h"
 
 Keyword::Keyword(QObject *parent)
@@ -99,4 +100,21 @@ void Keyword::removePlantingKeywords(int plantingId) const
     QString queryString = "DELETE FROM planting_keyword WHERY planting_id = %1)";
     QSqlQuery query(queryString.arg(plantingId));
     debugQuery(query);
+}
+
+qreal Keyword::totalBedLenght(int keywordId, int season, int year) const
+{
+    QDate beg;
+    QDate end;
+    std::tie(beg, end) = MDate::seasonDates(season, year);
+    QString queryString("SELECT sum(length) "
+                        "FROM planting_view "
+                        "JOIN planting_keyword USING (planting_id) "
+                        "WHERE keyword_id = %1 "
+                        "AND planting_date BETWEEN '%2' AND '%3'");
+    QSqlQuery query(
+            queryString.arg(keywordId).arg(beg.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
+    debugQuery(query);
+    query.next();
+    return query.value(0).toDouble();
 }

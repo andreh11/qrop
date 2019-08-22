@@ -58,6 +58,10 @@ Button {
     hoverEnabled: true
     font { family: "Roboto Regular"; pixelSize: 14; capitalization: Font.MixedCase }
 
+    Behavior on implicitWidth {
+        NumberAnimation { duration: Units.shortDuration }
+    }
+
     background: Rectangle {
         implicitHeight: Units.chipHeight
         anchors.verticalCenter: control.verticalCenter
@@ -66,8 +70,8 @@ Button {
                        : hasFocus ? activeFocusColor
                                      : hovered ? hoveredColor
                                                : defaultColor
-        ColorAnimation on color {
-            duration: 2000
+        Behavior on color {
+            ColorAnimation { duration: Units.shortDuration }
         }
     }
 
@@ -80,14 +84,15 @@ Button {
         text: control.text
         font: control.font
 
-        ColorAnimation on color {
-            duration: 2000
+        Behavior on color {
+            ColorAnimation  { duration: Units.shortDuration }
         }
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        z: 3
         hoverEnabled: true
         cursorShape: containsMouse && checkable ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {

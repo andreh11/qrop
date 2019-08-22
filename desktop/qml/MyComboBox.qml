@@ -264,7 +264,7 @@ ComboBox {
                                     : Qt.darker(control.hintColor)
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation { duration: Units.mediumDuration }
             }
         }
 
@@ -278,7 +278,7 @@ ComboBox {
             horizontalAlignment: Text.AlignLeft
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation { duration: Units.mediumDuration }
             }
         }
     }

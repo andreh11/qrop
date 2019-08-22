@@ -39,18 +39,21 @@ Page {
     property int tableSortColumn: 1
     property string tableSortOrder: "ascending"
     property var tableHeaderModel: [
-        { name: qsTr("Date"),   columnName: "crop", width: 100, alignment: Text.AlignLeft },
-        { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft },
-        { name: qsTr("Variety"),   columnName: "variety", width: 200, alignment: Text.AlignLeft },
-        { name: qsTr("Seed company"), columnName: "seed_company", width: 200, alignment: Text.AlignLeft },
-        { name: qsTr("Number"),    columnName: "seeds_number", width: 100, alignment: Text.AlignRight},
-        { name: qsTr("Quantity"),    columnName: "seeds_quantity", width: 100, alignment: Text.AlignRight}
+        { name: qsTr("Date"),   columnName: "planting_date", width: 100, alignment: Text.AlignLeft, visible: transplantsRadioButton.checked },
+        { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Variety"),   columnName: "variety", width: 200, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Seed company"), columnName: "seed_company", width: 200, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Number"),    columnName: seedsRadioButton.checked ? "seeds_number" : "plants_needed", width: 100, alignment: Text.AlignRight, visible: true },
+        { name: qsTr("Quantity"),    columnName: "seeds_quantity", width: 100, alignment: Text.AlignRight,
+            visible: seedsRadioButton.checked }
     ]
 
     property int rowWidth: {
         var width = 0;
-        for (var i = 0; i < tableHeaderModel.length; i++)
-            width += tableHeaderModel[i].width + Units.formSpacing
+        for (var i = 0; i < tableHeaderModel.length; i++) {
+            if (tableHeaderModel[i].visible)
+                width += tableHeaderModel[i].width + Units.formSpacing
+        }
         return width;
     }
 
@@ -92,15 +95,15 @@ Page {
         onActivated: weekSpinBox.previousYear();
     }
 
-//    Shortcut {
-//        sequences: ["Up", "Down", "Left", "Right"]
-//        enabled: navigationIndex === 4
-//        context: Qt.ApplicationShortcut
-//        onActivated: {
-//            seedListView.currentIndex = 0
-//            seedListView.forceActiveFocus();
-//        }
-//    }
+    //    Shortcut {
+    //        sequences: ["Up", "Down", "Left", "Right"]
+    //        enabled: navigationIndex === 4
+    //        context: Qt.ApplicationShortcut
+    //        onActivated: {
+    //            seedListView.currentIndex = 0
+    //            seedListView.forceActiveFocus();
+    //        }
+    //    }
 
     SeedListModel {
         id: seedListModel
@@ -169,61 +172,78 @@ Page {
             width: parent.width
             height: Units.toolBarHeight
 
-            RowLayout {
-                id: buttonRow
-                anchors.fill: parent
-                spacing: Units.smallSpacing
-                visible: !filterMode
+            //            RowLayout {
+            //                id: buttonRow
+            //                anchors.fill: parent
+            //                spacing: Units.smallSpacing
+            //                visible: !filterMode
 
-                ButtonGroup {
-                    buttons: checkButtonRow.children
+            ButtonGroup {
+                buttons: checkButtonRow.children
+            }
+
+            Row {
+                id: checkButtonRow
+                anchors {
+                    left: parent.left
+                    leftMargin: 16 - padding
+                    verticalCenter: parent.verticalCenter
                 }
 
-                Row {
-                    id: checkButtonRow
-                    Layout.leftMargin: 16 - padding
-
-                    ButtonCheckBox {
-                        id: seedsRadioButton
-                        checked: true
-                        text: qsTr("Seeds")
-                    }
-
-                    ButtonCheckBox {
-                        id: transplantsRadioButton
-                        text: qsTr("Transplants")
-                    }
+                ButtonCheckBox {
+                    id: seedsRadioButton
+                    checked: true
+                    text: qsTr("Seeds")
                 }
 
-                SearchField {
-                    id: filterField
-                    placeholderText: seedsRadioButton.checked ? qsTr("Search seeds")
-                                                              : qsTr("Search transplants")
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhPreferLowercase
-                    visible: !checks
+                ButtonCheckBox {
+                    id: transplantsRadioButton
+                    text: qsTr("Transplants")
                 }
+            }
 
-                WeekSpinBox {
-                    id: weekSpinBox
-                    showOnlyYear: true
-                    visible: checks === 0
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
+            SearchField {
+                id: filterField
+                placeholderText: seedsRadioButton.checked ? qsTr("Search seeds")
+                                                          : qsTr("Search transplants")
+                Layout.fillWidth: true
+                inputMethodHints: Qt.ImhPreferLowercase
+                width: seedListView.width
+
+                anchors {
+                    centerIn: parent
                 }
+            }
 
-                IconButton {
-                    id: printButton
-                    text: "\ue8ad"
-                    hoverEnabled: true
+            WeekSpinBox {
+                id: weekSpinBox
+                showOnlyYear: true
+                visible: checks === 0
+                week: MDate.currentWeek();
+                year: MDate.currentYear();
+                anchors {
+                    right: printButton.left
+                    verticalCenter: parent.verticalCenter
+                }
+            }
 
-                    Layout.rightMargin: 16 - padding
-                    ToolTip.visible: hovered
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
-                                                           : qsTr("Print the transplant order list")
+            IconButton {
+                id: printButton
+                text: "\ue8ad"
+                hoverEnabled: true
 
-                    onClicked: saveDialog.open()
+                Layout.rightMargin: 16 - padding
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
+                                                       : qsTr("Print the transplant order list")
+
+                onClicked: saveDialog.open()
+
+                anchors {
+                    right: parent.right
+                    rightMargin: 16 - padding
+                    verticalCenter: parent.verticalCenter
                 }
 
             }
@@ -265,15 +285,13 @@ Page {
 
             ScrollBar.vertical: ScrollBar {
                 parent: seedListView.parent
-                anchors.top: seedListView.top
-                anchors.left: seedListView.right
-                anchors.bottom: seedListView.bottom
+                anchors {
+                    top: parent.top
+                    topMargin: buttonRectangle.height + topDivider.height
+                    right: parent.right
+                    bottom: parent.bottom
+                }
             }
-
-//            section.property: "crop"
-//            section.criteria: ViewSection.FullString
-//            section.delegate: sectionHeading
-//            section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {
@@ -331,7 +349,7 @@ Page {
                     hoverEnabled: true
                     preventStealing: true
                     propagateComposedEvents: true
-//                    cursorShape: Qt.PointingHandCursor
+                    //                    cursorShape: Qt.PointingHandCursor
 
                     Row {
                         id: summaryRow
@@ -340,7 +358,7 @@ Page {
                         leftPadding: Units.formSpacing
 
                         Label {
-                            visible: transplantsRadioButton.checked
+                            visible: tableHeaderModel[0].visible
                             text: MDate.formatDate(model.planting_date, page.year)
                             font.family: "Roboto Regular"
                             font.pixelSize: Units.fontSizeBodyAndButton
@@ -392,7 +410,7 @@ Page {
                         }
 
                         Label {
-                            visible: seedsRadioButton.checked
+                            visible: tableHeaderModel[5].visible
                             text: model.seeds_quantity > 1000
                                   ? qsTr("%L1 kg").arg(Math.round(model.seeds_quantity * 0.1) / 100)
                                   : qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)

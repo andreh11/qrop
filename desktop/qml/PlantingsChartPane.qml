@@ -18,33 +18,56 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtCharts 2.2
+import QtCharts 2.3
 
 import io.qrop.components 1.0
 
-ChartView {
-    id: chart
+Item {
+    id: control
 
     property int year: 0
     property int season: 0
     property int oldSeason: 0
+    property int keywordId: -1
+    property bool percentage: relativeButton.checked
 
     function computeField() {
         var bedLength = Location.totalBedLength(false);
-        var fieldList = Planting.totalLengthByWeek(season, year, false)
+        var fieldList = Planting.totalLengthByWeek(season, year, keywordId, false)
         var dateList = MDate.seasonMondayDates(season, year);
+        var max = 0
         for (var i = 0; i < fieldList.length; i++) {
-            fieldChart.append(dateList[i].getTime(), fieldList[i]/bedLength * 100);
+            if (percentage) {
+                fieldChart.append(dateList[i].getTime(), fieldList[i]/bedLength);
+            } else {
+                var length = Helpers.bedLength(fieldList[i])
+                if (length > max)
+                    max = length
+                fieldChart.append(dateList[i].getTime(), length);
+            }
         }
+        if (!percentage)
+            yValueAxis.max = max
+        else
+            yValueAxis.max = 1.25
     }
 
     function computeGreenhouse() {
         var bedLength = Location.totalBedLength(true);
-        var fieldList = Planting.totalLengthByWeek(season, year, true)
+        var fieldList = Planting.totalLengthByWeek(season, year, keywordId, true)
         var dateList = MDate.seasonMondayDates(season, year);
         for (var i = 0; i < fieldList.length; i++) {
-            greenhouseChart.append(dateList[i].getTime(), fieldList[i]/bedLength * 100);
+            if (percentage) {
+                greenhouseChart.append(dateList[i].getTime(), fieldList[i]/bedLength);
+            } else {
+                var length = Helpers.bedLength(fieldList[i])
+                greenhouseChart.append(dateList[i].getTime(), length);
+            }
         }
+    }
+
+    function computeYAxis() {
+        yCategoryAxis.appendAxisChildren()
     }
 
     function refresh() {
@@ -56,65 +79,178 @@ ChartView {
         computeGreenhouse();
     }
 
-    antialiasing: true
-    localizeNumbers: true
-
     onYearChanged: refresh();
     onSeasonChanged: refresh();
     onVisibleChanged: refresh();
-    title: qsTr("Estimated field and greenhouse space occupied this year (in % of total bed length)")
+    onKeywordIdChanged: refresh();
+    onPercentageChanged: refresh();
 
-    CategoryAxis {
-        id: yValuesAxis
-        min: 0
-        max: 125
-        labelsPosition: CategoryAxis.AxisLabelsPositionOnValue
-        CategoryRange {
-            label: "0 %"
-            endValue: 0
+    Row {
+        id: checkButtonRow
+        z: 1
+        anchors {
+            right: parent.right
+            top: parent.top
+            margins: Units.mediumSpacing
         }
-        CategoryRange {
-            label: "25 %"
-            endValue: 25
+
+        ButtonCheckBox {
+            id: relativeButton
+            checked: true
+            text: qsTr("Relative")
+            autoExclusive: true
         }
-        CategoryRange {
-            label: "50 %"
-            endValue: 50
-        }
-        CategoryRange {
-            label: "75 %"
-            endValue: 75
-        }
-        CategoryRange {
-            label: "100 %"
-            endValue: 100
-        }
-        CategoryRange {
-            label: "125 %"
-            endValue: 125
+
+        ButtonCheckBox {
+            id: absoluteButton
+            text: qsTr("Absolute")
+            autoExclusive: true
         }
     }
 
-    DateTimeAxis {
-        id: xValuesAxis
-        format: "MMM"
-        min: MDate.seasonBeginning(season,year)
-        max: MDate.seasonEnd(season, year)
-        tickCount: 12
-        titleVisible: false
+    ChartView {
+        id: chart
+
+        antialiasing: true
+        localizeNumbers: true
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: keywordLayout.top
+        }
+
+        title: qsTr("Estimated field and greenhouse space occupied this year")
+
+        ToolTip {
+             id: toolTip
+//             contentItem: Text{
+//                 color: "#21be2b"
+//                 text: toolTip.text
+//             }
+//             background: Rectangle {
+//                 border.color: "#21be2b"
+//             }
+         }
+
+        ValueAxis {
+            id: yValueAxis
+            min: 0
+            visible: !percentage
+            tickInterval: 5
+        }
+
+        CategoryAxis {
+            id: yCategoryAxis
+            visible: percentage
+            min: 0
+            max: 1.25
+            labelsPosition: CategoryAxis.AxisLabelsPositionOnValue
+            CategoryRange {
+                label: "0 %"
+                endValue: 0
+            }
+            CategoryRange {
+                label: "25 %"
+                endValue: 0.25
+            }
+            CategoryRange {
+                label: "50 %"
+                endValue: 0.50
+            }
+            CategoryRange {
+                label: "75 %"
+                endValue: 0.75
+            }
+            CategoryRange {
+                label: "100 %"
+                endValue: 1
+            }
+            CategoryRange {
+                label: "125 %"
+                endValue: 1.25
+            }
+        }
+
+        DateTimeAxis {
+            id: xValuesAxis
+            format: "MMM"
+            min: MDate.seasonBeginning(season,year)
+            max: MDate.seasonEnd(season, year)
+            tickCount: 12
+            titleVisible: false
+        }
+
+        LineSeries {
+            id: fieldChart
+            name: qsTr("Field")
+            axisX: xValuesAxis
+            axisY: percentage ? yCategoryAxis : yValueAxis
+            pointsVisible: true
+            onClicked: {
+                var p = chart.mapToPosition(point)
+
+                var text = qsTr("%2").arg(point.y)
+                toolTip.x = p.x - toolTip.width/2
+                toolTip.y = p.y - toolTip.height - Units.smallSpacing
+                toolTip.text = text
+                //toolTip.timeout = 1000
+                toolTip.visible = true
+            }
+        }
+
+        LineSeries {
+            id: greenhouseChart
+            name: qsTr("Greenhouse")
+            axisX: xValuesAxis
+            axisY: percentage ? yCategoryAxis : yValueAxis
+            pointsVisible: true
+            onClicked: {
+                var p = chart.mapToPosition(point)
+
+                var text = qsTr("%2").arg(point.y)
+                toolTip.x = p.x - toolTip.width/2
+                toolTip.y = p.y - toolTip.height - Units.smallSpacing
+                toolTip.text = text
+                //toolTip.timeout = 1000
+                toolTip.visible = true
+            }
+        }
     }
 
-    LineSeries {
-        id: fieldChart
-        name: qsTr("Field")
-        axisY: yValuesAxis
-        axisX: xValuesAxis
+    ButtonGroup {
+        id: buttonGroup
     }
 
-    LineSeries {
-        id: greenhouseChart
-        name: qsTr("Greenhouse")
-        axisY: yValuesAxis
-        axisX: xValuesAxis
+    RowLayout {
+        id: keywordLayout
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            margins: Units.mediumSpacing
+        }
+
+        ListView {
+            id: keywordListView
+            orientation: Qt.Horizontal
+            height: Units.rowHeight
+            spacing: Units.smallSpacing
+            model: KeywordModel {
+                id: keywordModel
+            }
+
+            Layout.fillWidth: true
+            delegate: ChoiceChip {
+                text: keyword + (checked ? " <i>%L1</i>".arg(Helpers.bedLength(Keyword.totalBedLenght(keyword_id, season, year))) : "")
+                ButtonGroup.group: buttonGroup
+                onClicked: {
+                    if (checked)
+                        control.keywordId = keyword_id
+                    else
+                        control.keywordId = -1
+                }
+            }
+        }
     }
 }

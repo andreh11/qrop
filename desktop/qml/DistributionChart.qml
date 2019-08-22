@@ -13,11 +13,13 @@ HorizontalBarView {
 
     property int year
     property bool greenhouse
+    property int numberOfCrops
 
     function refresh() {
         var names = Planting.longestCropNames(year, greenhouse)
         var lengths = Planting.longestCropLengths(year, greenhouse);
         compute(names, lengths);
+        numberOfCrops = names.length
     }
 
     title: qsTr("Crop space distribution (in bed meter)")

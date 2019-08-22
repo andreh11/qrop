@@ -90,6 +90,7 @@ Page {
     }
 
     GridLayout {
+        id: gridLayout
         columns: 2
         columnSpacing: Units.mediumSpacing
         rowSpacing: columnSpacing
@@ -102,6 +103,38 @@ Page {
             margins: Units.mediumSpacing
         }
 
+        ColumnLayout {
+            Layout.alignment: Qt.AlignTop
+            spacing: Units.mediumSpacing
+
+            StatCard {
+                title: qsTr("Estimated revenue")
+                text: qsTr("$%L1").arg(Planting.revenue(page.year))
+
+                Material.background: Material.color(Material.Green, Material.Shade400)
+                Layout.preferredHeight: 100
+                Layout.preferredWidth: 200
+            }
+
+            StatCard {
+                title: qsTr("Number of beds")
+                text: "%L1".arg(Helpers.bedLength(Planting.totalLengthForYear(page.year, greenhouseCheckBox.checked)))
+
+                Material.background: Material.color(Material.Orange, Material.Shade400)
+                Layout.preferredHeight: 100
+                Layout.preferredWidth: 200
+            }
+
+            StatCard {
+                title: qsTr("Number of crops")
+                text: "%L1".arg(cropDistributionChart.numberOfCrops)
+
+                Material.background: Material.color(Material.Pink, Material.Shade400)
+                Layout.preferredHeight: 100
+                Layout.preferredWidth: 200
+            }
+        }
+
         Pane {
             id: cardPane
             Material.elevation: 1
@@ -109,8 +142,40 @@ Page {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            Row {
+                z: 2
+                spacing: 0
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                }
+
+                ButtonCheckBox {
+                    id: spaceCheckBox
+                    text: qsTr("Space")
+                    autoExclusive: true
+                    checked: true
+                }
+
+                ButtonCheckBox {
+                    id: revenueCheckBox
+                    text: qsTr("Revenue")
+                    autoExclusive: true
+                    onCheckedChanged: refresh();
+                }
+            }
+
             DistributionChart {
                 id: cropDistributionChart
+                visible: spaceCheckBox.checked
+                anchors.fill: parent
+                year: page.year
+                greenhouse: greenhouseCheckBox.checked
+            }
+
+            CropRevenueChart {
+                id: cropRevenueChart
+                visible: revenueCheckBox.checked
                 anchors.fill: parent
                 year: page.year
                 greenhouse: greenhouseCheckBox.checked
@@ -118,16 +183,11 @@ Page {
         }
 
         Pane {
+            visible: false
             Material.elevation: 1
             Material.background: "white"
             Layout.fillWidth: true
             Layout.fillHeight: true
-            CropRevenueChart {
-                id: cropRevenueChart
-                anchors.fill: parent
-                year: page.year
-                greenhouse: greenhouseCheckBox.checked
-            }
         }
     }
 }

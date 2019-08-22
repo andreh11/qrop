@@ -160,7 +160,7 @@ TextField {
             color: control.hasError ? control.errorColor
                                     : Material.color(Material.Grey, Material.Shade800)
 
-            Behavior on color { ColorAnimation { duration: 200 } }
+            Behavior on color { ColorAnimation { duration: Units.mediumDuration } }
         }
 
         Label {
@@ -172,7 +172,7 @@ TextField {
             color: control.hasError ? control.errorColor : control.hintColor
             horizontalAlignment: Text.AlignLeft
 
-            Behavior on color { ColorAnimation { duration: 200 } }
+            Behavior on color { ColorAnimation { duration: Units.mediumDuration } }
         }
     }
 }

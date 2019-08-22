@@ -69,7 +69,7 @@ Dialog {
         MyTextField {
             id: varietyNameField
             width: parent.width
-            validator: RegExpValidator { regExp: /\w[\w\d() ]*/ }
+            validator: RegExpValidator { regExp: /\w[\w\d()'- ]*/ }
 
             labelText: qsTr("Variety")
             Layout.fillWidth: true

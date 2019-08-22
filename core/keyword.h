@@ -32,6 +32,7 @@ public:
     void addPlanting(int plantingId, int keywordId) const;
     void removePlanting(int plantingId, int keywordId) const;
     void removePlantingKeywords(int plantingId) const;
+    Q_INVOKABLE qreal totalBedLenght(int keyword, int season, int year) const;
 };
 
 #endif // KEYWORD_H

@@ -209,7 +209,7 @@ Page {
                     flat: true
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
-                    highlighted: true
+//                    highlighted: true
 
                     MouseArea {
                         id: tmouseArea
@@ -407,6 +407,15 @@ Page {
                 bottomMargin: Units.smallSpacing
                 leftMargin: parent.width * 0.1
                 rightMargin: parent.width * 0.1
+            }
+            ScrollBar.vertical: ScrollBar {
+                parent: taskView.parent
+                anchors {
+                    top: parent.top
+                    topMargin: buttonRectangle.height + topDivider.height
+                    right: parent.right
+                    bottom: parent.bottom
+                }
             }
             year: weekSpinBox.year
             week: weekSpinBox.week

@@ -29,7 +29,6 @@ Page {
     property alias week: weekSpinBox.week
     property alias year: weekSpinBox.year
     property alias rowCount: harvestModel.rowCount
-    property bool filterMode: false
     property string filterText: ""
     property int checks: 0
     property alias listView: harvestView
@@ -79,7 +78,7 @@ Page {
         sequences: [StandardKey.Find]
         enabled: navigationIndex === 3 && !dialogOpened
         context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+        onActivated: searchField.forceActiveFocus();
     }
 
     Shortcut {
@@ -189,17 +188,20 @@ Page {
             width: parent.width
             height: Units.toolBarHeight
 
-            RowLayout {
-                id: buttonRow
-                anchors.fill: parent
-                spacing: Units.smallSpacing
-                visible: !filterMode
+//            RowLayout {
+//                id: buttonRow
+//                anchors.fill: parent
+//                spacing: Units.smallSpacing
 
                 Button {
                     id: addButton
                     text: qsTr("Add harvest")
                     flat: true
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    anchors {
+                        left: parent.left
+                        leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                        verticalCenter: parent.verticalCenter
+                    }
                     highlighted: true
                     font.pixelSize: Units.fontSizeBodyAndButton
 
@@ -234,35 +236,45 @@ Page {
                     }
                 }
 
+
                 SearchField {
-                    id: filterField
+                    id: searchField
                     placeholderText: qsTr("Search harvests")
-                    Layout.fillWidth: true
+                    anchors {
+                        centerIn: parent
+                    }
+                    width: Math.max(200, harvestView.width)
                     inputMethodHints: Qt.ImhPreferLowercase
                     visible: !checks
                 }
+
 
                 WeekSpinBox {
                     id: weekSpinBox
                     visible: checks === 0
                     week: MDate.currentWeek();
                     year: MDate.currentYear();
+                    anchors {
+                        right: printButton.left
+                        verticalCenter: parent.verticalCenter
+                    }
                 }
 
                 IconButton {
                     id: printButton
                     text: "\ue8ad"
                     hoverEnabled: true
-
-                    Layout.rightMargin: 16 - padding
+                    anchors {
+                        right: parent.right
+                        rightMargin: 16 - padding
+                        verticalCenter: parent.verticalCenter
+                    }
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: qsTr("Print the harvests list")
 
                     onClicked: saveDialog.open()
                 }
-
-            }
         }
 
         ThinDivider {
@@ -291,7 +303,7 @@ Page {
                 id: harvestModel
                 week: page.week
                 year: page.year
-                filterString: filterField.text
+                filterString: searchField.text
                 sortColumn: tableHeaderModel[tableSortColumn].columnName
                 sortOrder: tableSortOrder
             }
@@ -308,9 +320,12 @@ Page {
 
             ScrollBar.vertical: ScrollBar {
                 parent: harvestView.parent
-                anchors.top: harvestView.top
-                anchors.left: harvestView.right
-                anchors.bottom: harvestView.bottom
+                anchors {
+                    top: parent.top
+                    topMargin: buttonRectangle.height + topDivider.height
+                    right: parent.right
+                    bottom: parent.bottom
+                }
             }
 
             Keys.onPressed: {

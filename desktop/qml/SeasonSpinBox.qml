@@ -59,10 +59,8 @@ Item {
         }
     }
 
-    implicitHeight: buttonLayout.implicitHeight
     implicitWidth: buttonLayout.implicitWidth
-    height: implicitHeight
-    width: implicitWidth
+    implicitHeight: Units.buttonHeight
 
     Rectangle {
         anchors.fill: parent

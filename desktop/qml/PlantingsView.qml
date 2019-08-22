@@ -34,6 +34,8 @@ ListView {
     property int checkBoxWidth: Units.rowHeight * 0.8
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
     property alias revenue: plantingModel.revenue
+    property alias totalBedLength: plantingModel.totalBedLength
+    property alias keywordId: plantingModel.keywordId
 
     property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
@@ -525,7 +527,7 @@ ListView {
         property date transplantingDate: model.planting_date
         property date beginHarvestDate: model.beg_harvest_date
         property date endHarvestDate: model.end_harvest_date
-        property var keywordStringList: Keyword.keywordStringList(model.planting_id)
+        property var keywordStringList: model.keywords.length ? model.keywords.split(",") : []
         property int plantingId: model.planting_id
 
         height: delegateColumn.height
@@ -642,6 +644,7 @@ ListView {
 
                     TableLabel {
                         text: modelData
+                        color: Units.colorHighEmphasis
                         visible: tableHeaderModel[index+2].visible
                         anchors.verticalCenter: parent.verticalCenter
                         horizontalAlignment: tableHeaderModel[index+2].alignment

@@ -32,6 +32,8 @@ TextField {
     padding: 8
     topPadding: 16
     focus: true
+//    implicitHeight: Units.buttonHeight
+//    height: Units.buttonHeight
 
     Keys.onEscapePressed: {
         event.accepted = true
@@ -44,18 +46,15 @@ TextField {
     
     background: Rectangle {
         anchors.verticalCenter: parent.verticalCenter
-//        implicitWidth: 500
-        implicitHeight: height
-        height: parent.height * 0.8
-        color: Material.color(Material.Grey,
-                              Material.Shade400)
+        height: Units.buttonHeight
+        color: Material.color(Material.Grey, Material.Shade400)
         radius: 4
         opacity: 0.1
     }
     
     Label {
         id: searchLogo
-        color: "black"
+        color: Units.colorMediumEmphasis
         anchors.left: parent.left
         anchors.leftMargin: 8
         anchors.verticalCenter: parent.verticalCenter

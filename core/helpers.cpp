@@ -16,9 +16,11 @@
 
 #include <QDate>
 #include <QDebug>
+#include <QSettings>
 
 #include "mdate.h"
 #include "helpers.h"
+#include <cmath>
 
 Helpers::Helpers(QObject *parent)
     : QObject(parent)
@@ -53,4 +55,15 @@ QList<int> Helpers::listOfInt(const QString &s, const QString &sep)
     for (const auto &elt : s.split(sep, QString::SkipEmptyParts))
         list.push_back(elt.toInt());
     return list;
+}
+
+qreal Helpers::bedLength(qreal length)
+{
+    QSettings settings;
+
+    if (settings.value("useStandardBedLength").toBool()) {
+        return std::round((length / settings.value("standardBedLength").toDouble()) * 100) / 100;
+    } else {
+        return length;
+    }
 }

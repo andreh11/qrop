@@ -25,4 +25,5 @@ ToolButton {
     font.family: "Material Icons"
     font.pixelSize: 20
     clip: true
+    Material.foreground: Units.colorMediumEmphasis
 }

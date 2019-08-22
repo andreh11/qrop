@@ -674,24 +674,68 @@ qreal Planting::lengthToAssign(int plantingId) const
     return length - assignedLength(plantingId);
 }
 
-qreal Planting::totalLengthForWeek(int week, int year, bool greenhouse) const
+qreal Planting::totalLengthForWeek(int week, int year, int keywordId, bool greenhouse) const
 {
     QDate date;
     std::tie(date, std::ignore) = MDate::weekDates(week, year);
     int inGreenhouse = greenhouse ? 1 : 0;
-    QString queryString("select sum(length) "
-                        "from planting_view "
-                        "where planting_date <= '%1' "
-                        "and '%1' <= end_harvest_date "
-                        "and in_greenhouse = %2");
-    QSqlQuery query(queryString.arg(date.toString(Qt::ISODate)).arg(inGreenhouse));
-    query.exec();
+    QString queryString;
+    QSqlQuery query;
+    if (keywordId > 0) {
+        queryString = ("select sum(length) "
+                       "from planting_view "
+                       "join planting_keyword using (planting_id) "
+                       "where ('%1' between planting_date and end_harvest_date) "
+                       "and in_greenhouse = %2 "
+                       "and keyword_id = %3");
+        query.exec(queryString.arg(date.toString(Qt::ISODate)).arg(inGreenhouse).arg(keywordId));
+    } else {
+        queryString = ("select sum(length) "
+                       "from planting_view "
+                       "where ('%1' between planting_date and end_harvest_date) "
+                       "and in_greenhouse = %2");
+        query.exec(queryString.arg(date.toString(Qt::ISODate)).arg(inGreenhouse));
+    }
+
     debugQuery(query);
     query.first();
+    return query.value(0).toDouble();
+}
+
+qreal Planting::totalLengthForYear(int year, bool greenhouse) const
+{
+    QString queryString("SELECT SUM(length) "
+                        "FROM planting_view "
+                        "WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\" "
+                        "AND in_greenhouse = %2");
+    QSqlQuery query(queryString.arg(year).arg(greenhouse ? 1 : 0));
+    debugQuery(query);
+    query.next();
+    return query.value(0).toDouble();
+}
+
+int Planting::numberOfCrops(int year, bool greenhouse) const
+{
+    QString queryString("SELECT COUNT(DISTINCT crop_id) "
+                        "FROM planting_view "
+                        "WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\" "
+                        "AND in_greenhouse = %2");
+    QSqlQuery query(queryString.arg(year).arg(greenhouse ? 1 : 0));
+    debugQuery(query);
+    query.next();
     return query.value(0).toInt();
 }
 
-QVariantList Planting::totalLengthByWeek(int season, int year, bool greenhouse) const
+int Planting::revenue(int year) const
+{
+    QString queryString("SELECT SUM(bed_revenue) "
+                        "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
+    QSqlQuery query(queryString.arg(year));
+    query.next();
+    return query.value(0).toInt();
+}
+
+QVariantList Planting::totalLengthByWeek(int season, int year, int keywordId, bool greenhouse) const
 {
     QVariantList list;
     QDate beg;
@@ -702,7 +746,7 @@ QVariantList Planting::totalLengthByWeek(int season, int year, bool greenhouse) 
         int w;
         int y;
         w = beg.weekNumber(&y);
-        list.push_back(totalLengthForWeek(w, y, greenhouse));
+        list.push_back(totalLengthForWeek(w, y, keywordId, greenhouse));
         beg = beg.addDays(7);
     }
     return list;
@@ -730,7 +774,7 @@ QVariantList Planting::longestCropNames(int year, bool greenhouse) const
 QVariantList Planting::longestCropLengths(int year, bool greenhouse) const
 {
     QString queryString("select crop, sum(length), sum(bed_revenue), "
-                        "strftime('%Y', planting_date) as year "
+                        "strftime('%Y', sowing_date) as year "
                         "from planting_view "
                         "where year = '%1' "
                         "and in_greenhouse = %2 "
@@ -741,8 +785,12 @@ QVariantList Planting::longestCropLengths(int year, bool greenhouse) const
     query.exec();
     debugQuery(query);
     QVariantList list;
-    while (query.next())
-        list.push_back(query.value(1));
+    while (query.next()) {
+        list.push_back(Helpers::bedLength(query.value(1).toDouble()));
+        qDebug() << QString("%1;%2")
+                            .arg(query.value(0).toString())
+                            .arg(Helpers::bedLength(query.value(1).toDouble()));
+    }
     return list;
 }
 

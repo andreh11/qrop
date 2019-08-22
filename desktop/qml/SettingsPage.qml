@@ -86,10 +86,22 @@ Page {
     }
 
     ScrollView {
+        id: scrollView
         width: mainColumn.implicitWidth
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        ScrollBar.vertical: ScrollBar {
+            parent: scrollView.parent
+            anchors {
+                top: parent.top
+                right: parent.right
+                bottom: parent.bottom
+            }
+        }
 
         Flickable {
             boundsBehavior: Flickable.StopAtBounds

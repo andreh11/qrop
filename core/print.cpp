@@ -901,6 +901,7 @@ void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, i
     painter.drawText(QRectF(point3, point4).adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
                      MDate::formatDate(begHarvestDate, year, "", false));
 
+    // Print end harvest date if there is enough space and the date is in the current season.
     if ((begHarvestDate.daysTo(endHarvestDate) >= 21)
         && (endHarvestDate <= m_locationModel->seasonDates().second)) {
         painter.drawText(QRectF(point3, point4).adjusted(0, 0, -m_textPadding, 0),
