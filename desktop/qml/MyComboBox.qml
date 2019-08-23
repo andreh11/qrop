@@ -87,7 +87,6 @@ ComboBox {
     width: parent.width
     padding: 0
     editable: true
-    leftPadding: Units.smallSpacing
 
     onEditTextChanged: {
         if (activeFocus) {
@@ -125,7 +124,7 @@ ComboBox {
         color: Material.accent
         text: labelText
         font.pixelSize: 14
-//        visible: control.contentItem.text !== ""
+        visible: labelText
     }
 
     popup: Popup {
@@ -245,7 +244,6 @@ ComboBox {
         leftPadding: 10
         visible: false
     }
-
 
     RowLayout {
         anchors {
