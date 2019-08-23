@@ -77,6 +77,18 @@ Item {
         greenhouseChart.clear();
         computeField();
         computeGreenhouse();
+        toolTip.visible = false;
+    }
+
+    function setToolTip(point) {
+        var p = chart.mapToPosition(point)
+
+        var text = percentage ? qsTr("%1%").arg(Math.round(point.y * 100))
+                              : qsTr("%L1").arg(Math.round(point.y * 10))
+        toolTip.x = p.x - toolTip.width/2
+        toolTip.y = p.y - toolTip.height - Units.smallSpacing
+        toolTip.text = text
+        toolTip.visible = true
     }
 
     onYearChanged: refresh();
@@ -124,13 +136,6 @@ Item {
 
         ToolTip {
              id: toolTip
-//             contentItem: Text{
-//                 color: "#21be2b"
-//                 text: toolTip.text
-//             }
-//             background: Rectangle {
-//                 border.color: "#21be2b"
-//             }
          }
 
         ValueAxis {
@@ -187,16 +192,7 @@ Item {
             axisX: xValuesAxis
             axisY: percentage ? yCategoryAxis : yValueAxis
             pointsVisible: true
-            onClicked: {
-                var p = chart.mapToPosition(point)
-
-                var text = qsTr("%2").arg(point.y)
-                toolTip.x = p.x - toolTip.width/2
-                toolTip.y = p.y - toolTip.height - Units.smallSpacing
-                toolTip.text = text
-                //toolTip.timeout = 1000
-                toolTip.visible = true
-            }
+            onClicked: setToolTip(point)
         }
 
         LineSeries {
@@ -205,16 +201,7 @@ Item {
             axisX: xValuesAxis
             axisY: percentage ? yCategoryAxis : yValueAxis
             pointsVisible: true
-            onClicked: {
-                var p = chart.mapToPosition(point)
-
-                var text = qsTr("%2").arg(point.y)
-                toolTip.x = p.x - toolTip.width/2
-                toolTip.y = p.y - toolTip.height - Units.smallSpacing
-                toolTip.text = text
-                //toolTip.timeout = 1000
-                toolTip.visible = true
-            }
+            onClicked: setToolTip(point)
         }
     }
 
@@ -242,8 +229,16 @@ Item {
 
             Layout.fillWidth: true
             delegate: ChoiceChip {
-                text: keyword + (checked ? " <i>%L1</i>".arg(Helpers.bedLength(Keyword.totalBedLenght(keyword_id, season, year))) : "")
+                text: {
+                    if (checked) {
+                        "%1 <i>%L2</i>".arg(keyword)
+                        .arg(Helpers.bedLength(Keyword.totalBedLenght(keyword_id, season, year)))
+                    } else {
+                        keyword;
+                    }
+                }
                 ButtonGroup.group: buttonGroup
+
                 onClicked: {
                     if (checked)
                         control.keywordId = keyword_id

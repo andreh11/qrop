@@ -364,8 +364,14 @@ Page {
                         text: qsTr("GH", "Abbreviation for \"greenhouse\"")
                         font.family: "Roboto Regular"
                         font.pixelSize: Units.fontSizeBodyAndButton
+
                         Layout.leftMargin: -padding
                         Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Show all plantings")
+                                              : qsTr("Show only greenhouse plantings")
                     }
 
                     IconButton {
@@ -499,7 +505,7 @@ Page {
                         Layout.rightMargin: Layout.leftMargin
 
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Show the note pane")
+                        ToolTip.text: checked ? qsTr("Hide notes") : qsTr("Show notes")
                         ToolTip.delay: Units.shortDuration
                     }
 
@@ -527,42 +533,6 @@ Page {
                                 noteSideSheet.visible = false;
                         }
                     }
-
-//                    Column {
-//                        id: revenueColumn
-//                        visible: !checks
-//                        Layout.leftMargin: Units.smallSpacing
-//                        Layout.rightMargin: Units.smallSpacing
-//                        Label {
-//                            text: qsTr("Revenue")
-//                            color: Material.color(Material.Blue)
-//                            font.family: "Roboto Regular"
-//                            font.pixelSize: 10
-//                        }
-//                        Label {
-//                            text: qsTr("$%L1").arg(plantingsView.revenue)
-//                            font.family: "Roboto Regular"
-//                            font.pixelSize: Units.fontSizeTitle
-//                        }
-//                    }
-
-//                    Column {
-//                        id: bedLength
-//                        visible: !checks
-//                        Layout.leftMargin: Units.smallSpacing
-//                        Layout.rightMargin: Units.smallSpacing
-//                        Label {
-//                            text: qsTr("Total Bed Length")
-//                            color: Material.color(Material.Blue)
-//                            font.family: "Roboto Regular"
-//                            font.pixelSize: 10
-//                        }
-//                        Label {
-//                            text: qsTr("%L1 beds").arg(Helpers.bedLength(plantingsView.totalBedLength))
-//                            font.family: "Roboto Regular"
-//                            font.pixelSize: Units.fontSizeTitle
-//                        }
-//                    }
 
                     Label {
                         text: qsTr("planting(s) selected", "", checks)
@@ -747,9 +717,7 @@ Page {
                             }
                         }
                     }
-
                 }
-
             }
 
             ThinDivider {
@@ -758,15 +726,12 @@ Page {
                 width: parent.width
             }
 
-
             Column {
                 id: blankStateColumn
                 z: 1
                 spacing: Units.smallSpacing
                 visible: !page.rowCount
-                anchors {
-                    centerIn: parent
-                }
+                anchors.centerIn: parent
 
                 Label {
                     id: emptyStateLabel
@@ -789,7 +754,6 @@ Page {
                     onClicked: plantingDialog.createPlanting()
                 }
             }
-
 
             PlantingsView {
                 id: plantingsView
