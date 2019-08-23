@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+  − *Plan de culture* − Amélioration mineure du graphique.
   - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches
     et de l'assolement.
   - *Plan de culture* − Amélioration de l'apparence des panneaux latéraux.

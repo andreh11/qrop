@@ -49,10 +49,6 @@ Page {
             anchors.fill: parent
             spacing: Units.smallSpacing
 
-            Item {
-                Layout.fillWidth: true
-            }
-
             Row {
                 id: checkButtonRow
                 spacing: 0
@@ -70,6 +66,12 @@ Page {
                     text: qsTr("Greenhouse")
                     autoExclusive: true
                 }
+
+                Layout.leftMargin: 16
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             WeekSpinBox {
@@ -111,8 +113,9 @@ Page {
                 title: qsTr("Estimated revenue")
                 text: qsTr("$%L1").arg(Planting.revenue(page.year))
 
-                Material.background: Material.color(Material.Green, Material.Shade400)
-                Layout.preferredHeight: 100
+//                Material.background: Material.color(Material.Green, Material.Shade400)
+                Material.background: "white"
+                Layout.preferredHeight: 80
                 Layout.preferredWidth: 200
             }
 
@@ -120,8 +123,9 @@ Page {
                 title: qsTr("Number of beds")
                 text: "%L1".arg(Helpers.bedLength(Planting.totalLengthForYear(page.year, greenhouseCheckBox.checked)))
 
-                Material.background: Material.color(Material.Orange, Material.Shade400)
-                Layout.preferredHeight: 100
+//                Material.background: Material.color(Material.Orange, Material.Shade400)
+                Material.background: "white"
+                Layout.preferredHeight: 80
                 Layout.preferredWidth: 200
             }
 
@@ -129,8 +133,9 @@ Page {
                 title: qsTr("Number of crops")
                 text: "%L1".arg(cropDistributionChart.numberOfCrops)
 
-                Material.background: Material.color(Material.Pink, Material.Shade400)
-                Layout.preferredHeight: 100
+//                Material.background: Material.color(Material.Pink, Material.Shade400)
+                Material.background: "white"
+                Layout.preferredHeight: 80
                 Layout.preferredWidth: 200
             }
         }
