@@ -5,6 +5,9 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Ajouts
+  - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
+
 ### Changements
   − *Plan de culture* − Amélioration mineure du graphique.
   - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches

@@ -57,6 +57,7 @@ Page {
         category: "PlantingsPane"
         property alias durationsByDefault: durationsByDefaultSwitch.checked
         property alias showDurationFields: showDurationFieldSwitch.checked
+        property alias showDensityField: showDensityFieldSwitch.checked
     }
 
     Settings {
@@ -341,6 +342,15 @@ Page {
                         SettingsSwitch {
                             id: showDurationFieldSwitch
                             text: qsTr("Show duration fields")
+                            onToggled: restartSnackbar.open();
+                        }
+
+                        ThinDivider { width: parent.width }
+
+                        SettingsSwitch {
+                            id: showDensityFieldSwitch
+                            text: qsTr("Show density field")
+                            enabled: settings.useStandardBedLength
                             onToggled: restartSnackbar.open();
                         }
 
