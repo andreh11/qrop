@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+  - *Planting form* − Add density (m²) field (#126).
+
 ### Changed
   - *Seeds and transplants lists* − Add quarter or month views (#131).
   - *Planting map* − Minor improvement of the chart pane.

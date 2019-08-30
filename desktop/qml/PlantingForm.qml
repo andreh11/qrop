@@ -88,7 +88,9 @@ Flickable {
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property real standardTotalWidth: (settings.standardBedWidth + settings.standardPathWidth) / 100.0
-    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((standardTotalWidth / rowsPerBed) * inRowSpacing / 100)) : 0
+//    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((standardTotalWidth / rowsPerBed) * inRowSpacing / 100)) : 0
+    readonly property real plantsBySquareMeter: inRowSpacing ? 100 * rowsPerBed / (standardTotalWidth * inRowSpacing) : 0
+
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
     readonly property int seedsPerHole: Number(seedsPerHoleField.text)
     readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
@@ -486,6 +488,18 @@ Flickable {
         }
     }
 
+    function updateFromDensity() {
+        if (!rowsPerBed || !standardTotalWidth)
+            return;
+        var density = Number.fromLocaleString(Qt.locale(), densityField.text)
+
+        if (density) {
+            inRowSpacingField.text = Math.round(100 * rowsPerBed / (density * standardTotalWidth));
+        } else {
+            inRowSpacingField.text = 0;
+        }
+    }
+
     function updateFromFieldSowingDate() {
         if (!durationMode && !initMode)
             return;
@@ -572,6 +586,7 @@ Flickable {
         category: "PlantingsPane"
         property bool durationsByDefault
         property bool showDurationFields
+        property bool showDensityField
     }
 
     VarietyModel {
@@ -661,6 +676,7 @@ Flickable {
                     id: inGreenhouseCheckBox
                     property bool manuallyModified
                     text: qsTr("In Greenhouse")
+                    Layout.alignment: Qt.AlignBottom
                     onPressed: manuallyModified = true
                 }
             }
@@ -691,6 +707,7 @@ Flickable {
                             notation: DoubleValidator.StandardNotation
                         }
                         Layout.fillWidth: true
+                        Layout.minimumWidth: 100
                         onActiveFocusChanged: ensureItemVisible(plantingAmountField)
                     }
 
@@ -702,6 +719,7 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 999 }
                         Layout.fillWidth: true
+                        Layout.minimumWidth: 100
                         onActiveFocusChanged: ensureItemVisible(inRowSpacingField)
                     }
 
@@ -712,8 +730,28 @@ Flickable {
                         inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator { bottom: 1; top: 99 }
                         Layout.fillWidth: true
+                        Layout.minimumWidth: 100
                         onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
-                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
+//                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
+                    }
+
+                    MyTextField {
+                        id: densityField
+                        visible: plantingSettings.showDensityField && settings.useStandardBedLength
+                        floatingLabel: true
+                        labelText: qsTr("Density (m²)")
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 100
+                        text: "%L1".arg(Math.round(plantsBySquareMeter * 100) / 100)
+                        onEditingFinished: updateFromDensity();
+                        onActiveFocusChanged: ensureItemVisible(densityField)
+                        validator: QropDoubleValidator {
+                            bottom: 0
+                            decimals: 2
+                            top: 999
+                            notation: DoubleValidator.StandardNotation
+                        }
                     }
                 }
 

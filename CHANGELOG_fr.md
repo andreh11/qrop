@@ -5,6 +5,9 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Ajouts
+  - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
+
 ### Changements
   − *Semences et plants* − Ajout d'une vue mensuelle et d'une semestrielle (#131).
   − *Plan de culture* − Amélioration mineure du graphique.
