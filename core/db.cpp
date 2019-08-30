@@ -66,11 +66,14 @@ int Database::databaseVersion()
 
 void Database::backupDatabase()
 {
+    QDebug debug = qDebug();
+    debug << "Backing up database...";
     QFileInfo fileInfo(databasePath());
     auto today = QDate::currentDate();
     QString backupFileName =
             QString("%1-%2.sqlite").arg(fileInfo.baseName(), today.toString(Qt::ISODate));
     QFile::copy(fileInfo.absoluteFilePath(), fileInfo.absolutePath() + "/" + backupFileName);
+    debug << "done.";
 }
 
 void Database::removeFileIfExists(const QUrl &url)
@@ -106,9 +109,7 @@ void Database::migrate()
     int lastVersion = fileInfoList.last().baseName().toInt();
 
     if (dbVersion < lastVersion) {
-        qInfo() << "Backup database...";
         backupDatabase();
-        qInfo() << "done.";
 
         qInfo() << "!!!! Migration database from version" << dbVersion << "to latest version "
                 << lastVersion;
@@ -158,10 +159,11 @@ void Database::connectToDatabase(const QUrl &url)
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
     query.exec();
-    if (create)
+    if (create) {
         createDatabase();
-    else
+    } else {
         migrate();
+    }
 }
 
 void Database::execSqlFile(const QString &fileName, const QString &separator)

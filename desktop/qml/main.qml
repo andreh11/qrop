@@ -93,13 +93,18 @@ ApplicationWindow {
 
     function switchToDatabase(db) {
         if (db === "main") {
-            Database.connectToDatabase();
-            currentDatabaseFile = "";
+            if (currentDatabaseFile !== "") {
+                Database.connectToDatabase();
+                currentDatabaseFile = "";
+            }
         }  else if (db === "second") {
-            Database.connectToDatabase(secondDatabaseFile);
-            currentDatabaseFile = secondDatabaseFile;
+            if (currentDatabaseFile !== "second") {
+                Database.connectToDatabase(secondDatabaseFile);
+                currentDatabaseFile = secondDatabaseFile;
+            }
         }
-        locationsPage.reload();
+        if (locationsPage.item)
+            locationsPage.item.reload();
         stackView.currentItem.refresh();
     }
 

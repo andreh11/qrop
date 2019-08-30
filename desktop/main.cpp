@@ -62,6 +62,8 @@
 #include "rolemodel.h"
 #include "seedcompanymodel.h"
 #include "seedlistmodel.h"
+#include "seedlistmonthmodel.h"
+#include "seedlistquartermodel.h"
 #include "taskimplementmodel.h"
 #include "taskmethodmodel.h"
 #include "taskmodel.h"
@@ -111,6 +113,8 @@ void registerTypes()
     qmlRegisterType<TimeValidator>("io.qrop.components", 1, 0, "TimeValidator");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
     qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
+    qmlRegisterType<SeedListMonthModel>("io.qrop.components", 1, 0, "SeedListMonthModel");
+    qmlRegisterType<SeedListQuarterModel>("io.qrop.components", 1, 0, "SeedListQuarterModel");
     qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
     qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");

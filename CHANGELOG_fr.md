@@ -6,6 +6,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+  − *Semences et plants* − Ajout d'une vue mensuelle et d'une semestrielle (#131).
   − *Plan de culture* − Amélioration mineure du graphique.
   - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches
     et de l'assolement.
@@ -13,6 +14,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - Amélioration de la performance des vues séries et tâches.
 
 ### Corrections
+  − *Semences et plants* − Correction de la fonction de tri des dates et noms.
   - Correction de la longueur à assigner lors d'une assignation multiple à un 
     emplacement.
 

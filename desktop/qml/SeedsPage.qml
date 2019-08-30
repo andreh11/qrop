@@ -41,8 +41,8 @@ Page {
     property var tableHeaderModel: [
         { name: qsTr("Date"),   columnName: "planting_date", width: 100, alignment: Text.AlignLeft, visible: transplantsRadioButton.checked },
         { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft, visible: true },
-        { name: qsTr("Variety"),   columnName: "variety", width: 200, alignment: Text.AlignLeft, visible: true },
-        { name: qsTr("Seed company"), columnName: "seed_company", width: 200, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Variety"),   columnName: "variety", width: 150, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Seed company"), columnName: "seed_company", width: 150, alignment: Text.AlignLeft, visible: true },
         { name: qsTr("Number"),    columnName: seedsRadioButton.checked ? "seeds_number" : "plants_needed", width: 100, alignment: Text.AlignRight, visible: true },
         { name: qsTr("Quantity"),    columnName: "seeds_quantity", width: 100, alignment: Text.AlignRight,
             visible: seedsRadioButton.checked }
@@ -112,6 +112,23 @@ Page {
         sortColumn: tableHeaderModel[tableSortColumn].columnName
         sortOrder: tableSortOrder
     }
+
+    SeedListMonthModel {
+        id: seedListMonthModel
+        year: page.year
+        filterString: filterField.text
+        sortColumn: tableHeaderModel[tableSortColumn].columnName
+        sortOrder: tableSortOrder
+    }
+
+    SeedListQuarterModel {
+        id: seedListQuarterModel
+        year: page.year
+        filterString: filterField.text
+        sortColumn: tableHeaderModel[tableSortColumn].columnName
+        sortOrder: tableSortOrder
+    }
+
 
     TransplantListModel {
         id: transplantListModel
@@ -208,10 +225,43 @@ Page {
                                                           : qsTr("Search transplants")
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhPreferLowercase
-                width: seedListView.width
+//                width: seedListView.width
 
                 anchors {
-                    centerIn: parent
+                    left: checkButtonRow.right
+                    right: rangeButtonRow.left
+                    leftMargin: Units.formSpacing
+                    rightMargin: Units.formSpacing
+                }
+            }
+
+            ButtonGroup {
+                buttons: rangeButtonRow.children
+            }
+
+            Row {
+                id: rangeButtonRow
+                visible: seedsRadioButton.checked
+                anchors {
+                    right: weekSpinBox.left
+                    rightMargin: Units.formSpacing
+                    verticalCenter: parent.verticalCenter
+                }
+
+                ButtonCheckBox {
+                    id: yearRangeButton
+                    checked: true
+                    text: qsTr("Year")
+                }
+
+                ButtonCheckBox {
+                    id: quarterRangeButton
+                    text: qsTr("Quarter")
+                }
+
+                ButtonCheckBox {
+                    id: monthRangeButton
+                    text: qsTr("Month")
                 }
             }
 
@@ -272,7 +322,18 @@ Page {
                 bottomMargin: Units.smallSpacing
             }
 
-            model: seedsRadioButton.checked ? seedListModel : transplantListModel
+            model: {
+                if (seedsRadioButton.checked) {
+                    if (yearRangeButton.checked)
+                        seedListModel;
+                    else if (quarterRangeButton.checked)
+                        seedListQuarterModel;
+                    else
+                        seedListMonthModel;
+                } else {
+                    transplantListModel
+                }
+            }
             highlightMoveDuration: 0
             highlightResizeDuration: 0
             highlight: Rectangle {
@@ -292,6 +353,43 @@ Page {
                     bottom: parent.bottom
                 }
             }
+
+            Component {
+                id: sectionHeading
+                Rectangle {
+                    width: parent.width
+                    height: Units.rowHeight
+                    color: Material.color(Material.Grey, Material.Shade100)
+                    radius: 4
+
+                    Text {
+                        text: (seedsRadioButton.checked && monthRangeButton.checked)
+                              ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
+                              : section
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: Material.accent
+                        font.bold: true
+                        font.pixelSize: Units.fontSizeTitle
+                        font.family: "Roboto Regular"
+                    }
+                }
+            }
+
+            section.property: {
+                if (seedsRadioButton.checked) {
+                    if (yearRangeButton.checked)
+                        undefined;
+                    else if (quarterRangeButton.checked)
+                        "trimester";
+                    else
+                        "month";
+                } else {
+                    "week";
+                }
+            }
+            section.criteria: ViewSection.FullString
+            section.delegate: sectionHeading
+            section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {

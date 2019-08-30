@@ -18,6 +18,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QElapsedTimer>
 
 #include "location.h"
 #include "planting.h"
@@ -40,19 +41,35 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
 void TaskModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
+    QElapsedTimer timer;
+    timer.start();
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug() << "sortColumn time:" << timer.elapsed() << "ms";
     sortColumnChanged();
 }
 
 void TaskModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
+    QElapsedTimer timer;
+    timer.start();
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
+    qDebug() << "sortOrder time:" << timer.elapsed() << "ms";
     sortOrderChanged();
 }
 
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    auto leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
+    auto rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
+
+    if (m_plantingId < 0) { // We don't care about task types when listing one planting's tasks.
+        if (leftType < rightType)
+            return QSortFilterProxyModel::sortOrder() == Qt::AscendingOrder;
+        else if (leftType > rightType)
+            return QSortFilterProxyModel::sortOrder() == Qt::DescendingOrder;
+    }
+
     bool before = true;
     if (m_sortColumn == QStringLiteral("assigned_date")) {
         auto leftDate = fieldDate(left.row(), left.parent(), "completed_date");
@@ -118,16 +135,7 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
         before = mTask->description(leftId) < mTask->description(rightId);
     }
 
-    if (m_plantingId > 0)
-        return before;
-
-    auto leftType = rowValue(left.row(), left.parent(), "task_type_id").toInt();
-    auto rightType = rowValue(right.row(), right.parent(), "task_type_id").toInt();
-
-    // Keep same sorting for task types.
-    if (QSortFilterProxyModel::sortOrder() == Qt::AscendingOrder)
-        return (leftType < rightType) || (leftType == rightType && before);
-    return (leftType > rightType) || (leftType == rightType && before);
+    return before;
 }
 
 QVariant TaskModel::data(const QModelIndex &idx, int role) const

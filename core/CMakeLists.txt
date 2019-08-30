@@ -27,6 +27,8 @@ add_library(core SHARED
         rolemodel.cpp
         seedcompanymodel.cpp
         seedlistmodel.cpp
+        seedlistmonthmodel.cpp
+        seedlistquartermodel.cpp
         sortfilterproxymodel.cpp
         task.cpp
         taskimplementmodel.cpp

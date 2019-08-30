@@ -5,12 +5,14 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Changed
+  - *Seeds and transplants lists* − Add quarter or month views (#131).
   - *Planting map* − Minor improvement of the chart pane.
   - *PDF* − Minor improvements of PDF output for calendar and field map.
   - *Planting map* − Improve side sheets look.
   - Improve planting and task views performance.
 
 ### Fixed
+  - *Seeds and transplants lists* − Fix sorting bug for dates and names.
   - Fix planting length when assigning to multiple locations.
 
 ## 0.3 - 2019-06-15 

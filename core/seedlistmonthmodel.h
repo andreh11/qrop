@@ -14,24 +14,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEEDLISTMODEL_H
-#define SEEDLISTMODEL_H
+#ifndef SEEDLISTMONTHMODEL_H
+#define SEEDLISTMONTHMODEL_H
 
 #include <QObject>
 
 #include "core_global.h"
-#include "sortfilterproxymodel.h"
+#include "seedlistmodel.h"
 
-class CORESHARED_EXPORT SeedListModel : public SortFilterProxyModel
+class CORESHARED_EXPORT SeedListMonthModel : public SeedListModel
 {
     Q_OBJECT
 public:
-    explicit SeedListModel(QObject *parent = nullptr, const QString &tableName = "seed_list_view");
+    explicit SeedListMonthModel(QObject *parent = nullptr,
+                                const QString &tableName = "seed_list_month_view");
+
+    void setSortColumn(const QString &columnName) override;
+    void setSortOrder(const QString &order) override;
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
-    virtual int groupLessThan(const QModelIndex &left, const QModelIndex &right) const;
+    int groupLessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 
-#endif // SEEDLISTMODEL_H
+#endif // SEEDLISTMONTHMODEL_H
