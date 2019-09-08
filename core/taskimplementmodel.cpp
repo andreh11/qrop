@@ -43,7 +43,7 @@ void TaskImplementModel::setMethodId(int methodId)
 
 bool TaskImplementModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int taskMethodId = rowValue(sourceRow, sourceParent, "task_method_id").toInt();
+    int taskMethodId = sourceRowValue(sourceRow, sourceParent, "task_method_id").toInt();
     return taskMethodId == m_methodId
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

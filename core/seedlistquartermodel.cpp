@@ -22,16 +22,11 @@ SeedListQuarterModel::SeedListQuarterModel(QObject *parent, const QString &table
     setSortColumn("crop_id");
 }
 
-bool SeedListQuarterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
-{
-    int year = rowValue(sourceRow, sourceParent, "year").toInt();
-    return (year == m_year) && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
-}
-
 int SeedListQuarterModel::groupLessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    int leftQuarter = rowValue(left.row(), left.parent(), QStringLiteral("trimester")).toInt();
-    int rightQuarter = rowValue(right.row(), right.parent(), QStringLiteral("trimester")).toInt();
+    int leftQuarter = sourceRowValue(left.row(), left.parent(), QStringLiteral("trimester")).toInt();
+    int rightQuarter =
+            sourceRowValue(right.row(), right.parent(), QStringLiteral("trimester")).toInt();
     if (leftQuarter < rightQuarter)
         return -1;
     else if (leftQuarter == rightQuarter)

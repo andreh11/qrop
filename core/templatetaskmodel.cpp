@@ -86,15 +86,15 @@ void TemplateTaskModel::setBeforeDate(bool before)
 
 bool TemplateTaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int taskTemplateId = rowValue(sourceRow, sourceParent, "task_template_id").toInt();
+    int taskTemplateId = sourceRowValue(sourceRow, sourceParent, "task_template_id").toInt();
     if (taskTemplateId < 0 || m_taskTemplateId < 0)
         return false;
 
-    int templateDateType = rowValue(sourceRow, sourceParent, "template_date_type").toInt();
+    int templateDateType = sourceRowValue(sourceRow, sourceParent, "template_date_type").toInt();
     if (templateDateType < 0 || templateDateType > 3)
         return false;
 
-    int linkDays = rowValue(sourceRow, sourceParent, "link_days").toInt();
+    int linkDays = sourceRowValue(sourceRow, sourceParent, "link_days").toInt();
     return ((m_beforeDate && linkDays < 0) || (!m_beforeDate && linkDays >= 0))
             && taskTemplateId == m_taskTemplateId && templateDateType == m_templateDateType
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);

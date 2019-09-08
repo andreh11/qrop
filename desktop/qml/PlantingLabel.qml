@@ -11,29 +11,20 @@ Item {
 
     property int plantingId
     readonly property bool validId: plantingId > 0
-    property string crop: Planting.cropName(plantingId)
-    property string variety: Planting.varietyName(plantingId)
-    property date sowingDate: Planting.sowingDate(plantingId)
-    property date endHarvestDate: Planting.endHarvestDate(plantingId)
-    property int rank: Planting.rank(plantingId)
+    property var map: Planting.mapFromId("planting_view", plantingId)
+    property string crop: map['crop']
+    property string variety: map['variety']
+    property date sowingDate: map['sowing_date']
+    property date endHarvestDate: map['end_harvest_date']
+    property int rank: map['planting_rank']
     property int year
-    property int length: Planting.totalLength(plantingId)
-    property var locations: Location.locations(plantingId)
+    property var locations
+    property double length
     property bool showOnlyDates: false
     property bool showRank: false
 
     implicitHeight: childrenRect.height
     implicitWidth: childrenRect.width
-
-    function cropName(plantingId) {
-        var map = Planting.mapFromId("planting_view", plantingId);
-        return map['crop']
-    }
-
-    function varietyName(plantingId) {
-        var map = Planting.mapFromId("planting_view", plantingId);
-        return map['variety']
-    }
 
     Settings {
         id: settings
@@ -48,6 +39,7 @@ Item {
             text: validId ? "%1, %2".arg(crop).arg(variety) : " "
             font.family: "Roboto Regular"
             font.pixelSize: Units.fontSizeBodyAndButton
+            elide: Text.ElideRight
         }
         Text {
             text: {
@@ -75,6 +67,7 @@ Item {
             font.family: "Roboto Regular"
             color: Material.color(Material.Grey, Material.Shade600)
             font.pixelSize: Units.fontSizeCaption
+            elide: Text.ElideRight
         }
     }
 }

@@ -19,6 +19,7 @@
 #include <QSqlField>
 #include <QSqlRecord>
 #include <QDate>
+#include <QSqlDriver>
 
 #include "databaseutility.h"
 
@@ -99,15 +100,17 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     if (tableName.isNull())
         return {};
 
-    QString queryString("SELECT * FROM %1 WHERE %2 = %3");
-    QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(id));
+    QString queryString("SELECT * FROM %1 WHERE %2 = :id");
+    QSqlQuery query;
+    query.setForwardOnly(true);
+    query.prepare(queryString.arg(tableName).arg(tableName + "_id"));
+    query.bindValue(":id", id);
     query.exec();
     debugQuery(query);
 
     query.next();
     if (query.isValid())
         return query.record();
-
     return {};
 }
 
@@ -119,15 +122,14 @@ QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName
     if (tableName.isNull())
         return {};
 
-    QString queryString("SELECT * FROM %1 WHERE %2 in %3");
-    QString ids = "(";
+    QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
+    QString ids = "";
     int i;
     for (i = 0; i < idList.length() - 1; i++)
         ids.append(QString::number(idList[i]) + ", ");
-    ids.append(QString::number(idList[i]) + ")");
+    ids.append(QString::number(idList[i]));
 
     QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
-    query.exec();
     debugQuery(query);
 
     QList<QSqlRecord> recordList;
@@ -215,7 +217,6 @@ void DatabaseUtility::addLink(const QString &table, const QString &field1, int i
 {
     QString queryString = "INSERT INTO %1(%2,%3) VALUES (%4,%5)";
     QSqlQuery query(queryString.arg(table, field1, field2).arg(id1).arg(id2));
-    query.exec();
     debugQuery(query);
 }
 
@@ -279,7 +280,6 @@ void DatabaseUtility::remove(int id) const
     QString queryString = "DELETE FROM %1 WHERE %2 = %3";
     QString idColumnName = table() + "_id";
     QSqlQuery query(queryString.arg(table()).arg(idColumnName).arg(id));
-    query.exec();
     debugQuery(query);
 }
 
@@ -296,7 +296,6 @@ void DatabaseUtility::removeLink(const QString &table, const QString &field1, in
 {
     QString queryString = "DELETE FROM %1 WHERE %2 = %3 AND %4 = %5";
     QSqlQuery query(queryString.arg(table, field1).arg(id1).arg(field2).arg(id2));
-    query.exec();
     debugQuery(query);
 }
 

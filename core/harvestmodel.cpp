@@ -61,7 +61,7 @@ void HarvestModel::updateWeekDates()
 
 bool HarvestModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    QDate taskDate = fieldDate(sourceRow, sourceParent, "date");
+    QDate taskDate = sourceFieldDate(sourceRow, sourceParent, "date");
     bool inRange = m_mondayDate <= taskDate && taskDate <= m_sundayDate;
     return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

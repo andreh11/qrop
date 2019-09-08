@@ -30,7 +30,6 @@ public:
                                   const QString &tableName = "seed_list_quarter_view");
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     int groupLessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 

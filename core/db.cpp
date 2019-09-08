@@ -24,6 +24,7 @@
 #include <QSqlQuery>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QSqlDriver>
 
 #include "db.h"
 #include "family.h"
@@ -59,7 +60,6 @@ void Database::deleteDatabase()
 int Database::databaseVersion()
 {
     QSqlQuery query("PRAGMA user_version");
-    query.exec();
     query.next();
     return query.value(0).toInt();
 }
@@ -111,7 +111,7 @@ void Database::migrate()
     if (dbVersion < lastVersion) {
         backupDatabase();
 
-        qInfo() << "!!!! Migration database from version" << dbVersion << "to latest version "
+        qInfo() << "!!!! Migrating database from version" << dbVersion << "to latest version "
                 << lastVersion;
 
         for (const auto &fileInfo : fileInfoList) {
@@ -140,11 +140,10 @@ void Database::connectToDatabase(const QUrl &url)
 
     QString fileName;
     bool create = false;
-    if (url.isEmpty()) { // default database path
+    if (url.isEmpty()) // default database path
         fileName = databasePath();
-    } else {
+    else
         fileName = url.toLocalFile();
-    }
 
     QFileInfo fileInfo(fileName);
     create = !fileInfo.exists();
@@ -157,8 +156,12 @@ void Database::connectToDatabase(const QUrl &url)
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
     }
 
+    qDebug() << "Has named placeholders:"
+             << QSqlDatabase::database().driver()->hasFeature(QSqlDriver::NamedPlaceholders);
+    qDebug() << "Has positional placeholders"
+             << QSqlDatabase::database().driver()->hasFeature(QSqlDriver::PositionalPlaceholders);
+
     QSqlQuery query("PRAGMA foreign_keys = ON");
-    query.exec();
     if (create) {
         createDatabase();
     } else {

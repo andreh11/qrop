@@ -39,7 +39,7 @@ void TaskTypeModel::setShowPlantingTasks(bool show)
 
 bool TaskTypeModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int taskTypeId = rowValue(sourceRow, sourceParent, "task_type_id").toInt();
+    int taskTypeId = sourceRowValue(sourceRow, sourceParent, "task_type_id").toInt();
     bool isPlantingTask = taskTypeId <= 3;
     return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)
             && (m_showPlantingTasks || !isPlantingTask);

@@ -138,50 +138,50 @@ ListView {
         sortOrder: tableSortOrder
     }
     
-    headerPositioning: ListView.OverlayHeader
-    header: Rectangle {
-        id: headerRectangle
-        height: headerRow.height
-        width: parent.width
-        color: Material.color(Material.Grey, Material.Shade100)
-        z: 3
-        Column {
-            width: parent.width
+//    headerPositioning: ListView.OverlayHeader
+//    header: Rectangle {
+//        id: headerRectangle
+//        height: headerRow.height
+//        width: parent.width
+//        color: Material.color(Material.Grey, Material.Shade100)
+//        z: 3
+//        Column {
+//            width: parent.width
             
-            Row {
-                id: headerRow
-                height: Units.rowHeight
-                spacing: Units.smallSpacing
-                leftPadding: Units.smallSpacing
+//            Row {
+//                id: headerRow
+//                height: Units.rowHeight
+//                spacing: Units.smallSpacing
+//                leftPadding: Units.smallSpacing
                 
-                Item {
-                    visible: true
-                    id: headerCheckbox
-                    anchors.verticalCenter: headerRow.verticalCenter
-                    width: parent.height
-                    height: width
-                }
+//                Item {
+//                    visible: true
+//                    id: headerCheckbox
+//                    anchors.verticalCenter: headerRow.verticalCenter
+//                    width: parent.height
+//                    height: width
+//                }
                 
-                Repeater {
-                    model: taskView.tableHeaderModel
+//                Repeater {
+//                    model: taskView.tableHeaderModel
                     
-                    TableHeaderLabel {
-                        text: modelData.name
-                        anchors.verticalCenter: headerRow.verticalCenter
-                        width: modelData.width
-                        state: taskView.tableSortColumn === index ? taskView.tableSortOrder : ""
-                        onNewColumn: {
-                            if (taskView.tableSortColumn !== index) {
-                                taskView.tableSortColumn = index
-                                taskView.tableSortOrder = "descending"
-                            }
-                        }
-                        onNewOrder: taskView.tableSortOrder = order
-                    }
-                }
-            }
-        }
-    }
+//                    TableHeaderLabel {
+//                        text: modelData.name
+//                        anchors.verticalCenter: headerRow.verticalCenter
+//                        width: modelData.width
+//                        state: taskView.tableSortColumn === index ? taskView.tableSortOrder : ""
+//                        onNewColumn: {
+//                            if (taskView.tableSortColumn !== index) {
+//                                taskView.tableSortColumn = index
+//                                taskView.tableSortOrder = "descending"
+//                            }
+//                        }
+//                        onNewOrder: taskView.tableSortOrder = order
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     delegate: Rectangle {
         id: delegate
@@ -331,8 +331,6 @@ ListView {
                             anchors.verticalCenter: parent.verticalCenter
                             plantingId: firstPlantingId
                             showOnlyDates: true
-                            sowingDate: Planting.sowingDate(plantingId)
-                            endHarvestDate: Planting.endHarvestDate(plantingId)
                             showRank: true
                             year: taskView.year
                         }

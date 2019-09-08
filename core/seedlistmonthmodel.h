@@ -29,11 +29,7 @@ public:
     explicit SeedListMonthModel(QObject *parent = nullptr,
                                 const QString &tableName = "seed_list_month_view");
 
-    void setSortColumn(const QString &columnName) override;
-    void setSortOrder(const QString &order) override;
-
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     int groupLessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 

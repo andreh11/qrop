@@ -49,6 +49,7 @@ add_library(core SHARED
         tasktemplate.cpp
         templatetask.cpp
         templatetaskmodel.cpp
+        tableprinter.cpp
 	core_resources.qrc)
 
 target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)

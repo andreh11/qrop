@@ -398,6 +398,8 @@ Page {
                 height: Units.rowHeight
                 width: parent.width
 
+                property var map: Planting.mapFromId(model.planting_id)
+
                 function editHarvest() {
                     harvestDialog.edit(model.harvest_id, model.crop_id);
                     dialogOpened = true;
@@ -460,40 +462,21 @@ Page {
                         TextCheckBox {
                             id: checkBox
                             width: parent.height * 0.8
-                            text: Planting.cropName(model.planting_id).slice(0,2)
-                            rank: Planting.rank(model.planting_id)
+                            text: map['crop'].slice(0,2)
+                            rank: map['planting_rank']
                             font.pixelSize: 26
-                            color: Planting.cropColor(model.planting_id)
+                            color: map['crop_color']
                             round: true
                             anchors.verticalCenter: parent.verticalCenter
                             hoverEnabled: false
                             checkable: false
                         }
 
-//                        Rectangle {
-//                            id: textIcon
-//                            height: parent.height * 0.8
-//                            //            height: 40
-//                            width: height
-//                            radius: 80
-//                            color: Planting.cropColor(model.planting_id)
-//                            anchors.verticalCenter: parent.verticalCenter
-
-//                            Text {
-//                                anchors.centerIn: parent
-//                                text: Planting.cropName(model.planting_id).slice(0,2)
-//                                color: "white"
-//                                font { family: "Roboto Regular"; pixelSize: 20 }
-//                            }
-//                        }
-
                         PlantingLabel {
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
                             plantingId: model.planting_id
                             showOnlyDates: true
-                            sowingDate: Planting.sowingDate(plantingId)
-                            endHarvestDate: Planting.endHarvestDate(plantingId)
                             year: page.year
                             showRank: false
                         }

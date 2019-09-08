@@ -80,7 +80,7 @@ void LocationModel::refreshTree()
     }
 }
 
-QVariant LocationModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
+QVariant LocationModel::sourceRowValue(int row, const QModelIndex &parent, const QString &field) const
 {
     if (!m_treeModel)
         return {};
@@ -446,7 +446,7 @@ bool LocationModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     }
 
     if (m_showOnlyGreenhouseLocations) {
-        bool isGreenhouse = rowValue(sourceRow, sourceParent, "greenhouse").toInt() == 1;
+        bool isGreenhouse = sourceRowValue(sourceRow, sourceParent, "greenhouse").toInt() == 1;
         accept = accept && isGreenhouse;
     }
 

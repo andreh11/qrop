@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   - *Planting form* − Add density (m²) field (#126).
 
 ### Changed
-  - *Seeds and transplants lists* − Add quarter or month views (#131).
+  - *Seeds and transplants lists* − Add quarter and month PDF outputs (#131).
+  - *Seeds and transplants lists* − Add quarter and month views (#131).
   - *Planting map* − Minor improvement of the chart pane.
   - *PDF* − Minor improvements of PDF output for calendar and field map.
   - *Planting map* − Improve side sheets look.

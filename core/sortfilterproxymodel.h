@@ -59,16 +59,22 @@ public:
     virtual void setSortOrder(const QString &order);
 
     std::pair<QDate, QDate> seasonDates() const;
+    QVariant rowValue(int row, const QString &field) const
+    {
+        return rowValue(row, QModelIndex(), field);
+    }
 
 protected:
     SqlTableModel *m_model;
-    bool isDateInRange(const QDate &date) const;
-    virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
-    QDate fieldDate(int row, const QModelIndex &parent, const QString &field) const;
+    virtual bool isDateInRange(const QDate &date) const;
+    QDate sourceFieldDate(int row, const QModelIndex &parent, const QString &field) const;
     int m_year;
     int m_season { 1 }; // default: summer
     QString m_sortColumn;
     QString m_sortOrder { "ascending" };
+    virtual QVariant sourceRowValue(int sourceRow, const QModelIndex &sourceParent,
+                                    const QString &field) const;
+    virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
 
 private:
     QString m_tableName;

@@ -28,8 +28,8 @@ void NoteModel::setPlantingId(int plantingId)
 
 bool NoteModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    int leftCrop = rowValue(left.row(), left.parent(), "planting_id").toInt();
-    int rightCrop = rowValue(right.row(), right.parent(), "planting_id").toInt();
+    int leftCrop = sourceRowValue(left.row(), left.parent(), "planting_id").toInt();
+    int rightCrop = sourceRowValue(right.row(), right.parent(), "planting_id").toInt();
 
     return leftCrop < rightCrop;
 }
@@ -38,7 +38,7 @@ bool NoteModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
 {
     if (m_plantingId < 0)
         return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
-    int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
+    int plantingId = sourceRowValue(sourceRow, sourceParent, "planting_id").toInt();
     return plantingId == m_plantingId
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

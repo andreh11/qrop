@@ -67,7 +67,6 @@ void Location::remove(int id) const
     idString.chop(2);
 
     QSqlQuery query(queryString.arg(table(), idColumnName, idString));
-    query.exec();
     debugQuery(query);
 }
 
@@ -379,7 +378,6 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length) const
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(length));
-    query.exec();
     debugQuery(query);
     return length;
 }
@@ -416,7 +414,6 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length, const 
     QString queryString("INSERT INTO planting_location (planting_id, location_id, length) "
                         "VALUES (%1, %2, %3)");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId).arg(lengthToAdd));
-    query.exec();
     debugQuery(query);
     return lengthToAdd;
 }
@@ -449,7 +446,6 @@ int Location::totalBedLength(bool greenhouse) const
                         " FROM location "
                         " WHERE parent_id IS NOT NULL)");
     QSqlQuery query(queryString.arg(inGreenhouse));
-    query.exec();
     debugQuery(query);
     query.first();
     return query.value(0).toInt();

@@ -57,7 +57,7 @@ void TaskTemplateModel::toggle(int row)
 
     auto idx = index(row, 0);
 
-    auto templateId = rowValue(mapToSource(idx).row(), QModelIndex(), "task_template_id").toInt();
+    auto templateId = sourceRowValue(mapToSource(idx).row(), QModelIndex(), "task_template_id").toInt();
     if (isApplied(templateId))
         mTaskTemplate->unapplyList(templateId, m_plantingIdList);
     else
@@ -70,7 +70,7 @@ void TaskTemplateModel::toggle(int row)
 QVariant TaskTemplateModel::data(const QModelIndex &idx, int role) const
 {
     QModelIndex sourceIndex = mapToSource(idx);
-    auto templateId = rowValue(sourceIndex.row(), sourceIndex.parent(), "task_template_id").toInt();
+    auto templateId = sourceRowValue(sourceIndex.row(), sourceIndex.parent(), "task_template_id").toInt();
     switch (role) {
     case AppliedRole:
         return isApplied(templateId);

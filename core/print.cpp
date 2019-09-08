@@ -37,6 +37,13 @@
 #include "task.h"
 #include "task.h"
 
+#include "tableprinter.h"
+
+#include "seedlistmodel.h"
+#include "seedlistmonthmodel.h"
+#include "seedlistquartermodel.h"
+#include "transplantlistmodel.h"
+
 Print::Print(QObject *parent)
     : QObject(parent)
     , mLocation(new Location(this))
@@ -61,8 +68,6 @@ Print::Print(QObject *parent)
                          "strftime('%Y', date) as harvest_year "
                          "FROM harvest_view "
                          "WHERE harvest_year = '%1' ")
-    , seedsQueryString("SELECT * FROM seed_list_view WHERE year = '%1' ")
-    , transplantsQueryString("SELECT * FROM transplant_list_view WHERE year = '%1' ")
 {
     cropPlanMap["entire"] = {
         "",
@@ -273,54 +278,6 @@ Print::Print(QObject *parent)
                      "<td class='tg' align=left>%4</th>"
                      "<td class='tg' align=left>%5</th>"
                      "</tr>") };
-
-    seedsInfo = { "",
-                  "",
-                  "",
-                  QString("<h2 align=center>%1 %2</h2>").arg(tr("Seed list")).arg("%1"),
-                  QString("<table width='100%' style='page-break-after: always'>"
-                          "<tr>"
-                          "<th class='tg' align=left width=25%>%1</th>"
-                          "<th class='tg' align=left width=25%>%2</th>"
-                          "<th class='tg' align=left width=20%>%3</th>"
-                          "<th class='tg' align=right width=15%>%4</th>"
-                          "<th class='tg' align=right width=15%>%5</th>"
-                          "</tr>")
-                          .arg(tr("Crop"))
-                          .arg(tr("Variety"))
-                          .arg(tr("Company"))
-                          .arg(tr("Number"))
-                          .arg(tr("Quantity")),
-                  ("<td class='tg' align=left>%1</th>"
-                   "<td class='tg' align=left>%2</th>"
-                   "<td class='tg' align=left>%3</th>"
-                   "<td class='tg' align=right>%4</th>"
-                   "<td class='tg' align=right>%5</th>"
-                   "</tr>") };
-
-    transplantsInfo = { "",
-                        "",
-                        "",
-                        QString("<h2 align=center>%1 %2</h2>").arg(tr("Transplant list")).arg("%1"),
-                        QString("<table width='100%' style='page-break-after: always'>"
-                                "<tr>"
-                                "<th class='tg' align=left width=15%>%1</th>"
-                                "<th class='tg' align=left width=25%>%2</th>"
-                                "<th class='tg' align=left width=25%>%3</th>"
-                                "<th class='tg' align=left width=20%>%4</th>"
-                                "<th class='tg' align=right width=15%>%5</th>"
-                                "</tr>")
-                                .arg(tr("Date"))
-                                .arg(tr("Crop"))
-                                .arg(tr("Variety"))
-                                .arg(tr("Company"))
-                                .arg(tr("Number")),
-                        ("<td class='tg' align=left>%1</td>"
-                         "<td class='tg' align=left>%2</th>"
-                         "<td class='tg' align=left>%3</th>"
-                         "<td class='tg' align=left>%4</th>"
-                         "<td class='tg' align=right>%5</th>"
-                         "</tr>") };
 }
 
 void Print::printCropPlan(int year, int month, int week, const QUrl &path, const QString &type)
@@ -368,16 +325,81 @@ void Print::printHarvests(int year, const QUrl &path)
     exportPdf(html, path, QPageLayout::Portrait);
 }
 
-void Print::printSeedList(int year, const QUrl &path)
+void Print::preparePdfWriter(QPdfWriter &writer)
 {
-    QString html = seedsHtml(year);
-    exportPdf(html, path, QPageLayout::Portrait);
+    writer.setPageSize(QPagedPaintDevice::A4);
+    writer.setPageOrientation(QPageLayout::Portrait);
+    writer.setPageMargins(QMargins(10, 10, 10, 10), QPageLayout::Millimeter);
+}
+
+void Print::printSeedList(int year, const QUrl &path, const QString &section)
+{
+    QPdfWriter writer(path.toLocalFile());
+    preparePdfWriter(writer);
+
+    QPainter painter;
+    painter.begin(&writer);
+
+    TablePrinter tablePrinter(&painter, &writer);
+    tablePrinter.setTableInfo({ { "crop", tr("Crop"), 10, TablePrinter::String },
+                                { "variety", tr("Variety"), 10, TablePrinter::String },
+                                { "seed_company", tr("Company"), 10, TablePrinter::String },
+                                { "seeds_number", tr("Number"), 5, TablePrinter::Number },
+                                { "seeds_quantity", tr("Quantity"), 5, TablePrinter::Weight } });
+
+    SeedListModel *model;
+    if (section == "month") {
+        model = new SeedListMonthModel(this);
+        tablePrinter.setTitle(tr("Monthly Seed List (%1)").arg(year));
+    } else if (section == "quarter") {
+        model = new SeedListQuarterModel(this);
+        tablePrinter.setTitle(tr("Quarterly Seed List (%1)").arg(year));
+    } else {
+        model = new SeedListModel(this);
+        tablePrinter.setTitle(tr("Yearly Seed List (%1)").arg(year));
+    }
+
+    model->setSortColumn("crop");
+    model->setFilterYear(year);
+    tablePrinter.setModel(model);
+
+    if (section == "month")
+        tablePrinter.printTable("month", true);
+    else if (section == "quarter")
+        tablePrinter.printTable("trimester", true);
+    else
+        tablePrinter.printTable();
+
+    painter.end();
+    delete model;
 }
 
 void Print::printTransplantList(int year, const QUrl &path)
 {
-    QString html = transplantsHtml(year);
-    exportPdf(html, path, QPageLayout::Portrait);
+    QPdfWriter writer(path.toLocalFile());
+    preparePdfWriter(writer);
+
+    QPainter painter;
+    painter.begin(&writer);
+
+    TransplantListModel model;
+    model.setSortColumn("crop");
+    model.setFilterYear(year);
+    model.setSortColumn("planting_date");
+
+    TablePrinter tablePrinter(&painter, &writer);
+    tablePrinter.setTableInfo({ { "planting_date", tr("Transplanting date"), 8, TablePrinter::Week },
+                                { "crop", tr("Crop"), 10, TablePrinter::String },
+                                { "variety", tr("Variety"), 10, TablePrinter::String },
+                                { "seed_company", tr("Company"), 10, TablePrinter::String },
+                                { "plants_needed", tr("Number"), 5, TablePrinter::Number } });
+    tablePrinter.setModel(&model);
+    tablePrinter.setTitle(tr("Transplant List (%1)").arg(year));
+    tablePrinter.setYear(year);
+
+    tablePrinter.printTable();
+
+    painter.end();
 }
 
 void Print::exportPdf(const QString &html, const QUrl &path, QPageLayout::Orientation orientation)
@@ -392,19 +414,33 @@ void Print::exportPdf(const QString &html, const QUrl &path, QPageLayout::Orient
                                  "padding: 10; "
                                  "padding-bottom: 10; "
                                  "border-style: none }"
+
+                                 "p.break {page-break-before: always}"
+
+                                 ".header { font-family: Roboto Regular; "
+                                 "font-size: 10pt; "
+                                 "padding: 10; "
+                                 "padding-bottom: 10; "
+                                 "border-style: none;"
+                                 "background-color: black;"
+                                 "color: white }"
+
                                  ".tovd  { font-family: Roboto Regular; "
                                  "font-size: 10pt; "
                                  "font-weight: bold;"
                                  "padding: 10; "
                                  "padding-bottom: 10; "
                                  "border-style: none }"
+
                                  ".type  { font-family: Roboto Regular; "
                                  "font-size: 10pt; "
                                  "padding: 10; "
                                  "padding-bottom: 10; "
                                  "border-style: none;"
                                  "background-color: #757575;"
-                                 "color: white }");
+                                 "color: white }"
+
+    );
 
     auto *doc = new QTextDocument(this);
     doc->setDocumentMargin(0);
@@ -700,78 +736,6 @@ QString Print::harvestHtml(int year) const
         i++;
     }
 
-    return html;
-}
-
-QString Print::seedsHtml(int year) const
-{
-    QString html = seedsInfo.title.arg(year);
-    html.append(seedsInfo.tableHeader);
-
-    QString queryString = seedsQueryString.arg(year);
-    queryString.append(seedsInfo.plantingTypeClause);
-    queryString.append(seedsInfo.orderClause);
-    QSqlQuery query(queryString);
-
-    qDebug() << queryString;
-
-    int i = 0;
-    while (query.next()) {
-        QString crop = query.value("crop").toString();
-        QString variety = query.value("variety").toString();
-        QString company = query.value("seed_company").toString();
-        int number = query.value("seeds_number").toInt();
-        int quantity = query.value("seeds_quantity").toInt();
-
-        if (i % 2 == 0)
-            html.append("<tr style='background-color: #e0e0e0'>");
-        else
-            html.append("<tr>");
-
-        html += seedsInfo.tableRow.arg(crop)
-                        .arg(variety)
-                        .arg(company)
-                        .arg(QString("%L1").arg(number))
-                        .arg(QString("%L1 g").arg(quantity));
-
-        i++;
-    }
-    return html;
-}
-
-QString Print::transplantsHtml(int year) const
-{
-    QString html = transplantsInfo.title.arg(year);
-    html.append(transplantsInfo.tableHeader);
-
-    QString queryString = transplantsQueryString.arg(year);
-    queryString.append(transplantsInfo.plantingTypeClause);
-    queryString.append(transplantsInfo.orderClause);
-    QSqlQuery query(queryString);
-
-    qDebug() << queryString;
-
-    int i = 0;
-    while (query.next()) {
-        QDate plantingDate = QDate::fromString(query.value("planting_date").toString(), Qt::ISODate);
-        QString crop = query.value("crop").toString();
-        QString variety = query.value("variety").toString();
-        QString company = query.value("seed_company").toString();
-        int number = query.value("plants_needed").toInt();
-
-        if (i % 2 == 0)
-            html.append("<tr style='background-color: #e0e0e0'>");
-        else
-            html.append("<tr>");
-
-        html += transplantsInfo.tableRow.arg(MDate::formatDate(plantingDate, year, "", false))
-                        .arg(crop)
-                        .arg(variety)
-                        .arg(company)
-                        .arg(QString("%L1").arg(number));
-
-        i++;
-    }
     return html;
 }
 

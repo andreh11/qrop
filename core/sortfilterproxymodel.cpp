@@ -144,23 +144,17 @@ void SortFilterProxyModel::setFilterKeyStringColumn(const QString &columnName)
 
 void SortFilterProxyModel::setSortColumn(const QString &columnName)
 {
-    //    QElapsedTimer t;
-    //    t.start();
     m_sortColumn = columnName;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    //    qDebug() << "[setSortColumn]" << t.elapsed() << "ms";
     sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
 {
-    //    QElapsedTimer t;
-    //    t.start();
     m_sortOrder = order;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    //    qDebug() << "[setSortOrder]" << t.elapsed() << "ms";
     sortOrderChanged();
 }
 
@@ -171,16 +165,34 @@ std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
-    auto index = m_model->index(row, 0, parent);
+    auto idx = mapToSource(index(row, 0, parent));
+    if (!idx.isValid())
+        return {};
+
+    return m_model->data(idx, field);
+}
+
+/**
+ * @brief SortFilterProxyModel::sourceRowValue
+ * @param row the row in the source model
+ * @param parent the parent in the source model
+ * @param field
+ * @return the value of \a field for (row, parent) in the source model
+ * @see SortFilterProxyModel::rowValue
+ */
+QVariant SortFilterProxyModel::sourceRowValue(int sourceRow, const QModelIndex &sourceParent,
+                                              const QString &field) const
+{
+    auto index = m_model->index(sourceRow, 0, sourceParent);
     if (!index.isValid())
         return {};
 
     return m_model->data(index, field);
 }
 
-QDate SortFilterProxyModel::fieldDate(int row, const QModelIndex &parent, const QString &field) const
+QDate SortFilterProxyModel::sourceFieldDate(int row, const QModelIndex &parent, const QString &field) const
 {
-    auto value = rowValue(row, parent, field);
+    auto value = sourceRowValue(row, parent, field);
     if (value.isNull())
         return {};
 

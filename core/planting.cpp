@@ -655,7 +655,6 @@ qreal Planting::assignedLength(int plantingId) const
 
     QString queryString("SELECT SUM(length) FROM planting_location WHERE planting_id=%1");
     QSqlQuery query(queryString.arg(plantingId));
-    query.exec();
     debugQuery(query);
 
     if (!query.next())
@@ -763,7 +762,6 @@ QVariantList Planting::longestCropNames(int year, bool greenhouse) const
                         "order by year, sum(length) asc");
     int inGreenhouse = greenhouse ? 1 : 0;
     QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
-    query.exec();
     debugQuery(query);
     QVariantList list;
     while (query.next())
@@ -782,7 +780,6 @@ QVariantList Planting::longestCropLengths(int year, bool greenhouse) const
                         "order by sum(length) asc");
     int inGreenhouse = greenhouse ? 1 : 0;
     QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
-    query.exec();
     debugQuery(query);
     QVariantList list;
     while (query.next()) {
@@ -805,7 +802,6 @@ QVariantList Planting::highestRevenueCropNames(int year, bool greenhouse) const
                         "order by year, sum(bed_revenue) asc");
     int inGreenhouse = greenhouse ? 1 : 0;
     QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
-    query.exec();
     debugQuery(query);
     QVariantList list;
     while (query.next())
@@ -824,7 +820,6 @@ QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) con
                         "order by year, sum(bed_revenue) asc");
     int inGreenhouse = greenhouse ? 1 : 0;
     QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
-    query.exec();
     debugQuery(query);
     QVariantList list;
     while (query.next())

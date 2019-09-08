@@ -92,7 +92,7 @@ public:
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const override;
+    QVariant sourceRowValue(int row, const QModelIndex &parent, const QString &field) const override;
 
 signals:
     void showOnlyEmptyLocationsChanged();

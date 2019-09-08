@@ -74,6 +74,9 @@ QVariant SqlTableModel::data(const QModelIndex &index, const QString &role) cons
 
 int SqlTableModel::fieldColumn(const QString &field) const
 {
+    const auto &it = m_rolesIndexes.constFind(field);
+    if (it == m_rolesIndexes.constEnd())
+        return -1;
     return m_rolesIndexes[field];
 }
 

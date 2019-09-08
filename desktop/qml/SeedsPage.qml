@@ -146,8 +146,13 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
+            console.log("[QML] rowCount() =",
+                        seedListModel.rowCount,
+                        seedListQuarterModel.rowCount,
+                        seedListMonthModel.rowCount);
             if (seedsRadioButton.checked)
-                Print.printSeedList(page.year, file);
+                Print.printSeedList(page.year, file, monthRangeButton.checked
+                                    ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
             else
                 Print.printTransplantList(page.year, file);
         }

@@ -35,8 +35,9 @@ Controls1.TreeView {
 
     property int indentation: 20
     property int draggedPlantingId: -1
-    property date plantingDate: Planting.plantingDate(draggedPlantingId)
-    property date endHarvestDate: Planting.endHarvestDate(draggedPlantingId)
+    property var plantingMap: Planting.mapFromId(draggedPlantingId)
+    property date plantingDate: plantingMap['planting_date']
+    property date endHarvestDate: plantingMap['end_harvest_date']
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
     
     property var expandIndex: null
@@ -341,10 +342,9 @@ Controls1.TreeView {
                                 var plantingId
                                 for (var i = 0; i < plantingIdList.length; i++) {
                                     plantingId = plantingIdList[i]
-                                    text += Planting.cropName(plantingId)
-                                            + ", " + Planting.varietyName(plantingId)
-                                            + " " + Planting.plantingDate(plantingId).getFullYear()
-                                            + "\n"
+                                    map = Planting.mapFromId(plantingId)
+                                    text += "%1, %2 %3\n".arg(map['crop']).arg(map['variety'])
+                                                       .arg(map['planting_date'].getFullYear())
                                 }
                                 return text.slice(0, -1)
                             }

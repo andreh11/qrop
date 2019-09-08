@@ -1,5 +1,5 @@
 
-# Changelog
+# Journal des modifications
 
 Tous les changements importants seront documentés dans ce fichier.
 
@@ -9,7 +9,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
 
 ### Changements
-  − *Semences et plants* − Ajout d'une vue mensuelle et d'une semestrielle (#131).
+  - *Semences et plants* − Ajout d'une sortie PDF pour les listes mensuelle et
+  trimestrielle (#131).
+  − *Semences et plants* − Ajout d'une vue mensuelle et d'une trimestrielle (#131).
   − *Plan de culture* − Amélioration mineure du graphique.
   - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches
     et de l'assolement.
@@ -180,7 +182,7 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## 0.1.1 - 2019-01-10
 
-### Fixed
+### Corrections
   - Construction du fichier AppImage.
 
 ## 0.1 - 2019-01-09

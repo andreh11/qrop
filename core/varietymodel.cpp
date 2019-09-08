@@ -43,6 +43,6 @@ void VarietyModel::setFilterCropId(int cropId)
 
 bool VarietyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int cropId = rowValue(sourceRow, sourceParent, "crop_id").toInt();
+    int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
     return cropId == m_cropId && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

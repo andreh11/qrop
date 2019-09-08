@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QPainter>
 #include <QPagedPaintDevice>
+#include <QPdfWriter>
 
 #include "core_global.h"
 
@@ -49,7 +50,7 @@ public:
     Q_INVOKABLE void printCropMap(int year, int season, const QUrl &path,
                                   bool showFamilyColor = false, bool showOnlyGreenhouse = false);
     Q_INVOKABLE void printHarvests(int year, const QUrl &path);
-    Q_INVOKABLE void printSeedList(int year, const QUrl &path);
+    Q_INVOKABLE void printSeedList(int year, const QUrl &path, const QString &section = "");
     Q_INVOKABLE void printTransplantList(int year, const QUrl &path);
 
 private:
@@ -76,6 +77,8 @@ private:
     LocationModel *m_locationModel;
     QSettings *mSettings;
 
+    void preparePdfWriter(QPdfWriter &writer);
+
     void exportPdf(const QString &html, const QUrl &path,
                    QPageLayout::Orientation orientation = QPageLayout::Landscape);
 
@@ -90,14 +93,6 @@ private:
     TableInfo harvestInfo;
     QString harvestQueryString;
     QString harvestHtml(int year) const;
-
-    TableInfo seedsInfo;
-    QString seedsQueryString;
-    QString seedsHtml(int year) const;
-
-    TableInfo transplantsInfo;
-    QString transplantsQueryString;
-    QString transplantsHtml(int year) const;
 
     void paintHeader(QPainter &painter, int season, int year);
     void paintRowGrid(QPainter &painter, int row);

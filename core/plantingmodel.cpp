@@ -38,8 +38,9 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
 bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     if (m_sortColumn == QStringLiteral("variety")) {
-        auto leftCrop = rowValue(left.row(), left.parent(), QStringLiteral("crop")).toString();
-        auto rightCrop = rowValue(right.row(), right.parent(), QStringLiteral("crop")).toString();
+        auto leftCrop = sourceRowValue(left.row(), left.parent(), QStringLiteral("crop")).toString();
+        auto rightCrop =
+                sourceRowValue(right.row(), right.parent(), QStringLiteral("crop")).toString();
 
         int cmp = leftCrop.localeAwareCompare(rightCrop);
         if (cmp == -1)
@@ -47,16 +48,18 @@ bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
         if (cmp == 1)
             return false;
 
-        auto leftVariety = rowValue(left.row(), left.parent(), QStringLiteral("variety")).toString();
+        auto leftVariety =
+                sourceRowValue(left.row(), left.parent(), QStringLiteral("variety")).toString();
         auto rightVariety =
-                rowValue(right.row(), right.parent(), QStringLiteral("variety")).toString();
+                sourceRowValue(right.row(), right.parent(), QStringLiteral("variety")).toString();
 
         return leftVariety.localeAwareCompare(rightVariety) == -1;
     }
 
     if (m_sortColumn == QStringLiteral("locations")) {
-        int leftId = rowValue(left.row(), left.parent(), QStringLiteral("planting_id")).toInt();
-        int rightId = rowValue(right.row(), right.parent(), QStringLiteral("planting_id")).toInt();
+        int leftId = sourceRowValue(left.row(), left.parent(), QStringLiteral("planting_id")).toInt();
+        int rightId =
+                sourceRowValue(right.row(), right.parent(), QStringLiteral("planting_id")).toInt();
         return location->fullName(location->locations(leftId))
                        .localeAwareCompare(location->fullName(location->locations(rightId)))
                 == -1;
@@ -190,14 +193,14 @@ qreal PlantingModel::totalBedLength() const
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int plantingId = rowValue(sourceRow, sourceParent, "planting_id").toInt();
-    int length = rowValue(sourceRow, sourceParent, "length").toInt();
-    QDate sowingDate = fieldDate(sourceRow, sourceParent, "sowing_date");
-    QDate plantingDate = fieldDate(sourceRow, sourceParent, "planting_date");
-    QDate harvestBeginDate = fieldDate(sourceRow, sourceParent, "beg_harvest_date");
-    QDate harvestEndDate = fieldDate(sourceRow, sourceParent, "end_harvest_date");
-    bool inGreenhouse = rowValue(sourceRow, sourceParent, "in_greenhouse").toInt() > 0;
-    int cropId = rowValue(sourceRow, sourceParent, "crop_id").toInt();
+    int plantingId = sourceRowValue(sourceRow, sourceParent, "planting_id").toInt();
+    int length = sourceRowValue(sourceRow, sourceParent, "length").toInt();
+    QDate sowingDate = sourceFieldDate(sourceRow, sourceParent, "sowing_date");
+    QDate plantingDate = sourceFieldDate(sourceRow, sourceParent, "planting_date");
+    QDate harvestBeginDate = sourceFieldDate(sourceRow, sourceParent, "beg_harvest_date");
+    QDate harvestEndDate = sourceFieldDate(sourceRow, sourceParent, "end_harvest_date");
+    bool inGreenhouse = sourceRowValue(sourceRow, sourceParent, "in_greenhouse").toInt() > 0;
+    int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
 
     bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
                     || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
@@ -209,7 +212,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
                 || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (m_cropId < 1 || cropId == m_cropId)
             && (m_keywordId < 1
-                || Helpers::listOfInt(rowValue(sourceRow, sourceParent, "keyword_ids").toString())
+                || Helpers::listOfInt(sourceRowValue(sourceRow, sourceParent, "keyword_ids").toString())
                            .contains(m_keywordId));
 
     return inRange && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);

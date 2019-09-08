@@ -258,11 +258,15 @@ int MDate::seasonYear(const QDate &date)
 
 QString MDate::dayName(const QDate &date)
 {
+    if (date == QDate::currentDate())
+        return tr("today");
     return date.toString("dddd");
 }
 
 QString MDate::shortDayName(const QDate &date)
 {
+    if (date == QDate::currentDate())
+        return tr("today", "abbreviation");
     return date.toString("ddd");
 }
 
