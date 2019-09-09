@@ -63,7 +63,7 @@ Page {
     title: qsTr("Harvests")
     padding: 0
 
-    Material.background: Material.color(Material.Grey, Material.Shade100)
+    Material.background: Material.color(Material.Grey, Material.Shade200)
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
@@ -283,14 +283,9 @@ Page {
             width: parent.width
         }
 
-        ListView {
-            id: harvestView
+        Pane {
+            Material.background: "white"
             width: Math.min(rowWidth, parent.width * 0.8)
-            clip: true
-            spacing: 4
-            boundsBehavior: Flickable.StopAtBounds
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
-
             anchors {
                 top: topDivider.bottom
                 bottom: parent.bottom
@@ -298,6 +293,31 @@ Page {
                 topMargin: Units.smallSpacing
                 bottomMargin: Units.smallSpacing
             }
+            padding: 0
+            background: Rectangle {
+                color: "white"
+                border.color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
+                radius: 4
+                border.width: 1
+            }
+
+        ListView {
+            id: harvestView
+//            width: Math.min(rowWidth, parent.width * 0.8)
+            anchors.fill: parent
+            anchors.margins: 1
+            clip: true
+            spacing: 0
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
+
+//            anchors {
+//                top: topDivider.bottom
+//                bottom: parent.bottom
+//                horizontalCenter: parent.horizontalCenter
+//                topMargin: Units.smallSpacing
+//                bottomMargin: Units.smallSpacing
+//            }
 
             model: HarvestModel {
                 id: harvestModel
@@ -348,22 +368,23 @@ Page {
                 id: headerRectangle
                 height: headerRow.height
                 width: parent.width
-                color: Material.color(Material.Grey, Material.Shade100)
+                color: "white"
+                radius: 4
                 z: 3
                 Column {
                     width: parent.width
 
                     Row {
                         id: headerRow
-                        height: Units.rowHeight
+                        height: 56
                         spacing: Units.smallSpacing
-                        leftPadding: Units.smallSpacing
+                        leftPadding: Units.formSpacing
 
                         Item {
                             visible: true
                             id: headerCheckbox
                             anchors.verticalCenter: headerRow.verticalCenter
-                            width: parent.height
+                            width: Units.rowHeight * 0.8
                             height: width
                         }
 
@@ -385,6 +406,7 @@ Page {
                             }
                         }
                     }
+                    ThinDivider { width: parent.width }
                 }
             }
 
@@ -395,7 +417,7 @@ Page {
                 border.width: rowMouseArea.containsMouse ? 1 : 0
 
                 radius: 2
-                height: Units.rowHeight
+                height: 52
                 width: parent.width
 
                 property var map: Planting.mapFromId(model.planting_id)
@@ -408,6 +430,14 @@ Page {
                 function deleteHarvest() {
                     Harvest.remove(model.harvest_id);
                     page.refresh();
+                }
+
+                ThinDivider {
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
                 }
 
                 MouseArea {
@@ -458,9 +488,10 @@ Page {
                         height: Units.rowHeight
                         spacing: Units.smallSpacing
                         leftPadding: Units.formSpacing
+                        anchors.verticalCenter: parent.verticalCenter
 
                         TextCheckBox {
-                            id: checkBox
+                            id: plantingCheckBox
                             width: parent.height * 0.8
                             text: map['crop'].slice(0,2)
                             rank: map['planting_rank']
@@ -481,30 +512,26 @@ Page {
                             showRank: false
                         }
 
-                        Label {
+                        TableLabel {
                             text: Location.fullName(Location.locations(model.planting_id))
-                            elide: Text.ElideRight
                             width: tableHeaderModel[1].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        Label {
+                        TableLabel {
                             text: "%L1 %2".arg(Math.round(model.quantity)).arg(model.unit)
-                            elide: Text.ElideRight
                             width: tableHeaderModel[2].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        Label {
+                        TableLabel {
                             text: MDate.dayName(model.date)
-                            elide: Text.ElideRight
                             width: tableHeaderModel[3].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        Label {
+                        TableLabel {
                             text: model.time
-                            elide: Text.ElideRight
                             width: tableHeaderModel[4].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -513,4 +540,6 @@ Page {
             }
         }
     }
+}
+
 }

@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   - *Planting form* − Add density (m²) field (#126).
 
 ### Changed
+  - *Field map* − When editing the field map, Crl+Left click now selects every
+    children of a location (#113).
   - *Seeds and transplants lists* − Add quarter and month PDF outputs (#131).
   - *Seeds and transplants lists* − Add quarter and month views (#131).
   - *Planting map* − Minor improvement of the chart pane.

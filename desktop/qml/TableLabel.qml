@@ -19,6 +19,10 @@ import QtQuick.Controls 2.2
 
 Label {
     id: label
-    font { family: "Roboto Condensed"; pixelSize: Units.fontSizeBodyAndButton }
+    font {
+        family: "Roboto Regular";
+        pixelSize: Units.fontSizeTable
+    }
+    color: Units.colorHighEmphasis
     elide: Text.ElideRight
 }

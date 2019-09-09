@@ -9,6 +9,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
 
 ### Changements
+  - *Parcellaire* − Lors de l'édition du parcellaire, Ctrl+Clic gauche
+    sélectionne l'ensemble des fils d'un emplacement (#113).
   - *Semences et plants* − Ajout d'une sortie PDF pour les listes mensuelle et
   trimestrielle (#131).
   − *Semences et plants* − Ajout d'une vue mensuelle et d'une trimestrielle (#131).
