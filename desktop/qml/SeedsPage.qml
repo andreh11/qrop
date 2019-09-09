@@ -40,7 +40,7 @@ Page {
     property string tableSortOrder: "ascending"
     property var tableHeaderModel: [
         { name: qsTr("Date"),   columnName: "planting_date", width: 100, alignment: Text.AlignLeft, visible: transplantsRadioButton.checked },
-        { name: qsTr("Crop"),   columnName: "crop", width: 200, alignment: Text.AlignLeft, visible: true },
+        { name: qsTr("Crop"),   columnName: "crop", width: 150, alignment: Text.AlignLeft, visible: true },
         { name: qsTr("Variety"),   columnName: "variety", width: 150, alignment: Text.AlignLeft, visible: true },
         { name: qsTr("Seed company"), columnName: "seed_company", width: 150, alignment: Text.AlignLeft, visible: true },
         { name: qsTr("Number"),    columnName: seedsRadioButton.checked ? "seeds_number" : "plants_needed", width: 100, alignment: Text.AlignRight, visible: true },
@@ -70,7 +70,7 @@ Page {
     focus: true
     padding: 0
 
-    Material.background: Material.color(Material.Grey, Material.Shade100)
+    Material.background: Material.color(Material.Grey, Material.Shade200)
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
@@ -310,22 +310,43 @@ Page {
             width: parent.width
         }
 
-        ListView {
-            id: seedListView
-            width: rowWidth
-            clip: true
-            spacing: 4
-            boundsBehavior: Flickable.StopAtBounds
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
 
+        Pane {
+            Material.background: "white"
+            width: Math.min(rowWidth, parent.width * 0.8)
             anchors {
                 top: topDivider.bottom
                 bottom: parent.bottom
-
                 horizontalCenter: parent.horizontalCenter
                 topMargin: Units.smallSpacing
                 bottomMargin: Units.smallSpacing
             }
+            padding: 0
+            background: Rectangle {
+                color: "white"
+                border.color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
+                radius: 4
+                border.width: 1
+            }
+
+        ListView {
+            id: seedListView
+            width: rowWidth
+            clip: true
+            spacing: 0
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
+
+            anchors.fill: parent
+            anchors.margins: 1
+//            anchors {
+//                top: topDivider.bottom
+//                bottom: parent.bottom
+
+//                horizontalCenter: parent.horizontalCenter
+//                topMargin: Units.smallSpacing
+//                bottomMargin: Units.smallSpacing
+//            }
 
             model: {
                 if (seedsRadioButton.checked) {
@@ -363,19 +384,29 @@ Page {
                 id: sectionHeading
                 Rectangle {
                     width: parent.width
-                    height: Units.rowHeight
+                    height: Units.tableRowHeight
                     color: Material.color(Material.Grey, Material.Shade100)
-                    radius: 4
+//                    color: Material.color(Material.Indigo, Material.Shade400)
 
                     Text {
                         text: (seedsRadioButton.checked && monthRangeButton.checked)
                               ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
                               : section
                         anchors.verticalCenter: parent.verticalCenter
+                        leftPadding: Units.formSpacing
+//                        color: Units.colorHighEmphasis
                         color: Material.accent
                         font.bold: true
-                        font.pixelSize: Units.fontSizeTitle
+                        font.pixelSize: Units.fontSizeSubheading
                         font.family: "Roboto Regular"
+                        font.capitalization: Font.Capitalize
+                    }
+                    ThinDivider {
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            right: parent.right
+                        }
                     }
                 }
             }
@@ -393,7 +424,16 @@ Page {
                 }
             }
             section.criteria: ViewSection.FullString
-            section.delegate: sectionHeading
+            section.delegate: {
+                if (seedsRadioButton.checked) {
+                    if (yearRangeButton.checked)
+                        null
+                    else
+                        sectionHeading
+                } else {
+                    null
+                }
+            }
             section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
 
             headerPositioning: ListView.OverlayHeader
@@ -401,14 +441,15 @@ Page {
                 id: headerRectangle
                 height: headerRow.height
                 width: parent.width
-                color: Material.color(Material.Grey, Material.Shade100)
+                radius: 4
+
                 z: 3
                 Column {
                     width: parent.width
 
                     Row {
                         id: headerRow
-                        height: Units.rowHeight
+                        height: Units.tableHeaderHeight
                         spacing: Units.smallSpacing
                         leftPadding: Units.formSpacing
 
@@ -433,18 +474,26 @@ Page {
                             }
                         }
                     }
+                    ThinDivider { width: parent.width }
                 }
             }
 
             delegate: Rectangle {
                 id: delegate
-                color: "white"
-                border.color: Material.color(Material.Grey, Material.Shade400)
-                border.width: rowMouseArea.containsMouse ? 1 : 0
+                color: rowMouseArea.containsMouse ?  Material.color(Material.Grey, Material.Shade100)
+                                                  : "white";
 
                 radius: 2
-                height: Units.rowHeight
+                height: Units.tableRowHeight
                 width: parent.width
+
+                ThinDivider {
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
+                }
 
                 MouseArea {
                     id: rowMouseArea
@@ -459,6 +508,7 @@ Page {
                         height: Units.rowHeight
                         spacing: Units.smallSpacing
                         leftPadding: Units.formSpacing
+                        anchors.verticalCenter: parent.verticalCenter
 
                         Label {
                             visible: tableHeaderModel[0].visible
@@ -529,4 +579,6 @@ Page {
             }
         }
     }
+}
+
 }

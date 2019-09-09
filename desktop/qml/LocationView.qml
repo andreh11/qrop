@@ -98,6 +98,11 @@ Item {
         console.timeEnd("selectAll")
     }
 
+    function selectSubTree(index) {
+        selectionModel.select(locationModel.treeSelection(index), ItemSelectionModel.Toggle);
+        locationModel.refreshTree(index);
+    }
+
     function deselectAll() {
         selectionModel.clear();
         locationModel.refreshTree();
@@ -672,6 +677,9 @@ Item {
                                         if (mouse.button !== Qt.LeftButton)
                                             return
 
+
+                                        if (mouse.modifiers & Qt.ControlModifier)
+                                            selectSubTree(styleData.index)
                                         selectionModel.select(styleData.index,
                                                               ItemSelectionModel.Toggle)
                                         // Since selectionModel.isSelected() isn't called after

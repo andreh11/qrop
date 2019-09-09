@@ -32,11 +32,15 @@ QtObject {
     readonly property int fontSizeSubheading: 16
     readonly property int fontSizeBodyAndButton: 14 // default
     readonly property int fontSizeCaption: 12
+    readonly property int fontSizeTable: fontSizeBodyAndButton
 
     readonly property int smallSpacing: 8
     readonly property int formSpacing: 16
     readonly property int mediumSpacing: 20
     readonly property int largeSpacing: 24
+
+    readonly property int tableHeaderHeight: 56
+    readonly property int tableRowHeight: 52
 
     readonly property int desktopSideSheetWidth: 320
     readonly property color closeButtonColor: Qt.rgba(0.459, 0.459, 0.459)

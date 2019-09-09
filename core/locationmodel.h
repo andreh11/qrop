@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE qreal length(const QModelIndex &index) const;
 
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
-    Q_INVOKABLE void refreshTree();
+    Q_INVOKABLE void refreshTree(const QModelIndex &index = QModelIndex());
 
     Q_INVOKABLE qreal availableSpace(const QModelIndex &index, const QDate &plantingDate,
                                      const QDate &endHarvestDate) const;
@@ -79,7 +79,7 @@ public:
     Q_INVOKABLE int depth() const;
 
     Q_INVOKABLE void selectTree(QItemSelectionModel &selectionModel);
-    Q_INVOKABLE QItemSelection treeSelection() const;
+    Q_INVOKABLE QItemSelection treeSelection(const QModelIndex &root = QModelIndex()) const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE QModelIndexList treePath(const QModelIndex &index) const;
     Q_INVOKABLE void refresh() override;

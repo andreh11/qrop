@@ -346,7 +346,7 @@ ListView {
                         }
                     }
                     
-                    Label {
+                    TableLabel {
                         text: firstPlantingId > 0
                               ? Location.fullName(Location.locations(firstPlantingId))
                               : Location.fullName(locationIdList)
@@ -356,14 +356,14 @@ ListView {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     
-                    Label {
+                    TableLabel {
                         text: Task.description(model.task_id)
                         elide: Text.ElideRight
                         width: tableHeaderModel[2].width
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     
-                    Label {
+                    TableLabel {
                         text: MDate.isoWeek(model.assigned_date) !== week ? MDate.formatDate(model.assigned_date, year, "")
                                                                           : MDate.dayName(model.assigned_date)
                         elide: Text.ElideRight

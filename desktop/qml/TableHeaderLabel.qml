@@ -55,9 +55,10 @@ Item {
         anchors.left: horizontalAlignment === Text.AlignLeft ? parent.left : undefined
         anchors.right: horizontalAlignment === Text.AlignRight ? parent.right : undefined
         elide: Text.ElideRight
-        color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
-        font.family: "Roboto Condensed"
-        font.pixelSize: 14
+//        color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
+        color: Units.colorHighEmphasis
+        font.family: "Roboto Medium"
+        font.pixelSize: Units.fontSizeTable
         horizontalAlignment: control.horizontalAlignment
     }
 
@@ -65,7 +66,7 @@ Item {
         visible: mouseArea.containsMouse && headerLabel.implicitWidth > headerLabel.width
         delay: Qt.styleHints.mousePressAndHoldInterval
         text: control.text
-        font.family: "Robo Regular"
+        font.family: "Roboto Regular"
         x: headerLabel.width / 2
         y: headerLabel.height + 16
     }

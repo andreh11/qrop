@@ -39,6 +39,6 @@ Rectangle {
 
         color: Material.color(Material.Grey, Material.Shade800)
         text: control.text
-        font { family: "Roboto Condensed"; pixelSize: 14; capitalization: Font.MixedCase }
+        font { family: "Roboto Regular"; pixelSize: Units.fontSizeTable; capitalization: Font.MixedCase }
     }
 }

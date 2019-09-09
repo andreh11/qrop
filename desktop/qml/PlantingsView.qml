@@ -29,8 +29,8 @@ ListView {
     property int year
     property int season
 
-    property int rowPadding: 16
-    property int rowSpacing: Units.smallSpacing
+    property int rowPadding: 8
+    property int rowSpacing: 8
     property int checkBoxWidth: Units.rowHeight * 0.8
     readonly property int firstColumnWidth: rowPadding + rowSpacing * 2 + checkBoxWidth + tableHeaderModel[2].width
     property alias revenue: plantingModel.revenue
@@ -363,8 +363,8 @@ ListView {
             Row {
                 id: headerRow
                 height: Units.rowHeight
-                spacing: 8
-                leftPadding: 16
+                spacing: listView.rowSpacing
+                leftPadding: listView.rowPadding
 
                 CheckBox {
                     id: headerCheckbox
@@ -432,8 +432,9 @@ ListView {
                                 Label {
                                     text: Qt.locale().monthName(modelData, Locale.ShortFormat)
                                     anchors.left: lineRectangle.right
-                                    font.family: "Roboto Condensed"
-                                    color: Material.color(Material.Grey, Material.Shade700)
+                                    font.family: "Roboto Medium"
+                                    font.pixelSize: Units.fontSizeTable
+                                    color: Units.colorHighEmphasis
                                     width: 60 - 1
                                     anchors.verticalCenter: parent.verticalCenter
                                     horizontalAlignment: Text.AlignHCenter
@@ -516,6 +517,14 @@ ListView {
                 }
             }
         }
+
+        ThinDivider {
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+        }
     }
 
     delegate: Rectangle {
@@ -552,7 +561,6 @@ ListView {
             id: delegateColumn
             width: row.width
 
-            ThinDivider { width: parent.width }
 
             Row {
                 id: row
@@ -652,15 +660,21 @@ ListView {
                     }
                 }
 
-                Repeater {
-                    model: keywordStringList
-                    delegate: SimpleChip {
-                        text: modelData
-                        visible: !showOnlyTimegraph && tableHeaderModel[tableHeaderModel.length-1].visible
-                        anchors.verticalCenter: parent.verticalCenter
+                Row {
+                    spacing: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    Repeater {
+                        model: keywordStringList
+                        delegate: SimpleChip {
+                            text: modelData
+                            visible: !showOnlyTimegraph && tableHeaderModel[tableHeaderModel.length-1].visible
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
             }
+
+            ThinDivider { width: parent.width }
         }
     }
 }

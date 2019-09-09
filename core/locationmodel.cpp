@@ -62,18 +62,15 @@ void LocationModel::refresh()
     countChanged();
 }
 
-/** Emit dataChanged signal for all indexes of the tree. */
-void LocationModel::refreshTree()
+/** Emit dataChanged signal for all indexes of the subtree whose root is \a root. */
+void LocationModel::refreshTree(const QModelIndex &root)
 {
-    QModelIndex root;
     QModelIndexList treeList;
+    treeList.push_back(root);
 
-    dataChanged(index(0, 0, root), index(rowCount() - 1, 0, root));
-    for (int row = 0; row < rowCount(root); row++)
-        treeList.push_back(index(row, 0, root));
-
+    QModelIndex parent;
     for (int i = 0; i < treeList.length(); i++) {
-        QModelIndex parent = treeList[i];
+        parent = treeList[i];
         dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
         for (int row = 0; row < rowCount(parent); row++)
             treeList.push_back(index(row, 0, parent));
@@ -535,28 +532,29 @@ int LocationModel::depth() const
     return d;
 }
 
-/** Return a list of all QModelIndex of location tree. */
-QItemSelection LocationModel::treeSelection() const
+/**
+ * Return a selection of the subtree whose root is \a root.
+ *
+ * If no root is given, retun the indexes of the whole tree.
+ */
+QItemSelection LocationModel::treeSelection(const QModelIndex &root) const
 {
-    QModelIndex root;
-    QModelIndexList treeList;
     QItemSelection selection;
+    QModelIndexList treeList;
+    treeList.push_back(root);
 
-    for (int row = 0; row < rowCount(root); row++)
-        treeList.push_back(index(row, 0, root));
-    QItemSelection rootSelection(index(0, 0, root), index(rowCount() - 1, 0, root));
-    selection.merge(rootSelection, QItemSelectionModel::Select);
-
+    QModelIndex parent;
     for (int i = 0; i < treeList.length(); i++) {
-        QModelIndex parent = treeList[i];
-        QItemSelection sel(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
-        selection.merge(sel, QItemSelectionModel::Select);
+        parent = treeList[i];
+        selection.merge(QItemSelection(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent)),
+                        QItemSelectionModel::Select);
         for (int row = 0; row < rowCount(parent); row++)
             treeList.push_back(index(row, 0, parent));
     }
 
     return selection;
 }
+
 /** Return a list of all QModelIndex of location tree. */
 void LocationModel::selectTree(QItemSelectionModel &selectionModel)
 {

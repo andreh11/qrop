@@ -38,7 +38,7 @@ Item {
         Text {
             text: validId ? "%1, %2".arg(crop).arg(variety) : " "
             font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeBodyAndButton
+            font.pixelSize: Units.fontSizeTable
             elide: Text.ElideRight
         }
         Text {
@@ -65,8 +65,8 @@ Item {
                 return txt;
             }
             font.family: "Roboto Regular"
-            color: Material.color(Material.Grey, Material.Shade600)
-            font.pixelSize: Units.fontSizeCaption
+            color: Units.colorMediumEmphasis
+            font.pixelSize: Units.fontSizeTable
             elide: Text.ElideRight
         }
     }
