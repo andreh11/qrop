@@ -28,7 +28,7 @@ int SeedListMonthModel::groupLessThan(const QModelIndex &left, const QModelIndex
     int rightMonth = sourceRowValue(right.row(), right.parent(), QStringLiteral("month")).toInt();
     if (leftMonth < rightMonth)
         return -1;
-    else if (leftMonth == rightMonth)
+    if (leftMonth == rightMonth)
         return 0;
     else
         return 1;

@@ -54,14 +54,14 @@ public:
     Q_INVOKABLE void printTransplantList(int year, const QUrl &path);
 
 private:
-    typedef struct {
+    using TableInfo = struct {
         QString plantingTypeClause;
         QString monthClause;
         QString orderClause;
         QString title;
         QString tableHeader;
         QString tableRow;
-    } TableInfo;
+    };
 
     int m_firstColumnWidth { 2000 };
     int m_rowHeight { 500 };

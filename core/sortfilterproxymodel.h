@@ -65,8 +65,8 @@ public:
     }
 
 protected:
-    SqlTableModel *m_model;
     virtual bool isDateInRange(const QDate &date) const;
+    SqlTableModel *m_model;
     QDate sourceFieldDate(int row, const QModelIndex &parent, const QString &field) const;
     int m_year;
     int m_season { 1 }; // default: summer

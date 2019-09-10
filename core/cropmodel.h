@@ -36,7 +36,7 @@ signals:
     void familyIdChanged();
 
 private:
-    int m_familyId;
+    int m_familyId { -1 };
 };
 
 #endif // CROPMODEL_H

@@ -44,9 +44,8 @@ public:
     TreeItem *parent() const;
     int row() const;
 
-    QSqlRecord m_record;
-
 private:
+    QSqlRecord m_record;
     QList<TreeItem *> m_children;
     TreeItem *m_parent;
 };
@@ -69,7 +68,7 @@ public:
                         int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &parent) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex &index = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;

@@ -712,7 +712,7 @@ QString Print::harvestHtml(int year) const
         int successionNumber = mPlanting->rank(plantingId);
 
         QList<int> locationIdList;
-        for (auto idString : locationString.splitRef(","))
+        for (const auto& idString : locationString.splitRef(","))
             locationIdList.append(idString.toInt());
 
         if (i % 2 == 0)

@@ -37,7 +37,7 @@ public:
     Q_INVOKABLE void removeFromCurrentApplications(int templateTaskId) const;
 
     Q_INVOKABLE void apply(int templateTaskId, int plantingId) const;
-    Q_INVOKABLE void applyList(int templateTaskId, QList<int> plantingIdList) const;
+    Q_INVOKABLE void applyList(int templateTaskId, const QList<int> &plantingIdList) const;
     //    Q_INVOKABLE void unapply(int templateTaskId, int plantingId) const;
     //    Q_INVOKABLE void unapplyList(int templateTaskId, QList<int> plantingIdList) const;
 

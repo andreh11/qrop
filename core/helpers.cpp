@@ -31,7 +31,7 @@ qreal Helpers::coordinate(qint64 dayNumber)
 {
     if (dayNumber < 0)
         return 0;
-    else if (dayNumber > 365)
+    if (dayNumber > 365)
         return mGraphWidth;
     return (dayNumber / 365.0) * mGraphWidth;
 }

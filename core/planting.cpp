@@ -180,7 +180,7 @@ QVariant Planting::get(const QVariantMap &map, const QSqlRecord &record, const Q
 {
     if (map.contains(key))
         return map.value(key);
-    else if (record.contains(key))
+    if (record.contains(key))
         return record.value(key);
     return {};
 }

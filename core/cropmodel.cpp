@@ -20,7 +20,6 @@
 
 CropModel::CropModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , m_familyId(-1)
 {
     setSortColumn("crop");
     setFilterKeyStringColumn("crop");

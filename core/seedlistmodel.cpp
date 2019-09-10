@@ -42,16 +42,16 @@ bool SeedListModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
     int cmp = groupLessThan(left, right);
     if (cmp < 0)
         return QSortFilterProxyModel::sortOrder() == Qt::AscendingOrder;
-    else if (cmp > 0)
+    if (cmp > 0)
         return QSortFilterProxyModel::sortOrder() == Qt::DescendingOrder;
 
     if (m_sortColumn == QStringLiteral("crop")) {
         auto leftCrop = sourceRowValue(left.row(), left.parent(), "crop").toString();
         auto rightCrop = sourceRowValue(right.row(), right.parent(), "crop").toString();
         int cmp = leftCrop.localeAwareCompare(rightCrop);
-        if (cmp < 0) {
+        if (cmp < 0)
             return true;
-        } else if (cmp == 0) {
+        if (cmp == 0) {
             auto leftVariety = sourceRowValue(left.row(), left.parent(), "variety").toString();
             auto rightVariety = sourceRowValue(right.row(), right.parent(), "variety").toString();
             return leftVariety.localeAwareCompare(rightVariety) < 0;

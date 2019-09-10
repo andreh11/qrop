@@ -281,7 +281,7 @@ void Database::createData()
     QSqlDatabase::database().transaction();
     QMap<QString, int> familyMap;
     Family family;
-    for (auto pair : familyList) {
+    for (const auto& pair : familyList) {
         familyMap[pair.first] = family.add({ { "family", pair.first }, { "interval", pair.second } });
     }
 
@@ -289,7 +289,7 @@ void Database::createData()
     DatabaseUtility crop;
     Variety variety;
     crop.setTable("crop");
-    for (auto pair : cropList) {
+    for (const auto& pair : cropList) {
         cropMap[pair.first] =
                 crop.add({ { "crop", pair.first }, { "family_id", familyMap.value(pair.second) } });
         variety.addDefault(cropMap[pair.first]);
@@ -300,19 +300,19 @@ void Database::createData()
     taskType.add({ { "type", tr("Direct sow") }, { "task_type_id", 1 } });
     taskType.add({ { "type", tr("Greenhouse sow") }, { "task_type_id", 2 } });
     taskType.add({ { "type", tr("Transplant") }, { "task_type_id", 3 } });
-    for (auto task : taskList) {
+    for (const auto& task : taskList) {
         taskType.add({ { "type", task } });
     }
 
     DatabaseUtility unit;
     unit.setTable("unit");
-    for (auto pair : unitList) {
+    for (const auto& pair : unitList) {
         unit.add({ { "fullname", pair.first }, { "abbreviation", pair.second } });
     }
 
     DatabaseUtility seedCompany;
     seedCompany.setTable("seed_company");
-    for (auto company : companyList) {
+    for (const auto& company : companyList) {
         seedCompany.add({ { "seed_company", company } });
     }
 

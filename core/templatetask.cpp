@@ -118,7 +118,7 @@ void TemplateTask::apply(int templateTaskId, int plantingId) const
     mTask->add(map);
 }
 
-void TemplateTask::applyList(int templateTaskId, QList<int> plantingIdList) const
+void TemplateTask::applyList(int templateTaskId, const QList<int> &plantingIdList) const
 {
     QSqlDatabase::database().transaction();
     for (const int plantingId : plantingIdList)

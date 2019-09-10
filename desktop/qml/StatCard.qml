@@ -24,7 +24,7 @@ Pane {
     
     Label {
         id: textLabel
-        font.family: "Eczar"
+        font.family: "Roboto Regular"
         font.pixelSize: Units.fontSizeHeadline
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft

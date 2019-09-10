@@ -142,7 +142,7 @@ QList<int> TaskTemplate::plantingTemplates(int plantingId) const
     return queryIds(queryString.arg(plantingId), "task_template_id");
 }
 
-QList<int> TaskTemplate::plantingsCommonTemplates(QList<int> plantingIdList) const
+QList<int> TaskTemplate::plantingsCommonTemplates(const QList<int> &plantingIdList) const
 {
     if (plantingIdList.empty())
         return {};
@@ -181,7 +181,7 @@ void TaskTemplate::apply(int templateId, int plantingId, bool transaction) const
         QSqlDatabase::database().commit();
 }
 
-void TaskTemplate::applyList(int templateId, QList<int> plantingIdList) const
+void TaskTemplate::applyList(int templateId, const QList<int> &plantingIdList) const
 {
     QSqlDatabase::database().transaction();
     for (const int plantingId : plantingIdList)
@@ -199,7 +199,7 @@ bool TaskTemplate::hasTasks(int templateId) const
     return tasks(templateId).length() > 0;
 }
 
-void TaskTemplate::unapplyList(int templateId, QList<int> plantingIdList) const
+void TaskTemplate::unapplyList(int templateId, const QList<int> &plantingIdList) const
 {
     for (const int plantingId : plantingIdList)
         unapply(templateId, plantingId);

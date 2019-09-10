@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE qreal length(const QModelIndex &index) const;
 
     Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
-    Q_INVOKABLE void refreshTree(const QModelIndex &index = QModelIndex());
+    Q_INVOKABLE void refreshTree(const QModelIndex &root = QModelIndex());
 
     Q_INVOKABLE qreal availableSpace(const QModelIndex &index, const QDate &plantingDate,
                                      const QDate &endHarvestDate) const;

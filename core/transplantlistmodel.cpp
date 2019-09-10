@@ -36,24 +36,26 @@ bool TransplantListModel::lessThan(const QModelIndex &left, const QModelIndex &r
         auto lhs = sourceFieldDate(left.row(), left.parent(), "planting_date");
         auto rhs = sourceFieldDate(right.row(), right.parent(), "planting_date");
         return lhs < rhs;
-    } else if (m_sortColumn == QStringLiteral("crop")) {
+    }
+    if (m_sortColumn == QStringLiteral("crop")) {
         auto leftCrop = sourceRowValue(left.row(), left.parent(), "crop").toString();
         auto rightCrop = sourceRowValue(right.row(), right.parent(), "crop").toString();
         int cmp = leftCrop.localeAwareCompare(rightCrop);
-        if (cmp < 0) {
+        if (cmp < 0)
             return true;
-        } else if (cmp == 0) {
+        if (cmp == 0) {
             auto leftVariety = sourceRowValue(left.row(), left.parent(), "variety").toString();
             auto rightVariety = sourceRowValue(right.row(), right.parent(), "variety").toString();
             return leftVariety.localeAwareCompare(rightVariety) < 0;
         }
-    } else if (m_sortColumn == QStringLiteral("variety")
-               || m_sortColumn == QStringLiteral("seed_company")) {
+    }
+    if (m_sortColumn == QStringLiteral("variety") || m_sortColumn == QStringLiteral("seed_company")) {
         auto leftVariety = sourceRowValue(left.row(), left.parent(), m_sortColumn).toString();
         auto rightVariety = sourceRowValue(right.row(), right.parent(), m_sortColumn).toString();
         return leftVariety.localeAwareCompare(rightVariety) < 0;
-    } else if (m_sortColumn == QStringLiteral("seeds_number")
-               || m_sortColumn == QStringLiteral("seeds_quantity")) {
+    }
+    if (m_sortColumn == QStringLiteral("seeds_number")
+        || m_sortColumn == QStringLiteral("seeds_quantity")) {
         auto lhs = sourceRowValue(left.row(), left.parent(), m_sortColumn).toInt();
         auto rhs = sourceRowValue(right.row(), right.parent(), m_sortColumn).toInt();
         return lhs < rhs;

@@ -66,7 +66,7 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
     if (m_plantingId < 0) { // We don't care about task types when listing one planting's tasks.
         if (leftType < rightType)
             return QSortFilterProxyModel::sortOrder() == Qt::AscendingOrder;
-        else if (leftType > rightType)
+        if (leftType > rightType)
             return QSortFilterProxyModel::sortOrder() == Qt::DescendingOrder;
     }
 

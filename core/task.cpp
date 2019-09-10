@@ -490,7 +490,8 @@ std::pair<int, int> Task::sowPlantTaskIds(int plantingId) const
         if (taskType == TaskType::DirectSow) {
             sowingTaskId = plantingTaskId = taskId;
             break;
-        } else if (taskType == TaskType::GreenhouseSow) {
+        }
+        if (taskType == TaskType::GreenhouseSow) {
             sowingTaskId = taskId;
             if (plantingTaskId > 0)
                 break;

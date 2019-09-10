@@ -29,7 +29,7 @@ int SeedListQuarterModel::groupLessThan(const QModelIndex &left, const QModelInd
             sourceRowValue(right.row(), right.parent(), QStringLiteral("trimester")).toInt();
     if (leftQuarter < rightQuarter)
         return -1;
-    else if (leftQuarter == rightQuarter)
+    if (leftQuarter == rightQuarter)
         return 0;
     else
         return 1;
