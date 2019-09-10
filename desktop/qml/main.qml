@@ -40,7 +40,7 @@ ApplicationWindow {
 
     readonly property bool largeDisplay: width > 800
     readonly property bool smallDisplay: width < 500
-    property bool railMode: false
+    property bool railMode: width > 1200
     property bool searchMode: false
     property bool showSaveButton: false
     property string searchString: searchField.text

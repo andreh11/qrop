@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
-import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
 
 import io.qrop.components 1.0
@@ -39,12 +38,35 @@ Page {
     property int tableSortColumn: 1
     property string tableSortOrder: "ascending"
     property var tableHeaderModel: [
-        { name: qsTr("Date"),   columnName: "planting_date", width: 100, alignment: Text.AlignLeft, visible: transplantsRadioButton.checked },
-        { name: qsTr("Crop"),   columnName: "crop", width: 150, alignment: Text.AlignLeft, visible: true },
-        { name: qsTr("Variety"),   columnName: "variety", width: 150, alignment: Text.AlignLeft, visible: true },
-        { name: qsTr("Seed company"), columnName: "seed_company", width: 150, alignment: Text.AlignLeft, visible: true },
-        { name: qsTr("Number"),    columnName: seedsRadioButton.checked ? "seeds_number" : "plants_needed", width: 100, alignment: Text.AlignRight, visible: true },
-        { name: qsTr("Quantity"),    columnName: "seeds_quantity", width: 100, alignment: Text.AlignRight,
+        { name: qsTr("Date"),
+            columnName: "planting_date",
+            width: 100,
+            alignment: Text.AlignLeft,
+            visible: transplantsRadioButton.checked },
+        { name: qsTr("Crop"),
+            columnName: "crop",
+            width: 150,
+            alignment: Text.AlignLeft,
+            visible: true },
+        { name: qsTr("Variety"),
+            columnName: "variety",
+            width: 150,
+            alignment: Text.AlignLeft,
+            visible: true },
+        { name: qsTr("Seed company"),
+            columnName: "seed_company",
+            width: 150,
+            alignment: Text.AlignLeft,
+            visible: true },
+        { name: qsTr("Number"),
+            columnName: seedsRadioButton.checked ? "seeds_number" : "plants_needed",
+            width: 100,
+            alignment: Text.AlignRight,
+            visible: true },
+        { name: qsTr("Quantity"),
+            columnName: "seeds_quantity",
+            width: 100,
+            alignment: Text.AlignRight,
             visible: seedsRadioButton.checked }
     ]
 
@@ -146,10 +168,6 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
-            console.log("[QML] rowCount() =",
-                        seedListModel.rowCount,
-                        seedListQuarterModel.rowCount,
-                        seedListMonthModel.rowCount);
             if (seedsRadioButton.checked)
                 Print.printSeedList(page.year, file, monthRangeButton.checked
                                     ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
@@ -165,26 +183,20 @@ Page {
         padding: 0
         Material.elevation: 1
 
-        Label {
+        BlankLabel {
             id: seedBlankLabel
+            z:2
+            primaryText: qsTr('No seeds to order for %1').arg(page.year)
             anchors.centerIn: parent
             visible: seedsRadioButton.checked && !seedsRowCount
-            text:  qsTr('No seeds to order for %1').arg(page.year)
-            font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-            color: Qt.rgba(0, 0, 0, 0.8)
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
         }
 
-        Label {
+        BlankLabel {
             id: transplantBlankLabel
+            z: 2
+            primaryText: qsTr('No transplants to order for %1').arg(page.year)
             anchors.centerIn: parent
             visible: transplantsRadioButton.checked && !transplantsRowCount
-            text:  qsTr('No transplants to order for %1').arg(page.year)
-            font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-            color: Qt.rgba(0, 0, 0, 0.8)
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
         }
 
         Rectangle {
@@ -193,12 +205,6 @@ Page {
             visible: true
             width: parent.width
             height: Units.toolBarHeight
-
-            //            RowLayout {
-            //                id: buttonRow
-            //                anchors.fill: parent
-            //                spacing: Units.smallSpacing
-            //                visible: !filterMode
 
             ButtonGroup {
                 buttons: checkButtonRow.children
@@ -230,7 +236,7 @@ Page {
                                                           : qsTr("Search transplants")
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhPreferLowercase
-//                width: seedListView.width
+                //                width: seedListView.width
 
                 anchors {
                     left: checkButtonRow.right
@@ -310,7 +316,6 @@ Page {
             width: parent.width
         }
 
-
         Pane {
             Material.background: "white"
             width: Math.min(rowWidth, parent.width * 0.8)
@@ -329,78 +334,170 @@ Page {
                 border.width: 1
             }
 
-        ListView {
-            id: seedListView
-            width: rowWidth
-            clip: true
-            spacing: 0
-            boundsBehavior: Flickable.StopAtBounds
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            ListView {
+                id: seedListView
+                width: rowWidth
+                clip: true
+                spacing: 0
+                boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.HorizontalAndVerticalFlick
 
-            anchors.fill: parent
-            anchors.margins: 1
-//            anchors {
-//                top: topDivider.bottom
-//                bottom: parent.bottom
+                anchors.fill: parent
+                anchors.margins: 1
 
-//                horizontalCenter: parent.horizontalCenter
-//                topMargin: Units.smallSpacing
-//                bottomMargin: Units.smallSpacing
-//            }
-
-            model: {
-                if (seedsRadioButton.checked) {
-                    if (yearRangeButton.checked)
-                        seedListModel;
-                    else if (quarterRangeButton.checked)
-                        seedListQuarterModel;
-                    else
-                        seedListMonthModel;
-                } else {
-                    transplantListModel
-                }
-            }
-            highlightMoveDuration: 0
-            highlightResizeDuration: 0
-            highlight: Rectangle {
-                visible: seedListView.activeFocus
-                z:3;
-                opacity: 0.1;
-                color: Material.primary
-                radius: 2
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                parent: seedListView.parent
-                anchors {
-                    top: parent.top
-                    topMargin: buttonRectangle.height + topDivider.height
-                    right: parent.right
-                    bottom: parent.bottom
-                }
-            }
-
-            Component {
-                id: sectionHeading
-                Rectangle {
-                    width: parent.width
-                    height: Units.tableRowHeight
-                    color: Material.color(Material.Grey, Material.Shade100)
-//                    color: Material.color(Material.Indigo, Material.Shade400)
-
-                    Text {
-                        text: (seedsRadioButton.checked && monthRangeButton.checked)
-                              ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
-                              : section
-                        anchors.verticalCenter: parent.verticalCenter
-                        leftPadding: Units.formSpacing
-//                        color: Units.colorHighEmphasis
-                        color: Material.accent
-                        font.bold: true
-                        font.pixelSize: Units.fontSizeSubheading
-                        font.family: "Roboto Regular"
-                        font.capitalization: Font.Capitalize
+                model: {
+                    if (seedsRadioButton.checked) {
+                        if (yearRangeButton.checked)
+                            seedListModel;
+                        else if (quarterRangeButton.checked)
+                            seedListQuarterModel;
+                        else
+                            seedListMonthModel;
+                    } else {
+                        transplantListModel
                     }
+                }
+
+                highlightMoveDuration: 0
+                highlightResizeDuration: 0
+                highlight: Rectangle {
+                    visible: seedListView.activeFocus
+                    z:3;
+                    opacity: 0.1;
+                    color: Material.primary
+                    radius: 2
+                }
+
+                ScrollBar.vertical: ScrollBar {
+                    parent: seedListView.parent
+                    anchors {
+                        top: parent.top
+                        topMargin: buttonRectangle.height + topDivider.height
+                        right: parent.right
+                        bottom: parent.bottom
+                    }
+                }
+
+                Component {
+                    id: sectionHeading
+                    Rectangle {
+                        width: parent.width
+                        height: Units.tableRowHeight
+                        color: Material.color(Material.Grey, Material.Shade100)
+
+                        Text {
+                            text: (seedsRadioButton.checked && monthRangeButton.checked)
+                                  ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
+                                  : section
+                            anchors.verticalCenter: parent.verticalCenter
+                            leftPadding: Units.formSpacing
+                            color: Material.accent
+                            font.bold: true
+                            font.pixelSize: Units.fontSizeSubheading
+                            font.family: "Roboto Regular"
+                            font.capitalization: Font.Capitalize
+                        }
+
+                        ThinDivider {
+                            anchors {
+                                bottom: parent.bottom
+                                left: parent.left
+                                right: parent.right
+                            }
+                        }
+                    }
+                }
+
+                section.criteria: ViewSection.FullString
+                section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
+                section.property: {
+                    if (seedsRadioButton.checked) {
+                        if (yearRangeButton.checked)
+                            undefined;
+                        else if (quarterRangeButton.checked)
+                            "trimester";
+                        else
+                            "month";
+                    } else {
+                        "week";
+                    }
+                }
+                section.delegate: {
+                    if (seedsRadioButton.checked) {
+                        if (yearRangeButton.checked)
+                            null
+                        else
+                            sectionHeading
+                    } else {
+                        null
+                    }
+                }
+
+                headerPositioning: ListView.OverlayHeader
+                header: Rectangle {
+                    id: headerRectangle
+                    height: headerRow.height
+                    width: parent.width
+                    radius: 4
+
+                    z: 3
+                    Column {
+                        width: parent.width
+
+                        Row {
+                            id: headerRow
+                            height: Units.tableHeaderHeight
+                            spacing: Units.smallSpacing
+                            leftPadding: Units.formSpacing
+
+                            Repeater {
+                                model: page.tableHeaderModel
+
+                                TableHeaderLabel {
+                                    visible: (index == 0 && transplantsRadioButton.checked)
+                                             || (index === 5 && seedsRadioButton.checked)
+                                             || (index > 0 && index < 5)
+
+                                    text: modelData.name
+                                    anchors.verticalCenter: headerRow.verticalCenter
+                                    width: modelData.width
+                                    state: page.tableSortColumn === index ? page.tableSortOrder : ""
+                                    horizontalAlignment: modelData.alignment
+                                    onNewColumn: {
+                                        if (page.tableSortColumn !== index) {
+                                            page.tableSortColumn = index
+                                            page.tableSortOrder = "descending"
+                                        }
+                                    }
+                                    onNewOrder: page.tableSortOrder = order
+                                }
+                            }
+                        }
+                        ThinDivider { width: parent.width }
+                    }
+                }
+
+                delegate: Rectangle {
+                    id: delegate
+
+                    property var labelList: [
+                        MDate.formatDate(model.planting_date, page.year),
+                        model.crop,
+                        model.variety,
+                        model.seed_company,
+                        "%L1".arg(seedsRadioButton.checked ? model.seeds_number : model.plants_needed),
+                        model.seeds_quantity > 1000
+                        ? qsTr("%L1 kg").arg(Math.round(model.seeds_quantity * 0.1) / 100)
+                        : qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
+                    ]
+
+                    color: rowMouseArea.containsMouse
+                           ? Material.color(Material.Grey, Material.Shade100)
+                           : "white"
+                    radius: 2
+                    height: Units.tableRowHeight
+                    width: parent.width
+
                     ThinDivider {
                         anchors {
                             bottom: parent.bottom
@@ -408,177 +505,35 @@ Page {
                             right: parent.right
                         }
                     }
-                }
-            }
 
-            section.property: {
-                if (seedsRadioButton.checked) {
-                    if (yearRangeButton.checked)
-                        undefined;
-                    else if (quarterRangeButton.checked)
-                        "trimester";
-                    else
-                        "month";
-                } else {
-                    "week";
-                }
-            }
-            section.criteria: ViewSection.FullString
-            section.delegate: {
-                if (seedsRadioButton.checked) {
-                    if (yearRangeButton.checked)
-                        null
-                    else
-                        sectionHeading
-                } else {
-                    null
-                }
-            }
-            section.labelPositioning: ViewSection.CurrentLabelAtStart |  ViewSection.InlineLabels
+                    MouseArea {
+                        id: rowMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        preventStealing: true
+                        propagateComposedEvents: true
 
-            headerPositioning: ListView.OverlayHeader
-            header: Rectangle {
-                id: headerRectangle
-                height: headerRow.height
-                width: parent.width
-                radius: 4
+                        Row {
+                            id: summaryRow
+                            height: Units.rowHeight
+                            spacing: Units.smallSpacing
+                            leftPadding: Units.formSpacing
+                            anchors.verticalCenter: parent.verticalCenter
 
-                z: 3
-                Column {
-                    width: parent.width
-
-                    Row {
-                        id: headerRow
-                        height: Units.tableHeaderHeight
-                        spacing: Units.smallSpacing
-                        leftPadding: Units.formSpacing
-
-                        Repeater {
-                            model: page.tableHeaderModel
-
-                            TableHeaderLabel {
-                                visible: (index == 0 && transplantsRadioButton.checked) || (index === 5 && seedsRadioButton.checked) || (index > 0 && index < 5)
-
-                                text: modelData.name
-                                anchors.verticalCenter: headerRow.verticalCenter
-                                width: modelData.width
-                                state: page.tableSortColumn === index ? page.tableSortOrder : ""
-                                horizontalAlignment: modelData.alignment
-                                onNewColumn: {
-                                    if (page.tableSortColumn !== index) {
-                                        page.tableSortColumn = index
-                                        page.tableSortOrder = "descending"
-                                    }
+                            Repeater {
+                                model: labelList
+                                TableLabel {
+                                    text: modelData
+                                    visible: tableHeaderModel[index].visible
+                                    width: tableHeaderModel[index].width
+                                    horizontalAlignment: tableHeaderModel[index].alignment
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
-                                onNewOrder: page.tableSortOrder = order
                             }
-                        }
-                    }
-                    ThinDivider { width: parent.width }
-                }
-            }
-
-            delegate: Rectangle {
-                id: delegate
-                color: rowMouseArea.containsMouse ?  Material.color(Material.Grey, Material.Shade100)
-                                                  : "white";
-
-                radius: 2
-                height: Units.tableRowHeight
-                width: parent.width
-
-                ThinDivider {
-                    anchors {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
-                    }
-                }
-
-                MouseArea {
-                    id: rowMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    preventStealing: true
-                    propagateComposedEvents: true
-                    //                    cursorShape: Qt.PointingHandCursor
-
-                    Row {
-                        id: summaryRow
-                        height: Units.rowHeight
-                        spacing: Units.smallSpacing
-                        leftPadding: Units.formSpacing
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Label {
-                            visible: tableHeaderModel[0].visible
-                            text: MDate.formatDate(model.planting_date, page.year)
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[0].width
-                            horizontalAlignment: tableHeaderModel[0].alignment
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            text: model.crop
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[1].width
-                            horizontalAlignment: tableHeaderModel[1].alignment
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            text: model.variety
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[2].width
-                            horizontalAlignment: tableHeaderModel[2].alignment
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            text: model.seed_company
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[3].width
-                            horizontalAlignment: tableHeaderModel[3].alignment
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            text: "%L1".arg(seedsRadioButton.checked ? model.seeds_number
-                                                                     : model.plants_needed)
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[4].width
-                            horizontalAlignment: tableHeaderModel[4].alignment
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            visible: tableHeaderModel[5].visible
-                            text: model.seeds_quantity > 1000
-                                  ? qsTr("%L1 kg").arg(Math.round(model.seeds_quantity * 0.1) / 100)
-                                  : qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
-                            font.family: "Roboto Regular"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            elide: Text.ElideRight
-                            width: tableHeaderModel[5].width
-                            horizontalAlignment: tableHeaderModel[5].alignment
-                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
                 }
             }
         }
     }
-}
-
 }

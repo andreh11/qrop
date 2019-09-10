@@ -337,14 +337,20 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
 
     switch (type) {
     case PlantingType::DirectSeeded: {
-        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) }, { "task_type_id", 1 } });
+        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                       { "labor_time", "00:00" },
+                       { "task_type_id", 1 } });
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
     case PlantingType::TransplantRaised: {
         QDate sowDate = plantingDate.addDays(-dtt);
-        int sowId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) }, { "task_type_id", 2 } });
+        int sowId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) },
+
+                          { "labor_time", "00:00" },
+                          { "task_type_id", 2 } });
         int plantId = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                            { "labor_time", "00:00" },
                             { "task_type_id", 3 },
                             { "link_days", dtt },
                             { "link_task_id", sowId } });
@@ -353,7 +359,9 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
         break;
     }
     case PlantingType::TransplantBought:
-        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) }, { "task_type_id", 3 } });
+        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                       { "labor_time", "00:00" },
+                       { "task_type_id", 3 } });
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
@@ -429,7 +437,9 @@ int Task::createNurseryTask(int plantingId, const QDate &plantingDate, int dtt) 
     }
 
     QDate sowDate = plantingDate.addDays(-dtt);
-    int sowTaskId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) }, { "task_type_id", 2 } });
+    int sowTaskId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) },
+                          { "labor_time", "00:00" },
+                          { "task_type_id", 2 } });
     addLink("planting_task", "planting_id", plantingId, "task_id", sowTaskId);
     update(plantingTaskId, { { "link_days", dtt }, { "link_task_id", sowTaskId } });
 

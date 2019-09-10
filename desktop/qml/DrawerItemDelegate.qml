@@ -57,6 +57,7 @@ ItemDelegate {
             visible: !largeDisplay
             width: visible ? implicitWidth : 0
             text: control.text
+            font.family: "Roboto Regular"
             verticalAlignment: Text.AlignVCenter
         }
     }

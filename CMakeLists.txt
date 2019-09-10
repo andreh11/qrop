@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 2.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(qrop LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -48,7 +51,7 @@ string(TIMESTAMP BUILD_DATE %Y%m)
 include_directories("${PROJECT_SOURCE_DIR}/core")
 add_subdirectory(core)
 
-find_package(Qt5 COMPONENTS Core Quick Gui Widgets Qml Quick Sql REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 Gui Widgets Qml Quick Sql REQUIRED)
 
 set(desktop_SRCS
     desktop/main.cpp

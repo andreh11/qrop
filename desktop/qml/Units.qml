@@ -34,6 +34,24 @@ QtObject {
     readonly property int fontSizeCaption: 12
     readonly property int fontSizeTable: fontSizeBodyAndButton
 
+    readonly property var body1Font: {
+        "family": "Eczar Regular",
+        "size": 16,
+        "capitalization": Font.Normal
+    }
+
+    readonly property var body2Font: {
+        "family": "Roboto Condensed Light",
+        "size": 14,
+        "capitalization": Font.Normal
+    }
+
+    readonly property var captionFont: {
+        "family": "Roboto Condensed Regular",
+        "size": 10,
+        "capitalization": Font.AllUppercase
+    }
+
     readonly property int smallSpacing: 8
     readonly property int formSpacing: 16
     readonly property int mediumSpacing: 20

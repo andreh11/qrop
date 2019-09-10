@@ -392,6 +392,7 @@ ListView {
 
                     TableHeaderLabel {
                         text: modelData.name
+                        condensed: true
                         width: modelData.width
                         state: listView.tableSortColumn === index ? listView.tableSortOrder : ""
                         visible: index > 0 && tableHeaderModel[index].visible
@@ -432,9 +433,9 @@ ListView {
                                 Label {
                                     text: Qt.locale().monthName(modelData, Locale.ShortFormat)
                                     anchors.left: lineRectangle.right
-                                    font.family: "Roboto Medium"
+                                    font.family: "Roboto Condensed"
                                     font.pixelSize: Units.fontSizeTable
-                                    color: Units.colorHighEmphasis
+                                    color: Units.colorMediumEmphasis
                                     width: 60 - 1
                                     anchors.verticalCenter: parent.verticalCenter
                                     horizontalAlignment: Text.AlignHCenter
@@ -453,6 +454,7 @@ ListView {
 
                     TableHeaderLabel {
                         text: modelData.name
+                        condensed: true
                         width: modelData.width
                         visible: index > 1 && tableHeaderModel[index].visible
                         horizontalAlignment: tableHeaderModel[index].alignment
@@ -618,6 +620,7 @@ ListView {
                     text: settings.showSeedCompanyBesideVariety
                           ? "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3))
                           : "%1".arg(model.variety)
+                    condensed: true
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight
                     width: 100
@@ -652,6 +655,7 @@ ListView {
 
                     TableLabel {
                         text: modelData
+                        condensed: true
                         color: Units.colorHighEmphasis
                         visible: tableHeaderModel[index+2].visible
                         anchors.verticalCenter: parent.verticalCenter

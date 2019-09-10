@@ -19,9 +19,11 @@ import QtQuick.Controls 2.2
 
 Label {
     id: label
+    property bool condensed: false
+
     font {
-        family: "Roboto Regular";
-        pixelSize: Units.fontSizeTable
+        family: condensed ? "Roboto Condensed" : "Roboto Regular"
+        pixelSize: 14
     }
     color: Units.colorHighEmphasis
     elide: Text.ElideRight

@@ -22,9 +22,7 @@ import QtQuick.Controls.Material 2.2
 Item {
     id: control
 
-//    property var filterLabel
-//    property string filterColumn
-//    property string columnName
+    property bool condensed: false
     property alias text: headerLabel.text
     property Item container
 
@@ -55,9 +53,8 @@ Item {
         anchors.left: horizontalAlignment === Text.AlignLeft ? parent.left : undefined
         anchors.right: horizontalAlignment === Text.AlignRight ? parent.right : undefined
         elide: Text.ElideRight
-//        color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
-        color: Units.colorHighEmphasis
-        font.family: "Roboto Medium"
+        color: Units.colorMediumEmphasis
+        font.family: condensed ? "Roboto Condensed" : "Roboto Regular"
         font.pixelSize: Units.fontSizeTable
         horizontalAlignment: control.horizontalAlignment
     }

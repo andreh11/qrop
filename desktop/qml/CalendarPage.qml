@@ -398,15 +398,13 @@ Page {
 
         TaskView {
             id: taskView
+            width: Math.min(1200, parent.width * 0.8)
             anchors {
                 top: topDivider.bottom
-                left: parent.left
-                right: parent.right
+                horizontalCenter: parent.horizontalCenter
                 bottom: parent.bottom
                 topMargin: Units.smallSpacing
                 bottomMargin: Units.smallSpacing
-                leftMargin: parent.width * 0.1
-                rightMargin: parent.width * 0.1
             }
             ScrollBar.vertical: ScrollBar {
                 parent: taskView.parent
