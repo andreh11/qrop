@@ -48,6 +48,7 @@ configure_file(
 
 string(TIMESTAMP BUILD_DATE %Y%m)
 
+include_directories(lib)
 include_directories("${PROJECT_SOURCE_DIR}/core")
 add_subdirectory(core)
 
@@ -58,7 +59,8 @@ set(desktop_SRCS
     desktop/qropdoublevalidator.cpp
     desktop/timevalidator.cpp
     desktop/qml.qrc
-    desktop/resources.qrc)
+    desktop/resources.qrc
+    )
 
 add_executable(${PROJECT_NAME} ${desktop_SRCS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)

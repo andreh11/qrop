@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE static qreal widthBetween(qreal pos, const QDate &seasonBegin, const QDate &date);
     static QList<int> listOfInt(const QString &s, const QString &sep = ",");
     Q_INVOKABLE static qreal bedLength(qreal length);
+    Q_INVOKABLE static QVariantList intToVariantList(const QList<int> &list);
 
 private:
     const static int mGraphWidth { 60 * 12 };

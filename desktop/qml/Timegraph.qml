@@ -43,6 +43,7 @@ Item {
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
+    clip: true
 
 //    anchors {
 //        left: parent.left
@@ -50,7 +51,7 @@ Item {
 //        leftMargin: positions[0]
 //    }
     x: drawMap["graphStart"]
-    z: dragArea.containsMouse ? 4 : 1
+//    z: dragArea.containsMouse ? 4 : 1
 
     ToolTip.visible: dragArea.containsMouse
     ToolTip.delay: 200

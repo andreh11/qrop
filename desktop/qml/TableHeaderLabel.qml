@@ -31,6 +31,7 @@ Item {
     signal newOrder(string order)
 
     height: headerLabel.height
+    width: childrenRect.width
     anchors.verticalCenter: parent.verticalCenter
 
     Label {

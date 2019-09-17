@@ -16,8 +16,6 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
-import QtQuick.Controls 1.4 as Controls1
-import QtQuick.Controls.Styles 1.4 as Styles1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 import QtQml.Models 2.10
@@ -25,29 +23,31 @@ import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
 
-Item {
-    id: view
+ListView {
+    id: locationView
 
-    property alias year: locationModel.year
-    property alias season: locationModel.season
+    property int year
+    property int season
 
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
+    readonly property date seasonEnd: MDate.seasonEnd(season, year)
     property date todayDate: new Date()
     property int firstColumnWidth
     property int editedPlantingId: -1
 
-    property alias rowCount: locationModel.rowCount
-    property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
-    property alias showOnlyGreenhouseLocations: locationModel.showOnlyGreenhouseLocations
+    property int rowCount: locationTreeViewModel.rowCount
+    //    property alias showOnlyEmptyLocations: locationModel.showOnlyEmptyLocations
+    property alias showOnlyGreenhouseLocations: locationTreeViewModel.showOnlyGreenhouseLocations
     property alias hasSelection: selectionModel.hasSelection
     property alias selectedIndexes: selectionModel.selectedIndexes
-    property alias draggedPlantingId: treeView.draggedPlantingId
+    property alias draggedPlantingId: locationView.draggedPlantingId
     property bool showFamilyColor: false
 
-    property alias treeDepth: locationModel.depth
+    property alias treeDepth: locationTreeViewModel.depth
     property int headerHeight: headerRow.height
-    property int treeViewHeight: treeView.flickableItem.contentHeight
-    property int treeViewWidth: treeView.implicitWidth
+    //    property int locationViewHeight: locationView.flickableItem.contentHeight
+    property int locationViewHeight: locationView.contentHeight
+    property int locationViewWidth: locationView.implicitWidth
     property bool alwaysShowCheckbox: false
     property bool editMode: false
     property bool showTimeline: true
@@ -70,57 +70,68 @@ Item {
     property var assignedIdMap: selectedLocationIdMap()
     property int remainingLength: editedPlantingLength - assignedLength()
 
-    signal plantingMoved()
-    signal plantingRemoved()
+    property int draggedPlantingId: -1
+    property date plantingDate: Planting.plantingDate(draggedPlantingId)
+    property date endHarvestDate: Planting.endHarvestDate(draggedPlantingId)
+
+    property var expandIndex: -1
+    property var draggedOnIndex: -1
+    property alias expandTimer: expandTimer
+
+    ScrollBar.vertical: ScrollBar { }
+
+    signal plantingMoved
+    signal plantingRemoved
     signal addPlantingLength(int length)
 
     function refresh() {
-        locationModel.refreshTree();
+        locationTreeViewModel.refreshTree();
     }
 
     function reload() {
-        locationModel.refresh();
+        locationTreeViewModel.refresh();
     }
 
     function updateIndexes(map, indexes) {
-        locationModel.updateIndexes(map, indexes);
+        locationTreeViewModel.updateIndexes(map, indexes);
     }
 
     // TODO: optimize
     function selectAll() {
         console.time("selectAll")
-        selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select);
+        selectionModel.select(locationTreeViewModel.treeSelection(), ItemSelectionModel.Select);
         //        console.log(l);
         //        for (var i = 0; i < l.length; i++) {
         //            selectionModel.select(l[i], ItemSelectionModel.Select)
         ////        }
-        locationModel.refreshTree();
+        locationTreeViewModel.refreshTree();
         console.timeEnd("selectAll")
     }
 
     function selectSubTree(index) {
-        selectionModel.select(locationModel.treeSelection(index), ItemSelectionModel.Toggle);
-        locationModel.refreshTree(index);
+        locationTreeViewModel.toggleIsTreeSelected(index, true)
+        //        selectionModel.select(locationTreeViewModel.treeSelection(index), ItemSelectionModel.Toggle);
+        //        locationTreeViewModel.refreshTree(index);
     }
 
     function deselectAll() {
         selectionModel.clear();
-        locationModel.refreshTree();
+        locationTreeViewModel.refreshTree();
     }
 
     function expandAll(depth) {
-        var indexList = locationModel.treeIndexes(depth);
+        var indexList = locationTreeViewModel.treeIndexes(depth);
         for (var i = 0; i < indexList.length; i++) {
             var index = indexList[i];
-            treeView.expand(index);
+            locationView.expand(index);
         }
     }
 
     function collapseAll(depth) {
-        var indexList = locationModel.treeIndexes(depth, false);
+        var indexList = locationTreeViewModel.treeIndexes(depth, false);
         for (var i = 0; i < indexList.length; i++) {
             var index = indexList[i];
-            treeView.collapse(index);
+            locationView.collapse(index);
         }
     }
 
@@ -145,11 +156,11 @@ Item {
 
         // Refresh the unselected indexes to uncheck checkboxes.
         for (var j in selectedIndexes)
-            locationModel.refreshIndex(selectedIndexes[j]);
+            locationTreeViewModel.refreshIndex(selectedIndexes[j]);
     }
 
     function selectLocationIds(idList) {
-        var indexList = locationModel.treeHasIds(idList);
+        var indexList = locationTreeViewModel.treeHasIds(idList);
 
         for (var i = 0; i < indexList.length; i++) {
             var idx = indexList[i];
@@ -157,17 +168,17 @@ Item {
             expandPath(idx);
 
             if (editedPlantingId > 0)
-                assignedLengthMap[idx] = locationModel.plantingLength(editedPlantingId, idx);
+                assignedLengthMap[idx] = locationTreeViewModel.plantingLength(editedPlantingId, idx);
         }
         assignedLengthMapChanged();
     }
 
     //! Expand all nodes from root to index's parent.
     function expandPath(index) {
-        var path = locationModel.treePath(index);
+        var path = locationTreeViewModel.treePath(index);
         for (var i = 0; i < path.length; i++) {
-            if (!treeView.isExpanded(path[i]))
-                treeView.expand(path[i]);
+            if (!locationView.isExpanded(path[i]))
+                locationView.expand(path[i]);
         }
     }
 
@@ -175,7 +186,7 @@ Item {
         var list = [];
         var selectedIndexes = selectionModel.selectedIndexes;
         for (var i = 0; i < selectedIndexes.length; i++) {
-            list.push(locationModel.locationId(selectedIndexes[i]));
+            list.push(locationTreeViewModel.locationId(selectedIndexes[i]));
         }
         return list;
     }
@@ -184,7 +195,7 @@ Item {
         var map = ({});
         for (var i = 0; i < selectedIndexes.length; i++) {
             var index = selectedIndexes[i]
-            var locationId = locationModel.locationId(index)
+            var locationId = locationTreeViewModel.locationId(index)
             var length = assignedLengthMap[index]
             map[locationId] = length
         }
@@ -200,21 +211,21 @@ Item {
     }
 
     function addLocations(name, length, width, quantity) {
-        if (view.hasSelection)
-            locationModel.addLocations(name, length, width, quantity, selectionModel.selectedIndexes)
+        if (locationView.hasSelection)
+            locationTreeViewModel.addLocations(name, length, width, quantity, selectionModel.selectedIndexes)
         else
-            locationModel.addLocations(name, length, width, quantity)
+            locationTreeViewModel.addLocations(name, length, width, quantity)
         clearSelection();
     }
 
     function duplicateSelected() {
-        locationModel.duplicateLocations(selectionModel.selectedIndexes)
+        locationTreeViewModel.duplicateLocations(selectionModel.selectedIndexes)
         clearSelection();
     }
 
     function removeSelected() {
         var indexList = selectionModel.selectedIndexes.slice()
-        locationModel.removeIndexes(indexList)
+        locationTreeViewModel.removeIndexes(indexList)
         plantingsView.resetFilter();
     }
 
@@ -227,14 +238,14 @@ Item {
         property bool showTasks
     }
 
-    LocationModel {
-        id: locationModel
+    LocationTreeViewModel {
+        id: locationTreeViewModel
     }
 
     // Declare selection model outside TreeView to avoid odd behavior.
     ItemSelectionModel {
         id: selectionModel
-        model: locationModel
+        model: locationTreeViewModel
     }
 
     Rectangle {
@@ -248,7 +259,9 @@ Item {
         color: Material.accent
     }
 
-    Rectangle {
+    clip: true
+    headerPositioning: ListView.OverlayHeader
+    header: Rectangle {
         id: headerRectangle
         visible: showHeader
         height: showHeader ? headerRow.height : 0
@@ -260,546 +273,347 @@ Item {
             id: headerRow
             height: Units.rowHeight
             spacing: Units.smallSpacing
-            leftPadding: 16 + view.indentation
-
-            CheckBox {
-                id: headerRowCheckBox
-                anchors.verticalCenter: headerRow.verticalCenter
-                visible: view.editMode
-                height: parent.height * 0.8
-                width: height
-                contentItem: Text {}
-
-                tristate: true
-
-                checkState: rowCount && locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
-                            ? Qt.Checked
-                            : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
-                nextCheckState: function () {
-                    if (!rowCount)
-                        return;
-
-                    if (checkState == Qt.Checked) {
-                        view.deselectAll()
-                        return Qt.Unchecked
-                    } else {
-                        view.selectAll()
-                        return Qt.Checked
-                    }
-                }
-            }
-
-            TableHeaderLabel {
-                text: qsTr("Name")
-                width: 120 - (view.editMode ? headerRowCheckBox.width + headerRow.spacing : 0)
-            }
+            leftPadding: 16
 
             Row {
-                id: headerTimelineRow
-                visible: view.showTimeline
-                anchors.verticalCenter: parent.verticalCenter
+                id: firstColumnRow
                 height: parent.height
+                width: firstColumnWidth - 16 - spacing
+                spacing: headerRow.spacing
 
-                Repeater {
-                    model: monthsOrder[view.season]
-                    Item {
-                        width: Units.monthWidth
-                        height: parent.height
+                CheckBox {
+                    id: headerRowCheckBox
+                    anchors.verticalCenter: headerRow.verticalCenter
+                    visible: locationView.editMode
+                    height: parent.height * 0.8
+                    width: height
+                    contentItem: Text {}
 
-                        Rectangle {
-                            id: lineRectangle
-                            height: parent.height
-                            width: 1
-                            color: Qt.rgba(0, 0, 0, 0.12)
-                        }
+                    tristate: true
 
-                        Label {
-                            text: Qt.locale().monthName(modelData,
-                                                        Locale.ShortFormat)
-                            anchors.left: lineRectangle.right
-                            font.family: "Roboto Condensed"
-                            color: Material.color(Material.Grey,
-                                                  Material.Shade700)
-                            width: 60 - 1
-                            anchors.verticalCenter: parent.verticalCenter
-                            horizontalAlignment: Text.AlignHCenter
+                    checkState: rowCount && locationTreeViewModel.treeIndexes().length === selectionModel.selectedIndexes.length
+                                ? Qt.Checked
+                                : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                    nextCheckState: function () {
+                        if (!rowCount)
+                            return;
+
+                        if (checkState == Qt.Checked) {
+                            locationView.deselectAll();
+                            return Qt.Unchecked;
+                        } else {
+                            locationView.selectAll()
+                            return Qt.Checked;
                         }
                     }
                 }
 
-                Rectangle {
-                    height: parent.height
-                    width: 1
-                    color: Qt.rgba(0, 0, 0, 0.12)
+                TableHeaderLabel {
+                    id: nameTableLabel
+                    text: qsTr("Name")
+                    condensed: true
                 }
+            }
+
+            HeaderTimelineRow {
+                id: headerTimelineRow
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                visible: locationView.showTimeline
+                season: locationView.season
             }
         }
 
         ThinDivider { anchors { bottom: parent.bottom; left: parent.left; right: parent.right } }
     }
 
-    Controls1.TreeView {
-        id: treeView
-        //                anchors.fill: parent
-        anchors {
-            top: headerRectangle.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+    model: locationTreeViewModel
+
+    delegate: Rectangle {
+        id: locationDelegate
+
+        property int currentIndex: index
+        property int currentLocationId: model.location_id
+        property var plantingRowList: [[]]
+        property int rows: plantingRowList.length
+
+        function toggleIsExpanded() {
+            if (model.hasChildren)
+                model.isExpanded = !model.isExpanded
         }
 
-        // Size of the area of the bottom and top of TreeView where the drag-scrolling
-        // happens.
-        property int scrollEdgeSize: Units.rowHeight
+        Binding on plantingRowList {
+            when: !model.hidden
+            value: Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
+        }
 
-        // Internal: set to -1 when drag-scrolling up and 1 when drag-scrolling down
-        property int _scrollingDirection: 0
+        clip: true
+        // collapsed items have a null height
+        visible: !model.hidden
+        // fill available width
+        width: ListView.view.width
+        height: {
+            if (model.hidden)
+                return 0;
+            if (model.hasChildren) {
+                return Units.rowHeight + 1;
+            } else {
+                return Math.max(1,rows) * Units.rowHeight + 1
+            }
+        }
+        color: Qt.darker(model.hasChildren ? colorList[model.indentation] : "white",
+                         model.isSelected ? 1.1 : 1)
 
-        property int draggedPlantingId: -1
-        property date plantingDate: Planting.plantingDate(draggedPlantingId)
-        property date endHarvestDate: Planting.endHarvestDate(draggedPlantingId)
-        readonly property date seasonBegin: MDate.seasonBeginning(view.season,
-                                                                  view.year)
+        DropArea {
+            id: dropArea
+            anchors.fill: parent
 
-        property var expandIndex: null
-        property var draggedOnIndex: null
-        property alias expandTimer: expandTimer
+            onEntered: {
+                const list = drag.text.split(";")
+                const plantingId = Number(list[0])
+                const sourceLocationId = Number(list[1])
+                if (plantingId !== locationView.draggedPlantingId)
+                    locationView.draggedPlantingId = plantingId;
 
-//        DropArea {
-//            anchors.top: parent.top
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//            height: 16
-//            onEntered: {
-//                if (!upAnimation.running)
-//                    upAnimation.start();
-//            }
-//            onPositionChanged: {
-//                if (!upAnimation.running)
-//                    upAnimation.start();
-//            }
+                if (model.hasChildren) {
+                    if (!model.isExpanded) {
+                        locationView.expandIndex = currentIndex
+                        locationView.draggedOnIndex = currentIndex
+                        locationView.expandTimer.stop();
+                        locationView.expandTimer.start();
+                    }
+                    drag.accepted = (model.indentation >= locationTreeViewModel.depth - 1)
+                            && (sourceLocationId === -1);
 
-//            onExited: upAnimation.stop()
-//        }
+                } else if (currentLocationId !== sourceLocationId) {
+                    drag.accepted = locationSettings.allowPlantingsConflict
+                            || Location.acceptPlanting(currentLocationId, plantingId,
+                                                       seasonBegin, seasonEnd);
+                } else {
+                    drag.accepted = false;
+                }
+            }
 
-//        DropArea {
-//            anchors.bottom: parent.bottom
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//            height: 16
-//            onEntered: {
-//                if (!downAnimation.running)
-//                    downAnimation.start();
-//            }
-//            onPositionChanged: {
-//                if (!downAnimation.running)
-//                    downAnimation.start();
-//            }
-//            onExited: downAnimation.stop()
-//        }
+            onExited: {
+                locationView.draggedPlantingId = -1;
+                locationView.draggedOnIndex = null
+            }
 
-        // BUG: badly crashing, don't know why
-//        NumberAnimation {
-//            id: upAnimation
-//            target: treeView.__listView
-//            property: "contentY"
-//            to: Math.max(0, treeView.__listView.contentY - Units.rowHeight)
-//            duration: 50
-//        }
+            onDropped: {
+                locationView.draggedPlantingId = -1
 
-//        NumberAnimation {
-//            id: downAnimation
-//            target: treeView.__listView
-//            property: "contentY"
-//            to: Math.min(treeView.__listView.contentHeight - treeView.__listView.height,
-//                         treeView.__listView.contentY + Units.rowHeight)
-//            duration: 50
-//        }
+                if (drop.hasText && drop.proposedAction == Qt.MoveAction) {
+                    const locationId = model.location_id;
+                    const list = drop.text.split(";");
+                    const plantingId = Number(list[0]);
+                    const sourceLocationId = Number(list[1]);
 
-        Timer {
-            id: expandTimer
-            interval: 300
-            onTriggered: {
-                if (treeView.expandIndex && treeView.expandIndex === treeView.draggedOnIndex) {
-                    treeView.expand(treeView.expandIndex);
-                    treeView.draggedOnIndex = null;
+                    drop.acceptProposedAction();
+
+                    let length = 0;
+                    if (sourceLocationId > 0) // drag comes from location
+                        length = Location.plantingLength(plantingId, sourceLocationId);
+                    else
+                        length = Planting.lengthToAssign(plantingId);
+
+                    Location.addPlanting(plantingId, model.location_id, length)
+                    locationTreeViewModel.refresh(index);
+
+                    locationView.draggedOnIndex = null;
+                    locationView.expandIndex = null;
                 }
             }
         }
 
-        frameVisible: false
-        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
-        implicitWidth: headerRectangle.implicitWidth + 80
+        RowLayout {
+            id: layout
+            spacing: 0
+            anchors.fill: parent
+            anchors.leftMargin: 16
 
-        Controls1.TableViewColumn {
-            role: "name"
-        }
+            Row  {
+                Layout.minimumWidth: firstColumnWidth - 16
+                Layout.maximumWidth: firstColumnWidth - 16
+                spacing: Units.smallSpacing
 
-        Rectangle {
-            id: begLine
-            visible: plantingEditMode ||  treeView.draggedPlantingId > 0
-            // TODO: remove magic numbers
-            x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2
-               + Units.position(treeView.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
-                                                                       : treeView.plantingDate)
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 2
-            color: Material.color(Material.Green)
-            z: 2
-        }
+                AbstractButton {
+                    id: arrowControl
+                    height: parent.height
+                    width: height
+                    Layout.preferredHeight: Units.rowHeight
+                    Layout.preferredWidth: height
+                    Layout.alignment: Qt.AlignTop
 
-        Rectangle {
-            id: endLine
-            visible: plantingEditMode || treeView.draggedPlantingId > 0
-            // TODO: remove magic numbers
-            x: 100 + 16 + Units.rowHeight * 0.8 + Units.smallSpacing * 2
-               + Units.position(treeView.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
-                                                                       : treeView.endHarvestDate)
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 2
-            color: Material.color(Material.Green)
-            z: 2
-        }
+                    onClicked: toggleIsExpanded()
 
-        backgroundVisible: false
-        headerDelegate: null
-        model: locationModel
+                    Label {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
 
-        style: Styles1.TreeViewStyle {
-            id: treeViewStyle
-            indentation: view.indentation
-            rowDelegate: Rectangle {
-                height: Units.rowHeight + 1
-                color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
-                                 selectionModel.isSelected(styleData.index) ? 1.1 :  1)
-
-                ThinDivider {
-                    anchors {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
-                    }
-                }
-            }
-
-            branchDelegate:  Rectangle {
-                id: branchRectangle
-                color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
-                                 selectionModel.isSelected(styleData.index) ? 1.1 :  1)
-                width: view.indentation
-                height: Units.rowHeight + 1
-                x: - styleData.depth * view.indentation
-
-                ThinDivider {
-                    anchors {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
+                        text: model.hasChildren ? (model.isExpanded ? "\ue313" : "\ue315") : ""
+                        font { family: "Material Icons"; pixelSize: 22 }
+                        verticalAlignment: Text.AlignVCenter
                     }
                 }
 
-                Text {
-                    leftPadding: Units.smallSpacing
-                    anchors.centerIn: parent
-                    //                        width: 24
-                    text: styleData.hasChildren
-                          ? (styleData.isExpanded ? "\ue313" : "\ue315")
-                          : ""
-                    font { family: "Material Icons"; pixelSize: 22 }
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-        }
+                CheckBox {
+                    id: rowCheckBox
+//                    anchors.verticalCenter: parent.verticalCenter
+                    visible: locationView.editMode || locationView.alwaysShowCheckbox
+                    height: parent.height * 0.8
+                    width: height
+                    contentItem: Text {}
+                    checked: model.isSelected
 
-        itemDelegate:  Column {
-            id: itemDelegate
-            property int locationId: locationModel.locationId(styleData.index)
+                    Layout.preferredHeight: Units.rowHeight
+                    Layout.preferredWidth: height
+                    Layout.alignment: Qt.AlignTop
 
-            function scrollIfNeeded(yDrag) {
-                var yCoord = treeView.mapFromItem(dropArea, 0, yDrag).y
-                if (yCoord < Units.rowHeight) {
-                    if (!upAnimation.running)
-                        upAnimation.start();
-                } else if (yCoord > treeView.height - Units.rowHeight) {
-                    if (!downAnimation.running)
-                        downAnimation.start();
-                }
-            }
-
-            Rectangle {
-                width: parent.width - x
-                height: Units.rowHeight + 1
-                color: Qt.darker(styleData.hasChildren ? colorList[styleData.depth] : "white",
-                                 selectionModel.isSelected(styleData.index) ? 1.1 :  1)
-
-                x: - styleData.depth * view.indentation
-
-                DropArea {
-                    id: dropArea
-                    anchors.fill: parent
-
-//                    onPositionChanged: itemDelegate.scrollIfNeeded(drag.y)
-                    onEntered: {
-                        // TODO: crashing unexpectedly when scrolling, don't know why.
-                        // itemDelegate.scrollIfNeeded(drag.y)
-
-                        var list = drag.text.split(";")
-                        var plantingId = Number(list[0])
-                        var sourceLocationId = Number(list[1])
-                        if (plantingId !== treeView.draggedPlantingId)
-                            treeView.draggedPlantingId = plantingId;
-
-                        if (styleData.hasChildren) {
-                            if (!styleData.isExpanded) {
-                                treeView.expandIndex = styleData.index
-                                treeView.draggedOnIndex = styleData.index
-                                treeView.expandTimer.stop();
-                                treeView.expandTimer.start();
-                            }
-                            drag.accepted = (styleData.depth >= locationModel.depth - 1)
-                                    && (sourceLocationId === -1);
-
-                        } else if (locationId !== sourceLocationId) {
-                            drag.accepted = locationSettings.allowPlantingsConflict
-                                    || locationModel.acceptPlanting(styleData.index, plantingId);
-                        } else {
-                            drag.accepted = false;
-                        }
-                    }
-
-                    onExited: {
-                        treeView.draggedPlantingId = -1;
-                        treeView.draggedOnIndex = null
-//                        treeView._scrollingDirection = 0
-
-//                        if (upAnimation.running) {
-//                            upAnimation.stop();
-//                        }
-
-//                        if (downAnimation.running) {
-//                            downAnimation.stop();
-//                        }
-                    }
-
-                    onDropped: {
-                        treeView.draggedPlantingId = -1
-
-                        if (//!styleData.hasChildren
-                                drop.hasText
-                                && drop.proposedAction == Qt.MoveAction) {
-
-                            var locationId = locationModel.locationId(styleData.index)
-                            var list = drop.text.split(";")
-                            var plantingId = Number(list[0])
-                            var sourceLocationId = Number(list[1])
-
-                            drop.acceptProposedAction()
-
-                            var length = 0;
-                            if (sourceLocationId > 0) // drag comes from location
-                                length = Location.plantingLength(plantingId, sourceLocationId)
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (mouse.button !== Qt.LeftButton)
+                                return
+                            if (mouse.modifiers & Qt.ControlModifier)
+                                model.isTreeSelected = !model.isTreeSelected
                             else
-                                length = Planting.lengthToAssign(plantingId)
-                            locationModel.addPlanting(styleData.index, plantingId, length)
-
-                            treeView.draggedOnIndex = null
-                            treeView.expandIndex = null
+                                model.isSelected = !model.isSelected
                         }
                     }
                 }
 
-                MouseArea {
-                    id: rowMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
+                ToolButton {
+                    id: locationNameLabel
+                    text: model.hidden ? "" : (hovered ? "\ue889" : locationSettings.showFullName ? Location.fullName(model.location_id) : model.name)
+                    font.family: hovered ? "Material Icons" : "Roboto Regular"
+                    font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
 
-                    onClicked: {
-                        if (styleData.hasChildren || !view.plantingEditMode)
-                            return;
+                    Layout.preferredHeight: Units.rowHeight
+                    Layout.preferredWidth: height
+                    Layout.alignment: Qt.AlignTop
 
-                        var plantings = locationModel.plantings(styleData.index, view.season, view.year)
-                        if (!selectionModel.isSelected(styleData.index)
-                                && !locationModel.acceptPlanting(styleData.index,
-                                                                 editedPlantingPlantingDate,
-                                                                 editedPlantingEndHarvestDate)
-                                && !plantings.includes(editedPlantingId)) {
-                            return;
-                        }
-
-                        if (selectionModel.isSelected(styleData.index)) {
-                            assignedLengthMap[styleData.index] = 0
-                        } else if (plantings.includes(editedPlantingId)) {
-                            assignedLengthMap[styleData.index] =
-                                    locationModel.plantingLength(editedPlantingId, styleData.index);
-
-                        } else {
-                            var availableSpace = locationModel.availableSpace(styleData.index,
-                                                                              editedPlantingPlantingDate,
-                                                                              editedPlantingEndHarvestDate);
-
-                            if (remainingLength === 0) {
-                                assignedLengthMap[styleData.index] = availableSpace;
-                                view.addPlantingLength(assignedLengthMap[styleData.index]);
-                            } else {
-                                assignedLengthMap[styleData.index] = Math.min(remainingLength, availableSpace);
-                            }
-                        }
-
-                        selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
-                        assignedLengthMapChanged()
-                        locationModel.refreshIndex(styleData.index);
+                    ToolTip.visible: hovered && ToolTip.text
+                    ToolTip.text: ""
+                    onHoveredChanged: {
+                        if (hovered && !ToolTip.text)
+                            ToolTip.text = Location.historyDescription(model.location_id, season, year);
+                       console.log(ToolTip.text)
                     }
+                }
 
-                    Column {
-                        id: column
+                ConflictAlertButton {
+                    id: conflictAlertButton
+//                    anchors.verticalCenter: parent.verticalCenter
+                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
+                    year: locationView.year
+                    locationId: model.location_id
 
-                        Row {
-                            id: row
-                            height: Units.rowHeight
-                            spacing: Units.smallSpacing
-                            leftPadding: 16
-
-                            CheckBox {
-                                id: rowCheckBox
-                                anchors.verticalCenter: row.verticalCenter
-                                visible: view.editMode || view.alwaysShowCheckbox
-                                height: parent.height * 0.8
-                                width: height
-                                contentItem: Text {}
-                                checked: selectionModel.isSelected(styleData.index)
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        if (mouse.button !== Qt.LeftButton)
-                                            return
-
-
-                                        if (mouse.modifiers & Qt.ControlModifier)
-                                            selectSubTree(styleData.index)
-                                        selectionModel.select(styleData.index,
-                                                              ItemSelectionModel.Toggle)
-                                        // Since selectionModel.isSelected() isn't called after
-                                        // select(), we refresh the index... Ugly but workin'.
-                                        locationModel.refreshIndex(styleData.index)
-                                    }
-                                }
-                            }
-
-                            ToolButton {
-                                id: locationNameLabel
-                                text: hovered ? "\ue889"
-                                              : locationSettings.showFullName
-                                                ? Location.fullName(locationModel.locationId(styleData.index))
-                                                : styleData.value
-                                font.family: hovered ? "Material Icons" : "Roboto Regular"
-                                font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
-
-                                ToolTip.visible: hovered && ToolTip.text
-                                ToolTip.text: ""
-                                onHoveredChanged: {
-                                    if (hovered && !ToolTip.text)
-                                        ToolTip.text = locationModel.historyDescription(styleData.index, season, year)
-                                }
-                            }
-
-                            Item {
-                                id: namePadder
-                                height: Units.rowHeight
-                                width: 120 - locationNameLabel.width - row.spacing
-                                       - (rowCheckBox.visible
-                                          ? rowCheckBox.width + row.spacing
-                                          : 0)
-                                       - (conflictAlertButton.visible
-                                          ? conflictAlertButton.width + row.spacing
-                                          : 0)
-                                       - (rotationAlertLabel.visible
-                                          ? rotationAlertLabel.width + row.spacing
-                                          : 0)
-
-                            }
-
-                            ConflictAlertButton {
-                                id: conflictAlertButton
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: false
-                                conflictList: []
-//                                visible: locationModel.hasSpaceConflict(styleData.index, season, year)
-//                                conflictList: visible ? [] : locationModel.spaceConflictingPlantings(styleData.index, season, year)
-                                year: view.year
-                                locationId: locationModel.locationId(styleData.index)
-                                onPlantingModified: {
-                                    locationModel.refreshIndex(styleData.index)
-                                    timeline.refresh();
-                                }
-                                onPlantingRemoved: {
-                                    view.plantingRemoved()
-                                    locationModel.refreshIndex(styleData.index)
-                                    timeline.refresh();
-                                }
-
-                            }
-
-                            ToolButton {
-                                id: rotationAlertLabel
-                                visible: false
-//                                visible: locationModel.hasRotationConflict(styleData.index, season, year)
-                                opacity: visible ? 1 : 0
-                                text: "\ue160"
-                                font.pixelSize: Units.fontSizeTitle
-                                font.family: "Material Icons"
-                                Material.foreground: Material.color(Material.Red)
-                                anchors.verticalCenter: parent.verticalCenter
-
-                                Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-                                ToolTip.visible: hovered && ToolTip.text
-                                ToolTip.text: ""
-
-                                onHoveredChanged: {
-                                    if (hovered && !ToolTip.text)
-                                        ToolTip.text = locationModel.rotationConflictingDescription(styleData.index, season, year)
-                                }
-                            }
-
-                            Timeline {
-                                id: timeline
-                                height: parent.height
-                                visible: view.showTimeline
-                                year: view.year
-                                season: view.season
-                                showGreenhouseSow: false
-                                showNames: true
-                                showTasks: locationSettings.showTasks
-                                showOnlyActiveColor: true
-                                showFamilyColor: view.showFamilyColor
-                                dragActive: true
-                                plantingIdList: locationModel.plantings(styleData.index, season, year)
-                                taskIdList: locationModel.tasks(styleData.index, season, year)
-                                locationId: locationModel.locationId(styleData.index)
-                                onDragFinished: treeView.draggedPlantingId = -1
-                                onPlantingMoved: {
-                                    locationModel.refreshIndex(styleData.index)
-                                    view.plantingMoved()
-                                }
-                                onPlantingRemoved: {
-                                    locationModel.refreshIndex(styleData.index)
-                                    view.plantingRemoved()
-                                }
-                            }
-                        }
+                    onPlantingModified: {
+                        locationTreeViewModel.refresh(currentIndex)
+                        timeline.refresh();
                     }
+                    onPlantingRemoved: {
+                        locationView.plantingRemoved()
+                        locationTreeViewModel.refresh(currentIndex)
+                        timeline.refresh();
+                    }
+                }
 
-                    ThinDivider {
-                        anchors {
-                            bottom: parent.bottom
-                            left: parent.left
-                            right: parent.right
+                ToolButton {
+                    id: rotationAlertLabel
+                    visible: false
+                    //                                visible: locationModel.hasRotationConflict(styleData.index, season, year)
+                    opacity: visible ? 1 : 0
+                    text: "\ue160"
+                    font.pixelSize: Units.fontSizeTitle
+                    font.family: "Material Icons"
+                    Material.foreground: Material.color(Material.Red)
+//                    anchors.verticalCenter: parent.verticalCenter
+
+                    Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
+                    ToolTip.visible: hovered && ToolTip.text
+                    ToolTip.text: ""
+
+                    //                        onHoveredChanged: {
+                    //                            if (hovered && !ToolTip.text)
+                    //                                ToolTip.text = locationModel.rotationConflictingDescription(styleData.index, season, year)
+                    //                        }
+                }
+            }
+
+            Column {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Repeater {
+                    model: locationDelegate.plantingRowList
+
+                    Timeline {
+                        id: timeline
+                        height: Units.rowHeight
+                        visible: locationView.showTimeline
+                        year: locationView.year
+                        season: locationView.season
+                        showGreenhouseSow: false
+                        showNames: true
+                        //                            showTasks: locationSettings.showTasks
+                        showTasks: false
+                        showOnlyActiveColor: true
+                        showFamilyColor: locationView.showFamilyColor
+                        dragActive: true
+                        plantingIdList: modelData
+                        //                            taskIdList: model.hidden ? []
+                        //                                                     : Helpers.intToVariantList(Location.tasks(model.location_id, seasonBegin, seasonEnd) )
+                        locationId: currentLocationId
+                        onDragFinished: locationView.draggedPlantingId = -1
+                        onPlantingMoved: locationTreeViewModel.refresh(currentIndex);
+                        onPlantingRemoved: locationTreeViewModel.refresh(currentIndex);
+                        Component.onCompleted: {
+                            plantingMoved.connect(locationView.plantingMoved)
+                            plantingRemoved.connect(locationView.plantingRemoved)
                         }
                     }
                 }
+            }
+        }
+
+        ThinDivider {
+            anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
+        }
+    }
+
+    Rectangle {
+        id: plantingBeginningLine
+        x: firstColumnWidth
+           + Units.position(locationView.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
+                                                                       : locationView.plantingDate)
+        visible: plantingEditMode ||  locationView.draggedPlantingId > 0
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: 2
+        color: Material.color(Material.Green)
+    }
+
+    Rectangle {
+        id: plantingEndLine
+        width: 2
+        x: firstColumnWidth
+           + Units.position(locationView.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
+                                                                       : locationView.endHarvestDate)
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        visible: plantingEditMode || locationView.draggedPlantingId > 0
+        color: Material.color(Material.Green)
+    }
+
+    Timer {
+        id: expandTimer
+        interval: 300
+        onTriggered: {
+            if ((locationView.expandIndex > 0)
+                    && (locationView.expandIndex === locationView.draggedOnIndex)) {
+                locationTreeViewModel.toggleIsExpanded(locationView.expandIndex, true);
+                locationView.draggedOnIndex = -1;
             }
         }
     }

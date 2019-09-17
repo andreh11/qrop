@@ -111,6 +111,7 @@ private:
     DatabaseUtility *mUnit;
     Variety *variety;
     QSettings *mSettings;
+
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     QList<int> yearPlantingList(int year) const;

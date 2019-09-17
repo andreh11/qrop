@@ -40,6 +40,7 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 public:
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
 
+    Q_INVOKABLE QVariantList plantings(int locationId, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
     Q_INVOKABLE QVariantList tasks(const QModelIndex &index, int season, int year) const;
@@ -90,21 +91,21 @@ public:
     bool showOnlyGreenhouseLocations() const;
     void setShowOnlyGreenhouseLocations(bool show);
 
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    QVariant sourceRowValue(int row, const QModelIndex &parent, const QString &field) const override;
-
 signals:
     void showOnlyEmptyLocationsChanged();
     void showOnlyGreenhouseLocationsChanged();
     void depthChanged();
 
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    QVariant sourceRowValue(int row, const QModelIndex &parent, const QString &field) const override;
+
 private:
     bool m_showOnlyEmptyLocations { false };
     bool m_showOnlyGreenhouseLocations { false };
     SqlTreeModel *m_treeModel;
-    Planting *planting;
-    Location *location;
+    Planting *m_planting;
+    Location *m_location;
 };
 
 #endif // LOCATIONMODEL_H

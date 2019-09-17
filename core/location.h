@@ -19,6 +19,7 @@
 
 #include "core_global.h"
 #include "databaseutility.h"
+#include "listmodel.h"
 
 class Planting;
 
@@ -41,12 +42,19 @@ public:
     Q_INVOKABLE QList<int> locations(int plantingId) const;
     Q_INVOKABLE qreal plantingLength(int plantingId, int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId) const;
+    QSqlQuery plantingsQuery(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
+    QSqlQuery plantingsQuery(int locationId, int season, int year) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
 
     Q_INVOKABLE QList<int> tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
     bool overlap(int plantingId1, int plantingId2) const;
     bool overlap(int plantingId1, const QDate &plantingDate, const QDate &endHarvestDate) const;
+    bool overlap(const QDate &plantingDate1, const QDate &endHarvestDate1,
+                 const QDate &plantingDate2, const QDate &endHarvestDate2);
+
+    Q_INVOKABLE QList<QVariant> nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
+                                                           const QDate &seasonEnd);
 
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
@@ -56,6 +64,8 @@ public:
                                      const QDate &seasonEnd) const;
     qreal availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                          const QDate &seasonEnd) const;
+    Q_INVOKABLE bool acceptPlanting(int locationId, int plantingId, const QDate &seasonBeg,
+                                    const QDate &seasonEnd) const;
     Q_INVOKABLE void splitPlanting(int plantingId, int otherPlantingId, int locationId);
 
     Q_INVOKABLE qreal addPlanting(int plantingId, int locationId, qreal length) const;
@@ -65,6 +75,8 @@ public:
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 
     Q_INVOKABLE int totalBedLength(bool greenhouse = false) const;
+
+    Q_INVOKABLE QString historyDescription(int locationId, int season, int year) const;
 
 private:
     Planting *planting;

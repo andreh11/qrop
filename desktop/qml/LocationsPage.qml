@@ -29,8 +29,10 @@ Page {
     property alias editMode: editCropMapButton.checked
     property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
-    property alias hasSelection: locationView.hasSelection
-    property alias rowCount: locationView.rowCount
+//    property alias hasSelection: locationView.hasSelection
+    property bool hasSelection: false
+//    property alias rowCount: locationView.rowCount
+    property int rowCount: locationView.rowCount
     property bool showPlantingsPane: true
 
     function refresh() {
@@ -493,12 +495,12 @@ Page {
             }
 
             LocationView {
-                anchors.fill: parent
                 id: locationView
+                anchors.fill: parent
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
-                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
-                showOnlyGreenhouseLocations: greenhouseButton.checked
+//                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
+//                showOnlyGreenhouseLocations: greenhouseButton.checked
                 showFamilyColor: familyColorButton.checked
                 editMode: page.editMode
                 firstColumnWidth: plantingsView.firstColumnWidth

@@ -103,15 +103,7 @@ Item {
         anchors.fill: parent
         Repeater {
             model: plantingIdList
-//            TimeGraphItem {
-//                x: 0
-//                y: 0
-//                plantingId: modelData
-//                year: control.year
-//                season: control.season
-//            }
-
-            Timegraph {
+            delegate: Timegraph {
                 plantingId: modelData
                 locationId: control.locationId
                 todayDate: control.todayDate

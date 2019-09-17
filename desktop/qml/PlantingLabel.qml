@@ -61,9 +61,6 @@ Item {
 
         Text {
             text: {
-                if (!validId)
-                    return "";
-
                 var txt = ""
 
                 if (showRank && settings.showPlantingSuccessionNumber) {

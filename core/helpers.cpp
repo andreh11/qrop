@@ -20,6 +20,7 @@
 
 #include "mdate.h"
 #include "helpers.h"
+#include "location.h"
 #include <cmath>
 
 Helpers::Helpers(QObject *parent)
@@ -66,4 +67,12 @@ qreal Helpers::bedLength(qreal length)
     } else {
         return length;
     }
+}
+
+QVariantList Helpers::intToVariantList(const QList<int> &list)
+{
+    QVariantList variantList;
+    for (const int elt : list)
+        variantList.push_back(elt);
+    return variantList;
 }
