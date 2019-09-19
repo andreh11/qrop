@@ -230,6 +230,9 @@ ListView {
     }
 
 
+    clip: true
+    cacheBuffer: Units.rowHeight * 20
+
     Settings {
         id: locationSettings
         category: "LocationView"
@@ -259,7 +262,6 @@ ListView {
         color: Material.accent
     }
 
-    clip: true
     headerPositioning: ListView.OverlayHeader
     header: Rectangle {
         id: headerRectangle
@@ -334,7 +336,8 @@ ListView {
 
         property int currentIndex: index
         property int currentLocationId: model.location_id
-        property var plantingRowList: [[]]
+        property var plantingRowList: model.hidden ? [[]]
+                                                   : Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
         property int rows: plantingRowList.length
 
         function toggleIsExpanded() {
@@ -342,16 +345,9 @@ ListView {
                 model.isExpanded = !model.isExpanded
         }
 
-        Binding on plantingRowList {
-            when: !model.hidden
-            value: Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
-        }
-
         clip: true
-        // collapsed items have a null height
-        visible: !model.hidden
-        // fill available width
-        width: ListView.view.width
+        visible: !model.hidden // collapsed items have a null height
+        width: ListView.view.width // fill available width
         height: {
             if (model.hidden)
                 return 0;
@@ -495,16 +491,17 @@ ListView {
                     ToolTip.visible: hovered && ToolTip.text
                     ToolTip.text: ""
                     onHoveredChanged: {
-                        if (hovered && !ToolTip.text)
-                            ToolTip.text = Location.historyDescription(model.location_id, season, year);
-                       console.log(ToolTip.text)
+//                        if (hovered && !tooltip.text)
+//                            tooltip.text = location.historydescription(model.location_id, season, year);
+//                       console.log(tooltip.text)
                     }
                 }
 
                 ConflictAlertButton {
                     id: conflictAlertButton
 //                    anchors.verticalCenter: parent.verticalCenter
-                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
+//                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
+                    conflictList: []
                     year: locationView.year
                     locationId: model.location_id
 

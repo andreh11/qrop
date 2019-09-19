@@ -62,8 +62,7 @@ int SortFilterProxyModel::rowId(int row) const
 
 int SortFilterProxyModel::roleIndex(const QString &roleName) const
 {
-    if (!m_model)
-        return -1;
+    Q_ASSERT(m_model);
     return m_model->roleIndex(roleName);
 }
 
@@ -81,8 +80,8 @@ void SortFilterProxyModel::refresh()
 // TODO: not working
 void SortFilterProxyModel::refreshRow(int row)
 {
-    if (row < 0 && row >= rowCount())
-        return;
+    Q_ASSERT(row >= 0);
+    Q_ASSERT(row < rowCount());
 
     auto idx = mapToSource(index(row, 0));
     m_model->selectRow(idx.row());
@@ -166,8 +165,7 @@ std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
     auto idx = mapToSource(index(row, 0, parent));
-    if (!idx.isValid())
-        return {};
+    Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
 
     return m_model->data(idx, field);
 }

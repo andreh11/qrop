@@ -25,8 +25,7 @@ void TreeViewModel::setSourceModel(QAbstractItemModel *sourceModel)
 
 Q_INVOKABLE void TreeViewModel::refresh(int row)
 {
-    if (row > rowCount())
-        return;
+    Q_ASSERT(row < rowCount());
     auto idx = index(row);
     emit dataChanged(idx, idx);
 }

@@ -15,15 +15,18 @@ LocationTreeViewModel::LocationTreeViewModel(QObject *parent)
 
 bool LocationTreeViewModel::showOnlyGreenhouseLocations() const
 {
+    Q_ASSERT(m_locationModel);
     return m_locationModel->showOnlyEmptyLocations();
 }
 
 void LocationTreeViewModel::setShowOnlyGreenhouseLocations(bool show)
 {
+    Q_ASSERT(m_locationModel);
     m_locationModel->setShowOnlyGreenhouseLocations(show);
 }
 
 int LocationTreeViewModel::depth() const
 {
+    Q_ASSERT(m_locationModel);
     return m_locationModel->depth();
 }

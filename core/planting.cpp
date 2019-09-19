@@ -73,8 +73,7 @@ int Planting::add(const QVariantMap &map) const
         newMap["unit_id"] = QVariant(QVariant::Int);
 
     int id = DatabaseUtility::add(newMap);
-    if (id < 1)
-        return -1;
+    Q_ASSERT(id > 0);
 
     task->createTasks(id, plantingDate);
     for (const auto &keywordId : keywordIdList)
@@ -398,8 +397,7 @@ int Planting::duplicate(int id) const
  */
 int Planting::duplicateToYear(int id, int year) const
 {
-    if (id < 0)
-        return -1;
+    Q_ASSERT(id > 0);
 
     QDate fromDate = plantingDate(id);
     auto map = mapFromId(table(), id);
@@ -447,8 +445,7 @@ void Planting::duplicatePlan(int fromYear, int toYear) const
 
 QVariantMap Planting::commonValues(const QList<int> &idList) const
 {
-    if (idList.empty())
-        return {};
+    Q_ASSERT(!idList.empty());
 
     QVariantMap common = DatabaseUtility::commonValues(idList);
 
