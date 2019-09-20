@@ -46,6 +46,8 @@ public:
     std::unique_ptr<QSqlQuery> plantingsQuery(int locationId, const QDate &seasonBeg,
                                               const QDate &seasonEnd) const;
     std::unique_ptr<QSqlQuery> plantingsQuery(int locationId, int season, int year) const;
+    std::unique_ptr<QSqlQuery> allLocationsPlantingsQuery(const QDate &seasonBeg,
+                                                          const QDate &seasonEnd) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
 
@@ -57,6 +59,8 @@ public:
                  const QDate &plantingDate2, const QDate &endHarvestDate2);
     Q_INVOKABLE QList<QVariant> nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
                                                            const QDate &seasonEnd);
+    QMap<int, QList<QVariant>> allNonOverlappingPlantingList(const QDate &seasonBeg,
+                                                             const QDate &seasonEnd);
 
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,

@@ -25,9 +25,13 @@ import io.qrop.components 1.0
 
 ListView {
     id: locationView
+    clip: true
+    cacheBuffer: Units.rowHeight * 20
+    boundsBehavior: Flickable.StopAtBounds
+    anchors.fill: parent
 
-    property int year
-    property int season
+    property alias year: locationTreeViewModel.year
+    property alias season: locationTreeViewModel.season
 
     readonly property date seasonBegin: MDate.seasonBeginning(season, year)
     readonly property date seasonEnd: MDate.seasonEnd(season, year)
@@ -44,7 +48,7 @@ ListView {
     property bool showFamilyColor: false
 
     property alias treeDepth: locationTreeViewModel.depth
-    property int headerHeight: headerRow.height
+    property int headerHeight: headerRectangle.height
     //    property int locationViewHeight: locationView.flickableItem.contentHeight
     property int locationViewHeight: locationView.contentHeight
     property int locationViewWidth: locationView.implicitWidth
@@ -78,14 +82,12 @@ ListView {
     property var draggedOnIndex: -1
     property alias expandTimer: expandTimer
 
-    ScrollBar.vertical: ScrollBar { }
-
     signal plantingMoved
     signal plantingRemoved
     signal addPlantingLength(int length)
 
     function refresh() {
-        locationTreeViewModel.refreshTree();
+//        locationTreeViewModel.refreshTree();
     }
 
     function reload() {
@@ -229,9 +231,17 @@ ListView {
         plantingsView.resetFilter();
     }
 
+    ScrollBar.vertical: ScrollBar {
+        anchors {
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+        }
+    }
 
-    clip: true
-    cacheBuffer: Units.rowHeight * 20
+
+    Component.onCompleted: contentHeight = locationTreeViewModel.contentHeight * (Units.rowHeight + 1)
+
 
     Settings {
         id: locationSettings
@@ -243,6 +253,7 @@ ListView {
 
     LocationTreeViewModel {
         id: locationTreeViewModel
+        onContentHeightChanged: locationView.contentHeight = locationTreeViewModel.contentHeight * (Units.rowHeight + 1)
     }
 
     // Declare selection model outside TreeView to avoid odd behavior.
@@ -282,10 +293,11 @@ ListView {
                 height: parent.height
                 width: firstColumnWidth - 16 - spacing
                 spacing: headerRow.spacing
+                anchors.verticalCenter: parent.verticalCenter
 
                 CheckBox {
                     id: headerRowCheckBox
-                    anchors.verticalCenter: headerRow.verticalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     visible: locationView.editMode
                     height: parent.height * 0.8
                     width: height
@@ -336,8 +348,10 @@ ListView {
 
         property int currentIndex: index
         property int currentLocationId: model.location_id
-        property var plantingRowList: model.hidden ? [[]]
-                                                   : Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
+        property var plantingRowList: model.nonOverlappingPlantingList
+
+        //            model.hidden ? [[]]
+        //                                                   : Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
         property int rows: plantingRowList.length
 
         function toggleIsExpanded() {
@@ -454,7 +468,7 @@ ListView {
 
                 CheckBox {
                     id: rowCheckBox
-//                    anchors.verticalCenter: parent.verticalCenter
+                    //                    anchors.verticalCenter: parent.verticalCenter
                     visible: locationView.editMode || locationView.alwaysShowCheckbox
                     height: parent.height * 0.8
                     width: height
@@ -491,30 +505,30 @@ ListView {
                     ToolTip.visible: hovered && ToolTip.text
                     ToolTip.text: ""
                     onHoveredChanged: {
-//                        if (hovered && !tooltip.text)
-//                            tooltip.text = location.historydescription(model.location_id, season, year);
-//                       console.log(tooltip.text)
+                        //                        if (hovered && !tooltip.text)
+                        //                            tooltip.text = location.historydescription(model.location_id, season, year);
+                        //                       console.log(tooltip.text)
                     }
                 }
 
-                ConflictAlertButton {
-                    id: conflictAlertButton
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
-                    conflictList: []
-                    year: locationView.year
-                    locationId: model.location_id
+                //                ConflictAlertButton {
+                //                    id: conflictAlertButton
+                ////                    anchors.verticalCenter: parent.verticalCenter
+                ////                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
+                //                    conflictList: []
+                //                    year: locationView.year
+                //                    locationId: model.location_id
 
-                    onPlantingModified: {
-                        locationTreeViewModel.refresh(currentIndex)
-                        timeline.refresh();
-                    }
-                    onPlantingRemoved: {
-                        locationView.plantingRemoved()
-                        locationTreeViewModel.refresh(currentIndex)
-                        timeline.refresh();
-                    }
-                }
+                //                    onPlantingModified: {
+                //                        locationTreeViewModel.refresh(currentIndex)
+                //                        timeline.refresh();
+                //                    }
+                //                    onPlantingRemoved: {
+                //                        locationView.plantingRemoved()
+                //                        locationTreeViewModel.refresh(currentIndex)
+                //                        timeline.refresh();
+                //                    }
+                //                }
 
                 ToolButton {
                     id: rotationAlertLabel
@@ -525,7 +539,7 @@ ListView {
                     font.pixelSize: Units.fontSizeTitle
                     font.family: "Material Icons"
                     Material.foreground: Material.color(Material.Red)
-//                    anchors.verticalCenter: parent.verticalCenter
+                    //                    anchors.verticalCenter: parent.verticalCenter
 
                     Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
                     ToolTip.visible: hovered && ToolTip.text
@@ -541,6 +555,11 @@ ListView {
             Column {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+
+                MonthGrid {
+                    height: parent.height
+                    width: parent.width
+                }
 
                 Repeater {
                     model: locationDelegate.plantingRowList
@@ -571,7 +590,10 @@ ListView {
                         }
                     }
                 }
+
+
             }
+
         }
 
         ThinDivider {

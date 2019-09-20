@@ -112,5 +112,6 @@
         <file>qml/TreeItemView.qml</file>
         <file>qml/TreeView.qml</file>
         <file>qml/HeaderTimelineRow.qml</file>
+        <file>qml/MonthGrid.qml</file>
     </qresource>
 </RCC>

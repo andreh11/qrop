@@ -55,20 +55,10 @@ Item {
 
     implicitWidth: gridRow.width
 
-    Row {
+    MonthGrid {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
-        spacing: monthWidth - 1
-
-        Repeater {
-            model: 13
-            Rectangle {
-                height: parent.height
-                width: 1
-                color: Qt.rgba(0, 0, 0, 0.12)
-            }
-        }
     }
 
     Rectangle {

@@ -162,12 +162,17 @@ std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
     return MDate::seasonDates(m_season, m_year);
 }
 
+QVariant SortFilterProxyModel::rowValue(const QModelIndex &index, const QString &field) const
+{
+    auto sourceIndex = mapToSource(index);
+    if (!sourceIndex.isValid())
+        return {};
+    return m_model->data(sourceIndex, field);
+}
+
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
-    auto idx = mapToSource(index(row, 0, parent));
-    Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
-
-    return m_model->data(idx, field);
+    return rowValue(index(row, 0, parent), field);
 }
 
 /**

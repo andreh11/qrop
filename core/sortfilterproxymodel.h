@@ -64,6 +64,9 @@ public:
         return rowValue(row, QModelIndex(), field);
     }
 
+    virtual QVariant rowValue(const QModelIndex &index, const QString &field) const;
+    virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
+
 protected:
     virtual bool isDateInRange(const QDate &date) const;
     SqlTableModel *m_model;
@@ -74,7 +77,6 @@ protected:
     QString m_sortOrder { "ascending" };
     virtual QVariant sourceRowValue(int sourceRow, const QModelIndex &sourceParent,
                                     const QString &field) const;
-    virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
 
 private:
     QString m_tableName;

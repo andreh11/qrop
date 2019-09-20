@@ -282,6 +282,27 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, int season, 
     return query;
 }
 
+std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &seasonBeg,
+                                                                const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString(
+            "SELECT location_id, planting_id, crop, variety, planting_date, end_harvest_date FROM "
+            "planting_location "
+            "LEFT JOIN planting_view USING (planting_id) "
+            "WHERE ('%1' <= planting_date AND planting_date <= '%2') "
+            "ORDER BY location_id, planting_date");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begString).arg(endString));
+    query->exec();
+
+    return query;
+}
+
 QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
@@ -424,6 +445,75 @@ QList<QVariant> Location::nonOverlappingPlantingList(int locationId, const QDate
             variantList.push_back(lst);
     }
     return variantList;
+}
+
+QMap<int, QList<QVariant>> Location::allNonOverlappingPlantingList(const QDate &seasonBeg,
+                                                                   const QDate &seasonEnd)
+{
+    // Use a single query for performance.
+    auto query = allLocationsPlantingsQuery(seasonBeg, seasonEnd);
+    if (!query->next())
+        return {};
+
+    QMap<int, QList<QVariant>> map;
+    int locationId = query->value("location_id").toInt();
+
+    QVector<QList<QVariant>> rows;
+    rows.push_back({ query->value("planting_id").toInt() });
+
+    // rowDate[i] is pair of the planting and end harvest dates of the last planting we added
+    // to row i.
+    QVector<QPair<QDate, QDate>> rowDate;
+    rowDate.push_back({ MDate::dateFromIsoString(query->value("planting_date").toString()),
+                        MDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+
+    int lid;
+    int plantingId;
+    int i;
+    while (query->next()) {
+        lid = query->value("location_id").toInt();
+        plantingId = query->value("planting_id").toInt();
+        auto plantingDate = MDate::dateFromIsoString(query->value("planting_date").toString());
+        auto endHarvestDate = MDate::dateFromIsoString(query->value("end_harvest_date").toString());
+
+        if (lid != locationId) {
+            // We've found a new location, so we add the list we've just built to the QMap
+            // and clear the temporary lists.
+            // Since QML cannot use a QList of QList<int>, we convert the
+            // list to a QList<QVariant>. This may introduce a performance problem,
+            // but it is a working solution.
+            QList<QVariant> variantList;
+            for (const auto &lst : rows) {
+                if (!lst.isEmpty())
+                    variantList.push_back(lst);
+            }
+            map[locationId] = variantList;
+            rows.clear();
+            rowDate.clear();
+            locationId = lid;
+            rows.push_back({ plantingId });
+            rowDate.push_back({ plantingDate, endHarvestDate });
+            continue;
+        }
+
+        i = 0;
+        for (; i < rowDate.count(); ++i) {
+            if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
+                rows[i].push_back(plantingId);
+                rowDate[i] = { plantingDate, endHarvestDate };
+                break;
+            }
+        }
+
+        if (i == rowDate.count()) {
+            // Current planting overlaps every plantings we've already assigned,
+            // so we create a new row for it.
+            rowDate.push_back({ plantingDate, endHarvestDate });
+            rows.push_back({ plantingId });
+        }
+    }
+
+    return map;
 }
 
 /**
