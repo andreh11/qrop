@@ -73,7 +73,7 @@ ApplicationWindow {
     flags: Qt.Window
 
     Material.primary: Material.Teal
-    Material.accent: Material.Indigo
+    Material.accent: Material.Blue
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
@@ -445,7 +445,6 @@ ApplicationWindow {
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
-        //        Material.background: Material.color(Material.Teal, Material.Shade300)
         Material.background: Material.primary
 
         ColumnLayout {

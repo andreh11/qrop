@@ -158,10 +158,8 @@ qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) co
 
 void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal length)
 {
-    if (!idx.isValid())
-        return;
-    if (length < 1)
-        return;
+    Q_ASSERT(idx.isValid());
+    Q_ASSERT(length > 0);
 
     std::pair<QDate, QDate> dates = seasonDates();
     if (hasChildren(idx)) {

@@ -374,6 +374,13 @@ ListView {
         color: Qt.darker(model.hasChildren ? colorList[model.indentation] : "white",
                          model.isSelected ? 1.1 : 1)
 
+//        Behavior on height {
+//            enabled: !model.hasChildren && !model.isHidden
+//            NumberAnimation {
+//                duration: Units.shortDuration
+//            }
+//        }
+
         DropArea {
             id: dropArea
             anchors.fill: parent
@@ -423,11 +430,11 @@ ListView {
                     let length = 0;
                     if (sourceLocationId > 0) // drag comes from location
                         length = Location.plantingLength(plantingId, sourceLocationId);
-                    else
+                    else // drag comes from planting view
                         length = Planting.lengthToAssign(plantingId);
 
-                    Location.addPlanting(plantingId, model.location_id, length)
-                    locationTreeViewModel.refresh(index);
+                    locationTreeViewModel.addPlanting(model.location_id, plantingId, length)
+//                    locationTreeViewModel.refresh(index);
 
                     locationView.draggedOnIndex = null;
                     locationView.expandIndex = null;
@@ -444,15 +451,13 @@ ListView {
             Row  {
                 Layout.minimumWidth: firstColumnWidth - 16
                 Layout.maximumWidth: firstColumnWidth - 16
+                Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 spacing: Units.smallSpacing
 
                 AbstractButton {
                     id: arrowControl
                     height: parent.height
-                    width: height
-                    Layout.preferredHeight: Units.rowHeight
-                    Layout.preferredWidth: height
-                    Layout.alignment: Qt.AlignTop
+                    width: parent.height * 0.8
 
                     onClicked: toggleIsExpanded()
 
@@ -475,10 +480,6 @@ ListView {
                     contentItem: Text {}
                     checked: model.isSelected
 
-                    Layout.preferredHeight: Units.rowHeight
-                    Layout.preferredWidth: height
-                    Layout.alignment: Qt.AlignTop
-
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
@@ -497,10 +498,6 @@ ListView {
                     text: model.hidden ? "" : (hovered ? "\ue889" : locationSettings.showFullName ? Location.fullName(model.location_id) : model.name)
                     font.family: hovered ? "Material Icons" : "Roboto Regular"
                     font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
-
-                    Layout.preferredHeight: Units.rowHeight
-                    Layout.preferredWidth: height
-                    Layout.alignment: Qt.AlignTop
 
                     ToolTip.visible: hovered && ToolTip.text
                     ToolTip.text: ""
@@ -557,6 +554,7 @@ ListView {
                 Layout.fillWidth: true
 
                 MonthGrid {
+                    visible: !locationDelegate.plantingRowList.length
                     height: parent.height
                     width: parent.width
                 }

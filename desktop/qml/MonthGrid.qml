@@ -8,7 +8,7 @@ import io.qrop.components 1.0
 
 Row {
     id: gridRow
-    spacing: monthWidth - 1
+    spacing: Units.monthWidth - 1
     
     Repeater {
         model: 13

@@ -185,40 +185,20 @@ Page {
                     verticalAlignment: Qt.AlignVCenter
                 }
 
-                Button {
+                FlatButton {
                     id: addButton
                     text: qsTr("Add task")
-                    flat: true
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
                     highlighted: true
-                    MouseArea {
-                        id: mouseArea
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        anchors.fill: parent
-                        onPressed:  mouse.accepted = false
-                    }
-                    onClicked:  taskDialog.addTask()
+                    onClicked: taskDialog.addTask()
                 }
 
-                Button {
+                FlatButton {
                     id: templatesButton
                     text: qsTr("Templates")
-                    flat: true
                     font.pixelSize: Units.fontSizeBodyAndButton
                     visible: checks === 0
-//                    highlighted: true
-
-                    MouseArea {
-                        id: tmouseArea
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        anchors.fill: parent
-                        onPressed:  mouse.accepted = false
-                    }
-
                     onClicked: {
                         mainPane.visible = false;
                         templatePane.visible = true;
@@ -232,7 +212,6 @@ Page {
                     inputMethodHints: Qt.ImhPreferLowercase
                     visible: !checks
                 }
-
 
                 Row {
                     id: checkButtonRow

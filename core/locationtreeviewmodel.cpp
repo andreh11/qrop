@@ -131,3 +131,9 @@ void LocationTreeViewModel::buildNonOverlapMap()
     m_nonOverlapMap = m_location->allNonOverlappingPlantingList(pair.first, pair.second);
     emit dataChanged(index(0), index(rowCount() - 1), { NonOverlappingPlantingList });
 }
+
+void LocationTreeViewModel::addPlanting(int row, int plantingId, qreal length)
+{
+    auto idx = mapToSource(index(row));
+    m_locationModel->addPlanting(idx, plantingId, length);
+}

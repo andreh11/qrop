@@ -599,10 +599,9 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length) const
 /**
  * Add \a plantingId to \a locationId between \a seasonBeg and \a seasonEnd.
  *
- * If the location has sublocations, assign the planting to the sublocations,
- * checking for available space if planting conflicts aren't authorized.
+ * Check for available space if planting conflicts aren't authorized.
  *
- * \return the length added to the location or its sublocations.
+ * \return the length added to the location.
  */
 qreal Location::addPlanting(int plantingId, int locationId, qreal length, const QDate &seasonBeg,
                             const QDate &seasonEnd) const

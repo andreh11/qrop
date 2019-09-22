@@ -528,7 +528,7 @@ Flickable {
                     alwaysShowCheckbox: true
                     year: control.year
                     season: 1
-                    showOnlyEmptyLocations: false
+//                    showOnlyEmptyLocations: false
                     editMode: false
                     Layout.fillHeight: true
                     Layout.fillWidth: true

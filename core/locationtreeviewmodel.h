@@ -38,6 +38,8 @@ public:
     void setFilterYear(int year);
     void setFilterSeason(int season);
 
+    Q_INVOKABLE void addPlanting(int row, int plantingId, qreal length);
+
 private:
     LocationModel *m_locationModel;
     Location *m_location;
