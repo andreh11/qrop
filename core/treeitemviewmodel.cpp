@@ -66,7 +66,7 @@ QModelIndex TreeItemViewModel::sourceIndex() const
     return m_sourceIndex;
 }
 
-TreeItemViewModel *TreeItemViewModel::addChild(QModelIndex index)
+TreeItemViewModel *TreeItemViewModel::addChild(const QModelIndex &index)
 {
     TreeItemViewModel *child = new TreeItemViewModel(this, index, m_flattenedTree, m_proxyModel,
                                                      m_expandedMap, m_hiddenMap, m_selectedMap);
@@ -78,7 +78,7 @@ TreeItemViewModel *TreeItemViewModel::addChild(QModelIndex index)
     return child;
 }
 
-TreeItemViewModel *TreeItemViewModel::insertChild(int row, QModelIndex index)
+TreeItemViewModel *TreeItemViewModel::insertChild(int row, const QModelIndex &index)
 {
     if (m_childItems.count() <= row)
         return addChild(index);
@@ -91,7 +91,7 @@ TreeItemViewModel *TreeItemViewModel::insertChild(int row, QModelIndex index)
     return child;
 }
 
-void TreeItemViewModel::setExpanded(bool expanded)
+void TreeItemViewModel::setExpanded(bool expanded, bool emitSignal)
 {
     if (m_isExpanded == expanded)
         return;
@@ -99,17 +99,19 @@ void TreeItemViewModel::setExpanded(bool expanded)
     m_isExpanded = expanded;
     m_expandedMap[sourceIndexAcrossProxyChain(m_sourceIndex)] = expanded;
 
-    QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
-    emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    if (emitSignal) {
+        QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
+        emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    }
 
     if (m_proxyModel->sourceModel()->canFetchMore(sourceIndex()))
         m_proxyModel->sourceModel()->fetchMore(sourceIndex());
 
     for (TreeItemViewModel *child : m_childItems)
-        child->setHidden(!m_isExpanded);
+        child->setHidden(!m_isExpanded, emitSignal);
 }
 
-void TreeItemViewModel::setSelected(bool selected, bool treeSelect)
+void TreeItemViewModel::setSelected(bool selected, bool treeSelect, bool emitSignal)
 {
     if (m_isSelected == selected)
         return;
@@ -117,16 +119,18 @@ void TreeItemViewModel::setSelected(bool selected, bool treeSelect)
     m_isSelected = selected;
     m_selectedMap[sourceIndexAcrossProxyChain(m_sourceIndex)] = selected;
 
-    QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
-    emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    if (emitSignal) {
+        QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
+        emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    }
 
     if (treeSelect) {
         for (auto child : m_childItems)
-            child->setSelected(selected, treeSelect);
+            child->setSelected(selected, treeSelect, emitSignal);
     }
 }
 
-void TreeItemViewModel::setHidden(bool hidden)
+void TreeItemViewModel::setHidden(bool hidden, bool emitSignal)
 {
     if (m_isHidden == hidden)
         return;
@@ -134,11 +138,13 @@ void TreeItemViewModel::setHidden(bool hidden)
     m_isHidden = hidden;
     m_hiddenMap[m_sourceIndex] = hidden;
 
-    QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
-    emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    if (emitSignal) {
+        QModelIndex proxyIndex = m_proxyModel->mapFromSource(sourceIndex());
+        emit m_proxyModel->dataChanged(proxyIndex, proxyIndex);
+    }
 
     for (TreeItemViewModel *child : m_childItems)
-        child->setHidden(m_isHidden || !m_isExpanded);
+        child->setHidden(m_isHidden || !m_isExpanded, emitSignal);
 }
 
 int TreeItemViewModel::row()

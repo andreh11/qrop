@@ -47,7 +47,7 @@ Flickable {
     readonly property alias plantingTask: plantingRadioButton.checked
     readonly property alias locationTask: locationRadioButton.checked
     readonly property alias plantingIdList: plantingList.plantingIdList
-    readonly property var locationIdList: locationView.selectedLocationIds()
+    readonly property var locationIdList: locationView.selectedLocationIds
     property string completedDate: ""
     readonly property alias descriptionText: descriptionTextArea.text
     property int successions: Number(successionsField.text)
@@ -539,7 +539,7 @@ Flickable {
                     id: selectedLocationLabel
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds()))
+                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds))
                     Layout.minimumHeight: 26
                     Layout.fillWidth: true
                 }

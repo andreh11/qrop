@@ -618,7 +618,7 @@ ListView {
                     model: listView.showOnlyTimegraph ? [] : parent.labelList
 
                     TableLabel {
-                        text: modelData
+                        text: modelData ? modelData : ""
                         condensed: true
                         color: Units.colorHighEmphasis
                         visible: tableHeaderModel[index+2].visible

@@ -119,6 +119,7 @@ Frame {
         PlantingTaskTemplateView {
             id: plantingTaskTemplateView
             Layout.fillWidth: true
+            Layout.leftMargin: 1
             Layout.preferredHeight: parent.height/3
             onTemplateListChanged: plantingTaskView.refresh();
         }

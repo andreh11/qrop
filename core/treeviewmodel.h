@@ -22,6 +22,7 @@ class TreeItemViewModel;
 class CORESHARED_EXPORT TreeViewModel : public QAbstractProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(QList<int> selectedIdList READ selectedIdList NOTIFY selectedIdListChanged)
 
 public:
     enum TreeRoles {
@@ -33,7 +34,7 @@ public:
         TreeSelected
     };
 
-    TreeViewModel(QObject *parent = nullptr);
+    explicit TreeViewModel(QObject *parent = nullptr);
     void setSourceModel(QAbstractItemModel *sourceModel) override;
 
     Q_INVOKABLE void refresh(int row);
@@ -47,13 +48,20 @@ public:
     bool setData(const QModelIndex &proxyIndex, const QVariant &value, int role) override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QList<int> selectedIdList() const;
+
     Q_INVOKABLE void toggleIsExpanded(int row, bool isExpanded);
     Q_INVOKABLE void toggleIsSelected(int row, bool isSelected);
     Q_INVOKABLE void toggleIsTreeSelected(int row, bool isSelected);
 
-    //        Q_INVOKABLE void selectAll(bool selected);
-    //    Q_INVOKABLE void expandAll(bool expanded);
-    //    Q_INVOKABLE void expandToDepth(int depth, bool expanded);
+    Q_INVOKABLE void selectAll();
+    Q_INVOKABLE void unselectAll();
+
+    Q_INVOKABLE void expandAll();
+    Q_INVOKABLE void collapseAll();
+
+signals:
+    void selectedIdListChanged();
 
 private slots:
     void onLayoutChanged();
@@ -61,7 +69,6 @@ private slots:
     void onRowsInserted(const QModelIndex &parent, int first, int last);
     void onRowsMoved(const QModelIndex &parent, int start, int end,
                      const QModelIndex &destinationParent, int destinationRow);
-
     void onRowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
@@ -71,6 +78,7 @@ private:
     void doResetModel(QAbstractItemModel *sourceModel);
     TreeItemViewModel *findItemByIndex(const QModelIndex &sourceIndex) const;
 
+    TreeItemViewModel *m_root { nullptr };
     QList<TreeItemViewModel *> m_flattenedTree;
     QMap<QModelIndex, bool> m_expandedMap;
     QMap<QModelIndex, bool> m_hiddenMap;

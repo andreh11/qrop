@@ -79,6 +79,8 @@
 #include "usermodel.h"
 #include "varietymodel.h"
 
+#include "qquicktreemodeladaptor.h"
+
 #include "qropdoublevalidator.h"
 #include "timevalidator.h"
 
@@ -128,6 +130,8 @@ void registerTypes()
     qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
+
+    qmlRegisterType<QQuickTreeModelAdaptor>("io.qrop.components", 1, 0, "TreeModelAdaptor");
 
     qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
 

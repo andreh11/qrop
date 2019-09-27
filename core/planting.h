@@ -103,15 +103,7 @@ public:
                                         bool showNames = false) const;
 
 private:
-    DatabaseUtility *crop;
-    Family *family;
-    DatabaseUtility *seedCompany;
-    Keyword *keyword;
-    Task *task;
-    DatabaseUtility *mUnit;
-    Variety *variety;
-    QSettings *mSettings;
-
+    QVariant value(int plantingId, const QString &field) const;
     QVariant get(const QVariantMap &map, const QSqlRecord &record, const QString &key) const;
     void setGreenhouseValues(QVariantMap &map, const QSqlRecord &record);
     QList<int> yearPlantingList(int year) const;
@@ -119,6 +111,15 @@ private:
     int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
     void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
     qreal convertedLength(qreal length) const;
+
+    DatabaseUtility *crop;
+    Family *family;
+    DatabaseUtility *seedCompany;
+    Keyword *keyword;
+    Task *task;
+    DatabaseUtility *mUnit;
+    Variety *variety;
+    QSettings *m_settings;
 };
 
 #endif // PLANTING_H

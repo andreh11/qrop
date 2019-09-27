@@ -31,7 +31,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     m_model->setTable(tableName);
     m_model->select();
     setSourceModel(m_model);
-    setSortLocaleAware(true);
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
     connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
@@ -173,6 +172,11 @@ QVariant SortFilterProxyModel::rowValue(const QModelIndex &index, const QString 
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
     return rowValue(index(row, 0, parent), field);
+}
+
+QVariant SortFilterProxyModel::rowValue(int row, const QString &field) const
+{
+    return rowValue(row, QModelIndex(), field);
 }
 
 /**

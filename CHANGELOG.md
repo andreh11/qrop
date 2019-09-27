@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   - *Seeds and transplants lists* − Fix sorting bug for dates and names.
   - Fix planting length when assigning to multiple locations.
 
-## 0.3 - 2019-06-15 
+## 0.3 - 2019-06-15
 
 ### Added
   - *Task calendar* − Add sorting function for tasks (#122).
@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
   - Add planting succession numbering by crop and planting date.
 
 ### Changed
-  - *Planting dialog* − Check date consitency when editing one planting (#119).j
+  - *Planting dialog* − Check date consitency when editing one planting (#119).
   - *Plantings* − It is now possible for a planting not to have a unit (#106).
   - Field map output: more space for long location names (#141).
   - *Harvest dialog* − Show currently harvested crops. When one planting is
@@ -49,7 +49,7 @@ All notable changes to this project will be documented in this file.
   - *Crop plan* − Show planting's color only when it has been seeded or planted.
 
 ### Fixed
-  - Fixed month selection bug in date picker for comlete dates (#114).
+  - Fixed month selection bug in date picker for complete dates (#114).
   - *Planting map* − Duplicate keywords when plantings are duplicated.
   - *Harvest dialog* − Split harvest time between multiple plantings (#96).
   - *Field map* − Don't show rotation conflict when two plantings overlaps on the

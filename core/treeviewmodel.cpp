@@ -16,35 +16,53 @@ void TreeViewModel::setSourceModel(QAbstractItemModel *sourceModel)
     if (sourceModel != nullptr) {
         connect(sourceModel, &QAbstractItemModel::dataChanged, this,
                 &TreeViewModel::onSourceDataChanged);
-        connect(sourceModel, &QAbstractItemModel::rowsInserted, this, &TreeViewModel::onRowsInserted);
+        connect(sourceModel, &QAbstractItemModel::dataChanged, this,
+                &TreeViewModel::selectedIdListChanged);
+        connect(this, &TreeViewModel::dataChanged, this, &TreeViewModel::selectedIdListChanged);
+        //        connect(sourceModel, &QAbstractItemModel::rowsInserted, this, &TreeViewModel::onRowsInserted);
+        connect(sourceModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
+                SLOT(onRowsInserted(const QModelIndex &, int, int)));
+
         connect(sourceModel, &QAbstractItemModel::rowsRemoved, this, &TreeViewModel::onRowsRemoved);
         connect(sourceModel, &QAbstractItemModel::rowsMoved, this, &TreeViewModel::onRowsMoved);
         connect(sourceModel, &QAbstractItemModel::layoutChanged, this, &TreeViewModel::onLayoutChanged);
     }
 }
 
+QList<int> TreeViewModel::selectedIdList() const
+{
+    QList<int> list;
+    for (int row = 0; row < rowCount(); ++row) {
+        const QModelIndex idx = index(row);
+        if (data(idx, Selected).toBool()) {
+            int locationId = data(idx, Qt::UserRole).toInt();
+            list.push_back(locationId);
+        }
+    }
+    return list;
+}
+
 Q_INVOKABLE void TreeViewModel::refresh(int row)
 {
     Q_ASSERT(row < rowCount());
-    auto idx = index(row);
+    const QModelIndex idx = index(row);
     emit dataChanged(idx, idx);
 }
 
 QModelIndex TreeViewModel::mapToSource(const QModelIndex &proxyIndex) const
 {
-    //        if (!proxyIndex.isValid() || !flattenedTree_.count() > proxyIndex.row())
-    // This seems more logical, but we might have introduced a bug?
-    if (!proxyIndex.isValid() || !(m_flattenedTree.count() > proxyIndex.row()))
+    if (!proxyIndex.isValid())
         return {};
+    Q_ASSERT(proxyIndex.row() < m_flattenedTree.count());
     return m_flattenedTree[proxyIndex.row()]->sourceIndex();
 }
 
 QModelIndex TreeViewModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
-    TreeItemViewModel *n = findItemByIndex(sourceIndex);
-    if (n == nullptr)
+    TreeItemViewModel *node = findItemByIndex(sourceIndex);
+    if (node == nullptr)
         return {};
-    return createIndex(n->row(), 0);
+    return createIndex(node->row(), 0);
 }
 
 int TreeViewModel::columnCount(const QModelIndex &parent) const
@@ -121,21 +139,47 @@ QHash<int, QByteArray> TreeViewModel::roleNames() const
     return names;
 }
 
-// Q_INVOKABLE void TreeViewModel::selectAll(bool selected) {}
-
-Q_INVOKABLE void TreeViewModel::toggleIsExpanded(int row, bool isExpanded)
+void TreeViewModel::toggleIsExpanded(int row, bool isExpanded)
 {
     m_flattenedTree[row]->setExpanded(isExpanded);
 }
 
-Q_INVOKABLE void TreeViewModel::toggleIsSelected(int row, bool isSelected)
+void TreeViewModel::toggleIsSelected(int row, bool isSelected)
 {
     m_flattenedTree[row]->setSelected(isSelected, false);
 }
 
-Q_INVOKABLE void TreeViewModel::toggleIsTreeSelected(int row, bool isSelected)
+void TreeViewModel::toggleIsTreeSelected(int row, bool isSelected)
 {
     m_flattenedTree[row]->setSelected(isSelected, true);
+}
+
+void TreeViewModel::selectAll()
+{
+    for (const auto row : m_flattenedTree)
+        row->setSelected(true, false, false);
+    emit dataChanged(index(0), index(rowCount() - 1));
+}
+
+void TreeViewModel::unselectAll()
+{
+    for (const auto row : m_flattenedTree)
+        row->setSelected(false, false, false);
+    emit dataChanged(index(0), index(rowCount() - 1));
+}
+
+void TreeViewModel::expandAll()
+{
+    for (const auto row : m_flattenedTree)
+        row->setExpanded(true, false);
+    emit dataChanged(index(0), index(rowCount() - 1));
+}
+
+void TreeViewModel::collapseAll()
+{
+    for (const auto row : m_flattenedTree)
+        row->setSelected(false, false);
+    emit dataChanged(index(0), index(rowCount() - 1));
 }
 
 void TreeViewModel::onLayoutChanged()
@@ -153,7 +197,6 @@ void TreeViewModel::onSourceDataChanged(QModelIndex topLeft, QModelIndex bottomR
 void TreeViewModel::onRowsInserted(const QModelIndex &parent, int first, int last)
 {
     TreeItemViewModel *parentNode = findItemByIndex(parent);
-
     qDebug() << "onRowsInserted" << parent.data() << first << last;
 
     int firstRow = 0;
@@ -161,11 +204,16 @@ void TreeViewModel::onRowsInserted(const QModelIndex &parent, int first, int las
 
     for (int row = first; row < last + 1; ++row) {
         auto childIndex = index(row, 0, parent);
-        TreeItemViewModel *n = parentNode->insertChild(row, childIndex);
+        TreeItemViewModel *node = nullptr;
+        if (parentNode)
+            node = parentNode->insertChild(row, childIndex);
+        else
+            node = new TreeItemViewModel(nullptr, childIndex, m_flattenedTree, this, m_expandedMap,
+                                         m_hiddenMap, m_selectedMap);
         if (row == first)
-            firstRow = n->row();
+            firstRow = node->row();
         if (row == last)
-            lastRow = n->row();
+            lastRow = node->row();
     }
     beginInsertRows(QModelIndex(), firstRow, lastRow);
     endInsertRows();
@@ -205,12 +253,11 @@ void TreeViewModel::flatten(QAbstractItemModel *model, QModelIndex parent, TreeI
     for (int rowIndex = 0; rowIndex < rows; ++rowIndex) {
         QModelIndex index = model->index(rowIndex, 0, parent);
         TreeItemViewModel *node = nullptr;
-        if (parentNode) {
+        if (parentNode)
             node = parentNode->addChild(index);
-        } else {
-            node = new TreeItemViewModel(parentNode, index, m_flattenedTree, this, m_expandedMap,
+        else
+            node = new TreeItemViewModel(nullptr, index, m_flattenedTree, this, m_expandedMap,
                                          m_hiddenMap, m_selectedMap);
-        }
 
         if (node->hasChildren())
             flatten(model, index, node);

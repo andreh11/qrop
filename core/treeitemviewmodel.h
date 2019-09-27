@@ -25,6 +25,7 @@ public:
     TreeItemViewModel(QModelIndex sourceIndex, QList<TreeItemViewModel *> &flattenedTree,
                       QMap<QModelIndex, bool> &expandedMap, QMap<QModelIndex, bool> &hiddenMap,
                       QMap<QModelIndex, bool> &selectedMap);
+
     TreeItemViewModel(TreeItemViewModel *parent, QModelIndex sourceIndex,
                       QList<TreeItemViewModel *> &flattenedTree, QAbstractProxyModel *model,
                       QMap<QModelIndex, bool> &expandedMap, QMap<QModelIndex, bool> &hiddenMap,
@@ -34,12 +35,12 @@ public:
     TreeItemViewModel *parent();
     int indexOfChild(const TreeItemViewModel *child) const;
     QModelIndex sourceIndex() const;
-    TreeItemViewModel *addChild(QModelIndex index);
-    TreeItemViewModel *insertChild(int row, QModelIndex index);
+    TreeItemViewModel *addChild(const QModelIndex &index);
+    TreeItemViewModel *insertChild(int row, const QModelIndex &index);
 
-    void setExpanded(bool expanded);
-    void setHidden(bool hidden);
-    void setSelected(bool selected, bool treeSelect);
+    void setExpanded(bool expanded, bool emitSignal = true);
+    void setHidden(bool hidden, bool emitSignal = true);
+    void setSelected(bool selected, bool treeSelect, bool emitSignal = true);
 
     int row();
     int indent() const;

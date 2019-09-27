@@ -82,7 +82,10 @@ void DatabaseUtility::debugQuery(const QSqlQuery &query) const
 
 QList<int> DatabaseUtility::queryIds(const QString &queryString, const QString &idFieldName) const
 {
-    QSqlQuery query(queryString);
+    QSqlQuery query;
+    query.setForwardOnly(true);
+    query.prepare(queryString);
+    query.exec();
     debugQuery(query);
 
     QList<int> list;
@@ -238,8 +241,12 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
     QSqlQuery query;
     query.setForwardOnly(true);
     query.prepare(queryString);
-    for (const auto &key : map.keys())
-        query.bindValue(QString(":%1").arg(key), map[key]);
+
+    for (auto it = map.cbegin(); it != map.cend(); ++it)
+        query.bindValue(QString(":%1").arg(it.key()), it.value());
+
+    //    for (const auto &key : map.keys())
+    //        query.bindValue(QString(":%1").arg(key), map[key]);
 
     query.exec();
     debugQuery(query);

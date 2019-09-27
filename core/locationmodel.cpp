@@ -17,6 +17,7 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QDate>
+#include <QElapsedTimer>
 
 #include "locationmodel.h"
 #include "sqltablemodel.h"
@@ -33,6 +34,36 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
 {
     setSourceModel(m_treeModel);
     setRecursiveFilteringEnabled(true);
+
+    rebuildAndRefresh();
+
+    connect(this, SIGNAL(filterYearChanged()), this, SLOT(rebuildAndRefresh()));
+    connect(this, SIGNAL(filterSeasonChanged()), this, SLOT(rebuildAndRefresh()));
+    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this,
+            SLOT(onDataChanged(const QModelIndex &, const QModelIndex &)));
+}
+
+QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
+{
+    switch (role) {
+    case NonOverlappingPlantingList:
+        return nonOverlappingPlantingList(proxyIndex);
+    case TaskList:
+        return nonOverlappingTaskList(proxyIndex);
+    case History:
+        return historyDescription(proxyIndex);
+    default:
+        return SortFilterProxyModel::data(proxyIndex, role);
+    }
+}
+
+QHash<int, QByteArray> LocationModel::roleNames() const
+{
+    auto names = SortFilterProxyModel::roleNames();
+    names[NonOverlappingPlantingList] = "nonOverlappingPlantingList";
+    names[TaskList] = "taskList";
+    names[History] = "history";
+    return names;
 }
 
 int LocationModel::locationId(const QModelIndex &idx) const
@@ -69,11 +100,16 @@ void LocationModel::refreshTree(const QModelIndex &root)
     treeList.push_back(root);
 
     QModelIndex parent;
-    for (int i = 0; i < treeList.length(); i++) {
+    for (int i = 0; i < treeList.length(); ++i) {
         parent = treeList[i];
         dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
-        for (int row = 0; row < rowCount(parent); row++)
-            treeList.push_back(index(row, 0, parent));
+
+        int count = rowCount(parent);
+        for (int row = 0; row < count; ++row) {
+            const QModelIndex child = index(row, 0, parent);
+            if (hasChildren(child))
+                treeList.push_back(child);
+        }
     }
 }
 
@@ -161,12 +197,14 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
     Q_ASSERT(idx.isValid());
     Q_ASSERT(length > 0);
 
-    std::pair<QDate, QDate> dates = seasonDates();
+    qDebug() << "addPlanting" << idx << plantingId << length;
+
+    auto dates = seasonDates();
     if (hasChildren(idx)) {
         qreal l = length;
         int row = 0;
         for (; row < rowCount(idx) && l > 0; row++) {
-            QModelIndex child = index(row, 0, idx);
+            const auto child = index(row, 0, idx);
             if (!hasChildren(child)) {
                 int lid = locationId(child);
                 l -= m_location->addPlanting(plantingId, lid, l, dates.first, dates.second);
@@ -252,16 +290,46 @@ QList<int> LocationModel::rotationConflictingPlantings(const QModelIndex &index,
     return list;
 }
 
-QString LocationModel::historyDescription(const QModelIndex &index, int season, int year) const
+QString LocationModel::historyDescription(const QModelIndex &index) const
 {
-    QString text;
-    for (const int plantingId : m_location->plantings(locationId(index)))
-        text += QString("%1, %2 %3\n")
-                        .arg(m_planting->cropName(plantingId))
-                        .arg(m_planting->varietyName(plantingId))
-                        .arg(m_planting->plantingDate(plantingId).year());
-    text.chop(1);
-    return text;
+    if (!index.isValid())
+        return {};
+
+    int id = locationId(index);
+    Q_ASSERT(id > 0);
+
+    auto it = m_historyDescriptionMap.constFind(id);
+    if (it == m_historyDescriptionMap.cend())
+        return {};
+    return it.value();
+}
+
+QVariantList LocationModel::nonOverlappingPlantingList(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return {};
+
+    int id = locationId(index);
+    Q_ASSERT(id > 0);
+
+    auto it = m_nonOverlapPlantingMap.constFind(id);
+    if (it == m_nonOverlapPlantingMap.cend())
+        return {};
+    return it.value();
+}
+
+QVariantList LocationModel::nonOverlappingTaskList(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return {};
+
+    int id = locationId(index);
+    Q_ASSERT(id > 0);
+
+    auto it = m_nonOverlapTaskMap.constFind(id);
+    if (it == m_nonOverlapTaskMap.cend())
+        return {};
+    return it.value();
 }
 
 QString LocationModel::rotationConflictingDescription(const QModelIndex &index, int season, int year) const
@@ -358,11 +426,8 @@ void LocationModel::setShowOnlyGreenhouseLocations(bool show)
  * Returns \c true if all locations can be added, \c false otherwise
  */
 bool LocationModel::addLocations(const QString &baseName, int length, double width, int quantity,
-                                 const QModelIndexList &parentList)
+                                 bool greenhouse, const QModelIndexList &parentList)
 {
-    // TODO: This is ugly, we should redesign the class hierarchy.
-    auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
-
     int parentId = -1;
     QString parentIdString;
     int newId;
@@ -373,7 +438,7 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
     int baseInt = baseName.toInt(&isInt);
 
     QString name;
-    for (auto parent : parentList) {
+    for (const auto &parent : parentList) {
         parentId = data(index(parent.row(), 0, parent.parent()), 0).toInt();
         parentIdString = parentId > 0 ? QString::number(parentId) : QString();
         for (int i = 0; i < quantity; i++) {
@@ -387,11 +452,14 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
             newId = m_location->add({ { "bed_length", length },
                                       { "bed_width", width },
                                       { "parent_id", parentIdString },
-                                      { "name", name } });
-            tmodel->addRecord(m_location->recordFromId("location", newId), mapToSource(parent));
+                                      { "name", name },
+                                      { "greenhouse", greenhouse ? 1 : 0 } });
+            qDebug() << "addRecord";
+            m_treeModel->addRecord(m_location->recordFromId("location", newId), mapToSource(parent));
         }
     }
     QSqlDatabase::database().commit();
+    refresh();
     emit depthChanged();
 
     return true;
@@ -624,4 +692,92 @@ QModelIndexList LocationModel::treePath(const QModelIndex &index) const
     for (auto p = parent(index); p.isValid(); p = parent(p))
         list.push_back(p);
     return list;
+}
+
+/** @return true if the map has changed, false otherwise */
+bool LocationModel::buildNonOverlapPlantingMap()
+{
+    const auto dates = MDate::seasonDates(filterSeason(), filterYear());
+    const auto newMap = m_location->allNonOverlappingPlantingList(dates.first, dates.second);
+
+    if (m_nonOverlapPlantingMap == newMap)
+        return false;
+
+    m_nonOverlapPlantingMap = newMap;
+
+    return true;
+}
+
+/** @return true if the map has changed, false otherwise */
+bool LocationModel::buildNonOverlapTaskMap()
+{
+    const auto dates = MDate::seasonDates(filterSeason(), filterYear());
+    const auto newMap =
+            m_location->allNonOverlappingTaskList(m_nonOverlapPlantingMap, dates.first, dates.second);
+
+    if (m_nonOverlapTaskMap == newMap)
+        return false;
+
+    m_nonOverlapTaskMap = newMap;
+
+    return true;
+}
+
+/** @return true if the map has changed, false otherwise */
+bool LocationModel::buildHistoryDescriptionMap()
+{
+    const auto newMap = m_location->allHistoryDescription(filterSeason(), filterYear());
+
+    if (m_historyDescriptionMap == newMap)
+        return false;
+
+    m_historyDescriptionMap = newMap;
+    return true;
+}
+
+/** Rebuild the planting, task and history maps. Refresh the model if needed. */
+void LocationModel::rebuildAndRefresh()
+{
+    QElapsedTimer timer;
+    timer.start();
+    bool b1 = buildNonOverlapPlantingMap();
+    bool b2 = buildNonOverlapTaskMap();
+    bool b3 = buildHistoryDescriptionMap();
+    qDebug() << "[REBUILD]" << timer.elapsed() << "ms";
+
+    timer.start();
+    if (b1 || b2 || b3)
+        refreshTree();
+    qDebug() << "[REFRESH]" << timer.elapsed() << "ms";
+}
+
+void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    if (topLeft != bottomRight) {
+        if (buildNonOverlapPlantingMap()) {
+            buildHistoryDescriptionMap();
+            emit dataChanged(topLeft, bottomRight, { NonOverlappingPlantingList, TaskList, History });
+        }
+        return;
+    }
+
+    auto pair = MDate::seasonDates(filterSeason(), filterYear());
+    int lid = locationId(topLeft);
+    auto newList = m_location->nonOverlappingPlantingList(lid, pair.first, pair.second);
+    if (m_nonOverlapPlantingMap[lid] == newList)
+        return;
+
+    m_nonOverlapPlantingMap[lid] = newList;
+
+    // NOTE: Update task list. Because we are lazy, and because it costs only 1-2 ms,
+    // we rebuild the whole map. But it would be possible to only update the relevant
+    // location.
+    buildNonOverlapTaskMap();
+
+    // NOTE: Same here, we could optimize.
+    buildHistoryDescriptionMap();
+
+    // I don't understand why, but it is not necessary to emit a new signal.
+    //    qDebug() << "emit";
+    //    emit dataChanged(topLeft, bottomRight, { NonOverlappingPlantingList, TaskList, History });
 }

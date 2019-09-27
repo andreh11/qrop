@@ -157,10 +157,9 @@ Pane {
                     onClicked: pane.goBack()
                 }
 
-                Button {
+                FlatButton {
                     id: addButton
                     text: qsTr("Add template")
-                    flat: true
                     font.pixelSize: Units.fontSizeBodyAndButton
                     highlighted: true
                     Layout.alignment: Qt.AlignRight
@@ -205,54 +204,42 @@ Pane {
 
         VerticalThinDivider { Layout.fillHeight: true }
 
-        ColumnLayout {
-            id: taskColumn
-            spacing: 0
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.preferredWidth: 2*parent.width/3
+//        ColumnLayout {
+//            id: taskColumn
+//            spacing: 0
+//            Layout.fillHeight: true
+//            Layout.fillWidth: true
+//            Layout.preferredWidth: 2*parent.width/3
 
-            Rectangle {
-                id: taskButtonRectangle
-                width: parent.width
-                height: Units.toolBarHeight
-                color: "white"
-                Layout.fillWidth: true
+//            Rectangle {
+//                id: taskButtonRectangle
+//                width: parent.width
+//                height: Units.toolBarHeight
+//                color: "white"
+//                Layout.fillWidth: true
 
-                Label {
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    text: qsTr("Template %1").arg(pane.taskTemplateName)
-                    Layout.alignment: Qt.AlignLeft
+//                Label {
+//                    font.family: "Roboto Regular"
+//                    font.pixelSize: Units.fontSizeBodyAndButton
+//                    text: qsTr("Template %1").arg(pane.taskTemplateName)
+//                    Layout.alignment: Qt.AlignLeft
 
-                    anchors {
-                        left: parent.left
-                        leftMargin: 16
-                        verticalCenter: parent.verticalCenter
-                    }
-                }
+//                    anchors {
+//                        left: parent.left
+//                        leftMargin: 16
+//                        verticalCenter: parent.verticalCenter
+//                    }
+//                }
 
-                Button {
-                    id: addTaskButton
-                    flat: true
-                    highlighted: true
-                    text: qsTr("Add task")
-                    z: 1
-                    onClicked: taskDialog.addTask();
-                    anchors {
-                        right: parent.right
-                        rightMargin: 16 - ((background.width - contentItem.width) / 4)
-                        verticalCenter: parent.verticalCenter
-                    }
-                }
-            }
+//            }
 
-            ThinDivider { Layout.fillWidth: true }
+//            ThinDivider { Layout.fillWidth: true }
 
             Pane {
                 id: taskPane
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+            Layout.preferredWidth: 2*parent.width/3
                 Material.background: Material.color(Material.Grey, Material.Shade100)
 
                 TaskDialog {
@@ -316,11 +303,33 @@ Pane {
                     }
                 }
 
+                FlatButton {
+                    id: addTaskButton
+                    flat: true
+                    highlighted: true
+                    text: qsTr("Add task")
+                    z: 1
+                    onClicked: taskDialog.addTask();
+                    anchors {
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
+//                        right: parent.right
+//                        rightMargin: 16 - ((background.width - contentItem.width) / 4)
+//                        verticalCenter: parent.verticalCenter
+                    }
+                }
+
                 ScrollView {
                     id: scrollView
                     clip: true
                     padding: 0
-                    anchors.fill: parent
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: addTaskButton.bottom
+                        bottom: parent.bottom
+                    }
+
                     contentHeight: taskListColumn.implicitHeight
                     contentWidth: taskListColumn.implicitWidth
 
@@ -421,4 +430,4 @@ Pane {
             }
         }
     }
-}
+//}

@@ -159,22 +159,20 @@ ApplicationWindow {
     }
 
 
-    BusyIndicator {
-        visible: running
-        running: plantingsPage.status === Loader.Loading
-        anchors.centerIn: parent
-    }
-
     PlantingsPage {
         id: plantingsPage
     }
 
     Loader {
         id: calendarPage
+//        asynchronous: true
+//        visible: status == Loader.Ready
     }
 
     Loader {
         id: locationsPage
+//        asynchronous: true
+//        visible: status == Loader.Ready
     }
 
     Loader {
@@ -588,6 +586,26 @@ ApplicationWindow {
         initialItem: plantingsPage
         replaceEnter: null
         replaceExit: null
+
+        Rectangle {
+            id: buttonRectangle
+            visible: stackView.currentItem.status === Loader.Loading
+            //            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
+            width: parent.width
+            height: Units.toolBarHeight
+            Material.elevation: 2
+
+            ThinDivider {
+                id: topDivider
+                anchors.top: buttonRectangle.bottom
+                width: parent.width
+            }
+
+            ProgressBar {
+                anchors { top: topDivider.top; left: parent.left; right: parent.right }
+                indeterminate: true
+            }
+        }
 
         function activatePage(index) {
             switch (index) {

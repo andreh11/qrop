@@ -44,7 +44,7 @@ Planting::Planting(QObject *parent)
     , task(new Task(this))
     , mUnit(new DatabaseUtility(this))
     , variety(new Variety(this))
-    , mSettings(new QSettings(this))
+    , m_settings(new QSettings(this))
 {
     m_table = "planting";
     m_viewTable = "planting_view";
@@ -484,44 +484,37 @@ bool Planting::sameCrop(const QList<int> &plantingIdList) const
     return true;
 }
 
+QVariant Planting::value(int plantingId, const QString &field) const
+{
+    auto record = recordFromId("planting_view", plantingId);
+    if (record.isEmpty())
+        return {};
+    return record.value(field);
+}
+
 QString Planting::cropName(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("crop").toString();
+    return value(plantingId, "crop").toString();
 }
 
 int Planting::cropId(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("crop_id").toInt();
+    return value(plantingId, "crop_id").toInt();
 }
 
 QString Planting::cropColor(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("crop_color").toString();
+    return value(plantingId, "crop_color").toString();
 }
 
 QString Planting::varietyName(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("variety").toString();
+    return value(plantingId, "variety").toString();
 }
 
 int Planting::familyId(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("family_id").toInt();
+    return value(plantingId, "family_id").toInt();
 }
 
 bool Planting::hasSameFamily(int plantingId1, int plantingId2) const
@@ -531,42 +524,27 @@ bool Planting::hasSameFamily(int plantingId1, int plantingId2) const
 
 QString Planting::familyInterval(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("family_interval").toString();
+    return value(plantingId, "family_interval").toString();
 }
 
 QString Planting::familyColor(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("family_color").toString();
+    return value(plantingId, "family_color").toString();
 }
 
 QString Planting::unit(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("unit").toString();
+    return value(plantingId, "unit").toString();
 }
 
 int Planting::type(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("planting_type").toInt();
+    return value(plantingId, "planting_type").toInt();
 }
 
 int Planting::rank(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("planting_rank").toInt();
+    return value(plantingId, "planting_rank").toInt();
 }
 
 QVector<QDate> Planting::dates(int plantingId) const
@@ -631,17 +609,14 @@ bool Planting::isActive(int plantingId) const
 /** Convert length to bed numbers if needed. */
 qreal Planting::convertedLength(qreal length) const
 {
-    if (mSettings->value("useStandardBedLength").toBool())
-        return length / mSettings->value("standardBedLength", 1).toDouble();
+    if (m_settings->value("useStandardBedLength").toBool())
+        return length / m_settings->value("standardBedLength", 1).toDouble();
     return length;
 }
 
 qreal Planting::totalLength(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return {};
-    return map.value("length").toDouble();
+    return value(plantingId, "length").toDouble();
 }
 
 /** Return the already assigned bed length for \a plantingId */
@@ -662,12 +637,7 @@ qreal Planting::assignedLength(int plantingId) const
 
 qreal Planting::lengthToAssign(int plantingId) const
 {
-    auto map = mapFromId("planting_view", plantingId);
-    if (map.isEmpty())
-        return 0;
-
-    int length = map.value("length").toInt();
-    return length - assignedLength(plantingId);
+    return totalLength(plantingId) - assignedLength(plantingId);
 }
 
 qreal Planting::totalLengthForWeek(int week, int year, int keywordId, bool greenhouse) const
@@ -1113,7 +1083,7 @@ QString Planting::toolTip(int plantingId, int locationId) const
     auto record = recordFromId("planting_view", plantingId);
     const QString crop = record.value("crop").toString();
     const QString variety = record.value("variety").toString();
-    const QString bedUnit = mSettings->value("useStandardBedLength").toBool() ? tr("beds") : tr("m");
+    const QString bedUnit = m_settings->value("useStandardBedLength").toBool() ? tr("beds") : tr("m");
     if (locationId > 0) {
         return tr("%1, %2 (%L3/%L4 %5 assigned)")
                 .arg(crop)
@@ -1157,14 +1127,14 @@ QString Planting::growBarDescription(int plantingId, int year, bool showNames) c
 QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showGreenhouseSow,
                                   bool showFamilyColor, bool showNames) const
 {
-    auto record = recordFromId("planting_view", plantingId);
-    QDate sowingDate =
+    const auto record = recordFromId("planting_view", plantingId);
+    const auto sowingDate =
             QDate::fromString(record.value(QStringLiteral("sowing_date")).toString(), Qt::ISODate);
-    QDate plantingDate =
+    const auto plantingDate =
             QDate::fromString(record.value(QStringLiteral("planting_date")).toString(), Qt::ISODate);
-    QDate begHarvestDate =
+    const auto begHarvestDate =
             QDate::fromString(record.value(QStringLiteral("beg_harvest_date")).toString(), Qt::ISODate);
-    QDate endHarvestDate =
+    const auto endHarvestDate =
             QDate::fromString(record.value(QStringLiteral("end_harvest_date")).toString(), Qt::ISODate);
 
     const auto seasonBegin = MDate::seasonBeginning(season, year);

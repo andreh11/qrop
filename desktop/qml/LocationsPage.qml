@@ -29,10 +29,8 @@ Page {
     property alias editMode: editCropMapButton.checked
     property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
-//    property alias hasSelection: locationView.hasSelection
-    property bool hasSelection: false
-//    property alias rowCount: locationView.rowCount
-    property int rowCount: locationView.rowCount
+    property alias hasSelection: locationView.hasSelection
+    property alias rowCount: locationView.rowCount
     property bool showPlantingsPane: true
 
     function refresh() {
@@ -225,19 +223,17 @@ Page {
             anchors.fill: parent
             spacing: Units.smallSpacing
 
-            Button {
+            FlatButton {
                 id: addButton
                 Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                 text: hasSelection ? qsTr("Add sublocations") : qsTr("Add Locations")
-                flat: true
-                Material.foreground: page.hasSelection ? "white" : Material.accent
-                font.pixelSize: Units.fontSizeBodyAndButton
+                highlighted: true
                 visible: editMode
                 onClicked: addDialog.open()
                 LocationDialog {
                     id: addDialog
                     mode: "add"
-                    onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity)
+                    onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity, greenhouse)
                     onRejected: addDialog.close()
                 }
             }
@@ -255,10 +251,10 @@ Page {
                 LocationDialog {
                     id: editDialog
                     mode: "edit"
-                    locationIdList: locationView.selectedLocationIds();
+                    locationIdList: locationView.selectedIdList
 
                     onAccepted: {
-                        locationView.updateIndexes(editDialog.editedValues(), locationView.selectedIndexes);
+                        locationView.updateSelectedLocations(editDialog.editedValues());
                         locationView.clearSelection();
                     }
 

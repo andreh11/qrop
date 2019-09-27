@@ -56,11 +56,23 @@ public:
     bool overlap(int plantingId1, int plantingId2) const;
     bool overlap(int plantingId1, const QDate &plantingDate, const QDate &endHarvestDate) const;
     bool overlap(const QDate &plantingDate1, const QDate &endHarvestDate1,
-                 const QDate &plantingDate2, const QDate &endHarvestDate2);
-    Q_INVOKABLE QList<QVariant> nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
-                                                           const QDate &seasonEnd);
-    QMap<int, QList<QVariant>> allNonOverlappingPlantingList(const QDate &seasonBeg,
-                                                             const QDate &seasonEnd);
+                 const QDate &plantingDate2, const QDate &endHarvestDate2) const;
+
+    Q_INVOKABLE QVariantList nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
+                                                        const QDate &seasonEnd);
+
+    QMap<int, QVariantList> allNonOverlappingPlantingList(const QDate &seasonBeg,
+                                                          const QDate &seasonEnd) const;
+
+    std::unique_ptr<QSqlQuery> allLocationsTasksQuery(const QDate &seasonBeg,
+                                                      const QDate &seasonEnd) const;
+
+    QMap<int, QVariantList> nonOverlappingTaskList(int locationId,
+                                                   const QMap<int, QVariantList> &plantingMap,
+                                                   const QDate &seasonBeg, const QDate &seasonEnd) const;
+    QMap<int, QVariantList> allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
+                                                      const QDate &seasonBeg,
+                                                      const QDate &seasonEnd) const;
 
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
@@ -83,11 +95,16 @@ public:
 
     Q_INVOKABLE int totalBedLength(bool greenhouse = false) const;
 
+    std::unique_ptr<QSqlQuery> allHistoryQuery(int season, int year) const;
+    QMap<int, QString> allHistoryDescription(int season, int year) const;
     Q_INVOKABLE QString historyDescription(int locationId, int season, int year) const;
 
+    QMap<int, QList<int>> allRotationConflictingPlantings(int season, int year) const;
+
 private:
-    Planting *m_planting;
     int duplicateTree(int id, int parentId) const;
+
+    Planting *m_planting;
 };
 
 #endif // LOCATION_H

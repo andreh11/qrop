@@ -54,6 +54,7 @@ add_library(core SHARED
         tableprinter.cpp
         treeviewmodel.cpp
         treeitemviewmodel.cpp
+        qquicktreemodeladaptor.cpp
 	core_resources.qrc)
 
 target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)

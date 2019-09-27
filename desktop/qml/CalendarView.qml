@@ -162,7 +162,7 @@ Item {
                 font.bold: true
                 width: 30
                 Layout.preferredWidth: width
-//                Layout.fillWidth: true
+                //                Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -255,15 +255,15 @@ Item {
                     MouseArea {
                         anchors.fill: parent
 
-                    onClicked: {
-//                        if (isSelectedDate) {
-//                            dateSelected = false;
-//                        } else {
-                        if (!checked) {
-                            control.dateSelect(model.date)
-                            dateSelected = true;
+                        onClicked: {
+                            //                        if (isSelectedDate) {
+                            //                            dateSelected = false;
+                            //                        } else {
+                            if (!checked) {
+                                control.dateSelect(model.date)
+                                dateSelected = true;
+                            }
                         }
-                    }
                     }
                 }
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,11 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
     Q_PROPERTY(int depth READ depth NOTIFY depthChanged)
 
 public:
+    enum { NonOverlappingPlantingList = 300, TaskList, History, ConflictList };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
+
+    QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE QVariantList plantings(int locationId, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
@@ -61,7 +65,10 @@ public:
     Q_INVOKABLE QList<int> rotationConflictingPlantings(const QModelIndex &index, int season,
                                                         int year) const;
 
-    Q_INVOKABLE QString historyDescription(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QString historyDescription(const QModelIndex &index) const;
+    Q_INVOKABLE QVariantList nonOverlappingPlantingList(const QModelIndex &index) const;
+    Q_INVOKABLE QVariantList nonOverlappingTaskList(const QModelIndex &index) const;
+
     Q_INVOKABLE QString rotationConflictingDescription(const QModelIndex &index, int season,
                                                        int year) const;
     Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
@@ -72,6 +79,7 @@ public:
     Q_INVOKABLE qreal plantingLength(int plantingId, const QModelIndex &index) const;
     Q_INVOKABLE void addPlanting(const QModelIndex &idx, int plantingId, qreal length);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
+                                  bool greenhouse,
                                   const QModelIndexList &parentList = { QModelIndex() });
     Q_INVOKABLE bool duplicateLocations(const QModelIndexList &indexList);
     Q_INVOKABLE bool updateIndexes(const QVariantMap &map, const QModelIndexList &indexList);
@@ -101,11 +109,24 @@ protected:
     QVariant sourceRowValue(int row, const QModelIndex &parent, const QString &field) const override;
 
 private:
+    bool buildNonOverlapPlantingMap();
+    bool buildNonOverlapTaskMap();
+    bool buildHistoryDescriptionMap();
+
     bool m_showOnlyEmptyLocations { false };
     bool m_showOnlyGreenhouseLocations { false };
+
     SqlTreeModel *m_treeModel;
     Planting *m_planting;
     Location *m_location;
+
+    QMap<int, QList<QVariant>> m_nonOverlapPlantingMap;
+    QMap<int, QList<QVariant>> m_nonOverlapTaskMap;
+    QMap<int, QString> m_historyDescriptionMap;
+
+private slots:
+    void rebuildAndRefresh();
+    void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif // LOCATIONMODEL_H
