@@ -529,8 +529,8 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &sea
     return map;
 }
 
-std::unique_ptr<QSqlQuery> Location::allLocationsTasksQuery(const QDate &seasonBeg,
-                                                            const QDate &seasonEnd) const
+std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBeg,
+                                                           const QDate &seasonEnd) const
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
@@ -551,27 +551,78 @@ std::unique_ptr<QSqlQuery> Location::allLocationsTasksQuery(const QDate &seasonB
     return query;
 }
 
+std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBeg,
+                                                           const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString("SELECT location_id, group_concat(task_id) AS tasks "
+                        "FROM location_task "
+                        "LEFT JOIN task USING (task_id) "
+                        "WHERE (assigned_date BETWEEN '%1' AND '%2') "
+                        "OR (completed_date BETWEEN '%1' AND '%2') "
+                        "GROUP BY location_id "
+                        "ORDER BY location_id");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery);
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begString).arg(endString));
+    query->exec();
+
+    return query;
+}
+
 QMap<int, QVariantList> Location::allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
                                                             const QDate &seasonBeg,
                                                             const QDate &seasonEnd) const
 {
-    QMap<int, QList<QVariant>> taskMap;
-    auto query = allLocationsTasksQuery(seasonBeg, seasonEnd);
+    QMap<int, QVariantList> plantingTaskMap;
+    auto query = allPlantingTasksQuery(seasonBeg, seasonEnd);
     while (query->next()) {
         const int plantingId = query->value("planting_id").toInt();
-        taskMap[plantingId] = Helpers::listOfVariant(query->value("tasks").toString());
+        plantingTaskMap[plantingId] = Helpers::listOfVariant(query->value("tasks").toString());
+    }
+
+    QMap<int, QVariantList> locationTaskMap;
+    auto locationQuery = allLocationTasksQuery(seasonBeg, seasonEnd);
+    while (locationQuery->next()) {
+        const int locationId = locationQuery->value("location_id").toInt();
+        locationTaskMap[locationId] = Helpers::listOfVariant(locationQuery->value("tasks").toString());
     }
 
     QMap<int, QVariantList> map;
+
+    // add planting tasks
     for (auto location = plantingMap.cbegin(); location != plantingMap.cend(); ++location) {
         QVariantList taskList;
+
         for (const QVariant &row : location.value()) {
             QVariantList rowList;
             for (const QVariant &plantingId : row.toList())
-                rowList.append(taskMap[plantingId.toInt()]);
+                rowList.append(plantingTaskMap[plantingId.toInt()]);
             taskList.push_back(rowList);
         }
+
+        //        auto it = locationTaskMap.constFind(location.key());
+        //        if (it != locationTaskMap.cend()) {
+        //            if (taskList.isEmpty()) {
+        //                taskList.push_back(it.value());
+        //            } else {
+        //                taskList[0] = taskList.first().toList() + it.value();
+        //            }
+        //        }
+
         map[location.key()] = taskList;
+    }
+
+    // add location tasks
+    auto lend = locationTaskMap.cend();
+    for (auto location = locationTaskMap.cbegin(); location != lend; ++location) {
+        auto it = locationTaskMap.constFind(location.key());
+        if (it != locationTaskMap.cend()) {
+            map[location.key()].push_back(it.value());
+        }
     }
 
     return map;
@@ -748,47 +799,64 @@ std::unique_ptr<QSqlQuery> Location::allHistoryQuery(int season, int year) const
 
 /**
  */
-QMap<int, QList<int>> Location::allRotationConflictingPlantings(int season, int year) const
+QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, int year) const
 {
     auto query = allHistoryQuery(season, year);
     if (!query->next())
         return {};
 
-    QMap<int, QList<int>> map;
-    //    int locationId = query->value("location_id").toInt();
+    QMap<int, QVariantList> map;
+    QMap<int, CropInfoList> cropMap;
 
-    //    do {
+    int locationId = query->value("location_id").toInt();
+    CropInfoList infoList;
 
-    //    } while (query->next());
+    auto push = [&infoList, &query]() {
+        infoList.push_back({ query->value("planting_id").toInt(), query->value("crop").toString(),
+                             query->value("family_id").toInt(), query->value("family_interval").toInt(),
+                             MDate::dateFromIsoString(query->value("planting_date").toString()),
+                             MDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+    };
 
-    //    map[locationId] = formatQuery();
+    push();
 
-    //    while (query->next()) {
-    //        int lid = query->value("location_id").toInt();
-    //        if (lid != locationId) {
-    //            map[locationId].chop(1);
-    //            locationId = lid;
-    //        }
-    //        map[locationId].append(formatQuery());
-    //    }
+    while (query->next()) {
+        int lid = query->value("location_id").toInt();
+
+        // new location
+        if (lid != locationId) {
+            cropMap[locationId] = infoList;
+            infoList.clear();
+            locationId = lid;
+        }
+
+        push();
+    }
+    cropMap[locationId] = infoList;
+
+    auto it = cropMap.cbegin();
+    auto end = cropMap.cend();
+    for (; it != end; ++it) {
+        CropInfoList cropList = it.value();
+        QVariantList conflictList;
+        int length = cropList.length();
+        for (int i = 0; i < length; ++i) {
+            CropInfo p1 = cropList[i];
+            for (int j = i + 1; j < length; ++j) {
+                CropInfo p2 = cropList[j];
+                if ((p1.plantingDate.year() - p2.endHarvestDate.year()) > p1.familyInterval)
+                    break;
+                if ((p1.familyId == p2.familyId)
+                    && !overlap(p1.plantingDate, p1.endHarvestDate, p2.plantingDate, p2.endHarvestDate)) {
+                    conflictList.push_back(i);
+                    break;
+                }
+            }
+        }
+        map[it.key()] = conflictList;
+    }
+
     return map;
-
-    //    const QDate plantingDate = m_planting->plantingDate(plantingId);
-    //    const int intervalDays = qAbs(m_planting->familyInterval(plantingId).toInt()) * 365;
-
-    //    QList<int> clist;
-    //    QList<int> plantingIdList = plantings(locationId, plantingDate);
-    //    plantingIdList.removeOne(plantingId);
-
-    //    QDate pdate;
-    //    for (const int pid : plantingIdList) {
-    //        pdate = m_planting->plantingDate(pid);
-    //        if (m_planting->hasSameFamily(plantingId, pid) && pdate.daysTo(plantingDate) < intervalDays
-    //            && !overlap(plantingId, pid))
-    //            clist.push_back(pid);
-    //    }
-
-    //    return clist;
 }
 
 /**

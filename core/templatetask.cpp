@@ -84,7 +84,7 @@ void TemplateTask::updateTasks(int templateTaskId) const
         if (plantingIdList.length() != 1)
             continue;
 
-        const int plantingId = plantingIdList.first();
+        const int plantingId = plantingIdList.constFirst();
         mTask->updateLinkedTask(plantingId, taskId, map);
     }
     QSqlDatabase::database().commit();
@@ -170,7 +170,7 @@ int TemplateTask::uncompletedPlantingTask(int templateTaskId, int plantingId) co
                         "AND planting_id = %2");
     auto list = queryIds(queryString.arg(templateTaskId).arg(plantingId), "task_id");
     if (list.length())
-        return list.first();
+        return list.constFirst();
     return -1;
 }
 

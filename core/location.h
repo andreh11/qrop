@@ -19,6 +19,8 @@
 
 #include <memory>
 
+#include <QDate>
+
 #include "core_global.h"
 #include "databaseutility.h"
 
@@ -38,6 +40,7 @@ public:
     Q_INVOKABLE qreal length(int locationId) const;
     Q_INVOKABLE bool isGreenhouse(int locationId) const;
     Q_INVOKABLE QString fullName(int locationId) const;
+
     QList<QString> pathName(int locationId) const;
     Q_INVOKABLE QString fullName(const QList<int> &locationIdList) const;
     Q_INVOKABLE QList<int> locations(int plantingId) const;
@@ -64,8 +67,8 @@ public:
     QMap<int, QVariantList> allNonOverlappingPlantingList(const QDate &seasonBeg,
                                                           const QDate &seasonEnd) const;
 
-    std::unique_ptr<QSqlQuery> allLocationsTasksQuery(const QDate &seasonBeg,
-                                                      const QDate &seasonEnd) const;
+    std::unique_ptr<QSqlQuery> allPlantingTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;
+    std::unique_ptr<QSqlQuery> allLocationTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;
 
     QMap<int, QVariantList> nonOverlappingTaskList(int locationId,
                                                    const QMap<int, QVariantList> &plantingMap,
@@ -99,10 +102,20 @@ public:
     QMap<int, QString> allHistoryDescription(int season, int year) const;
     Q_INVOKABLE QString historyDescription(int locationId, int season, int year) const;
 
-    QMap<int, QList<int>> allRotationConflictingPlantings(int season, int year) const;
+    QMap<int, QVariantList> allRotationConflictingPlantings(int season, int year) const;
 
 private:
     int duplicateTree(int id, int parentId) const;
+
+    using CropInfo = struct {
+        int id;
+        QString crop;
+        int familyId;
+        int familyInterval;
+        QDate plantingDate;
+        QDate endHarvestDate;
+    };
+    using CropInfoList = QList<CropInfo>;
 
     Planting *m_planting;
 };

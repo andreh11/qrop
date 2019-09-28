@@ -27,7 +27,7 @@ Item {
 
     property int plantingId
     readonly property bool validId: plantingId > 0
-    property var map: Planting.mapFromId("planting_view", plantingId)
+    property var map: validId ? Planting.mapFromId("planting_view", plantingId) : {}
     property string crop: map['crop']
     property string variety: map['variety']
     property date sowingDate: map['sowing_date']
@@ -61,6 +61,9 @@ Item {
 
         Text {
             text: {
+                if (!validId)
+                    return ""
+
                 var txt = ""
 
                 if (showRank && settings.showPlantingSuccessionNumber) {

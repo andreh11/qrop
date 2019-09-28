@@ -147,7 +147,7 @@ QList<int> TaskTemplate::plantingsCommonTemplates(const QList<int> &plantingIdLi
     if (plantingIdList.empty())
         return {};
 
-    auto common = plantingTemplates(plantingIdList.first());
+    auto common = plantingTemplates(plantingIdList.constFirst());
     std::sort(common.begin(), common.end());
 
     for (const int plantingId : plantingIdList.mid(1)) {

@@ -496,7 +496,7 @@ Page {
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
 //                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
-//                showOnlyGreenhouseLocations: greenhouseButton.checked
+                showOnlyGreenhouseLocations: greenhouseButton.checked
                 showFamilyColor: familyColorButton.checked
                 editMode: page.editMode
                 firstColumnWidth: plantingsView.firstColumnWidth

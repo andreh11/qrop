@@ -38,7 +38,13 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
     Q_PROPERTY(int depth READ depth NOTIFY depthChanged)
 
 public:
-    enum { NonOverlappingPlantingList = 300, TaskList, History, ConflictList };
+    enum {
+        NonOverlappingPlantingList = 300,
+        TaskList,
+        History,
+        RotationConflictList,
+        SpaceConflictList
+    };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
 
     QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
@@ -53,7 +59,7 @@ public:
     Q_INVOKABLE int locationId(const QModelIndex &idx) const;
     Q_INVOKABLE qreal length(const QModelIndex &index) const;
 
-    Q_INVOKABLE void refreshIndex(const QModelIndex &index) { emit dataChanged(index, index); }
+    Q_INVOKABLE void refreshIndex(const QModelIndex &index);
     Q_INVOKABLE void refreshTree(const QModelIndex &root = QModelIndex());
 
     Q_INVOKABLE qreal availableSpace(const QModelIndex &index, const QDate &plantingDate,
@@ -62,19 +68,17 @@ public:
                                     const QDate &endHarvestDate) const;
     Q_INVOKABLE bool acceptPlanting(const QModelIndex &index, int plantingId) const;
     Q_INVOKABLE bool rotationRespected(const QModelIndex &index, int plantingId) const;
-    Q_INVOKABLE QList<int> rotationConflictingPlantings(const QModelIndex &index, int season,
-                                                        int year) const;
+
+    Q_INVOKABLE QVariantList rotationConflictingPlantings(const QModelIndex &index) const;
 
     Q_INVOKABLE QString historyDescription(const QModelIndex &index) const;
     Q_INVOKABLE QVariantList nonOverlappingPlantingList(const QModelIndex &index) const;
     Q_INVOKABLE QVariantList nonOverlappingTaskList(const QModelIndex &index) const;
 
-    Q_INVOKABLE QString rotationConflictingDescription(const QModelIndex &index, int season,
-                                                       int year) const;
-    Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index, int season, int year) const;
-    Q_INVOKABLE QVariantMap spaceConflictingPlantings(const QModelIndex &index, int season,
-                                                      int year) const;
-    Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index, int season, int year) const;
+    Q_INVOKABLE QString rotationConflictingDescription(const QModelIndex &index) const;
+    Q_INVOKABLE bool hasRotationConflict(const QModelIndex &index) const;
+    Q_INVOKABLE QVariantMap spaceConflictingPlantings(const QModelIndex &index) const;
+    Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index) const;
 
     Q_INVOKABLE qreal plantingLength(int plantingId, const QModelIndex &index) const;
     Q_INVOKABLE void addPlanting(const QModelIndex &idx, int plantingId, qreal length);
@@ -112,6 +116,7 @@ private:
     bool buildNonOverlapPlantingMap();
     bool buildNonOverlapTaskMap();
     bool buildHistoryDescriptionMap();
+    bool buildRotationConflictMap();
 
     bool m_showOnlyEmptyLocations { false };
     bool m_showOnlyGreenhouseLocations { false };
@@ -123,6 +128,7 @@ private:
     QMap<int, QList<QVariant>> m_nonOverlapPlantingMap;
     QMap<int, QList<QVariant>> m_nonOverlapTaskMap;
     QMap<int, QString> m_historyDescriptionMap;
+    QMap<int, QVariantList> m_rotationConflictMap;
 
 private slots:
     void rebuildAndRefresh();

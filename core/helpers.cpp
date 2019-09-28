@@ -84,3 +84,11 @@ QVariantList Helpers::intToVariantList(const QList<int> &list)
         variantList.push_back(elt);
     return variantList;
 }
+
+QList<int> Helpers::variantToIntList(const QVariantList &list)
+{
+    QList<int> intList;
+    for (const auto &elt : list)
+        intList.push_back(elt.toInt());
+    return intList;
+}

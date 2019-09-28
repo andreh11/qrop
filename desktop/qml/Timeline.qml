@@ -74,18 +74,12 @@ Item {
         color: Material.accent
     }
 
-    Item {
+    TaskTimeline {
         id: taskTimegraphView
-        visible: showTasks
         anchors.fill: parent
-        Repeater {
-            model: taskIdList
-
-            TaskTimegraph {
-                taskId: modelData
-                seasonBegin: control.seasonBegin
-            }
-        }
+        visible: showTasks
+        model: taskIdList
+        seasonBegin: control.seasonBegin
     }
 
     Item {

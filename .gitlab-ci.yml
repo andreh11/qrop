@@ -13,6 +13,7 @@ release-build:
   script:
     - bash dist/linux/build.sh
   artifacts:
+    name: "$CI_COMMIT_REF_NAME"
     paths:
       - Qrop*.AppImage
     expire_in: 1 weeks

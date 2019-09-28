@@ -61,7 +61,7 @@ int Variety::defaultVariety(int cropId) const
     auto list = queryIds(queryString.arg(cropId), "variety_id");
     if (list.length() < 1)
         return -1;
-    return list.first();
+    return list.constFirst();
 }
 
 void Variety::addDefault(int cropId) const

@@ -103,9 +103,10 @@ ApplicationWindow {
                 currentDatabaseFile = secondDatabaseFile;
             }
         }
-        if (locationsPage.item)
+        if (locationsPage.item) {
             locationsPage.item.reload();
-        stackView.currentItem.refresh();
+        }
+        stackView.currentItem.item.refresh();
     }
 
     Platform.FileDialog {

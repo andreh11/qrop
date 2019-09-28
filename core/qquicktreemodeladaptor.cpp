@@ -831,4 +831,10 @@ QList<int> QQuickTreeModelAdaptor::selectedIdList() const
     }
     return list;
 }
+
+// void QQuickTreeModelAdaptor::collapseSource(const QModelIndex &idx)
+//{
+//    collapse(mapToModel)
+//}
+
 QT_END_NAMESPACE

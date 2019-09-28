@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,10 +50,14 @@ Item {
 //    property alias draggedPlantingId: locationView.draggedPlantingId
     property bool showFamilyColor: false
 
+//    property int treeViewHeight: listView.contentHeight
+    property int treeViewHeight: 400
+    property int treeViewWidth: 400
+    property int headerHeight: Units.rowHeight + 1
+
     property int treeDepth: locationModel ? locationModel.depth : 0
 
-    property int headerHeight: headerRectangle.height
-    property int locationViewHeight: root.contentHeight
+    property int locationViewHeight: root.childrenRect.height
     property int locationViewWidth: root.implicitWidth
     property bool alwaysShowCheckbox: false
     property bool editMode: false
@@ -94,7 +98,11 @@ Item {
     }
 
     function reload() {
-        locationModel.reload();
+        locationModel.refresh();
+    }
+
+    function contains(array, elt) {
+        return array.indexOf(elt) > -1
     }
 
     function mapRowToModelIndex(row) {
@@ -132,13 +140,15 @@ Item {
     function selectAll() {
         console.time("selectAll")
         selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select);
-        //        console.log(l);
-        //        for (var i = 0; i < l.length; i++) {
-        //            selectionModel.select(l[i], ItemSelectionModel.Select)
-        ////        }
         locationModel.refreshTree();
         console.timeEnd("selectAll")
     }
+
+    function selectSubTree(row) {
+        const index = mapRowToModelIndex(row);
+        selectionModel.select(locationModel.treeSelection(index), ItemSelectionModel.Toggle);
+        locationModel.refreshTree(index);
+      }
 
     function deselectAll() {
         selectionModel.clear();
@@ -150,22 +160,29 @@ Item {
     }
 
     function expandAll(depth) {
-        return;
-        ////        var indexList = locationTreeViewModel.treeIndexes(depth);
-        ////        for (var i = 0; i < indexList.length; i++) {
-        ////            var index = indexList[i];
-        ////            locationView.expand(index);
-        ////        }
+        var indexList = locationModel.treeIndexes(depth);
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            modelAdaptor.expand(index);
+        }
+    }
+
+    //! Expand all nodes from root to index's parent.
+    function expandPath(index) {
+        var path = locationModel.treePath(index);
+        for (var i = 0; i < path.length; i++) {
+            if (!modelAdaptor.isExpanded(path[i]))
+                modelAdaptor.expand(path[i]);
+        }
     }
 
     function collapseAll(depth) {
-        //        var indexList = locationTreeViewModel.treeIndexes(depth, false);
-        //        for (var i = 0; i < indexList.length; i++) {
-        //            var index = indexList[i];
-        //            locationView.collapse(index);
-        //        }
+        var indexList = locationModel.treeIndexes(depth, false);
+        for (var i = 0; i < indexList.length; i++) {
+            var index = indexList[i];
+            modelAdaptor.collapse(index);
+        }
     }
-
 
     function selectLocationIds(idList) {
         const indexList = locationModel.treeHasIds(idList);
@@ -179,15 +196,6 @@ Item {
                 assignedLengthMap[idx] = locationModel.plantingLength(editedPlantingId, idx);
         }
         assignedLengthMapChanged();
-    }
-
-    //! Expand all nodes from root to index's parent.
-    function expandPath(index) {
-        //        var path = locationTreeViewModel.treePath(index);
-        //        for (var i = 0; i < path.length; i++) {
-        //            if (!locationView.isExpanded(path[i]))
-        //                locationView.expand(path[i]);
-        //        }
     }
 
     function selectedLocationIds() {
@@ -219,7 +227,10 @@ Item {
     }
 
     function addLocations(name, length, width, quantity, greenhouse) {
-        locationModel.addLocations(name, length, width, quantity, greenhouse)
+        if (root.hasSelection)
+            locationModel.addLocations(name, length, width, quantity, greenhouse, selectionModel.selectedIndexes);
+        else
+            locationModel.addLocations(name, length, width, quantity, greenhouse);
         clearSelection();
     }
 
@@ -243,6 +254,14 @@ Item {
         model: locationModel
     }
 
+    Settings {
+        id: locationSettings
+        category: "LocationView"
+        property bool showFullName
+        property bool allowPlantingsConflict
+        property bool showTasks
+    }
+
     ListView {
         id: listView
 
@@ -252,19 +271,7 @@ Item {
         anchors.fill: parent
 
         ScrollBar.vertical: ScrollBar {
-            anchors {
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
-        }
-
-        Settings {
-            id: locationSettings
-            category: "LocationView"
-            property bool showFullName
-            property bool allowPlantingsConflict
-            property bool showTasks
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
         }
 
         model: root.__model
@@ -301,9 +308,6 @@ Item {
 
                         tristate: true
 
-                        //                    checkState: rowCount && locationTreeViewModel.treeIndexes().length === selectionModel.selectedIndexes.length
-                        //                                ? Qt.Checked
-                        //                                : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
                         checkState: rowCount && locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
                                     ? Qt.Checked
                                     : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
@@ -347,22 +351,18 @@ Item {
             property int currentLocationId: model.location_id
             property var plantingRowList: model.nonOverlappingPlantingList
             property var taskRowList: model.taskList
-
-            //            model.hidden ? [[]]
-            //                                                   : Location.nonOverlappingPlantingList(model.location_id, seasonBegin, seasonEnd)
             property int rows: plantingRowList.length
-
-            function toggleIsExpanded() {
-                if (model.hasChildren)
-                    model.expanded = !model.expanded
-            }
+//            property bool showLocationTaskRow: taskRowList.length > plantingRowList.length
+            // We have to bind to selectexIndexes, otherwise it won't be properly updated.
+            property bool isSelected: root.contains(selectionModel.selectedIndexes,
+                                                    mapRowToModelIndex(currentRow))
 
             clip: true
             width: ListView.view.width // fill available width
             height: Math.max(1,rows) * Units.rowHeight + 1
 
             color: Qt.darker(model.hasChildren ? colorList[model.depth] : "white",
-                             model.isSelected ? 1.1 : 1)
+                             isSelected ? 1.1 : 1)
 
             Behavior on height {
                 NumberAnimation {
@@ -444,6 +444,7 @@ Item {
                         id: arrowControl
                         height: parent.height
                         width: 18
+                        anchors.verticalCenter: parent.verticalCenter
 
                         onClicked: model.expanded = !model.expanded
 
@@ -460,39 +461,22 @@ Item {
 
                     CheckBox {
                         id: rowCheckBox
-                        //                    anchors.verticalCenter: parent.verticalCenter
                         visible: root.editMode || root.alwaysShowCheckbox
                         height: parent.height * 0.8
                         width: height
-                        contentItem: Text {}
-                        checked: root.isSelected(currentRow)
-                        onCheckedChanged: console.log(checked)
+                        contentItem: Item {}
+                        checked: isSelected
+                        anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
                                 if (mouse.button !== Qt.LeftButton)
-                                    return
-
+                                    return;
 
                                 if (mouse.modifiers & Qt.ControlModifier)
-                                    selectSubTree(styleData.index)
-
+                                    selectSubTree(currentRow);
                                 root.selectRow(currentRow);
-                                root.refreshRow(currentRow);
-//                                selectionModel.select(styleData.index, ItemSelectionModel.Toggle)
-                                // Since selectionModel.isSelected() isn't called after
-                                // select(), we refresh the index... Ugly but workin'.
-//                                locationModel.refreshIndex(styleData.index)
-
-
-
-//                                if (mouse.button !== Qt.LeftButton)
-//                                    return
-//                                if (mouse.modifiers & Qt.ControlModifier)
-//                                    locationModel.isTreeSelected = !locationModel.isTreeSelected
-//                                else
-//                                    locationModel.isSelected = !locationModel.isSelected
                             }
                         }
                     }
@@ -509,30 +493,29 @@ Item {
                         ToolTip.text: model.history
                     }
 
-                    ConflictAlertButton {
-                        id: conflictAlertButton
-                        visible: false
-                        //                    anchors.verticalCenter: parent.verticalCenter
-                        //                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
-                        conflictList: []
-                        year: root.year
-                        locationId: model.location_id
+//                    ConflictAlertButton {
+//                        id: conflictAlertButton
+//                        visible: false
+//                        //                    anchors.verticalCenter: parent.verticalCenter
+//                        //                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
+//                        conflictList: []
+//                        year: root.year
+//                        locationId: model.location_id
 
-                        onPlantingModified: {
-                            refreshRow(currentRow);
-                            timeline.refresh();
-                        }
-                        onPlantingRemoved: {
-                            root.plantingRemoved();
-                            refreshRow(currentRow);
-                            timeline.refresh();
-                        }
-                    }
+//                        onPlantingModified: {
+//                            refreshRow(currentRow);
+//                            timeline.refresh();
+//                        }
+//                        onPlantingRemoved: {
+//                            root.plantingRemoved();
+//                            refreshRow(currentRow);
+//                            timeline.refresh();
+//                        }
+//                    }
 
                     ToolButton {
                         id: rotationAlertLabel
-                        visible: false
-                        //                                visible: locationModel.hasRotationConflict(styleData.index, season, year)
+                        visible: model.rotationConflictList.length > 0
                         opacity: visible ? 1 : 0
                         text: "\ue160"
                         font.pixelSize: Units.fontSizeTitle
@@ -580,14 +563,32 @@ Item {
                             taskIdList: locationDelegate.taskRowList[index]
                             locationId: currentLocationId
                             onDragFinished: root.draggedPlantingId = -1
-                            onPlantingMoved: { refreshRow(currentRow); console.log("moved") }
-                            onPlantingRemoved: { refreshRow(currentRow); console.log("removed"); }
+                            onPlantingMoved: refreshRow(currentRow)
+                            onPlantingRemoved: refreshRow(currentRow)
                             Component.onCompleted: {
                                 plantingMoved.connect(root.plantingMoved)
                                 plantingRemoved.connect(root.plantingRemoved)
                             }
                         }
                     }
+
+//                    Repeater {
+//                        model: locationDelegate.taskRowList
+
+////                        MonthGrid {
+////                            visible: showLocationTaskRow
+////                            height: parent.height
+////                            width: parent.width
+////                        }
+
+//                        TaskTimeline {
+//                            height: Units.rowHeight
+//                            width: parent.width
+//                            model: modelData
+//                            onModelChanged: console.log(model)
+//                            seasonBegin: root.seasonBegin
+//                        }
+//                    }
                 }
             }
 

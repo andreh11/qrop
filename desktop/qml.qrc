@@ -114,5 +114,6 @@
         <file>qml/HeaderTimelineRow.qml</file>
         <file>qml/MonthGrid.qml</file>
         <file>qml/FlatButton.qml</file>
+        <file>qml/TaskTimeline.qml</file>
     </qresource>
 </RCC>
