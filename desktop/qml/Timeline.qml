@@ -55,20 +55,10 @@ Item {
 
     implicitWidth: gridRow.width
 
-    Row {
+    MonthGrid {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
-        spacing: monthWidth - 1
-
-        Repeater {
-            model: 13
-            Rectangle {
-                height: parent.height
-                width: 1
-                color: Qt.rgba(0, 0, 0, 0.12)
-            }
-        }
     }
 
     Rectangle {
@@ -84,18 +74,12 @@ Item {
         color: Material.accent
     }
 
-    Item {
+    TaskTimeline {
         id: taskTimegraphView
-        visible: showTasks
         anchors.fill: parent
-        Repeater {
-            model: taskIdList
-
-            TaskTimegraph {
-                taskId: modelData
-                seasonBegin: control.seasonBegin
-            }
-        }
+        visible: showTasks
+        model: taskIdList
+        seasonBegin: control.seasonBegin
     }
 
     Item {
@@ -103,15 +87,7 @@ Item {
         anchors.fill: parent
         Repeater {
             model: plantingIdList
-//            TimeGraphItem {
-//                x: 0
-//                y: 0
-//                plantingId: modelData
-//                year: control.year
-//                season: control.season
-//            }
-
-            Timegraph {
+            delegate: Timegraph {
                 plantingId: modelData
                 locationId: control.locationId
                 todayDate: control.todayDate

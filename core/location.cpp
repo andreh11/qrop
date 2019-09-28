@@ -20,14 +20,17 @@
 #include <QVariant>
 #include <QSettings>
 #include <QSqlError>
+#include <QElapsedTimer>
 
 #include "location.h"
 #include "planting.h"
 #include "nametree.h"
+#include "mdate.h"
+#include "helpers.h"
 
 Location::Location(QObject *parent)
     : DatabaseUtility(parent)
-    , planting(new Planting(this))
+    , m_planting(new Planting(this))
 {
     m_table = "location";
     m_viewTable = "location";
@@ -39,7 +42,7 @@ Location::Location(QObject *parent)
  */
 QList<int> Location::childrenTree(int locationId) const
 {
-    QList<int> list = children(locationId);
+    auto list = children(locationId);
     QList<int> clist;
     int childId = -1;
     int size = list.count();
@@ -59,10 +62,10 @@ void Location::remove(int id) const
     if (id < 1)
         return;
 
-    QString queryString = "DELETE FROM %1 WHERE %2 in (%3)";
-    QString idColumnName = table() + "_id";
+    const QString queryString = "DELETE FROM %1 WHERE %2 in (%3)";
+    const QString idColumnName = table() + "_id";
     QString idString(QString::number(id) + ", ");
-    for (int childId : childrenTree(id))
+    for (const int childId : childrenTree(id))
         idString += QString::number(childId) + ", ";
     idString.chop(2);
 
@@ -82,7 +85,7 @@ int Location::duplicate(int id) const
     map.remove(idFieldName());
     map["name"] = map["name"].toString() + QString(" (copy)");
     int newId = add(map);
-    for (int childrenId : children(id))
+    for (const int childrenId : children(id))
         duplicateTree(childrenId, newId);
     QSqlDatabase::database().commit();
 
@@ -100,7 +103,7 @@ int Location::duplicateTree(int id, int parentId) const
     map.remove(idFieldName());
     map["parent_id"] = QString::number(parentId);
     int newId = add(map);
-    for (int childrenId : children(id))
+    for (const int childrenId : children(id))
         duplicateTree(childrenId, newId);
     return 0;
 }
@@ -185,7 +188,6 @@ qreal Location::plantingLength(int plantingId, int locationId) const
                         "WHERE planting_id = %1 AND location_id = %2");
     QSqlQuery query(queryString.arg(plantingId).arg(locationId));
     debugQuery(query);
-
     if (!query.next())
         return 0;
 
@@ -206,7 +208,6 @@ QList<int> Location::plantings(int locationId) const
 QList<int> Location::plantings(int locationId, const QDate &last) const
 {
     QString lastDateString = last.toString(Qt::ISODate);
-
     QString queryString("SELECT * FROM planting_location "
                         "LEFT JOIN planting_view USING (planting_id) "
                         "WHERE location_id = %1 "
@@ -233,7 +234,78 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
                         "  OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
                         "  OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
                         "ORDER BY (planting_date)");
+
     return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "planting_id");
+}
+
+std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate &seasonBeg,
+                                                    const QDate &seasonEnd) const
+{
+
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString(
+            "SELECT planting_id, planting_date, end_harvest_date FROM planting_location "
+            "LEFT JOIN planting_view USING (planting_id) "
+            "WHERE location_id = %1 "
+            "AND (('%2' <= planting_date AND planting_date <= '%3') "
+            "  OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
+            "  OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
+            "ORDER BY (planting_date)");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(locationId).arg(begString).arg(endString));
+    query->exec();
+
+    return query;
+}
+
+std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, int season, int year) const
+{
+    const auto dates = MDate::seasonDates(season, year);
+    const auto begin = dates.first.addYears(-10);
+    const auto end = dates.second;
+    QString queryString("SELECT planting_id, crop, variety, planting_date, end_harvest_date FROM "
+                        "planting_location "
+                        "LEFT JOIN planting_view USING (planting_id) "
+                        "WHERE location_id = %1 "
+                        "AND ('%2' <= planting_date AND planting_date <= '%3') "
+                        "OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
+                        "OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3') "
+                        "ORDER BY (planting_date)");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(
+            queryString.arg(locationId).arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
+    query->exec();
+
+    return query;
+}
+
+std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &seasonBeg,
+                                                                const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString("SELECT location_id, planting_id, crop, variety, planting_date, "
+                        "beg_harvest_date, end_harvest_date "
+                        "FROM planting_location "
+                        "LEFT JOIN planting_view USING (planting_id) "
+                        "WHERE ('%1' <= planting_date AND planting_date <= '%2') "
+                        "OR ('%1' <= beg_harvest_date AND beg_harvest_date <= '%2') "
+                        "OR ('%1' <= end_harvest_date AND end_harvest_date <= '%2') "
+                        "ORDER BY location_id, planting_date");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begString).arg(endString));
+    query->exec();
+
+    return query;
 }
 
 QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
@@ -271,16 +343,17 @@ QList<int> Location::children(int locationId) const
  */
 QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId) const
 {
+    const QDate plantingDate = m_planting->plantingDate(plantingId);
+    const int intervalDays = qAbs(m_planting->familyInterval(plantingId).toInt()) * 365;
+
     QList<int> clist;
-    const QDate plantingDate = planting->plantingDate(plantingId);
     QList<int> plantingIdList = plantings(locationId, plantingDate);
     plantingIdList.removeOne(plantingId);
-    const int intervalDays = qAbs(planting->familyInterval(plantingId).toInt()) * 365;
 
     QDate pdate;
     for (const int pid : plantingIdList) {
-        pdate = planting->plantingDate(pid);
-        if (planting->hasSameFamily(plantingId, pid) && pdate.daysTo(plantingDate) < intervalDays
+        pdate = m_planting->plantingDate(pid);
+        if (m_planting->hasSameFamily(plantingId, pid) && pdate.daysTo(plantingDate) < intervalDays
             && !overlap(plantingId, pid))
             clist.push_back(pid);
     }
@@ -290,8 +363,13 @@ QList<int> Location::rotationConflictingPlantings(int locationId, int plantingId
 
 bool Location::overlap(int plantingId1, int plantingId2) const
 {
-    auto dates1 = planting->dates(plantingId1);
-    auto dates2 = planting->dates(plantingId2);
+    if (plantingId1 < 1 || plantingId2 < 1) {
+        qDebug() << "Bad planting ids:" << plantingId1 << plantingId2;
+        return false;
+    }
+
+    auto dates1 = m_planting->dates(plantingId1);
+    auto dates2 = m_planting->dates(plantingId2);
 
     auto pdate1 = dates1[1];
     auto pdate2 = dates2[1];
@@ -300,12 +378,254 @@ bool Location::overlap(int plantingId1, int plantingId2) const
     return pdate2 < edate1 && pdate1 < edate2;
 }
 
+bool Location::overlap(const QDate &plantingDate1, const QDate &endHarvestDate1,
+                       const QDate &plantingDate2, const QDate &endHarvestDate2) const
+{
+    return plantingDate2 < endHarvestDate1 && plantingDate1 < endHarvestDate2;
+}
+
 bool Location::overlap(int plantingId, const QDate &plantingDate, const QDate &endHarvestDate) const
 {
-    auto dates1 = planting->dates(plantingId);
+    if (plantingId < 1) {
+        qDebug() << "Bad planting id:" << plantingId;
+        return false;
+    }
+
+    auto dates1 = m_planting->dates(plantingId);
     auto pdate1 = dates1[1];
     auto edate1 = dates1[3];
     return plantingDate < edate1 && pdate1 < endHarvestDate;
+}
+
+/**
+ * Return a list of list of plantings id such as for every list[i],
+ * every planting of list[i] can be draw on a single row without any
+ * overlap.
+ */
+QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
+                                                  const QDate &seasonEnd)
+{
+    // Use a single query for performance.
+    auto query = plantingsQuery(locationId, seasonBeg, seasonEnd);
+    if (!query->next())
+        return {};
+
+    QVector<QVariantList> rows;
+    rows.push_back({ query->value("planting_id").toInt() });
+
+    // rowDate[i] is pair of the planting and end harvest dates of the last planting we added
+    // to row i.
+    QVector<QPair<QDate, QDate>> rowDate;
+    rowDate.push_back({ MDate::dateFromIsoString(query->value("planting_date").toString()),
+                        MDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+
+    while (query->next()) {
+        int plantingId = query->value("planting_id").toInt();
+        auto plantingDate = MDate::dateFromIsoString(query->value("planting_date").toString());
+        auto endHarvestDate = MDate::dateFromIsoString(query->value("end_harvest_date").toString());
+
+        int i = 0;
+        for (; i < rowDate.count(); i++) {
+            if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
+                rows[i].push_back(plantingId);
+                rowDate[i] = { plantingDate, endHarvestDate };
+                break;
+            }
+        }
+
+        if (i == rowDate.count()) {
+            // Current planting overlaps every plantings we've already assigned,
+            // so we create a new row for it.
+            rowDate.push_back({ plantingDate, endHarvestDate });
+            rows.push_back({ plantingId });
+        }
+    }
+
+    // Since QML cannot use a QList of QList<int>, we convert the
+    // list to a QVariantList. This may introduce a performance problem,
+    // but it is a working solution.
+    QVariantList variantList;
+    for (const auto &lst : rows) {
+        if (!lst.isEmpty())
+            variantList.push_back(lst);
+    }
+    return variantList;
+}
+
+QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &seasonBeg,
+                                                                const QDate &seasonEnd) const
+{
+    // Use a single query for performance.
+    auto query = allLocationsPlantingsQuery(seasonBeg, seasonEnd);
+    if (!query->next())
+        return {};
+
+    QMap<int, QVariantList> map;
+    int locationId = query->value("location_id").toInt();
+
+    QVector<QVariantList> rows;
+    rows.push_back({ query->value("planting_id").toInt() });
+
+    // rowDate[i] is pair of the planting and end harvest dates of the last planting we added
+    // to row i.
+    QVector<QPair<QDate, QDate>> rowDate;
+    rowDate.push_back({ MDate::dateFromIsoString(query->value("planting_date").toString()),
+                        MDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+
+    int lid;
+    int plantingId;
+    int i;
+    while (query->next()) {
+        lid = query->value("location_id").toInt();
+        plantingId = query->value("planting_id").toInt();
+        auto plantingDate = MDate::dateFromIsoString(query->value("planting_date").toString());
+        auto endHarvestDate = MDate::dateFromIsoString(query->value("end_harvest_date").toString());
+
+        if (lid != locationId) {
+            // We've found a new location, so we add the list we've just built to the QMap
+            // and clear the temporary lists.
+            // Since QML cannot use a QList of QList<int>, we convert the
+            // list to a QVariantList. This may introduce a performance problem,
+            // but it is a working solution.
+            QVariantList variantList;
+            for (const auto &lst : rows) {
+                if (!lst.isEmpty())
+                    variantList.push_back(lst);
+            }
+            map[locationId] = variantList;
+            rows.clear();
+            rowDate.clear();
+            locationId = lid;
+            rows.push_back({ plantingId });
+            rowDate.push_back({ plantingDate, endHarvestDate });
+            continue;
+        }
+
+        i = 0;
+        for (; i < rowDate.count(); ++i) {
+            if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
+                rows[i].push_back(plantingId);
+                rowDate[i] = { plantingDate, endHarvestDate };
+                break;
+            }
+        }
+
+        if (i == rowDate.count()) {
+            // The current planting overlaps every plantings we've already assigned,
+            // so we create a new row for it.
+            rowDate.push_back({ plantingDate, endHarvestDate });
+            rows.push_back({ plantingId });
+        }
+    }
+
+    // Add last location.
+    QVariantList variantList;
+    for (const auto &lst : rows) {
+        if (!lst.isEmpty())
+            variantList.push_back(lst);
+    }
+    map[locationId] = variantList;
+
+    return map;
+}
+
+std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBeg,
+                                                           const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString("SELECT planting_id, group_concat(task_id) AS tasks "
+                        "FROM planting_task "
+                        "LEFT JOIN task USING (task_id) "
+                        "WHERE (assigned_date BETWEEN '%1' AND '%2') "
+                        "OR (completed_date BETWEEN '%1' AND '%2') "
+                        "GROUP BY planting_id "
+                        "ORDER BY planting_id");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery);
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begString).arg(endString));
+    query->exec();
+
+    return query;
+}
+
+std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBeg,
+                                                           const QDate &seasonEnd) const
+{
+    QString begString = seasonBeg.toString(Qt::ISODate);
+    QString endString = seasonEnd.toString(Qt::ISODate);
+
+    QString queryString("SELECT location_id, group_concat(task_id) AS tasks "
+                        "FROM location_task "
+                        "LEFT JOIN task USING (task_id) "
+                        "WHERE (assigned_date BETWEEN '%1' AND '%2') "
+                        "OR (completed_date BETWEEN '%1' AND '%2') "
+                        "GROUP BY location_id "
+                        "ORDER BY location_id");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery);
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begString).arg(endString));
+    query->exec();
+
+    return query;
+}
+
+QMap<int, QVariantList> Location::allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
+                                                            const QDate &seasonBeg,
+                                                            const QDate &seasonEnd) const
+{
+    QMap<int, QVariantList> plantingTaskMap;
+    auto query = allPlantingTasksQuery(seasonBeg, seasonEnd);
+    while (query->next()) {
+        const int plantingId = query->value("planting_id").toInt();
+        plantingTaskMap[plantingId] = Helpers::listOfVariant(query->value("tasks").toString());
+    }
+
+    QMap<int, QVariantList> locationTaskMap;
+    auto locationQuery = allLocationTasksQuery(seasonBeg, seasonEnd);
+    while (locationQuery->next()) {
+        const int locationId = locationQuery->value("location_id").toInt();
+        locationTaskMap[locationId] = Helpers::listOfVariant(locationQuery->value("tasks").toString());
+    }
+
+    QMap<int, QVariantList> map;
+
+    // add planting tasks
+    for (auto location = plantingMap.cbegin(); location != plantingMap.cend(); ++location) {
+        QVariantList taskList;
+
+        for (const QVariant &row : location.value()) {
+            QVariantList rowList;
+            for (const QVariant &plantingId : row.toList())
+                rowList.append(plantingTaskMap[plantingId.toInt()]);
+            taskList.push_back(rowList);
+        }
+
+        //        auto it = locationTaskMap.constFind(location.key());
+        //        if (it != locationTaskMap.cend()) {
+        //            if (taskList.isEmpty()) {
+        //                taskList.push_back(it.value());
+        //            } else {
+        //                taskList[0] = taskList.first().toList() + it.value();
+        //            }
+        //        }
+
+        map[location.key()] = taskList;
+    }
+
+    // add location tasks
+    auto lend = locationTaskMap.cend();
+    for (auto location = locationTaskMap.cbegin(); location != lend; ++location) {
+        auto it = locationTaskMap.constFind(location.key());
+        if (it != locationTaskMap.cend()) {
+            map[location.key()].push_back(it.value());
+        }
+    }
+
+    return map;
 }
 
 /**
@@ -350,9 +670,15 @@ qreal Location::availableSpace(int locationId, const QDate &plantingDate, const 
 qreal Location::availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                                const QDate &seasonEnd) const
 {
-    QDate plantingDate = planting->plantingDate(plantingId);
-    QDate endHarvestDate = planting->endHarvestDate(plantingId);
+    QDate plantingDate = m_planting->plantingDate(plantingId);
+    QDate endHarvestDate = m_planting->endHarvestDate(plantingId);
     return availableSpace(locationId, plantingDate, endHarvestDate, seasonBeg, seasonEnd);
+}
+
+bool Location::acceptPlanting(int locationId, int plantingId, const QDate &seasonBeg,
+                              const QDate &seasonEnd) const
+{
+    return availableSpace(locationId, plantingId, seasonBeg, seasonEnd) > 0;
 }
 
 void Location::splitPlanting(int plantingId, int otherPlantingId, int locationId)
@@ -385,10 +711,9 @@ qreal Location::addPlanting(int plantingId, int locationId, qreal length) const
 /**
  * Add \a plantingId to \a locationId between \a seasonBeg and \a seasonEnd.
  *
- * If the location has sublocations, assign the planting to the sublocations,
- * checking for available space if planting conflicts aren't authorized.
+ * Check for available space if planting conflicts aren't authorized.
  *
- * \return the length added to the location or its sublocations.
+ * \return the length added to the location.
  */
 qreal Location::addPlanting(int plantingId, int locationId, qreal length, const QDate &seasonBeg,
                             const QDate &seasonEnd) const
@@ -449,4 +774,132 @@ int Location::totalBedLength(bool greenhouse) const
     debugQuery(query);
     query.first();
     return query.value(0).toInt();
+}
+
+std::unique_ptr<QSqlQuery> Location::allHistoryQuery(int season, int year) const
+{
+    const auto dates = MDate::seasonDates(season, year);
+    const auto begin = dates.first.addYears(-20);
+    const auto end = dates.second;
+    QString queryString(
+            "SELECT location_id, planting_id, crop, variety, planting_date, end_harvest_date, "
+            "family_id, family_interval "
+            "FROM planting_location "
+            "LEFT JOIN planting_view USING (planting_id) "
+            "WHERE planting_date BETWEEN '%1' AND '%2' "
+            "ORDER BY location_id ASC, planting_date DESC");
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
+    query->exec();
+
+    return query;
+}
+
+/**
+ */
+QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, int year) const
+{
+    auto query = allHistoryQuery(season, year);
+    if (!query->next())
+        return {};
+
+    QMap<int, QVariantList> map;
+    QMap<int, CropInfoList> cropMap;
+
+    int locationId = query->value("location_id").toInt();
+    CropInfoList infoList;
+
+    auto push = [&infoList, &query]() {
+        infoList.push_back({ query->value("planting_id").toInt(), query->value("crop").toString(),
+                             query->value("family_id").toInt(), query->value("family_interval").toInt(),
+                             MDate::dateFromIsoString(query->value("planting_date").toString()),
+                             MDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+    };
+
+    push();
+
+    while (query->next()) {
+        int lid = query->value("location_id").toInt();
+
+        // new location
+        if (lid != locationId) {
+            cropMap[locationId] = infoList;
+            infoList.clear();
+            locationId = lid;
+        }
+
+        push();
+    }
+    cropMap[locationId] = infoList;
+
+    auto it = cropMap.cbegin();
+    auto end = cropMap.cend();
+    for (; it != end; ++it) {
+        CropInfoList cropList = it.value();
+        QVariantList conflictList;
+        int length = cropList.length();
+        for (int i = 0; i < length; ++i) {
+            CropInfo p1 = cropList[i];
+            for (int j = i + 1; j < length; ++j) {
+                CropInfo p2 = cropList[j];
+                if ((p1.plantingDate.year() - p2.endHarvestDate.year()) > p1.familyInterval)
+                    break;
+                if ((p1.familyId == p2.familyId)
+                    && !overlap(p1.plantingDate, p1.endHarvestDate, p2.plantingDate, p2.endHarvestDate)) {
+                    conflictList.push_back(i);
+                    break;
+                }
+            }
+        }
+        map[it.key()] = conflictList;
+    }
+
+    return map;
+}
+
+/**
+ * @return a map containing a string description of the planting history for every location.
+ */
+QMap<int, QString> Location::allHistoryDescription(int season, int year) const
+{
+    auto query = allHistoryQuery(season, year);
+    if (!query->next())
+        return {};
+
+    auto formatQuery = [&query]() {
+        return QString("%1, %2 <i>%3</i><br/>")
+                .arg(query->value("crop").toString())
+                .arg(query->value("variety").toString())
+                .arg(MDate::dateFromIsoString(query->value("planting_date").toString()).year());
+    };
+
+    QMap<int, QString> map;
+    int locationId = query->value("location_id").toInt();
+    map[locationId] = formatQuery();
+
+    while (query->next()) {
+        int lid = query->value("location_id").toInt();
+        if (lid != locationId) {
+            map[locationId].chop(1);
+            locationId = lid;
+        }
+        map[locationId].append(formatQuery());
+    }
+    return map;
+}
+
+// not needed anymore
+QString Location::historyDescription(int locationId, int season, int year) const
+{
+    auto query = plantingsQuery(locationId, season, year);
+    QString text;
+    while (query->next())
+        text += QString("%1, %2 %3\n")
+                        .arg(query->value("crop").toString())
+                        .arg(query->value("variety").toString())
+                        .arg(MDate::dateFromIsoString(query->value("planting_date").toString()).year());
+    text.chop(1);
+    return text;
 }

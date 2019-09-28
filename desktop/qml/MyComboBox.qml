@@ -120,7 +120,7 @@ ComboBox {
         id: floatingLabel
         anchors.bottom: control.top
         anchors.left: parent.left
-//        anchors.topMargin: -2
+        anchors.bottomMargin: -6
         color: Material.accent
         text: labelText
         font.pixelSize: 14

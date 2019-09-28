@@ -53,5 +53,5 @@ int SeedCompany::defaultSeedCompany() const
     auto list = queryIds(queryString, "seed_company_id");
     if (list.length() < 1)
         return -1;
-    return list.first();
+    return list.constFirst();
 }

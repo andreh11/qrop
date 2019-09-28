@@ -44,6 +44,7 @@ ToolButton {
         }
     }
 
+    visible: lmodel.count
     opacity: visible ? 1 : 0
     text: "\ue8e9"
     font.pixelSize: Units.fontSizeTitle

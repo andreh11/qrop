@@ -48,6 +48,7 @@ configure_file(
 
 string(TIMESTAMP BUILD_DATE %Y%m)
 
+include_directories(lib)
 include_directories("${PROJECT_SOURCE_DIR}/core")
 add_subdirectory(core)
 
@@ -57,10 +58,19 @@ set(desktop_SRCS
     desktop/main.cpp
     desktop/qropdoublevalidator.cpp
     desktop/timevalidator.cpp
-    desktop/qml.qrc
     desktop/resources.qrc)
 
-add_executable(${PROJECT_NAME} ${desktop_SRCS})
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(RESOURCES desktop/qml.qrc)
+endif()
+
+# Compile QML code for release.
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    find_package(Qt5QuickCompiler)
+    qtquick_compiler_add_resources(RESOURCES desktop/qml.qrc)
+endif()
+
+add_executable(${PROJECT_NAME} ${desktop_SRCS} ${RESOURCES})
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
 

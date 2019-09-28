@@ -17,6 +17,10 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
+#include <memory>
+
+#include <QDate>
+
 #include "core_global.h"
 #include "databaseutility.h"
 
@@ -36,17 +40,42 @@ public:
     Q_INVOKABLE qreal length(int locationId) const;
     Q_INVOKABLE bool isGreenhouse(int locationId) const;
     Q_INVOKABLE QString fullName(int locationId) const;
+
     QList<QString> pathName(int locationId) const;
     Q_INVOKABLE QString fullName(const QList<int> &locationIdList) const;
     Q_INVOKABLE QList<int> locations(int plantingId) const;
     Q_INVOKABLE qreal plantingLength(int plantingId, int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId) const;
+    std::unique_ptr<QSqlQuery> plantingsQuery(int locationId, const QDate &seasonBeg,
+                                              const QDate &seasonEnd) const;
+    std::unique_ptr<QSqlQuery> plantingsQuery(int locationId, int season, int year) const;
+    std::unique_ptr<QSqlQuery> allLocationsPlantingsQuery(const QDate &seasonBeg,
+                                                          const QDate &seasonEnd) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &last) const;
     Q_INVOKABLE QList<int> plantings(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
 
     Q_INVOKABLE QList<int> tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const;
+
     bool overlap(int plantingId1, int plantingId2) const;
     bool overlap(int plantingId1, const QDate &plantingDate, const QDate &endHarvestDate) const;
+    bool overlap(const QDate &plantingDate1, const QDate &endHarvestDate1,
+                 const QDate &plantingDate2, const QDate &endHarvestDate2) const;
+
+    Q_INVOKABLE QVariantList nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
+                                                        const QDate &seasonEnd);
+
+    QMap<int, QVariantList> allNonOverlappingPlantingList(const QDate &seasonBeg,
+                                                          const QDate &seasonEnd) const;
+
+    std::unique_ptr<QSqlQuery> allPlantingTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;
+    std::unique_ptr<QSqlQuery> allLocationTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;
+
+    QMap<int, QVariantList> nonOverlappingTaskList(int locationId,
+                                                   const QMap<int, QVariantList> &plantingMap,
+                                                   const QDate &seasonBeg, const QDate &seasonEnd) const;
+    QMap<int, QVariantList> allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
+                                                      const QDate &seasonBeg,
+                                                      const QDate &seasonEnd) const;
 
     Q_INVOKABLE QList<int> rotationConflictingPlantings(int locationId, int plantingId) const;
     Q_INVOKABLE QVariantMap spaceConflictingPlantings(int locationId, const QDate &seasonBeg,
@@ -56,6 +85,9 @@ public:
                                      const QDate &seasonEnd) const;
     qreal availableSpace(int locationId, int plantingId, const QDate &seasonBeg,
                          const QDate &seasonEnd) const;
+
+    Q_INVOKABLE bool acceptPlanting(int locationId, int plantingId, const QDate &seasonBeg,
+                                    const QDate &seasonEnd) const;
     Q_INVOKABLE void splitPlanting(int plantingId, int otherPlantingId, int locationId);
 
     Q_INVOKABLE qreal addPlanting(int plantingId, int locationId, qreal length) const;
@@ -66,9 +98,26 @@ public:
 
     Q_INVOKABLE int totalBedLength(bool greenhouse = false) const;
 
+    std::unique_ptr<QSqlQuery> allHistoryQuery(int season, int year) const;
+    QMap<int, QString> allHistoryDescription(int season, int year) const;
+    Q_INVOKABLE QString historyDescription(int locationId, int season, int year) const;
+
+    QMap<int, QVariantList> allRotationConflictingPlantings(int season, int year) const;
+
 private:
-    Planting *planting;
     int duplicateTree(int id, int parentId) const;
+
+    using CropInfo = struct {
+        int id;
+        QString crop;
+        int familyId;
+        int familyInterval;
+        QDate plantingDate;
+        QDate endHarvestDate;
+    };
+    using CropInfoList = QList<CropInfo>;
+
+    Planting *m_planting;
 };
 
 #endif // LOCATION_H

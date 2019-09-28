@@ -194,7 +194,7 @@ qreal PlantingModel::totalBedLength() const
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     int plantingId = sourceRowValue(sourceRow, sourceParent, "planting_id").toInt();
-    int length = sourceRowValue(sourceRow, sourceParent, "length").toInt();
+    qreal length = sourceRowValue(sourceRow, sourceParent, "length").toDouble();
     QDate sowingDate = sourceFieldDate(sourceRow, sourceParent, "sowing_date");
     QDate plantingDate = sourceFieldDate(sourceRow, sourceParent, "planting_date");
     QDate harvestBeginDate = sourceFieldDate(sourceRow, sourceParent, "beg_harvest_date");

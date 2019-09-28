@@ -1045,7 +1045,8 @@ Flickable {
 
         FormGroupBox {
             id: locationGroupBox
-            visible: (mode === "add" && successions == 1) || (mode == "edit" && !bulkEditMode)
+//            visible: (mode === "add" && successions == 1) || (mode == "edit" && !bulkEditMode)
+            visible: false
             width: parent.width
             Material.background: "white"
 
@@ -1113,6 +1114,7 @@ Flickable {
                     //                    height: 400
                     height: treeViewHeight + headerHeight
                     width: treeViewWidth
+//                    width: parent.width
                     plantingEditMode: true
 
                     editedPlantingLength: plantingLength

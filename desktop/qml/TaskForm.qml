@@ -528,7 +528,7 @@ Flickable {
                     alwaysShowCheckbox: true
                     year: control.year
                     season: 1
-                    showOnlyEmptyLocations: false
+//                    showOnlyEmptyLocations: false
                     editMode: false
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -539,7 +539,7 @@ Flickable {
                     id: selectedLocationLabel
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds()))
+                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds))
                     Layout.minimumHeight: 26
                     Layout.fillWidth: true
                 }

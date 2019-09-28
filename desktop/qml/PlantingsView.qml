@@ -405,48 +405,12 @@ ListView {
                     }
                 }
 
-                Item {
+                HeaderTimelineRow {
+                    id: headerTimelineRow
                     height: parent.height
-                    width: headerTimelineRow.width
+                    anchors.verticalCenter: parent.verticalCenter
                     visible: showTimegraph
-
-                    Row {
-                        id: headerTimelineRow
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height
-                        spacing: 0
-
-                        Repeater {
-                            model: monthsOrder[listView.season]
-
-                            Item {
-                                width: Units.monthWidth
-                                height: parent.height
-
-                                Rectangle {
-                                    id: lineRectangle
-                                    height: parent.height
-                                    width: 1
-                                    color: Qt.rgba(0, 0, 0, 0.12)
-                                }
-
-                                Label {
-                                    text: Qt.locale().monthName(modelData, Locale.ShortFormat)
-                                    anchors.left: lineRectangle.right
-                                    font.family: "Roboto Condensed"
-                                    font.pixelSize: Units.fontSizeTable
-                                    color: Units.colorMediumEmphasis
-                                    width: 60 - 1
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    horizontalAlignment: Text.AlignHCenter
-                                }
-                            }
-                        }
-
-                        Rectangle {
-                            height: parent.height; width: 1; color: Qt.rgba(0, 0, 0, 0.12)
-                        }
-                    }
+                    season: listView.season
                 }
 
                 Repeater {
@@ -654,7 +618,7 @@ ListView {
                     model: listView.showOnlyTimegraph ? [] : parent.labelList
 
                     TableLabel {
-                        text: modelData
+                        text: modelData ? modelData : ""
                         condensed: true
                         color: Units.colorHighEmphasis
                         visible: tableHeaderModel[index+2].visible

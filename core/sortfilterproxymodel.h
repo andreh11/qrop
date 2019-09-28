@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,38 +47,26 @@ public:
     Q_INVOKABLE void refreshRow(int row);
 
     QString filterString() const;
-    int filterYear() const;
-    int filterSeason() const;
-    QString sortColumn() const;
-    QString sortOrder() const;
 
+    int filterYear() const;
     void setFilterYear(int year);
+
+    int filterSeason() const;
     void setFilterSeason(int season);
-    void setFilterKeyStringColumn(const QString &columnName);
+
+    QString sortColumn() const;
     virtual void setSortColumn(const QString &columnName);
+
+    QString sortOrder() const;
     virtual void setSortOrder(const QString &order);
 
+    void setFilterKeyStringColumn(const QString &columnName);
+
     std::pair<QDate, QDate> seasonDates() const;
-    QVariant rowValue(int row, const QString &field) const
-    {
-        return rowValue(row, QModelIndex(), field);
-    }
 
-protected:
-    virtual bool isDateInRange(const QDate &date) const;
-    SqlTableModel *m_model;
-    QDate sourceFieldDate(int row, const QModelIndex &parent, const QString &field) const;
-    int m_year;
-    int m_season { 1 }; // default: summer
-    QString m_sortColumn;
-    QString m_sortOrder { "ascending" };
-    virtual QVariant sourceRowValue(int sourceRow, const QModelIndex &sourceParent,
-                                    const QString &field) const;
+    virtual QVariant rowValue(const QModelIndex &index, const QString &field) const;
     virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
-
-private:
-    QString m_tableName;
-    QString m_string;
+    QVariant rowValue(int row, const QString &field) const;
 
 signals:
     void filterStringChanged();
@@ -88,6 +76,22 @@ signals:
     void sortOrderChanged();
     void selectionChanged();
     void countChanged();
+
+protected:
+    virtual bool isDateInRange(const QDate &date) const;
+    virtual QVariant sourceRowValue(int sourceRow, const QModelIndex &sourceParent,
+                                    const QString &field) const;
+    QDate sourceFieldDate(int row, const QModelIndex &parent, const QString &field) const;
+
+    SqlTableModel *m_model;
+    int m_year;
+    int m_season { 1 }; // default: summer
+    QString m_sortColumn;
+    QString m_sortOrder { "ascending" };
+
+private:
+    QString m_tableName;
+    QString m_string;
 };
 
 #endif // SORTFILTERPROXYMODEL_H

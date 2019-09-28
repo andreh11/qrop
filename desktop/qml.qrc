@@ -108,5 +108,12 @@
         <file>qml/SimpleChip.qml</file>
         <file>qml/LocationFormBox.qml</file>
         <file>qml/StatCard.qml</file>
+        <file>qml/LocationRow.qml</file>
+        <file>qml/TreeItemView.qml</file>
+        <file>qml/TreeView.qml</file>
+        <file>qml/HeaderTimelineRow.qml</file>
+        <file>qml/MonthGrid.qml</file>
+        <file>qml/FlatButton.qml</file>
+        <file>qml/TaskTimeline.qml</file>
     </qresource>
 </RCC>

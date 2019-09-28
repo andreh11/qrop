@@ -386,7 +386,7 @@ int Task::greenhouseSowingTask(int plantingId) const
     if (idList.isEmpty())
         return -1;
 
-    return idList.first();
+    return idList.constFirst();
 }
 
 /** Return the sowing or in-ground planting task id for \a plantingId. */
@@ -404,7 +404,7 @@ int Task::plantingTask(int plantingId) const
     if (idList.isEmpty())
         return -1;
 
-    return idList.first();
+    return idList.constFirst();
 }
 
 /** Set the task type of \a taskId to \a type. */
@@ -625,7 +625,7 @@ void Task::removeNurseryTask(int plantingId) const
     if (taskIdList.isEmpty())
         return;
 
-    int taskId = taskIdList.first();
+    int taskId = taskIdList.constFirst();
 
     QString queryString("DELETE FROM planting_task WHERE task_id = %1");
     QSqlQuery query(queryString.arg(taskId));
@@ -693,7 +693,7 @@ void Task::updateHarvestLinkedTasks(int taskId) const
         return;
 
     auto plantingList = taskPlantings(taskId);
-    int plantingId = plantingList.first();
+    int plantingId = plantingList.constFirst();
     for (const int taskId : uncompletedHarvestLinkedTasks(plantingId)) {
         auto map = mapFromId("task", taskId);
         if (!map.isEmpty())

@@ -188,93 +188,84 @@ Page {
             width: parent.width
             height: Units.toolBarHeight
 
-//            RowLayout {
-//                id: buttonRow
-//                anchors.fill: parent
-//                spacing: Units.smallSpacing
+            FlatButton {
+                id: addButton
+                text: qsTr("Add harvest")
+                anchors {
+                    left: parent.left
+                    leftMargin: 16 - ((background.width - contentItem.width) / 4)
+                    verticalCenter: parent.verticalCenter
+                }
+                highlighted: true
 
-                Button {
-                    id: addButton
-                    text: qsTr("Add harvest")
-                    flat: true
-                    anchors {
-                        left: parent.left
-                        leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        verticalCenter: parent.verticalCenter
-                    }
-                    highlighted: true
-                    font.pixelSize: Units.fontSizeBodyAndButton
-
-                    onClicked: {
-                        dialogOpened = true;
-                        harvestDialog.create()
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        anchors.fill: parent
-                        onPressed: mouse.accepted = false
-                    }
-
-                    HarvestDialog {
-                        id: harvestDialog
-                        y: parent.height * 2/3
-                        year: page.year
-                        onHarvestAdded: {
-                            page.refresh()
-                            addHarvestSnackbar.open();
-                            dialogOpened = false;
-                        }
-                        onHarvestUpdated: {
-                            page.refresh();
-                            editHarvestsSnackBar.open();
-                            dialogOpened = false;
-                        }
-                        onRejected: dialogOpened = false;
-                    }
+                onClicked: {
+                    dialogOpened = true;
+                    harvestDialog.create()
                 }
 
-
-                SearchField {
-                    id: searchField
-                    placeholderText: qsTr("Search harvests")
-                    anchors {
-                        centerIn: parent
-                    }
-                    width: Math.max(200, harvestView.width)
-                    inputMethodHints: Qt.ImhPreferLowercase
-                    visible: !checks
-                }
-
-
-                WeekSpinBox {
-                    id: weekSpinBox
-                    visible: checks === 0
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
-                    anchors {
-                        right: printButton.left
-                        verticalCenter: parent.verticalCenter
-                    }
-                }
-
-                IconButton {
-                    id: printButton
-                    text: "\ue8ad"
+                MouseArea {
+                    id: mouseArea
                     hoverEnabled: true
-                    anchors {
-                        right: parent.right
-                        rightMargin: 16 - padding
-                        verticalCenter: parent.verticalCenter
-                    }
-                    ToolTip.visible: hovered
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: qsTr("Print the harvests list")
-
-                    onClicked: saveDialog.open()
+                    cursorShape: Qt.PointingHandCursor
+                    anchors.fill: parent
+                    onPressed: mouse.accepted = false
                 }
+
+                HarvestDialog {
+                    id: harvestDialog
+                    y: parent.height * 2/3
+                    year: page.year
+                    onHarvestAdded: {
+                        page.refresh()
+                        addHarvestSnackbar.open();
+                        dialogOpened = false;
+                    }
+                    onHarvestUpdated: {
+                        page.refresh();
+                        editHarvestsSnackBar.open();
+                        dialogOpened = false;
+                    }
+                    onRejected: dialogOpened = false;
+                }
+            }
+
+            SearchField {
+                id: searchField
+                placeholderText: qsTr("Search harvests")
+                anchors {
+                    centerIn: parent
+                }
+                width: Math.max(200, harvestView.width)
+                inputMethodHints: Qt.ImhPreferLowercase
+                visible: !checks
+            }
+
+            WeekSpinBox {
+                id: weekSpinBox
+                visible: checks === 0
+                week: MDate.currentWeek();
+                year: MDate.currentYear();
+                anchors {
+                    right: printButton.left
+                    verticalCenter: parent.verticalCenter
+                }
+            }
+
+            IconButton {
+                id: printButton
+                text: "\ue8ad"
+                hoverEnabled: true
+                anchors {
+                    right: parent.right
+                    rightMargin: 16 - padding
+                    verticalCenter: parent.verticalCenter
+                }
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Print the harvests list")
+
+                onClicked: saveDialog.open()
+            }
         }
 
         ThinDivider {
@@ -301,245 +292,237 @@ Page {
                 border.width: 1
             }
 
-        ListView {
-            id: harvestView
-//            width: Math.min(rowWidth, parent.width * 0.8)
-            anchors.fill: parent
-            anchors.margins: 1
-            clip: true
-            spacing: 0
-            boundsBehavior: Flickable.StopAtBounds
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            ListView {
+                id: harvestView
+                //            width: Math.min(rowWidth, parent.width * 0.8)
+                anchors.fill: parent
+                anchors.margins: 1
+                clip: true
+                spacing: 0
+                boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.HorizontalAndVerticalFlick
 
-//            anchors {
-//                top: topDivider.bottom
-//                bottom: parent.bottom
-//                horizontalCenter: parent.horizontalCenter
-//                topMargin: Units.smallSpacing
-//                bottomMargin: Units.smallSpacing
-//            }
-
-            model: HarvestModel {
-                id: harvestModel
-                week: page.week
-                year: page.year
-                filterString: searchField.text
-                sortColumn: tableHeaderModel[tableSortColumn].columnName
-                sortOrder: tableSortOrder
-            }
-
-            highlightMoveDuration: 0
-            highlightResizeDuration: 0
-            highlight: Rectangle {
-                visible: harvestView.activeFocus
-                z:3;
-                opacity: 0.1;
-                color: Material.primary
-                radius: 2
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                parent: harvestView.parent
-                anchors {
-                    top: parent.top
-                    topMargin: buttonRectangle.height + topDivider.height
-                    right: parent.right
-                    bottom: parent.bottom
+                model: HarvestModel {
+                    id: harvestModel
+                    week: page.week
+                    year: page.year
+                    filterString: searchField.text
+                    sortColumn: tableHeaderModel[tableSortColumn].columnName
+                    sortOrder: tableSortOrder
                 }
-            }
 
-            Keys.onPressed: {
-                switch (event.key) {
-                case Qt.Key_E:
-                    // FALLTHROUGH
-                case Qt.Key_Return:
-                    // FALLTHROUGH
-                case Qt.Key_Enter:
-                    currentItem.editHarvest();
-                    break;
-                case Qt.Key_Delete:
-                    currentItem.deleteHarvest();
-                    break;
+                highlightMoveDuration: 0
+                highlightResizeDuration: 0
+                highlight: Rectangle {
+                    visible: harvestView.activeFocus
+                    z:3;
+                    opacity: 0.1;
+                    color: Material.primary
+                    radius: 2
                 }
-            }
 
-            headerPositioning: ListView.OverlayHeader
-            header: Rectangle {
-                id: headerRectangle
-                height: headerRow.height
-                width: parent.width
-                color: "white"
-                radius: 4
-                z: 3
-                Column {
+                ScrollBar.vertical: ScrollBar {
+                    parent: harvestView.parent
+                    anchors {
+                        top: parent.top
+                        topMargin: buttonRectangle.height + topDivider.height
+                        right: parent.right
+                        bottom: parent.bottom
+                    }
+                }
+
+                Keys.onPressed: {
+                    switch (event.key) {
+                    case Qt.Key_E:
+                        // FALLTHROUGH
+                    case Qt.Key_Return:
+                        // FALLTHROUGH
+                    case Qt.Key_Enter:
+                        currentItem.editHarvest();
+                        break;
+                    case Qt.Key_Delete:
+                        currentItem.deleteHarvest();
+                        break;
+                    }
+                }
+
+                headerPositioning: ListView.OverlayHeader
+                header: Rectangle {
+                    id: headerRectangle
+                    height: headerRow.height
                     width: parent.width
+                    color: "white"
+                    radius: 4
+                    z: 3
+                    Column {
+                        width: parent.width
 
-                    Row {
-                        id: headerRow
-                        height: 56
-                        spacing: Units.smallSpacing
-                        leftPadding: Units.formSpacing
+                        Row {
+                            id: headerRow
+                            height: 56
+                            spacing: Units.smallSpacing
+                            leftPadding: Units.formSpacing
 
-                        Item {
-                            visible: true
-                            id: headerCheckbox
-                            anchors.verticalCenter: headerRow.verticalCenter
-                            width: Units.rowHeight * 0.8
-                            height: width
-                        }
-
-                        Repeater {
-                            model: page.tableHeaderModel
-
-                            TableHeaderLabel {
-                                text: modelData.name
+                            Item {
+                                visible: true
+                                id: headerCheckbox
                                 anchors.verticalCenter: headerRow.verticalCenter
-                                width: modelData.width
-                                state: page.tableSortColumn === index ? page.tableSortOrder : ""
-                                onNewColumn: {
-                                    if (page.tableSortColumn !== index) {
-                                        page.tableSortColumn = index
-                                        page.tableSortOrder = "descending"
+                                width: Units.rowHeight * 0.8
+                                height: width
+                            }
+
+                            Repeater {
+                                model: page.tableHeaderModel
+
+                                TableHeaderLabel {
+                                    text: modelData.name
+                                    anchors.verticalCenter: headerRow.verticalCenter
+                                    width: modelData.width
+                                    state: page.tableSortColumn === index ? page.tableSortOrder : ""
+                                    onNewColumn: {
+                                        if (page.tableSortColumn !== index) {
+                                            page.tableSortColumn = index
+                                            page.tableSortOrder = "descending"
+                                        }
                                     }
+                                    onNewOrder: page.tableSortOrder = order
                                 }
-                                onNewOrder: page.tableSortOrder = order
                             }
                         }
-                    }
-                    ThinDivider { width: parent.width }
-                }
-            }
-
-            delegate: Rectangle {
-                id: delegate
-                color: "white"
-                border.color: Material.color(Material.Grey, Material.Shade400)
-                border.width: rowMouseArea.containsMouse ? 1 : 0
-
-                radius: 2
-                height: 52
-                width: parent.width
-
-                property var map: Planting.mapFromId(model.planting_id)
-
-                function editHarvest() {
-                    harvestDialog.edit(model.harvest_id, model.crop_id);
-                    dialogOpened = true;
-                }
-
-                function deleteHarvest() {
-                    Harvest.remove(model.harvest_id);
-                    page.refresh();
-                }
-
-                ThinDivider {
-                    anchors {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
+                        ThinDivider { width: parent.width }
                     }
                 }
 
-                MouseArea {
-                    id: rowMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    preventStealing: true
-                    propagateComposedEvents: true
-                    cursorShape: Qt.PointingHandCursor
+                delegate: Rectangle {
+                    id: delegate
+                    color: "white"
+                    border.color: Material.color(Material.Grey, Material.Shade400)
+                    border.width: rowMouseArea.containsMouse ? 1 : 0
 
-                    onClicked: editHarvest()
+                    radius: 2
+                    height: 52
+                    width: parent.width
 
-                    Rectangle {
-                        id: harvestButtonRectangle
-                        height: Units.rowHeight
-                        width: childrenRect.width
-                        color: "white"
-                        z: 3
-                        visible: rowMouseArea.containsMouse
+                    property var map: Planting.mapFromId(model.planting_id)
+
+                    function editHarvest() {
+                        harvestDialog.edit(model.harvest_id, model.crop_id);
+                        dialogOpened = true;
+                    }
+
+                    function deleteHarvest() {
+                        Harvest.remove(model.harvest_id);
+                        page.refresh();
+                    }
+
+                    ThinDivider {
                         anchors {
-                            top: parent.top
                             bottom: parent.bottom
+                            left: parent.left
                             right: parent.right
-                            topMargin: delegate.border.width
-                            bottomMargin: delegate.border.width
-                            rightMargin: delegate.border.width
+                        }
+                    }
+
+                    MouseArea {
+                        id: rowMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        preventStealing: true
+                        propagateComposedEvents: true
+                        cursorShape: Qt.PointingHandCursor
+
+                        onClicked: editHarvest()
+
+                        Rectangle {
+                            id: harvestButtonRectangle
+                            height: Units.rowHeight
+                            width: childrenRect.width
+                            color: "white"
+                            z: 3
+                            visible: rowMouseArea.containsMouse
+                            anchors {
+                                top: parent.top
+                                bottom: parent.bottom
+                                right: parent.right
+                                topMargin: delegate.border.width
+                                bottomMargin: delegate.border.width
+                                rightMargin: delegate.border.width
+                            }
+
+                            Row {
+                                spacing: -16
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                MyToolButton {
+                                    id: deleteButton
+                                    text: enabled ? "\ue872" : ""
+                                    font.family: "Material Icons"
+                                    font.pixelSize: 22
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: deleteHarvest()
+                                    ToolTip.text: qsTr("Remove")
+                                    ToolTip.visible: hovered
+                                }
+                            }
                         }
 
                         Row {
-                            spacing: -16
+                            id: summaryRow
+                            height: Units.rowHeight
+                            spacing: Units.smallSpacing
+                            leftPadding: Units.formSpacing
                             anchors.verticalCenter: parent.verticalCenter
 
-                            MyToolButton {
-                                id: deleteButton
-                                text: enabled ? "\ue872" : ""
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
+                            TextCheckBox {
+                                id: plantingCheckBox
+                                width: parent.height * 0.8
+                                text: map['crop'].slice(0,2)
+                                rank: map['planting_rank']
+                                font.pixelSize: 26
+                                color: map['crop_color']
+                                round: true
                                 anchors.verticalCenter: parent.verticalCenter
-                                onClicked: deleteHarvest()
-                                ToolTip.text: qsTr("Remove")
-                                ToolTip.visible: hovered
+                                hoverEnabled: false
+                                checkable: false
                             }
-                        }
-                    }
 
-                    Row {
-                        id: summaryRow
-                        height: Units.rowHeight
-                        spacing: Units.smallSpacing
-                        leftPadding: Units.formSpacing
-                        anchors.verticalCenter: parent.verticalCenter
+                            PlantingLabel {
+                                width: tableHeaderModel[0].width
+                                anchors.verticalCenter: parent.verticalCenter
+                                plantingId: model.planting_id
+                                showOnlyDates: true
+                                year: page.year
+                                showRank: false
+                            }
 
-                        TextCheckBox {
-                            id: plantingCheckBox
-                            width: parent.height * 0.8
-                            text: map['crop'].slice(0,2)
-                            rank: map['planting_rank']
-                            font.pixelSize: 26
-                            color: map['crop_color']
-                            round: true
-                            anchors.verticalCenter: parent.verticalCenter
-                            hoverEnabled: false
-                            checkable: false
-                        }
+                            TableLabel {
+                                text: Location.fullName(Location.locations(model.planting_id))
+                                width: tableHeaderModel[1].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
 
-                        PlantingLabel {
-                            width: tableHeaderModel[0].width
-                            anchors.verticalCenter: parent.verticalCenter
-                            plantingId: model.planting_id
-                            showOnlyDates: true
-                            year: page.year
-                            showRank: false
-                        }
+                            TableLabel {
+                                text: "%L1 %2".arg(Math.round(model.quantity)).arg(model.unit)
+                                width: tableHeaderModel[2].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
 
-                        TableLabel {
-                            text: Location.fullName(Location.locations(model.planting_id))
-                            width: tableHeaderModel[1].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                            TableLabel {
+                                text: MDate.dayName(model.date)
+                                width: tableHeaderModel[3].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
 
-                        TableLabel {
-                            text: "%L1 %2".arg(Math.round(model.quantity)).arg(model.unit)
-                            width: tableHeaderModel[2].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        TableLabel {
-                            text: MDate.dayName(model.date)
-                            width: tableHeaderModel[3].width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        TableLabel {
-                            text: model.time
-                            width: tableHeaderModel[4].width
-                            anchors.verticalCenter: parent.verticalCenter
+                            TableLabel {
+                                text: model.time
+                                width: tableHeaderModel[4].width
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
 
 }

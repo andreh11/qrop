@@ -223,19 +223,17 @@ Page {
             anchors.fill: parent
             spacing: Units.smallSpacing
 
-            Button {
+            FlatButton {
                 id: addButton
                 Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                 text: hasSelection ? qsTr("Add sublocations") : qsTr("Add Locations")
-                flat: true
-                Material.foreground: page.hasSelection ? "white" : Material.accent
-                font.pixelSize: Units.fontSizeBodyAndButton
+                highlighted: true
                 visible: editMode
                 onClicked: addDialog.open()
                 LocationDialog {
                     id: addDialog
                     mode: "add"
-                    onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity)
+                    onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity, greenhouse)
                     onRejected: addDialog.close()
                 }
             }
@@ -253,10 +251,10 @@ Page {
                 LocationDialog {
                     id: editDialog
                     mode: "edit"
-                    locationIdList: locationView.selectedLocationIds();
+                    locationIdList: locationView.selectedIdList
 
                     onAccepted: {
-                        locationView.updateIndexes(editDialog.editedValues(), locationView.selectedIndexes);
+                        locationView.updateSelectedLocations(editDialog.editedValues());
                         locationView.clearSelection();
                     }
 
@@ -493,11 +491,11 @@ Page {
             }
 
             LocationView {
-                anchors.fill: parent
                 id: locationView
+                anchors.fill: parent
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
-                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
+//                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
                 showOnlyGreenhouseLocations: greenhouseButton.checked
                 showFamilyColor: familyColorButton.checked
                 editMode: page.editMode

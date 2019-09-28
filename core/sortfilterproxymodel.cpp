@@ -31,7 +31,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
     m_model->setTable(tableName);
     m_model->select();
     setSourceModel(m_model);
-    setSortLocaleAware(true);
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
     connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(countChanged()));
@@ -62,8 +61,7 @@ int SortFilterProxyModel::rowId(int row) const
 
 int SortFilterProxyModel::roleIndex(const QString &roleName) const
 {
-    if (!m_model)
-        return -1;
+    Q_ASSERT(m_model);
     return m_model->roleIndex(roleName);
 }
 
@@ -81,8 +79,8 @@ void SortFilterProxyModel::refresh()
 // TODO: not working
 void SortFilterProxyModel::refreshRow(int row)
 {
-    if (row < 0 && row >= rowCount())
-        return;
+    Q_ASSERT(row >= 0);
+    Q_ASSERT(row < rowCount());
 
     auto idx = mapToSource(index(row, 0));
     m_model->selectRow(idx.row());
@@ -163,13 +161,22 @@ std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
     return MDate::seasonDates(m_season, m_year);
 }
 
+QVariant SortFilterProxyModel::rowValue(const QModelIndex &index, const QString &field) const
+{
+    auto sourceIndex = mapToSource(index);
+    if (!sourceIndex.isValid())
+        return {};
+    return m_model->data(sourceIndex, field);
+}
+
 QVariant SortFilterProxyModel::rowValue(int row, const QModelIndex &parent, const QString &field) const
 {
-    auto idx = mapToSource(index(row, 0, parent));
-    if (!idx.isValid())
-        return {};
+    return rowValue(index(row, 0, parent), field);
+}
 
-    return m_model->data(idx, field);
+QVariant SortFilterProxyModel::rowValue(int row, const QString &field) const
+{
+    return rowValue(row, QModelIndex(), field);
 }
 
 /**

@@ -343,14 +343,12 @@ Page {
                     visible: !filterMode
                     spacing: Units.smallSpacing
 
-                    Button {
+                    FlatButton {
                         id: addButton
                         text: qsTr("Add plantings")
-                        flat: true
-                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        font.pixelSize: Units.fontSizeBodyAndButton
                         visible: checks === 0
                         highlighted: true
+                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                         onClicked: {
                             plantingDialog.createPlanting()
                         }
