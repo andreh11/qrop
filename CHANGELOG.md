@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
   - *Field map* − Multi-line view (#76).
-  - *Field map* − When editing the field map, Crl+Left click now selects every
+  - *Field map* − When editing the field map, Crl+Left click now selects all
     children of a location (#113).
   - *Seeds and transplants lists* − Add quarter and month PDF outputs (#131).
   - *Seeds and transplants lists* − Add quarter and month views (#131).
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - Improve planting and task views performance.
 
 ### Fixed
+  - *Planting form* − Fix the bug which prevented planting conflicts.
   - *Seeds and transplants lists* − Fix sorting bug for dates and names.
   - Fix planting length when assigning to multiple locations.
 

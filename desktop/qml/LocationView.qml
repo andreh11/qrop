@@ -91,7 +91,7 @@ Item {
 
     signal plantingMoved
     signal plantingRemoved
-    signal addPlantingLength(int length)
+    signal addPlantingLength(real length)
 
     function refresh() {
         locationModel.refreshTree();
@@ -301,9 +301,7 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         anchors.fill: parent
 
-        ScrollBar.vertical: ScrollBar {
-            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-        }
+        ScrollBar.vertical: ScrollBar { }
 
         model: root.__model
 
@@ -489,6 +487,7 @@ Item {
                             root.setAssignedLength(currentRow, space);
                             root.addPlantingLength(root.assignedLengthRow(currentRow));
                         } else {
+                           console.log(2) ;
                             setAssignedLength(currentRow, Math.min(remainingLength, space));
                         }
                     }

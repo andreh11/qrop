@@ -23,6 +23,8 @@ Tous les changements importants seront documentés dans ce fichier.
   - Amélioration de la performance des vues séries et tâches.
 
 ### Corrections
+  - *Édition des séries* − Correction du bogue qui empêchait les conflits de
+    séries lorsque ceux-ci étaient activés.
   − *Semences et plants* − Correction de la fonction de tri des dates et noms.
   - Correction de la longueur à assigner lors d'une assignation multiple à un 
     emplacement.

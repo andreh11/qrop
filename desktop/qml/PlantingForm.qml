@@ -1123,11 +1123,11 @@ Flickable {
 
                     onSelectedIndexesChanged: locationsModified = true
                     onAddPlantingLength: {
-                        if (settings.useStandardBedLength)
-                            plantingAmountField.text = Number(plantingAmountField.text) + (length/settings.standardBedLength)
-                        else
-                            plantingAmountField.text = plantingLength + length
-                        plantingAmountField.manuallyModified = true // for editedValues()
+                        if (settings.useStandardBedLength) {
+                            plantingAmountField.text = (plantingLength + length)/settings.standardBedLength;
+                        } else
+                            plantingAmountField.text = plantingLength + length;
+                        plantingAmountField.manuallyModified = true; // for editedValues()
                     }
                 }
             }

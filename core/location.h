@@ -96,7 +96,7 @@ public:
     Q_INVOKABLE void removePlanting(int plantingId, int locationId) const;
     Q_INVOKABLE void removePlantingLocations(int plantingId) const;
 
-    Q_INVOKABLE int totalBedLength(bool greenhouse = false) const;
+    Q_INVOKABLE qreal totalBedLength(bool greenhouse = false) const;
 
     std::unique_ptr<QSqlQuery> allHistoryQuery(int season, int year) const;
     QMap<int, QString> allHistoryDescription(int season, int year) const;

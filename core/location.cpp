@@ -757,7 +757,7 @@ void Location::removePlantingLocations(int plantingId) const
     debugQuery(query);
 }
 
-int Location::totalBedLength(bool greenhouse) const
+qreal Location::totalBedLength(bool greenhouse) const
 {
     int inGreenhouse = greenhouse ? 1 : 0;
     QString queryString("SELECT SUM(bed_length) "
@@ -773,7 +773,7 @@ int Location::totalBedLength(bool greenhouse) const
     QSqlQuery query(queryString.arg(inGreenhouse));
     debugQuery(query);
     query.first();
-    return query.value(0).toInt();
+    return query.value(0).toDouble();
 }
 
 std::unique_ptr<QSqlQuery> Location::allHistoryQuery(int season, int year) const
