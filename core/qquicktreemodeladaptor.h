@@ -48,9 +48,9 @@
 // We mean it.
 //
 
-#include <QtCore/qset.h>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qitemselectionmodel.h>
+#include <QSet>
+#include <QAbstractItemModel>
+#include <QItemSelectionModel>
 
 QT_BEGIN_NAMESPACE
 

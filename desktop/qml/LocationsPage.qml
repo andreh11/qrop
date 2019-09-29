@@ -254,7 +254,7 @@ Page {
                     locationIdList: locationView.selectedIdList
 
                     onAccepted: {
-                        locationView.updateSelectedLocations(editDialog.editedValues());
+                        locationView.updateSelected(editDialog.editedValues());
                         locationView.clearSelection();
                     }
 

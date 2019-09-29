@@ -75,7 +75,7 @@ int LocationModel::locationId(const QModelIndex &idx) const
     if (!idx.isValid())
         return -1;
 
-    // Here we assume that location_id if on first column. This is a
+    // Here we assume that location_id is in the first column. This is a
     // reasonable assumption, but database schema update or API update
     // might break the code...
     int id = data(index(idx.row(), 0, idx.parent())).toInt();
@@ -123,6 +123,7 @@ void LocationModel::refreshTree(const QModelIndex &root)
     }
 }
 
+/** Return the value of \a field for the source index of \a row, \a parent. */
 QVariant LocationModel::sourceRowValue(int row, const QModelIndex &parent, const QString &field) const
 {
     if (!m_treeModel)
@@ -156,14 +157,7 @@ QVariantList LocationModel::plantings(const QModelIndex &index, int season, int 
         return {};
 
     int lid = locationId(index);
-    QDate beg;
-    QDate end;
-    std::tie(beg, end) = MDate::seasonDates(season, year);
-
-    QVariantList list;
-    for (int id : m_location->plantings(lid, beg, end))
-        list.push_back(id);
-    return list;
+    return plantings(lid, season, year);
 }
 
 QVariantList LocationModel::plantings(const QModelIndex &index) const
@@ -283,20 +277,6 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
  */
 QVariantList LocationModel::rotationConflictingPlantings(const QModelIndex &index) const
 {
-    //    if (!index.isValid())
-    //        return {};
-
-    //    const int lid = locationId(index);
-    //    std::pair<QDate, QDate> dates = MDate::seasonDates(m_season, m_year);
-    //    QList<int> plantingIdList = m_location->plantings(lid, dates.first, dates.second);
-    //    QList<QVariant> list;
-    //    for (const int pid : plantingIdList) {
-    //        auto conflictList = m_location->rotationConflictingPlantings(lid, pid);
-    //        if (conflictList.count() > 0)
-    //            list.push_back(pid);
-    //    }
-
-    //    return list;
     if (!index.isValid())
         return {};
 
@@ -306,7 +286,6 @@ QVariantList LocationModel::rotationConflictingPlantings(const QModelIndex &inde
     auto it = m_rotationConflictMap.constFind(id);
     if (it == m_rotationConflictMap.cend())
         return {};
-    qDebug() << it.value();
     return it.value();
 }
 

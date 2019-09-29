@@ -1045,8 +1045,7 @@ Flickable {
 
         FormGroupBox {
             id: locationGroupBox
-//            visible: (mode === "add" && successions == 1) || (mode == "edit" && !bulkEditMode)
-            visible: false
+            visible: (mode === "add" && successions == 1) || (mode == "edit" && !bulkEditMode)
             width: parent.width
             Material.background: "white"
 
@@ -1106,15 +1105,13 @@ Flickable {
                     visible: chooseLocationMode
                     clip: true
 
-                    property date plantingDate: plantingType === 1 ? fieldPlantingDateField.calendarDate
-                                                                   : fieldPlantingDateField.calendarDate
+                    property date plantingDate: fieldPlantingDateField.calendarDate
+
                     season: MDate.season(plantingDate)
                     year: MDate.seasonYear(plantingDate)
-                    //                    width: parent.width
-                    //                    height: 400
-                    height: treeViewHeight + headerHeight
-                    width: treeViewWidth
-//                    width: parent.width
+//                    height: treeViewHeight
+                    height: 600
+                    width: 800
                     plantingEditMode: true
 
                     editedPlantingLength: plantingLength

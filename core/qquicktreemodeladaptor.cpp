@@ -35,9 +35,11 @@
 ****************************************************************************/
 
 #include <math.h>
+
+#include <QDebug>
+#include <QStack>
+
 #include "qquicktreemodeladaptor.h"
-#include <QtCore/qstack.h>
-#include <QtCore/qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -177,7 +179,7 @@ bool QQuickTreeModelAdaptor::setData(const QModelIndex &index, const QVariant &v
             expandRow(index.row());
         else
             collapseRow(index.row());
-        break;
+        return true;
     case DepthRole:
     case HasChildrenRole:
     case HasSiblingRole:

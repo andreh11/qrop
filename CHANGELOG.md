@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.4 - 2019-09-28 
+
 ### Added
   - *Planting form* − Add density (m²) field (#126).
 

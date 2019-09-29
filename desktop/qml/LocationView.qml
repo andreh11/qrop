@@ -51,9 +51,9 @@ Item {
     property bool showFamilyColor: false
 
 //    property int treeViewHeight: listView.contentHeight
-    property int treeViewHeight: 400
-    property int treeViewWidth: 400
-    property int headerHeight: Units.rowHeight + 1
+    property int treeViewHeight: listView.contentItem.height
+    property int treeViewWidth: implicitWidth
+    onTreeViewWidthChanged: console.log("treeview width", treeViewWidth)
 
     property int treeDepth: locationModel ? locationModel.depth : 0
 
@@ -129,19 +129,16 @@ Item {
         locationModel.addPlanting(mapRowToModelIndex(row), plantingId, length);
     }
 
-    function updateSelectedLocations(map) {
-        locationTreeViewModel.updateSelectedLocations(map);
-    }
-
     function isSelected(row) {
-        return selectionModel.isSelected(mapRowToModelIndex(row));
+        // We cannot use selectionModel.isSelected(). We have to bind to
+        // selectexIndexes, otherwise this property won't but updated when
+        // several checkboxes are toggled at the same time.
+        return contains(selectionModel.selectedIndexes, mapRowToModelIndex(row))
     }
 
     function selectAll() {
-        console.time("selectAll")
         selectionModel.select(locationModel.treeSelection(), ItemSelectionModel.Select);
         locationModel.refreshTree();
-        console.timeEnd("selectAll")
     }
 
     function selectSubTree(row) {
@@ -159,6 +156,7 @@ Item {
         deselectAll();
     }
 
+    //! Expand all nodes of given depth (and their parents).
     function expandAll(depth) {
         var indexList = locationModel.treeIndexes(depth);
         for (var i = 0; i < indexList.length; i++) {
@@ -176,6 +174,7 @@ Item {
         }
     }
 
+    //! Collapse all nodes of given depth (and their parents).
     function collapseAll(depth) {
         var indexList = locationModel.treeIndexes(depth, false);
         for (var i = 0; i < indexList.length; i++) {
@@ -232,6 +231,14 @@ Item {
         else
             locationModel.addLocations(name, length, width, quantity, greenhouse);
         clearSelection();
+    }
+
+    function updateIndexes(map, indexes) {
+        locationModel.updateIndexes(map, indexes);
+    }
+
+    function updateSelected(map) {
+        updateIndexes(map, selectionModel.selectedIndexes);
     }
 
     function duplicateSelected() {
@@ -352,10 +359,8 @@ Item {
             property var plantingRowList: model.nonOverlappingPlantingList
             property var taskRowList: model.taskList
             property int rows: plantingRowList.length
-//            property bool showLocationTaskRow: taskRowList.length > plantingRowList.length
-            // We have to bind to selectexIndexes, otherwise it won't be properly updated.
-            property bool isSelected: root.contains(selectionModel.selectedIndexes,
-                                                    mapRowToModelIndex(currentRow))
+            //property bool showLocationTaskRow: taskRowList.length > plantingRowList.length
+            property bool isSelected: root.isSelected(currentRow)
 
             clip: true
             width: ListView.view.width // fill available width
@@ -645,5 +650,4 @@ Item {
             }
         }
     }
-
 }

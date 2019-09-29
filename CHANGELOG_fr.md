@@ -1,9 +1,10 @@
-
 # Journal des modifications
 
 Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
+
+## 0.4 - 2019-09-28 
 
 ### Ajouts
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
