@@ -460,9 +460,7 @@ Page {
                 z: 1
                 spacing: Units.smallSpacing
                 visible: !page.rowCount
-                anchors {
-                    centerIn: parent
-                }
+                anchors. centerIn: parent
 
                 Label {
                     id: emptyStateLabel
@@ -562,12 +560,10 @@ Page {
 
                 Column {
                     id: emptyPlantingStateColumn
-                    spacing: Units.smallSpacing
                     visible: !plantingsView.rowCount && showPlantingsPane
                     z:2
-                    anchors {
-                        centerIn: parent
-                    }
+                    anchors.centerIn: parent
+                    spacing: Units.smallSpacing
 
                     Label {
                         id: emptyPlantingStateLabel

@@ -109,6 +109,23 @@ Item {
         return modelAdaptor.mapRowToModelIndex(row);
     }
 
+    function plantings(row) {
+        return locationModel.plantings(mapRowToModelIndex(row));
+    }
+
+    function setAssignedLength(row, length) {
+        assignedLengthMap[mapRowToModelIndex(row)] = length;
+    }
+
+    function assignedLengthRow(row) {
+        return assignedLengthMap[mapRowToModelIndex(row)];
+    }
+
+    function availableSpace(row, plantingDate, endHarvestDate)
+    {
+        return locationModel.availableSpace(mapRowToModelIndex(row), plantingDate, endHarvestDate);
+    }
+
     function refreshRow(row) {
         locationModel.refreshIndex(mapRowToModelIndex(row));
     }
@@ -122,7 +139,13 @@ Item {
     }
 
     function acceptPlanting(row, plantingId) {
-        return locationModel.acceptPlanting(mapRowToModelIndex(row), plantingId);
+        return locationModel.acceptPlanting(mapRowToModelIndex(row),
+                                            editedPlantingPlantingDate,
+                                            editedPlantingEndHarvestDate);
+    }
+
+    function acceptPlantingDate(row, plantingDate, endHarvestDate) {
+        return locationModel.acceptPlanting(mapRowToModelIndex(row), plantingDate, endHarvestDate);
     }
 
     function addPlanting(row, plantingId, length) {
@@ -154,6 +177,7 @@ Item {
 
     function clearSelection() {
         deselectAll();
+        assignedLengthMap = ({})
     }
 
     //! Expand all nodes of given depth (and their parents).
@@ -430,6 +454,48 @@ Item {
                         root.draggedOnIndex = null;
                         root.expandIndex = null;
                     }
+                }
+            }
+
+            MouseArea {
+                id: rowMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onClicked: {
+                    if (model.hasChildren || !root.plantingEditMode)
+                        return;
+
+                    var plantings = root.plantings(currentRow);
+                    if (!locationSettings.allowPlantingsConflict
+                            && !isSelected
+                            && !root.acceptPlanting(currentRow,
+                                                    editedPlantingPlantingDate,
+                                                    editedPlantingEndHarvestDate)
+                            && !plantings.includes(editedPlantingId)) {
+                        return;
+                    }
+
+                    if (isSelected) {
+                        root.setAssignedLength(currentRow, 0);
+                    } else if (plantings.includes(editedPlantingId)) {
+                        root.setAssignedLength(currentRow,
+                                       Location.plantingLength(editedPlantingId, model.location_id));
+                    } else {
+                        var space = root.availableSpace(currentRow,
+                                                        editedPlantingPlantingDate,
+                                                        editedPlantingEndHarvestDate)
+                        if (remainingLength === 0) {
+                            root.setAssignedLength(currentRow, space);
+                            root.addPlantingLength(root.assignedLengthRow(currentRow));
+                        } else {
+                            setAssignedLength(currentRow, Math.min(remainingLength, space));
+                        }
+                    }
+
+                    selectRow(currentRow)
+                    assignedLengthMapChanged()
+                    refreshRow(currentRow)
                 }
             }
 

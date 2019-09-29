@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ Flickable {
     // Initialisation mode ensures that no duration field is modified.
     property bool initMode: false
 
-    property int locationViewWidth: locationView.treeViewWidth
+    property alias locationViewWidth: locationView.width
     property alias durationMode: durationCheckBox.checked
     property var plantingIds: []
 
@@ -88,7 +88,7 @@ Flickable {
     readonly property int inRowSpacing: Number(inRowSpacingField.text)
     readonly property int rowsPerBed: Number(rowsPerBedField.text)
     readonly property real standardTotalWidth: (settings.standardBedWidth + settings.standardPathWidth) / 100.0
-//    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((standardTotalWidth / rowsPerBed) * inRowSpacing / 100)) : 0
+    //    readonly property real plantsBySquareMeter: rowsPerBed ? (1 / ((standardTotalWidth / rowsPerBed) * inRowSpacing / 100)) : 0
     readonly property real plantsBySquareMeter: inRowSpacing ? 100 * rowsPerBed / (standardTotalWidth * inRowSpacing) : 0
 
     readonly property int seedsExtraPercentage: Number(seedsExtraPercentageField.text)
@@ -325,8 +325,8 @@ Flickable {
         if (mode === "edit") {
             fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
             greenhouseStartDateField.effectiveDate = MDate.dateFromIsoString(val["sowing_date"])
-//            begHarvestDateField.effectiveDate
-//            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
+            //            begHarvestDateField.effectiveDate
+            //            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
         }
 
         initMode = true;
@@ -732,7 +732,7 @@ Flickable {
                         Layout.fillWidth: true
                         Layout.minimumWidth: 100
                         onActiveFocusChanged: ensureItemVisible(rowsPerBedField)
-//                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
+                        //                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
                     }
 
                     MyTextField {
@@ -1109,9 +1109,11 @@ Flickable {
 
                     season: MDate.season(plantingDate)
                     year: MDate.seasonYear(plantingDate)
-//                    height: treeViewHeight
-                    height: 600
-                    width: 800
+                    height: treeViewHeight
+                    // TODO: remove magic number
+                    firstColumnWidth: 150
+                    // TODO: remove magic number
+                    width: 920
                     plantingEditMode: true
 
                     editedPlantingLength: plantingLength
