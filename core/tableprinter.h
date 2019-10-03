@@ -40,11 +40,12 @@
 class QPagedPaintDevice;
 class QPainter;
 class SortFilterProxyModel;
+class Location;
 
 class TablePrinter
 {
 public:
-    enum ColumnType { String, Weight, Number, Week };
+    enum ColumnType { String, Weight, Number, Week, Locations };
 
     using ColumnInfo = struct {
         QString name;
@@ -80,6 +81,7 @@ public:
 private:
     SortFilterProxyModel *m_model;
     TableInfo m_tableInfo;
+    Location *m_location;
 
     QPainter *m_painter;
     QPagedPaintDevice *m_printer;

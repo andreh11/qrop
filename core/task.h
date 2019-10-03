@@ -79,6 +79,8 @@ public:
     void updateHarvestLinkedTasks(int taskId) const;
     QList<int> uncompletedHarvestLinkedTasks(int plantingId) const;
 
+    Q_INVOKABLE QVariantMap drawInfoMap(int taskId, int season, int year) const;
+
 private:
     int typeId(int taskId) const;
     QSettings *mSettings;

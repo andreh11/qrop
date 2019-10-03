@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,45 +63,49 @@ private:
         QString tableRow;
     };
 
-    int m_firstColumnWidth { 2000 };
-    int m_rowHeight { 500 };
-    int m_monthWidth { 925 };
-    int m_textPadding { 80 };
-    int m_locationRows { 0 };
-    int m_pageNumber { 0 };
-    bool m_showFamilyColor { false };
-    Location *mLocation;
-    Planting *mPlanting;
-    Keyword *mKeyword;
-    Task *mTask;
-    LocationModel *m_locationModel;
-    QSettings *mSettings;
-
     void preparePdfWriter(QPdfWriter &writer);
 
     void exportPdf(const QString &html, const QUrl &path,
                    QPageLayout::Orientation orientation = QPageLayout::Landscape);
 
+    // TODO: use TablePrinter
+    QString cropPlanHtml(int year, int month, int week, const QString &type) const;
+    QString calendarHtml(int year, int week, bool showOverdue) const;
+    QString harvestHtml(int year) const;
+
+    // Crop map
+    void breakPage(QPagedPaintDevice &printer, QPainter &painter);
+    void paintHeader(QPainter &painter, int season, int year);
+    void paintRowGrid(QPainter &painter, int rows);
+    int datePosition(const QDate &date);
+    void paintPlantingTimegraph(QPainter &painter, int plantingId, int year);
+    void paintTaskTimeGraph(QPainter &painter, int taskId);
+    void paintTimeline(QPainter &painter, const QModelIndex &parent, int year);
+    void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
+                   int season, int year);
+    int locationRows(const QModelIndex &index) const;
+
+    int m_firstColumnWidth { 2000 };
+    int m_rowHeight { 500 };
+    int m_monthWidth { 925 };
+    int m_textPadding { 80 };
+    int m_pageNumber { 0 };
+    bool m_showFamilyColor { false };
+    Location *m_location;
+    Planting *m_planting;
+    Keyword *m_keyword;
+    Task *m_task;
+    LocationModel *m_locationModel;
+    QSettings *m_settings;
+
     QMap<QString, TableInfo> cropPlanMap;
     QString cropPlanQueryString;
-    QString cropPlanHtml(int year, int month, int week, const QString &type) const;
 
     TableInfo calendarInfo;
     QString calendarQueryString;
-    QString calendarHtml(int year, int week, bool showOverdue) const;
 
     TableInfo harvestInfo;
     QString harvestQueryString;
-    QString harvestHtml(int year) const;
-
-    void paintHeader(QPainter &painter, int season, int year);
-    void paintRowGrid(QPainter &painter, int row);
-    int datePosition(const QDate &date);
-    void paintPlantingTimegraph(QPainter &painter, int row, int plantingId, int year);
-    void paintTaskTimeGraph(QPainter &painter, int row, int taskId);
-    void paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year);
-    void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
-                   int season, int year);
 };
 
 #endif // PRINT_H

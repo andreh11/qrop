@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@
 #include "keyword.h"
 #include "location.h"
 #include "locationmodel.h"
+#include "harvestmodel.h"
 #include "mdate.h"
 #include "planting.h"
 #include "print.h"
-#include "task.h"
 #include "task.h"
 
 #include "tableprinter.h"
@@ -46,12 +46,12 @@
 
 Print::Print(QObject *parent)
     : QObject(parent)
-    , mLocation(new Location(this))
-    , mPlanting(new Planting(this))
-    , mKeyword(new Keyword(this))
-    , mTask(new Task(this))
-    , m_locationModel(new LocationModel(this))
-    , mSettings(new QSettings(this))
+    , m_location(new Location(this))
+    , m_planting(new Planting(this))
+    , m_keyword(new Keyword(this))
+    , m_task(new Task(this))
+    , m_locationModel(nullptr)
+    , m_settings(new QSettings(this))
     , cropPlanQueryString("SELECT *, "
                           "strftime('%Y', sowing_date) AS sowing_year, "
                           "CAST(strftime('%m', sowing_date) AS INTEGER) AS sowing_month, "
@@ -69,47 +69,44 @@ Print::Print(QObject *parent)
                          "FROM harvest_view "
                          "WHERE harvest_year = '%1' ")
 {
-    cropPlanMap["entire"] = {
-        "",
-        "AND (sowing_month = %1 OR planting_month = %1) ",
-        "ORDER BY sowing_date, crop, variety",
-        QString("<h2 align=center>%1%2</h2>").arg(tr("General crop plan")).arg("%1"),
-        QString("<table width='100%'>"
-                "<tr>"
-                "<th class='tg' align=left width=20%>%1</th>"
-                "<th class='tg' align=left width=20%>%2</th>"
-                "<th class='tg' align=right width=5%>%3</th>"
-                "<th class='tg' align=right width=5%>%4</th>"
-                "<th class='tg' align=right width=5%>%5</th>"
-                "<th class='tg' align=right width=5%>%6</th>"
-                "<th class='tg' align=right width=5%>%7</th>"
-                "<th class='tg' align=right width=5%>%8</th>"
-                "<th class='tg' align=right width=5%>%9</th>"
-                "<th class='tg' align=left width=10%>%10</th>"
-                "</tr>")
-                .arg(tr("Crop"))
-                .arg(tr("Variety"))
-                .arg(tr("S"))
-                .arg(tr("TP"))
-                .arg(tr("FH"))
-                .arg(tr("LH"))
-                .arg(tr("Length"))
-                .arg(tr("Rows"))
-                .arg(tr("Spac."))
-                .arg(tr("Locations")),
-        QString("<td class='tg'>%1</td>"
-                "<td class='tg'>%2</td>"
-                "<td class='tg' align=right>%3</td>"
-                "<td class='tg' align=right>%4</td>"
-                "<td class='tg' align=right>%5</td>"
-                "<td class='tg' align=right>%6</td>"
-                "<td class='tg' align=right>%7</td>"
-                "<td class='tg' align=right>%8</td>"
-                "<td class='tg' align=right>%9</td>"
-                "<td class='tg' align=left>%10</td>"
-                "</tr>")
-
-    };
+    cropPlanMap["entire"] = { "",
+                              "AND (sowing_month = %1 OR planting_month = %1) ",
+                              "ORDER BY sowing_date, crop, variety",
+                              QString("<h2 align=center>%1%2</h2>").arg(tr("General crop plan")).arg("%1"),
+                              QString("<table width='100%'>"
+                                      "<tr>"
+                                      "<th class='tg' align=left width=20%>%1</th>"
+                                      "<th class='tg' align=left width=20%>%2</th>"
+                                      "<th class='tg' align=right width=5%>%3</th>"
+                                      "<th class='tg' align=right width=5%>%4</th>"
+                                      "<th class='tg' align=right width=5%>%5</th>"
+                                      "<th class='tg' align=right width=5%>%6</th>"
+                                      "<th class='tg' align=right width=5%>%7</th>"
+                                      "<th class='tg' align=right width=5%>%8</th>"
+                                      "<th class='tg' align=right width=5%>%9</th>"
+                                      "<th class='tg' align=left width=10%>%10</th>"
+                                      "</tr>")
+                                      .arg(tr("Crop"))
+                                      .arg(tr("Variety"))
+                                      .arg(tr("S"))
+                                      .arg(tr("TP"))
+                                      .arg(tr("FH"))
+                                      .arg(tr("LH"))
+                                      .arg(tr("Length"))
+                                      .arg(tr("Rows"))
+                                      .arg(tr("Spac."))
+                                      .arg(tr("Locations")),
+                              QString("<td class='tg'>%1</td>"
+                                      "<td class='tg'>%2</td>"
+                                      "<td class='tg' align=right>%3</td>"
+                                      "<td class='tg' align=right>%4</td>"
+                                      "<td class='tg' align=right>%5</td>"
+                                      "<td class='tg' align=right>%6</td>"
+                                      "<td class='tg' align=right>%7</td>"
+                                      "<td class='tg' align=right>%8</td>"
+                                      "<td class='tg' align=right>%9</td>"
+                                      "<td class='tg' align=left>%10</td>"
+                                      "</tr>") };
 
     cropPlanMap["greenhouse"] = {
         "AND planting_type = 2 ",
@@ -323,6 +320,31 @@ void Print::printHarvests(int year, const QUrl &path)
 {
     QString html = harvestHtml(year);
     exportPdf(html, path, QPageLayout::Portrait);
+    //    QPdfWriter writer(path.toLocalFile());
+    //    preparePdfWriter(writer);
+
+    //    QPainter painter;
+    //    painter.begin(&writer);
+
+    //    TablePrinter tablePrinter(&painter, &writer);
+    //    tablePrinter.setTableInfo({ { "date", tr("Date"), 10, TablePrinter::Week },
+    //                                { "crop", tr("Crop"), 10, TablePrinter::String },
+    //                                { "variety", tr("Variety"), 10, TablePrinter::String },
+    //                                { "unit", tr("Unit"), 5, TablePrinter::String },
+    //                                { "quantity", tr("Quantity"), 5, TablePrinter::Number },
+    //                                { "locations", tr("Locations"), 10, TablePrinter::Locations } });
+
+    //    auto model = new HarvestModel(this);
+
+    //    //    model->setSortColumn("crop");
+    //    model->setWeek(40);
+    //    model->setFilterYear(year);
+    //    tablePrinter.setModel(model);
+
+    //    tablePrinter.printTable();
+
+    //    painter.end();
+    //    delete model;
 }
 
 void Print::preparePdfWriter(QPdfWriter &writer)
@@ -451,7 +473,7 @@ void Print::exportPdf(const QString &html, const QUrl &path, QPageLayout::Orient
 
 QString Print::cropPlanHtml(int year, int month, int week, const QString &type) const
 {
-    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
+    auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
     QString titleMW;
     if (month >= 1 && month <= 12)
         titleMW.append(QString(" (%1)").arg(MDate::monthName(month)));
@@ -562,7 +584,7 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
 
 QString Print::calendarHtml(int year, int week, bool showOverdue) const
 {
-    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
+    auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
 
     QString titleMW;
     if (week >= 1 && week <= 53) {
@@ -594,8 +616,8 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         int taskId = query.value("task_id").toInt();
         int taskTypeId = query.value("task_type_id").toInt();
         const auto taskType = query.value("type").toString();
-        const auto plantingIdList = mTask->taskPlantings(taskId);
-        const auto locationIdList = mTask->taskLocations(taskId);
+        const auto plantingIdList = m_task->taskPlantings(taskId);
+        const auto locationIdList = m_task->taskLocations(taskId);
 
         const auto taskMethod = query.value("method").toString();
         const auto taskImplement = query.value("implement").toString();
@@ -608,17 +630,17 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
         int j = 0;
 
-        bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
-        int standardBedLength = mSettings->value("standardBedLength").toInt();
+        bool useStandardBedLength = m_settings->value("useStandardBedLength").toBool();
+        int standardBedLength = m_settings->value("standardBedLength").toInt();
 
         // Plantings
         for (const int plantingId : plantingIdList) {
-            auto record = mPlanting->recordFromId("planting_view", plantingId);
+            auto record = m_planting->recordFromId("planting_view", plantingId);
             auto locationList = Helpers::listOfInt(record.value("locations").toString());
-            QString locationsName = mLocation->fullName(locationList);
+            QString locationsName = m_location->fullName(locationList);
 
             int successionNumber = record.value("planting_rank").toInt();
-            auto keywordStringList = mKeyword->keywordStringList(plantingId);
+            auto keywordStringList = m_keyword->keywordStringList(plantingId);
 
             QString keywordString;
             for (const auto &variant : keywordStringList) {
@@ -652,7 +674,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                                 .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
                                 .arg(plantingString)
                                 .arg(locationsName)
-                                .arg(mTask->description(taskId))
+                                .arg(m_task->description(taskId))
                                 .arg(keywordString)
                                 .arg("");
             else
@@ -667,7 +689,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         }
 
         if (!locationIdList.empty()) {
-            QString locationsName = mLocation->fullName(locationIdList);
+            QString locationsName = m_location->fullName(locationIdList);
 
             if (i % 2 == 1)
                 html.append("<tr style='background-color: #e0e0e0'>");
@@ -677,7 +699,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                             .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
                             .arg("")
                             .arg(locationsName)
-                            .arg(mTask->description(taskId))
+                            .arg(m_task->description(taskId))
                             .arg("");
         }
 
@@ -689,7 +711,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
 QString Print::harvestHtml(int year) const
 {
-    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
+    auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
     QString html = harvestInfo.title.arg(year);
     html.append(harvestInfo.tableHeader);
 
@@ -709,10 +731,10 @@ QString Print::harvestHtml(int year) const
         QString laborTime = query.value("time").toString();
         QString locationString = query.value("locations").toString();
         int plantingId = query.value("planting_id").toInt();
-        int successionNumber = mPlanting->rank(plantingId);
+        int successionNumber = m_planting->rank(plantingId);
 
         QList<int> locationIdList;
-        for (const auto& idString : locationString.splitRef(","))
+        for (const auto &idString : locationString.splitRef(","))
             locationIdList.append(idString.toInt());
 
         if (i % 2 == 0)
@@ -730,7 +752,7 @@ QString Print::harvestHtml(int year) const
                                                   ? QString(" %1").arg(successionNumber)
                                                   : "")
                                      .arg(variety))
-                        .arg(mLocation->fullName(locationIdList))
+                        .arg(m_location->fullName(locationIdList))
                         .arg(QString("%1 %2").arg(quantity).arg(unit))
                         .arg(laborTime);
         i++;
@@ -741,8 +763,10 @@ QString Print::harvestHtml(int year) const
 
 void Print::printCropMap(int year, int season, const QUrl &path, bool showFamilyColor,
                          bool showOnlyGreenhouse)
-
 {
+    QElapsedTimer timer;
+    timer.start();
+
     QPdfWriter writer(path.toLocalFile());
     writer.setPageSize(QPagedPaintDevice::A4);
     writer.setPageOrientation(QPageLayout::Landscape);
@@ -757,17 +781,21 @@ void Print::printCropMap(int year, int season, const QUrl &path, bool showFamily
     pen.setBrush(QColor("grey"));
     painter.setPen(pen);
 
+    if (!m_locationModel)
+        m_locationModel = new LocationModel(this);
+
     m_locationModel->refresh();
     m_locationModel->setFilterYear(year);
     m_locationModel->setFilterSeason(season);
     m_locationModel->setShowOnlyGreenhouseLocations(showOnlyGreenhouse);
-    m_locationRows = 0;
+
     m_showFamilyColor = showFamilyColor;
     m_pageNumber = 1;
     paintHeader(painter, season, year);
     paintTree(writer, painter, QModelIndex(), season, year);
 
     painter.end();
+    qDebug() << "[Crop map]" << timer.elapsed() << "ms";
 }
 
 void Print::paintHeader(QPainter &painter, int season, int year)
@@ -782,27 +810,29 @@ void Print::paintHeader(QPainter &painter, int season, int year)
     painter.drawText(headerRect, Qt::AlignRight, QString::number(m_pageNumber));
     painter.restore();
 
-    QRectF locationRect(0, m_rowHeight, m_firstColumnWidth, m_rowHeight);
+    painter.translate(0, m_rowHeight);
 
+    QRectF locationRect(0, 0, m_firstColumnWidth, m_rowHeight);
     painter.drawRect(locationRect);
     painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter, tr("Location"));
-
     for (int m = 0; m < 12; m++) {
-        QRectF rect(m_firstColumnWidth + m * m_monthWidth, m_rowHeight, m_monthWidth, m_rowHeight);
+        QRectF rect(m_firstColumnWidth + m * m_monthWidth, 0, m_monthWidth, m_rowHeight);
         painter.drawRect(rect);
         painter.drawText(rect, Qt::AlignCenter,
                          MDate::shortMonthName(1 + MDate::monthsOrder[season][m]));
     }
+    painter.translate(0, m_rowHeight);
 }
 
-void Print::paintRowGrid(QPainter &painter, int row)
+void Print::paintRowGrid(QPainter &painter, int rows)
 {
-    painter.drawRect(0, (row + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
+    const int height = rows * m_rowHeight;
+    painter.drawRect(0, 0, m_firstColumnWidth, height);
     for (int m = 0; m < 12; m++) {
-        QRectF rect(m_firstColumnWidth + m * m_monthWidth, (2 + row) * m_rowHeight, m_monthWidth,
-                    m_rowHeight);
+        QRectF rect(m_firstColumnWidth + m * m_monthWidth, 0, m_monthWidth, height);
         painter.drawRect(rect);
     }
+    painter.translate(0, height);
 }
 
 int Print::datePosition(const QDate &date)
@@ -822,13 +852,13 @@ int Print::datePosition(const QDate &date)
     return m_firstColumnWidth + x;
 }
 
-void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, int year)
+void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 {
-    const auto record = mPlanting->recordFromId("planting_view", plantingId);
+    const auto record = m_planting->recordFromId("planting_view", plantingId);
     const auto plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
     QDate begHarvestDate = MDate::dateFromIsoString(record.value("beg_harvest_date").toString());
     QDate endHarvestDate = MDate::dateFromIsoString(record.value("end_harvest_date").toString());
-    auto showPlantingSuccessionNumber = mSettings->value("showPlantingSuccessionNumber").toBool();
+    auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
 
     QString colorString;
 
@@ -838,11 +868,12 @@ void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, i
         colorString = record.value("crop_color").toString();
 
     const QColor cropColor(colorString);
-    const auto cropName = record.value("crop").toString().leftRef(4);
+    const auto cropName = record.value("crop").toString().left(4);
     const auto varietyName = record.value("variety").toString();
     const int successionNumber = record.value("planting_rank").toInt();
 
-    const int y = (2 + row) * m_rowHeight;
+    //    const int y = (2 + row) * m_rowHeight;
+    const int y = 0;
     const int p = static_cast<int>(m_rowHeight * 0.1);
 
     const QPoint point1(datePosition(plantingDate), y + p);
@@ -876,21 +907,31 @@ void Print::paintPlantingTimegraph(QPainter &painter, int row, int plantingId, i
     painter.restore();
 }
 
-void Print::paintTaskTimeGraph(QPainter &painter, int row, int taskId)
+void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
 {
-    const auto record = mTask->recordFromId("task_view", taskId);
+    const auto record = m_task->recordFromId("task_view", taskId);
     const int duration = record.value("duration").toInt();
     const QDate assignedDate = MDate::dateFromIsoString(record.value("assigned_date").toString());
     const QDate taskEndDate = assignedDate.addDays(duration);
     const QString type = record.value("type").toString();
     const QString color = record.value("color").toString();
 
-    const int y = (2 + row) * m_rowHeight;
-    const int p = static_cast<int>(m_rowHeight * 0.1);
+    //    const int y = (2 + row) * m_rowHeight;
+    const int y = 0;
+    const int t = static_cast<int>(m_rowHeight * 0.1);
+    const int b = t;
 
-    const QPoint point1(datePosition(assignedDate), y + p);
-    const QPoint point2(datePosition(taskEndDate), y + m_rowHeight - p);
-    painter.fillRect(QRectF(point1, point2), color);
+    const QPoint point1(datePosition(assignedDate), y + t);
+    const QPoint point2(datePosition(taskEndDate), y + m_rowHeight - b);
+    //    painter.fillRect(QRectF(point1, point2), color);
+
+    //    painter.save();
+    QPainterPath path;
+    path.addRoundRect(QRectF(point1, point2), 10.0, 0.0);
+    auto rectColor = QColor(color);
+    rectColor.setAlphaF(0.8);
+    painter.fillPath(path, rectColor);
+
     painter.save();
     const QPen pen(QColor("white"));
     painter.setPen(pen);
@@ -899,21 +940,45 @@ void Print::paintTaskTimeGraph(QPainter &painter, int row, int taskId)
     painter.restore();
 }
 
-void Print::paintTimeline(QPainter &painter, int row, const QModelIndex &parent, int year)
+/** @return the number of rows painted */
+void Print::paintTimeline(QPainter &painter, const QModelIndex &parent, int year)
 {
-    int locationId = m_locationModel->locationId(parent);
+    const auto plantingList = m_locationModel->nonOverlappingPlantingList(parent);
+    int plantingLength = plantingList.count();
+    for (const auto &list : plantingList) {
+        for (int plantingId : Helpers::variantToIntList(list.toList()))
+            paintPlantingTimegraph(painter, plantingId, year);
+        painter.translate(0, m_rowHeight);
+    }
+    painter.translate(0, -plantingLength * m_rowHeight);
 
-    std::pair<QDate, QDate> seasonDates = m_locationModel->seasonDates();
-    QDate seasonBeg = seasonDates.first;
-    QDate seasonEnd = seasonDates.second;
-
-    if (mSettings->value("LocationView/showTasks", false).toBool()) {
-        for (int taskId : mLocation->tasks(locationId, seasonBeg, seasonEnd))
-            paintTaskTimeGraph(painter, row, taskId);
+    int taskLength = 0;
+    if (m_settings->value("LocationView/showTasks", false).toBool()) {
+        const auto taskList = m_locationModel->nonOverlappingTaskList(parent);
+        taskLength = taskList.length();
+        for (const auto &list : taskList) {
+            for (int taskId : Helpers::variantToIntList(list.toList()))
+                paintTaskTimeGraph(painter, taskId);
+            painter.translate(0, m_rowHeight);
+        }
     }
 
-    for (int plantingId : mLocation->plantings(locationId, seasonBeg, seasonEnd))
-        paintPlantingTimegraph(painter, row, plantingId, year);
+    if (!plantingLength && !taskLength)
+        painter.translate(0, m_rowHeight);
+}
+
+void Print::breakPage(QPagedPaintDevice &printer, QPainter &painter)
+{
+    printer.newPage();
+    m_pageNumber++;
+    painter.translate(-painter.transform().dx(), -painter.transform().dy());
+    //    drawTitle();
+}
+
+int Print::locationRows(const QModelIndex &index) const
+{
+    return std::max({ 1, m_locationModel->nonOverlappingPlantingList(index).count(),
+                      m_locationModel->nonOverlappingTaskList(index).count() });
 }
 
 void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
@@ -926,21 +991,22 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
         if (m_locationModel->hasChildren(index)) {
             paintTree(printer, painter, index, season, year);
         } else {
-            paintRowGrid(painter, m_locationRows);
+            int rows = locationRows(index);
 
-            QRectF locationRect(0, (m_locationRows + 2) * m_rowHeight, m_firstColumnWidth, m_rowHeight);
-            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
-                             mLocation->fullName(locationId));
-
-            paintTimeline(painter, m_locationRows, index, year);
-
-            m_locationRows++;
-            if (m_locationRows > 15) {
-                printer.newPage();
-                m_pageNumber++;
+            // begin from new page if there is not enough space left on the current page
+            if ((painter.transform().dy() + rows * m_rowHeight) > painter.viewport().height()) {
+                breakPage(printer, painter);
                 paintHeader(painter, season, year);
-                m_locationRows = 0;
             }
+
+            paintRowGrid(painter, rows);
+            painter.translate(0, -rows * m_rowHeight);
+
+            QRectF locationRect(0, 0, m_firstColumnWidth, m_rowHeight);
+            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
+                             m_location->fullName(locationId));
+
+            paintTimeline(painter, index, year);
         }
     }
 }

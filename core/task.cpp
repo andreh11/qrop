@@ -23,6 +23,7 @@
 #include "task.h"
 #include "templatetask.h"
 #include "mdate.h"
+#include "helpers.h"
 
 Task::Task(QObject *parent)
     : DatabaseUtility(parent)
@@ -709,4 +710,40 @@ QList<int> Task::uncompletedHarvestLinkedTasks(int plantingId) const
                         "AND planting_id = %1 "
                         "AND template_date_type in (2,3)");
     return queryIds(queryString.arg(plantingId), "task_id");
+}
+
+QVariantMap Task::drawInfoMap(int taskId, int season, int year) const
+{
+    const auto record = recordFromId("task_view", taskId);
+    const auto assignedDate =
+            QDate::fromString(record.value(QStringLiteral("assigned_date")).toString(), Qt::ISODate);
+    const auto completedDate =
+            QDate::fromString(record.value(QStringLiteral("completed_date")).toString(), Qt::ISODate);
+    const int duration = record.value(QStringLiteral("duration")).toInt();
+    const auto description = Helpers::acronymize(record.value("type").toString());
+    QString toolTip = record.value("type").toString();
+    if (!toolTip.isEmpty()) {
+        QString method = record.value("method").toString();
+        if (!method.isEmpty()) {
+            toolTip += ", " + method;
+            QString implement = record.value("implement").toString();
+            if (!implement.isEmpty())
+                toolTip += ", " + implement;
+        }
+    }
+
+    const auto seasonBegin = MDate::seasonBeginning(season, year);
+    const qreal graphStart = Helpers::position(seasonBegin, assignedDate);
+    const qreal width = Helpers::widthBetween(graphStart, seasonBegin, assignedDate.addDays(duration));
+
+    //    qDebug() << description << graphStart << width;
+
+    return { { "graphStart", graphStart },
+             { "width", width },
+             { "assignedDate", MDate::formatDate(assignedDate, year, "", false) },
+             { "completedDate", MDate::formatDate(completedDate, year, "", false) },
+             { "color", record.value("color").toString() },
+             { "duration", duration },
+             { "description", description },
+             { "toolTip", toolTip } };
 }

@@ -41,9 +41,12 @@
 #include "tableprinter.h"
 #include "sortfilterproxymodel.h"
 #include "mdate.h"
+#include "location.h"
+#include "helpers.h"
 
 TablePrinter::TablePrinter(QPainter *painter, QPagedPaintDevice *printer)
     : m_model(nullptr)
+    , m_location(new Location())
     , m_painter(painter)
     , m_printer(printer)
 {
@@ -253,6 +256,10 @@ void TablePrinter::drawRow(int row)
             string = MDate::formatDate(date, m_year);
             break;
         }
+        case TablePrinter::Locations: {
+            string = m_location->fullName(Helpers::listOfInt(value.toString()));
+            break;
+        }
         default:
             string = value.toString();
         }
@@ -299,6 +306,7 @@ bool TablePrinter::printTable(const QString &sectionName, bool pageBreak)
 
     QVariant s;
     for (int row = 1; row < m_model->rowCount(); row++) {
+        qDebug() << "PRINT" << row;
         if (useSection) {
             s = m_model->rowValue(row, sectionName);
             if (section != s) {

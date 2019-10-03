@@ -14,21 +14,22 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Parcellaire* − Lors de l'édition du parcellaire, Ctrl+Clic gauche
     sélectionne l'ensemble des fils d'un emplacement (#113).
   - *Semences et plants* − Ajout d'une sortie PDF pour les listes mensuelle et
-  trimestrielle (#131).
-  − *Semences et plants* − Ajout d'une vue mensuelle et d'une trimestrielle (#131).
-  − *Plan de culture* − Amélioration mineure du graphique.
+    trimestrielle (#131).
+  - *Semences et plants* − Ajout d'une vue mensuelle et d'une trimestrielle (#131).
+  - *Plan de culture* − Amélioration mineure du graphique.
   - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches
     et de l'assolement.
   - *Plan de culture* − Amélioration de l'apparence des panneaux latéraux.
   - Amélioration de la performance des vues séries et tâches.
 
 ### Corrections
+  - *Parcellaire* − Afficher la couleur des tâches.
   - *Édition des séries* − Correction du bogue qui empêchait les conflits de
     séries lorsque ceux-ci étaient activés.
-  − *Semences et plants* − Correction de la fonction de tri des dates et noms.
+  - *Semences et plants* − Correction de la fonction de tri des dates et noms.
   - Correction de la longueur à assigner lors d'une assignation multiple à un 
     emplacement.
-
+ 
 ## 0.3 - 2019-06-15
 
 ### Ajouts

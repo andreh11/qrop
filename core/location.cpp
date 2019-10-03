@@ -538,8 +538,11 @@ std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBe
     QString queryString("SELECT planting_id, group_concat(task_id) AS tasks "
                         "FROM planting_task "
                         "LEFT JOIN task USING (task_id) "
-                        "WHERE (assigned_date BETWEEN '%1' AND '%2') "
+                        "WHERE duration > 0 "
+                        "AND ((assigned_date BETWEEN '%1' AND '%2') "
+                        "OR (date(assigned_date, duration || ' days') BETWEEN '%1' AND '%2') "
                         "OR (completed_date BETWEEN '%1' AND '%2') "
+                        "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY planting_id "
                         "ORDER BY planting_id");
 
@@ -560,8 +563,11 @@ std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBe
     QString queryString("SELECT location_id, group_concat(task_id) AS tasks "
                         "FROM location_task "
                         "LEFT JOIN task USING (task_id) "
-                        "WHERE (assigned_date BETWEEN '%1' AND '%2') "
+                        "WHERE duration > 0 "
+                        "AND ((assigned_date BETWEEN '%1' AND '%2') "
+                        "OR (date(assigned_date, duration || ' days') BETWEEN '%1' AND '%2') "
                         "OR (completed_date BETWEEN '%1' AND '%2') "
+                        "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY location_id "
                         "ORDER BY location_id");
 

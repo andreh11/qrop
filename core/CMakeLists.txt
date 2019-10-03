@@ -17,7 +17,6 @@ add_library(core SHARED
         listmodel.cpp
         location.cpp
         locationmodel.cpp
-        locationtreeviewmodel.cpp
         mdate.cpp
         nametree.cpp
         note.cpp
@@ -52,8 +51,6 @@ add_library(core SHARED
         templatetask.cpp
         templatetaskmodel.cpp
         tableprinter.cpp
-        treeviewmodel.cpp
-        treeitemviewmodel.cpp
         qquicktreemodeladaptor.cpp
 	core_resources.qrc)
 

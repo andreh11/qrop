@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - Improve planting and task views performance.
 
 ### Fixed
+  - *Field map* − Show task color.
   - *Planting form* − Fix the bug which prevented planting conflicts.
   - *Seeds and transplants lists* − Fix sorting bug for dates and names.
   - Fix planting length when assigning to multiple locations.

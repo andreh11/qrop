@@ -86,6 +86,16 @@ Page {
         onActivated: seasonSpinBox.previousSeason();
     }
 
+//    Shortcut {
+//        sequences: ["Up", "Down", "Left", "Right"]
+//        enabled: navigationIndex === 2 && !locationView.activeFocus
+//                 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+//        context: Qt.ApplicationShortcut
+//        onActivated: {
+//            locationView.currentIndex = 0
+//            locationView.forceActiveFocus();
+//        }
+//    }
     //    Shortcut {
     //        sequences: ["Up", "Down", "Left", "Right"]
     //        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
@@ -165,10 +175,8 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted: {
-            Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
-                               greenhouseButton.checked)
-        }
+        onAccepted:  Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
+                                        greenhouseButton.checked)
     }
 
     RoundButton {

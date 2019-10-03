@@ -27,6 +27,7 @@ Item {
     id: root
 
     property LocationModel model: locationModel
+    property alias currentIndex: listView.currentIndex
     property var __model: TreeModelAdaptor {
         id: modelAdaptor
         model: root.model
@@ -320,12 +321,12 @@ Item {
                 spacing: Units.smallSpacing
                 leftPadding: 16
 
-                Row {
-                    id: firstColumnRow
-                    height: parent.height
-                    width: firstColumnWidth - 16 - spacing
-                    spacing: headerRow.spacing
-                    anchors.verticalCenter: parent.verticalCenter
+//                Row {
+//                    id: firstColumnRow
+//                    height: parent.height
+//                    width: firstColumnWidth - 16 - spacing
+//                    spacing: headerRow.spacing
+//                    anchors.verticalCenter: parent.verticalCenter
 
                     CheckBox {
                         id: headerRowCheckBox
@@ -358,8 +359,9 @@ Item {
                         id: nameTableLabel
                         text: qsTr("Name")
                         condensed: true
+                        width: firstColumnWidth - headerRow.spacing - headerRow.leftPadding
+                               - (root.editMode ? headerRow.spacing + headerRowCheckBox.width : 0)
                     }
-                }
 
                 HeaderTimelineRow {
                     id: headerTimelineRow
@@ -373,6 +375,17 @@ Item {
             ThinDivider { anchors { bottom: parent.bottom; left: parent.left; right: parent.right } }
         }
 
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 0
+        highlightResizeDuration: 0
+        highlight: Rectangle {
+            visible: root.activeFocus
+            z:3;
+            opacity: 0.1;
+            color: Material.primary
+            radius: 2
+        }
+
         delegate: Rectangle {
             id: locationDelegate
 
@@ -384,12 +397,13 @@ Item {
             //property bool showLocationTaskRow: taskRowList.length > plantingRowList.length
             property bool isSelected: root.isSelected(currentRow)
 
+
             clip: true
             width: ListView.view.width // fill available width
             height: Math.max(1,rows) * Units.rowHeight + 1
 
             color: Qt.darker(model.hasChildren ? colorList[model.depth] : "white",
-                             isSelected ? 1.1 : 1)
+                             (isSelected) ? 1.1 : 1)
 
             Behavior on height {
                 NumberAnimation {
@@ -415,8 +429,7 @@ Item {
                             root.expandTimer.stop();
                             root.expandTimer.start();
                         }
-                        drag.accepted = (model.depth >= locationModel.depth - 1)
-                                && (sourceLocationId === -1);
+                        drag.accepted = (model.depth >= locationModel.depth - 1);
                     } else if (currentLocationId !== sourceLocationId) {
                         drag.accepted = locationSettings.allowPlantingsConflict
                                 || root.acceptPlanting(currentRow, plantingId);
@@ -502,13 +515,12 @@ Item {
                 id: layout
                 spacing: 0
                 anchors.fill: parent
-                anchors.leftMargin: 16
+                anchors.leftMargin: 0
 
                 Row  {
-                    Layout.minimumWidth: firstColumnWidth - 16
-                    Layout.maximumWidth: firstColumnWidth - 16
+                    Layout.minimumWidth: firstColumnWidth
+                    Layout.maximumWidth: firstColumnWidth
                     Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-                    spacing: -6
 
                     AbstractButton {
                         id: arrowControl

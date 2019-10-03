@@ -57,7 +57,6 @@
 #include "harvestmodel.h"
 #include "keywordmodel.h"
 #include "locationmodel.h"
-#include "locationtreeviewmodel.h"
 #include "nametree.h"
 #include "notemodel.h"
 #include "plantingmodel.h"
@@ -110,7 +109,6 @@ void registerTypes()
     qmlRegisterType<HarvestModel>("io.qrop.components", 1, 0, "HarvestModel");
     qmlRegisterType<KeywordModel>("io.qrop.components", 1, 0, "KeywordModel");
     qmlRegisterType<LocationModel>("io.qrop.components", 1, 0, "LocationModel");
-    qmlRegisterType<LocationTreeViewModel>("io.qrop.components", 1, 0, "LocationTreeViewModel");
     qmlRegisterType<NoteModel>("io.qrop.components", 1, 0, "NoteModel");
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
@@ -345,21 +343,7 @@ int main(int argc, char *argv[])
     });
 #endif
 
-    //    LocationModel locationModel;
-    //    locationModel.setFilterYear(2019);
-    //    locationModel.setFilterSeason(3);
-
-    //    TreeViewModel locationTreeViewModel;
-    //    locationTreeViewModel.setSourceModel(&locationModel);
-
-    //    fileSystemTreeViewModel.setSourceModel(&locationModel);
-
-    //    QTreeView tv;
-    //    tv.setModel(&sortFilterProxyModel);
-    //    tv.show();
-
     QQmlApplicationEngine engine;
-    //    engine.rootContext()->setContextProperty("locationTreeViewModel", &locationTreeViewModel);
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,

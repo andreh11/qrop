@@ -6,12 +6,16 @@ Item {
     id: control
     property alias model: repeater.model
     property date seasonBegin
+    property int season
+    property int year
 
     Repeater {
         id: repeater
         TaskTimegraph {
             taskId: modelData
             seasonBegin: control.seasonBegin
+            season: control.season
+            year: control.year
         }
     }
 }

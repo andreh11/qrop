@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE static qreal bedLength(qreal length);
     Q_INVOKABLE static QVariantList intToVariantList(const QList<int> &list);
     static QList<int> variantToIntList(const QVariantList &list);
+    static QString acronymize(const QString &string);
 
 private:
     const static int mGraphWidth { 60 * 12 };

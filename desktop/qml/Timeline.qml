@@ -80,6 +80,8 @@ Item {
         visible: showTasks
         model: taskIdList
         seasonBegin: control.seasonBegin
+        season: control.season
+        year: control.year
     }
 
     Item {

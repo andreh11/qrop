@@ -768,8 +768,12 @@ void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex 
 {
     if (topLeft != bottomRight) {
         if (buildNonOverlapPlantingMap()) {
+            buildNonOverlapTaskMap();
             buildHistoryDescriptionMap();
-            emit dataChanged(topLeft, bottomRight, { NonOverlappingPlantingList, TaskList, History });
+            buildRotationConflictMap();
+            emit dataChanged(topLeft, bottomRight,
+                             { NonOverlappingPlantingList, TaskList, History, RotationConflictList,
+                               SpaceConflictList });
         }
         return;
     }

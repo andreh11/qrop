@@ -92,3 +92,16 @@ QList<int> Helpers::variantToIntList(const QVariantList &list)
         intList.push_back(elt.toInt());
     return intList;
 }
+
+QString Helpers::acronymize(const QString &string)
+{
+    auto stringList = string.split(" ");
+    if (stringList.length() > 1) {
+        QString s;
+        for (int i = 0; i < stringList.length(); i++)
+            s += stringList[i][0].toUpper();
+        return s;
+    } else {
+        return stringList[0][0] + stringList[0][1].toUpper();
+    }
+}

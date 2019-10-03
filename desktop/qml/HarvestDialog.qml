@@ -248,8 +248,9 @@ Dialog {
                 id: plantingList
                 enabled: mode === "add"
                 implicitHeight: 300
-                year: dialog.year
-                season: dialog.season
+//                year: dialog.year
+                year: datePicker.calendarDate.getFullYear()
+//                season: dialog.season
                 week: datePicker.week
                 filterString: plantingSearchField.text
                 width: parent.widh
