@@ -854,7 +854,10 @@ int Print::datePosition(const QDate &date)
 
 void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 {
+    QElapsedTimer timer;
+    timer.start();
     const auto record = m_planting->recordFromId("planting_view", plantingId);
+    qDebug() << "[planting timegraph]" << timer.elapsed() << "ms";
     const auto plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
     QDate begHarvestDate = MDate::dateFromIsoString(record.value("beg_harvest_date").toString());
     QDate endHarvestDate = MDate::dateFromIsoString(record.value("end_harvest_date").toString());
@@ -909,35 +912,58 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 
 void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
 {
+    QElapsedTimer timer;
+    timer.start();
     const auto record = m_task->recordFromId("task_view", taskId);
+
     const int duration = record.value("duration").toInt();
+    if (duration < 1)
+        return;
+
     const QDate assignedDate = MDate::dateFromIsoString(record.value("assigned_date").toString());
     const QDate taskEndDate = assignedDate.addDays(duration);
     const QString type = record.value("type").toString();
     const QString color = record.value("color").toString();
 
-    //    const int y = (2 + row) * m_rowHeight;
     const int y = 0;
     const int t = static_cast<int>(m_rowHeight * 0.1);
     const int b = t;
 
-    const QPoint point1(datePosition(assignedDate), y + t);
-    const QPoint point2(datePosition(taskEndDate), y + m_rowHeight - b);
-    //    painter.fillRect(QRectF(point1, point2), color);
+    const int pos1 = datePosition(assignedDate);
+    const int pos2 = datePosition(taskEndDate);
+    const QPoint point1(pos1, y + t);
+    const QPoint point2(pos2, y + m_rowHeight - b);
+    const QRectF rect(point1, point2);
 
-    //    painter.save();
+    //    QFontMetrics fm(painter.font());
+    bool wideEnough = rect.width() > (0.5 * m_monthWidth);
+    bool simpleLine = rect.width() < (0.2 * m_monthWidth);
+
     QPainterPath path;
-    path.addRoundRect(QRectF(point1, point2), 10.0, 0.0);
+    path.addRoundRect(rect, 10.0, 0.0);
     auto rectColor = QColor(color);
     rectColor.setAlphaF(0.8);
     painter.fillPath(path, rectColor);
 
     painter.save();
-    const QPen pen(QColor("white"));
+    const QPen pen(simpleLine ? QColor("black") : QColor("white"));
+
     painter.setPen(pen);
-    painter.drawText(QRectF(point1, point2).adjusted(m_textPadding, 0, -m_textPadding, 0),
-                     Qt::AlignVCenter, QString("%1").arg(type));
+    if (simpleLine) {
+        auto center = rect.center();
+        painter.drawText(QPointF(center.x() + rect.width(), center.y()), Helpers::acronymize(type));
+    } else if (wideEnough) {
+        painter.drawText(rect.adjusted(m_textPadding, 0, -m_textPadding, 0), Qt::AlignVCenter,
+                         Helpers::acronymize(type));
+    } else {
+        painter.translate(rect.center());
+        painter.rotate(-90);
+        painter.drawText(QRect(-1000, -1000, 2000, 2000), Qt::AlignCenter, Helpers::acronymize(type));
+        painter.rotate(90);
+    }
+
     painter.restore();
+    qDebug() << "[task]" << timer.elapsed() << "ms";
 }
 
 /** @return the number of rows painted */

@@ -330,3 +330,12 @@ QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
 
     return common;
 }
+
+std::unique_ptr<QSqlQuery> DatabaseUtility::queryBuilder(const QString &queryString)
+{
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString);
+    query->exec();
+    return query;
+}

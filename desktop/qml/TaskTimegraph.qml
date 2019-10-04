@@ -42,22 +42,22 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         color: taskColor
         opacity: 0.8
+    }
 
-        Label {
-            id: label
-            property bool wideEnough: parent.width > 20
-            anchors {
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-                leftMargin: wideEnough ? 4 : 0
-            }
-            text: description
-            visible: taskBar.width
-            rotation: wideEnough ? 0 : -90
-            font.family: "Roboto Condensed"
-            font.pixelSize: Units.fontSizeBodyAndButton
-            antialiasing: true
-            color: Material.color(Material.Grey, taskBar.width < 10 ? Material.Shade600 : Material.Shade100)
+    Label {
+        id: label
+        property bool wideEnough: taskBar.width > 20
+        anchors {
+            left: taskBar.left
+            verticalCenter: parent.verticalCenter
+            leftMargin: wideEnough ? 4 : 0
         }
+        text: description
+        visible: taskBar.width
+        rotation: wideEnough ? 0 : -90
+        font.family: "Roboto Condensed"
+        font.pixelSize: Units.fontSizeBodyAndButton
+        antialiasing: true
+        color: Material.color(Material.Grey, taskBar.width < 10 ? Material.Shade600 : Material.Shade100)
     }
 }

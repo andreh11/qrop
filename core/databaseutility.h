@@ -17,6 +17,8 @@
 #ifndef DATABASEUTILITY_H
 #define DATABASEUTILITY_H
 
+#include <memory>
+
 #include <QObject>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -70,6 +72,8 @@ public:
                     int id2) const;
     Q_INVOKABLE void rollback() const;
     Q_INVOKABLE virtual QVariantMap commonValues(const QList<int> &idList) const;
+
+    static std::unique_ptr<QSqlQuery> queryBuilder(const QString &queryString);
 
 protected:
     QString m_table;

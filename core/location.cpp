@@ -241,10 +241,8 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
 std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate &seasonBeg,
                                                     const QDate &seasonEnd) const
 {
-
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
-
     QString queryString(
             "SELECT planting_id, planting_date, end_harvest_date FROM planting_location "
             "LEFT JOIN planting_view USING (planting_id) "
@@ -253,13 +251,7 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate 
             "  OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
             "  OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
             "ORDER BY (planting_date)");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(queryString.arg(locationId).arg(begString).arg(endString));
-    query->exec();
-
-    return query;
+    return queryBuilder(queryString.arg(locationId).arg(begString).arg(endString));
 }
 
 std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, int season, int year) const
@@ -275,14 +267,8 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, int season, 
                         "OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
                         "OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3') "
                         "ORDER BY (planting_date)");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(
+    return queryBuilder(
             queryString.arg(locationId).arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
-    query->exec();
-
-    return query;
 }
 
 std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &seasonBeg,
@@ -290,7 +276,6 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
-
     QString queryString("SELECT location_id, planting_id, crop, variety, planting_date, "
                         "beg_harvest_date, end_harvest_date "
                         "FROM planting_location "
@@ -299,13 +284,7 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
                         "OR ('%1' <= beg_harvest_date AND beg_harvest_date <= '%2') "
                         "OR ('%1' <= end_harvest_date AND end_harvest_date <= '%2') "
                         "ORDER BY location_id, planting_date");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(queryString.arg(begString).arg(endString));
-    query->exec();
-
-    return query;
+    return queryBuilder(queryString.arg(begString).arg(endString));
 }
 
 QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
@@ -534,7 +513,6 @@ std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBe
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
-
     QString queryString("SELECT planting_id, group_concat(task_id) AS tasks "
                         "FROM planting_task "
                         "LEFT JOIN task USING (task_id) "
@@ -545,13 +523,7 @@ std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBe
                         "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY planting_id "
                         "ORDER BY planting_id");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery);
-    query->setForwardOnly(true);
-    query->prepare(queryString.arg(begString).arg(endString));
-    query->exec();
-
-    return query;
+    return queryBuilder(queryString.arg(begString).arg(endString));
 }
 
 std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBeg,
@@ -559,7 +531,6 @@ std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBe
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
-
     QString queryString("SELECT location_id, group_concat(task_id) AS tasks "
                         "FROM location_task "
                         "LEFT JOIN task USING (task_id) "
@@ -570,13 +541,7 @@ std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBe
                         "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY location_id "
                         "ORDER BY location_id");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery);
-    query->setForwardOnly(true);
-    query->prepare(queryString.arg(begString).arg(endString));
-    query->exec();
-
-    return query;
+    return queryBuilder(queryString.arg(begString).arg(endString));
 }
 
 QMap<int, QVariantList> Location::allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
@@ -794,13 +759,7 @@ std::unique_ptr<QSqlQuery> Location::allHistoryQuery(int season, int year) const
             "LEFT JOIN planting_view USING (planting_id) "
             "WHERE planting_date BETWEEN '%1' AND '%2' "
             "ORDER BY location_id ASC, planting_date DESC");
-
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(queryString.arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
-    query->exec();
-
-    return query;
+    return queryBuilder(queryString.arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
 }
 
 /**

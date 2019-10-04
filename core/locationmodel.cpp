@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
 
 QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
 {
+    Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
     switch (role) {
     case NonOverlappingPlantingList:
         return nonOverlappingPlantingList(proxyIndex);
@@ -68,24 +69,6 @@ QHash<int, QByteArray> LocationModel::roleNames() const
     names[SpaceConflictList] = "spaceConflictList";
     names[RotationConflictList] = "rotationConflictList";
     return names;
-}
-
-int LocationModel::locationId(const QModelIndex &idx) const
-{
-    if (!idx.isValid())
-        return -1;
-
-    // Here we assume that location_id is in the first column. This is a
-    // reasonable assumption, but database schema update or API update
-    // might break the code...
-    int id = data(index(idx.row(), 0, idx.parent())).toInt();
-    return id;
-}
-
-/** Return the bed length of \a index. */
-qreal LocationModel::length(const QModelIndex &index) const
-{
-    return m_location->length(locationId(index));
 }
 
 void LocationModel::refresh()
@@ -123,6 +106,22 @@ void LocationModel::refreshTree(const QModelIndex &root)
     }
 }
 
+int LocationModel::locationId(const QModelIndex &idx) const
+{
+    Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
+    // Here we assume that location_id is in the first column. This is a
+    // reasonable assumption, but database schema update or API update
+    // might break the code...
+    int id = data(index(idx.row(), 0, idx.parent())).toInt();
+    return id;
+}
+
+/** Return the bed length of \a index. */
+qreal LocationModel::length(const QModelIndex &index) const
+{
+    return m_location->length(locationId(index));
+}
+
 /** Return the value of \a field for the source index of \a row, \a parent. */
 QVariant LocationModel::sourceRowValue(int row, const QModelIndex &parent, const QString &field) const
 {
@@ -151,11 +150,14 @@ QVariantList LocationModel::plantings(int locationId, int season, int year) cons
     return list;
 }
 
+/**
+ * \return the plantings of \a index for \a season of \a year.
+ *
+ * \a index must be valid
+ */
 QVariantList LocationModel::plantings(const QModelIndex &index, int season, int year) const
 {
-    if (!index.isValid())
-        return {};
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     int lid = locationId(index);
     return plantings(lid, season, year);
 }
@@ -165,11 +167,14 @@ QVariantList LocationModel::plantings(const QModelIndex &index) const
     return plantings(index, m_season, m_year);
 }
 
+/**
+ * \return the tasks of \a index for \a season of \a year.
+ *
+ * \a index must be valid
+ */
 QVariantList LocationModel::tasks(const QModelIndex &index, int season, int year) const
 {
-    if (!index.isValid())
-        return {};
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     int lid = locationId(index);
     QDate beg;
     QDate end;
@@ -188,8 +193,7 @@ QVariantList LocationModel::tasks(const QModelIndex &index) const
 
 qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return 0;
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     if (plantingId < 1)
         return 0;
 
@@ -198,9 +202,8 @@ qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) co
 
 void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal length)
 {
-    Q_ASSERT(idx.isValid());
+    Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
     Q_ASSERT(length > 0);
-
     auto dates = seasonDates();
     if (hasChildren(idx)) {
         qreal l = length;
@@ -223,12 +226,9 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
 qreal LocationModel::availableSpace(const QModelIndex &index, const QDate &plantingDate,
                                     const QDate &endHarvestDate) const
 {
-    if (!index.isValid())
-        return false;
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     int lid = locationId(index);
-    std::pair<QDate, QDate> dates = seasonDates();
-
+    auto dates = seasonDates();
     return m_location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second);
 }
 
@@ -239,33 +239,25 @@ qreal LocationModel::availableSpace(const QModelIndex &index, const QDate &plant
 bool LocationModel::acceptPlanting(const QModelIndex &index, const QDate &plantingDate,
                                    const QDate &endHarvestDate) const
 {
-    if (!index.isValid())
-        return false;
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     int lid = locationId(index);
-    std::pair<QDate, QDate> dates = seasonDates();
-
+    auto dates = seasonDates();
     return m_location->availableSpace(lid, plantingDate, endHarvestDate, dates.first, dates.second) > 0;
 }
 
 /** Return true iff there is some space left for the planting \a plantingId. */
 bool LocationModel::acceptPlanting(const QModelIndex &index, int plantingId) const
 {
-    if (!index.isValid())
-        return false;
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     int lid = locationId(index);
-    std::pair<QDate, QDate> dates = seasonDates();
-
+    auto dates = seasonDates();
     return m_location->availableSpace(lid, plantingId, dates.first, dates.second) > 0;
 }
 
 /** Returns true iff the planting \a plantingId respects the rotation. */
 bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) const
 {
-    if (!index.isValid())
-        return false;
-
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
     const int lid = locationId(index);
     return m_location->rotationConflictingPlantings(lid, plantingId).count() == 0;
 }
@@ -277,13 +269,10 @@ bool LocationModel::rotationRespected(const QModelIndex &index, int plantingId) 
  */
 QVariantList LocationModel::rotationConflictingPlantings(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return {};
-
     int id = locationId(index);
     Q_ASSERT(id > 0);
 
-    auto it = m_rotationConflictMap.constFind(id);
+    const auto it = m_rotationConflictMap.constFind(id);
     if (it == m_rotationConflictMap.cend())
         return {};
     return it.value();
@@ -291,13 +280,10 @@ QVariantList LocationModel::rotationConflictingPlantings(const QModelIndex &inde
 
 QString LocationModel::historyDescription(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return {};
-
     int id = locationId(index);
     Q_ASSERT(id > 0);
 
-    auto it = m_historyDescriptionMap.constFind(id);
+    const auto it = m_historyDescriptionMap.constFind(id);
     if (it == m_historyDescriptionMap.cend())
         return {};
     return it.value();
@@ -305,13 +291,10 @@ QString LocationModel::historyDescription(const QModelIndex &index) const
 
 QVariantList LocationModel::nonOverlappingPlantingList(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return {};
-
     int id = locationId(index);
     Q_ASSERT(id > 0);
 
-    auto it = m_nonOverlapPlantingMap.constFind(id);
+    const auto it = m_nonOverlapPlantingMap.constFind(id);
     if (it == m_nonOverlapPlantingMap.cend())
         return {};
     return it.value();
@@ -319,13 +302,10 @@ QVariantList LocationModel::nonOverlappingPlantingList(const QModelIndex &index)
 
 QVariantList LocationModel::nonOverlappingTaskList(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return {};
-
     int id = locationId(index);
     Q_ASSERT(id > 0);
 
-    auto it = m_nonOverlapTaskMap.constFind(id);
+    const auto it = m_nonOverlapTaskMap.constFind(id);
     if (it == m_nonOverlapTaskMap.cend())
         return {};
     return it.value();
@@ -362,9 +342,6 @@ QString LocationModel::rotationConflictingDescription(const QModelIndex &index) 
  */
 QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return {};
-
     const int lid = locationId(index);
     const auto dates = MDate::seasonDates(m_season, m_year);
     return m_location->spaceConflictingPlantings(lid, dates.first, dates.second);
@@ -439,6 +416,7 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
 
     QString name;
     for (const auto &parent : parentList) {
+        Q_ASSERT(checkIndex(parent, CheckIndexOption::IndexIsValid));
         parentId = data(index(parent.row(), 0, parent.parent()), 0).toInt();
         parentIdString = parentId > 0 ? QString::number(parentId) : QString();
         for (int i = 0; i < quantity; i++) {
@@ -454,7 +432,6 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
                                       { "parent_id", parentIdString },
                                       { "name", name },
                                       { "greenhouse", greenhouse ? 1 : 0 } });
-            qDebug() << "addRecord";
             m_treeModel->addRecord(m_location->recordFromId("location", newId), mapToSource(parent));
         }
     }
@@ -479,7 +456,8 @@ bool LocationModel::duplicateLocations(const QModelIndexList &indexList)
     // TODO: This is ugly, we should redesign the class hierarchy.
     auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
-    for (auto idx : indexList) {
+    for (const auto &idx : indexList) {
+        Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
         id = data(index(idx.row(), 0, idx.parent()), 0).toInt();
         newId = m_location->duplicate(id);
         QList<QSqlRecord> recordList;
@@ -499,7 +477,8 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
     // TODO: This is ugly, we should redesign the class hierarchy.
     auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
-    for (auto idx : indexList) {
+    for (const auto &idx : indexList) {
+        Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
         id = data(index(idx.row(), 0, idx.parent()), 0).toInt();
         m_location->update(id, map);
 
@@ -539,7 +518,8 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
     auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
     QList<int> idList;
-    for (auto &index : indexList) {
+    for (const auto &index : indexList) {
+        Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
         sourceIndexList.push_back(mapToSource(index));
         idList.push_back(data(index, 0).toInt());
     }
@@ -672,7 +652,6 @@ QModelIndexList LocationModel::treeHasIds(const QVariantList &idList) const
         intList.push_back(val.toInt());
 
     QModelIndexList treeList = treeIndexes();
-
     QModelIndexList indexList;
     for (int i = 0; i < treeList.count(); i++) {
         QModelIndex idx = treeList[i];

@@ -39,28 +39,28 @@ class CORESHARED_EXPORT LocationModel : public SortFilterProxyModel
 
 public:
     enum {
-        NonOverlappingPlantingList = 300,
+        NonOverlappingPlantingList = Qt::UserRole + 300,
         TaskList,
         History,
         RotationConflictList,
         SpaceConflictList
     };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
-
     QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
+
+    Q_INVOKABLE int locationId(const QModelIndex &idx) const;
+    Q_INVOKABLE qreal length(const QModelIndex &index) const;
+
+    Q_INVOKABLE void refresh() override;
+    Q_INVOKABLE void refreshIndex(const QModelIndex &index);
+    Q_INVOKABLE void refreshTree(const QModelIndex &root = QModelIndex());
 
     Q_INVOKABLE QVariantList plantings(int locationId, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index) const;
     Q_INVOKABLE QVariantList tasks(const QModelIndex &index, int season, int year) const;
     Q_INVOKABLE QVariantList tasks(const QModelIndex &index) const;
-
-    Q_INVOKABLE int locationId(const QModelIndex &idx) const;
-    Q_INVOKABLE qreal length(const QModelIndex &index) const;
-
-    Q_INVOKABLE void refreshIndex(const QModelIndex &index);
-    Q_INVOKABLE void refreshTree(const QModelIndex &root = QModelIndex());
 
     Q_INVOKABLE qreal availableSpace(const QModelIndex &index, const QDate &plantingDate,
                                      const QDate &endHarvestDate) const;
@@ -95,7 +95,6 @@ public:
     Q_INVOKABLE QItemSelection treeSelection(const QModelIndex &root = QModelIndex()) const;
     Q_INVOKABLE QModelIndexList treeHasIds(const QVariantList &idList) const;
     Q_INVOKABLE QModelIndexList treePath(const QModelIndex &index) const;
-    Q_INVOKABLE void refresh() override;
 
     bool showOnlyEmptyLocations() const;
     void setShowOnlyEmptyLocations(bool show);
