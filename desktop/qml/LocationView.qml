@@ -48,10 +48,10 @@ Item {
     property alias selectedIndexes: selectionModel.selectedIndexes
     property var selectedIdList: selectedLocationIds()
     property bool hasSelection: selectedIdList.length > 0
-//    property alias draggedPlantingId: locationView.draggedPlantingId
+    //    property alias draggedPlantingId: locationView.draggedPlantingId
     property bool showFamilyColor: false
 
-//    property int treeViewHeight: listView.contentHeight
+    //    property int treeViewHeight: listView.contentHeight
     property int treeViewHeight: listView.contentItem.height
     property int treeViewWidth: implicitWidth
     onTreeViewWidthChanged: console.log("treeview width", treeViewWidth)
@@ -108,6 +108,10 @@ Item {
 
     function mapRowToModelIndex(row) {
         return modelAdaptor.mapRowToModelIndex(row);
+    }
+
+    function spaceConflictingPlantings(row) {
+        return locationModel.spaceConflictingPlantings(modelAdaptor.mapRowToModelIndex(row));
     }
 
     function plantings(row) {
@@ -167,7 +171,7 @@ Item {
         const index = mapRowToModelIndex(row);
         selectionModel.select(locationModel.treeSelection(index), ItemSelectionModel.Toggle);
         locationModel.refreshTree(index);
-      }
+    }
 
     function deselectAll() {
         selectionModel.clear();
@@ -276,7 +280,7 @@ Item {
     }
 
     LocationModel {
-       id: locationModel
+        id: locationModel
     }
 
     ItemSelectionModel {
@@ -319,47 +323,47 @@ Item {
                 spacing: Units.smallSpacing
                 leftPadding: 16
 
-//                Row {
-//                    id: firstColumnRow
-//                    height: parent.height
-//                    width: firstColumnWidth - 16 - spacing
-//                    spacing: headerRow.spacing
-//                    anchors.verticalCenter: parent.verticalCenter
+                //                Row {
+                //                    id: firstColumnRow
+                //                    height: parent.height
+                //                    width: firstColumnWidth - 16 - spacing
+                //                    spacing: headerRow.spacing
+                //                    anchors.verticalCenter: parent.verticalCenter
 
-                    CheckBox {
-                        id: headerRowCheckBox
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: root.editMode
-                        height: parent.height * 0.8
-                        width: height
-                        contentItem: Text {}
+                CheckBox {
+                    id: headerRowCheckBox
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: root.editMode
+                    height: parent.height * 0.8
+                    width: height
+                    contentItem: Text {}
 
-                        tristate: true
+                    tristate: true
 
-                        checkState: rowCount && locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
-                                    ? Qt.Checked
-                                    : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
-                        nextCheckState: function () {
-                            if (!rowCount)
-                                return;
+                    checkState: rowCount && locationModel.treeIndexes().length === selectionModel.selectedIndexes.length
+                                ? Qt.Checked
+                                : (selectionModel.selectedIndexes.length > 0 ? Qt.PartiallyChecked : Qt.Unchecked)
+                    nextCheckState: function () {
+                        if (!rowCount)
+                            return;
 
-                            if (checkState == Qt.Checked) {
-                                root.deselectAll();
-                                return Qt.Unchecked;
-                            } else {
-                                root.selectAll()
-                                return Qt.Checked;
-                            }
+                        if (checkState == Qt.Checked) {
+                            root.deselectAll();
+                            return Qt.Unchecked;
+                        } else {
+                            root.selectAll()
+                            return Qt.Checked;
                         }
                     }
+                }
 
-                    TableHeaderLabel {
-                        id: nameTableLabel
-                        text: qsTr("Name")
-                        condensed: true
-                        width: firstColumnWidth - headerRow.spacing - headerRow.leftPadding
-                               - (root.editMode ? headerRow.spacing + headerRowCheckBox.width : 0)
-                    }
+                TableHeaderLabel {
+                    id: nameTableLabel
+                    text: qsTr("Name")
+                    condensed: true
+                    width: firstColumnWidth - headerRow.spacing - headerRow.leftPadding
+                           - (root.editMode ? headerRow.spacing + headerRowCheckBox.width : 0)
+                }
 
                 HeaderTimelineRow {
                     id: headerTimelineRow
@@ -480,8 +484,8 @@ Item {
                     if (!locationSettings.allowPlantingsConflict
                             && !isSelected
                             && !root.acceptPlantingDate(currentRow,
-                                                    editedPlantingPlantingDate,
-                                                    editedPlantingEndHarvestDate)
+                                                        editedPlantingPlantingDate,
+                                                        editedPlantingEndHarvestDate)
                             && !plantings.includes(editedPlantingId)) {
                         return;
                     }
@@ -490,7 +494,7 @@ Item {
                         root.setAssignedLength(currentRow, 0);
                     } else if (plantings.includes(editedPlantingId)) {
                         root.setAssignedLength(currentRow,
-                                       Location.plantingLength(editedPlantingId, model.location_id));
+                                               Location.plantingLength(editedPlantingId, model.location_id));
                     } else {
                         var space = root.availableSpace(currentRow,
                                                         editedPlantingPlantingDate,
@@ -499,7 +503,7 @@ Item {
                             root.setAssignedLength(currentRow, space);
                             root.addPlantingLength(root.assignedLengthRow(currentRow));
                         } else {
-                           console.log(2) ;
+                            console.log(2) ;
                             setAssignedLength(currentRow, Math.min(remainingLength, space));
                         }
                     }
@@ -574,44 +578,37 @@ Item {
                         ToolTip.text: model.history
                     }
 
-//                    ConflictAlertButton {
-//                        id: conflictAlertButton
-//                        visible: false
-//                        //                    anchors.verticalCenter: parent.verticalCenter
-//                        //                    conflictList: model.hidden ? [] : Location.spaceConflictingPlantings(model.location_id, seasonBegin, seasonEnd)
-//                        conflictList: []
-//                        year: root.year
-//                        locationId: model.location_id
+                    ConflictAlertButton {
+                        id: conflictAlertButton
+                        visible: model.hasSpaceConflict
+                        anchors.verticalCenter: parent.verticalCenter
+                        conflictList: visible ? model.spaceConflictList : []
+                        year: root.year
+                        locationId: model.location_id
 
-//                        onPlantingModified: {
-//                            refreshRow(currentRow);
-//                            timeline.refresh();
-//                        }
-//                        onPlantingRemoved: {
-//                            root.plantingRemoved();
-//                            refreshRow(currentRow);
-//                            timeline.refresh();
-//                        }
-//                    }
+                        onPlantingModified: {
+                            refreshRow(currentRow);
+                            timeline.refresh();
+                        }
+                        onPlantingRemoved: {
+                            root.plantingRemoved();
+                            refreshRow(currentRow);
+                            timeline.refresh();
+                        }
+                    }
 
                     ToolButton {
                         id: rotationAlertLabel
-                        visible: model.rotationConflictList.length > 0
+                        visible: model.hasRotationConflict
                         opacity: visible ? 1 : 0
                         text: "\ue160"
                         font.pixelSize: Units.fontSizeTitle
                         font.family: "Material Icons"
                         Material.foreground: Material.color(Material.Red)
-                        //                    anchors.verticalCenter: parent.verticalCenter
 
                         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
                         ToolTip.visible: hovered && ToolTip.text
                         ToolTip.text: ""
-
-                        //                        onHoveredChanged: {
-                        //                            if (hovered && !ToolTip.text)
-                        //                                ToolTip.text = locationModel.rotationConflictingDescription(styleData.index, season, year)
-                        //                        }
                     }
                 }
 
@@ -692,7 +689,7 @@ Item {
             width: 2
             x: firstColumnWidth
                + Units.position(root.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
-                                                                           : root.endHarvestDate)
+                                                                   : root.endHarvestDate)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             visible: plantingEditMode || root.draggedPlantingId > 0

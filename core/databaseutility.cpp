@@ -337,5 +337,9 @@ std::unique_ptr<QSqlQuery> DatabaseUtility::queryBuilder(const QString &queryStr
     query->setForwardOnly(true);
     query->prepare(queryString);
     query->exec();
+    if (query->lastError().type() != QSqlError::ErrorType::NoError) {
+        qWarning() << "[Query ERROR] " << query->lastError().text();
+        qWarning() << "[Query TEXT]: " << query->lastQuery();
+    }
     return query;
 }

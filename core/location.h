@@ -103,11 +103,12 @@ public:
     Q_INVOKABLE QString historyDescription(int locationId, int season, int year) const;
 
     QMap<int, QVariantList> allRotationConflictingPlantings(int season, int year) const;
+    QMap<int, QVariantMap> allSpaceConflictingPlantings(int season, int year) const;
 
 private:
     int duplicateTree(int id, int parentId) const;
 
-    using CropInfo = struct {
+    using CropRotationInfo = struct {
         int id;
         QString crop;
         int familyId;
@@ -115,7 +116,16 @@ private:
         QDate plantingDate;
         QDate endHarvestDate;
     };
-    using CropInfoList = QList<CropInfo>;
+    using CropRotationInfoList = QList<CropRotationInfo>;
+
+    using CropSpaceInfo = struct {
+        int id;
+        QString crop;
+        qreal assignedLength;
+        QDate plantingDate;
+        QDate endHarvestDate;
+    };
+    using CropSpaceInfoList = QList<CropSpaceInfo>;
 
     Planting *m_planting;
 };

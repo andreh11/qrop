@@ -45,6 +45,7 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
 
 QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
 {
+    Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
     switch (role) {
     case NonOverlappingPlantingList:
         return nonOverlappingPlantingList(proxyIndex);
@@ -52,8 +53,14 @@ QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
         return nonOverlappingTaskList(proxyIndex);
     case History:
         return historyDescription(proxyIndex);
+    case SpaceConflictList:
+        return spaceConflictingPlantings(proxyIndex);
+    case HasSpaceConflict:
+        return hasSpaceConflict(proxyIndex);
     case RotationConflictList:
         return rotationConflictingPlantings(proxyIndex);
+    case HasRotationConflict:
+        return hasRotationConflict(proxyIndex);
     default:
         return SortFilterProxyModel::data(proxyIndex, role);
     }
@@ -66,7 +73,9 @@ QHash<int, QByteArray> LocationModel::roleNames() const
     names[TaskList] = "taskList";
     names[History] = "history";
     names[SpaceConflictList] = "spaceConflictList";
+    names[HasSpaceConflict] = "hasSpaceConflict";
     names[RotationConflictList] = "rotationConflictList";
+    names[HasRotationConflict] = "hasRotationConflict";
     return names;
 }
 
@@ -361,9 +370,17 @@ QString LocationModel::rotationConflictingDescription(const QModelIndex &index) 
  */
 QVariantMap LocationModel::spaceConflictingPlantings(const QModelIndex &index) const
 {
-    const int lid = locationId(index);
-    const auto dates = MDate::seasonDates(m_season, m_year);
-    return m_location->spaceConflictingPlantings(lid, dates.first, dates.second);
+    int id = locationId(index);
+    Q_ASSERT(id > 0);
+
+    const auto it = m_spaceConflictMap.constFind(id);
+    if (it == m_spaceConflictMap.cend())
+        return {};
+    return it.value();
+
+    //    const int lid = locationId(index);
+    //    const auto dates = MDate::seasonDates(m_season, m_year);
+    //    return m_location->spaceConflictingPlantings(lid, dates.first, dates.second);
 }
 
 bool LocationModel::hasRotationConflict(const QModelIndex &index) const
@@ -744,20 +761,44 @@ bool LocationModel::buildRotationConflictMap()
     return true;
 }
 
+/** @return true if the map has changed, false otherwise */
+bool LocationModel::buildSpaceConflictMap()
+{
+    const auto newMap = m_location->allSpaceConflictingPlantings(filterSeason(), filterYear());
+
+    if (m_spaceConflictMap == newMap)
+        return false;
+
+    m_spaceConflictMap = newMap;
+    return true;
+}
+
 /** Rebuild the planting, task and history maps. Refresh the model if needed. */
 void LocationModel::rebuildAndRefresh()
 {
     QElapsedTimer timer;
     timer.start();
-    bool b1 = buildNonOverlapPlantingMap();
-    bool b2 = buildNonOverlapTaskMap();
-    bool b3 = buildHistoryDescriptionMap();
-    bool b4 = buildRotationConflictMap();
-    qDebug() << "[REBUILD]" << timer.elapsed() << "ms";
+    QList<bool> blist;
+    blist.push_back(buildNonOverlapPlantingMap());
+    qDebug() << "[planting]" << timer.elapsed() << "ms";
+    timer.start();
+    blist.push_back(buildNonOverlapTaskMap());
+    qDebug() << "[task]" << timer.elapsed() << "ms";
+    timer.start();
+    blist.push_back(buildHistoryDescriptionMap());
+    qDebug() << "[history]" << timer.elapsed() << "ms";
+    timer.start();
+    blist.push_back(buildRotationConflictMap());
+    qDebug() << "[rotation]" << timer.elapsed() << "ms";
+    timer.start();
+    blist.push_back(buildSpaceConflictMap());
+    qDebug() << "[space]" << timer.elapsed() << "ms";
 
     timer.start();
-    if (b1 || b2 || b3 || b4)
-        refreshTree();
+    for (const bool b : blist) {
+        if (b)
+            refreshTree();
+    }
     qDebug() << "[REFRESH]" << timer.elapsed() << "ms";
 }
 
@@ -768,6 +809,7 @@ void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex 
             buildNonOverlapTaskMap();
             buildHistoryDescriptionMap();
             buildRotationConflictMap();
+            buildSpaceConflictMap();
             emit dataChanged(topLeft, bottomRight,
                              { NonOverlappingPlantingList, TaskList, History, RotationConflictList,
                                SpaceConflictList });
@@ -790,8 +832,8 @@ void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex 
 
     // NOTE: Same here, we could optimize.
     buildHistoryDescriptionMap();
-
     buildRotationConflictMap();
+    buildSpaceConflictMap();
 
     // I don't understand why, but it is not necessary to emit a new signal.
     //    qDebug() << "emit";

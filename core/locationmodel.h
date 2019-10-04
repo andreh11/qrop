@@ -43,7 +43,9 @@ public:
         TaskList,
         History,
         RotationConflictList,
-        SpaceConflictList
+        HasRotationConflict,
+        SpaceConflictList,
+        HasSpaceConflict
     };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
     QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
@@ -117,6 +119,7 @@ private:
     bool buildNonOverlapTaskMap();
     bool buildHistoryDescriptionMap();
     bool buildRotationConflictMap();
+    bool buildSpaceConflictMap();
 
     bool m_showOnlyEmptyLocations { false };
     bool m_showOnlyGreenhouseLocations { false };
@@ -129,6 +132,7 @@ private:
     QMap<int, QList<QVariant>> m_nonOverlapTaskMap;
     QMap<int, QString> m_historyDescriptionMap;
     QMap<int, QVariantList> m_rotationConflictMap;
+    QMap<int, QVariantMap> m_spaceConflictMap;
 
 private slots:
     void rebuildAndRefresh();
