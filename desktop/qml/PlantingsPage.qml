@@ -724,33 +724,16 @@ Page {
                 width: parent.width
             }
 
-            Column {
+            BlankLabel {
                 id: blankStateColumn
                 z: 1
                 spacing: Units.smallSpacing
                 visible: !page.rowCount
                 anchors.centerIn: parent
+                primaryText: qsTr('No plantings for this season')
+                primaryButtonText: qsTr("Add")
 
-                Label {
-                    id: emptyStateLabel
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr('No plantings for this season')
-                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-                    color: Qt.rgba(0, 0, 0, 0.8)
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Button {
-                    text: qsTr("Add")
-                    flat: true
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.background: Material.accent
-                    Material.foreground: "white"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: plantingDialog.createPlanting()
-                }
+                onPrimaryButtonClicked: plantingDialog.createPlanting()
             }
 
             PlantingsView {

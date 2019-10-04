@@ -45,7 +45,6 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
 
 QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
 {
-    Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
     switch (role) {
     case NonOverlappingPlantingList:
         return nonOverlappingPlantingList(proxyIndex);
@@ -89,6 +88,10 @@ void LocationModel::refreshIndex(const QModelIndex &index)
 /** Emit dataChanged signal for all indexes of the subtree whose root is \a root. */
 void LocationModel::refreshTree(const QModelIndex &root)
 {
+    // Check for empty tree
+    if (!root.isValid() && rowCount() == 0)
+        return;
+
     QModelIndexList treeList;
     treeList.push_back(root);
 
@@ -119,7 +122,8 @@ int LocationModel::locationId(const QModelIndex &idx) const
 /** Return the bed length of \a index. */
 qreal LocationModel::length(const QModelIndex &index) const
 {
-    return m_location->length(locationId(index));
+    Q_ASSERT(checkIndex(index, CheckIndexOption::IndexIsValid));
+    return rowValue(index, "length").toDouble();
 }
 
 /** Return the value of \a field for the source index of \a row, \a parent. */
@@ -431,7 +435,6 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
 
     QString name;
     for (const auto &parent : parentList) {
-        Q_ASSERT(checkIndex(parent, CheckIndexOption::IndexIsValid));
         parentId = data(index(parent.row(), 0, parent.parent()), 0).toInt();
         parentIdString = parentId > 0 ? QString::number(parentId) : QString();
         for (int i = 0; i < quantity; i++) {

@@ -463,36 +463,17 @@ Page {
             Material.elevation: 2
             Material.background: "white"
 
-            Column {
+            BlankLabel {
                 id: emptyStateColumn
-                z: 1
-                spacing: Units.smallSpacing
+                z: 3
                 visible: !page.rowCount
-                anchors. centerIn: parent
+                anchors.centerIn: parent
+                primaryText: greenhouseButton.checked ? qsTr("No greenhouse locations yet") : qsTr('No locations yet')
+                primaryButtonText: qsTr("Add")
 
-                Label {
-                    id: emptyStateLabel
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr('No locations yet')
-                    font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-                    color: Qt.rgba(0, 0, 0, 0.8)
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Button {
-                    id: emptyStateButton
-                    text: qsTr("Add")
-                    flat: true
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                    Material.background: Material.accent
-                    Material.foreground: "white"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onClicked: {
-                        editCropMapButton.checked = true;
-                        addDialog.open();
-                    }
+                onPrimaryButtonClicked: {
+                    editCropMapButton.checked = true;
+                    addDialog.open();
                 }
             }
 
@@ -566,65 +547,26 @@ Page {
                     anchors.fill: parent
                 }
 
-                Column {
+                BlankLabel {
                     id: emptyPlantingStateColumn
                     visible: !plantingsView.rowCount && showPlantingsPane
                     z:2
                     anchors.centerIn: parent
                     spacing: Units.smallSpacing
-
-                    Label {
-                        id: emptyPlantingStateLabel
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: filterField.text
-                              ? qsTr('No more "%1" plantings to assign for this season.').arg(filterField.text)
-                              : qsTr('No more plantings to assign for this season.')
-                        font { family: "Roboto Regular"; pixelSize: Units.fontSizeTitle }
-                        color: Qt.rgba(0, 0, 0, 0.8)
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                    primaryText: {
+                        if (filterField.text && greenhouseButton.checked)
+                            qsTr('No more greenhouse plantings of “%1” to assign for this season.').arg(filterField.text)
+                        else if (filterField.text)
+                            qsTr('No more plantings of “%1” to assign for this season.').arg(filterField.text)
+                        else if (greenhouseButton.checked)
+                            qsTr('No more greenhouse plantings to assign for this season.')
+                        else
+                            qsTr('No more plantings to assign for this season.')
                     }
-
-                    Row {
-                        spacing: Units.smallSpacing
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        Button {
-                            id: emptyPreviousButton
-                            text: qsTr("Previous")
-                            flat: true
-                            Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                            Material.background: Material.accent
-                            Material.foreground: "white"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            onClicked: page.previousSeason();
-                        }
-
-                        Button {
-                            id: emptyNextButton
-                            text: qsTr("Next")
-                            flat: true
-                            Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                            Material.background: Material.accent
-                            Material.foreground: "white"
-                            font.pixelSize: Units.fontSizeBodyAndButton
-                            onClicked: page.nextSeason();
-                        }
-                    }
-
-                    Button {
-                        visible: filterField.text
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        id: clearSearchFieldButton
-                        text: qsTr("Clear search Field")
-                        flat: true
-                        Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
-                        Material.foreground: Material.accent
-                        font.pixelSize: Units.fontSizeBodyAndButton
-                        onClicked: filterField.text = ""
-                    }
-
+                    primaryButtonText: filterField.text ? qsTr("Clear search Field") : ""
+                    highlightPrimaryButton: false
+                    onPrimaryButtonClicked: filterField.text = ""
                 }
-
 
                 DropArea {
                     id: plantingsDropArea
@@ -666,5 +608,4 @@ Page {
             }
         }
     }
-
 }

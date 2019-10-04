@@ -18,8 +18,13 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 
 Column {
+    id: column
     property alias primaryText: primaryLabel.text
     property alias secondaryText: secondaryLabel.text
+    property alias primaryButtonText: primaryButton.text
+    property alias highlightPrimaryButton: primaryButton.highlighted
+
+    signal primaryButtonClicked()
 
     Label {
         id: primaryLabel
@@ -39,5 +44,14 @@ Column {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    FlatButton {
+        id: primaryButton
+        visible: text
+        highlighted: true
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.pixelSize: Units.fontSizeBodyAndButton
+        onClicked: column.primaryButtonClicked()
     }
 }
