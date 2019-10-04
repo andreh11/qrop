@@ -139,18 +139,16 @@ Item {
         modelAdaptor.expandRow(row);
     }
 
-    function acceptPlanting(row, plantingId) {
-        return locationModel.acceptPlanting(mapRowToModelIndex(row),
-                                            editedPlantingPlantingDate,
-                                            editedPlantingEndHarvestDate);
+    function acceptDraggedPlanting(row) {
+        return locationModel.acceptPlanting(mapRowToModelIndex(row), plantingDate, endHarvestDate);
     }
 
     function acceptPlantingDate(row, plantingDate, endHarvestDate) {
         return locationModel.acceptPlanting(mapRowToModelIndex(row), plantingDate, endHarvestDate);
     }
 
-    function addPlanting(row, plantingId, length) {
-        locationModel.addPlanting(mapRowToModelIndex(row), plantingId, length);
+    function addPlanting(row, plantingId, length, addToSiblings) {
+        locationModel.addPlanting(mapRowToModelIndex(row), plantingId, length, addToSiblings);
     }
 
     function isSelected(row) {
@@ -432,10 +430,11 @@ Item {
                         drag.accepted = (model.depth >= locationModel.depth - 1);
                     } else if (currentLocationId !== sourceLocationId) {
                         drag.accepted = locationSettings.allowPlantingsConflict
-                                || root.acceptPlanting(currentRow, plantingId);
+                                || root.acceptDraggedPlanting(currentRow);
                     } else {
                         drag.accepted = false;
                     }
+
                 }
 
                 onExited: {
@@ -446,7 +445,7 @@ Item {
                 onDropped: {
                     root.draggedPlantingId = -1
 
-                    if (drop.hasText && drop.proposedAction == Qt.MoveAction) {
+                    if (drop.hasText && (drop.proposedAction == Qt.MoveAction || drop.proposedAction == Qt.CopyAction)) {
                         const locationId = model.location_id;
                         const list = drop.text.split(";");
                         const plantingId = Number(list[0]);
@@ -460,7 +459,7 @@ Item {
                         else // drag comes from planting view
                             length = Planting.lengthToAssign(plantingId);
 
-                        root.addPlanting(currentRow, plantingId, length);
+                        root.addPlanting(currentRow, plantingId, length, drop.proposedAction === Qt.CopyAction)
 
                         root.draggedOnIndex = null;
                         root.expandIndex = null;
@@ -480,7 +479,7 @@ Item {
                     var plantings = root.plantings(currentRow);
                     if (!locationSettings.allowPlantingsConflict
                             && !isSelected
-                            && !root.acceptPlanting(currentRow,
+                            && !root.acceptPlantingDate(currentRow,
                                                     editedPlantingPlantingDate,
                                                     editedPlantingEndHarvestDate)
                             && !plantings.includes(editedPlantingId)) {

@@ -10,13 +10,17 @@ All notable changes to this project will be documented in this file.
   - *Planting form* − Add density (m²) field (#126).
 
 ### Changed
+  - *Field map* - Dropping a planting on location while pressing Ctrl will assign
+    the planting to its subsequent siblings if needed.
+  - *Field map* − Improve PDF output : multiline view, better tasks and planting
+    drawings.
   - *Field map* − Multi-line view (#76).
   - *Field map* − When editing the field map, Crl+Left click now selects all
     children of a location (#113).
   - *Seeds and transplants lists* − Add quarter and month PDF outputs (#131).
   - *Seeds and transplants lists* − Add quarter and month views (#131).
   - *Planting map* − Minor improvement of the chart pane.
-  - *PDF* − Minor improvements of PDF output for calendar and field map.
+  - *PDF* − Minor improvements of PDF output for calendar.
   - *Planting map* − Improve side sheets look.
   - Improve planting and task views performance.
 

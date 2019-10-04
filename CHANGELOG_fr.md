@@ -10,6 +10,10 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
 
 ### Changements
+  - *Parcellaire* − En glissant/déposant une série tout en maintenant la touche
+    Ctrl, la série est affectée aux emplacements suivants si nécessaire.
+  - *Parcellaire* − Amélioration de la sortie PDF : muliligne, meilleur
+    affichage des tâches et séries.
   - *Parcellaire* − Vue sur plusieurs lignes (#76).
   - *Parcellaire* − Lors de l'édition du parcellaire, Ctrl+Clic gauche
     sélectionne l'ensemble des fils d'un emplacement (#113).
@@ -17,8 +21,7 @@ Tous les changements importants seront documentés dans ce fichier.
     trimestrielle (#131).
   - *Semences et plants* − Ajout d'une vue mensuelle et d'une trimestrielle (#131).
   - *Plan de culture* − Amélioration mineure du graphique.
-  - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches
-    et de l'assolement.
+  - *PDF* − Améliorations mineures des sorties PDF du calendrier des tâches.
   - *Plan de culture* − Amélioration de l'apparence des panneaux latéraux.
   - Amélioration de la performance des vues séries et tâches.
 

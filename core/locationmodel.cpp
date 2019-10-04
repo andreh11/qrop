@@ -200,7 +200,7 @@ qreal LocationModel::plantingLength(int plantingId, const QModelIndex &index) co
     return m_location->plantingLength(plantingId, locationId(index));
 }
 
-void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal length)
+void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal length, bool addToSiblings)
 {
     Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
     Q_ASSERT(length > 0);
@@ -210,12 +210,27 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
         int row = 0;
         for (; row < rowCount(idx) && l > 0; row++) {
             const auto child = index(row, 0, idx);
+            Q_ASSERT(checkIndex(child, CheckIndexOption::IndexIsValid));
             if (!hasChildren(child)) {
                 int lid = locationId(child);
                 l -= m_location->addPlanting(plantingId, lid, l, dates.first, dates.second);
             }
         }
         dataChanged(index(0, 0, idx), index(row - 1, 0, idx));
+    } else if (addToSiblings) {
+        qreal l = length;
+        int startRow = idx.row();
+        const auto parent = idx.parent();
+
+        int row = startRow;
+        for (; row < rowCount(parent) && l > 0; row++) {
+            const auto child = index(row, 0, parent);
+            if (!hasChildren(child)) {
+                int lid = locationId(child);
+                l -= m_location->addPlanting(plantingId, lid, l, dates.first, dates.second);
+            }
+        }
+        dataChanged(index(startRow, 0, parent), index(row - 1, 0, parent));
     } else {
         int lid = locationId(idx);
         m_location->addPlanting(plantingId, lid, length, dates.first, dates.second);

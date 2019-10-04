@@ -70,7 +70,7 @@ Item {
         Drag.dragType: Drag.Automatic
         Drag.onDragFinished: {
             control.dragFinished();
-            if (dropAction === Qt.MoveAction) {
+            if (dropAction === Qt.MoveAction || dropAction == Qt.CopyAction) {
                 plantingIdChanged();
                 if (locationId > 0) {
                     Location.removePlanting(plantingId, locationId)

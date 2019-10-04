@@ -81,7 +81,8 @@ public:
     Q_INVOKABLE bool hasSpaceConflict(const QModelIndex &index) const;
 
     Q_INVOKABLE qreal plantingLength(int plantingId, const QModelIndex &index) const;
-    Q_INVOKABLE void addPlanting(const QModelIndex &idx, int plantingId, qreal length);
+    Q_INVOKABLE void addPlanting(const QModelIndex &idx, int plantingId, qreal length,
+                                 bool addToSiblings = false);
     Q_INVOKABLE bool addLocations(const QString &baseName, int length, double width, int quantity,
                                   bool greenhouse,
                                   const QModelIndexList &parentList = { QModelIndex() });
