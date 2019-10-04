@@ -392,7 +392,7 @@ Item {
             property var plantingRowList: model.nonOverlappingPlantingList
             property var taskRowList: model.taskList
             property int rows: plantingRowList.length
-            //property bool showLocationTaskRow: taskRowList.length > plantingRowList.length
+            property bool hasLocationTasks: taskRowList.length > plantingRowList.length
             property bool isSelected: root.isSelected(currentRow)
 
 
@@ -615,7 +615,7 @@ Item {
                     }
                 }
 
-                Column {
+                Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
 
@@ -625,52 +625,49 @@ Item {
                         width: parent.width
                     }
 
-                    Repeater {
-                        model: locationDelegate.plantingRowList
+                    TaskTimeline {
+                        id: locationTaskTimeline
+                        visible: locationDelegate.hasLocationTasks
+                        model: visible ? locationDelegate.taskRowList[taskRowList.length - 1] : []
+                        seasonBegin: root.seasonBegin
+                        season: root.season
+                        year: root.year
+                        height: locationDelegate.height
+                        width: parent.width
+                    }
 
-                        Timeline {
-                            id: timeline
-                            height: Units.rowHeight
-                            visible: root.showTimeline
-                            year: root.year
-                            season: root.season
-                            showGreenhouseSow: false
-                            showNames: true
-                            showTasks: locationSettings.showTasks
-                            showOnlyActiveColor: true
-                            showFamilyColor: root.showFamilyColor
-                            dragActive: true
-                            plantingIdList: modelData
-                            taskIdList: locationDelegate.taskRowList[index]
-                            locationId: currentLocationId
-                            onDragFinished: root.draggedPlantingId = -1
-                            onPlantingMoved: refreshRow(currentRow)
-                            onPlantingRemoved: refreshRow(currentRow)
-                            Component.onCompleted: {
-                                plantingMoved.connect(root.plantingMoved)
-                                plantingRemoved.connect(root.plantingRemoved)
+                    Column {
+                        id: timelineColumn
+                        Repeater {
+                            model: locationDelegate.plantingRowList
+
+                            Timeline {
+                                id: timeline
+                                height: Units.rowHeight
+                                visible: root.showTimeline
+                                year: root.year
+                                season: root.season
+                                showGreenhouseSow: false
+                                showNames: true
+                                showTasks: locationSettings.showTasks
+                                showOnlyActiveColor: true
+                                showFamilyColor: root.showFamilyColor
+                                dragActive: true
+                                plantingIdList: modelData
+                                taskIdList: locationDelegate.taskRowList[index]
+                                locationId: currentLocationId
+                                onDragFinished: root.draggedPlantingId = -1
+                                onPlantingMoved: refreshRow(currentRow)
+                                onPlantingRemoved: refreshRow(currentRow)
+                                Component.onCompleted: {
+                                    plantingMoved.connect(root.plantingMoved)
+                                    plantingRemoved.connect(root.plantingRemoved)
+                                }
                             }
                         }
                     }
-
-//                    Repeater {
-//                        model: locationDelegate.taskRowList
-
-////                        MonthGrid {
-////                            visible: showLocationTaskRow
-////                            height: parent.height
-////                            width: parent.width
-////                        }
-
-//                        TaskTimeline {
-//                            height: Units.rowHeight
-//                            width: parent.width
-//                            model: modelData
-//                            onModelChanged: console.log(model)
-//                            seasonBegin: root.seasonBegin
-//                        }
-//                    }
                 }
+
             }
 
             ThinDivider {
@@ -682,7 +679,7 @@ Item {
             id: plantingBeginningLine
             x: firstColumnWidth
                + Units.position(root.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
-                                                                           : root.plantingDate)
+                                                                   : root.plantingDate)
             visible: plantingEditMode || root.draggedPlantingId > 0
             anchors.top: parent.top
             anchors.bottom: parent.bottom

@@ -128,7 +128,7 @@ QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName
     QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
     QString ids = "";
     int i;
-    for (i = 0; i < idList.length() - 1; i++)
+    for (i = 0; i < idList.length() - 1; ++i)
         ids.append(QString::number(idList[i]) + ", ");
     ids.append(QString::number(idList[i]));
 
@@ -146,7 +146,7 @@ QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName
 QVariantMap DatabaseUtility::mapFromRecord(const QSqlRecord &record) const
 {
     QVariantMap map;
-    for (int i = 0; i < record.count(); i++)
+    for (int i = 0; i < record.count(); ++i)
         map[record.field(i).name()] = record.field(i).value();
     return map;
 }
@@ -204,8 +204,8 @@ int DatabaseUtility::add(const QVariantMap &map) const
     QSqlQuery query;
     query.prepare(queryString);
 
-    const auto end = map.end();
-    for (auto it = map.cbegin(); it != end; it++)
+    const auto end = map.cend();
+    for (auto it = map.cbegin(); it != end; ++it)
         query.bindValue(QString(":%1").arg(it.key()), it.value());
 
     query.exec();
@@ -321,7 +321,7 @@ QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
 
     for (const auto &key : common.keys()) {
         int i = 1;
-        for (; i < list.length(); i++)
+        for (; i < list.length(); ++i)
             if (list[i].value(key) != common.value(key))
                 break;
         if (i != list.length())

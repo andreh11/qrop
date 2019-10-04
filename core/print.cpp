@@ -923,7 +923,7 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
     painter.restore();
 }
 
-void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
+void Print::paintTaskTimeGraph(QPainter &painter, int taskId, int rows)
 {
     const auto record = m_task->recordFromId("task_view", taskId);
 
@@ -936,14 +936,13 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
     const QString type = record.value("type").toString();
     const QString color = record.value("color").toString();
 
-    const int y = 0;
     const int t = static_cast<int>(m_rowHeight * 0.1);
     const int b = t;
 
     const int pos1 = datePosition(assignedDate);
     const int pos2 = datePosition(taskEndDate);
-    const QPoint point1(pos1, y + t);
-    const QPoint point2(pos2, y + m_rowHeight - b);
+    const QPoint point1(pos1, t);
+    const QPoint point2(pos2, (rows * m_rowHeight) - b);
     const QRectF rect(point1, point2);
 
     if (rect.width() == 0.0)
@@ -998,10 +997,23 @@ void Print::paintTimeline(QPainter &painter, const QModelIndex &parent, int year
     if (m_settings->value("LocationView/showTasks", false).toBool()) {
         const auto taskList = m_locationModel->nonOverlappingTaskList(parent);
         taskLength = taskList.length();
-        for (const auto &list : taskList) {
+
+        int i = 0;
+        for (; i < plantingLength; ++i) {
+            const auto &list = taskList[i];
             for (int taskId : Helpers::variantToIntList(list.toList()))
                 paintTaskTimeGraph(painter, taskId);
             painter.translate(0, m_rowHeight);
+        }
+
+        // draw location tasks
+        if (taskLength > plantingLength) {
+            int rows = std::max(1, plantingLength);
+            painter.translate(0, -plantingLength * m_rowHeight);
+            const auto &list = taskList[i];
+            for (int taskId : Helpers::variantToIntList(list.toList()))
+                paintTaskTimeGraph(painter, taskId, rows);
+            painter.translate(0, rows * m_rowHeight);
         }
     }
 
@@ -1019,8 +1031,7 @@ void Print::breakPage(QPagedPaintDevice &printer, QPainter &painter)
 
 int Print::locationRows(const QModelIndex &index) const
 {
-    return std::max({ 1, m_locationModel->nonOverlappingPlantingList(index).count(),
-                      m_locationModel->nonOverlappingTaskList(index).count() });
+    return std::max(1, m_locationModel->nonOverlappingPlantingList(index).count());
 }
 
 void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,

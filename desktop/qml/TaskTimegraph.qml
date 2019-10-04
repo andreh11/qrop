@@ -38,7 +38,7 @@ Item {
         width: taskMap["width"]
         radius: 3
         visible: duration > 0 && width > 0
-        height: parent.height * 0.7
+        height: parent.height - Units.rowHeight * 0.3
         anchors.verticalCenter: parent.verticalCenter
         color: taskColor
         opacity: 0.8

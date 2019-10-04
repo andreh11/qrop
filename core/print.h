@@ -79,7 +79,7 @@ private:
     void paintRowGrid(QPainter &painter, int rows);
     int datePosition(const QDate &date);
     void paintPlantingTimegraph(QPainter &painter, int plantingId, int year);
-    void paintTaskTimeGraph(QPainter &painter, int taskId);
+    void paintTaskTimeGraph(QPainter &painter, int taskId, int rows = 1);
     void paintTimeline(QPainter &painter, const QModelIndex &parent, int year);
     void paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
                    int season, int year);

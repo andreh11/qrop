@@ -43,7 +43,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &table
 QList<int> SortFilterProxyModel::idList() const
 {
     QList<int> list;
-    for (int row = 0; row < rowCount(); row++) {
+    for (int row = 0; row < rowCount(); ++row) {
         QModelIndex idx = index(row, 0);
         QModelIndex sourceIndex = mapToSource(idx);
         int id = m_model->data(sourceIndex, Qt::UserRole).toInt();

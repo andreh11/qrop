@@ -47,7 +47,7 @@ QList<int> Location::childrenTree(int locationId) const
     int childId = -1;
     int size = list.count();
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; ++i) {
         childId = list[i];
         clist = children(childId);
         list.append(clist);
@@ -404,7 +404,7 @@ QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &s
         auto endHarvestDate = MDate::dateFromIsoString(query->value("end_harvest_date").toString());
 
         int i = 0;
-        for (; i < rowDate.count(); i++) {
+        for (; i < rowDate.count(); ++i) {
             if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
                 rows[i].push_back(plantingId);
                 rowDate[i] = { plantingDate, endHarvestDate };
@@ -574,28 +574,13 @@ QMap<int, QVariantList> Location::allNonOverlappingTaskList(const QMap<int, QVar
                 rowList.append(plantingTaskMap[plantingId.toInt()]);
             taskList.push_back(rowList);
         }
-
-        //        auto it = locationTaskMap.constFind(location.key());
-        //        if (it != locationTaskMap.cend()) {
-        //            if (taskList.isEmpty()) {
-        //                taskList.push_back(it.value());
-        //            } else {
-        //                taskList[0] = taskList.first().toList() + it.value();
-        //            }
-        //        }
-
         map[location.key()] = taskList;
     }
 
     // add location tasks
-    auto lend = locationTaskMap.cend();
-    for (auto location = locationTaskMap.cbegin(); location != lend; ++location) {
-        auto it = locationTaskMap.constFind(location.key());
-        if (it != locationTaskMap.cend()) {
-            map[location.key()].push_back(it.value());
-        }
-    }
-
+    const auto lend = locationTaskMap.cend();
+    for (auto location = locationTaskMap.cbegin(); location != lend; ++location)
+        map[location.key()].push_back(location.value());
     return map;
 }
 
@@ -610,11 +595,11 @@ QVariantMap Location::spaceConflictingPlantings(int locationId, const QDate &sea
     QVariantMap conflictMap;
     int bedLength = recordFromId("location", locationId).value("bed_length").toInt();
 
-    for (int i = 0; i < plantingList.count(); i++) {
+    for (int i = 0; i < plantingList.count(); ++i) {
         int plantingId = plantingList.value(i);
         qreal length = plantingLength(plantingId, locationId);
 
-        for (int j = i + 1; j < plantingList.count(); j++) {
+        for (int j = i + 1; j < plantingList.count(); ++j) {
             int pid = plantingList.value(j);
             qreal l = plantingLength(pid, locationId);
             if (overlap(plantingId, pid) && length + l > bedLength)
