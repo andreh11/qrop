@@ -775,6 +775,9 @@ void Print::printCropMap(int year, int season, const QUrl &path, bool showFamily
     QPainter painter;
     painter.begin(&writer);
 
+    QFont font("Roboto Condensed", 11);
+    painter.setFont(font);
+
     QPen pen;
     pen.setWidth(10);
     pen.setStyle(Qt::SolidLine);
@@ -803,8 +806,6 @@ void Print::paintHeader(QPainter &painter, int season, int year)
     QRectF headerRect(0, 0, m_firstColumnWidth + 12 * m_monthWidth, m_rowHeight);
 
     painter.save();
-    QFont font("Roboto Regular", 14, 10);
-    painter.setFont(font);
     painter.drawText(headerRect, Qt::AlignLeft,
                      QString("%1 %2").arg(MDate::seasonName(season)).arg(year));
     painter.drawText(headerRect, Qt::AlignRight, QString::number(m_pageNumber));
@@ -854,10 +855,7 @@ int Print::datePosition(const QDate &date)
 
 void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 {
-    QElapsedTimer timer;
-    timer.start();
     const auto record = m_planting->recordFromId("planting_view", plantingId);
-    qDebug() << "[planting timegraph]" << timer.elapsed() << "ms";
     const auto plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
     QDate begHarvestDate = MDate::dateFromIsoString(record.value("beg_harvest_date").toString());
     QDate endHarvestDate = MDate::dateFromIsoString(record.value("end_harvest_date").toString());
@@ -871,7 +869,7 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
         colorString = record.value("crop_color").toString();
 
     const QColor cropColor(colorString);
-    const auto cropName = record.value("crop").toString().left(4);
+    const auto cropName = record.value("crop").toString().left(2);
     const auto varietyName = record.value("variety").toString();
     const int successionNumber = record.value("planting_rank").toInt();
 
@@ -884,27 +882,42 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
     const QPoint point3(datePosition(begHarvestDate), y + p);
     const QPoint point4(datePosition(endHarvestDate), y + m_rowHeight - p);
 
-    painter.fillRect(QRectF(point1, point2), cropColor);
-    painter.fillRect(QRectF(point3, point4), cropColor.darker(120));
+    const auto growRect(QRectF(point1, point2));
+    const auto harvestRect(QRectF(point3, point4));
+
+    painter.fillRect(growRect, cropColor);
+    painter.fillRect(harvestRect, cropColor.darker(120));
 
     painter.save();
+
     QPen pen(QColor("white"));
     painter.setPen(pen);
-    painter.drawText(QRectF(point1, point2).adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
-                     QString("%1 %2%3, %4")
-                             .arg(MDate::formatDate(plantingDate, year, "", false))
-                             .arg(cropName)
-                             .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
-                             .arg(varietyName));
-    painter.drawText(QRectF(point3, point4).adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
-                     MDate::formatDate(begHarvestDate, year, "", false));
 
-    // Print end harvest date if there is enough space and the date is in the current season.
-    if ((begHarvestDate.daysTo(endHarvestDate) >= 21)
-        && (endHarvestDate <= m_locationModel->seasonDates().second)) {
-        painter.drawText(QRectF(point3, point4).adjusted(0, 0, -m_textPadding, 0),
-                         Qt::AlignVCenter | Qt::AlignRight,
-                         MDate::formatDate(endHarvestDate, year, "", false));
+    if (growRect.width() > m_monthWidth * 0.3) {
+        QFontMetrics fm(painter.font());
+        auto description =
+                QString("%1 %2%3, %4")
+                        .arg(MDate::formatDate(plantingDate, year, "", false))
+                        .arg(cropName)
+                        .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
+                        .arg(varietyName);
+        auto descriptionRect = growRect.adjusted(m_textPadding, 0, -m_textPadding, 0);
+
+        painter.drawText(descriptionRect, Qt::AlignVCenter,
+                         fm.elidedText(description, Qt::ElideRight,
+                                       static_cast<int>(descriptionRect.width())));
+    }
+
+    if (harvestRect.width() > m_monthWidth * 0.2) {
+        painter.drawText(harvestRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
+                         MDate::formatDate(begHarvestDate, year, "", false));
+        // Print end harvest date if there is enough space and the date is in the current season.
+        if ((harvestRect.width() > m_monthWidth * 0.5)
+            && (endHarvestDate <= m_locationModel->seasonDates().second)) {
+            painter.drawText(QRectF(point3, point4).adjusted(0, 0, -m_textPadding, 0),
+                             Qt::AlignVCenter | Qt::AlignRight,
+                             MDate::formatDate(endHarvestDate, year, "", false));
+        }
     }
 
     painter.restore();
@@ -912,8 +925,6 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 
 void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
 {
-    QElapsedTimer timer;
-    timer.start();
     const auto record = m_task->recordFromId("task_view", taskId);
 
     const int duration = record.value("duration").toInt();
@@ -935,9 +946,12 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
     const QPoint point2(pos2, y + m_rowHeight - b);
     const QRectF rect(point1, point2);
 
-    //    QFontMetrics fm(painter.font());
-    bool wideEnough = rect.width() > (0.5 * m_monthWidth);
-    bool simpleLine = rect.width() < (0.2 * m_monthWidth);
+    if (rect.width() == 0.0)
+        return;
+
+    QFontMetrics fm(painter.font());
+    bool wideEnough = rect.width() > (0.3 * m_monthWidth);
+    bool simpleLine = rect.width() < (0.1 * m_monthWidth);
 
     QPainterPath path;
     path.addRoundRect(rect, 10.0, 0.0);
@@ -950,8 +964,11 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
 
     painter.setPen(pen);
     if (simpleLine) {
-        auto center = rect.center();
-        painter.drawText(QPointF(center.x() + rect.width(), center.y()), Helpers::acronymize(type));
+        auto center = rect.translated(0.1 * m_monthWidth, 0).center();
+        painter.translate(center);
+        painter.rotate(-90);
+        painter.drawText(QRect(-1000, -1000, 2000, 2000), Qt::AlignCenter, Helpers::acronymize(type));
+        painter.rotate(90);
     } else if (wideEnough) {
         painter.drawText(rect.adjusted(m_textPadding, 0, -m_textPadding, 0), Qt::AlignVCenter,
                          Helpers::acronymize(type));
@@ -963,7 +980,6 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId)
     }
 
     painter.restore();
-    qDebug() << "[task]" << timer.elapsed() << "ms";
 }
 
 /** @return the number of rows painted */

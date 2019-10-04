@@ -606,14 +606,6 @@ bool Planting::isActive(int plantingId) const
     return task->isComplete(sowingTaskId) || task->isComplete(plantingTaskId);
 }
 
-/** Convert length to bed numbers if needed. */
-qreal Planting::convertedLength(qreal length) const
-{
-    if (m_settings->value("useStandardBedLength").toBool())
-        return length / m_settings->value("standardBedLength", 1).toDouble();
-    return length;
-}
-
 qreal Planting::totalLength(int plantingId) const
 {
     return value(plantingId, "length").toDouble();
@@ -1088,15 +1080,15 @@ QString Planting::toolTip(int plantingId, int locationId) const
         return tr("%1, %2 (%L3/%L4 %5 assigned)")
                 .arg(crop)
                 .arg(variety)
-                .arg(convertedLength(assignedLength(plantingId)))
-                .arg(convertedLength(totalLength(plantingId)))
+                .arg(Helpers::bedLength(assignedLength(plantingId)))
+                .arg(Helpers::bedLength(totalLength(plantingId)))
                 .arg(bedUnit);
     }
     return tr("%1, %2 (%L3/%L4 %5 to assign)")
             .arg(crop)
             .arg(variety)
-            .arg(convertedLength(lengthToAssign(plantingId)))
-            .arg(convertedLength(totalLength(plantingId)))
+            .arg(Helpers::bedLength(lengthToAssign(plantingId)))
+            .arg(Helpers::bedLength(totalLength(plantingId)))
             .arg(bedUnit);
 }
 

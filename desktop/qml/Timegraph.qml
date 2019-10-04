@@ -169,6 +169,7 @@ Item {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 4
+            elide: Text.ElideRight
         }
     }
 

@@ -50,7 +50,7 @@ Item {
         anchors {
             left: taskBar.left
             verticalCenter: parent.verticalCenter
-            leftMargin: wideEnough ? 4 : 0
+            leftMargin: wideEnough ? 4 : -2
         }
         text: description
         visible: taskBar.width

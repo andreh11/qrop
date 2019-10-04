@@ -86,9 +86,9 @@ private:
     int locationRows(const QModelIndex &index) const;
 
     int m_firstColumnWidth { 2000 };
-    int m_rowHeight { 500 };
+    int m_rowHeight { 400 };
     int m_monthWidth { 925 };
-    int m_textPadding { 80 };
+    int m_textPadding { 60 };
     int m_pageNumber { 0 };
     bool m_showFamilyColor { false };
     Location *m_location;

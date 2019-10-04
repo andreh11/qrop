@@ -110,7 +110,6 @@ private:
     void updateTaskType(int plantingId, PlantingType oldType, PlantingType newType) const;
     int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
     void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
-    qreal convertedLength(qreal length) const;
 
     DatabaseUtility *crop;
     Family *family;
