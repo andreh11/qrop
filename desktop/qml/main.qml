@@ -160,8 +160,9 @@ ApplicationWindow {
     }
 
 
-    PlantingsPage {
+    Loader {
         id: plantingsPage
+        source: "PlantingsPage.qml"
     }
 
     Loader {
@@ -503,9 +504,13 @@ ApplicationWindow {
                     databaseMenu.open();
                 }
 
-                ToolTip.text: secondDatabaseFile == "" ? qsTr("No other database opened")
-                                                       : secondDatabaseFile
-                ToolTip.visible: hovered
+                ToolTip {
+                    text: secondDatabaseFile == "" ? qsTr("No other database opened")
+                                                   : secondDatabaseFile
+                    visible: parent.hovered
+                    x: parent.width + Units.smallSpacing
+                    y: height/4
+                }
 
                 Menu {
                     id: databaseMenu
@@ -611,8 +616,10 @@ ApplicationWindow {
         function activatePage(index) {
             switch (index) {
             case 0:
+                if (plantingsPage.status === Loader.Null)
+                    plantingsPage.source = "PlantingsPage.qml";
                 stackView.replace(plantingsPage)
-                plantingsPage.refresh();
+                plantingsPage.item.refresh();
                 break;
             case 1:
                 if (calendarPage.status === Loader.Null)
