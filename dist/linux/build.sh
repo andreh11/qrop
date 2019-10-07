@@ -9,7 +9,7 @@ find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" 
 cp -R core/* qrop deploy/usr/bin
 cp logo.png deploy/qrop.png
 cp dist/Qrop.desktop deploy/usr/share/applications
-curl -OL "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
+curl -OL "https://github.com/probonopd/linuxdeployqt/releases/download/6/linuxdeployqt-6-x86_64.AppImage"
 chmod a+x linuxdeployqt*.AppImage;
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
 ./linuxdeployqt*.AppImage --appimage-extract 

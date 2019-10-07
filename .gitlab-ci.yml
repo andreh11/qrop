@@ -1,13 +1,10 @@
 image: andreh11/qt:5.12.5-trusty
 
-#before_script:
-#  - bash dist/linux/before_install.sh
-
-# normal-build:
-#   script:
-#     - bash dist/linux/build.sh
-#   except:
-#     - tags
+normal-build:
+  script:
+    - bash dist/linux/build.sh
+  except:
+    - tags
 
 release-build:
   script:
@@ -17,5 +14,5 @@ release-build:
     paths:
       - Qrop*.AppImage
     expire_in: 1 weeks
-#  only:
-#    - tags
+  only:
+   - tags

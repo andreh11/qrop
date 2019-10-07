@@ -98,6 +98,7 @@ public:
     Q_INVOKABLE QString toolTip(int plantingId, int locationId) const;
     QString growBarDescription(const QSqlRecord &record, int year, bool showNames) const;
     QString growBarDescription(int plantingId, int year, bool showNames) const;
+
     Q_INVOKABLE QVariantMap drawInfoMap(int plantingId, int season, int year,
                                         bool showGreenhouseSow = true, bool showFamilyColor = false,
                                         bool showNames = false) const;
@@ -111,13 +112,13 @@ private:
     int plantsNeeded(const QVariantMap &map, const QSqlRecord &record) const;
     void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
 
-    DatabaseUtility *crop;
-    Family *family;
-    DatabaseUtility *seedCompany;
-    Keyword *keyword;
-    Task *task;
-    DatabaseUtility *mUnit;
-    Variety *variety;
+    DatabaseUtility *m_crop;
+    Family *m_family;
+    DatabaseUtility *m_seedCompany;
+    Keyword *m_keyword;
+    Task *m_task;
+    DatabaseUtility *m_unit;
+    Variety *m_variety;
     QSettings *m_settings;
 };
 

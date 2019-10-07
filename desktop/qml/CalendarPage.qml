@@ -115,16 +115,16 @@ Page {
         onActivated: showOverdueCheckBox.toggle();
     }
 
-    TaskDialog {
-        id: taskDialog
-        width: parent.width / 2
-//        height: parent.height - 2 * Units.mediumSpacing
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        onAccepted: page.refresh()
-        week: page.week
-        year: page.year
-    }
+//    TaskDialog {
+//        id: taskDialog
+//        width: parent.width / 2
+////        height: parent.height - 2 * Units.mediumSpacing
+//        x: (parent.width - width) / 2
+//        y: (parent.height - height) / 2
+//        onAccepted: page.refresh()
+//        week: page.week
+//        year: page.year
+//    }
 
     Platform.FileDialog {
         id: saveCalendarDialog
@@ -191,7 +191,7 @@ Page {
                     Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                     visible: checks === 0
                     highlighted: true
-                    onClicked: taskDialog.addTask()
+//                    onClicked: taskDialog.addTask()
                 }
 
                 FlatButton {

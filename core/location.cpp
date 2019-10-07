@@ -756,7 +756,7 @@ QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, in
     int locationId = query->value("location_id").toInt();
     CropRotationInfoList infoList;
 
-    auto push = [&infoList, &query]() {
+    const auto push = [&infoList, &query]() {
         infoList.push_back({ query->value("planting_id").toInt(), query->value("crop").toString(),
                              query->value("family_id").toInt(), query->value("family_interval").toInt(),
                              MDate::dateFromIsoString(query->value("planting_date").toString()),
@@ -896,7 +896,7 @@ QMap<int, QString> Location::allHistoryDescription(int season, int year) const
     return map;
 }
 
-// not needed anymore
+// NOTE: not needed anymore
 QString Location::historyDescription(int locationId, int season, int year) const
 {
     auto query = plantingsQuery(locationId, season, year);

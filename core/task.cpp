@@ -20,6 +20,8 @@
 #include <QSettings>
 #include <QStringBuilder>
 
+#include <QElapsedTimer>
+
 #include "task.h"
 #include "templatetask.h"
 #include "mdate.h"
@@ -710,6 +712,8 @@ QList<int> Task::uncompletedHarvestLinkedTasks(int plantingId) const
 
 QVariantMap Task::drawInfoMap(int taskId, int season, int year) const
 {
+    QElapsedTimer timer;
+    timer.start();
     const auto record = recordFromId("task_view", taskId);
     const auto assignedDate =
             QDate::fromString(record.value(QStringLiteral("assigned_date")).toString(), Qt::ISODate);
@@ -733,6 +737,8 @@ QVariantMap Task::drawInfoMap(int taskId, int season, int year) const
     const qreal width = Helpers::widthBetween(graphStart, seasonBegin, assignedDate.addDays(duration));
 
     //    qDebug() << description << graphStart << width;
+
+    qDebug() << "[drawPlantingMap]" << timer.elapsed() << "ms";
 
     return { { "graphStart", graphStart },
              { "width", width },

@@ -37,27 +37,27 @@
 
 Planting::Planting(QObject *parent)
     : DatabaseUtility(parent)
-    , crop(new DatabaseUtility(this))
-    , family(new Family(this))
-    , seedCompany(new DatabaseUtility(this))
-    , keyword(new Keyword(this))
-    , task(new Task(this))
-    , mUnit(new DatabaseUtility(this))
-    , variety(new Variety(this))
+    , m_crop(new DatabaseUtility(this))
+    , m_family(new Family(this))
+    , m_seedCompany(new DatabaseUtility(this))
+    , m_keyword(new Keyword(this))
+    , m_task(new Task(this))
+    , m_unit(new DatabaseUtility(this))
+    , m_variety(new Variety(this))
     , m_settings(new QSettings(this))
 {
     m_table = "planting";
     m_viewTable = "planting_view";
     m_idFieldName = "planting_id";
 
-    crop->setTable("crop");
-    crop->setViewTable("crop");
+    m_crop->setTable("crop");
+    m_crop->setViewTable("crop");
 
-    seedCompany->setTable("seed_company");
-    seedCompany->setViewTable("seed_company");
+    m_seedCompany->setTable("seed_company");
+    m_seedCompany->setViewTable("seed_company");
 
-    mUnit->setTable("unit");
-    mUnit->setViewTable("unit");
+    m_unit->setTable("unit");
+    m_unit->setViewTable("unit");
 }
 
 // map has planting table's fields and a "keyword_ids" field.
@@ -75,9 +75,9 @@ int Planting::add(const QVariantMap &map) const
     int id = DatabaseUtility::add(newMap);
     Q_ASSERT(id > 0);
 
-    task->createTasks(id, plantingDate);
+    m_task->createTasks(id, plantingDate);
     for (const auto &keywordId : keywordIdList)
-        keyword->addPlanting(id, keywordId.toInt());
+        m_keyword->addPlanting(id, keywordId.toInt());
 
     return id;
 }
@@ -221,10 +221,10 @@ void Planting::updateKeywords(int plantingId, const QVariantList &newList, const
             toRemove.push_back(oldId.toInt());
 
     for (const int keywordId : toAdd)
-        keyword->addPlanting(plantingId, keywordId);
+        m_keyword->addPlanting(plantingId, keywordId);
 
     for (const int keywordId : toRemove)
-        keyword->removePlanting(plantingId, keywordId);
+        m_keyword->removePlanting(plantingId, keywordId);
 }
 
 void Planting::update(int id, const QVariantMap &map) const
@@ -250,40 +250,40 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
 
     auto newPlantingType = static_cast<PlantingType>(get(newMap, record, "planting_type").toInt());
     auto oldPlantingType = static_cast<PlantingType>(record.value("planting_type").toInt());
-    int plantingTaskId = task->plantingTask(id);
+    int plantingTaskId = m_task->plantingTask(id);
 
     if (oldPlantingType == PlantingType::DirectSeeded) {
         if (newPlantingType == PlantingType::TransplantRaised) {
-            task->updateType(plantingTaskId, TaskType::Transplant);
+            m_task->updateType(plantingTaskId, TaskType::Transplant);
 
             // Create greenhouse sowing task.
             int dtt = get(newMap, record, "dtt").toInt();
             QDate pdate = plantingDateString.isNull()
                     ? plantingDate(id)
                     : QDate::fromString(plantingDateString, Qt::ISODate);
-            task->createNurseryTask(id, pdate, dtt);
+            m_task->createNurseryTask(id, pdate, dtt);
         } else if (newPlantingType == PlantingType::TransplantBought) {
-            task->updateType(plantingTaskId, TaskType::Transplant);
+            m_task->updateType(plantingTaskId, TaskType::Transplant);
         }
     } else if (oldPlantingType == PlantingType::TransplantRaised) {
         if (newPlantingType == PlantingType::DirectSeeded) {
             newMap["dtt"] = 0;
-            task->updateType(plantingTaskId, TaskType::DirectSow);
-            task->removeNurseryTask(id);
+            m_task->updateType(plantingTaskId, TaskType::DirectSow);
+            m_task->removeNurseryTask(id);
         } else if (newPlantingType == PlantingType::TransplantBought) {
             newMap["dtt"] = 0;
-            task->removeNurseryTask(id);
+            m_task->removeNurseryTask(id);
         }
     } else if (oldPlantingType == PlantingType::TransplantBought) {
         if (newPlantingType == PlantingType::DirectSeeded) {
-            task->updateType(plantingTaskId, TaskType::DirectSow);
+            m_task->updateType(plantingTaskId, TaskType::DirectSow);
         } else if (newPlantingType == PlantingType::TransplantRaised) {
             // Create greenhouse sowing task.
             int dtt = get(newMap, record, "dtt").toInt();
             QDate pdate = plantingDateString.isNull()
                     ? plantingDate(id)
                     : QDate::fromString(plantingDateString, Qt::ISODate);
-            task->createNurseryTask(id, pdate, dtt);
+            m_task->createNurseryTask(id, pdate, dtt);
         }
     }
 
@@ -368,18 +368,18 @@ void Planting::update(int id, const QVariantMap &map, const QVariantMap &locatio
 
     if (!plantingDateString.isNull()) {
         QDate plantingDate = QDate::fromString(plantingDateString, Qt::ISODate);
-        task->updateTaskDates(id, plantingDate);
-        task->updateHarvestLinkedTasks(id);
+        m_task->updateTaskDates(id, plantingDate);
+        m_task->updateHarvestLinkedTasks(id);
     } else if (newMap.contains("dtm") || newMap.contains("harvest_window")) {
-        task->updateHarvestLinkedTasks(id);
+        m_task->updateHarvestLinkedTasks(id);
     }
 }
 
 int Planting::duplicate(int id) const
 {
     int newId = DatabaseUtility::duplicate(id);
-    task->duplicatePlantingTasks(id, newId);
-    keyword->duplicateKeywords(id, newId);
+    m_task->duplicatePlantingTasks(id, newId);
+    m_keyword->duplicateKeywords(id, newId);
     return newId;
 }
 
@@ -409,7 +409,7 @@ int Planting::duplicateToYear(int id, int year) const
         map["planting_date"] = toDate.toString(Qt::ISODate);
 
         int newId = add(map);
-        keyword->duplicateKeywords(id, newId);
+        m_keyword->duplicateKeywords(id, newId);
     }
 
     return -1;
@@ -447,9 +447,9 @@ QVariantMap Planting::commonValues(const QList<int> &idList) const
     QVariantMap common = DatabaseUtility::commonValues(idList);
 
     // Add common keywords
-    auto commonKeywords = keyword->keywordIdList(idList.value(0));
+    auto commonKeywords = m_keyword->keywordIdList(idList.value(0));
     for (const auto plantingId : idList) {
-        auto keywordIdList = keyword->keywordIdList(plantingId);
+        auto keywordIdList = m_keyword->keywordIdList(plantingId);
         for (const auto keywordId : commonKeywords) {
             if (!keywordIdList.contains(keywordId))
                 commonKeywords.removeOne(keywordId);
@@ -599,8 +599,8 @@ bool Planting::isActive(int plantingId) const
 {
     int sowingTaskId;
     int plantingTaskId;
-    std::tie(sowingTaskId, plantingTaskId) = task->sowPlantTaskIds(plantingId);
-    return task->isComplete(sowingTaskId) || task->isComplete(plantingTaskId);
+    std::tie(sowingTaskId, plantingTaskId) = m_task->sowPlantTaskIds(plantingId);
+    return m_task->isComplete(sowingTaskId) || m_task->isComplete(plantingTaskId);
 }
 
 qreal Planting::totalLength(int plantingId) const
@@ -830,7 +830,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                     QVariantMap m;
                     m["family"] = familyName;
                     m["color"] = "#000000";
-                    familyId = family->add(m);
+                    familyId = m_family->add(m);
                 }
             } else if (field == "crop") {
                 QString queryString("SELECT crop_id FROM crop WHERE crop='%1'");
@@ -844,7 +844,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                     m["crop"] = cropName;
                     m["color"] = "#000000";
                     m["family_id"] = familyId;
-                    cropId = crop->add(m);
+                    cropId = m_crop->add(m);
                 }
             } else if (field == "seed_company") {
                 QString queryString(
@@ -857,7 +857,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                 } else {
                     QVariantMap m;
                     m["seed_company"] = seedCompanyName;
-                    seedCompanyId = seedCompany->add(m);
+                    seedCompanyId = m_seedCompany->add(m);
                 }
             } else if (field == "variety") {
                 varietyName = line[i].trimmed();
@@ -871,11 +871,11 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                 } else {
                     QVariantMap m;
                     m["unit"] = unitString;
-                    unitId = mUnit->add(m);
+                    unitId = m_unit->add(m);
                 }
                 map["unit_id"] = unitId;
             } else if (field == "keywords") {
-                keywordIdList = keyword->keywordListFromString(line[i]);
+                keywordIdList = m_keyword->keywordListFromString(line[i]);
                 map.take("keywords");
             } else if (field == "planting_type") {
                 plantingType = line[i].trimmed().toInt();
@@ -921,7 +921,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             } else {
                 QVariantMap m;
                 m["seed_company"] = tr("Unkown company");
-                seedCompanyId = seedCompany->add(m);
+                seedCompanyId = m_seedCompany->add(m);
             }
         }
 
@@ -936,7 +936,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             m["variety"] = varietyName.trimmed();
             m["crop_id"] = cropId;
             m["seed_company_id"] = seedCompanyId;
-            varietyId = variety->add(m);
+            varietyId = m_variety->add(m);
         }
         map["variety_id"] = varietyId;
 
@@ -956,7 +956,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             } else {
                 QVariantMap m;
                 m["unit"] = "kg";
-                unitId = mUnit->add(m);
+                unitId = m_unit->add(m);
             }
             map["unit_id"] = unitId;
         }
@@ -975,7 +975,7 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
         if (plantingId < 0)
             continue;
         for (const int keywordId : keywordIdList)
-            keyword->addPlanting(plantingId, keywordId);
+            m_keyword->addPlanting(plantingId, keywordId);
     }
     QSqlDatabase::database().commit();
     f.close();
@@ -1055,7 +1055,7 @@ void Planting::csvExportPlan(int year, const QUrl &path) const
         }
 
         QString keywordString;
-        for (const auto &variant : keyword->keywordStringList(plantingId))
+        for (const auto &variant : m_keyword->keywordStringList(plantingId))
             keywordString += variant.toString() + QString(",");
         keywordString.chop(1);
         ts << keywordString;

@@ -15,6 +15,8 @@ set(QROP_MAJOR_VERSION 0)
 set(QROP_MINOR_VERSION 3)
 set(QROP_PATCH_VERSION 0)
 
+set(QROP_VERSION "0.4")
+
 option(MAKE_TESTS "Make the tests" ON)
 
 # Get the current working branch
@@ -68,6 +70,20 @@ endif()
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
     find_package(Qt5QuickCompiler)
     qtquick_compiler_add_resources(RESOURCES desktop/qml.qrc)
+endif()
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(ICON_FILE ${CMAKE_SOURCE_DIR}/dist/osx/Qrop.icns)
+    set(MACOSX_BUNDLE_INFO_STRING "Qrop")
+    set(MACOSX_BUNDLE_BUNDLE_NAME "Qrop")
+    set(MACOSX_BUNDLE_ICON_FILE Qrop.icns)
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.frama.qrop")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${QROP_VERSION}")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${QROP_VERSION}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${QROP_VERSION}")
+    set(MACOSX_BUNDLE_COPYRIGHT "André Hoarau")
+    set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set(QROP_PKG MACOSX_BUNDLE ${ICON_FILE})
 endif()
 
 add_executable(${PROJECT_NAME} ${desktop_SRCS} ${RESOURCES})
