@@ -1,4 +1,4 @@
-image: andreh11/qt:5.12.5-xenial
+image: andreh11/qt:5.12.5-trusty
 
 #before_script:
 #  - bash dist/linux/before_install.sh
