@@ -1,0 +1,18 @@
+{
+
+  "title": "Qrop",
+
+  "icon": "../Qrop.app/Contents/Resources/Qrop.icns",
+
+  "icon-size": 80,
+
+  "contents": [
+
+    { "x": 250, "y": 150, "type": "file", "path": "Qrop.app" },
+    { "x": 475, "y": 150, "type": "link", "path": "/Applications" }
+
+  ],
+
+  "format": "UDZO"
+}
+
