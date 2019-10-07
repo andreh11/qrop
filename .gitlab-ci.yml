@@ -1,13 +1,13 @@
 image: andreh11/qt:5.12.5-xenial
 
-before_script:
-  - bash dist/linux/before_install.sh
+#before_script:
+#  - bash dist/linux/before_install.sh
 
-normal-build:
-  script:
-    - bash dist/linux/build.sh
-  except:
-    - tags
+# normal-build:
+#   script:
+#     - bash dist/linux/build.sh
+#   except:
+#     - tags
 
 release-build:
   script:
