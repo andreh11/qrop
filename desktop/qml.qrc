@@ -73,7 +73,6 @@
         <file>qml/SettingsSeedCompanyPane.qml</file>
         <file>qml/ConflictAlertButton.qml</file>
         <file>qml/BackIcon.qml</file>
-        <file>qml/LocationTreeView.qml</file>
         <file>qml/MenuItemDelegate.qml</file>
         <file>qml/LightPlantingForm.qml</file>
         <file>qml/HarvestDialog.qml</file>
@@ -108,7 +107,6 @@
         <file>qml/SimpleChip.qml</file>
         <file>qml/LocationFormBox.qml</file>
         <file>qml/StatCard.qml</file>
-        <file>qml/LocationRow.qml</file>
         <file>qml/TreeItemView.qml</file>
         <file>qml/TreeView.qml</file>
         <file>qml/HeaderTimelineRow.qml</file>
