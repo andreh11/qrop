@@ -104,12 +104,8 @@ QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVa
         newMap["planting_date"] = plantingDate.addDays(days).toString(Qt::ISODate);
 
         int id = add(newMap);
-        if (id > 0) {
-            idList.append(id);
-        } else {
-            qDebug() << "[addSuccesions] cannot add planting to the database. Rolling back...";
-            break;
-        }
+        Q_ASSERT(id > 0);
+        idList.append(id);
     }
 
     if (i < successions)
@@ -238,6 +234,7 @@ void Planting::update(int id, const QVariantMap &map) const
 
 void Planting::update(int id, const QVariantMap &map, const QVariantMap &locationLengthMap) const
 {
+    Q_ASSERT(id > 0);
     QVariantMap newMap(map);
     QString plantingDateString;
 
@@ -614,9 +611,7 @@ qreal Planting::totalLength(int plantingId) const
 /** Return the already assigned bed length for \a plantingId */
 qreal Planting::assignedLength(int plantingId) const
 {
-    if (plantingId < 1)
-        return 0;
-
+    Q_ASSERT(plantingId > 0);
     QString queryString("SELECT SUM(length) FROM planting_location WHERE planting_id=%1");
     QSqlQuery query(queryString.arg(plantingId));
     debugQuery(query);
@@ -788,7 +783,7 @@ QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) con
 
 void Planting::csvImportPlan(int year, const QUrl &path) const
 {
-    if (year < 2000 || year > 3000)
+    if (year < 1000 || year > 3000)
         return;
 
     QFile f(path.toLocalFile());

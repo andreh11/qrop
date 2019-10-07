@@ -35,7 +35,7 @@ Task::Task(QObject *parent)
 
 QString Task::type(int taskId) const
 {
-    auto record = recordFromId("task_view", taskId);
+    const auto record = recordFromId("task_view", taskId);
     if (record.isEmpty())
         return {};
     return record.value("type").toString();
@@ -43,7 +43,7 @@ QString Task::type(int taskId) const
 
 QString Task::method(int taskId) const
 {
-    auto record = recordFromId("task_view", taskId);
+    const auto record = recordFromId("task_view", taskId);
     if (record.isEmpty())
         return {};
     return record.value("method").toString();
@@ -51,7 +51,7 @@ QString Task::method(int taskId) const
 
 QString Task::implement(int taskId) const
 {
-    auto record = recordFromId("task_view", taskId);
+    const auto record = recordFromId("task_view", taskId);
     if (record.isEmpty())
         return {};
     return record.value("implement").toString();
@@ -59,11 +59,12 @@ QString Task::implement(int taskId) const
 
 QString Task::description(int taskId) const
 {
-    int taskTypeId = typeId(taskId);
+    auto taskRecord = recordFromId("task_view", taskId);
+    int taskTypeId = taskRecord.value("task_type_id").toInt();
 
     if (taskTypeId > 3) {
-        QString m = method(taskId);
-        QString i = implement(taskId);
+        QString m = taskRecord.value("method").toString();
+        QString i = taskRecord.value("implement").toString();
 
         if (i.isEmpty())
             return m;
@@ -91,13 +92,13 @@ QString Task::description(int taskId) const
 
     int rows = record.value("rows").toInt();
     int spacing = record.value("spacing_plants").toInt();
-    int length = record.value("length").toInt();
+    qreal length = record.value("length").toDouble();
     bool useStandardBedLength = mSettings->value("useStandardBedLength").toBool();
     int standardBedLength = mSettings->value("standardBedLength").toInt();
 
     QString lengthString;
     if (useStandardBedLength)
-        lengthString = tr("%L1 beds").arg(length * 1.0 / standardBedLength, 0, 'g', 2);
+        lengthString = tr("%L1 beds").arg(length / standardBedLength, 0, 'g', 2);
     else
         lengthString = tr("%L1 bed m.").arg(length);
 
@@ -106,7 +107,7 @@ QString Task::description(int taskId) const
 
 QString Task::color(int taskId) const
 {
-    auto record = recordFromId("task_view", taskId);
+    const auto record = recordFromId("task_view", taskId);
     if (record.isEmpty())
         return {};
     return record.value("color").toString();
@@ -119,7 +120,7 @@ QDate Task::assignedDate(int taskId) const
 
 int Task::duration(int taskId) const
 {
-    auto record = recordFromId("task", taskId);
+    const auto record = recordFromId("task", taskId);
     if (record.isEmpty())
         return {};
     return record.value("duration").toInt();
@@ -129,12 +130,8 @@ int Task::add(const QVariantMap &map) const
 {
     QVariantMap newMap(map);
 
-    qDebug() << newMap.value("planting_ids");
-
     auto plantingIdList = newMap.take("planting_ids").toList();
     auto locationIdList = newMap.take("location_ids").toList();
-
-    qDebug() << plantingIdList;
 
     int methodId = newMap.value("task_method_id").toInt();
     if (methodId < 1)
@@ -192,7 +189,7 @@ QList<int> Task::addSuccessions(int successions, int weeksBetween, const QVarian
         if (id > 0) {
             idList.append(id);
         } else {
-            qDebug() << "[addSuccesions] cannot add task to the database. Rolling back...";
+            qDebug() << "[addSuccessions] cannot add task to the database. Rolling back...";
             break;
         }
     }
@@ -297,7 +294,6 @@ void Task::duplicateLocationTasks(int sourceLocationId, int newLocationId) const
 
 void Task::removeLocationTasks(int locationId) const
 {
-    qDebug() << Q_FUNC_INFO << "Removing tasks for location: " << locationId;
     QString queryString("DELETE FROM location_task WHERE location_id = %1");
     QSqlQuery query(queryString.arg(locationId));
     debugQuery(query);
@@ -332,29 +328,29 @@ void Task::createTasks(int plantingId, const QDate &plantingDate) const
 {
     qDebug() << "[Task] Creating tasks for planting: " << plantingId << plantingDate;
 
-    auto record = recordFromId("planting", plantingId);
-    auto type = static_cast<PlantingType>(record.value("planting_type").toInt());
-    int dtt = record.value("dtt").toInt();
+    const auto record = recordFromId("planting", plantingId);
+    const auto type = static_cast<PlantingType>(record.value("planting_type").toInt());
+    const int dtt = record.value("dtt").toInt();
 
     switch (type) {
     case PlantingType::DirectSeeded: {
-        int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
-                       { "labor_time", "00:00" },
-                       { "task_type_id", 1 } });
+        const int id = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                             { "labor_time", "00:00" },
+                             { "task_type_id", 1 } });
         addLink("planting_task", "planting_id", plantingId, "task_id", id);
         break;
     }
     case PlantingType::TransplantRaised: {
-        QDate sowDate = plantingDate.addDays(-dtt);
-        int sowId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) },
+        const QDate sowDate = plantingDate.addDays(-dtt);
+        const int sowId = add({ { "assigned_date", sowDate.toString(Qt::ISODate) },
 
-                          { "labor_time", "00:00" },
-                          { "task_type_id", 2 } });
-        int plantId = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
-                            { "labor_time", "00:00" },
-                            { "task_type_id", 3 },
-                            { "link_days", dtt },
-                            { "link_task_id", sowId } });
+                                { "labor_time", "00:00" },
+                                { "task_type_id", 2 } });
+        const int plantId = add({ { "assigned_date", plantingDate.toString(Qt::ISODate) },
+                                  { "labor_time", "00:00" },
+                                  { "task_type_id", 3 },
+                                  { "link_days", dtt },
+                                  { "link_task_id", sowId } });
         addLink("planting_task", "planting_id", plantingId, "task_id", sowId);
         addLink("planting_task", "planting_id", plantingId, "task_id", plantId);
         break;
@@ -461,7 +457,7 @@ void Task::uncompleteTask(int taskId) const
 
 bool Task::isComplete(int taskId) const
 {
-    auto date = dateFromField("task", "completed_date", taskId);
+    const auto date = dateFromField("task", "completed_date", taskId);
     return date.isValid();
 }
 
@@ -470,7 +466,7 @@ void Task::delay(int taskId, int weeks)
     if (taskId < 0)
         return;
 
-    QVariantMap map = mapFromId("task", taskId);
+    const auto map = mapFromId("task", taskId);
     if (!map.contains("assigned_date"))
         return;
 

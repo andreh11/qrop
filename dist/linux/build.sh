@@ -9,9 +9,9 @@ find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" 
 cp -R core/* qrop deploy/usr/bin
 cp logo.png deploy/qrop.png
 cp dist/Qrop.desktop deploy/usr/share/applications
-wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
+curl -OL "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage"
 chmod a+x linuxdeployqt*.AppImage;
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
 ./linuxdeployqt*.AppImage --appimage-extract 
-./squashfs-root/AppRun deploy/usr/share/applications/Qrop.desktop -qmake=/opt/qt512/bin/qmake -verbose=2 -qmldir=desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers -exclude-libs=libqsqlmysql,libqsqlibase,libqsqlodbc,libqsqlpsql,libqsqltds -appimage
+./squashfs-root/AppRun deploy/usr/share/applications/Qrop.desktop -qmake=/opt/Qt/5.12.5/gcc_64/bin/qmake -verbose=2 -qmldir=desktop/qml -bundle-non-qt-libs -extra-plugins=sqldrivers -exclude-libs=libqsqlmysql,libqsqlibase,libqsqlodbc,libqsqlpsql,libqsqltds -appimage
 find . | grep AppImage;

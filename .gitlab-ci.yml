@@ -1,4 +1,4 @@
-image: andreh11/qt:5.12.3-xenial
+image: andreh11/qt:5.12.5-xenial
 
 before_script:
   - bash dist/linux/before_install.sh
@@ -17,5 +17,5 @@ release-build:
     paths:
       - Qrop*.AppImage
     expire_in: 1 weeks
-  only:
-    - tags
+#  only:
+#    - tags

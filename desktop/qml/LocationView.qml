@@ -48,14 +48,10 @@ Item {
     property alias selectedIndexes: selectionModel.selectedIndexes
     property var selectedIdList: selectedLocationIds()
     property bool hasSelection: selectedIdList.length > 0
-    //    property alias draggedPlantingId: locationView.draggedPlantingId
     property bool showFamilyColor: false
 
-    //    property int treeViewHeight: listView.contentHeight
     property int treeViewHeight: listView.contentItem.height
     property int treeViewWidth: implicitWidth
-    onTreeViewWidthChanged: console.log("treeview width", treeViewWidth)
-
     property int treeDepth: locationModel ? locationModel.depth : 0
 
     property int locationViewHeight: root.childrenRect.height
@@ -279,6 +275,14 @@ Item {
         plantingsView.resetFilter();
     }
 
+    Settings {
+        id: locationSettings
+        category: "LocationView"
+        property bool showFullName
+        property bool allowPlantingsConflict
+        property bool showTasks
+    }
+
     LocationModel {
         id: locationModel
     }
@@ -286,14 +290,6 @@ Item {
     ItemSelectionModel {
         id: selectionModel
         model: locationModel
-    }
-
-    Settings {
-        id: locationSettings
-        category: "LocationView"
-        property bool showFullName
-        property bool allowPlantingsConflict
-        property bool showTasks
     }
 
     ListView {
@@ -322,13 +318,6 @@ Item {
                 height: Units.rowHeight
                 spacing: Units.smallSpacing
                 leftPadding: 16
-
-                //                Row {
-                //                    id: firstColumnRow
-                //                    height: parent.height
-                //                    width: firstColumnWidth - 16 - spacing
-                //                    spacing: headerRow.spacing
-                //                    anchors.verticalCenter: parent.verticalCenter
 
                 CheckBox {
                     id: headerRowCheckBox
@@ -399,18 +388,15 @@ Item {
             property bool hasLocationTasks: taskRowList.length > plantingRowList.length
             property bool isSelected: root.isSelected(currentRow)
 
-
             clip: true
             width: ListView.view.width // fill available width
-            height: Math.max(1,rows) * Units.rowHeight + 1
+            height: Math.max(1,rows) * Units.rowHeight + 1 // always show at least one row
 
             color: Qt.darker(model.hasChildren ? colorList[model.depth] : "white",
                              (isSelected) ? 1.1 : 1)
 
             Behavior on height {
-                NumberAnimation {
-                    duration: Units.shortDuration
-                }
+                NumberAnimation { duration: Units.shortDuration }
             }
 
             DropArea {
@@ -449,7 +435,9 @@ Item {
                 onDropped: {
                     root.draggedPlantingId = -1
 
-                    if (drop.hasText && (drop.proposedAction == Qt.MoveAction || drop.proposedAction == Qt.CopyAction)) {
+                    if (drop.hasText
+                            && (drop.proposedAction == Qt.MoveAction
+                                || drop.proposedAction == Qt.CopyAction)) {
                         const locationId = model.location_id;
                         const list = drop.text.split(";");
                         const plantingId = Number(list[0]);
@@ -568,13 +556,12 @@ Item {
 
                     ToolButton {
                         id: locationNameLabel
-                        text: hovered ? "\ue889" :
-                                        (locationSettings.showFullName ? Location.fullName(model.location_id) : model.name)
-                        font.family: hovered ? "Material Icons" : "Roboto Regular"
-                        font.pixelSize: hovered ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
+                        text: pressed ? "\ue889" :
+                                        (locationSettings.showFullName ? model.fullName : model.name)
+                        font.family: pressed ? "Material Icons" : "Roboto Regular"
+                        font.pixelSize: pressed ? Units.fontSizeTitle : Units.fontSizeBodyAndButton
                         hoverEnabled: !model.hasChildren
-
-                        ToolTip.visible: hovered && ToolTip.text
+                        ToolTip.visible: pressed && ToolTip.text
                         ToolTip.text: model.history
                     }
 

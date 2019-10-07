@@ -120,9 +120,8 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
                                                         const QList<int> &idList) const
 {
-    if (idList.length() < 1)
-        return {};
-    if (tableName.isNull())
+    Q_ASSERT(!tableName.isEmpty());
+    if (idList.isEmpty())
         return {};
 
     QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
@@ -225,10 +224,8 @@ void DatabaseUtility::addLink(const QString &table, const QString &field1, int i
 
 void DatabaseUtility::update(int id, const QVariantMap &map) const
 {
-    if (id < 0)
-        return;
-    if (table().isNull())
-        return;
+    Q_ASSERT(id > 0);
+    Q_ASSERT(!table().isEmpty());
     if (map.isEmpty())
         return;
 
@@ -242,12 +239,9 @@ void DatabaseUtility::update(int id, const QVariantMap &map) const
     query.setForwardOnly(true);
     query.prepare(queryString);
 
-    for (auto it = map.cbegin(); it != map.cend(); ++it)
+    const auto end = map.cend();
+    for (auto it = map.cbegin(); it != end; ++it)
         query.bindValue(QString(":%1").arg(it.key()), it.value());
-
-    //    for (const auto &key : map.keys())
-    //        query.bindValue(QString(":%1").arg(key), map[key]);
-
     query.exec();
     debugQuery(query);
 }
@@ -262,14 +256,10 @@ void DatabaseUtility::updateList(const QList<int> &idList, const QVariantMap &ma
 
 int DatabaseUtility::duplicate(int id) const
 {
-    if (id < 0)
-        return -1;
-    if (table().isNull())
-        return -1;
-
+    Q_ASSERT(id > 0);
+    Q_ASSERT(!table().isNull());
     auto map = mapFromId(table(), id);
     map.remove(idFieldName());
-
     return add(map);
 }
 
@@ -284,6 +274,7 @@ void DatabaseUtility::duplicateList(const QList<int> &idList) const
 
 void DatabaseUtility::remove(int id) const
 {
+    Q_ASSERT(id > 0);
     QString queryString = "DELETE FROM %1 WHERE %2 = %3";
     QString idColumnName = table() + "_id";
     QSqlQuery query(queryString.arg(table()).arg(idColumnName).arg(id));
@@ -301,6 +292,11 @@ void DatabaseUtility::removeList(const QList<int> &idList) const
 void DatabaseUtility::removeLink(const QString &table, const QString &field1, int id1,
                                  const QString &field2, int id2) const
 {
+    Q_ASSERT(!table.isEmpty());
+    Q_ASSERT(!field1.isEmpty());
+    Q_ASSERT(!field2.isEmpty());
+    Q_ASSERT(id1 > 0);
+    Q_ASSERT(id2 > 0);
     QString queryString = "DELETE FROM %1 WHERE %2 = %3 AND %4 = %5";
     QSqlQuery query(queryString.arg(table, field1).arg(id1).arg(field2).arg(id2));
     debugQuery(query);
@@ -308,7 +304,7 @@ void DatabaseUtility::removeLink(const QString &table, const QString &field1, in
 
 QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
 {
-    if (idList.length() < 1)
+    if (idList.isEmpty())
         return {};
 
     const auto list = mapListFromIdList(m_viewTable, idList);

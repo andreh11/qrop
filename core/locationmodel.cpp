@@ -61,6 +61,8 @@ QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
         return rotationConflictingPlantings(proxyIndex);
     case HasRotationConflict:
         return hasRotationConflict(proxyIndex);
+    case FullName:
+        return fullName(proxyIndex);
     default:
         return SortFilterProxyModel::data(proxyIndex, role);
     }
@@ -76,6 +78,7 @@ QHash<int, QByteArray> LocationModel::roleNames() const
     names[HasSpaceConflict] = "hasSpaceConflict";
     names[RotationConflictList] = "rotationConflictList";
     names[HasRotationConflict] = "hasRotationConflict";
+    names[FullName] = "fullName";
     return names;
 }
 
@@ -421,6 +424,11 @@ void LocationModel::setShowOnlyGreenhouseLocations(bool show)
     m_showOnlyGreenhouseLocations = show;
     invalidateFilter();
     emit showOnlyGreenhouseLocationsChanged();
+}
+
+QString LocationModel::fullName(const QModelIndex &index) const
+{
+    return m_location->fullName(locationId(index));
 }
 
 /**

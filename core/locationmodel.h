@@ -45,7 +45,8 @@ public:
         RotationConflictList,
         HasRotationConflict,
         SpaceConflictList,
-        HasSpaceConflict
+        HasSpaceConflict,
+        FullName
     };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
     QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
@@ -104,6 +105,8 @@ public:
 
     bool showOnlyGreenhouseLocations() const;
     void setShowOnlyGreenhouseLocations(bool show);
+
+    QString fullName(const QModelIndex &index) const;
 
 signals:
     void showOnlyEmptyLocationsChanged();
