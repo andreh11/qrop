@@ -44,8 +44,6 @@ script:
 deploy:
   provider: script
   script: sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/deploy.sh
-  on:
-    tags: true
 # deploy:
 #   provider: releases
 #   api_key:
