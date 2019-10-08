@@ -1,14 +1,36 @@
 image: andreh11/qt:5.12.5-trusty
 
+stages:
+  - build
+  - deploy
+
 normal-build:
+  stage: build
   script:
     - bash dist/linux/build.sh
+  except:
+    - master
+    - tags
+
+master-build:
+  stage: build
+  variables:
+    QROP_BUILD_TYPE: "snapshot"
+  script:
+    - bash dist/linux/build.sh
+    - bash dist/linux/deploy.sh
+  only:
+    - master
   except:
     - tags
 
 release-build:
+  stage: build
+  variables:
+    QROP_BUILD_TYPE: "release"
   script:
     - bash dist/linux/build.sh
+    - bash dist/linux/deploy.sh
   artifacts:
     name: "$CI_COMMIT_REF_NAME"
     paths:
@@ -16,3 +38,21 @@ release-build:
     expire_in: 1 weeks
   only:
    - tags
+
+# snapshot-deploy:
+#   stage: deploy
+#   variables:
+#     QROP_BUILD_TYPE: "snapshot"
+#   script:
+#     - bash dist/gitlab-release.sh
+#   # only:
+  #   -tags
+
+release-deploy:
+  stage: deploy
+  variables:
+    QROP_BUILD_TYPE: "release"
+  script:
+    - bash dist/gitlab-release.sh
+  only:
+    - tags

@@ -2,7 +2,7 @@
 
   "title": "Qrop",
 
-  "icon": "../Qrop.app/Contents/Resources/Qrop.icns",
+  "icon": "./res/AppIcon.icns",
 
   "icon-size": 80,
 

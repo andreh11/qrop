@@ -52,11 +52,13 @@
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
 
+#include "core_global.h"
+
 QT_BEGIN_NAMESPACE
 
 class QAbstractItemModel;
 
-class QQuickTreeModelAdaptor : public QAbstractListModel
+class CORESHARED_EXPORT QQuickTreeModelAdaptor : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged)

@@ -6,7 +6,7 @@ make -j$(nproc);
 mkdir -p deploy/usr/bin deploy/usr/lib deploy/usr/share;
 mkdir deploy/usr/share/applications;
 find . \( -name "moc_*" -or -name "*.o" -or -name "qrc_*" -or -name "Makefile*" -or -name "*.a" \) -exec rm {} \;
-cp -R core/* qrop deploy/usr/bin
+cp -R core/* Qrop deploy/usr/bin
 cp logo.png deploy/qrop.png
 cp dist/Qrop.desktop deploy/usr/share/applications
 curl -OL "https://github.com/probonopd/linuxdeployqt/releases/download/6/linuxdeployqt-6-x86_64.AppImage"

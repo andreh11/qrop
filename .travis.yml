@@ -1,26 +1,62 @@
 language: cpp
-
 matrix:
   include:
-    - os: osx
-      env:
-        - QROP_PLATFORM="osx"
-        - PATH="/usr/local/opt/qt/bin:$PATH"
-        - LDFLAGS="-L/usr/local/opt/qt/lib"
-        - CPPFLAGS="-I/usr/local/opt/qt/include"
-        - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
-      osx_image: xcode10.1
-      compiler: clang
-      addons:
-        homebrew:
-          packages:
-            - qt
-            - tree
-          update: true
+  - os: osx
+    if: branch = master AND tag IS present
+    env:
+    - QROP_PLATFORM="osx"
+    - PATH="/usr/local/opt/qt/bin:$PATH"
+    - LDFLAGS="-L/usr/local/opt/qt/lib"
+    - CPPFLAGS="-I/usr/local/opt/qt/include"
+    - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+    - QROP_BUILD_TYPE="release"
+    osx_image: xcode10.1
+    compiler: clang
+    language: c++
+    addons:
+      homebrew:
+        packages:
+        - qt
+        - tree
+        update: true
+  - os: osx
+    if: branch = master AND tag IS blank
+    env:
+    - QROP_PLATFORM="osx"
+    - PATH="/usr/local/opt/qt/bin:$PATH"
+    - LDFLAGS="-L/usr/local/opt/qt/lib"
+    - CPPFLAGS="-I/usr/local/opt/qt/include"
+    - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+    - QROP_BUILD_TYPE="snapshot"
+    osx_image: xcode10.1
+    compiler: clang
+    language: c++
+    addons:
+      homebrew:
+        packages:
+        - qt
+        - tree
+        update: true
 
 script:
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
+deploy:
+  provider: script
+  script: sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/deploy.sh
+  on:
+    tags: true
+# deploy:
+#   provider: releases
+#   api_key:
+#     secure: $GH_TOKEN
+#   file: Qrop.dmg
+#   skip_cleanup: true
+#   on:
+#     tags: true
 env:
   global:
-    secure: a2sSFPhaFFjFPaJz9kWr1WCJGP1H4301Dhd8TzGR4ZxfqGpFjMn1k+92eVO3QKc9zVmSgHx95hIsSARMOs1yDaKthASSkkLBsrY9Uep6zGX9AXA8+N+pSMLtDnmgNlVfcPYGhewObGtP8wIToQ1RM3K7JUzOPtkQDEWUlxcJ71bJFwewR8MKPLF1/hWKOLpyUX1yydldAupR/cas3kJIanA60OTyAgJbeuD8wVWTKSw9f6iIu3ui3s1tfwV6gRoEeJdFPKy1ltTxbeUwB5M9bLhBoJqQ/zncy7dy1FA6eFM0hb15Py2lIzchJ3/vFK/RUuYMnmBTgQZXBBnwf+fQ405kmZYOcuU/wE1nBuOt73g7RSdUe4qocs64tJyKBaW25DOMpLvdDTMxfJXt+jtXT0RyBcYoM5K4EP2tN98Kjq1Z3r9JGLbAwZzagdTX+IUx8eyiwJGssnAuOA7S/iyE+i1noMkVnPfuOthn9ZLf6cw1fyOA0PCt+fWtqWu9BF7yCJGVCg7dka0rQwrrw/oK782djJHOtiR3Jf3N7k9+Hyw3BWs7YMtXmNFWzUpLS1BrjMCIKoEPSskQFgom0eJ4TkLrfHi8DBrFUiGhhtrTe5BVqtvYSUT9GwkbAsEs9hjL3kJ400+3X/ceQUJiN9hAv9Zntql9+RkP9RbqopLQGW4=
+  - secure: a2sSFPhaFFjFPaJz9kWr1WCJGP1H4301Dhd8TzGR4ZxfqGpFjMn1k+92eVO3QKc9zVmSgHx95hIsSARMOs1yDaKthASSkkLBsrY9Uep6zGX9AXA8+N+pSMLtDnmgNlVfcPYGhewObGtP8wIToQ1RM3K7JUzOPtkQDEWUlxcJ71bJFwewR8MKPLF1/hWKOLpyUX1yydldAupR/cas3kJIanA60OTyAgJbeuD8wVWTKSw9f6iIu3ui3s1tfwV6gRoEeJdFPKy1ltTxbeUwB5M9bLhBoJqQ/zncy7dy1FA6eFM0hb15Py2lIzchJ3/vFK/RUuYMnmBTgQZXBBnwf+fQ405kmZYOcuU/wE1nBuOt73g7RSdUe4qocs64tJyKBaW25DOMpLvdDTMxfJXt+jtXT0RyBcYoM5K4EP2tN98Kjq1Z3r9JGLbAwZzagdTX+IUx8eyiwJGssnAuOA7S/iyE+i1noMkVnPfuOthn9ZLf6cw1fyOA0PCt+fWtqWu9BF7yCJGVCg7dka0rQwrrw/oK782djJHOtiR3Jf3N7k9+Hyw3BWs7YMtXmNFWzUpLS1BrjMCIKoEPSskQFgom0eJ4TkLrfHi8DBrFUiGhhtrTe5BVqtvYSUT9GwkbAsEs9hjL3kJ400+3X/ceQUJiN9hAv9Zntql9+RkP9RbqopLQGW4=
+  - secure: XRgX+bNC3+ctZ1SOINpZ4HBGe6MpAdoN5obvb17r4VURQOofhjlZICDiplEs7/kh7wwkgZeg/m+6beYdHazLym2WVzL0aNuOAWPNKnOhQ/H4TcYnFRasZ1n0UhcXgFOoGVGyH+TwT6CVhTlKamQPj/YcfHMz7LPqhtpUThZuheP7R6HRsnvYMwghf0fHl3ETSBkvq1CPiBkx6zsqU6e6mnz9xrdgZpa2IgcP/LNbYNYI2NHjZ7U4JqvWuP3FyZ+mhq8vhbu7yzXJ2xfA649tZ4emlqE6ZoXHS1ejliFMIw0eTLYxcZQc7G5WgrN/gCDYYH9utjRKet0igKbkkhwLpqvWms2OV3cdffzEaK06FEvvtd3JSTe8rRn59hHkduGa9wtE5c9jx6AiJAu0DsDS+uYBs5b+C16ZRKpSsfe9XyGFyC7Ujp8zWzRy/eG64YQayMvzsPMyKs+OqWoXOwH3qamGfzl5QOaGiGVnkTQrssW5auM/kjRbVm/ofTJyw+OQ22SHWGwHJ4AGGKAuIrD0RC9l63EwXAeWJwg7l3v7fwbcXqRWYldD+UNMa76phgZxxVy28AfpnVO01rBd4PnsfsalQtJbAwPstrAQcIhULDwmSFM/oEI0a74C5LuKFbO3dKgRU8m5q4g8UEzI4JibK2I/wnBGpO4lz4w8CDFHRwM=
+  - secure: qqPRuTbUA7QZ+x4pdSZv1ADWunFZEcu83NidFBxbe83oiT9oUyF8YGagtSNeiyhTIgIhdxqho7KH6C80rCdJzdZUVy2HntpMBgz6lhIE+DA5N5Z/aJEsYZQ7SsjOkJurso+8zANU5lu/KabxUI/aLRK55+6wJlKcLr4P0lh2KeW1uJF9mOjGTsqD2Gi5xhLPZNSS+rJ8upDr+AlU/diFxVulJGu1zj1uoR7pvJtxmdzntEjCrMud+JtTvZ9x+8QdJ00n1BVrDBQ+1c/KiFJTURijNcQta+C4m/zV4ijfzoDYa20oFmQ8hscmjjbt/MK7svhjLokLaB2YsTy4q2PfrtpH5ZT430YS9+ZUd/qV7+090+6uHexGp5P5hyl/IuOglIJfhreKbXNX5fUWwPDUewhrJ01xIP48C4E/kHu4/hHeNzAAM1KbQoPIldlJHcNNJIfIh8Bo4f1fb0Zl+MmFC2iFhgF181mUss0cIv+PK96nflyS7lIMJBCJxS3auHo8iIMQd8cfxoKoMCTUP/42VWPIOxVrnV79rnN7PyiHc61kVErrs5EC1MuZD06BXfoBqvcPeO++4ywENHYA0KfBnmTsMTAPOEmJS+5XLUf/xTEquCdlzf+/RejoR2e8H/0yjio6ZGTQe8DaNWSxOPG6ECbmW33PKXQpbNzz3qpBYjc=
+  - secure: ophEUYX0pgBwTM0a2Ko+VzVNYGrIgEFnWLW/i2a5ynnfgavkw7r8kktLcN4YiwO6vFheNmn1zOITx67mLANkij63r03Mh5Ly0h84u7Wvyu73Za9o3F6WDYr0emv/+vtc2WIjD7oVQ8pqCuoB+4cyG096i/G87G2qmRxr51uL1cB7o9Nn0hU0YxppgZlEmtAsLKZHiw2r0p7KhZ556/MP5g5WZz820DgHb4m+H6yp9x7EZ+hW6EX2mE/YwEyHN5ltRsf/8K2i+G8MoIQmHueTRXXmF3GeXEvZdrq3SxFfgJSbWLUTFoFrf/Ykzwi6ogQGQDv01NZdaMppYBpYzIR71DGkODiTUZQdfHWbkK4Lkyp8bvPJpvIqagf+EOBDba8bcwCeNv4hIDLxvkHttavSEkgWxQS4Ru2eXtjzrmXcLnY3dzPYZ+tgGGjF8+0HGUacFKqL7D5NtRD1RhmQFhLtdV3S4qAf6qynXvlU51bYj/OTpIUrzeOYneJ4j2zMrUVXhETEQm36wd2fFU5cOszzdmu/FxlVXsBewjt6uKmO1q5kydNDRZU9kM+zqdWrD7YE60K+99w7FFTNDUbE+Rx1VIJVzx2Ujir7NBmpGLhOCIl0gHnfvoSxAm7V8owxJ+mgqteSHFTYN/Y3487AWSnkLp6gAxpNH5hYGq+rmvZo2VA=

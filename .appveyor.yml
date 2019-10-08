@@ -1,5 +1,5 @@
 # common settings
-version: 0.3-{build}
+version: 0.4-{build}
 clone_depth: 1
 clone_folder: C:\projects\qrop
 image: Visual Studio 2017
@@ -43,3 +43,21 @@ artifacts:
   - path: release\
     name: Qrop-$(QROP_VERSION)-%arch%
     type: zip
+
+deploy:
+  - provider: Environment
+    name: production
+    QROP_BUILD_TYPE: "release"
+    on:
+      APPVEYOR_REPO_TAG: true
+      branch: master
+
+  - provider: Environment
+    name: production
+    QROP_BUILD_TYPE: "snapshot"
+    on:
+      APPVEYOR_REPO_TAG: true
+      branch: master
+
+deploy_script:
+  - cmd: sh dist/windows/deploy.sh
