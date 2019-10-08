@@ -28,9 +28,8 @@ if (WIN32)
       "windows_metafile.rc"
     )
     set(RES_FILES "windows_metafile.rc")
-    set(CMAKE_RC_COMPILER_INIT windres)
     ENABLE_LANGUAGE(RC)
-    SET(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <SOURCE> <OBJECT>")
+    set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> /l 0x809 /fo<OBJECT> <SOURCE>")
 endif()
 
 if (APPLE)
