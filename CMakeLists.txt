@@ -62,17 +62,17 @@ set(SOURCE_FILES
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(RESOURCES desktop/qml.qrc)
+if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(QML_FILES desktop/qml.qrc)
 endif()
 
-# Compile QML code for release.
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
+# Compile QML code for release only on Unix and Mac.
+if ((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
     find_package(Qt5QuickCompiler)
-    qtquick_compiler_add_resources(RESOURCES desktop/qml.qrc)
+    qtquick_compiler_add_resources(QML_FILES desktop/qml.qrc)
 endif()
 
-add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${RESOURCES})
+add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${QML_FILES})
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
 
