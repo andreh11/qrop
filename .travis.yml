@@ -39,19 +39,13 @@ matrix:
         update: true
 
 script:
+  - echo "[Building]"
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
-deploy:
-  provider: script
-  script: sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/deploy.sh
-# deploy:
-#   provider: releases
-#   api_key:
-#     secure: $GH_TOKEN
-#   file: Qrop.dmg
-#   skip_cleanup: true
-#   on:
-#     tags: true
+after_success:
+  - echo "[Deploying to FTP server]"
+  - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/deploy.sh
+
 env:
   global:
   - secure: a2sSFPhaFFjFPaJz9kWr1WCJGP1H4301Dhd8TzGR4ZxfqGpFjMn1k+92eVO3QKc9zVmSgHx95hIsSARMOs1yDaKthASSkkLBsrY9Uep6zGX9AXA8+N+pSMLtDnmgNlVfcPYGhewObGtP8wIToQ1RM3K7JUzOPtkQDEWUlxcJ71bJFwewR8MKPLF1/hWKOLpyUX1yydldAupR/cas3kJIanA60OTyAgJbeuD8wVWTKSw9f6iIu3ui3s1tfwV6gRoEeJdFPKy1ltTxbeUwB5M9bLhBoJqQ/zncy7dy1FA6eFM0hb15Py2lIzchJ3/vFK/RUuYMnmBTgQZXBBnwf+fQ405kmZYOcuU/wE1nBuOt73g7RSdUe4qocs64tJyKBaW25DOMpLvdDTMxfJXt+jtXT0RyBcYoM5K4EP2tN98Kjq1Z3r9JGLbAwZzagdTX+IUx8eyiwJGssnAuOA7S/iyE+i1noMkVnPfuOthn9ZLf6cw1fyOA0PCt+fWtqWu9BF7yCJGVCg7dka0rQwrrw/oK782djJHOtiR3Jf3N7k9+Hyw3BWs7YMtXmNFWzUpLS1BrjMCIKoEPSskQFgom0eJ4TkLrfHi8DBrFUiGhhtrTe5BVqtvYSUT9GwkbAsEs9hjL3kJ400+3X/ceQUJiN9hAv9Zntql9+RkP9RbqopLQGW4=
