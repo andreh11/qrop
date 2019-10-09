@@ -1,6 +1,5 @@
 # common settings
 version: 0.4-{build}
-clone_depth: 1
 clone_folder: C:\projects\qrop
 image: Visual Studio 2017
 
