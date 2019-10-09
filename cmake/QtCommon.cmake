@@ -29,9 +29,6 @@ if (WIN32)
     set(RES_FILES "windows_metafile.rc")
     ENABLE_LANGUAGE(RC)
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> /l 0x809 /fo<OBJECT> <SOURCE>")
-
-    # Configure NSIS script
-    configure_file("${PROJECT_SOURCE_DIR}/dist/windows/Qrop.nsi.in" "${PROJECT_SOURCE_DIR}/Qrop.nsi" @ONLY)
 endif()
 
 if (APPLE)

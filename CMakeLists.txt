@@ -49,6 +49,11 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+if (WIN32)
+    # Configure NSIS script
+    configure_file("${PROJECT_SOURCE_DIR}/dist/windows/Qrop.nsi.in" "${PROJECT_SOURCE_DIR}/Qrop.nsi" @ONLY)
+endif()
+
 configure_file(
   ${CMAKE_SOURCE_DIR}/core/version.h.in
   ${CMAKE_SOURCE_DIR}/core/version.h
