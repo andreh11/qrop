@@ -159,7 +159,7 @@ Section "Qrop" BfWSection
   ; File /r /x .* doc\manual\images
 
   SetOutPath "$INSTDIR"
-  File dist\windows\AppIcon.ico
+  File res\AppIcon.ico
 
   ; %NSIS_INSTALL_FILES
 
