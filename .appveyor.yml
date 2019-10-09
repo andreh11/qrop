@@ -17,7 +17,7 @@ environment:
 
 install:
   - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
-  - set QTDIR=C:\Qt\5.12.4\%suffix%
+  - set QTDIR=C:\Qt\5.12.5\%suffix%
   - set PATH=%PATH%;%QTDIR%\bin;
   - cmd: mkdir C:\Code
   - cmd: cd C:\Code
@@ -38,6 +38,7 @@ build_script:
   - cmd: cp core/*.dll release/
   - cmd: cp qrop.exe release/
   - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release
+  - cmd: cat Qrop.nsi
   - cmd: makensis Qrop.nsi
 
 artifacts:

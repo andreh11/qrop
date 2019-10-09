@@ -6,17 +6,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Basic functions and other bundle stuffs for Mac and Windows
-include(QtCommon)
-
-# Project informations
-project(qrop LANGUAGES CXX VERSION 0.4)
-fix_project_version()
-set(COMPANY "L'Atelier paysan")
-set(COPYRIGHT "Copyright (c) 2018-2019 André Hoarau")
-
-option(MAKE_TESTS "Make the tests" ON)
-
 # Get the current working branch
 execute_process(
   COMMAND git rev-parse --abbrev-ref HEAD
@@ -48,6 +37,18 @@ execute_process(
     OUTPUT_VARIABLE GIT_VERSION_NUMBER
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
+
+
+# Basic functions and other bundle stuffs for Mac and Windows
+include(QtCommon)
+
+# Project informations
+project(qrop LANGUAGES CXX VERSION 0.4)
+fix_project_version()
+set(COMPANY "L'Atelier paysan")
+set(COPYRIGHT "Copyright (c) 2018-2019 André Hoarau")
+
+option(MAKE_TESTS "Make the tests" ON)
 
 configure_file(
   ${CMAKE_SOURCE_DIR}/core/version.h.in
