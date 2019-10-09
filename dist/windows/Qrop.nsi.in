@@ -241,4 +241,4 @@ Function un.onInit
   ; !insertmacro MULTIUSER_UNINIT
   ; !insertmacro MUI_UNGETLANGUAGE
 
-FunctionEnd#
+FunctionEnd
