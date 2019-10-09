@@ -43,16 +43,11 @@ execute_process(
 
 # Get the shot version number
 execute_process(
-    COMMAND bash "-c" "git describe --abbrev=0 --tag | tr -d \"v\""
+    COMMAND sh "-c" "git describe --abbrev=0 --tag | tr -d \"v\""
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_VERSION_NUMBER
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-
-if (WIN32)
-    # Configure NSIS script
-    configure_file("${PROJECT_SOURCE_DIR}/dist/windows/Qrop.nsi.in" "${PROJECT_SOURCE_DIR}/Qrop.nsi" @ONLY)
-endif()
 
 configure_file(
   ${CMAKE_SOURCE_DIR}/core/version.h.in
