@@ -1,0 +1,244 @@
+SetCompressor /SOLID lzma
+
+!include "MUI2.nsh"
+
+;--------------------------------
+;General
+
+!define QROP_VERSION "@GIT_VERSION_NUMBER@"
+
+# VIProductVersion requires version in x.x.x.x format
+!define QROP_VIPRODUCTVERSION "@GIT_VERSION_NUMBER@.0.0"
+
+;Name and file
+Name "Qrop"
+OutFile "Qrop.exe"
+
+# Icon to use for the installer
+!define MUI_ICON "res\AppIcon.ico"
+!define MUI_UNICON "res\AppIcon.ico"
+
+# Default installation folder
+InstallDir "$PROGRAMFILES64\Qrop"
+
+
+#--------------------------------
+# Version information
+
+VIProductVersion "${QROP_VIPRODUCTVERSION}"
+VIAddVersionKey "ProductName" "Qrop"
+VIAddVersionKey "FileDescription" "Qrop - a free software for crop planning."
+VIAddVersionKey "FileVersion" "${QROP_VERSION}"
+VIAddVersionKey "LegalCopyright" "GPL v.3"
+VIAddVersionKey "ProductVersion" "${QROP_VERSION}"
+
+;--------------------------------
+;Variables
+
+Var StartMenuFolder
+!define UserdataDir Qrop1.5
+!define UserdataFlags "--config-dir ${UserdataDir}"
+
+;--------------------------------
+;Interface Settings
+
+!define MUI_WELCOMEFINISHPAGE_BITMAP "dist\windows\WindowsInstallerGraphic.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "dist\windows\WindowsInstallerGraphic.bmp"
+!define MUI_ABORTWARNING
+
+;--------------------------------
+;Language Selection Dialog Settings
+
+;Remember the installer language
+!define MUI_LANGDLL_REGISTRY_ROOT "SHCTX"
+!define MUI_LANGDLL_REGISTRY_KEY "Software\Qrop\${QROP_VERSION}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+
+;--------------------------------
+;Pages
+
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "LICENSE"
+; !insertmacro MUI_PAGE_COMPONENTS
+; !insertmacro MULTIUSER_PAGE_INSTALLMODE
+!insertmacro MUI_PAGE_DIRECTORY
+
+;Start Menu Folder Page Configuration
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "SHCTX"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Qrop\${QROP_VERSION}"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+
+!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+
+!insertmacro MUI_PAGE_INSTFILES
+
+!define MUI_FINISHPAGE_RUN $INSTDIR\qrop.exe
+!define MUI_FINISHPAGE_RUN_PARAMETERS "${UserdataFlags}"
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+;--------------------------------
+;Languages
+
+!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+!insertmacro MUI_LANGUAGE "French"
+; !insertmacro MUI_LANGUAGE "German"
+; !insertmacro MUI_LANGUAGE "Spanish"
+; !insertmacro MUI_LANGUAGE "SpanishInternational"
+; !insertmacro MUI_LANGUAGE "SimpChinese"
+; !insertmacro MUI_LANGUAGE "TradChinese"
+; !insertmacro MUI_LANGUAGE "Japanese"
+; !insertmacro MUI_LANGUAGE "Korean"
+; !insertmacro MUI_LANGUAGE "Italian"
+; !insertmacro MUI_LANGUAGE "Dutch"
+; !insertmacro MUI_LANGUAGE "Danish"
+; !insertmacro MUI_LANGUAGE "Swedish"
+; !insertmacro MUI_LANGUAGE "Norwegian"
+; !insertmacro MUI_LANGUAGE "NorwegianNynorsk"
+; !insertmacro MUI_LANGUAGE "Finnish"
+; !insertmacro MUI_LANGUAGE "Greek"
+; !insertmacro MUI_LANGUAGE "Russian"
+; !insertmacro MUI_LANGUAGE "Portuguese"
+; !insertmacro MUI_LANGUAGE "PortugueseBR"
+; !insertmacro MUI_LANGUAGE "Polish"
+; !insertmacro MUI_LANGUAGE "Ukrainian"
+; !insertmacro MUI_LANGUAGE "Czech"
+; !insertmacro MUI_LANGUAGE "Slovak"
+; !insertmacro MUI_LANGUAGE "Croatian"
+; !insertmacro MUI_LANGUAGE "Bulgarian"
+; !insertmacro MUI_LANGUAGE "Hungarian"
+; !insertmacro MUI_LANGUAGE "Thai"
+; !insertmacro MUI_LANGUAGE "Romanian"
+; !insertmacro MUI_LANGUAGE "Latvian"
+; !insertmacro MUI_LANGUAGE "Macedonian"
+; !insertmacro MUI_LANGUAGE "Estonian"
+; !insertmacro MUI_LANGUAGE "Turkish"
+; !insertmacro MUI_LANGUAGE "Lithuanian"
+; !insertmacro MUI_LANGUAGE "Slovenian"
+; !insertmacro MUI_LANGUAGE "Serbian"
+; !insertmacro MUI_LANGUAGE "SerbianLatin"
+; !insertmacro MUI_LANGUAGE "Arabic"
+; !insertmacro MUI_LANGUAGE "Farsi"
+; !insertmacro MUI_LANGUAGE "Hebrew"
+; !insertmacro MUI_LANGUAGE "Indonesian"
+; !insertmacro MUI_LANGUAGE "Mongolian"
+; !insertmacro MUI_LANGUAGE "Luxembourgish"
+; !insertmacro MUI_LANGUAGE "Albanian"
+; !insertmacro MUI_LANGUAGE "Breton"
+; !insertmacro MUI_LANGUAGE "Belarusian"
+; !insertmacro MUI_LANGUAGE "Icelandic"
+; !insertmacro MUI_LANGUAGE "Malay"
+; !insertmacro MUI_LANGUAGE "Bosnian"
+; !insertmacro MUI_LANGUAGE "Kurdish"
+; !insertmacro MUI_LANGUAGE "Irish"
+; !insertmacro MUI_LANGUAGE "Uzbek"
+; !insertmacro MUI_LANGUAGE "Galician"
+; !insertmacro MUI_LANGUAGE "Afrikaans"
+; !insertmacro MUI_LANGUAGE "Catalan"
+
+;--------------------------------
+;Reserve Files
+
+;If you are using solid compression, files that are required before
+;the actual installation should be stored first in the data block,
+;because this will make your installer start faster.
+
+; !insertmacro MUI_RESERVEFILE_LANGDLL
+; ReserveFile "${NSISDIR}\Plugins\*.dll"
+
+;--------------------------------
+;Installer Sections
+
+Section "Qrop" BfWSection
+
+  ; SetOutPath "$INSTDIR\manual"
+  ; File /r /x .* doc\manual\*.html
+  ; File /r /x .* doc\manual\styles
+  ; File /r /x .* doc\manual\images
+
+  SetOutPath "$INSTDIR"
+  File dist\windows\AppIcon.ico
+
+  ; %NSIS_INSTALL_FILES
+
+  ; ; install python stuff
+  ; SetOutPath "$INSTDIR\Lib"
+  ; File /nonfatal /r /x .* /x *.pyc /x *.pyo Lib\*.*
+
+  ; SetOutPath "$INSTDIR\DLLs"
+  ; File /nonfatal /r /x .* DLLs\*.*
+
+  SetOutPath "$INSTDIR"
+  File /r release\*
+
+  SetOutPath "$INSTDIR"
+
+  ;Store installation folder
+  WriteRegStr SHCTX "Software\Qrop\${QROP_VERSION}" "" $INSTDIR
+
+  ;Create uninstaller
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
+  ;Create shortcuts
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Qrop.lnk" "$INSTDIR\qrop.exe" "${UserdataFlags}"
+  ; CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Map editor.lnk" "$INSTDIR\qrop.exe" "-e ${UserdataFlags}" "$INSTDIR\qrop_editor-icon.ico"
+  ; CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Multiplayer server.lnk" "$INSTDIR\qropd.exe"
+  ; CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Manual.lnk" "$INSTDIR\manual\manual.en.html"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+
+!insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
+;--------------------------------
+;Installer Functions
+
+Function .onInit
+
+  ; !insertmacro MULTIUSER_INIT
+  ; !insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+;--------------------------------
+;Descriptions
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
+
+;Assign descriptions to sections
+; !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+;   !insertmacro MUI_DESCRIPTION_TEXT ${BfWSection} "Qrop executable and data."
+; !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+;--------------------------------
+;Uninstaller Section
+
+Section "Uninstall"
+  RMDir /r "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+
+  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Qrop.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder"
+
+  DeleteRegKey /ifempty SHCTX "Software\Qrop\${QROP_VERSION}"
+  DeleteRegKey /ifempty SHCTX "Software\Qrop"
+
+SectionEnd
+
+;--------------------------------
+;Uninstaller Functions
+
+Function un.onInit
+
+  ; !insertmacro MULTIUSER_UNINIT
+  ; !insertmacro MUI_UNGETLANGUAGE
+
+FunctionEnd#

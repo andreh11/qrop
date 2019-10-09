@@ -1,7 +1,11 @@
 [Desktop Entry]
 Type=Application
 Name=Qrop
+Name[fr]=Qrop
+GenericName=Crop planning software
+GenericName[fr]=Logiciel de planification des cultures
 Comment=Crop planning and recordkeeping software
-Exec=Qrop
+Comment[fr]=Un logiciel de planification et de suivi de cultures
+Exec=qrop
 Icon=qrop
 Categories=Office;

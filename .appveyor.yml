@@ -38,6 +38,7 @@ build_script:
   - cmd: cp core/*.dll release/
   - cmd: cp qrop.exe release/
   - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release
+  - cmd: makensis Qrop.nsi
 
 artifacts:
   - path: release\

@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(QtCommon)
 
 # Project informations
-project(Qrop LANGUAGES CXX VERSION 0.4)
+project(qrop LANGUAGES CXX VERSION 0.4)
 fix_project_version()
 set(COMPANY "L'Atelier paysan")
 set(COPYRIGHT "Copyright (c) 2018-2019 André Hoarau")
@@ -39,6 +39,14 @@ execute_process(
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   OUTPUT_VARIABLE GIT_REVISION
   OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get the shot version number
+execute_process(
+    COMMAND bash "-c" "git describe --abbrev=0 --tag | tr -d \"v\""
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_VERSION_NUMBER
+    OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
 configure_file(

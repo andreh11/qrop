@@ -2,5 +2,8 @@
 
 source dist/env.sh
 
-curl --ftp-create-dirs -T Qrop*x86.exe -u $FTP_USER:$FTP_PASSWD $WIN32_FTP_FILE
-curl --ftp-create-dirs -T Qrop*x64.exe -u $FTP_USER:$FTP_PASSWD $WIN64_FTP_FILE
+if [ "$arch" == "x86" ]; then
+    curl --ftp-create-dirs -T Qrop.exe -u $FTP_USER:$FTP_PASSWD $WIN32_FTP_FILE
+else
+    curl --ftp-create-dirs -T Qrop.exe -u $FTP_USER:$FTP_PASSWD $WIN64_FTP_FILE
+fi
