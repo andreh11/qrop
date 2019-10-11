@@ -1,4 +1,3 @@
-# common settings
 version: 0.4-{build}
 clone_folder: C:\projects\qrop
 image: Visual Studio 2017
@@ -15,50 +14,31 @@ environment:
       arch: x86
 
 install:
-  - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
+  - '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
   - set QTDIR=C:\Qt\5.12.4\%suffix%
   - set PATH=%PATH%;%QTDIR%\bin;
-  - cmd: mkdir C:\Code
-  - cmd: cd C:\Code
+  - mkdir C:\Code
+  - cd C:\Code
   - ps: Start-FileDownload 'http://download.qt.io/official_releases/jom/jom.zip'
-  - cmd: 7z x jom.zip -oC:/jom/
+  - 7z x jom.zip -oC:/jom/
   - set PATH=%PATH%;C:/jom/;
 
 build_script:
-  - if defined APPVEYOR_REPO_TAG_NAME (set QROP_RELEASE=true) else (set QROP_SNAPSHOT=true)
-  - if defined QROP_RELEASE set QROP_VERSION=%APPVEYOR_REPO_TAG_NAME:~1%
-  - if defined QROP_RELEASE echo Building QROP %QROP_VERSION%...
-  - if defined QROP_SNAPSHOT set QROP_VERSION=%APPVEYOR_BUILD_VERSION%
-  - if defined QROP_SNAPSHOT echo Building QROP snapshot %QROP_VERSION%...
-  - cmd: cd C:\projects\qrop
-  - cmd: cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
-  - cmd: jom -j4
-  - cmd: mkdir release
-  - cmd: cp core/*.dll release/
-  - cmd: cp qrop.exe release/
-  - cmd: windeployqt.exe --release -sql --qmldir desktop\qml release
-  - cmd: cat Qrop.nsi
-  - cmd: makensis Qrop.nsi
-
-artifacts:
-  - path: release\
-    name: Qrop-$(QROP_VERSION)-%arch%
-    type: zip
+  - cd C:\projects\qrop
+  - cmake . -G"NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release
+  - jom -j4
+  - mkdir release
+  - cp core/*.dll release/
+  - cp qrop.exe release/
+  - windeployqt.exe --release -sql --qmldir desktop\qml release
+  - makensis Qrop.nsi
 
 deploy:
   - provider: Environment
     name: production
-    QROP_BUILD_TYPE: "release"
-    on:
-      APPVEYOR_REPO_TAG: true
-      branch: master
-
-  - provider: Environment
-    name: production
-    QROP_BUILD_TYPE: "snapshot"
-    on:
-      APPVEYOR_REPO_TAG: true
-      branch: master
 
 deploy_script:
-  - cmd: sh dist/windows/deploy.sh
+  - if %APPVEYOR_REPO_TAG% EQU TRUE (set QROP_RELEASE=true) else (set QROP_RELEASE=false)
+  - if %QROP_RELEASE% EQU TRUE (set QROP_VERSION=%APPVEYOR_REPO_TAG_NAME:~1%) else (set QROP_VERSION=nightly)
+  - if %QROP_RELEASE% EQU TRUE (set QROP_PATH=ftp://ftp.ouvaton.coop/httpdocs/releases/%QROP_VERSION%/Qrop-%QROP_VERSION%-%arch%.exe) else (set QROP_PATH=ftp://ftp.ouvaton.coop/httpdocs/snapshots/Qrop-nightly-%arch%.exe)
+  - curl --ftp-create-dirs -T Qrop.exe -u %FTP_USER%:%FTP_PASSWD% %QROP_PATH%
