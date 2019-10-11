@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
-QROP_VERSION=$(git describe --tags)
 QROP_COMMIT=$(git rev-parse HEAD)
-echo $QROP_VERSION
-echo $QROP_COMMIT
 
-EXE_VERSION=$(echo $QROP_VERSION | tr -d 'v')
 EXE_BASENAME=Qrop-${EXE_VERSION}
 
 if [ "$QROP_BUILD_TYPE" == "snapshot" ]; then
     QROP_DIR=snapshots
     EXE_BASENAME=Qrop-nightly
 else
+    QROP_VERSION=$(git describe --tags)
     QROP_DIR="releases/${QROP_VERSION}"
+    EXE_VERSION=$(echo $QROP_VERSION | tr -d 'v')
     EXE_BASENAME=Qrop-${EXE_VERSION}
 fi
 

@@ -27,12 +27,21 @@ ItemDelegate {
     property bool isActive: index === navigationIndex
     property alias iconText: iconLabel.text
     property alias iconColor: iconLabel.color
+    property bool showToolTip: true
 
     focusPolicy: Qt.NoFocus
     height: 48
     highlighted: isActive
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
+
+    ToolTip {
+        x: control.width + Units.smallSpacing
+        y: (control.height - height) / 2
+        text: control.text
+        visible: control.showToolTip && largeDisplay && control.hovered
+        delay: Qt.styleHints.mousePressAndHoldInterval
+    }
 
     contentItem: Row {
         anchors.centerIn: parent
@@ -51,12 +60,12 @@ ItemDelegate {
         }
 
         Label {
+            id: textLabel
+            text: control.text
             color: "white"
             anchors.verticalCenter: parent.verticalCenter
-            id: textLabel
             visible: !largeDisplay
             width: visible ? implicitWidth : 0
-            text: control.text
             font.family: "Roboto Regular"
             verticalAlignment: Text.AlignVCenter
         }

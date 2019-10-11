@@ -4,9 +4,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
-## 0.4 - 2019-09-28 
+## 0.4 - 2019-10-11
 
 ### Ajouts
+  - Ajout d'infobulles pour les boutons de la barre de gauche.
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
 
 ### Changements

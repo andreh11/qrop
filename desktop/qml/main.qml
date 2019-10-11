@@ -472,7 +472,7 @@ ApplicationWindow {
                 id: mainDatabase
                 Layout.fillWidth: true
                 width: drawer.width
-                text: qsTr("Settings")
+                text: qsTr("Main database")
                 iconText: "\ue400"
                 isActive: currentDatabaseFile == ""
 
@@ -486,7 +486,8 @@ ApplicationWindow {
                 id: secondDatabaseButton
                 Layout.fillWidth: true
                 width: drawer.width
-                text: qsTr("Settings")
+                text: qsTr("Second database")
+                showToolTip: false
                 iconText: "\ue401"
                 iconColor: secondDatabaseFile === "" ?  Material.color(Material.Grey,
                                                                        Material.Shade400)

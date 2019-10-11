@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ## 0.4 - 2019-09-28 
 
 ### Added
+  - Add tooltips for the buttons of the left bar.
   - *Planting form* − Add density (m²) field (#126).
 
 ### Changed
