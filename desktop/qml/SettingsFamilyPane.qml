@@ -26,6 +26,7 @@ Pane {
 
     property int firstColumnWidth: 200
     property int secondColumnWidth: 150
+    property int paneWidth
 
     signal close();
 
@@ -33,49 +34,17 @@ Pane {
         familyModel.refresh();
     }
 
-    Material.elevation: 2
-    Material.background: "white"
+    Material.elevation: 0
+    Material.background: Units.pageColor
     padding: 0
+    anchors.fill: parent
 
-    RowLayout {
-        id: rowLayout
-        spacing: Units.smallSpacing
-        width: parent.width
-
-        ToolButton {
-            id: drawerButton
-            text: "\ue5c4"
-            font.family: "Material Icons"
-            font.pixelSize: Units.fontSizeHeadline
-            onClicked: pane.close()
-            Layout.leftMargin: Units.formSpacing
-        }
-
-        Label {
-            id: familyLabel
-            text: qsTr("Families and crops")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeSubheading
-            Layout.fillWidth: true
-        }
-
-        Button {
-            text: qsTr("Add family")
-            flat: true
-            Material.foreground: Material.accent
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.rightMargin: Units.mediumSpacing
-
-            onClicked: addFamilyDialog.open()
-
-            AddFamilyDialog {
-                id: addFamilyDialog
-                onAccepted: {
-                    Family.add({"family" : cropName, "color" : color});
-                    familyModel.refresh();
-                }
-            }
-        }
+    Pane {
+        id: backgroundPane
+        Material.background: "white"
+        Material.elevation: 1
+        anchors { top: parent.top; bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
+        width: paneWidth
     }
 
     ListView {
@@ -84,23 +53,65 @@ Pane {
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         clip: true
 
-        anchors {
-            top: rowLayout.bottom
-            topMargin: Units.mediumSpacing
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+        ScrollBar.vertical: ScrollBar {
+            parent: pane
+            anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+        }
+        cacheBuffer: Units.rowHeight * 20
+
+        anchors.fill: parent
+        header:  RowLayout {
+            id: rowLayout
+            spacing: Units.smallSpacing
+            width: paneWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ToolButton {
+                id: drawerButton
+                text: "\ue5c4"
+                Material.foreground:  Units.colorHighEmphasis
+                font.family: "Material Icons"
+                font.pixelSize: Units.fontSizeHeadline
+                onClicked: pane.close()
+                Layout.leftMargin: Units.formSpacing
+            }
+
+            Label {
+                id: familyLabel
+                text: qsTr("Families and crops")
+                font.family: "Roboto Regular"
+                color: Units.colorHighEmphasis
+                font.pixelSize: Units.fontSizeBodyAndButton
+                Layout.fillWidth: true
+            }
+
+            FlatButton {
+                text: qsTr("Add family")
+                highlighted: true
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.rightMargin: Units.mediumSpacing
+
+                onClicked: addFamilyDialog.open()
+
+                AddFamilyDialog {
+                    id: addFamilyDialog
+                    onAccepted: {
+                        Family.add({"family" : cropName, "color" : color});
+                        familyModel.refresh();
+                    }
+                }
+            }
         }
 
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
-        ScrollBar.vertical: ScrollBar { id: scrollBar }
 
-        spacing: Units.smallSpacing
+        spacing: 0
         model: FamilyModel { id: familyModel }
         delegate: SettingsFamilyDelegate {
-            width: parent.width
-            onRefresh: familyModel.refresh()
+            width: paneWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+            onRefresh: familyModel.refreshRow(index)
             firstColumnWidth: pane.firstColumnWidth
             secondColumnWidth: pane.secondColumnWidth
         }

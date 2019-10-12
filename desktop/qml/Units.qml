@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ pragma Singleton
 import QtQuick 2.0
 import Qt.labs.settings 1.0
 import QtQuick.Controls 2.4
+import QtQuick.Controls.Material 2.0
 
 import io.qrop.components 1.0
 
@@ -76,11 +77,13 @@ QtObject {
     readonly property int monthWidth: 60 // Width of a month in a timeline.
     readonly property int timegraphWidth: monthWidth * 12
     readonly property int toolBarHeight: 48
+    readonly property int listSingleLineHeight: 48
 
     readonly property color colorHighEmphasis: Qt.rgba(0, 0, 0, 0.87)
     readonly property color colorMediumEmphasis: Qt.rgba(0, 0, 0, 0.6)
     readonly property color colorDisabledEmphasis: Qt.rgba(0, 0, 0, 0.38)
     readonly property color colorError: Qt.rgba(176/255., 0, 32/255., 1)
+    readonly property color pageColor: Material.color(Material.Grey, Material.Shade100)
 
     readonly property int dialogHeaderHeight: 72
 

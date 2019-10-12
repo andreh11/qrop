@@ -31,29 +31,31 @@ Column {
 
     signal refresh()
 
+    Behavior on height {
+        NumberAnimation { duration: Units.shortDuration }
+    }
+
     Rectangle {
-        color: Material.color(Material.Grey, Material.Shade100)
+        color: "white"
+//        Material.color(Material.Grey, Material.Shade100)
         width: parent.width
-        height: childrenRect.height
+        height: Units.listSingleLineHeight
 
         MouseArea {
             id: familyMouseArea
-            height: Units.rowHeight
-            width: parent.width
+            anchors.fill: parent
             hoverEnabled: true
 
             RowLayout {
-                id: headerRow
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-                height: Units.rowHeight
+                anchors.fill: parent
                 spacing: Units.formSpacing
 
                 TextDisk {
                     id: headerCheckbox
-                    text: family.slice(0,2)
+                    text: ""
                     color: model.color
                     Layout.leftMargin: Units.mediumSpacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     onClicked: colorPickerDialog.open()
 
                     Dialog {
@@ -72,13 +74,12 @@ Column {
                     }
                 }
 
-                TextInput {
+                EditableLabel {
+                    id: editableLabel
                     text: family
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.minimumWidth: pane.firstColumnWidth
-                    maximumLength: 25
                     Layout.maximumWidth: Layout.minimumWidth
+                    Layout.fillHeight: true
                     onEditingFinished: {
                         Family.update(family_id, {"family": text})
                         refresh();
@@ -88,8 +89,9 @@ Column {
                 ComboBox {
                     flat: true
                     model: 10
-                    Layout.minimumWidth: pane.secondColumnWidth
                     currentIndex: interval
+                    Layout.minimumWidth: pane.secondColumnWidth
+                    Layout.fillHeight: true
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
                     displayText: qsTr("%L1 years", "", currentIndex).arg(currentIndex)
@@ -99,7 +101,6 @@ Column {
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
                 }
-
 
                 Item { Layout.fillWidth: true }
 
@@ -112,6 +113,7 @@ Column {
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
 
                     onClicked: confirmFamilyDeleteDialog.open()
 
@@ -141,8 +143,11 @@ Column {
                     Layout.leftMargin: -28
                     Layout.rightMargin: Units.mediumSpacing
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
                     checkable: true
-                    text: checked ?  "\ue313" : "\ue315"
+//                    text: checked ?  "\ue313" : "\ue315"
+                    text: "\ue313"
+                    rotation: checked ? 180 : 0
                     font.family: "Material Icons"
                     font.pixelSize: 22
                     ToolTip.text: checked ? qsTr("Hide crops") : qsTr("Show crop")
@@ -171,7 +176,7 @@ Column {
 
         delegate: SettingsCropDelegate {
             width: parent.width
-            onRefresh: cropModel.refresh()
+            onRefresh: cropModel.refreshRow(index)
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
         }
@@ -200,4 +205,6 @@ Column {
             }
         }
     }
+
+    ThinDivider { width: parent.width }
 }

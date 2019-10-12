@@ -8,107 +8,117 @@ import io.qrop.components 1.0
 
 Pane {
     id: pane
-    
+
     property int firstColumnWidth: 200
     property int secondColumnWidth: 150
-    
-    signal close();
-    
-    Material.elevation: 2
-    Material.background: "white"
-    padding: 0
-    
-    RowLayout {
-        id: rowLayout
-        spacing: Units.smallSpacing
-        width: parent.width
-        
-        ToolButton {
-            id: backButton
-            text: "\ue5c4"
-            font.family: "Material Icons"
-            font.pixelSize: Units.fontSizeHeadline
-            onClicked: pane.close()
-            Layout.leftMargin: Units.formSpacing
-        }
-        
-        Label {
-            id: label
-            text: qsTr("Units")
-            font.family: "Roboto Regular"
-            font.pixelSize: Units.fontSizeSubheading
-            Layout.fillWidth: true
-        }
-        
-        Button {
-            text: qsTr("Add unit")
-            flat: true
-            Material.foreground: Material.accent
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.rightMargin: Units.mediumSpacing
-            
-            onClicked: addUnitDialog.open()
+    property int paneWidth
 
-            AddUnitDialog {
-                id: addUnitDialog
-                onAccepted: {
-                    Unit.add({"fullname" : unitName,
-                                 "abbreviation": unitAbbreviation});
-                    unitModel.refresh();
-                }
-            }
-        }
+    signal close();
+
+    Material.elevation: 0
+    Material.background: Units.pageColor
+    padding: 0
+    anchors.fill: parent
+
+    Pane {
+        id: backgroundPane
+        Material.background: "white"
+        Material.elevation: 2
+        anchors { top: parent.top; bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
+        width: paneWidth
     }
-    
+
     ListView {
         id: unitView
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalAndVerticalFlick
-        anchors {
-            top: rowLayout.bottom
-            topMargin: Units.mediumSpacing
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+        anchors.fill: parent
+
+        header: RowLayout {
+            id: rowLayout
+            spacing: Units.smallSpacing
+            width: paneWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ToolButton {
+                id: backButton
+                text: "\ue5c4"
+                font.family: "Material Icons"
+                font.pixelSize: Units.fontSizeHeadline
+                onClicked: pane.close()
+                Layout.leftMargin: Units.formSpacing
+            }
+
+            Label {
+                id: label
+                text: qsTr("Units")
+                font.family: "Roboto Regular"
+                font.pixelSize: Units.fontSizeSubheading
+                Layout.fillWidth: true
+            }
+
+            Button {
+                text: qsTr("Add unit")
+                flat: true
+                Material.foreground: Material.accent
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.rightMargin: Units.mediumSpacing
+
+                onClicked: addUnitDialog.open()
+
+                AddUnitDialog {
+                    id: addUnitDialog
+                    onAccepted: {
+                        Unit.add({"fullname" : unitName,
+                                     "abbreviation": unitAbbreviation});
+                        unitModel.refresh();
+                    }
+                }
+            }
         }
 
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
-        ScrollBar.vertical: ScrollBar { id: scrollBar }
+
+
+        ScrollBar.vertical: ScrollBar {
+            parent: pane
+            anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+        }
+        cacheBuffer: Units.rowHeight * 20
 
         spacing: Units.smallSpacing
         model: UnitModel { id: unitModel }
         delegate: MouseArea {
             id: mouseArea
-            height: Units.rowHeight
-            width: parent.width
+            height: Units.listSingleLineHeight
+            width: paneWidth
             hoverEnabled: true
-            
+            anchors.horizontalCenter: parent.horizontalCenter
+
             RowLayout {
                 id: headerRow
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-                height: Units.rowHeight
+                anchors.fill: parent
                 spacing: Units.formSpacing
-                
-                TextInput {
+
+                EditableLabel {
                     text: fullname
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.minimumWidth: pane.firstColumnWidth
                     Layout.leftMargin: Units.mediumSpacing
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
                     onEditingFinished: {
                         Unit.update(unit_id, {"fullname": text})
                         unitModel.refresh();
                     }
                 }
 
-                TextInput {
+                EditableLabel {
                     text: abbreviation
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.minimumWidth: pane.firstColumnWidth
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.leftMargin: Units.mediumSpacing
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
                     onEditingFinished: {
                         Unit.update(unit_id, {"abbreviation": text})
@@ -126,23 +136,25 @@ Pane {
                     ToolTip.delay: 200
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.rightMargin: Units.mediumSpacing
-                    
+
                     onClicked: deleteDialog.open()
-                    
+
                     Dialog {
                         id: deleteDialog
                         title: qsTr("Delete %1?").arg(fullname)
                         standardButtons: Dialog.Ok | Dialog.Cancel
-                        
+
                         onAccepted: {
                             Unit.remove(unit_id)
                             unitModel.refresh();
                         }
-                        
+
                         onRejected: deleteDialog.close()
                     }
                 }
+
             }
+            ThinDivider { width: parent.width; anchors.top: headerRow.bottom }
         }
     }
 }

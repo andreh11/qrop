@@ -11,6 +11,7 @@ Column {
 
     property int firstColumnWidth
     property int secondColumnWidth
+    property int listPadding
 
     signal refresh()
 
@@ -32,11 +33,11 @@ Column {
                 height: Units.rowHeight
                 spacing: Units.formSpacing
 
-                TextInput {
+                EditableLabel {
                     text: model.method
-                    font.family: "Roboto Regular"
                     Layout.minimumWidth: pane.firstColumnWidth
-                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.fillHeight: true
+                    Layout.leftMargin: Units.mediumSpacing + listPadding
                     onEditingFinished: {
                         TaskMethod.update(model.task_method_id, {"method": text});
                         refresh();
@@ -84,7 +85,8 @@ Column {
                     Layout.rightMargin: Units.mediumSpacing
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     checkable: true
-                    text: checked ?  "\ue313" : "\ue315"
+                    text: "\ue313"
+                    rotation: checked ? 180 : 0
                     font.family: "Material Icons"
                     font.pixelSize: 22
                     ToolTip.text: checked ? qsTr("Hide implements") : qsTr("Show implements")
@@ -108,18 +110,18 @@ Column {
 
         delegate: SettingsImplementDelegate {
             width: parent.width
-            onRefresh: taskImplementModel.refresh()
+            listPadding: control.listPadding
+            onRefresh: { taskImplementModel.refreshRow(index); taskImplementModel.resetFilter() }
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
         }
     }
 
-    Button {
+    FlatButton {
         visible: showButton.checked
         id: addVarietyButton
         anchors.right: parent.right
         anchors.rightMargin: Units.mediumSpacing
-        flat: true
         text: qsTr("Add implement")
         onClicked: addDialog.open();
 

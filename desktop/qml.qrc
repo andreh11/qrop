@@ -113,5 +113,6 @@
         <file>qml/MonthGrid.qml</file>
         <file>qml/FlatButton.qml</file>
         <file>qml/TaskTimeline.qml</file>
+        <file>qml/SettingsPaneButton.qml</file>
     </qresource>
 </RCC>

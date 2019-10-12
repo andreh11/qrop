@@ -46,7 +46,7 @@ Column {
                 id: cropRow
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width
-                height: Units.rowHeight
+                height: Units.listSingleLineHeight
                 spacing: Units.formSpacing
 
                 TextDisk {
@@ -72,12 +72,12 @@ Column {
                     }
                 }
 
-                TextInput {
+                EditableLabel {
+                    id: editableLabel
                     text: model.crop
-                    font.family: "Roboto Regular"
-                    maximumLength: 25
-                    Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: pane.firstColumnWidth
+                    Layout.maximumWidth: Layout.minimumWidth
+                    Layout.fillHeight: true
                     onEditingFinished: {
                         Crop.update(model.crop_id, {"crop": text});
                         refresh();
@@ -125,12 +125,13 @@ Column {
                     Layout.rightMargin: Units.mediumSpacing
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     checkable: true
-                    text: checked ?  "\ue313" : "\ue315"
+                    text: "\ue313"
+                    rotation: checked ? 180 : 0
                     font.family: "Material Icons"
                     font.pixelSize: 22
-                    ToolTip.text: checked ? qsTr("Hide varieties") : qsTr("Show varieties")
-                    ToolTip.visible: hovered
-                    ToolTip.delay: 200
+//                    ToolTip.text: checked ? qsTr("Hide varieties") : qsTr("Show varieties")
+//                    ToolTip.visible: hovered
+//                    ToolTip.delay: 199
                 }
             }
         }
@@ -156,7 +157,7 @@ Column {
 
         delegate: SettingsVarietyDelegate {
             width: parent.width
-            onRefresh: varietyModel.refresh()
+            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
             buttonGroup: buttonGroupL

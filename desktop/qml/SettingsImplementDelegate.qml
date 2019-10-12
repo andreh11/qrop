@@ -9,30 +9,31 @@ import io.qrop.components 1.0
 Column {
     property int firstColumnWidth
     property int secondColumnWidth
+    property int listPadding
     
     signal refresh()
     
     Rectangle {
-        height: childrenRect.height
+        height: Units.listSingleLineHeight
         width: parent.width
         
         MouseArea {
             id: mouseArea
-            height: Units.rowHeight
+            height: parent.height
             width: parent.width
             hoverEnabled: true
             
             RowLayout {
                 id: varietyRow
-                height: Units.rowHeight
+                height: parent.height
                 width: parent.width
                 spacing: Units.formSpacing
                 
-                TextInput {
+                EditableLabel {
                     text: model.implement
-                    color: Qt.rgba(0, 0, 0, 0.7)
-                    font.family: "Roboto Regular"
-                    Layout.leftMargin: Units.mediumSpacing * 2
+                    color: Units.colorMediumEmphasis
+                    Layout.leftMargin: Units.mediumSpacing * 2 + listPadding
+                    Layout.fillHeight: true
                     Layout.minimumWidth: firstColumnWidth
                     
                     onEditingFinished: TaskImplement.update(model.task_implement_id, {"implement": text})

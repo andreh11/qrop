@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ Page {
     }
 
     title: qsTr("Settings")
-    Material.background: Material.color(Material.Grey, Material.Shade100)
+    Material.background: Units.pageColor
 
     Settings {
         id: settings
@@ -88,25 +88,14 @@ Page {
 
     ScrollView {
         id: scrollView
-        width: mainColumn.implicitWidth
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
+        anchors.fill: parent
 
         ScrollBar.vertical: ScrollBar {
-            parent: scrollView.parent
-            anchors {
-                top: parent.top
-                right: parent.right
-                bottom: parent.bottom
-            }
+            anchors { top: parent.top; right: parent.right; bottom: parent.bottom; }
         }
 
         Flickable {
             boundsBehavior: Flickable.StopAtBounds
-
             visible: !showFamilyPane && !showKeywordPane && !showSeedCompanyPane && !showUnitPane
                      && !showTaskTypePane
             contentHeight: mainColumn.implicitHeight
@@ -445,158 +434,52 @@ Page {
 
                         ThinDivider { width: parent.width }
 
-                        RowLayout {
-                            width: parent.width
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Families, crops and varieties")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: showFamilyPane = true
-                                }
-                            }
-
-                            RoundButton {
-                                text: "\ue315"
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
-                                flat: true
-                                onClicked: showFamilyPane = true
-                            }
+                        SettingsPaneButton {
+                            text: qsTr("Families, crops and varieties")
+                            onClicked: showFamilyPane = true
                         }
 
                         ThinDivider { width: parent.width }
 
-                        RowLayout {
-                            width: parent.width
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Keywords")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: showKeywordPane = true
-                                }
-                            }
-
-                            RoundButton {
-                                text: "\ue315"
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
-                                flat: true
-                                onClicked: showKeywordPane = true
-                            }
+                        SettingsPaneButton {
+                            text: qsTr("Keywords")
+                            onClicked: showKeywordPane = true
                         }
 
                         ThinDivider { width: parent.width }
 
-                        RowLayout {
-                            width: parent.width
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Seed companies")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: showSeedCompanyPane = true
-                                }
-                            }
-
-                            RoundButton {
-                                text: "\ue315"
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
-                                flat: true
-                                onClicked: showSeedCompanyPane = true
-                            }
+                        SettingsPaneButton {
+                            text: qsTr("Seed companies")
+                            onClicked: showSeedCompanyPane = true
                         }
 
                         ThinDivider { width: parent.width }
 
-                        RowLayout {
-                            width: parent.width
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Task types")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: showTaskTypePane = true
-                                }
-                            }
-
-                            RoundButton {
-                                text: "\ue315"
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
-                                flat: true
-                                onClicked: showTaskTypePane = true
-                            }
+                        SettingsPaneButton {
+                            text: qsTr("Task types")
+                            onClicked: showTaskTypePane = true
                         }
 
                         ThinDivider { width: parent.width }
-
-                        RowLayout {
-                            width: parent.width
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Units")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: showUnitPane = true
-                                }
-                            }
-
-                            RoundButton {
-                                text: "\ue315"
-                                font.family: "Material Icons"
-                                font.pixelSize: 22
-                                flat: true
-                                onClicked: showUnitPane = true
-                            }
+                        SettingsPaneButton {
+                            text: qsTr("Units")
+                            onClicked: showUnitPane = true
                         }
 
                         ThinDivider { width: parent.width }
 
                         Item { Layout.fillHeight: true }
-
                     }
                 }
             }
-
         }
     }
+
     SettingsFamilyPane {
         id: familyPane
         height: parent.height
-        width: paneWidth
+        width: parent.width
+        paneWidth: page.paneWidth
         visible: showFamilyPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showFamilyPane = false
@@ -605,7 +488,8 @@ Page {
     SettingsKeywordPane {
         id: keywordPane
         height: parent.height
-        width: paneWidth
+        width: parent.width
+        paneWidth: page.paneWidth
         visible: showKeywordPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showKeywordPane = false
@@ -615,7 +499,8 @@ Page {
     SettingsSeedCompanyPane {
         id: seedCompanyPane
         height: parent.height
-        width: paneWidth
+        width: parent.width
+        paneWidth: page.paneWidth
         visible: showSeedCompanyPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showSeedCompanyPane = false
@@ -624,8 +509,9 @@ Page {
     SettingsUnitPane {
         id: unitPane
         height: parent.height
-        width: paneWidth
         visible: showUnitPane
+        width: parent.width
+        paneWidth: page.paneWidth
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showUnitPane = false
     }
@@ -633,7 +519,8 @@ Page {
     SettingsTaskPane {
         id: taskTypePane
         height: parent.height
-        width: paneWidth
+        width: parent.width
+        paneWidth: page.paneWidth
         visible: showTaskTypePane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showTaskTypePane = false

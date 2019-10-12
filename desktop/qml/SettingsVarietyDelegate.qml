@@ -47,17 +47,17 @@ Column {
 
                 RadioButton {
                     autoExclusive: true
-                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.leftMargin: Units.mediumSpacing - leftPadding / 2
+                    Layout.rightMargin: -rightPadding / 2
                     ButtonGroup.group: buttonGroup
                     onCheckedChanged: Variety.setDefault(model.variety_id, checked)
-                    checked: Variety.isDefault(model.variety_id)
+                    checked: model.is_default === 1
                 }
 
                 TextInput {
                     text: model.variety
                     color: Qt.rgba(0, 0, 0, 0.7)
                     font.family: "Roboto Regular"
-//                    Layout.leftMargin: Units.mediumSpacing + Units.formSpacing + 48
                     maximumLength: 25
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: firstColumnWidth

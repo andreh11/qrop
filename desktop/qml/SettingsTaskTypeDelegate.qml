@@ -15,13 +15,13 @@ Column {
     signal refresh()
 
     Rectangle {
-        color: Material.color(Material.Grey, Material.Shade100)
+        color: "white"
         width: parent.width
-        height: childrenRect.height
+        height: Units.listSingleLineHeight
 
         MouseArea {
             id: taskTypeMouseArea
-            height: Units.rowHeight
+            height: parent.height
             width: parent.width
             hoverEnabled: true
 
@@ -29,14 +29,23 @@ Column {
                 id: headerRow
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width
-                height: Units.rowHeight
-                spacing: Units.formSpacing
+                height: parent.height
+                spacing: Units.mediumSpacing
 
                 TextDisk {
                     id: colorDisk
-                    text: type.slice(0,2)
+//                    text: type.slice(0,2)
+                    text: {
+
+                        var stringList = type.split(" ");
+                        if (stringList.length > 1)
+                            return stringList[0][0] + stringList[1][0].toString().toUpperCase()
+                        else
+                            return stringList[0][0] + stringList[0][1]
+                    }
                     color: model.color
                     Layout.leftMargin: Units.mediumSpacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     onClicked: colorPickerDialog.open()
 
                     Dialog {
@@ -55,12 +64,11 @@ Column {
                     }
                 }
 
-                TextInput {
+                EditableLabel {
                     text: type
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
                     Layout.minimumWidth: pane.firstColumnWidth
-                    Layout.leftMargin: Units.mediumSpacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                    Layout.fillHeight: true
                     onEditingFinished: {
                         TaskType.update(task_type_id, {"type": text})
                         refresh();
@@ -107,7 +115,8 @@ Column {
                     Layout.rightMargin: Units.mediumSpacing
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     checkable: true
-                    text: checked ?  "\ue313" : "\ue315"
+                    text: "\ue313"
+                    rotation: checked ? 180 : 0
                     font.family: "Material Icons"
                     font.pixelSize: 22
                     ToolTip.text: checked ? qsTr("Hide methods") : qsTr("Show methods")
@@ -138,19 +147,19 @@ Column {
 
         delegate: SettingsTaskMethodDelegate {
             width: parent.width
+            listPadding: colorDisk.width + headerRow.spacing
             onRefresh: taskImplementModel.refresh()
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
         }
     }
 
-    Button {
+    FlatButton {
         id: addMethodButton
         visible: showCropsButton.checked
         anchors.right: parent.right
         anchors.rightMargin: Units.mediumSpacing
         text: qsTr("Add method")
-        flat: true
         Material.foreground: Material.accent
         onClicked: addDialog.open();
         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -168,4 +177,6 @@ Column {
             }
         }
     }
+
+    ThinDivider { width: parent.width }
 }
