@@ -35,7 +35,7 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
     setSourceModel(m_treeModel);
     setRecursiveFilteringEnabled(true);
 
-    rebuildAndRefresh();
+    //    rebuildAndRefresh();
 
     connect(this, SIGNAL(filterYearChanged()), this, SLOT(rebuildAndRefresh()));
     connect(this, SIGNAL(filterSeasonChanged()), this, SLOT(rebuildAndRefresh()));
@@ -822,9 +822,9 @@ void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex 
             buildHistoryDescriptionMap();
             buildRotationConflictMap();
             buildSpaceConflictMap();
-            emit dataChanged(topLeft, bottomRight,
-                             { NonOverlappingPlantingList, TaskList, History, RotationConflictList,
-                               SpaceConflictList });
+            //            emit dataChanged(topLeft, bottomRight,
+            //                             { NonOverlappingPlantingList, TaskList, History, RotationConflictList,
+            //                               SpaceConflictList });
         }
         return;
     }

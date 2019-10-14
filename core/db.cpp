@@ -157,6 +157,15 @@ void Database::connectToDatabase(const QUrl &url)
     }
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
+
+#if defined(Q_OS_WIN)
+    // Try to improve SQLite performance on Windows. But the database may become
+    // corrupted in case of crash!
+    query.exec("PRAGMA synchronous = OFF");
+    query.exec("PRAGMA journal_mode = MEMORY");
+    query.exec("PRAGMA locking_mode = EXCLUSIVE");
+#endif
+
     if (create) {
         createDatabase();
     } else {
