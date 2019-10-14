@@ -104,21 +104,24 @@ void LocationModel::refreshTree(const QModelIndex &root)
     if (!root.isValid() && rowCount() == 0)
         return;
 
-    QModelIndexList treeList;
-    treeList.push_back(root);
+    //    QModelIndexList treeList;
+    //    treeList.push_back(root);
 
-    QModelIndex parent;
-    for (int i = 0; i < treeList.length(); ++i) {
-        parent = treeList[i];
-        dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
 
-        int count = rowCount(parent);
-        for (int row = 0; row < count; ++row) {
-            const QModelIndex child = index(row, 0, parent);
-            if (hasChildren(child))
-                treeList.push_back(child);
-        }
-    }
+    //    QModelIndex parent;
+    //    for (int i = 0; i < treeList.length(); ++i) {
+    //        parent = treeList[i];
+    //        dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
+
+    //        int count = rowCount(parent);
+    //        for (int row = 0; row < count; ++row) {
+    //            const QModelIndex child = index(row, 0, parent);
+    //            if (hasChildren(child))
+    //                treeList.push_back(child);
+    //        }
+    //    }
 }
 
 int LocationModel::locationId(const QModelIndex &idx) const
@@ -719,8 +722,7 @@ QModelIndexList LocationModel::treePath(const QModelIndex &index) const
 /** @return true if the map has changed, false otherwise */
 bool LocationModel::buildNonOverlapPlantingMap()
 {
-    const auto dates = MDate::seasonDates(filterSeason(), filterYear());
-    const auto newMap = m_location->allNonOverlappingPlantingList(dates.first, dates.second);
+    const auto newMap = m_location->allNonOverlappingPlantingList(filterSeason(), filterYear());
 
     if (m_nonOverlapPlantingMap == newMap)
         return false;
@@ -785,27 +787,29 @@ bool LocationModel::buildSpaceConflictMap()
 void LocationModel::rebuildAndRefresh()
 {
     QElapsedTimer timer;
-    timer.start();
+    //    timer.start();
     QList<bool> blist;
     blist.push_back(buildNonOverlapPlantingMap());
-    qDebug() << "[planting]" << timer.elapsed() << "ms";
-    timer.start();
+    //    qDebug() << "[planting]" << timer.elapsed() << "ms";
+    //    timer.start();
     blist.push_back(buildNonOverlapTaskMap());
-    qDebug() << "[task]" << timer.elapsed() << "ms";
-    timer.start();
+    //    qDebug() << "[task]" << timer.elapsed() << "ms";
+    //    timer.start();
     blist.push_back(buildHistoryDescriptionMap());
-    qDebug() << "[history]" << timer.elapsed() << "ms";
-    timer.start();
+    //    qDebug() << "[history]" << timer.elapsed() << "ms";
+    //    timer.start();
     blist.push_back(buildRotationConflictMap());
-    qDebug() << "[rotation]" << timer.elapsed() << "ms";
-    timer.start();
+    //    qDebug() << "[rotation]" << timer.elapsed() << "ms";
+    //    timer.start();
     blist.push_back(buildSpaceConflictMap());
-    qDebug() << "[space]" << timer.elapsed() << "ms";
+    //    qDebug() << "[space]" << timer.elapsed() << "ms";
 
     timer.start();
     for (const bool b : blist) {
-        if (b)
+        if (b) {
             refreshTree();
+            break;
+        }
     }
     qDebug() << "[REFRESH]" << timer.elapsed() << "ms";
 }

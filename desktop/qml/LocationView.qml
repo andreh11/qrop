@@ -382,6 +382,7 @@ Item {
 
             property int currentRow: index
             property int currentLocationId: model.location_id
+            property real currentLocationLength: model.bed_length
             property var plantingRowList: model.nonOverlappingPlantingList
             property var taskRowList: model.taskList
             property int rows: plantingRowList.length
@@ -637,9 +638,13 @@ Item {
                                 showOnlyActiveColor: true
                                 showFamilyColor: root.showFamilyColor
                                 dragActive: true
+//                                plantingIdList: modelData["plantingId"]
                                 plantingIdList: modelData
+//                                plantingDrawMapList: modelData
+
                                 taskIdList: locationDelegate.taskRowList[index]
                                 locationId: currentLocationId
+                                locationLength: currentLocationLength
                                 onDragFinished: root.draggedPlantingId = -1
                                 onPlantingMoved: refreshRow(currentRow)
                                 onPlantingRemoved: refreshRow(currentRow)

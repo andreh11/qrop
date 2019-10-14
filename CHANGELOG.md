@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ## 0.4 - 2019-09-28 
 
 ### Added
+  - *Field map* − Show planting length when it doesn't fill the location (or
+    when it is longer than the location's length).
   - Add tooltips for the buttons of the left bar.
   - *Planting form* − Add density (m²) field (#126).
 

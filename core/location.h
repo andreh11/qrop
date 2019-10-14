@@ -64,8 +64,7 @@ public:
     Q_INVOKABLE QVariantList nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
                                                         const QDate &seasonEnd);
 
-    QMap<int, QVariantList> allNonOverlappingPlantingList(const QDate &seasonBeg,
-                                                          const QDate &seasonEnd) const;
+    QMap<int, QVariantList> allNonOverlappingPlantingList(int season, int year) const;
 
     std::unique_ptr<QSqlQuery> allPlantingTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;
     std::unique_ptr<QSqlQuery> allLocationTasksQuery(const QDate &seasonBeg, const QDate &seasonEnd) const;

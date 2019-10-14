@@ -24,6 +24,7 @@
 #include <QSettings>
 #include <QStringRef>
 #include <QStringBuilder>
+#include <QElapsedTimer>
 
 #include "databaseutility.h"
 #include "family.h"
@@ -765,7 +766,7 @@ QVariantList Planting::highestRevenueCropNames(int year, bool greenhouse) const
 
 QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) const
 {
-    QString queryString("select crop, sum(bed_revenue), "
+    QString queryString("select crop, sum(bed_revenue), sum(yield_per_bed_meter*length), "
                         "strftime('%Y', planting_date) as year "
                         "from planting_view "
                         "where year = '%1' "
@@ -776,8 +777,10 @@ QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) con
     QSqlQuery query(queryString.arg(year).arg(inGreenhouse));
     debugQuery(query);
     QVariantList list;
-    while (query.next())
+    while (query.next()) {
         list.push_back(query.value(1));
+        qDebug() << QString("%1;%2").arg(query.value(0).toString()).arg(query.value(2).toDouble());
+    }
     return list;
 }
 
@@ -1071,19 +1074,22 @@ QString Planting::toolTip(int plantingId, int locationId) const
     const QString crop = record.value("crop").toString();
     const QString variety = record.value("variety").toString();
     const QString bedUnit = m_settings->value("useStandardBedLength").toBool() ? tr("beds") : tr("m");
+    const qreal totalLength = Helpers::bedLength(record.value("length").toDouble());
+
     if (locationId > 0) {
         return tr("%1, %2 (%L3/%L4 %5 assigned)")
                 .arg(crop)
                 .arg(variety)
                 .arg(Helpers::bedLength(assignedLength(plantingId)))
-                .arg(Helpers::bedLength(totalLength(plantingId)))
+                //                .arg(Helpers::bedLength(location->
+                .arg(totalLength)
                 .arg(bedUnit);
     }
     return tr("%1, %2 (%L3/%L4 %5 to assign)")
             .arg(crop)
             .arg(variety)
             .arg(Helpers::bedLength(lengthToAssign(plantingId)))
-            .arg(Helpers::bedLength(totalLength(plantingId)))
+            .arg(totalLength)
             .arg(bedUnit);
 }
 
@@ -1111,10 +1117,11 @@ QString Planting::growBarDescription(int plantingId, int year, bool showNames) c
     return growBarDescription(recordFromId("planting_view", plantingId), year, showNames);
 }
 
-QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showGreenhouseSow,
-                                  bool showFamilyColor, bool showNames) const
+QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year,
+                                  bool showGreenhouseSow, bool showNames) const
 {
-    const auto record = recordFromId("planting_view", plantingId);
+    //    QElapsedTimer timer;
+    //    timer.start();
     const auto sowingDate =
             QDate::fromString(record.value(QStringLiteral("sowing_date")).toString(), Qt::ISODate);
     const auto plantingDate =
@@ -1135,14 +1142,25 @@ QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool sho
     const qreal harvestWidth =
             Helpers::widthBetween(harvestStart + graphStart, seasonBegin, endHarvestDate);
 
+    //    qDebug() << "planting info map" << timer.elapsed() << "ms";
+
     return { { "graphStart", graphStart },
              { "growStart", growStart },
              { "harvestStart", harvestStart },
              { "greenhouseWidth", greenhouseWidth },
              { "growWidth", growWidth },
              { "harvestWidth", harvestWidth },
+             { "plantingId", record.value("planting_id") },
              { "sowingDate", MDate::formatDate(sowingDate, year, "", false) },
              { "begHarvestDate", MDate::formatDate(begHarvestDate, year, "", false) },
-             { "color", showFamilyColor ? record.value("family_color") : record.value("crop_color") },
+             { "cropColor", record.value("crop_color") },
+             { "familyColor", record.value("family_color") },
              { "growBarDescription", growBarDescription(record, year, showNames) } };
+}
+
+QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showFamilyColor,
+                                  bool showNames) const
+{
+    return drawInfoMap(recordFromId("planting_view", plantingId), season, year, showFamilyColor,
+                       showNames);
 }

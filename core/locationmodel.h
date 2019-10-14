@@ -17,7 +17,6 @@
 #ifndef LOCATIONMODEL_H
 #define LOCATIONMODEL_H
 
-#include <QObject>
 #include <QItemSelection>
 
 #include "core_global.h"
@@ -46,7 +45,8 @@ public:
         HasRotationConflict,
         SpaceConflictList,
         HasSpaceConflict,
-        FullName
+        FullName,
+        Plantings
     };
     LocationModel(QObject *parent = nullptr, const QString &tableName = "location");
     QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;

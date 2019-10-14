@@ -114,7 +114,7 @@ qreal Location::length(int locationId) const
     if (record.isEmpty())
         return 0;
 
-    return record.value("length").toReal();
+    return record.value("bed_length").toReal();
 }
 
 bool Location::isGreenhouse(int locationId) const
@@ -230,9 +230,10 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
     QString queryString("SELECT planting_id FROM planting_location "
                         "LEFT JOIN planting_view USING (planting_id) "
                         "WHERE location_id = %1 "
-                        "AND (('%2' <= planting_date AND planting_date <= '%3') "
-                        "  OR ('%2' <= beg_harvest_date AND beg_harvest_date <= '%3') "
-                        "  OR ('%2' <= end_harvest_date AND end_harvest_date <= '%3')) "
+                        "AND ((planting_date BETWEEN '%2' AND '%3') "
+                        "  OR (beg_harvest_date BETWEEN '%2' AND '%3') "
+                        "  OR (end_harvest_date BETWEEN '%2' AND '%3') "
+                        "  OR (planting_date <= '%2' AND '%2' <= end_harvest_date)) "
                         "ORDER BY (planting_date)");
 
     return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "planting_id");
@@ -248,9 +249,10 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate 
                         "FROM planting_location "
                         "LEFT JOIN planting_view USING (planting_id) "
                         "WHERE location_id = %1 "
-                        "AND ((planting_date BETWEEN '%2' AND '%3') "
+                        "AND ((planting_date    BETWEEN '%2' AND '%3') "
                         "  OR (beg_harvest_date BETWEEN '%2' AND '%3') "
-                        "  OR (end_harvest_date BETWEEN '%2' AND '%3')) "
+                        "  OR (end_harvest_date BETWEEN '%2' AND '%3') "
+                        "  OR (planting_date < '%2' AND '%2' < end_harvest_date)) "
                         "ORDER BY (planting_date)");
     return queryBuilder(queryString.arg(locationId).arg(begString).arg(endString));
 }
@@ -268,17 +270,17 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
 {
     QString begString = seasonBeg.toString(Qt::ISODate);
     QString endString = seasonEnd.toString(Qt::ISODate);
-    QString queryString(
-            "SELECT location_id, bed_length, planting_id, crop, variety, planting_date, "
-            "beg_harvest_date, end_harvest_date, "
-            "planting_location.length AS assigned_length "
-            "FROM planting_location "
-            "LEFT JOIN planting_view USING (planting_id) "
-            "LEFT JOIN location USING (location_id) "
-            "WHERE ((planting_date    BETWEEN '%1' AND '%2') "
-            "    OR (beg_harvest_date BETWEEN '%1' AND '%2') "
-            "    OR (end_harvest_date BETWEEN '%1' AND '%2')) "
-            "ORDER BY location_id, planting_date");
+    QString queryString("SELECT location_id, bed_length, planting_id, crop, variety, family_color, "
+                        "crop_color, planting_date, "
+                        "beg_harvest_date, end_harvest_date, "
+                        "planting_location.length AS assigned_length "
+                        "FROM planting_location "
+                        "LEFT JOIN planting_view USING (planting_id) "
+                        "LEFT JOIN location USING (location_id) "
+                        "WHERE ((planting_date    BETWEEN '%1' AND '%2') "
+                        "    OR (beg_harvest_date BETWEEN '%1' AND '%2') "
+                        "    OR (end_harvest_date BETWEEN '%1' AND '%2')) "
+                        "ORDER BY location_id, planting_date");
     return queryBuilder(queryString.arg(begString).arg(endString));
 }
 
@@ -426,9 +428,12 @@ QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &s
     return variantList;
 }
 
-QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &seasonBeg,
-                                                                const QDate &seasonEnd) const
+QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int year) const
 {
+    const auto dates = MDate::seasonDates(season, year);
+    const QDate seasonBeg = dates.first;
+    const QDate seasonEnd = dates.second;
+
     // Use a single query for performance.
     auto query = allLocationsPlantingsQuery(seasonBeg, seasonEnd);
     if (!query->next())
@@ -471,6 +476,7 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &sea
             rowDate.clear();
             locationId = lid;
             rows.push_back({ plantingId });
+            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
             rowDate.push_back({ plantingDate, endHarvestDate });
             continue;
         }
@@ -479,6 +485,7 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &sea
         for (; i < rowDate.count(); ++i) {
             if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
                 rows[i].push_back(plantingId);
+                //                rows[i].push_back(m_planting->drawInfoMap(query->record(), season, year, false, true));
                 rowDate[i] = { plantingDate, endHarvestDate };
                 break;
             }
@@ -489,6 +496,7 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(const QDate &sea
             // so we create a new row for it.
             rowDate.push_back({ plantingDate, endHarvestDate });
             rows.push_back({ plantingId });
+            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
         }
     }
 

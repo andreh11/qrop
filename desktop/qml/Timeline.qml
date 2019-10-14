@@ -32,11 +32,13 @@ Item {
     property int monthWidth: Units.monthWidth
     readonly property int graphWidth: 12 * monthWidth
     property var plantingIdList
+//    property var plantingDrawMapList
     property var taskIdList
     property bool showGreenhouseSow: true
     property bool showOnlyActiveColor: false
     property bool showFamilyColor: false
     property int locationId: -1
+    property real locationLength: -1
     property bool showNames: false
     property bool showTasks: false
     property bool dragActive: false
@@ -88,10 +90,14 @@ Item {
         id: timegraphView
         anchors.fill: parent
         Repeater {
+//            model: plantingDrawMapList
             model: plantingIdList
             delegate: Timegraph {
                 plantingId: modelData
+//                plantingId: modelData["plantingId"]
+//                drawMap: modelData
                 locationId: control.locationId
+                locationLength: control.locationLength
                 todayDate: control.todayDate
                 seasonBegin: control.seasonBegin
                 season: control.season

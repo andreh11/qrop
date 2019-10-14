@@ -607,6 +607,7 @@ ListView {
                     visible: showTimegraph
                     dragActive: listView.dragActive
                     plantingIdList: [model.planting_id]
+//                    plantingDrawMapList: [model.infoMap]
                     showOnlyActiveColor: listView.showOnlyActiveColor
                     showFamilyColor: listView.showFamilyColor
                     onPlantingMoved: listView.resetFilter()

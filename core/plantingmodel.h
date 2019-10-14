@@ -43,8 +43,11 @@ class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
     Q_PROPERTY(int totalBedLength READ totalBedLength NOTIFY totalBedLengthChanged)
 
 public:
+    enum { InfoMap = Qt::UserRole + 300 };
     PlantingModel(QObject *parent = nullptr, const QString &tableName = "planting_view");
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+    QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     int week() const;
     void setWeek(int week);

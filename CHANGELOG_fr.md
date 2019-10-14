@@ -7,6 +7,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## 0.4 - 2019-10-11
 
 ### Ajouts
+  − *Parcellaire* − Afficher la longueur de la série affectée à une planche
+  lorsqu'elle ne remplit pas la planche (ou qu'elle est plus longue que la planche).
   - Ajout d'infobulles pour les boutons de la barre de gauche.
   - *Édition des séries* − Ajout d'un champs densité au mètre carré (#126).
 

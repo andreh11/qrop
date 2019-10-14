@@ -33,6 +33,8 @@ PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     setSortColumn("crop");
     connect(this, SIGNAL(countChanged()), this, SIGNAL(revenueChanged()));
     connect(this, SIGNAL(countChanged()), this, SIGNAL(totalBedLengthChanged()));
+    //    connect(this, SIGNAL(filterYearChanged()), this, SLOT(dataChangedForAll()));
+    //    connect(this, SIGNAL(filterSeasonChanged()), this, SLOT(dataChangedForAll()));
 }
 
 bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -66,6 +68,25 @@ bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
     }
 
     return SortFilterProxyModel::lessThan(left, right);
+}
+
+QVariant PlantingModel::data(const QModelIndex &proxyIndex, int role) const
+{
+    Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
+    switch (role) {
+    case InfoMap:
+        return planting->drawInfoMap(m_model->record(mapToSource(proxyIndex).row()), m_season,
+                                     m_year, true, false);
+    default:
+        return SortFilterProxyModel::data(proxyIndex, role);
+    }
+}
+
+QHash<int, QByteArray> PlantingModel::roleNames() const
+{
+    auto names = SortFilterProxyModel::roleNames();
+    names[InfoMap] = "infoMap";
+    return names;
 }
 
 int PlantingModel::week() const
@@ -203,7 +224,8 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
 
     bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
-                    || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate))
+                    || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate)
+                    || (plantingDate < seasonDates().first && harvestEndDate > seasonDates().second))
             && (!m_showActivePlantings
                 || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId))

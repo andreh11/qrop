@@ -2,7 +2,6 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
-import Qt.labs.settings 1.0
 
 import io.qrop.components 1.0
 
@@ -11,6 +10,7 @@ Item {
 
     property int plantingId: -1
     property int locationId: -1
+    property real locationLength: 0
     property date todayDate
     property bool showGreenhouseSow: true
     property bool showNames: false
@@ -21,8 +21,12 @@ Item {
     property int year
     property date seasonBegin
 
-    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showFamilyColor, showNames)
-    property color cropColor: drawMap["color"]
+    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showNames)
+//    property var drawMap
+    property color cropColor: drawMap["cropColor"]
+    property color familyColor: drawMap["familyColor"]
+    property color plantingColor: showFamilyColor ? familyColor : cropColor
+    property real plantingLength: locationId > 0 ? Location.plantingLength(plantingId, locationId) : 0
 
     readonly property bool current: Planting.isActive(plantingId)
     readonly property alias hovered: dragArea.containsMouse
@@ -149,9 +153,9 @@ Item {
         color: {
             if (current || showOnlyActiveColor) {
                 if (control.hovered)
-                    return Qt.darker(cropColor, 1.1)
+                    return Qt.darker(plantingColor, 1.1)
                 else
-                    return cropColor
+                    return plantingColor
             } else {
                 if (control.hovered)
                     return Material.color(Material.Grey, Material.Shade500)
@@ -171,7 +175,9 @@ Item {
             anchors.leftMargin: 4
             elide: Text.ElideRight
         }
+
     }
+
 
     Rectangle {
         id: harvestBar
@@ -185,9 +191,9 @@ Item {
         color: {
             if (current || showOnlyActiveColor) {
                 if (control.hovered)
-                    return Qt.darker(cropColor, 1.3)
+                    return Qt.darker(plantingColor, 1.3)
                 else
-                    return Qt.darker(cropColor, 1.2)
+                    return Qt.darker(plantingColor, 1.2)
             } else {
                 if (control.hovered)
                     return Material.color(Material.Grey, Material.Shade600)
@@ -205,6 +211,22 @@ Item {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 4
+        }
+    }
+
+    Rectangle {
+        anchors { left: parent.left; bottom: parent.bottom; topMargin: 0 }
+        visible: locationId > 0 && (plantingLength !== locationLength)
+        height: childrenRect.height
+        width: 30
+        color: Qt.darker(plantingColor, 1.5)
+
+        Label {
+            text: "%L1".arg(Helpers.bedLength(plantingLength))
+            font.family: "Roboto Condensed"
+            font.pixelSize: Units.fontSizeCaption
+            color: "white"
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

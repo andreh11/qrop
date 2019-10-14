@@ -68,6 +68,9 @@ public:
     virtual QVariant rowValue(int row, const QModelIndex &parent, const QString &field) const;
     QVariant rowValue(int row, const QString &field) const;
 
+public slots:
+    void dataChangedForAll();
+
 signals:
     void filterStringChanged();
     void filterYearChanged();

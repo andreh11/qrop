@@ -99,9 +99,10 @@ public:
     QString growBarDescription(const QSqlRecord &record, int year, bool showNames) const;
     QString growBarDescription(int plantingId, int year, bool showNames) const;
 
+    QVariantMap drawInfoMap(const QSqlRecord &record, int season, int year,
+                            bool showGreenhouseSow = true, bool showNames = false) const;
     Q_INVOKABLE QVariantMap drawInfoMap(int plantingId, int season, int year,
-                                        bool showGreenhouseSow = true, bool showFamilyColor = false,
-                                        bool showNames = false) const;
+                                        bool showGreenhouseSow = true, bool showNames = false) const;
 
 private:
     QVariant value(int plantingId, const QString &field) const;

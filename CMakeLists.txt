@@ -65,7 +65,15 @@ include_directories(lib)
 include_directories("${PROJECT_SOURCE_DIR}/core")
 add_subdirectory(core)
 
-find_package(Qt5 COMPONENTS Core Quick QuickControls2 Gui Widgets Qml Quick Sql REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS
+    Core
+    Quick
+    QuickControls2
+    Gui
+    Widgets
+    Qml
+    Quick
+    Sql)
 
 set(SOURCE_FILES
     desktop/main.cpp
@@ -79,8 +87,8 @@ if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(QML_FILES desktop/qml.qrc)
 endif()
 
-# Compile QML code for release only on Unix and Mac.
-if ((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
+# Compile QML code for release only on Unix and Mac (doesn't work on Windows).
+if((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
     find_package(Qt5QuickCompiler)
     qtquick_compiler_add_resources(QML_FILES desktop/qml.qrc)
 endif()
@@ -89,7 +97,7 @@ add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCL
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
 
-if (MAKE_TESTS)
+if(MAKE_TESTS)
     enable_testing(true)
     include_directories("${PROJECT_SOURCE_DIR}/tests")
     add_subdirectory(tests)

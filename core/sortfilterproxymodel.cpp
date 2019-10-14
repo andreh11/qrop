@@ -86,6 +86,13 @@ void SortFilterProxyModel::refreshRow(int row)
     m_model->selectRow(idx.row());
 }
 
+void SortFilterProxyModel::dataChangedForAll()
+{
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
+    //    emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
+}
+
 QString SortFilterProxyModel::filterString() const
 {
     return m_string;
