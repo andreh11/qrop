@@ -25,6 +25,7 @@
 #include "location.h"
 #include "planting.h"
 #include "mdate.h"
+#include "helpers.h"
 
 LocationModel::LocationModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -59,6 +60,8 @@ QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
         return hasSpaceConflict(proxyIndex);
     case RotationConflictList:
         return rotationConflictingPlantings(proxyIndex);
+    case RotationConflictDescription:
+        return rotationConflictingDescription(proxyIndex);
     case HasRotationConflict:
         return hasRotationConflict(proxyIndex);
     case FullName:
@@ -77,6 +80,7 @@ QHash<int, QByteArray> LocationModel::roleNames() const
     names[SpaceConflictList] = "spaceConflictList";
     names[HasSpaceConflict] = "hasSpaceConflict";
     names[RotationConflictList] = "rotationConflictList";
+    names[RotationConflictDescription] = "rotationConflictDescription";
     names[HasRotationConflict] = "hasRotationConflict";
     names[FullName] = "fullName";
     return names;
@@ -347,22 +351,26 @@ QVariantList LocationModel::nonOverlappingTaskList(const QModelIndex &index) con
 
 QString LocationModel::rotationConflictingDescription(const QModelIndex &index) const
 {
-    const auto &list = rotationConflictingPlantings(index);
+    const auto &list = Helpers::variantToIntList(rotationConflictingPlantings(index));
+    auto query = m_location->queryFromIdList("planting_view", list);
     const int lid = locationId(index);
     QString text;
     QList<int> conflictList;
-    for (const auto &plantingIdVariant : list) {
-        int plantingId = plantingIdVariant.toInt();
+    while (query->next()) {
         text += QString("%1, %2 %3")
-                        .arg(m_planting->cropName(plantingId))
-                        .arg(m_planting->varietyName(plantingId))
-                        .arg(m_planting->plantingDate(plantingId).year());
+                        .arg(query->value("crop").toString())
+                        .arg(query->value("variety").toString())
+                        .arg(MDate::dateFromIsoString(query->value("planting_date").toString()).year());
 
-        for (int conflictId : m_location->rotationConflictingPlantings(lid, plantingId))
+        auto q = m_location->queryFromIdList(
+                "planting_view",
+                m_location->rotationConflictingPlantings(lid, query->value("planting_id").toInt()));
+        while (q->next()) {
             text += QString(" ⋅ %1, %2 %3")
-                            .arg(m_planting->cropName(conflictId))
-                            .arg(m_planting->varietyName(conflictId))
-                            .arg(m_planting->plantingDate(conflictId).year());
+                            .arg(q->value("crop").toString())
+                            .arg(q->value("variety").toString())
+                            .arg(MDate::dateFromIsoString(q->value("planting_date").toString()).year());
+        }
         text += "\n";
     }
     text.chop(1);

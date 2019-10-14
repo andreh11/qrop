@@ -801,7 +801,7 @@ QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, in
                     break;
                 if ((p1.familyId == p2.familyId)
                     && !overlap(p1.plantingDate, p1.endHarvestDate, p2.plantingDate, p2.endHarvestDate)) {
-                    conflictList.push_back(i);
+                    conflictList.push_back(p1.id);
                     break;
                 }
             }

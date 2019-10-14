@@ -50,6 +50,7 @@ public:
     QList<int> queryIds(const QString &queryString, const QString &idFieldName) const;
     QSqlRecord recordFromId(const QString &tableName, int id) const;
     QList<QSqlRecord> recordListFromIdList(const QString &tableName, const QList<int> &idList) const;
+    std::unique_ptr<QSqlQuery> queryFromIdList(const QString &tableName, const QList<int> &idList) const;
     QVariantMap mapFromRecord(const QSqlRecord &record) const;
     Q_INVOKABLE QVariantMap mapFromId(const QString &tableName, int id) const;
     Q_INVOKABLE QVariantMap mapFromId(int id) const;

@@ -117,6 +117,27 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
     return {};
 }
 
+std::unique_ptr<QSqlQuery> DatabaseUtility::queryFromIdList(const QString &tableName,
+                                                            const QList<int> &idList) const
+{
+    Q_ASSERT(!tableName.isEmpty());
+    if (idList.isEmpty())
+        return {};
+
+    QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
+    QString ids = "";
+    int i;
+    for (i = 0; i < idList.length() - 1; ++i)
+        ids.append(QString::number(idList[i]) + ", ");
+    ids.append(QString::number(idList[i]));
+
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
+    query->exec();
+    return query;
+}
+
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
                                                         const QList<int> &idList) const
 {

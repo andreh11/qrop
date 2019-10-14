@@ -595,8 +595,8 @@ Item {
                         Material.foreground: Material.color(Material.Red)
 
                         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-                        ToolTip.visible: hovered && ToolTip.text
-                        ToolTip.text: ""
+                        ToolTip.visible: pressed && ToolTip.text
+                        onPressedChanged: if (pressed) ToolTip.text = model.rotationConflictDescription
                     }
                 }
 

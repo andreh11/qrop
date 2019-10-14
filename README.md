@@ -2,12 +2,11 @@
 
 ## Introduction
 
-Qrop is a crop planning and recordkeeping free software designed by market
+Qrop is a crop planning and record keeping free software designed by market
 gardeners, for market gardeners, with the help of the wonderful French coop
 [L'Atelier paysan](https://latelierpaysan.org).
 
-Qrop is available on GNU/Linux, Windows. It does compile on Mac and Android,
-but has not been tested on these operating systems.
+Qrop is available on GNU/Linux, macOS and Windows.
 
 **Warning:** this is alpha software with known bugs. It runs, and work at least
 some of the times, but use at your own risk.
@@ -56,7 +55,7 @@ plan.
 
 ### GNU/Linux (AppImage)
 
-Download the latest version at https://github.com/andreh11/qrop/releases. Then
+Download the latest version at https://qrop.ouvaton.org/releases/. Then
 open a console in the right folder and type:
 
 ```shell
@@ -71,20 +70,13 @@ We only provide AppImages for now, but if you can, feel free to package it for
 your favorite distro!
 
 ### Windows
-
-Download the right Zip file for you architecture:
-
- - https://ah.ouvaton.org/qrop/qrop-0.1.2-x86.zip (32 bit)
- - https://ah.ouvaton.org/qrop/qrop-0.1.2-amd64.zip (64 bit)
-
-Unzip it, open the folder and click on "desktop" to launch the application.
-
-There is no installer yet, but this will be provided as soon as possible.
+Download the 32- or 64-bit installer from https://qrop.ouvaton.org/releases/,
+install and launch Qrop!
 
 ### OS X
 
-Qrop does compile on OS X, but has not been tested yet. Please contact us if you
-own a Mac and would like to try Qrop!
+Download the DMG from https://qrop.ouvaton.org/releases/, install and launch
+Qrop! It may be necessary to update your macOS version.
 
 ### Android
 
@@ -95,8 +87,7 @@ help us design a nice user interface, please contact us!
 
 ## 📖 Documentation
 
-See the [user manual](https://framagit.org/ah/qrop/wikis/userguide-fr) on the
-wiki (only available in French for now).
+See the [user manual](https://qrop.frama.io) (only available in French for now).
 
 ## 🙌 Contributing
 

@@ -42,6 +42,7 @@ public:
         TaskList,
         History,
         RotationConflictList,
+        RotationConflictDescription,
         HasRotationConflict,
         SpaceConflictList,
         HasSpaceConflict,
