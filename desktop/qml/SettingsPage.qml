@@ -35,6 +35,10 @@ Page {
 
     function refresh() {
         familyPane.refresh();
+        keywordPane.refresh();
+        seedCompanyPane.refresh();
+        unitPane.refresh();
+        taskTypePane.refresh();
     }
 
     title: qsTr("Settings")
