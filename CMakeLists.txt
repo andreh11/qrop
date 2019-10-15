@@ -6,11 +6,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(QROP_VERSION_MAJOR 0)
+set(QROP_VERSION_MINOR 4)
+set(QROP_VERSION_MICRO 0)
+set(QROP_VERSION "${QROP_VERSION_MAJOR}.${QROP_VERSION_MINOR}.${QROP_VERSION_MICRO}")
+
 # Basic functions and other bundle stuffs for Mac and Windows
 include(QtCommon)
 
 # Project informations
-project(qrop LANGUAGES CXX VERSION 0.4)
+project(qrop LANGUAGES CXX VERSION ${QROP_VERSION})
 fix_project_version()
 set(COMPANY "L'Atelier paysan")
 set(COPYRIGHT "Copyright (c) 2018-2019 André Hoarau")

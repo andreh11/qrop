@@ -5,16 +5,28 @@
 BuildInfo::BuildInfo(QObject *parent)
     : QObject(parent)
     ,
-#ifdef GIT_REVISION
-    mVersion(GIT_REVISION)
+#ifdef QROP_VERSION
+    m_version(QROP_VERSION)
 #else
-    mVersion(tr("Unkown build version"))
+    m_version(tr("Unknown build version"))
+#endif
+    ,
+#ifdef GIT_COMMIT_HASH
+    m_commit(GIT_COMMIT_HASH)
+#else
+    m_commit(tr("Unknown commit hash"))
 #endif
 {
 }
 
 QString BuildInfo::version() const
 {
-    qDebug() << "VERSION" << mVersion;
-    return mVersion;
+    qDebug() << "VERSION" << m_version;
+    return m_version;
+}
+
+QString BuildInfo::commit() const
+{
+    qDebug() << "COMMIT" << m_commit;
+    return m_commit;
 }
