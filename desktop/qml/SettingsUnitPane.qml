@@ -15,6 +15,10 @@ Pane {
 
     signal close();
 
+    function refresh() {
+        unitModel.refresh();
+    }
+
     Material.elevation: 0
     Material.background: Units.pageColor
     padding: 0
@@ -57,10 +61,9 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            Button {
-                text: qsTr("Add unit")
-                flat: true
-                Material.foreground: Material.accent
+            FlatButton {
+                text: qsTr("Add")
+                highlighted: true
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.rightMargin: Units.mediumSpacing
 
@@ -79,7 +82,6 @@ Pane {
 
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
-
 
         ScrollBar.vertical: ScrollBar {
             parent: pane

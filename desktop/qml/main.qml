@@ -659,6 +659,7 @@ ApplicationWindow {
                     settingsPage.setSource("SettingsPage.qml",
                                            { "paneWidth": Math.min(600, stackView.width * 0.8) })
                 stackView.replace(settingsPage)
+                settingsPage.item.refresh();
                 break
             }
         }
