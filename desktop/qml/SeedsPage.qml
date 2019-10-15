@@ -340,6 +340,7 @@ Page {
                 clip: true
                 spacing: 0
                 boundsBehavior: Flickable.StopAtBounds
+//                contentWidth: contentItem.childrenRect.width
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
 
                 anchors.fill: parent
@@ -498,39 +499,33 @@ Page {
                     height: Units.tableRowHeight
                     width: parent.width
 
-                    ThinDivider {
-                        anchors {
-                            bottom: parent.bottom
-                            left: parent.left
-                            right: parent.right
-                        }
-                    }
-
                     MouseArea {
                         id: rowMouseArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        preventStealing: true
-                        propagateComposedEvents: true
+                    }
 
-                        Row {
-                            id: summaryRow
-                            height: Units.rowHeight
-                            spacing: Units.smallSpacing
-                            leftPadding: Units.formSpacing
-                            anchors.verticalCenter: parent.verticalCenter
+                    Row {
+                        id: summaryRow
+                        height: Units.rowHeight
+                        spacing: Units.smallSpacing
+                        leftPadding: Units.formSpacing
+                        anchors.verticalCenter: parent.verticalCenter
 
-                            Repeater {
-                                model: labelList
-                                TableLabel {
-                                    text: modelData
-                                    visible: tableHeaderModel[index].visible
-                                    width: tableHeaderModel[index].width
-                                    horizontalAlignment: tableHeaderModel[index].alignment
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
+                        Repeater {
+                            model: labelList
+                            TableLabel {
+                                text: modelData
+                                visible: tableHeaderModel[index].visible
+                                width: tableHeaderModel[index].width
+                                horizontalAlignment: tableHeaderModel[index].alignment
+                                anchors.verticalCenter: parent.verticalCenter
                             }
                         }
+                    }
+
+                    ThinDivider {
+                        anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
                     }
                 }
             }

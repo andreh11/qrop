@@ -223,10 +223,10 @@ Item {
                 month: control.month
                 year: control.year
                 Layout.fillHeight: true
-                spacing: 0
+                spacing: Units.smallSpacing
                 delegate: Rectangle {
                     property bool checked: sameDates(control.date, model.date)
-                    width: 36
+                    width: 26
                     height: width
                     anchors.margins: 0
                     radius: 30
@@ -259,10 +259,10 @@ Item {
                             //                        if (isSelectedDate) {
                             //                            dateSelected = false;
                             //                        } else {
-                            if (!checked) {
+//                            if (!checked) {
                                 control.dateSelect(model.date)
                                 dateSelected = true;
-                            }
+//                            }
                         }
                     }
                 }

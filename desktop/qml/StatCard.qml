@@ -7,6 +7,7 @@ Pane {
     Material.elevation: 1
 
     property alias title: titleLabel.text
+    property alias subtitle: subtitleLabel.text
     property alias text: textLabel.text
 
     Label {
@@ -18,9 +19,23 @@ Pane {
             left: parent.left
             top: parent.top
             leftMargin: 4
-            topMargin: leftMargin
+            topMargin: 4
         }
     }
+
+    Label {
+        id: subtitleLabel
+        font.family: "Roboto Regular"
+        font.pixelSize: Units.fontSizeCaption
+        color: Units.colorMediumEmphasis
+        anchors {
+            left: parent.left
+            top: titleLabel.bottom
+            leftMargin: 4
+            topMargin: 2
+        }
+    }
+
     
     Label {
         id: textLabel

@@ -4,6 +4,7 @@ add_definitions(-DCORE_LIBRARY)
 
 add_library(core SHARED
         cropmodel.cpp
+        cropstatmodel.cpp
         databaseutility.cpp
         db.cpp
         expensecategorymodel.cpp

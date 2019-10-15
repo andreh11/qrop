@@ -38,6 +38,7 @@
 #include "buildinfo.h"
 #include "db.h"
 #include "family.h"
+#include "helpers.h"
 #include "keyword.h"
 #include "location.h"
 #include "mdate.h"
@@ -45,14 +46,14 @@
 #include "pictureimageprovider.h"
 #include "planting.h"
 #include "print.h"
+#include "seedcompany.h"
 #include "task.h"
 #include "tasktemplate.h"
 #include "variety.h"
 #include "version.h"
-#include "helpers.h"
-#include "seedcompany.h"
 
 #include "cropmodel.h"
+#include "cropstatmodel.h"
 #include "familymodel.h"
 #include "harvestmodel.h"
 #include "keywordmodel.h"
@@ -105,6 +106,7 @@ void registerFonts()
 void registerTypes()
 {
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
+    qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
     qmlRegisterType<HarvestModel>("io.qrop.components", 1, 0, "HarvestModel");
     qmlRegisterType<KeywordModel>("io.qrop.components", 1, 0, "KeywordModel");
@@ -113,7 +115,6 @@ void registerTypes()
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
-    qmlRegisterType<TimeValidator>("io.qrop.components", 1, 0, "TimeValidator");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
     qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
     qmlRegisterType<SeedListMonthModel>("io.qrop.components", 1, 0, "SeedListMonthModel");
@@ -122,9 +123,10 @@ void registerTypes()
     qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
     qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");
     qmlRegisterType<TaskModel>("io.qrop.components", 1, 0, "TaskModel");
-    qmlRegisterType<TemplateTaskModel>("io.qrop.components", 1, 0, "TemplateTaskModel");
     qmlRegisterType<TaskTemplateModel>("io.qrop.components", 1, 0, "TaskTemplateModel");
     qmlRegisterType<TaskTypeModel>("io.qrop.components", 1, 0, "TaskTypeModel");
+    qmlRegisterType<TemplateTaskModel>("io.qrop.components", 1, 0, "TemplateTaskModel");
+    qmlRegisterType<TimeValidator>("io.qrop.components", 1, 0, "TimeValidator");
     qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
