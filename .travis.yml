@@ -10,7 +10,7 @@ matrix:
     - CPPFLAGS="-I/usr/local/opt/qt/include"
     - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
     - QROP_BUILD_TYPE="release"
-    osx_image: xcode9.2
+    osx_image: xcode10
     compiler: clang
     addons:
       homebrew:
@@ -27,7 +27,7 @@ matrix:
     - CPPFLAGS="-I/usr/local/opt/qt/include"
     - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
     - QROP_BUILD_TYPE="snapshot"
-    osx_image: xcode9.2
+    osx_image: xcode10
     compiler: clang
     addons:
       homebrew:
