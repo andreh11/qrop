@@ -143,6 +143,7 @@ Pane {
                     }
                 }
             }
+            ThinDivider { width: parent.width; anchors.top: headerRow.bottom }
         }
     }
 }

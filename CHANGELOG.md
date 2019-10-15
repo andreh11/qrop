@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-## 0.4 - 2019-09-28 
+## 0.4 "Bobéhec" - 2019-10-15
 
 ### Added
   - *Field map* − Show planting length when it doesn't fill the location (or

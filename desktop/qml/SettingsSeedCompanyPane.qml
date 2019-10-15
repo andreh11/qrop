@@ -94,7 +94,7 @@ Pane {
         model: SeedCompanyModel { id: seedCompanyModel }
         delegate: MouseArea {
             id: mouseArea
-            height: Units.rowHeight
+            height: Units.listSingleLineHeight
             width: paneWidth
             hoverEnabled: true
             onDoubleClicked: editableLabel.state = "edit"
@@ -105,7 +105,7 @@ Pane {
                 id: headerRow
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width
-                height: Units.rowHeight
+                height: parent.height
                 spacing: Units.formSpacing
 
                 RadioButton {
@@ -126,6 +126,7 @@ Pane {
                         seedCompanyModel.refresh();
                     }
                 }
+
 
                 MyToolButton {
                     visible: mouseArea.containsMouse
@@ -154,6 +155,8 @@ Pane {
                     }
                 }
             }
+
+            ThinDivider { width: parent.width; anchors.top: headerRow.bottom }
         }
     }
 }

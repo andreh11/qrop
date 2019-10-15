@@ -4,7 +4,7 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
-## 0.4 - 2019-10-11
+## 0.4 « Bobéhec » - 2019-10-11
 
 ### Ajouts
   − *Parcellaire* − Afficher la longueur de la série affectée à une planche
