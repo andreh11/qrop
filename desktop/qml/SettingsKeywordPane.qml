@@ -15,6 +15,10 @@ Pane {
 
     signal close();
 
+    function refresh() {
+        keywordModel.refresh();
+    }
+
     Material.elevation: 2
     Material.background: Units.pageColor
     padding: 0

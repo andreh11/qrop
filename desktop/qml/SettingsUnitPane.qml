@@ -15,6 +15,10 @@ Pane {
 
     signal close();
 
+    function refresh() {
+        unitModel.refresh();
+    }
+
     Material.elevation: 0
     Material.background: Units.pageColor
     padding: 0
@@ -78,7 +82,6 @@ Pane {
 
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
-
 
         ScrollBar.vertical: ScrollBar {
             parent: pane
