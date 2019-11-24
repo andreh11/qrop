@@ -49,9 +49,9 @@ Page {
         //        property alias farmName: farmNameField.text
         property alias showSeedCompanyBesideVariety: showSeedCompanySwitch.checked
         property alias useStandardBedLength: standardBedLengthSwitch.checked
-        property alias standardBedLength: standardBedLengthField.value
-        property alias standardBedWidth: standardBedWidthField.value
-        property alias standardPathWidth: standardPathWidthField.value
+        property alias standardBedLength: standardBedLengthField.text
+        property alias standardBedWidth: standardBedWidthField.text
+        property alias standardPathWidth: standardPathWidthField.text
         property alias showPlantingSuccessionNumber: showPlantingSuccessionNumberSwitch.checked
         property string dateType
     }
@@ -226,19 +226,30 @@ Page {
                                 elide: Text.ElideRight
                             }
 
-                            SpinBox {
+                            MyTextField {
                                 id: standardBedLengthField
-                                from: 0
-                                to: 999
-                                textFromValue: function(value, locale) {
-                                    return "%1 %2".arg(value).arg(qsTr("m"))
-                                }
-                                valueFromText: function(text, locale) {
-                                    var s = text.split(" ");
-                                    return Number(s[0]);
-                                }
-                                Layout.preferredWidth: 180
+                                suffixText: qsTr("m")
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                validator: IntValidator { bottom: 1; top: 999 }
+                                Layout.topMargin: 6
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 60
+                                //                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
                             }
+
+                            //                            SpinBox {
+                            //                                id: standardBedLengthField
+                            //                                from: 0
+                            //                                to: 999
+                            //                                textFromValue: function(value, locale) {
+                            //                                    return "%1 %2".arg(value).arg(qsTr("m"))
+                            //                                }
+                            //                                valueFromText: function(text, locale) {
+                            //                                    var s = text.split(" ");
+                            //                                    return Number(s[0]);
+                            //                                }
+                            //                                Layout.preferredWidth: 180
+                            //                            }
                         }
 
                         ThinDivider { width: parent.width }
@@ -258,18 +269,14 @@ Page {
                                 elide: Text.ElideRight
                             }
 
-                            SpinBox {
+                            MyTextField {
                                 id: standardBedWidthField
-                                from: 0
-                                to: 999
-                                textFromValue: function(value, locale) {
-                                    return "%1 %2".arg(value).arg(qsTr("cm"))
-                                }
-                                valueFromText: function(text, locale) {
-                                    var s = text.split(" ");
-                                    return Number(s[0]);
-                                }
-                                Layout.preferredWidth: 180
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                suffixText: qsTr("cm")
+                                validator: IntValidator { bottom: 1; top: 999 }
+                                Layout.topMargin: 6
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 60
                             }
                         }
 
@@ -290,18 +297,14 @@ Page {
                                 elide: Text.ElideRight
                             }
 
-                            SpinBox {
+                            MyTextField {
                                 id: standardPathWidthField
-                                from: 0
-                                to: 999
-                                textFromValue: function(value, locale) {
-                                    return "%1 %2".arg(value).arg(qsTr("cm"))
-                                }
-                                valueFromText: function(text, locale) {
-                                    var s = text.split(" ");
-                                    return Number(s[0]);
-                                }
-                                Layout.preferredWidth: 180
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                suffixText: qsTr("cm")
+                                validator: IntValidator { bottom: 1; top: 999 }
+                                Layout.topMargin: 6
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 60
                             }
                         }
                     }
