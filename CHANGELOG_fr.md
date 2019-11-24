@@ -4,6 +4,9 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Changements
+  - *Paramètres* − Champs entier à la place des boutons fléchés (#149).  
+
 ## 0.4 « Bobéhec » - 2019-10-11
 
 ### Ajouts

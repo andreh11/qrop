@@ -355,6 +355,7 @@ int main(int argc, char *argv[])
             },
             Qt::QueuedConnection);
     engine.load(url);
+    engine.addImageProvider("pictures", new PictureImageProvider());
 
     return app.exec();
 }

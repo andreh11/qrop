@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Changed
+  - *Settings* − Use integer text field instead of spinbox (#149).
+
 ## 0.4 "Bobéhec" - 2019-10-15
 
 ### Added
