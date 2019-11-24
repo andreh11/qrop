@@ -346,7 +346,6 @@ Page {
                         SettingsSwitch {
                             id: showDensityFieldSwitch
                             text: qsTr("Show density field")
-                            enabled: settings.useStandardBedLength
                             onToggled: restartSnackbar.open();
                         }
 
