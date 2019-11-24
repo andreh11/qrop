@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
   - *Settings* − Use integer text field instead of spinbox (#149).
 
+### Fixed
+  - *Plantings* − Fix fullscreen displaying of the pictures linked to notes (#154).
+
 ## 0.4 "Bobéhec" - 2019-10-15
 
 ### Added

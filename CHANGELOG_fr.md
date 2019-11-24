@@ -5,7 +5,10 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
-  - *Paramètres* − Champs entier à la place des boutons fléchés (#149).  
+  - *Paramètres* − Champs entier à la place des boutons fléchés (#149).
+  
+### Corrections
+  - *Plan de culture* − Correction de l'affichage des images associées aux notes (#154).
 
 ## 0.4 « Bobéhec » - 2019-10-11
 
