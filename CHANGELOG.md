@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   - *Settings* − Use integer text field instead of spinbox (#149).
 
 ### Fixed
+  - *Settings* − Density switch is now available even if the user doesn't have
+    standard beds (#144).
   - *Plantings* − Fix fullscreen displaying of the pictures linked to notes (#154).
 
 ## 0.4 "Bobéhec" - 2019-10-15
