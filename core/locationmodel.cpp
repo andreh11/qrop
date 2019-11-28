@@ -46,7 +46,9 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
 
 QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
 {
-    Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
+    if (!proxyIndex.isValid())
+        return {};
+
     switch (role) {
     case NonOverlappingPlantingList:
         return nonOverlappingPlantingList(proxyIndex);
