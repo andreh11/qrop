@@ -1204,7 +1204,7 @@ Flickable {
                     validator: QropDoubleValidator {
                         bottom: 0
                         decimals: 3
-                        top: 999
+                        top: 9999
                         notation: DoubleValidator.StandardNotation
                     }
                     text: "0"
