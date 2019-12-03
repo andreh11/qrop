@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Qrop is a crop planning and record keeping free software designed by market
-gardeners, for market gardeners, with the help of the wonderful French coop
-[L'Atelier paysan](https://latelierpaysan.org).
+[Qrop](https://qrop.frama.io) is a crop planning and record keeping free
+software designed by market gardeners, for market gardeners, with the help of
+the wonderful French coop [L'Atelier paysan](https://latelierpaysan.org).
 
 Qrop is available on GNU/Linux, macOS and Windows.
 
@@ -105,6 +105,12 @@ See [AUTHORS](AUTHORS.md).
 * SQLite
 * 🖤 and hectolitres of
   [zapatista coffee](https://en.wikipedia.org/wiki/Zapatista_coffee_cooperatives)
+  
+## Donate
+
+If you like our work, consider making a donation!
+
+<script src="https://liberapay.com/ah/widgets/button.js"></script>
 
 ## License
 

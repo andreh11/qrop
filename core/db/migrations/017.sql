@@ -4,6 +4,8 @@
 PRAGMA foreign_keys = OFF;
 PRAGMA legacy_alter_table = 1;
 
+BEGIN TRANSACTION;
+
 CREATE VIEW IF NOT EXISTS crop_stat_view AS
 SELECT crop_id,
        crop,

@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.4.1. - 2019-12-02 
+
 ### Changed
   - *Settings* − Use integer text field instead of spinbox (#149).
 
 ### Fixed
+  - *Field map* − Fix crashing bug when creating a brand new field map.
   - *Settings* − Density switch is now available even if the user doesn't have
     standard beds (#144).
   - *Plantings* − Fix fullscreen displaying of the pictures linked to notes (#154).

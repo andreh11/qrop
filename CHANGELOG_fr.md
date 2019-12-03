@@ -4,10 +4,14 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.4.1. - 2019-12-02 
+
 ### Changements
   - *Paramètres* − Champs entier à la place des boutons fléchés (#149).
   
 ### Corrections
+  - *Parcellaire* − Correction d'un bogue faisant crasher le programme lors de
+    la création d'un nouveau parcellaire.
   - *Paramètres* − L'interrupteur « densité » est maitenant disponible même si
     l'utilisateurice n'a pas de planches standardisées (#144).
   - *Plan de culture* − Correction de l'affichage des images associées aux notes (#154).
