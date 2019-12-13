@@ -4,6 +4,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Corrections
+  - *PDF* − Parcellaire : correction de la hauteur des emplacemens lorsque les
+    tâches ne sont pas affichées.
+
 ## 0.4.1. - 2019-12-02 
 
 ### Changements

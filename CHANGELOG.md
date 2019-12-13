@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+  - *PDF* - Field map: Fix wrong location height when aren't displayed (#157).
+
 ## 0.4.1. - 2019-12-02 
 
 ### Changed
