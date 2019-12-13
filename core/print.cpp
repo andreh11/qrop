@@ -981,22 +981,19 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId, int rows)
     painter.restore();
 }
 
-/** @return the number of rows painted */
-void Print::paintTimeline(QPainter &painter, const QModelIndex &parent, int year)
+void Print::paintTimeline(QPainter &painter, QVariantList plantingList, QVariantList taskList, int year)
 {
-    const auto plantingList = m_locationModel->nonOverlappingPlantingList(parent);
     int plantingLength = plantingList.count();
     for (const auto &list : plantingList) {
         for (int plantingId : Helpers::variantToIntList(list.toList()))
             paintPlantingTimegraph(painter, plantingId, year);
         painter.translate(0, m_rowHeight);
     }
-    painter.translate(0, -plantingLength * m_rowHeight);
 
     int taskLength = 0;
     if (m_settings->value("LocationView/showTasks", false).toBool()) {
-        const auto taskList = m_locationModel->nonOverlappingTaskList(parent);
         taskLength = taskList.length();
+        painter.translate(0, -plantingLength * m_rowHeight);
 
         int i = 0;
         for (; i < plantingLength; ++i) {
@@ -1029,9 +1026,30 @@ void Print::breakPage(QPagedPaintDevice &printer, QPainter &painter)
     //    drawTitle();
 }
 
-int Print::locationRows(const QModelIndex &index) const
+void Print::paintRow(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &index,
+                     int season, int year)
 {
-    return std::max(1, m_locationModel->nonOverlappingPlantingList(index).count());
+    int locationId = m_locationModel->locationId(index);
+    auto plantingList = m_locationModel->nonOverlappingPlantingList(index);
+    auto taskList = m_locationModel->nonOverlappingTaskList(index);
+    int rows = std::max({ 1, plantingList.count(), taskList.count() });
+
+    // Begin from new page if there is not enough space left on the current page.
+    if ((painter.transform().dy() + rows * m_rowHeight) > painter.viewport().height()) {
+        breakPage(printer, painter);
+        paintHeader(painter, season, year);
+    }
+
+    // Paint grid and go backward.
+    paintRowGrid(painter, rows);
+    painter.translate(0, -rows * m_rowHeight);
+
+    // Paint location's name.
+    QRectF locationRect(0, 0, m_firstColumnWidth, m_rowHeight);
+    painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
+                     m_location->fullName(locationId));
+
+    paintTimeline(painter, plantingList, taskList, year);
 }
 
 void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QModelIndex &parent,
@@ -1039,27 +1057,9 @@ void Print::paintTree(QPagedPaintDevice &printer, QPainter &painter, const QMode
 {
     for (int row = 0; row < m_locationModel->rowCount(parent); row++) {
         QModelIndex index = m_locationModel->index(row, 0, parent);
-        int locationId = m_locationModel->locationId(index);
-
-        if (m_locationModel->hasChildren(index)) {
+        if (m_locationModel->hasChildren(index))
             paintTree(printer, painter, index, season, year);
-        } else {
-            int rows = locationRows(index);
-
-            // begin from new page if there is not enough space left on the current page
-            if ((painter.transform().dy() + rows * m_rowHeight) > painter.viewport().height()) {
-                breakPage(printer, painter);
-                paintHeader(painter, season, year);
-            }
-
-            paintRowGrid(painter, rows);
-            painter.translate(0, -rows * m_rowHeight);
-
-            QRectF locationRect(0, 0, m_firstColumnWidth, m_rowHeight);
-            painter.drawText(locationRect.adjusted(m_textPadding, 0, 0, 0), Qt::TextWordWrap,
-                             m_location->fullName(locationId));
-
-            paintTimeline(painter, index, year);
-        }
+        else
+            paintRow(printer, painter, index, season, year);
     }
 }
