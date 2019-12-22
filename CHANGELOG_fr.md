@@ -5,6 +5,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Corrections
+  - Correction de la sélection des années dans les champs date (#171).
   - *PDF* − Parcellaire : correction de la hauteur des emplacemens lorsque les
     tâches ne sont pas affichées.
 
