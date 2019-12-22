@@ -35,7 +35,7 @@ public:
 
     static const QList<QList<int>> monthsOrder;
     Q_INVOKABLE static QDate dateFromWeekString(const QString &s, int targetYear = 0);
-    Q_INVOKABLE static QDate dateFromDateString(const QString &s);
+    Q_INVOKABLE static QDate dateFromDateString(const QString &s, int targetYear = 0);
     Q_INVOKABLE static QDate dateFromIsoString(const QString &s)
     {
         return QDate::fromString(s, Qt::ISODate);

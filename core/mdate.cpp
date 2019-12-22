@@ -142,7 +142,7 @@ QDate MDate::dateFromWeekString(const QString &s, int targetYear)
     return mondayOfWeek(week, year);
 }
 
-QDate MDate::dateFromDateString(const QString &s)
+QDate MDate::dateFromDateString(const QString &s, int targetYear)
 {
     QRegExp regexp(R"((0{,1}[1-9]|[12]\d|3[01])[/-. ](0{,1}[1-9]|1[012])([/-. ](20\d\d)){,1})");
     if (!regexp.exactMatch(s))
@@ -150,13 +150,18 @@ QDate MDate::dateFromDateString(const QString &s)
 
     regexp.indexIn(s);
     QStringList list = regexp.capturedTexts();
+    qDebug() << list;
     int day = list[1].toInt();
     int month = list[2].toInt();
     int year;
-    if (list[4].isEmpty())
-        year = QDate::currentDate().year();
-    else
+    if (list[4].isEmpty()) {
+        if (targetYear == 0)
+            year = QDate::currentDate().year();
+        else
+            year = targetYear;
+    } else {
         year = list[4].toInt();
+    }
 
     QDate date(year, month, day);
     if (!date.isValid())

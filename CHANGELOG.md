@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Fixed
+  - Fixed date picker's bad year selection (#171).
   - *PDF* - Field map: Fix wrong location height when aren't displayed (#157).
 
 ## 0.4.1. - 2019-12-02 

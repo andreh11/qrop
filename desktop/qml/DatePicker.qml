@@ -70,8 +70,8 @@ Item {
         }
 
         function setDate() {
-            var newDate = mode === "date" ? MDate.dateFromDateString(text)
-                                          : MDate.dateFromWeekString(text);
+            var newDate = mode === "date" ? MDate.dateFromDateString(text, currentYear)
+                                          : MDate.dateFromWeekString(text, currentYear);
             if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
 
@@ -90,7 +90,6 @@ Item {
                 return;
             setDate();
         }
-
 
         Label {
             id: dateHelper
