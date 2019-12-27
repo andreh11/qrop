@@ -449,9 +449,9 @@ QString LocationModel::fullName(const QModelIndex &index) const
  * while be indexes of \a parentList, and generating location names using \a baseName,
  * into database and underlying SqlTreeModel.
  *
- * The \a baseName string can represent:
+ * The \a baseName string can be:
  * \list
- * \li an integer n: generated names will be subsequent integers ;
+ * \li ending with an integer: generated names will be subsequent integers ;
  * \li an all uppercase or all lowercase code (A, bb, AA) : generated names
  * will have last character incremented (B, bc, AB)
  * \li a free-from string : an integer will be appended to \a baseName
@@ -467,21 +467,27 @@ bool LocationModel::addLocations(const QString &baseName, int length, double wid
     int newId;
     QSqlDatabase::database().transaction();
 
-    // Check if baseName represents an integer.
-    bool isInt;
-    int baseInt = baseName.toInt(&isInt);
+    QRegExp regexp("(\\D*)(\\d*)$"); // Does baseName ends with number?
+    regexp.setMinimal(true);
+    if (!regexp.exactMatch(baseName))
+        qDebug() << "no match" << baseName << regexp.matchedLength();
+
+    QStringList list = regexp.capturedTexts();
+
+    bool endWithNumber = !list[2].isEmpty();
+    int baseInt = list[2].toInt();
 
     QString name;
     for (const auto &parent : parentList) {
         parentId = data(index(parent.row(), 0, parent.parent()), 0).toInt();
         parentIdString = parentId > 0 ? QString::number(parentId) : QString();
         for (int i = 0; i < quantity; i++) {
-            if (isInt)
-                name = QString::number(baseInt + i);
+            if (endWithNumber)
+                name = QString("%1%2").arg(list[1]).arg(baseInt + i);
             else if (baseName.back().unicode() + i < 'Z')
                 name = baseName.chopped(1) + QString(baseName.back().unicode() + i);
             else
-                name = baseName + " " + QString::number(i);
+                name = baseName + " " + QString::number(i + 1);
 
             newId = m_location->add({ { "bed_length", length },
                                       { "bed_width", width },
