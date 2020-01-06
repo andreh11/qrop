@@ -387,7 +387,8 @@ int Planting::duplicate(int id) const
 /**
  * Duplicate a planting to another \a year.
  *
- * The seeding and planting tasks will also be duplicated.
+ * The seeding and planting tasks will also be duplicated. Dates of week 53 of
+ * year Y will be duplicated to week 1 of year Y + 1.
  *
  * \param id the id of the planting to duplicate
  * \param year the targeted year
@@ -401,17 +402,16 @@ int Planting::duplicateToYear(int id, int year) const
     auto map = mapFromId(table(), id);
     map.remove(idFieldName());
 
-    QSettings settings;
-    QString dateType = settings.value("dateType", "week").toString();
+    int fromWeek = fromDate.weekNumber();
+    QDate toDate;
+    if (fromWeek == 53)
+        toDate = MDate::mondayOfWeek(1, year + 1).addDays(fromDate.dayOfWeek() - 1);
+    else
+        toDate = MDate::mondayOfWeek(fromWeek, year).addDays(fromDate.dayOfWeek() - 1);
+    map["planting_date"] = toDate.toString(Qt::ISODate);
 
-    if (dateType == "week") {
-        int fromWeek = fromDate.weekNumber();
-        QDate toDate = MDate::mondayOfWeek(fromWeek, year);
-        map["planting_date"] = toDate.toString(Qt::ISODate);
-
-        int newId = add(map);
-        m_keyword->duplicateKeywords(id, newId);
-    }
+    int newId = add(map);
+    m_keyword->duplicateKeywords(id, newId);
 
     return -1;
 }

@@ -114,6 +114,17 @@ QString MDate::formatDate(const QDate &date, int currentYear, const QString &typ
     return date.toString("dd/MM/yyyy");
 }
 
+/**
+ * @brief MDate::longYear
+ * @param year
+ * @return true if \a year has 53 ISO weeks
+ */
+bool MDate::longYear(int year)
+{
+    QDate lastDay(year, 12, 31);
+    return lastDay.weekNumber() == 53;
+}
+
 QDate MDate::dateFromWeekString(const QString &s, int targetYear)
 {
     int currentYear = 0;
