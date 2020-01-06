@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Corrections
+  - *Plan de culture* − Correction du bogue de duplication lors de l'utilisation
+    de dates complètes (#175).
   - Correction de la numérotation automatique des emplacements (#164).
   - Correction de la sélection des années dans les champs date (#171).
   - *PDF* − Parcellaire : correction de la hauteur des emplacemens lorsque les

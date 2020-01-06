@@ -666,7 +666,6 @@ Page {
                                 fromField.forceActiveFocus()
                             }
 
-
                             onAccepted: {
                                 Planting.duplicatePlan(Number(fromField.text), Number(toField.text))
                                 page.refresh();

@@ -10,27 +10,40 @@ Item {
     
     property int week: 1
     property int year: 2018
+    onYearChanged: console.log(year, longYear, lastWeek)
+    property bool longYear: MDate.longYear(year)
+    property int lastWeek: longYear ? 53 : 52
     property bool showOnlyYear: false
     
     function previousYear() {
+        let setLastWeek = false;
+        if (week == 53)
+            setLastWeek = true;
         year--;
+        if (setLastWeek)
+            week = lastWeek;
     }
 
     function nextYear() {
+        let setLastWeek = false;
+        if (week == 53)
+            setLastWeek = true;
         year++;
+        if (setLastWeek)
+            week = lastWeek;
     }
 
     function previousWeek() {
         if (week == 1) {
-            week = 52;
             year--;
+            week = lastWeek;
         } else {
             week--;
         }
     }
     
     function nextWeek() {
-        if (week == 52) {
+        if (week == lastWeek) {
             week = 1;
             year++
         } else {
