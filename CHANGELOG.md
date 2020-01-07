@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+  - *Settings* − Add dropbox to select the language (#156).
+
+### Changed
+  - Improve the translation infrastructure.
+
 ### Fixed
   - *Planting map* − Fix duplication bug when using complete dates (#175).
   - *Field map* - Fix automatic numbering of location names (#164).

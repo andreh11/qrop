@@ -54,6 +54,7 @@ Page {
         property alias standardPathWidth: standardPathWidthField.text
         property alias showPlantingSuccessionNumber: showPlantingSuccessionNumberSwitch.checked
         property string dateType
+        property string preferredLanguage
     }
 
     Settings {
@@ -86,7 +87,7 @@ Page {
         z: 2
         x: Units.mediumSpacing
         y: parent.height - height - Units.mediumSpacing
-        text: qsTr("Recent the application for modifications to take effect")
+        text: qsTr("Restart the application for modifications to take effect")
         visible: false
     }
 
@@ -159,6 +160,47 @@ Page {
                                         settings.dateType = "week"
                                     else
                                         settings.dateType = "date"
+                                }
+                            }
+                        }
+
+                        ThinDivider { width: parent.width }
+
+                        RowLayout {
+                            width: parent.width
+                            Layout.leftMargin: Units.mediumSpacing
+                            Layout.rightMargin: Layout.leftMargin
+
+                            Label {
+                                Layout.fillWidth: true
+                                text: qsTr("Language")
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
+                            }
+
+                            ComboBox {
+                                Material.elevation: 0
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                Layout.minimumWidth: 200
+                                currentIndex: {
+                                    if (settings.preferredLanguage == "system")
+                                        return 0;
+                                    else if (settings.preferredLanguage == "en")
+                                        return 1;
+                                    else
+                                        return 2;
+                                }
+                                model: ["System", "English", "Français"]
+                                onCurrentTextChanged: {
+                                    if (currentIndex == 0)
+                                        settings.preferredLanguage = "system"
+                                    else if (currentIndex == 1)
+                                        settings.preferredLanguage = "en"
+                                    else
+                                        settings.preferredLanguage = "fr"
+                                    restartSnackbar.open();
                                 }
                             }
                         }

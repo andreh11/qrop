@@ -15,20 +15,21 @@
  */
 
 #include <QApplication>
-#include <QQuickView>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
 #include <QDoubleValidator>
+#include <QFileSystemModel>
 #include <QFontDatabase>
 #include <QHash>
 #include <QIcon>
+#include <QLibraryInfo>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickView>
+#include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QStandardPaths>
 #include <QTranslator>
 #include <QVariantMap>
-#include <QFileSystemModel>
-#include <QLibraryInfo>
 
 #if defined(Q_OS_ANDROID)
 #include <QAndroidJniObject>
@@ -80,7 +81,6 @@
 #include "varietymodel.h"
 
 #include "qquicktreemodeladaptor.h"
-
 #include "qropdoublevalidator.h"
 #include "timevalidator.h"
 
@@ -316,18 +316,21 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("AH");
     QApplication::setOrganizationDomain("io.qrop");
     QApplication::setApplicationDisplayName("Qrop");
-    QApplication::setApplicationVersion("0.1");
+    QApplication::setApplicationVersion("0.4.1");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
     QTranslator translator;
-    QTranslator coreTranslator;
     const QString &lang = QLocale::system().name();
-    if (lang.contains("fr")) {
-        translator.load(":/translations/fr.qm");
-        coreTranslator.load(":/core_translations/fr.qm");
-        QApplication::installTranslator(&translator);
-        QApplication::installTranslator(&coreTranslator);
-    }
+    QSettings settings;
+    auto preferredLanguage = settings.value("preferredLanguage").toString();
+    qDebug() << "LANG " << lang << preferredLanguage;
+
+    if (preferredLanguage == "system")
+        translator.load(QLocale(), "qrop", "_", ":/translations", ".qm");
+    else
+        translator.load(":/translations/qrop_" + preferredLanguage + ".qm");
+
+    QApplication::installTranslator(&translator);
 
     registerFonts();
     registerTypes();
