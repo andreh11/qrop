@@ -4,6 +4,12 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Ajouts
+  - *Paramètres* − Ajout d'un menu déroulant pour sélectionner la langue (#156).
+
+### Changements
+  - Amélioration de l'infrastructure des traductions.
+
 ### Corrections
   - *Plan de culture* − Correction du bogue de duplication lors de l'utilisation
     de dates complètes (#175).

@@ -2,4 +2,5 @@
 *.autosave
 *.txt.user*
 *.swp
+*.qm
 core/version.h
