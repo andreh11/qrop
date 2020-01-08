@@ -8,6 +8,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Paramètres* − Ajout d'un menu déroulant pour sélectionner la langue (#156).
 
 ### Changements
+  − *PDF* − Affichage du nom des mois à la place de nombres dans les sections (#168).
   - Amélioration de l'infrastructure des traductions.
 
 ### Corrections

@@ -126,6 +126,8 @@ private:
 
     void setTableWidth();
     void setTotalStretch();
+
+    QVariant sectionValue(int row, const QString &sectionName) const;
 };
 
 #endif // TABLEPRINTER_H
