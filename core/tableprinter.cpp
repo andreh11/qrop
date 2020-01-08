@@ -238,12 +238,16 @@ void TablePrinter::drawRow(int row)
         int flags = Qt::AlignVCenter | Qt::TextWordWrap;
         switch (colInfo.type) {
         case TablePrinter::Weight: {
-            double weight = value.toDouble();
-            if (weight > 1000) {
-                weight = std::floor(weight / 10) / 100;
+            bool ok = true;
+            double weight = value.toDouble(&ok);
+            if (qIsInf(weight)) {
+                string = "−";
+            } else if (weight >= 1000) {
+                weight = std::ceil(weight / 10) / 100;
                 string = QString("%L1 kg").arg(weight);
+            } else {
+                string = QString("%L1 g").arg(std::ceil(weight * 10) / 10);
             }
-            string = QString("%L1 g").arg(std::floor(weight * 100) / 100);
             flags |= Qt::AlignRight;
             break;
         }

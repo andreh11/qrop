@@ -487,9 +487,11 @@ Page {
                         model.variety,
                         model.seed_company,
                         "%L1".arg(seedsRadioButton.checked ? model.seeds_number : model.plants_needed),
-                        model.seeds_quantity > 1000
-                        ? qsTr("%L1 kg").arg(Math.round(model.seeds_quantity * 0.1) / 100)
-                        : qsTr("%L1 g").arg(Math.round(model.seeds_quantity * 100) / 100)
+                        isFinite(model.seeds_quantity)
+                        ? (model.seeds_quantity >= 1000
+                        ? qsTr("%L1 kg").arg(Math.ceil(model.seeds_quantity / 10) / 100)
+                        : qsTr("%L1 g").arg(Math.ceil(model.seeds_quantity * 10) / 10))
+                        : "−"
                     ]
 
                     color: rowMouseArea.containsMouse
