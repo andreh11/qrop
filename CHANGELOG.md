@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   - *Settings* − Add dropbox to select the language (#156).
 
 ### Changed
+  - *PDF* − Show month name instead of number in sections (#168).
   - Improve the translation infrastructure.
 
 ### Fixed

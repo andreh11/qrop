@@ -284,6 +284,13 @@ void TablePrinter::breakPage()
     drawTitle();
 }
 
+QVariant TablePrinter::sectionValue(int row, const QString &sectionName) const
+{
+    if (sectionName == "month")
+        return MDate::monthName(m_model->rowValue(row, sectionName).toInt());
+    return m_model->rowValue(row, sectionName);
+}
+
 bool TablePrinter::printTable(const QString &sectionName, bool pageBreak)
 {
     if (!m_model)
@@ -299,16 +306,15 @@ bool TablePrinter::printTable(const QString &sectionName, bool pageBreak)
     drawTitle();
     drawHeader();
     if (useSection) {
-        section = m_model->rowValue(0, sectionName);
+        section = sectionValue(0, sectionName);
         drawSection(section.toString());
     }
     drawRow(0);
 
     QVariant s;
     for (int row = 1; row < m_model->rowCount(); row++) {
-        qDebug() << "PRINT" << row;
         if (useSection) {
-            s = m_model->rowValue(row, sectionName);
+            s = sectionValue(row, sectionName);
             if (section != s) {
                 section = s;
                 if (pageBreak) {
