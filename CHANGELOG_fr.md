@@ -12,6 +12,7 @@ Tous les changements importants seront documentés dans ce fichier.
   - Amélioration de l'infrastructure des traductions.
 
 ### Corrections
+  - *PDF* − Correction des mauvaises unités pour les poids : kg au lieu de g (#165).
   - *Plan de culture* − Correction du bogue de duplication lors de l'utilisation
     de dates complètes (#175).
   - Correction de la numérotation automatique des emplacements (#164).

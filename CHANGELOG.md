@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   - Improve the translation infrastructure.
 
 ### Fixed
+  - *PDF* − Fix bad unit for weights : kg instead of g (#165).
   - *Planting map* − Fix duplication bug when using complete dates (#175).
   - *Field map* - Fix automatic numbering of location names (#164).
   - Fixed date picker's bad year selection (#171).
