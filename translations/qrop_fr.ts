@@ -2837,7 +2837,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="75"/>
         <source>General crop plan</source>
-        <translation>Plane de culture général</translation>
+        <translation>Plan de culture général</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="89"/>
