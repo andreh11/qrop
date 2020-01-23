@@ -4,6 +4,9 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.4.3 « Albens » − 2020-01-23 
+  - *Paramètres* − Correction du comportement de barre de défilement.
+
 ## 0.4.2 « Albens » − 2020-01-23 
 
 ### Ajouts

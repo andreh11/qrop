@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.4.3 "Albens" − 2020-01-23 
+
+### Fixed
+  - *Settings* − Fix scrollbar behavior.
+
 ## 0.4.2 "Albens" − 2020-01-23 
 
 ### Added

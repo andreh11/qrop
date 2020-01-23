@@ -95,10 +95,6 @@ Page {
         id: scrollView
         anchors.fill: parent
 
-        ScrollBar.vertical: ScrollBar {
-            anchors { top: parent.top; right: parent.right; bottom: parent.bottom; }
-        }
-
         Flickable {
             boundsBehavior: Flickable.StopAtBounds
             visible: !showFamilyPane && !showKeywordPane && !showSeedCompanyPane && !showUnitPane
