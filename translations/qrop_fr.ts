@@ -2282,9 +2282,13 @@
         <translation type="vanished">Estimation de l&apos;occupation au champs et sous abris pour cette année (en % de la longueur de planche totale)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsChartPane.qml" line="86"/>
         <source>%1%</source>
-        <translation>%1 %</translation>
+        <translation type="vanished">%1 %</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/PlantingsChartPane.qml" line="86"/>
+        <source>S%1 %2%</source>
+        <translation>S%1⋅%2%</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="87"/>
@@ -2397,7 +2401,7 @@
         <translation>Plan de culture</translation>
     </message>
     <message numerus="yes">
-        <location filename="../desktop/qml/PlantingsPage.qml" line="222"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="219"/>
         <source>Added %L1 planting(s)</source>
         <translation>
             <numerusform>%L1 série ajoutée</numerusform>
@@ -2405,7 +2409,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../desktop/qml/PlantingsPage.qml" line="240"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="237"/>
         <source>Modified %L1 planting(s)</source>
         <translation>
             <numerusform>%L1 série modifiée</numerusform>
@@ -2413,217 +2417,224 @@
         </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="258"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="255"/>
         <source>Crop plan of %1 duplicated to %2</source>
         <translation>Plan de culture de %1 dupliqué pour %2</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="268"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="265"/>
         <source>PDF (*.pdf)</source>
         <translation>PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="298"/>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="310"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="295"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="307"/>
         <source>CSV (*.csv)</source>
         <translation>CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="348"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="345"/>
         <source>Add plantings</source>
         <translation>Ajouter des séries</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="362"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="359"/>
         <source>GH</source>
         <comment>Abbreviation for &quot;greenhouse&quot;</comment>
         <translation>SA</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="371"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="368"/>
         <source>Show all plantings</source>
         <translation>Afficher toutes les séries</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="372"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="369"/>
         <source>Show only greenhouse plantings</source>
         <translation>Afficher uniquement les séries sous abris</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="388"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="385"/>
         <source>Hide timegraph</source>
         <translation>Cacher le diagramme</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="388"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="385"/>
         <source>Show timegraph</source>
         <translation>Afficher le diagrame</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="396"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="393"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="409"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="406"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="420"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="417"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="429"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="426"/>
         <source>Duplicate to next year</source>
         <translation>Dupliquer pour l&apos;année suivante</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="477"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="474"/>
         <source>Hide planting&apos;s tasks</source>
         <translation>Cacher les tâches de série</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="478"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="475"/>
         <source>Show planting&apos;s tasks</source>
         <translation>Afficher les tâches de série</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="506"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="503"/>
         <source>Hide notes</source>
         <translation>Cacher les notes</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="506"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="503"/>
         <source>Show notes</source>
         <translation>Afficher les notes</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="522"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="519"/>
         <source>Hide chart</source>
         <translation>Cacher le graphique</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="523"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="520"/>
         <source>Show chart</source>
         <translation>Afficher le graphique</translation>
     </message>
     <message numerus="yes">
-        <location filename="../desktop/qml/PlantingsPage.qml" line="536"/>
-        <source>planting(s) selected</source>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="533"/>
+        <source>%L1 planting(s) selected</source>
         <translation>
+            <numerusform>%L1 série sélectionnée</numerusform>
+            <numerusform>%L1 séries sélectionnées</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>planting(s) selected</source>
+        <translation type="vanished">
             <numerusform>%n série sélectionnée</numerusform>
             <numerusform>%Ln séries sélectionnées</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="570"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="567"/>
         <source>Crop plan</source>
         <translation>Plan de culture</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="575"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="572"/>
         <source>Export as PDF...</source>
         <translation>Exporter au format PDF...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="580"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="577"/>
         <source>Duplicate crop plan...</source>
         <translation>Dupliquer le plan de culture...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="585"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="582"/>
         <source>Import crop plan...</source>
         <translation>Importer un plan de culture</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="590"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="587"/>
         <source>Export crop plan...</source>
         <translation>Exporter le plan de culture</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="597"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="594"/>
         <source>Print crop plan</source>
         <translation>Imprimer le plan de culture</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="610"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="607"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="614"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="611"/>
         <source>Entire plan</source>
         <translation>Plan complet</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="615"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="612"/>
         <source>Greenhouse plan</source>
         <translation>Plan de pépinière</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="616"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="613"/>
         <source>Field sowing plan</source>
         <translation>Plan de semis direct</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="617"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="614"/>
         <source>Transplanting plan</source>
         <translation>Plan de plantation</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="624"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="621"/>
         <source>Date range</source>
         <translation>Période</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="627"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="624"/>
         <source>Current week</source>
         <translation>Semaine courante</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="628"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="625"/>
         <source>Current month</source>
         <translation>Mois en cours</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="629"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="626"/>
         <source>Current year</source>
         <translation>Année courante</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="639"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="636"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="648"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="645"/>
         <source>Print</source>
         <translation>Imprimer</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="657"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="654"/>
         <source>Duplicate crop plan</source>
         <translation>Dupliquer le plan de culture</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="700"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="697"/>
         <source>From</source>
         <translation>De</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="710"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="707"/>
         <source>To</source>
         <translation>Vers</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="732"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="729"/>
         <source>No plantings for this season</source>
         <translation>Pas de séries pour cette saison</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="733"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="730"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
@@ -2835,207 +2846,207 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
 <context>
     <name>Print</name>
     <message>
-        <location filename="../core/print.cpp" line="75"/>
+        <location filename="../core/print.cpp" line="77"/>
         <source>General crop plan</source>
         <translation>Plan de culture général</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="89"/>
-        <location filename="../core/print.cpp" line="129"/>
-        <location filename="../core/print.cpp" line="167"/>
-        <location filename="../core/print.cpp" line="206"/>
-        <location filename="../core/print.cpp" line="366"/>
-        <location filename="../core/print.cpp" line="414"/>
+        <location filename="../core/print.cpp" line="91"/>
+        <location filename="../core/print.cpp" line="131"/>
+        <location filename="../core/print.cpp" line="169"/>
+        <location filename="../core/print.cpp" line="208"/>
+        <location filename="../core/print.cpp" line="368"/>
+        <location filename="../core/print.cpp" line="416"/>
         <source>Crop</source>
         <translation>Espèce</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="90"/>
-        <location filename="../core/print.cpp" line="130"/>
-        <location filename="../core/print.cpp" line="168"/>
-        <location filename="../core/print.cpp" line="207"/>
-        <location filename="../core/print.cpp" line="367"/>
-        <location filename="../core/print.cpp" line="415"/>
+        <location filename="../core/print.cpp" line="92"/>
+        <location filename="../core/print.cpp" line="132"/>
+        <location filename="../core/print.cpp" line="170"/>
+        <location filename="../core/print.cpp" line="209"/>
+        <location filename="../core/print.cpp" line="369"/>
+        <location filename="../core/print.cpp" line="417"/>
         <source>Variety</source>
         <translation>Variété</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="91"/>
-        <location filename="../core/print.cpp" line="128"/>
-        <location filename="../core/print.cpp" line="166"/>
+        <location filename="../core/print.cpp" line="93"/>
+        <location filename="../core/print.cpp" line="130"/>
+        <location filename="../core/print.cpp" line="168"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="92"/>
-        <location filename="../core/print.cpp" line="131"/>
-        <location filename="../core/print.cpp" line="205"/>
+        <location filename="../core/print.cpp" line="94"/>
+        <location filename="../core/print.cpp" line="133"/>
+        <location filename="../core/print.cpp" line="207"/>
         <source>TP</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="93"/>
-        <location filename="../core/print.cpp" line="169"/>
-        <location filename="../core/print.cpp" line="208"/>
+        <location filename="../core/print.cpp" line="95"/>
+        <location filename="../core/print.cpp" line="171"/>
+        <location filename="../core/print.cpp" line="210"/>
         <source>FH</source>
         <translation>DR</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="94"/>
+        <location filename="../core/print.cpp" line="96"/>
         <source>LH</source>
         <translation>FR</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="95"/>
-        <location filename="../core/print.cpp" line="170"/>
-        <location filename="../core/print.cpp" line="209"/>
+        <location filename="../core/print.cpp" line="97"/>
+        <location filename="../core/print.cpp" line="172"/>
+        <location filename="../core/print.cpp" line="211"/>
         <source>Length</source>
         <translation>Lgr.</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="96"/>
-        <location filename="../core/print.cpp" line="172"/>
-        <location filename="../core/print.cpp" line="211"/>
+        <location filename="../core/print.cpp" line="98"/>
+        <location filename="../core/print.cpp" line="174"/>
+        <location filename="../core/print.cpp" line="213"/>
         <source>Rows</source>
         <translation>Rangs</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="97"/>
+        <location filename="../core/print.cpp" line="99"/>
         <source>Spac.</source>
         <translation>Dist.</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="98"/>
-        <location filename="../core/print.cpp" line="174"/>
-        <location filename="../core/print.cpp" line="214"/>
-        <location filename="../core/print.cpp" line="243"/>
-        <location filename="../core/print.cpp" line="269"/>
+        <location filename="../core/print.cpp" line="100"/>
+        <location filename="../core/print.cpp" line="176"/>
+        <location filename="../core/print.cpp" line="216"/>
+        <location filename="../core/print.cpp" line="245"/>
+        <location filename="../core/print.cpp" line="271"/>
         <source>Locations</source>
         <translation>Emplacements</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="115"/>
+        <location filename="../core/print.cpp" line="117"/>
         <source>Greenhouse crop plan</source>
         <translation>Plan de culture pépinière</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="132"/>
-        <location filename="../core/print.cpp" line="212"/>
+        <location filename="../core/print.cpp" line="134"/>
+        <location filename="../core/print.cpp" line="214"/>
         <source># trays</source>
         <translation>Nb. plaques</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="133"/>
-        <location filename="../core/print.cpp" line="213"/>
+        <location filename="../core/print.cpp" line="135"/>
+        <location filename="../core/print.cpp" line="215"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="134"/>
+        <location filename="../core/print.cpp" line="136"/>
         <source>Seeds/hole</source>
-        <translation type="unfinished">Gr./trou</translation>
+        <translation>Gr./trou</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="135"/>
+        <location filename="../core/print.cpp" line="137"/>
         <source># seeds</source>
         <translation>Nb. graines</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="136"/>
+        <location filename="../core/print.cpp" line="138"/>
         <source>Seed weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="153"/>
+        <location filename="../core/print.cpp" line="155"/>
         <source>Field sowing crop plan</source>
         <translation>Plan de culture semis direct</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="171"/>
-        <location filename="../core/print.cpp" line="210"/>
+        <location filename="../core/print.cpp" line="173"/>
+        <location filename="../core/print.cpp" line="212"/>
         <source>Spacing</source>
         <translation>Dist.</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="173"/>
+        <location filename="../core/print.cpp" line="175"/>
         <source>Weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="191"/>
+        <location filename="../core/print.cpp" line="193"/>
         <source>Field transplanting crop plan</source>
         <translation>Plan de culture plantation</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="231"/>
+        <location filename="../core/print.cpp" line="233"/>
         <source>Task calendar</source>
         <translation>Calendrier des tâches</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="241"/>
-        <location filename="../core/print.cpp" line="267"/>
+        <location filename="../core/print.cpp" line="243"/>
+        <location filename="../core/print.cpp" line="269"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="242"/>
-        <location filename="../core/print.cpp" line="268"/>
+        <location filename="../core/print.cpp" line="244"/>
+        <location filename="../core/print.cpp" line="270"/>
         <source>Planting</source>
         <translation>Série</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="244"/>
+        <location filename="../core/print.cpp" line="246"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="245"/>
+        <location filename="../core/print.cpp" line="247"/>
         <source>Tags</source>
         <translation>Étiquettes</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="246"/>
+        <location filename="../core/print.cpp" line="248"/>
         <source>Notes</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="258"/>
+        <location filename="../core/print.cpp" line="260"/>
         <source>Harvests</source>
         <translation>Récoltes</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="270"/>
-        <location filename="../core/print.cpp" line="370"/>
+        <location filename="../core/print.cpp" line="272"/>
+        <location filename="../core/print.cpp" line="372"/>
         <source>Quantity</source>
         <translation>Quantité</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="271"/>
+        <location filename="../core/print.cpp" line="273"/>
         <source>Labor time</source>
         <translation>Temps de travail</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="375"/>
+        <location filename="../core/print.cpp" line="377"/>
         <source>Monthly Seed List (%1)</source>
         <translation>Liste des semences par mois (%1)</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="378"/>
+        <location filename="../core/print.cpp" line="380"/>
         <source>Quarterly Seed List (%1)</source>
         <translation>Liste des semences par trimestre (%1)</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="381"/>
+        <location filename="../core/print.cpp" line="383"/>
         <source>Yearly Seed List (%1)</source>
         <translation>Liste des semences (%1)</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="413"/>
+        <location filename="../core/print.cpp" line="415"/>
         <source>Transplanting date</source>
         <translation>Date plantation</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="419"/>
+        <location filename="../core/print.cpp" line="421"/>
         <source>Transplant List (%1)</source>
         <translation>Liste des plants (%1)</translation>
     </message>
@@ -3044,14 +3055,14 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Liste des semences</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="368"/>
-        <location filename="../core/print.cpp" line="416"/>
+        <location filename="../core/print.cpp" line="370"/>
+        <location filename="../core/print.cpp" line="418"/>
         <source>Company</source>
         <translation>Fournisseur</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="369"/>
-        <location filename="../core/print.cpp" line="417"/>
+        <location filename="../core/print.cpp" line="371"/>
+        <location filename="../core/print.cpp" line="419"/>
         <source>Number</source>
         <translation>Nombre</translation>
     </message>
@@ -3060,17 +3071,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Liste des plants</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="594"/>
+        <location filename="../core/print.cpp" line="596"/>
         <source> W%1, %2 − %3</source>
         <translation> S%1, %2 − %3</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="656"/>
+        <location filename="../core/print.cpp" line="658"/>
         <source>%1 beds</source>
         <translation>%1 pl.</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="658"/>
+        <location filename="../core/print.cpp" line="660"/>
         <source>%1 bed m.</source>
         <translation>%1 m pl.</translation>
     </message>
@@ -3083,7 +3094,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">%1 x %2, %3 graines par trou</translation>
     </message>
     <message>
-        <location filename="../core/print.cpp" line="818"/>
+        <location filename="../core/print.cpp" line="820"/>
         <source>Location</source>
         <translation>Emplacement</translation>
     </message>
@@ -3176,71 +3187,78 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="169"/>
+        <source>CSV (*.csv)</source>
+        <translation>CSV (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SeedsPage.qml" line="185"/>
         <source>PDF (*.pdf)</source>
         <translation>PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="189"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="205"/>
         <source>No seeds to order for %1</source>
         <translation>Pas de semences à commander pour %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="197"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="213"/>
         <source>No transplants to order for %1</source>
         <translation>Pas de plants à commander pour %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="224"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="240"/>
         <source>Seeds</source>
         <translation>Semences</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="229"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="245"/>
         <source>Transplants</source>
         <translation>Plants</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="235"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="251"/>
         <source>Search seeds</source>
         <translation>Recherche des semences</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="236"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="252"/>
         <source>Search transplants</source>
         <translation>Rechercher des plants</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="265"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="281"/>
         <source>Year</source>
         <translation>Année</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="270"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="286"/>
         <source>Quarter</source>
         <translation>Trimestre</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="275"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="291"/>
         <source>Month</source>
         <translation>Mois</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="299"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="314"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="333"/>
         <source>Print the seed order list</source>
         <translation>Imprimer la liste des semences</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="300"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="315"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="334"/>
         <source>Print the transplant order list</source>
         <translation>Imprimer la liste des plants</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="491"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="526"/>
         <source>%L1 kg</source>
         <translation>%L1 kg</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SeedsPage.qml" line="492"/>
+        <location filename="../desktop/qml/SeedsPage.qml" line="527"/>
         <source>%L1 g</source>
         <translation>%L1 g</translation>
     </message>
@@ -3434,6 +3452,11 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/SettingsPage.qml" line="176"/>
         <source>Language</source>
         <translation>Langue</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="195"/>
+        <source>System</source>
+        <translation>Système</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="212"/>

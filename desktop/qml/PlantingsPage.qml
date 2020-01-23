@@ -208,9 +208,6 @@ Page {
         onRejected: plantingsView.unselectAll()
     }
 
-
-
-
     Snackbar {
         id: addPlantingSnackbar
 
@@ -533,7 +530,7 @@ Page {
                     }
 
                     Label {
-                        text: qsTr("planting(s) selected", "", checks)
+                        text: qsTr("%L1 planting(s) selected", "", checks).arg(checks)
                         color: "white"
                         visible: checks > 0
                         font.family: "Roboto Regular"

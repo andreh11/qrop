@@ -20,6 +20,8 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.calendar 1.0
 
+import io.qrop.components 1.0
+
 Item {
     id: control
 
@@ -67,10 +69,6 @@ Item {
     function firstOfMonth(month) {
         var date = new Date(2018, month, 1)
         return date;
-    }
-
-    function monthName(month) {
-        return firstOfMonth(month).toLocaleString(grid.locale, "MMMM")
     }
 
     Column {
@@ -129,7 +127,7 @@ Item {
             }
 
             Label {
-                text: monthName(month)
+                text: MDate.shortMonthName(month)
                 font.bold: true
                 font.family: "Roboto Condensed"
                 width: 50

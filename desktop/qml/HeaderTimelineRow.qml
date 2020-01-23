@@ -2,6 +2,8 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Controls.Material 2.0
 
+import io.qrop.components 1.0
+
 Row {
     id: headerTimelineRow
     property int season: 1
@@ -20,7 +22,8 @@ Row {
             }
             
             Label {
-                text: Qt.locale().monthName(modelData, Locale.ShortFormat)
+//                text: Qt.locale().monthName(modelData, Locale.ShortFormat)
+                text: MDate.shortMonthName(modelData + 1)
                 anchors.left: lineRectangle.right
                 font.family: "Roboto Condensed"
                 color: Material.color(Material.Grey, Material.Shade700)

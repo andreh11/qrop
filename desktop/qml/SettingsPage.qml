@@ -192,7 +192,7 @@ Page {
                                     else
                                         return 2;
                                 }
-                                model: ["System", "English", "Français"]
+                                model: [qsTr("System"), "English", "Français"]
                                 onCurrentTextChanged: {
                                     if (currentIndex == 0)
                                         settings.preferredLanguage = "system"

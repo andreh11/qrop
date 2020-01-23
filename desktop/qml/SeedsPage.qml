@@ -421,7 +421,8 @@ Page {
 
                         Text {
                             text: (seedsRadioButton.checked && monthRangeButton.checked)
-                                  ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
+//                                  ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
+                                  ? MDate.monthName(Number(section))
                                   : section
                             anchors.verticalCenter: parent.verticalCenter
                             leftPadding: Units.formSpacing

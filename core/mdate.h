@@ -73,6 +73,9 @@ public:
     Q_INVOKABLE static QString shortDayName(const QDate &date);
     Q_INVOKABLE static QString monthName(int month);
     Q_INVOKABLE static QString shortMonthName(int month);
+
+private:
+    static QString dateToString(const QDate &date, const QString &format);
 };
 
 #endif // MDATE_H

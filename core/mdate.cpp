@@ -278,28 +278,37 @@ QString MDate::dayName(const QDate &date)
 {
     if (date == QDate::currentDate())
         return tr("today");
-    return date.toString("dddd");
+    return MDate::dateToString(date, "dddd");
 }
 
 QString MDate::shortDayName(const QDate &date)
 {
     if (date == QDate::currentDate())
         return tr("today", "abbreviation");
-    return date.toString("ddd");
+    return MDate::dateToString(date, "ddd");
+}
+
+QString MDate::dateToString(const QDate &date, const QString &format)
+{
+    QSettings settings;
+    auto preferredLanguage = settings.value("preferredLanguage").toString();
+
+    if (preferredLanguage == "system")
+        return QLocale().toString(date, format);
+    else
+        return QLocale(preferredLanguage).toString(date, format);
 }
 
 QString MDate::monthName(int month)
 {
     if (month < 1 || month > 12)
         return {};
-
-    return QDate(2018, month, 1).toString("MMMM");
+    return MDate::dateToString(QDate(2018, month, 1), "MMMM");
 }
 
 QString MDate::shortMonthName(int month)
 {
     if (month < 1 || month > 12)
         return {};
-
-    return QDate(2018, month, 1).toString("MMM");
+    return MDate::dateToString(QDate(2018, month, 1), "MMM");
 }
