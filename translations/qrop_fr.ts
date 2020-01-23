@@ -2933,7 +2933,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="134"/>
         <source>Seeds/hole</source>
-        <translation>Graines/trou</translation>
+        <translation type="unfinished">Gr./trou</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="135"/>

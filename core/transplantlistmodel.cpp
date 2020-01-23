@@ -15,6 +15,8 @@
  */
 
 #include <QDate>
+#include <QFile>
+#include <QSettings>
 
 #include "transplantlistmodel.h"
 
@@ -22,6 +24,46 @@ TransplantListModel::TransplantListModel(QObject *parent, const QString &tableNa
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("crop_id");
+}
+
+void TransplantListModel::csvExport(const QUrl &path)
+{
+    QFile f(path.toLocalFile());
+
+    if (f.exists())
+        f.remove();
+
+    if (!f.open(QIODevice::ReadWrite)) {
+        qDebug() << "Cannot open file";
+        return;
+    }
+
+    QTextStream ts(&f);
+
+    QList<QString> keyList = {
+        "planting_date", "crop", "variety", "seed_company", "plants_needed",
+    };
+
+    // Write headers
+    for (auto const &field : keyList)
+        ts << field << ";";
+    ts << "\n";
+
+    QSettings settings;
+    QString dateType = settings.value("dateType").toString();
+
+    for (int row = 0; row < rowCount(); ++row) {
+        for (auto const &field : keyList) {
+            if (dateType == "week" & field == "planting_date") {
+                int y;
+                int w = QDate::fromString(rowValue(row, field).toString(), Qt::ISODate).weekNumber(&y);
+                ts << w << ";";
+            } else {
+                ts << rowValue(row, field).toString() << ";";
+            }
+        }
+        ts << "\n";
+    }
 }
 
 bool TransplantListModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

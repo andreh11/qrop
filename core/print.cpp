@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <QDate>
 #include <QDebug>
 #include <QPainter>
@@ -121,9 +123,9 @@ Print::Print(QObject *parent)
                 "<th class='tg' align=right width=5%>%4</th>"
                 "<th class='tg' align=right width=5%>%5</th>"
                 "<th class='tg' align=right width=5%>%6</th>"
-                "<th class='tg' align=right width=5%>%7</th>"
+                "<th class='tg' align=right width=4%>%7</th>"
                 "<th class='tg' align=right width=5%>%8</th>"
-                "<th class='tg' align=right width=5%>%9</th>"
+                "<th class='tg' align=right width=10%>%9</th>"
                 "</tr>")
                 .arg(tr("S"))
                 .arg(tr("Crop"))
@@ -138,11 +140,11 @@ Print::Print(QObject *parent)
          "<td class='tg' align=left>%2</td>"
          "<td class='tg' align=left>%3</td>"
          "<td class='tg' align=right>%4</td>"
-         "<td class='tg' align=right>%5</td>"
+         "<td class='tg' align=right>%L5</td>"
          "<td class='tg' align=right>%6</td>"
          "<td class='tg' align=right>%7</td>"
          "<td class='tg' align=right>%8</td>"
-         "<td class='tg' align=right>%9 g</td>"
+         "<td class='tg' align=right>%L9 g</td>"
          "</tr>")
     };
 
@@ -499,11 +501,11 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
         int length = query.value("length").toInt();
         int rows = query.value("rows").toInt();
         int spacing = query.value("spacing_plants").toInt();
-        double trayNumber = query.value("trays_to_start").toDouble();
+        double trayNumber = std::round(query.value("trays_to_start").toDouble() * 10) / 10;
         int traySize = query.value("tray_size").toInt();
         int seedsPerHole = query.value("seeds_per_hole").toInt();
         int seedsNumber = query.value("seeds_number").toInt();
-        double seedsQuantity = query.value("seeds_quantity").toDouble();
+        double seedsQuantity = std::round(query.value("seeds_quantity").toDouble() * 10) / 10;
 
         QString locations = query.value("locations").toString();
         QList<int> locationIdList;

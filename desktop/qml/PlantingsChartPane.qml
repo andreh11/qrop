@@ -83,7 +83,7 @@ Item {
     function setToolTip(point) {
         var p = chart.mapToPosition(point)
 
-        var text = percentage ? qsTr("%1%").arg(Math.round(point.y * 100))
+        var text = percentage ? qsTr("S%1 %2%").arg().arg(Math.round(point.y * 100))
                               : qsTr("%L1").arg(Math.round(point.y * 10))
         toolTip.x = p.x - toolTip.width/2
         toolTip.y = p.y - toolTip.height - Units.smallSpacing

@@ -16,11 +16,52 @@
 
 #include "seedlistmodel.h"
 #include <QDate>
+#include <QFile>
+#include <QUrl>
+#include <QSettings>
 
 SeedListModel::SeedListModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("crop_id");
+}
+
+void SeedListModel::csvExport(const QUrl &path)
+{
+    QFile f(path.toLocalFile());
+
+    if (f.exists())
+        f.remove();
+
+    if (!f.open(QIODevice::ReadWrite)) {
+        qDebug() << "Cannot open file";
+        return;
+    }
+
+    QTextStream ts(&f);
+
+    QList<QString> keyList = { "crop", "variety", "seed_company", "seeds_number", "seeds_quantity" };
+
+    // Write headers
+    for (auto const &field : keyList)
+        ts << field << ";";
+    ts << "\n";
+
+    QSettings settings;
+    QString dateType = settings.value("dateType").toString();
+
+    for (int row = 0; row < rowCount(); ++row) {
+        for (auto const &field : keyList) {
+            if (dateType == "week" & field == "planting_date") {
+                int y;
+                int w = QDate::fromString(rowValue(row, field).toString(), Qt::ISODate).weekNumber(&y);
+                ts << w << ";";
+            } else {
+                ts << rowValue(row, field).toString() << ";";
+            }
+        }
+        ts << "\n";
+    }
 }
 
 bool SeedListModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

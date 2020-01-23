@@ -161,6 +161,22 @@ Page {
     }
 
     Platform.FileDialog {
+        id: csvDialog
+
+        defaultSuffix: "csv"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("CSV (*.csv)")]
+        onAccepted: {
+            if (seedsRadioButton.checked)
+                seedListModel.csvExport(file);
+            else
+                transplantListModel.csvExport(file);
+//                Print.printTransplantList(page.year, file);
+        }
+    }
+
+    Platform.FileDialog {
         id: saveDialog
 
         defaultSuffix: "pdf"
@@ -283,7 +299,25 @@ Page {
                 week: MDate.currentWeek();
                 year: MDate.currentYear();
                 anchors {
+                    right: csvButton.left
+                    verticalCenter: parent.verticalCenter
+                }
+            }
+
+            IconButton {
+                id: csvButton
+                text: "\ue2c6"
+                hoverEnabled: true
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
+                                                       : qsTr("Print the transplant order list")
+
+                onClicked: csvDialog.open()
+                anchors {
                     right: printButton.left
+                    rightMargin: - padding
                     verticalCenter: parent.verticalCenter
                 }
             }
@@ -306,7 +340,6 @@ Page {
                     rightMargin: 16 - padding
                     verticalCenter: parent.verticalCenter
                 }
-
             }
         }
 
