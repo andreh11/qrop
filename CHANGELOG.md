@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Fixed
+ - *Calendar* − Fix bad month name.
  - *Planting dialog* − Fix bad seeds numbers for direct seeded planting
    with multiple seeds per hole.
 

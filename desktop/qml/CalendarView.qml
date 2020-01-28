@@ -127,7 +127,7 @@ Item {
             }
 
             Label {
-                text: MDate.shortMonthName(month)
+                text: MDate.shortMonthName(month+1)
                 font.bold: true
                 font.family: "Roboto Condensed"
                 width: 50

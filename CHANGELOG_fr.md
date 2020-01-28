@@ -5,6 +5,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Corrections
+ - *Calendrier* − Correction du mauvais nom de mois.
  - *Dialogue des séries* − Correction du mauvais nombre de semences pour
    des séries en semis direct avec plusieurs graines par trou.
 
