@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.4.4 − 2020-01-28 
+
 ### Changed
  - *Planting dialog* − Show density field even if the beds aren't standardized.
 

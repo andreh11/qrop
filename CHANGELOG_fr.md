@@ -4,6 +4,8 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## 0.4.4 − 2020-01-28 
+
 ### Corrections
  - *Parcellaire* − Correction de la mise à jour de la sélection lors de l'ajout
    de sous-emplacements.
