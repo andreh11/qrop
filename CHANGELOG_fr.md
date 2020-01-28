@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Corrections
+ - *Parcellaire* − Correction de la mise à jour de la sélection lors de l'ajout
+   de sous-emplacements.
  - Utiliser « système » comme paramètre de langue par défaut.
  - *Dialogue des séries* − Afficher le champs densité même si les planches
    ne sont pas standardisées.

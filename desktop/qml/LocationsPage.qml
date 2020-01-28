@@ -30,6 +30,7 @@ Page {
     property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
     property alias hasSelection: locationView.hasSelection
+    onHasSelectionChanged: console.log("hasSelection", hasSelection)
     property alias rowCount: locationView.rowCount
     property bool showPlantingsPane: true
 
@@ -262,8 +263,8 @@ Page {
                     locationIdList: locationView.selectedIdList
 
                     onAccepted: {
-                        locationView.updateSelected(editDialog.editedValues());
                         locationView.clearSelection();
+                        locationView.updateSelected(editDialog.editedValues());
                     }
 
                     onRejected: {

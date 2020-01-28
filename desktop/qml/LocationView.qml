@@ -47,7 +47,7 @@ Item {
     property alias showOnlyGreenhouseLocations: locationModel.showOnlyGreenhouseLocations
     property alias selectedIndexes: selectionModel.selectedIndexes
     property var selectedIdList: selectedLocationIds()
-    property bool hasSelection: selectedIdList.length > 0
+    property bool hasSelection: selectedIndexes.length
     property bool showFamilyColor: false
 
     property int treeViewHeight: listView.contentItem.height
@@ -249,11 +249,13 @@ Item {
     }
 
     function addLocations(name, length, width, quantity, greenhouse) {
-        if (root.hasSelection)
-            locationModel.addLocations(name, length, width, quantity, greenhouse, selectionModel.selectedIndexes);
-        else
+        if (root.hasSelection) {
+            var indexes = selectionModel.selectedIndexes;
+            clearSelection();
+            locationModel.addLocations(name, length, width, quantity, greenhouse, indexes);
+        } else {
             locationModel.addLocations(name, length, width, quantity, greenhouse);
-        clearSelection();
+        }
     }
 
     function updateIndexes(map, indexes) {

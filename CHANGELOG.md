@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
  - *Planting dialog* − Show density field even if the beds aren't standardized.
 
 ### Fixed
+ - *Field map* − Fix selection update after adding sublocations.
  - Use "system" as the default language setting.
  - *Calendar* − Fix bad month name.
  - *Planting dialog* − Fix bad seeds numbers for direct seeded planting

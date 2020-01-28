@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("AH");
     QApplication::setOrganizationDomain("io.qrop");
     QApplication::setApplicationDisplayName("Qrop");
-    QApplication::setApplicationVersion("0.4.1");
+    QApplication::setApplicationVersion("0.4.4");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
     QTranslator translator;
