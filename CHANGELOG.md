@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-## Fixed
+### Changed
+ - *Planting dialog* − Show density field even if the beds aren't standardized.
+
+### Fixed
  - *Calendar* − Fix bad month name.
  - *Planting dialog* − Fix bad seeds numbers for direct seeded planting
    with multiple seeds per hole.

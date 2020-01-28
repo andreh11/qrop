@@ -737,7 +737,7 @@ Flickable {
 
                     MyTextField {
                         id: densityField
-                        visible: plantingSettings.showDensityField && settings.useStandardBedLength
+                        visible: plantingSettings.showDensityField
                         floatingLabel: true
                         labelText: qsTr("Density (m²)")
                         inputMethodHints: Qt.ImhDigitsOnly

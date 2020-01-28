@@ -239,6 +239,58 @@ Page {
                         width: parent.width
                         spacing: 0
 
+                        RowLayout {
+                            width: parent.width
+                            Layout.leftMargin: Units.mediumSpacing
+                            Layout.rightMargin: Layout.leftMargin
+                            Layout.minimumHeight: Units.rowHeight
+
+                            Label {
+                                Layout.fillWidth: true
+                                text: qsTr("Bed width")
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
+                            }
+
+                            MyTextField {
+                                id: standardBedWidthField
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                suffixText: qsTr("cm")
+                                validator: IntValidator { bottom: 1; top: 999 }
+                                Layout.topMargin: 6
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 60
+                            }
+                        }
+
+                        ThinDivider { width: parent.width }
+
+                        RowLayout {
+                            width: parent.width
+                            Layout.leftMargin: Units.mediumSpacing
+                            Layout.rightMargin: Layout.leftMargin
+                            Layout.minimumHeight: Units.rowHeight
+
+                            Label {
+                                Layout.fillWidth: true
+                                text: qsTr("Path width")
+                                font.family: "Roboto Regular"
+                                font.pixelSize: Units.fontSizeBodyAndButton
+                                elide: Text.ElideRight
+                            }
+
+                            MyTextField {
+                                id: standardPathWidthField
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                suffixText: qsTr("cm")
+                                validator: IntValidator { bottom: 1; top: 999 }
+                                Layout.topMargin: 6
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 60
+                            }
+                        }
+
                         ThinDivider { width: parent.width }
 
                         SettingsSwitch {
@@ -246,8 +298,6 @@ Page {
                             text: qsTr("Standard bed length")
                             onToggled: restartSnackbar.open();
                         }
-
-                        ThinDivider { width: parent.width }
 
                         RowLayout {
                             width: parent.width
@@ -292,59 +342,6 @@ Page {
 
                         ThinDivider { width: parent.width }
 
-                        RowLayout {
-                            width: parent.width
-                            enabled: standardBedLengthSwitch.checked
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-                            Layout.minimumHeight: Units.rowHeight
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Bed width")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                            }
-
-                            MyTextField {
-                                id: standardBedWidthField
-                                inputMethodHints: Qt.ImhDigitsOnly
-                                suffixText: qsTr("cm")
-                                validator: IntValidator { bottom: 1; top: 999 }
-                                Layout.topMargin: 6
-                                Layout.preferredWidth: 60
-                                Layout.minimumWidth: 60
-                            }
-                        }
-
-                        ThinDivider { width: parent.width }
-
-                        RowLayout {
-                            width: parent.width
-                            enabled: standardBedLengthSwitch.checked
-                            Layout.leftMargin: Units.mediumSpacing
-                            Layout.rightMargin: Layout.leftMargin
-                            Layout.minimumHeight: Units.rowHeight
-
-                            Label {
-                                Layout.fillWidth: true
-                                text: qsTr("Path width")
-                                font.family: "Roboto Regular"
-                                font.pixelSize: Units.fontSizeBodyAndButton
-                                elide: Text.ElideRight
-                            }
-
-                            MyTextField {
-                                id: standardPathWidthField
-                                inputMethodHints: Qt.ImhDigitsOnly
-                                suffixText: qsTr("cm")
-                                validator: IntValidator { bottom: 1; top: 999 }
-                                Layout.topMargin: 6
-                                Layout.preferredWidth: 60
-                                Layout.minimumWidth: 60
-                            }
-                        }
                     }
                 }
 
