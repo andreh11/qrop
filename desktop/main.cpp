@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
     QTranslator translator;
     const QString &lang = QLocale::system().name();
     QSettings settings;
-    auto preferredLanguage = settings.value("preferredLanguage").toString();
+    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
     qDebug() << "LANG " << lang << preferredLanguage;
 
     if (preferredLanguage == "system")

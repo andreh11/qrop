@@ -5,6 +5,7 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Corrections
+ - Utiliser « système » comme paramètre de langue par défaut.
  - *Dialogue des séries* − Afficher le champs densité même si les planches
    ne sont pas standardisées.
  - *Calendrier* − Correction du mauvais nom de mois.
