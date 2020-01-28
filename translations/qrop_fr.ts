@@ -11,7 +11,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="71"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
-        <translation>Un outil multiplatorme de planification et de suivi des cultures en maraîchage. Conçu par des maraîcher⋅es, pour des maraîcher⋅es, avec l&apos;aide la coopérative française &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</translation>
+        <translation type="unfinished">Un outil multiplatorme de planification et de suivi des cultures en maraîchage. Conçu par des maraîcher⋅es, pour des maraîcher⋅es, avec l&apos;aide de la coopérative française &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="96"/>

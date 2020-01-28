@@ -84,7 +84,7 @@ Dialog {
             
             Label {
                 width: parent.width
-                text: "Copyright © 2018−2019, André Hoarau"
+                text: "Copyright © 2018−2020, André Hoarau"
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize: Units.fontSizeCaption
