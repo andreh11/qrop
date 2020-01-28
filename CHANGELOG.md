@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## Fixed
+ - *Planting dialog* − Fix bad seeds numbers for direct seeded planting
+   with multiple seeds per hole.
+
 ## 0.4.3 "Albens" − 2020-01-23 
 
 ### Fixed

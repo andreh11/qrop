@@ -96,7 +96,7 @@ Flickable {
     readonly property real seedsPerGram: seedsPerGramField.text ? Number.fromLocaleString(Qt.locale(), seedsPerGramField.text) : 0
     readonly property real seedsNeeded: {
         if (plantingType === 1) // DS
-            plantsNeeded * (1 + seedsExtraPercentage / 100);
+            plantsNeeded * seedsPerHole * (1 + seedsExtraPercentage / 100);
         else if (plantingType === 2) // TP, raised
             plantsToStart * seedsPerHole
         else // TP, bought

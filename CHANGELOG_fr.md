@@ -4,6 +4,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Corrections
+ - *Dialogue des séries* − Correction du mauvais nombre de semences pour
+   des séries en semis direct avec plusieurs graines par trou.
+
 ## 0.4.3 « Albens » − 2020-01-23 
   - *Paramètres* − Correction du comportement de barre de défilement.
 
