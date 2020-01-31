@@ -62,8 +62,8 @@ bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
         int leftId = sourceRowValue(left.row(), left.parent(), QStringLiteral("planting_id")).toInt();
         int rightId =
                 sourceRowValue(right.row(), right.parent(), QStringLiteral("planting_id")).toInt();
-        return location->fullName(location->locations(leftId))
-                       .localeAwareCompare(location->fullName(location->locations(rightId)))
+        return location->fullNameList(location->locations(leftId))
+                       .localeAwareCompare(location->fullNameList(location->locations(rightId)))
                 == -1;
     }
 

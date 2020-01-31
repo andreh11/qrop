@@ -535,7 +535,7 @@ ListView {
                 leftPadding: listView.rowPadding
 
                 readonly property var labelList: [
-                    model.locations ? Location.fullName(model.locations.split(",")) : "",
+                    model.locations ? Location.fullNameList(model.locations.split(",")) : "",
                     model.planting_type !== 3 ? MDate.formatDate(seedingDate, year) : "",
                     model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
                     MDate.formatDate(beginHarvestDate, year),

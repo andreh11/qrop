@@ -448,7 +448,7 @@ Page {
                 section.property: {
                     if (seedsRadioButton.checked) {
                         if (yearRangeButton.checked)
-                            undefined;
+                            "";
                         else if (quarterRangeButton.checked)
                             "trimester";
                         else
@@ -516,7 +516,7 @@ Page {
                     id: delegate
 
                     property var labelList: [
-                        MDate.formatDate(model.planting_date, page.year),
+                        seedsRadioButton.checked ? "" : MDate.formatDate(model.planting_date, page.year),
                         model.crop,
                         model.variety,
                         model.seed_company,

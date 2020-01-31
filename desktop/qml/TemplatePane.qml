@@ -204,230 +204,229 @@ Pane {
 
         VerticalThinDivider { Layout.fillHeight: true }
 
-//        ColumnLayout {
-//            id: taskColumn
-//            spacing: 0
-//            Layout.fillHeight: true
-//            Layout.fillWidth: true
-//            Layout.preferredWidth: 2*parent.width/3
+        //        ColumnLayout {
+        //            id: taskColumn
+        //            spacing: 0
+        //            Layout.fillHeight: true
+        //            Layout.fillWidth: true
+        //            Layout.preferredWidth: 2*parent.width/3
 
-//            Rectangle {
-//                id: taskButtonRectangle
-//                width: parent.width
-//                height: Units.toolBarHeight
-//                color: "white"
-//                Layout.fillWidth: true
+        //            Rectangle {
+        //                id: taskButtonRectangle
+        //                width: parent.width
+        //                height: Units.toolBarHeight
+        //                color: "white"
+        //                Layout.fillWidth: true
 
-//                Label {
-//                    font.family: "Roboto Regular"
-//                    font.pixelSize: Units.fontSizeBodyAndButton
-//                    text: qsTr("Template %1").arg(pane.taskTemplateName)
-//                    Layout.alignment: Qt.AlignLeft
+        //                Label {
+        //                    font.family: "Roboto Regular"
+        //                    font.pixelSize: Units.fontSizeBodyAndButton
+        //                    text: qsTr("Template %1").arg(pane.taskTemplateName)
+        //                    Layout.alignment: Qt.AlignLeft
 
-//                    anchors {
-//                        left: parent.left
-//                        leftMargin: 16
-//                        verticalCenter: parent.verticalCenter
-//                    }
-//                }
+        //                    anchors {
+        //                        left: parent.left
+        //                        leftMargin: 16
+        //                        verticalCenter: parent.verticalCenter
+        //                    }
+        //                }
 
-//            }
+        //            }
 
-//            ThinDivider { Layout.fillWidth: true }
+        //            ThinDivider { Layout.fillWidth: true }
 
-            Pane {
-                id: taskPane
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+        Pane {
+            id: taskPane
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: 2*parent.width/3
-                Material.background: Material.color(Material.Grey, Material.Shade100)
+            Material.background: Material.color(Material.Grey, Material.Shade100)
 
-                TaskDialog {
-                    id: taskDialog
-                    mode: "add"
-                    templateMode: true
-                    taskTemplateId: pane.taskTemplateId
-                    width: parent.width / 2
-                    //                height: parent.height
-                    //                    x: (parent.width - width) / 2
-                    //                    y: (parent.height - height) / 2
-                    week: 0
-                    year: 0
+            TaskDialog {
+                id: taskDialog
+                mode: "add"
+                templateMode: true
+                taskTemplateId: pane.taskTemplateId
+                width: parent.width / 2
+                //                height: parent.height
+                //                    x: (parent.width - width) / 2
+                //                    y: (parent.height - height) / 2
+                week: 0
+                year: 0
 
-                    onTaskAdded: {
-                        if (TaskTemplate.hasTasks(taskTemplateId)) {
-                            addTaskDialog.taskId = taskId;
-                            addTaskDialog.open();
-                        }
-                    }
-                    onTaskUpdated: {
-                        if (TaskTemplate.hasTasks(taskTemplateId)) {
-                            updateTaskDialog.taskId = taskId;
-                            updateTaskDialog.open();
-                        }
-                    }
-                    onAccepted: {
-                        pane.refresh();
+                onTaskAdded: {
+                    if (TaskTemplate.hasTasks(taskTemplateId)) {
+                        addTaskDialog.taskId = taskId;
+                        addTaskDialog.open();
                     }
                 }
-
-                Dialog {
-                    id: addTaskDialog
-                    property int taskId: -1
-                    title: qsTr("Add this task to all current applications of this template?")
-                    standardButtons: Dialog.No | Dialog.Yes
-                    onAccepted: TemplateTask.addToCurrentApplications(taskId)
-                }
-
-                Dialog {
-                    id: updateTaskDialog
-                    property int taskId: -1
-                    title: qsTr("Apply update to all current applications of this template?")
-                    standardButtons: Dialog.No | Dialog.Yes
-                    onAccepted: TemplateTask.updateTasks(taskId)
-                }
-
-                Dialog {
-                    id: removeTaskDialog
-                    property int taskId: -1
-                    title: qsTr("Remove this task from all current applications of this template?")
-                    standardButtons: Dialog.No | Dialog.Yes
-                    onAccepted: {
-                        TemplateTask.removeFromCurrentApplications(taskId)
-                        TemplateTask.remove(taskId);
-                        pane.refresh();
-                    }
-                    onRejected: {
-                        TemplateTask.remove(taskId);
-                        pane.refresh();
+                onTaskUpdated: {
+                    if (TaskTemplate.hasTasks(taskTemplateId)) {
+                        updateTaskDialog.taskId = taskId;
+                        updateTaskDialog.open();
                     }
                 }
+                onAccepted: {
+                    pane.refresh();
+                }
+            }
 
-                FlatButton {
-                    id: addTaskButton
-                    flat: true
-                    highlighted: true
-                    text: qsTr("Add task")
-                    z: 1
-                    onClicked: taskDialog.addTask();
-                    anchors {
-                        top: parent.top
-                        horizontalCenter: parent.horizontalCenter
-//                        right: parent.right
-//                        rightMargin: 16 - ((background.width - contentItem.width) / 4)
-//                        verticalCenter: parent.verticalCenter
-                    }
+            Dialog {
+                id: addTaskDialog
+                property int taskId: -1
+                title: qsTr("Add this task to all current applications of this template?")
+                standardButtons: Dialog.No | Dialog.Yes
+                onAccepted: TemplateTask.addToCurrentApplications(taskId)
+            }
+
+            Dialog {
+                id: updateTaskDialog
+                property int taskId: -1
+                title: qsTr("Apply update to all current applications of this template?")
+                standardButtons: Dialog.No | Dialog.Yes
+                onAccepted: TemplateTask.updateTasks(taskId)
+            }
+
+            Dialog {
+                id: removeTaskDialog
+                property int taskId: -1
+                title: qsTr("Remove this task from all current applications of this template?")
+                standardButtons: Dialog.No | Dialog.Yes
+                onAccepted: {
+                    TemplateTask.removeFromCurrentApplications(taskId)
+                    TemplateTask.remove(taskId);
+                    pane.refresh();
+                }
+                onRejected: {
+                    TemplateTask.remove(taskId);
+                    pane.refresh();
+                }
+            }
+
+            FlatButton {
+                id: addTaskButton
+                flat: true
+                highlighted: true
+                text: qsTr("Add task")
+                z: 1
+                onClicked: taskDialog.addTask();
+                anchors {
+                    top: parent.top
+                    horizontalCenter: parent.horizontalCenter
+                    //                        right: parent.right
+                    //                        rightMargin: 16 - ((background.width - contentItem.width) / 4)
+                    //                        verticalCenter: parent.verticalCenter
+                }
+            }
+
+            ScrollView {
+                id: scrollView
+                clip: true
+                padding: 0
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: addTaskButton.bottom
+                    bottom: parent.bottom
                 }
 
-                ScrollView {
-                    id: scrollView
-                    clip: true
-                    padding: 0
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: addTaskButton.bottom
-                        bottom: parent.bottom
-                    }
+                contentHeight: taskListColumn.implicitHeight
+                contentWidth: taskListColumn.implicitWidth
 
-                    contentHeight: taskListColumn.implicitHeight
-                    contentWidth: taskListColumn.implicitWidth
+                Column {
+                    id: taskListColumn
+                    spacing: 4
+                    leftPadding: scrollView.width * 0.1
+                    rightPadding: leftPadding
+                    width: scrollView.width - rightPadding - leftPadding
 
-                    Column {
-                        id: taskListColumn
-                        spacing: 4
-                        leftPadding: scrollView.width * 0.1
-                        rightPadding: leftPadding
-                        width: scrollView.width - rightPadding - leftPadding
-                        anchors.horizontalCenter: scrollView.horizontalCenter
-
-                        Repeater {
-                            model: [beforeGHModel]
-                            TemplateListView {
-                                model: modelData
-                                width: parent.width
-                                Layout.fillWidth: true
-
-                                onEditTask: pane.editTask(taskId)
-                                onDeleteTask: pane.removeTask(taskId)
-                                onDuplicateTask: pane.duplicateTask(taskId)
-                            }
-                        }
-
-                        TemplateDateSection {
-                            text: qsTr("Greenhouse sowing")
+                    Repeater {
+                        model: [beforeGHModel]
+                        TemplateListView {
+                            model: modelData
                             width: parent.width
-                            visible: beforeGHModel.rowCount || afterGHModel.rowCount
-                        }
+                            Layout.fillWidth: true
 
-                        Repeater {
-                            model: [afterGHModel, beforePlantingModel]
-                            TemplateListView {
-                                model: modelData
-                                width: parent.width
-                                Layout.fillWidth: true
-                                onEditTask: pane.editTask(taskId)
-                                onDeleteTask: pane.removeTask(taskId)
-                                onDuplicateTask: pane.duplicateTask(taskId)
-                            }
+                            onEditTask: pane.editTask(taskId)
+                            onDeleteTask: pane.removeTask(taskId)
+                            onDuplicateTask: pane.duplicateTask(taskId)
                         }
+                    }
 
-                        TemplateDateSection {
-                            text: qsTr("Sowing/planting ")
+                    TemplateDateSection {
+                        text: qsTr("Greenhouse sowing")
+                        width: parent.width
+                        visible: beforeGHModel.rowCount || afterGHModel.rowCount
+                    }
+
+                    Repeater {
+                        model: [afterGHModel, beforePlantingModel]
+                        TemplateListView {
+                            model: modelData
                             width: parent.width
-                            visible: beforePlantingModel.rowCount || afterPlantingModel.rowCount
+                            Layout.fillWidth: true
+                            onEditTask: pane.editTask(taskId)
+                            onDeleteTask: pane.removeTask(taskId)
+                            onDuplicateTask: pane.duplicateTask(taskId)
                         }
+                    }
 
-                        Repeater {
-                            model: [afterPlantingModel, beforeFirstHarvestModel]
-                            TemplateListView {
-                                model: modelData
-                                width: parent.width
-                                Layout.fillWidth: true
-                                onEditTask: pane.editTask(taskId)
-                                onDeleteTask: pane.removeTask(taskId)
-                                onDuplicateTask: pane.duplicateTask(taskId)
-                            }
-                        }
+                    TemplateDateSection {
+                        text: qsTr("Sowing/planting ")
+                        width: parent.width
+                        visible: beforePlantingModel.rowCount || afterPlantingModel.rowCount
+                    }
 
-                        TemplateDateSection {
-                            text: qsTr("First harvest")
+                    Repeater {
+                        model: [afterPlantingModel, beforeFirstHarvestModel]
+                        TemplateListView {
+                            model: modelData
                             width: parent.width
-                            visible: beforeFirstHarvestModel.rowCount || afterFirstHarvestModel.rowCount
+                            Layout.fillWidth: true
+                            onEditTask: pane.editTask(taskId)
+                            onDeleteTask: pane.removeTask(taskId)
+                            onDuplicateTask: pane.duplicateTask(taskId)
                         }
+                    }
 
-                        Repeater {
-                            model: [afterFirstHarvestModel, beforeLastHarvestModel]
-                            TemplateListView {
-                                model: modelData
-                                width: parent.width
-                                Layout.fillWidth: true
-                                onEditTask: pane.editTask(taskId)
-                                onDeleteTask: pane.removeTask(taskId)
-                                onDuplicateTask: pane.duplicateTask(taskId)
-                            }
-                        }
+                    TemplateDateSection {
+                        text: qsTr("First harvest")
+                        width: parent.width
+                        visible: beforeFirstHarvestModel.rowCount || afterFirstHarvestModel.rowCount
+                    }
 
-                        TemplateDateSection {
-                            text: qsTr("Last harvest")
+                    Repeater {
+                        model: [afterFirstHarvestModel, beforeLastHarvestModel]
+                        TemplateListView {
+                            model: modelData
                             width: parent.width
-                            visible: beforeLastHarvestModel.rowCount || afterLastHarvestModel.rowCount
+                            Layout.fillWidth: true
+                            onEditTask: pane.editTask(taskId)
+                            onDeleteTask: pane.removeTask(taskId)
+                            onDuplicateTask: pane.duplicateTask(taskId)
                         }
+                    }
 
-                        Repeater {
-                            model: [afterLastHarvestModel]
-                            TemplateListView {
-                                model: modelData
-                                width: parent.width
-                                Layout.fillWidth: true
-                                onEditTask: pane.editTask(taskId)
-                                onDeleteTask: pane.removeTask(taskId)
-                                onDuplicateTask: pane.duplicateTask(taskId)
-                            }
+                    TemplateDateSection {
+                        text: qsTr("Last harvest")
+                        width: parent.width
+                        visible: beforeLastHarvestModel.rowCount || afterLastHarvestModel.rowCount
+                    }
+
+                    Repeater {
+                        model: [afterLastHarvestModel]
+                        TemplateListView {
+                            model: modelData
+                            width: parent.width
+                            Layout.fillWidth: true
+                            onEditTask: pane.editTask(taskId)
+                            onDeleteTask: pane.removeTask(taskId)
+                            onDuplicateTask: pane.duplicateTask(taskId)
                         }
                     }
                 }
             }
         }
     }
+}
 //}

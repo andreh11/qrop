@@ -161,7 +161,7 @@ QList<QString> Location::pathName(int locationId) const
     return list;
 }
 
-QString Location::fullName(const QList<int> &locationIdList) const
+QString Location::fullNameList(const QList<int> &locationIdList) const
 {
     NameTree *root = new NameTree("", 0);
     QList<QString> pathList;

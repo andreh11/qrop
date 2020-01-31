@@ -28,11 +28,11 @@ Item {
     property int plantingId
     readonly property bool validId: plantingId > 0
     property var map: validId ? Planting.mapFromId("planting_view", plantingId) : {}
-    property string crop: map['crop']
-    property string variety: map['variety']
-    property date sowingDate: map['sowing_date']
-    property date endHarvestDate: map['end_harvest_date']
-    property int rank: map['planting_rank']
+    property string crop: validId ? map['crop'] : ""
+    property string variety: validId ? map['variety'] : ""
+    property date sowingDate: validId ? map['sowing_date'] : ""
+    property date endHarvestDate: validId ? map['end_harvest_date'] : ""
+    property int rank: validId ? map['planting_rank'] : ""
     property int year
     property var locations
     property double length
@@ -72,12 +72,13 @@ Item {
 
                 txt += qsTr("%1−%2").arg(MDate.formatDate(sowingDate, year)).arg(MDate.formatDate(endHarvestDate, year))
 
-                if (!showOnlyDates) {
+                if (locations & !showOnlyDates) {
+                    console.log("TYPE", typeof locations, "CONTENT", locations);
                     if (settings.useStandardBedLength) {
                         var beds = length/settings.standardBedLength
-                        txt += qsTr(" ⋅ %L1 bed ⋅ %2", "", beds).arg(beds).arg(Location.fullName(locations))
+                        txt += qsTr(" ⋅ %L1 bed ⋅ %2", "", beds).arg(beds).arg(Location.fullNameList(locations))
                     } else {
-                        txt += qsTr(" ⋅ %L1 bed m ⋅ %2").arg(length).arg(Location.fullName(locations))
+                        txt += qsTr(" ⋅ %L1 bed m ⋅ %2").arg(length).arg(Location.fullNameList(locations))
                     }
                 }
                 return txt;

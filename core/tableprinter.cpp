@@ -261,7 +261,7 @@ void TablePrinter::drawRow(int row)
             break;
         }
         case TablePrinter::Locations: {
-            string = m_location->fullName(Helpers::listOfInt(value.toString()));
+            string = m_location->fullNameList(Helpers::listOfInt(value.toString()));
             break;
         }
         default:

@@ -10,7 +10,6 @@ Item {
     
     property int week: 1
     property int year: 2018
-    onYearChanged: console.log(year, longYear, lastWeek)
     property bool longYear: MDate.longYear(year)
     property int lastWeek: longYear ? 53 : 52
     property bool showOnlyYear: false

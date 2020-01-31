@@ -42,7 +42,7 @@ public:
     Q_INVOKABLE QString fullName(int locationId) const;
 
     QList<QString> pathName(int locationId) const;
-    Q_INVOKABLE QString fullName(const QList<int> &locationIdList) const;
+    Q_INVOKABLE QString fullNameList(const QList<int> &locationIdList) const;
     Q_INVOKABLE QList<int> locations(int plantingId) const;
     Q_INVOKABLE qreal plantingLength(int plantingId, int locationId) const;
     Q_INVOKABLE QList<int> plantings(int locationId) const;

@@ -511,7 +511,7 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
         QList<int> locationIdList;
         for (const auto &idString : locations.split(","))
             locationIdList.append(idString.toInt());
-        QString locationsName = location.fullName(locationIdList);
+        QString locationsName = location.fullNameList(locationIdList);
 
         QDate sowingDate = QDate::fromString(query.value("sowing_date").toString(), Qt::ISODate);
         QDate plantingDate = QDate::fromString(query.value("planting_date").toString(), Qt::ISODate);
@@ -639,7 +639,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         for (const int plantingId : plantingIdList) {
             auto record = m_planting->recordFromId("planting_view", plantingId);
             auto locationList = Helpers::listOfInt(record.value("locations").toString());
-            QString locationsName = m_location->fullName(locationList);
+            QString locationsName = m_location->fullNameList(locationList);
 
             int successionNumber = record.value("planting_rank").toInt();
             auto keywordStringList = m_keyword->keywordStringList(plantingId);
@@ -691,7 +691,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         }
 
         if (!locationIdList.empty()) {
-            QString locationsName = m_location->fullName(locationIdList);
+            QString locationsName = m_location->fullNameList(locationIdList);
 
             if (i % 2 == 1)
                 html.append("<tr style='background-color: #e0e0e0'>");
@@ -754,7 +754,7 @@ QString Print::harvestHtml(int year) const
                                                   ? QString(" %1").arg(successionNumber)
                                                   : "")
                                      .arg(variety))
-                        .arg(m_location->fullName(locationIdList))
+                        .arg(m_location->fullNameList(locationIdList))
                         .arg(QString("%1 %2").arg(quantity).arg(unit))
                         .arg(laborTime);
         i++;

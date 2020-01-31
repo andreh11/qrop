@@ -1063,7 +1063,7 @@ Flickable {
                     text: {
                         if (locationView.selectedIndexes.length === 0)
                             return qsTr("Choose locations");
-                        return qsTr("Locations: %1").arg(Location.fullName(locationView.selectedLocationIds()));
+                        return qsTr("Locations: %1").arg(Location.fullNameList(locationView.selectedLocationIds()));
                     }
                     onClicked: chooseLocationMode = true
                     onActiveFocusChanged: ensureItemVisible(locationButton)

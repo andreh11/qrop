@@ -17,6 +17,8 @@ ListView {
     model: TaskTemplateModel {
         id: taskTemplateModel
     }
+
+    ScrollBar.vertical: ScrollBar { }
     
     highlightMoveDuration: 0
     highlightResizeDuration: 0
@@ -30,6 +32,7 @@ ListView {
     
     onCurrentIndexChanged: currentItem.setTemplate()
     
+    clip: true
     focus: true
     delegate: Rectangle {
         id: delegate
@@ -122,7 +125,6 @@ ListView {
                         ToolTip.text: qsTr("Delete template")
                         ToolTip.visible: hovered
                     }
-                    
                 }
             }
         }

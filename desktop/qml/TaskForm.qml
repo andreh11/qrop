@@ -539,7 +539,7 @@ Flickable {
                     id: selectedLocationLabel
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    text: qsTr("Selected locations: %1").arg(Location.fullName(locationView.selectedLocationIds))
+                    text: qsTr("Selected locations: %1").arg(Location.fullNameList(locationView.selectedIdList))
                     Layout.minimumHeight: 26
                     Layout.fillWidth: true
                 }

@@ -327,6 +327,7 @@ ListView {
                     Row {
                         width: tableHeaderModel[0].width
                         anchors.verticalCenter: parent.verticalCenter
+
                         PlantingLabel {
                             anchors.verticalCenter: parent.verticalCenter
                             plantingId: firstPlantingId
@@ -348,8 +349,8 @@ ListView {
                     
                     TableLabel {
                         text: firstPlantingId > 0
-                              ? Location.fullName(Location.locations(firstPlantingId))
-                              : Location.fullName(locationIdList)
+                              ? Location.fullNameList(Location.locations(firstPlantingId))
+                              : Location.fullNameList(locationIdList)
                         
                         elide: Text.ElideRight
                         width: tableHeaderModel[1].width
@@ -394,6 +395,7 @@ ListView {
                             height: Units.rowHeight
                             spacing: Units.smallSpacing
                             Item { width: completeButton.width; height: parent.height }
+
                             PlantingLabel {
                                 width: tableHeaderModel[0].width
                                 plantingId: Number(modelData)
@@ -404,8 +406,9 @@ ListView {
                                 showOnlyDates: true
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
                             Label {
-                                text: Location.fullName(Location.locations(Number(modelData)))
+                                text: Location.fullNameList(Location.locations(Number(modelData)))
                                 elide: Text.ElideRight
                                 width: tableHeaderModel[1].width
                                 anchors.verticalCenter: parent.verticalCenter

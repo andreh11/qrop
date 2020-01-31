@@ -358,16 +358,14 @@ ApplicationWindow {
 
             Label {
                 id: titleLabel
-                text: stackView.currentItem.title
+                text: stackView.currentItem.item.title
                 visible: !largeDisplay && !searchMode
                 font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
-                //                color: "white"
                 Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignLeft
                 verticalAlignment: Qt.AlignVCenter
             }
-
 
             TextField  {
                 id: searchField

@@ -496,7 +496,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: Location.fullName(Location.locations(model.planting_id))
+                                text: Location.fullNameList(Location.locations(model.planting_id))
                                 width: tableHeaderModel[1].width
                                 anchors.verticalCenter: parent.verticalCenter
                             }
@@ -524,5 +524,4 @@ Page {
             }
         }
     }
-
 }
