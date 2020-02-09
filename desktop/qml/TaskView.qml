@@ -46,8 +46,8 @@ ListView {
     highlightResizeDuration: 0
     highlight: Rectangle {
         visible: taskView.activeFocus
-        z:3;
-        opacity: 0.1;
+        z:3
+        opacity: 0.1
         color: Material.primary
         radius: 2
     }
@@ -69,16 +69,20 @@ ListView {
         else
             currentItem.completeButton.clicked()
     }
-    
     Keys.onPressed: {
         if (event.key === Qt.Key_E)
             currentItem.editTask()
         if (event.key === Qt.Key_D)
             currentItem.detailsButton.toggle()
     }
-    
-    Keys.onRightPressed: currentItem.forwardDelayButton.clicked()
-    Keys.onLeftPressed: currentItem.backwardDelayButton.clicked()
+    Keys.onRightPressed: {
+        if (event.modifiers & Qt.ShiftModifier)
+            currentItem.forwardDelayButton.clicked()
+    }
+    Keys.onLeftPressed: {
+        if (event.modifiers & Qt.ShiftModifier)
+        currentItem.backwardDelayButton.clicked()
+    }
     Keys.onDeletePressed: currentItem.deleteButton.clicked()
 
     Popup {
@@ -138,51 +142,6 @@ ListView {
         sortOrder: tableSortOrder
     }
     
-//    headerPositioning: ListView.OverlayHeader
-//    header: Rectangle {
-//        id: headerRectangle
-//        height: headerRow.height
-//        width: parent.width
-//        color: Material.color(Material.Grey, Material.Shade100)
-//        z: 3
-//        Column {
-//            width: parent.width
-            
-//            Row {
-//                id: headerRow
-//                height: Units.rowHeight
-//                spacing: Units.smallSpacing
-//                leftPadding: Units.smallSpacing
-                
-//                Item {
-//                    visible: true
-//                    id: headerCheckbox
-//                    anchors.verticalCenter: headerRow.verticalCenter
-//                    width: parent.height
-//                    height: width
-//                }
-                
-//                Repeater {
-//                    model: taskView.tableHeaderModel
-                    
-//                    TableHeaderLabel {
-//                        text: modelData.name
-//                        anchors.verticalCenter: headerRow.verticalCenter
-//                        width: modelData.width
-//                        state: taskView.tableSortColumn === index ? taskView.tableSortOrder : ""
-//                        onNewColumn: {
-//                            if (taskView.tableSortColumn !== index) {
-//                                taskView.tableSortColumn = index
-//                                taskView.tableSortOrder = "descending"
-//                            }
-//                        }
-//                        onNewOrder: taskView.tableSortOrder = order
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     delegate: Rectangle {
         id: delegate
         
@@ -191,7 +150,11 @@ ListView {
         property alias backwardDelayButton: backwardDelayButton
         property alias deleteButton: deleteButton
         property alias detailsButton: detailsButton
-        
+
+        property var plantingIdList: model.plantings.split(",")
+        property var locationIdList: model.locations.split(",")
+        property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
+
         function editTask() {
             taskDialog.editTask(model.task_id)
         }
@@ -199,26 +162,24 @@ ListView {
         color: "white"
         border.color: Material.color(Material.Grey, Material.Shade400)
         border.width: rowMouseArea.containsMouse ? 1 : 0
-        
         radius: 2
-        property var plantingIdList: model.plantings.split(",")
-        property var locationIdList: model.locations.split(",")
-        property int firstPlantingId: plantingIdList ? Number(plantingIdList[0]) : -1
-        
         height: summaryRow.height + detailsRow.height
         width: parent.width
-        
+
         MouseArea {
             id: rowMouseArea
             anchors.fill: parent
             hoverEnabled: true
             preventStealing: true
             propagateComposedEvents: true
-            //                    z: 3
             cursorShape: Qt.PointingHandCursor
             
             onClicked: editTask()
-            
+
+            ToolTip.visible: containsMouse && model.description
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: model.description
+
             Rectangle {
                 id: taskButtonRectangle
                 height: Units.rowHeight
@@ -358,7 +319,7 @@ ListView {
                     }
                     
                     TableLabel {
-                        text: Task.description(model.task_id)
+                        text: Task.description(model.task_id, year)
                         elide: Text.ElideRight
                         width: tableHeaderModel[2].width
                         anchors.verticalCenter: parent.verticalCenter

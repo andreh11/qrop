@@ -59,7 +59,7 @@ QString Task::implement(int taskId) const
     return record.value("implement").toString();
 }
 
-QString Task::description(int taskId) const
+QString Task::description(int taskId, int year) const
 {
     auto taskRecord = recordFromId("task_view", taskId);
     int taskTypeId = taskRecord.value("task_type_id").toInt();
@@ -81,7 +81,7 @@ QString Task::description(int taskId) const
         int traySize = record.value("tray_size").toInt();
         int seedsPerHole = record.value("seeds_per_hole").toInt();
         QDate plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
-        QString plantingDateString = MDate::formatDate(plantingDate, 2019, "week", true);
+        QString plantingDateString = MDate::formatDate(plantingDate, year, "week", true);
 
         if (seedsPerHole > 1)
             return QString(tr("%L1 x %L2, %L3 seeds [%4]"))

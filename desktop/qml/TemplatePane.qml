@@ -140,7 +140,6 @@ Pane {
 
             Item {
                 id: templateButtonRectangle
-                //                color: "white"
                 visible: true
                 Layout.fillWidth: true
                 height: Units.toolBarHeight
@@ -163,8 +162,8 @@ Pane {
                     font.pixelSize: Units.fontSizeBodyAndButton
                     highlighted: true
                     Layout.alignment: Qt.AlignRight
-                    anchors.right: parent.right
-                    anchors.rightMargin: 16 - ((background.width - contentItem.width) / 4)
+                    anchors.left: backButton.right
+                    anchors.leftMargin: 16 - ((background.width - contentItem.width) / 4)
                     anchors.verticalCenter: parent.verticalCenter
 
                     MouseArea {
@@ -266,9 +265,8 @@ Pane {
                         updateTaskDialog.open();
                     }
                 }
-                onAccepted: {
-                    pane.refresh();
-                }
+                onApplied: pane.refresh();
+                onAccepted: pane.refresh();
             }
 
             Dialog {

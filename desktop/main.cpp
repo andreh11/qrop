@@ -62,6 +62,7 @@
 #include "nametree.h"
 #include "notemodel.h"
 #include "plantingmodel.h"
+#include "recordmodel.h"
 #include "rolemodel.h"
 #include "seedcompanymodel.h"
 #include "seedlistmodel.h"
@@ -115,6 +116,7 @@ void registerTypes()
     qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
     qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
     qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
+    qmlRegisterType<RecordModel>("io.qrop.components", 1, 0, "RecordModel");
     qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
     qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
     qmlRegisterType<SeedListMonthModel>("io.qrop.components", 1, 0, "SeedListMonthModel");

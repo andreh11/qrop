@@ -44,7 +44,7 @@ Dialog {
     {
         taskDialogHeader.reset();
         taskForm.reset();
-        taskTemplateId = -1;
+//        taskTemplateId = -1;
     }
 
     function addTask()
@@ -85,7 +85,40 @@ Dialog {
         dialog.open();
     }
 
-    onOpened: if (mode === "add") taskDialogHeader.typeField.forceActiveFocus();
+    function acceptApply() {
+        var newId;
+        if (mode === "add") {
+            if (templateMode)
+                newId = TemplateTask.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.templateValues);
+            else
+                newId = Task.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.values);
+            taskAdded(newId)
+        } else {
+            if (templateMode)
+                newId = TemplateTask.update(dialog.taskId, taskForm.templateValues)
+            else
+                newId = Task.update(dialog.taskId, taskForm.values);
+            taskUpdated(taskId);
+        }
+    }
+
+    function focusFirstField() {
+        taskDialogHeader.typeField.forceActiveFocus();
+    }
+
+    onOpened: {
+        if (mode === "add")
+            focusFirstField();
+    }
+    onApplied: {
+        acceptApply();
+        reset();
+        focusFirstField();
+    }
+
+    onAccepted: {
+        acceptApply();
+    }
 
     title: mode === "add" ? qsTr("Add Task") : qsTr("Edit Task")
     modal: true
@@ -93,16 +126,18 @@ Dialog {
     closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
     padding: Units.mediumSpacing
-    implicitHeight: taskDialogHeader.implicitHeight + taskForm.implicitHeight
-    //    implicitHeight: (!templateMode && sowPlantTask) ? taskForm.implicitHeight + Units.smallSpacing
-    //                                            : parent.height - 2 * Units.smallSpacing
+//    implicitHeight: taskDialogHeader.implicitHeight + taskForm.implicitHeight
+        implicitHeight: (!templateMode && sowPlantTask)
+                        ? taskForm.implicitHeight + Units.smallSpacing
+                        : parent.height - 2 * Units.smallSpacing
 
     Shortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut
         onActivated: {
-            if (taskForm.accepted) accept();
+            if (taskForm.accepted)
+                dialogFooter.apply();
         }
     }
 
@@ -131,24 +166,10 @@ Dialog {
     }
 
     footer: AddEditDialogFooter {
+        id: dialogFooter
         applyEnabled: formAccepted
         mode: dialog.mode
     }
 
-    onAccepted: {
-        var newId;
-        if (mode === "add") {
-            if (templateMode)
-                newId = TemplateTask.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.templateValues);
-            else
-                newId = Task.addSuccessions(taskForm.successions, taskForm.weeksBetween, taskForm.values);
-            taskAdded(newId)
-        } else {
-            if (templateMode)
-                newId = TemplateTask.update(dialog.taskId, taskForm.templateValues)
-            else
-                newId = Task.update(dialog.taskId, taskForm.values);
-            taskUpdated(taskId);
-        }
-    }
+
 }

@@ -241,6 +241,7 @@ Page {
                 LocationDialog {
                     id: addDialog
                     mode: "add"
+                    onApplied: locationView.addLocations(name, bedLength, bedWidth, quantity, greenhouse)
                     onAccepted: locationView.addLocations(name, bedLength, bedWidth, quantity, greenhouse)
                     onRejected: addDialog.close()
                 }

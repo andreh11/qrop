@@ -676,7 +676,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                                 .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
                                 .arg(plantingString)
                                 .arg(locationsName)
-                                .arg(m_task->description(taskId))
+                                .arg(m_task->description(taskId, year))
                                 .arg(keywordString)
                                 .arg("");
             else
@@ -690,7 +690,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
             j++;
         }
 
-        if (!locationIdList.empty()) {
+        if (plantingIdList.empty()) {
             QString locationsName = m_location->fullNameList(locationIdList);
 
             if (i % 2 == 1)
@@ -701,7 +701,8 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                             .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
                             .arg("")
                             .arg(locationsName)
-                            .arg(m_task->description(taskId))
+                            .arg(m_task->description(taskId, year))
+                            .arg("")
                             .arg("");
         }
 

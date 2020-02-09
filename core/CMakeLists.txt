@@ -26,6 +26,7 @@ add_library(core SHARED
         planting.cpp
         plantingmodel.cpp
         print.cpp
+        recordmodel.cpp
         rolemodel.cpp
         seedcompanymodel.cpp
         seedlistmodel.cpp

@@ -122,6 +122,7 @@ Page {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         onAccepted: page.refresh()
+        onApplied: page.refresh();
         week: page.week
         year: page.year
     }
@@ -411,6 +412,7 @@ Page {
         onGoBack:  {
             mainPane.visible = true;
             templatePane.visible = false;
+            page.refresh();
         }
     }
 }

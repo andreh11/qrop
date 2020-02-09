@@ -26,23 +26,23 @@ import io.qrop.components 1.0
 Page {
     id: page
 
-    property alias week: weekSpinBox.week
-    property alias year: weekSpinBox.year
-    property alias rowsNumber: harvestModel.rowCount
+    property alias week: yearSpinBox.week
+    property alias year: yearSpinBox.year
+    property alias rowsNumber: recordModel.rowCount
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
-    property alias listView: harvestView
+    property alias listView: recordView
     property date todayDate: new Date()
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
     property var tableHeaderModel: [
         { name: qsTr("Date"),    columnName: "date", width: 100},
-//        { name: qsTr("Type"),   columnName: "planting_id", width: 200 },
-        { name: qsTr("Details"),   columnName: "planting_id", width: 200 },
-        { name: qsTr("Plantings"),   columnName: "locations", width: 200 },
-        { name: qsTr("Locations"), columnName: "quantity", width: 80 },
+        { name: qsTr("Type"),   columnName: "type", width: 100 },
+        { name: qsTr("Details"),   columnName: "details", width: 300 },
+        { name: qsTr("Plantings"),   columnName: "plantings", width: 200 },
+        { name: qsTr("Locations"), columnName: "locations", width: 200 },
     ]
 
     property int rowWidth: {
@@ -55,9 +55,9 @@ Page {
     function refresh() {
         // Save current position, because refreshing the model will cause reloading,
         // and view position will be reset.
-        var currentY = harvestView.contentY
-        harvestModel.refresh();
-        harvestView.contentY = currentY
+        var currentY = recordView.contentY
+        recordModel.refresh();
+        recordView.contentY = currentY
     }
 
     title: qsTr("Harvests")
@@ -86,37 +86,37 @@ Page {
         sequence: "Ctrl+Right"
         enabled: navigationIndex === 3 && !harvestDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextWeek()
+        onActivated: yearSpinBox.nextWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Left"
         enabled: navigationIndex === 3 && !harvestDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousWeek()
+        onActivated: yearSpinBox.previousWeek()
     }
 
     Shortcut {
         sequence: "Ctrl+Up"
         enabled: navigationIndex === 3 && !harvestDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextYear()
+        onActivated: yearSpinBox.nextYear()
     }
 
     Shortcut {
         sequence: "Ctrl+Down"
         enabled: navigationIndex === 3 && !harvestDialog.activeFocus
         context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousYear();
+        onActivated: yearSpinBox.previousYear();
     }
 
     Shortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 3 && !harvestView.activeFocus && !harvestDialog.activeFocus
+        enabled: navigationIndex === 3 && !recordView.activeFocus && !harvestDialog.activeFocus
         context: Qt.ApplicationShortcut
         onActivated: {
-            harvestView.currentIndex = 0
-            harvestView.forceActiveFocus();
+            recordView.currentIndex = 0
+            recordView.forceActiveFocus();
         }
     }
 
@@ -205,17 +205,18 @@ Page {
 
                 SearchField {
                     id: filterField
-                    placeholderText: qsTr("Search harvests")
+                    placeholderText: qsTr("Search records")
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhPreferLowercase
                     visible: !checks
                 }
 
                 WeekSpinBox {
-                    id: weekSpinBox
+                    id: yearSpinBox
                     visible: checks === 0
                     week: MDate.currentWeek();
                     year: MDate.currentYear();
+                    showOnlyYear: true
                 }
 
                 IconButton {
@@ -242,7 +243,7 @@ Page {
         }
 
         ListView {
-            id: harvestView
+            id: recordView
             width: Math.max(rowWidth, parent.width * 0.8)
             clip: true
             spacing: 4
@@ -258,8 +259,8 @@ Page {
                 bottomMargin: Units.smallSpacing
             }
 
-            model: NoteModel {
-                id: harvestModel
+            model: RecordModel {
+                id: recordModel
                 year: page.year
                 filterString: filterField.text
                 sortColumn: tableHeaderModel[tableSortColumn].columnName
@@ -269,7 +270,7 @@ Page {
             highlightMoveDuration: 0
             highlightResizeDuration: 0
             highlight: Rectangle {
-                visible: harvestView.activeFocus
+                visible: recordView.activeFocus
                 z:3;
                 opacity: 0.1;
                 color: Material.primary
@@ -277,10 +278,10 @@ Page {
             }
 
             ScrollBar.vertical: ScrollBar {
-                parent: harvestView.parent
-                anchors.top: harvestView.top
-                anchors.left: harvestView.right
-                anchors.bottom: harvestView.bottom
+                parent: recordView.parent
+                anchors.top: recordView.top
+                anchors.left: recordView.right
+                anchors.bottom: recordView.bottom
             }
 
             Keys.onPressed: {
@@ -410,14 +411,23 @@ Page {
                         leftPadding: Units.formSpacing
 
                         Label {
-                            text: MDate.formatDate(model.date, 2019)
+                            text: MDate.formatDate(model.date, year)
                             elide: Text.ElideRight
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         Label {
-                            text: model.content
+                            text: {
+                                if (model.type === "task")
+                                    return qsTr("Task");
+                                else if (model.type === "note")
+                                    return qsTr("Note")
+                                else if (model.type === "harvest")
+                                    return qsTr("Harvest")
+                                else
+                                    return qsTr("Unknown");
+                            }
                             elide: Text.ElideRight
                             width: tableHeaderModel[1].width
                             anchors.verticalCenter: parent.verticalCenter
@@ -425,7 +435,21 @@ Page {
 
 
                         Label {
-                            text: model.time
+                            text: model.details
+                            elide: Text.ElideRight
+                            width: tableHeaderModel[2].width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        PlantingLabel {
+                            year: page.year
+                            anchors.verticalCenter: parent.verticalCenter
+                            plantingId: model.plantings
+                            showRank: true
+                        }
+
+                        Label {
+                            text: Location.fullNameList(model.locations.split(","))
                             elide: Text.ElideRight
                             width: tableHeaderModel[2].width
                             anchors.verticalCenter: parent.verticalCenter

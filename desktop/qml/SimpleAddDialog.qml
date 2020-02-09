@@ -28,8 +28,8 @@ Dialog {
 
     footer: AddDialogButtonBox {
         width: parent.width
-        onAccepted: dialog.accept()
-        onRejected: dialog.reject()
+//        onAccepted: dialog.accept()
+//        onRejected: dialog.reject()
         acceptableInput: acceptableForm
     }
 

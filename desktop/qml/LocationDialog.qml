@@ -108,7 +108,13 @@ Dialog {
     title: mode === "add" ? qsTr("Add Locations") : qsTr("Edit Locations")
     focus: true
 
+    onApplied: {
+        clearForm();
+        nameField.forceActiveFocus();
+    }
+
     footer: AddEditDialogFooter {
+        id: dialogFooter
         //        height: childrenRect.height
         //        width: parent.width
         applyEnabled: dialog.formAccepted

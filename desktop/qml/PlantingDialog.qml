@@ -72,6 +72,40 @@ Dialog {
         dialog.open()
     }
 
+    function applyAccept() {
+        if (mode === "add") {
+            var idList = Planting.addSuccessions(plantingForm.successions,
+                                                 plantingForm.weeksBetween,
+                                                 plantingForm.values);
+            if (!idList.length)
+                return;
+
+            if (idList.length === 1) {
+                var plantingId = idList[0]
+                for (var locationId in plantingForm.assignedLengthMap) {
+                    var length = plantingForm.assignedLengthMap[locationId]
+                    Location.addPlanting(plantingId, locationId, length)
+                }
+            }
+            dialog.plantingsAdded(plantingForm.successions)
+        } else {
+            console.log("Edited values:");
+            var values = plantingForm.editedValues()
+            for (var key in values)
+                console.log(key, values[key])
+
+            if (dialog.editPlantingIdList.length === 1)
+                Planting.update(dialog.editPlantingIdList[0],
+                                plantingForm.editedValues(),
+                                plantingForm.assignedLengthMap);
+            else
+                Planting.updateList(dialog.editPlantingIdList,
+                                    plantingForm.editedValues(),
+                                    plantingForm.assignedLengthMap);
+            dialog.plantingsModified(dialog.editPlantingIdList.length);
+        }
+    }
+
     modal: true
     focus: true
     contentWidth: scrollView.implicitWidth
@@ -90,7 +124,10 @@ Dialog {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut
-        onActivated: if (plantingForm.accepted) accept();
+        onActivated: {
+            if (plantingForm.accepted)
+                dialogFooter.apply();
+        }
     }
 
     header: PlantingFormHeader {
@@ -103,6 +140,7 @@ Dialog {
     }
 
     footer: AddEditDialogFooter {
+        id: dialogFooter
         applyEnabled: plantingForm.accepted
         rejectToolTip: qsTr("You have to choose at least a variety to add a planting.")
         mode: dialog.mode
@@ -148,38 +186,12 @@ Dialog {
             plantingForm.varietyField.forceActiveFocus();
     }
 
-    onAccepted: {
-        if (mode === "add") {
-            var idList = Planting.addSuccessions(plantingForm.successions,
-                                                 plantingForm.weeksBetween,
-                                                 plantingForm.values);
-            if (!idList.length)
-                return;
-
-            if (idList.length === 1) {
-                var plantingId = idList[0]
-                for (var locationId in plantingForm.assignedLengthMap) {
-                    var length = plantingForm.assignedLengthMap[locationId]
-                    Location.addPlanting(plantingId, locationId, length)
-                }
-            }
-            dialog.plantingsAdded(plantingForm.successions)
-        } else {
-            console.log("Edited values:");
-            var values = plantingForm.editedValues()
-            for (var key in values)
-                console.log(key, values[key])
-
-            if (dialog.editPlantingIdList.length === 1)
-                Planting.update(dialog.editPlantingIdList[0],
-                                plantingForm.editedValues(),
-                                plantingForm.assignedLengthMap);
-            else
-                Planting.updateList(dialog.editPlantingIdList,
-                                    plantingForm.editedValues(),
-                                    plantingForm.assignedLengthMap);
-            dialog.plantingsModified(dialog.editPlantingIdList.length);
-        }
-
+    onApplied: {
+        applyAccept();
+        refresh();
+        plantingForm.clearAll();
+        plantingFormHeader.cropField.forceActiveFocus();
     }
+
+    onAccepted: applyAccept();
 }

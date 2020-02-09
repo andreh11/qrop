@@ -33,8 +33,8 @@ ApplicationWindow {
         { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
         { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
         { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" },
-        { source: chartsPage,  name: qsTr("Charts"),  iconText: "\ue801" }
-        //        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
+        { source: chartsPage,  name: qsTr("Charts"),  iconText: "\ue801" },
+        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
     ]
     property int navigationIndex: 0
 
@@ -185,9 +185,9 @@ ApplicationWindow {
         id: chartsPage
     }
 
-//    NotesPage {
-//        id: notesPage
-//    }
+    Loader {
+        id: notesPage
+    }
 
     Loader {
         id: seedListPage
@@ -653,6 +653,12 @@ ApplicationWindow {
                 chartsPage.item.refresh();
                 break
             case 6:
+                if (notesPage.status === Loader.Null)
+                    notesPage.source = "NotesPage.qml";
+                stackView.replace(notesPage)
+                notesPage.item.refresh();
+                break
+            case 7:
                 if (settingsPage.status === Loader.Null)
                     settingsPage.setSource("SettingsPage.qml",
                                            { "paneWidth": Math.min(600, stackView.width * 0.8) })

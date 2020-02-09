@@ -39,13 +39,16 @@ Flickable {
 
     readonly property bool accepted: taskTypeId > 0
                                      && laborTimeField.acceptableInput
-                                     && (templateMode || (plantingTask && plantingIdList.length)
-                                         || (locationTask && locationIdList.length))
+
+//                                     && (templateMode || (plantingTask && plantingIdList.length)
+//                                         || (locationTask && locationIdList.length))
+
     readonly property alias dueDateString: dueDatepicker.isoDateString
     readonly property int duration: Number(durationField.text)
     readonly property alias laborTimeString: laborTimeField.text
     readonly property alias plantingTask: plantingRadioButton.checked
     readonly property alias locationTask: locationRadioButton.checked
+
     readonly property alias plantingIdList: plantingList.plantingIdList
     readonly property var locationIdList: locationView.selectedLocationIds()
     property string completedDate: ""
@@ -122,25 +125,26 @@ Flickable {
             }
         }
 
-        // Select plantings
+        // Select plantings.
         if ("plantings" in val) {
             var idList = val["plantings"].split(",")
-
-            if (val["plantings"])
+            if (val["plantings"]) {
+                console.log(idList, idList.length)
                 plantingRadioButton.checked = true
-
-            for (var i = 0; i < idList.length; i++)
-                plantingList.selectedIds[idList[i]] = true
-
-            plantingList.selectedIdsChanged();
+                for (var i = 0; i < idList.length; i++)
+                    plantingList.selectedIds[idList[i]] = true
+                plantingList.selectedIdsChanged();
+            }
         }
 
+        // Selection locations.
         if ("locations" in val) {
+            var locationList = val["locations"].split(",")
             if (val["locations"]) {
+                console.log(locationList, locationList.length)
                 locationRadioButton.checked = true
-                var list = val["locations"].split(",")
                 locationView.visible = false
-                locationView.selectLocationIds(list)
+                locationView.selectLocationIds(locationList)
                 locationView.visible = true
             }
         }
@@ -192,7 +196,7 @@ Flickable {
         laborTimeField.reset();
         descriptionTextArea.clear();
         plantingSearchField.clear();
-        plantingRadioButton.checked = true;
+        plantingRadioButton.checked = false;
         locationRadioButton.checked = false;
     }
 
@@ -415,9 +419,8 @@ Flickable {
 
             RadioButton {
                 id: plantingRadioButton
-                autoExclusive: true
-                checked: true
                 text: qsTr("Plantings")
+                autoExclusive: true
             }
 
             RadioButton {
@@ -626,6 +629,11 @@ Flickable {
                     }
                 }
             }
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
         }
     }
 }

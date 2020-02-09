@@ -20,5 +20,7 @@
         <file>db/migrations/015.sql</file>
         <file>db/migrations/016.sql</file>
         <file>db/migrations/017.sql</file>
+        <file>db/migrations/018.sql</file>
+        <file>db/migrations/019.sql</file>
     </qresource>
 </RCC>

@@ -108,12 +108,20 @@ Dialog {
         harvestUpdated();
     }
 
-    onAccepted: {
+    function acceptApply() {
         if (mode === "add")
             addHarvest();
         else
             updateHarvest();
     }
+
+    onApplied: {
+        acceptApply();
+        clearForm();
+        quantityField.forceActiveFocus();
+    }
+
+    onAccepted: acceptApply();
 
     focus: true
     title: mode === "add" ? qsTr("Add Harvest") : qsTr("Edit Harvest")
@@ -131,10 +139,14 @@ Dialog {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut
-        onActivated: if (formAccepted) accept();
+        onActivated: {
+            if (formAccepted)
+                dialogFooter.apply();
+        }
     }
 
     footer: AddEditDialogFooter {
+        id: dialogFooter
         applyEnabled: dialog.formAccepted
         mode: dialog.mode
     }
