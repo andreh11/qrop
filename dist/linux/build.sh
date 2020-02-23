@@ -1,4 +1,5 @@
 ##!/usr/bin/env bash
+# GNU/Linux build script for Qrop.
 
 BUILD_DIR=$PWD
 cmake . -DCMAKE_BUILD_TYPE=Release 

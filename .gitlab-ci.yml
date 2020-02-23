@@ -1,19 +1,20 @@
-image: andreh11/qt:5.12.5-trusty
 
 stages:
   - build
   - deploy
 
-normal-build:
+normal-build:linux:
   stage: build
+  image: andreh11/qt:5.12.5-trusty
   script:
     - bash dist/linux/build.sh
   except:
     - master
     - tags
 
-master-build:
+master-build:linux:
   stage: build
+  image: andreh11/qt:5.12.5-trusty
   variables:
     QROP_BUILD_TYPE: "snapshot"
   script:
@@ -24,8 +25,22 @@ master-build:
   except:
     - tags
 
-release-build:
+master-build:android:
   stage: build
+  image: a12e/docker-qt:5.12-android_armv7
+  variables:
+    QROP_BUILD_TYPE: "snapshot"
+  script:
+    - bash dist/android/build.sh
+    - bash dist/android/deploy.sh
+  only:
+    - master
+  except:
+    - tags
+
+release-build:linux:
+  stage: build
+  image: andreh11/qt:5.12.5-trusty
   variables:
     QROP_BUILD_TYPE: "release"
   script:
@@ -39,17 +54,9 @@ release-build:
   only:
    - tags
 
-# snapshot-deploy:
-#   stage: deploy
-#   variables:
-#     QROP_BUILD_TYPE: "snapshot"
-#   script:
-#     - bash dist/gitlab-release.sh
-#   # only:
-  #   -tags
-
-release-deploy:
+release-deploy:linux:
   stage: deploy
+  image: andreh11/qt:5.12.5-trusty
   variables:
     QROP_BUILD_TYPE: "release"
   script:
