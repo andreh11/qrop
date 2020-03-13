@@ -291,11 +291,8 @@ Page {
                                 Layout.topMargin: 6
                                 Layout.preferredWidth: 60
                                 Layout.minimumWidth: 60
-                                //                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
                             }
                         }
-
-
                     }
                 }
 
@@ -397,9 +394,7 @@ Page {
                 }
 
                 SettingsPaneDivider { }
-                PaneTitle {
-                    text: qsTr("Lists")
-                }
+                PaneTitle { text: qsTr("Lists") }
 
                 SettingsPane {
                     width: parent.width

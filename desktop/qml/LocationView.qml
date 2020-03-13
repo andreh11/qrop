@@ -263,6 +263,7 @@ Item {
     }
 
     function updateSelected(map) {
+        console.log(selectionModel.selectedIndexes);
         updateIndexes(map, selectionModel.selectedIndexes);
     }
 

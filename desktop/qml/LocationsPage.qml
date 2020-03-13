@@ -263,8 +263,8 @@ Page {
                     locationIdList: locationView.selectedIdList
 
                     onAccepted: {
-                        locationView.clearSelection();
                         locationView.updateSelected(editDialog.editedValues());
+                        locationView.clearSelection();
                     }
 
                     onRejected: {
@@ -483,7 +483,6 @@ Page {
                 anchors.fill: parent
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
-//                showOnlyEmptyLocations: emptyLocationsCheckbox.checked
                 showOnlyGreenhouseLocations: greenhouseButton.checked
                 showFamilyColor: familyColorButton.checked
                 editMode: page.editMode
@@ -505,9 +504,9 @@ Page {
             Material.elevation: 2
             Material.background: "white"
 
-//            Behavior on Layout.minimumHeight {
-//                NumberAnimation { duration: Units.shortDuration  }
-//            }
+            Behavior on Layout.minimumHeight {
+                NumberAnimation { duration: Units.shortDuration  }
+            }
 
             MouseArea {
                 id: plantingPaneMouseArea

@@ -4,6 +4,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Corrections
+ - *Parcellaire* − Correction du bug d'édition (impossiblité d'éditer un ou
+   plusieurs emplacements).
+
 ## 0.4.4 − 2020-01-28 
 
 ### Corrections

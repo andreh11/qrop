@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## Fixed
+ - *Crop map* − Fix editing bug.
+
 ## 0.4.4 − 2020-01-28 
 
 ### Changed
