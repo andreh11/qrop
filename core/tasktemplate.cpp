@@ -16,7 +16,6 @@
 
 #include <QDate>
 #include <QDebug>
-#include <QVariantMap>
 
 #include "planting.h"
 #include "tasktemplate.h"

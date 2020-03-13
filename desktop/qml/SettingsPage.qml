@@ -42,7 +42,7 @@ Page {
     }
 
     title: qsTr("Settings")
-    Material.background: Units.pageColor
+    Material.background: largeDisplay ? Units.pageColor : "white"
 
     Settings {
         id: settings
@@ -103,7 +103,7 @@ Page {
 
             Column {
                 id: mainColumn
-                width: paneWidth
+                width: largeDisplay ? paneWidth : parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
                 //            anchors.top: parent.top
                 //            anchors.bottom: parent.bottom
@@ -112,24 +112,14 @@ Page {
                 topPadding: Units.smallSpacing
                 bottomPadding: topPadding
 
-                Label {
-                    text: qsTr("General Settings")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
-                }
-
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
                         spacing: 0
 
-                        ThinDivider { width: parent.width }
+                        //                        ThinDivider { width: parent.width }
 
                         RowLayout {
                             width: parent.width
@@ -201,39 +191,18 @@ Page {
                             }
                         }
 
-                        ThinDivider { width: parent.width }
-
-                        SettingsSwitch {
-                            id: showSeedCompanySwitch
-                            text: qsTr("Show seed company beside variety names")
-                            onToggled: restartSnackbar.open();
-                        }
-
-                        ThinDivider { width: parent.width }
-
-                        SettingsSwitch {
-                            id: showPlantingSuccessionNumberSwitch
-                            text: qsTr("Show planting succession numbers")
-                            onToggled: restartSnackbar.open();
-                        }
-
-                        Item { Layout.fillHeight: true }
                     }
 
                 }
 
-                Label {
+                SettingsPaneDivider { }
+
+                PaneTitle {
                     text: qsTr("Beds")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
                 }
 
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
@@ -324,43 +293,36 @@ Page {
                                 Layout.minimumWidth: 60
                                 //                        helperText: plantsBySquareMeter ? qsTr("Plants/m2: %L1").arg(plantsBySquareMeter) : ""
                             }
-
-                            //                            SpinBox {
-                            //                                id: standardBedLengthField
-                            //                                from: 0
-                            //                                to: 999
-                            //                                textFromValue: function(value, locale) {
-                            //                                    return "%1 %2".arg(value).arg(qsTr("m"))
-                            //                                }
-                            //                                valueFromText: function(text, locale) {
-                            //                                    var s = text.split(" ");
-                            //                                    return Number(s[0]);
-                            //                                }
-                            //                                Layout.preferredWidth: 180
-                            //                            }
                         }
 
-                        ThinDivider { width: parent.width }
 
                     }
                 }
 
-                Label {
+                SettingsPaneDivider { }
+
+                PaneTitle {
                     text: qsTr("Plantings view")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
                 }
 
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
                         spacing: 0
+
+                        SettingsSwitch {
+                            id: showSeedCompanySwitch
+                            text: qsTr("Show seed company beside variety names")
+                            onToggled: restartSnackbar.open();
+                        }
+
+                        SettingsSwitch {
+                            id: showPlantingSuccessionNumberSwitch
+                            text: qsTr("Show planting succession numbers")
+                            onToggled: restartSnackbar.open();
+                        }
 
                         SettingsSwitch {
                             id: durationsByDefaultSwitch
@@ -368,38 +330,27 @@ Page {
                             onToggled: restartSnackbar.open();
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsSwitch {
                             id: showDurationFieldSwitch
                             text: qsTr("Show duration fields")
                             onToggled: restartSnackbar.open();
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsSwitch {
                             id: showDensityFieldSwitch
                             text: qsTr("Show density field")
                             onToggled: restartSnackbar.open();
                         }
-
-                        ThinDivider { width: parent.width }
                     }
                 }
 
-                Label {
+                SettingsPaneDivider { }
+                PaneTitle {
                     text: qsTr("Field map")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
                 }
 
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
@@ -411,38 +362,27 @@ Page {
                             onToggled: restartSnackbar.open();
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsSwitch {
                             id: allowPlantingsConflictSwitch
                             text: qsTr("Allow plantings conflicts on same location")
                             onToggled: restartSnackbar.open();
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsSwitch {
                             id: showTaskOnFieldMap
                             text: qsTr("Show tasks")
                             onToggled: restartSnackbar.open();
                         }
-
-                        ThinDivider { width: parent.width }
                     }
                 }
 
-                Label {
+                SettingsPaneDivider { }
+                PaneTitle {
                     text: qsTr("Harvests")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
                 }
 
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
@@ -456,60 +396,42 @@ Page {
                     }
                 }
 
-                Label {
+                SettingsPaneDivider { }
+                PaneTitle {
                     text: qsTr("Lists")
-                    font.family: "Roboto Regular"
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    topPadding: Units.mediumSpacing
                 }
 
-                Pane {
+                SettingsPane {
                     width: parent.width
-                    Material.elevation: 2
-                    Material.background: "white"
-                    padding: 0
 
                     ColumnLayout {
                         width: parent.width
                         spacing: 0
-
-                        ThinDivider { width: parent.width }
 
                         SettingsPaneButton {
                             text: qsTr("Families, crops and varieties")
                             onClicked: showFamilyPane = true
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsPaneButton {
                             text: qsTr("Keywords")
                             onClicked: showKeywordPane = true
                         }
-
-                        ThinDivider { width: parent.width }
 
                         SettingsPaneButton {
                             text: qsTr("Seed companies")
                             onClicked: showSeedCompanyPane = true
                         }
 
-                        ThinDivider { width: parent.width }
-
                         SettingsPaneButton {
                             text: qsTr("Task types")
                             onClicked: showTaskTypePane = true
                         }
 
-                        ThinDivider { width: parent.width }
                         SettingsPaneButton {
                             text: qsTr("Units")
                             onClicked: showUnitPane = true
                         }
-
-                        ThinDivider { width: parent.width }
-
-                        Item { Layout.fillHeight: true }
                     }
                 }
             }

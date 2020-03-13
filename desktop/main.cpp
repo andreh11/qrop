@@ -31,10 +31,10 @@
 #include <QTranslator>
 #include <QVariantMap>
 
-#if defined(Q_OS_ANDROID)
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#endif
+//#if defined(Q_OS_ANDROID)
+//#include <QtAndroid>
+//#include <QAndroidJniObject>
+//#endif
 
 #include "buildinfo.h"
 #include "db.h"
@@ -340,15 +340,15 @@ int main(int argc, char *argv[])
     Database db;
     Database::connectToDatabase();
 
-#if defined(Q_OS_ANDROID)
-    QtAndroid::runOnAndroidThread([=]() {
-        QAndroidJniObject window =
-                QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
-    });
-#endif
+    //#if defined(Q_OS_ANDROID)
+    //    QtAndroid::runOnAndroidThread([=]() {
+    //        QAndroidJniObject window =
+    //                QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+    //        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+    //        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+    //        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
+    //    });
+    //#endif
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

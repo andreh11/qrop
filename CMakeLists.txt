@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_AUTORCC ON)
+message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+
+set(MIN_QT_VERSION 5.12.0)
+
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -22,7 +28,7 @@ fix_project_version()
 set(COMPANY "L'Atelier paysan")
 set(COPYRIGHT "Copyright (c) 2018-2020 André Hoarau")
 
-option(MAKE_TESTS "Make the tests" ON)
+option(MAKE_TESTS "Make the tests" OFF)
 
 # Get the current working branch
 execute_process(
@@ -68,16 +74,36 @@ configure_file(
 
 string(TIMESTAMP BUILD_DATE %Y%m)
 
-find_package(Qt5 REQUIRED COMPONENTS
+#if(ANDROID)
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
+#        set(ANDROID_EXTRA_LIBS
+#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
+#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
+#    endif()
+#endif()
+
+find_package(Qt5 ${MIN_QT_VERSION}
+    COMPONENTS
     Core
-    Quick
-    QuickControls2
     Gui
-    LinguistTools
     Widgets
     Qml
     Quick
-    Sql)
+    QuickControls2
+    LinguistTools
+    Sql
+    REQUIRED
+)
+
+if (ANDROID)
+    message(STATUS "Adding Android extras...")
+    find_package(Qt5 ${MIN_QT_VERSION}
+        COMPONENTS
+        AndroidExtras
+        REQUIRED
+    )
+endif()
 
 include_directories(lib)
 include_directories("${PROJECT_SOURCE_DIR}/core")
@@ -114,13 +140,18 @@ if((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
     qtquick_compiler_add_resources(QML_FILES desktop/qml.qrc)
 endif()
 
-
-add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${QML_FILES})
-target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(${PROJECT_NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
-
-if(MAKE_TESTS)
-    enable_testing(true)
-    include_directories("${PROJECT_SOURCE_DIR}/tests")
-    add_subdirectory(tests)
+if(ANDROID)
+    add_library(${PROJECT_NAME} SHARED ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${QML_FILES})
+else()
+    add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${QML_FILES})
 endif()
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
+
+#if(MAKE_TESTS)
+#    enable_testing(true)
+#    include_directories("${PROJECT_SOURCE_DIR}/tests")
+#    add_subdirectory(tests)
+#endif()

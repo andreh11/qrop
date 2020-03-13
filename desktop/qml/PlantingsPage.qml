@@ -321,7 +321,7 @@ Page {
             padding: 0
             height: parent.height
             Material.elevation: 2
-            visible: largeDisplay
+//            visible: largeDisplay
 
             Rectangle {
                 id: buttonRectangle

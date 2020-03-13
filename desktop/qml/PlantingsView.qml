@@ -527,7 +527,6 @@ ListView {
             id: delegateColumn
             width: row.width
 
-
             Row {
                 id: row
                 height: Units.rowHeight

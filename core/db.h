@@ -34,6 +34,7 @@ public:
     static void migrate();
     static void backupDatabase();
     static Q_INVOKABLE void saveAs(const QUrl &url);
+    static Q_INVOKABLE void replaceMainDatabase(const QUrl &url);
     static Q_INVOKABLE void copy(const QUrl &from, const QUrl &to);
     static Q_INVOKABLE void createDatabase();
     static Q_INVOKABLE void deleteDatabase();

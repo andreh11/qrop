@@ -30,10 +30,10 @@ ApplicationWindow {
     property var navigationModel: [
         { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
         { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
-        { source: locationsPage,   name: qsTr("Crop Map"),  iconText: "\ue55b" },
+        { source: locationsPage, name: qsTr("Crop Map"),  iconText: "\ue55b" },
         { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: seedListPage,  name: qsTr("Seed list"),  iconText: "\ue8ef" },
-        { source: chartsPage,  name: qsTr("Charts"),  iconText: "\ue801" },
+        { source: seedListPage,  name: qsTr("Seed list"), iconText: "\ue8ef" },
+        { source: chartsPage,    name: qsTr("Charts"),    iconText: "\ue801" },
         { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
     ]
     property int navigationIndex: 0
@@ -144,6 +144,19 @@ ApplicationWindow {
         nameFilters: [qsTr("SQLITE (*.sqlite)")]
         onAccepted: {
             Database.saveAs(file);
+        }
+    }
+
+    Platform.FileDialog {
+        id: replaceMainDatabaseDialog
+
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.OpenFile
+        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        onAccepted: {
+            Database.replaceMainDatabase(file);
+            switchToDatabase("main");
         }
     }
 
@@ -303,7 +316,7 @@ ApplicationWindow {
                     placeholderText: qsTr("Search")
                     width: 200
                     color: Material.Grey
-
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
         }
@@ -315,11 +328,12 @@ ApplicationWindow {
         leftPadding: 8 + (largeDisplay ? drawer.width : 0)
         rightPadding: 8
         height: 56
+        Material.elevation: 0
         contentHeight: drawerButton.implicitHeight
-        //            background: searchMode ? "white" : Material.color(Material.background)
         Material.background: searchMode ? "white" : Material.primary
         Material.foreground: "white"
         z: 1
+
         RowLayout {
             spacing: Units.mediumSpacing
             anchors.fill: parent
@@ -347,7 +361,7 @@ ApplicationWindow {
                 id: backButton
                 visible: searchMode
                 text: "\ue5c4" // arrow_back
-                Material.foreground: Material.Grey
+                Material.foreground: Material.accent
                 font.family: "Material Icons"
                 font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
@@ -369,30 +383,16 @@ ApplicationWindow {
 
             TextField  {
                 id: searchField
-                leftPadding: 16 + largeDisplay ? 50 : 0
                 font.family: "Roboto Regular"
                 verticalAlignment: Qt.AlignVCenter
-                font.pixelSize: Units.fontSizeTitle
+                font.pixelSize: Units.fontSizeBodyAndButton
                 visible: largeDisplay || searchMode
                 color: "black"
                 placeholderText: qsTr("Search")
                 Layout.fillWidth: true
                 background: Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height * 0.7
-                    //                    width: parent.width
-                    //                        opacity: 0.3
-                    //                    color: largeDisplay ? Material.color(Material.Teal, Material.Shade400) : "white"
-                    radius: 5
-                    Label {
-                        leftPadding: 16
-                        visible: largeDisplay
-                        color: "white"
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "\ue8b6" // search
-                        font.family: "Material Icons"
-                        font.pixelSize: Units.fontSizeHeadline
-                    }
+                    height: parent.height
                 }
 
                 Shortcut {
@@ -476,7 +476,24 @@ ApplicationWindow {
 
                 onClicked: switchToDatabase("main");
                 onPressAndHold: {
-                    saveMainDatabaseDialog.open();
+                    mainDatabaseMenu.open();
+                }
+
+                Menu {
+                    id: mainDatabaseMenu
+                    title: qsTr("Main database menu")
+                    x: parent.width
+                    margins: 0
+
+                    MenuItem {
+                        text: qsTr("Export")
+                        onClicked: saveMainDatabaseDialog.open();
+                    }
+
+                    MenuItem {
+                        text: qsTr("Replace")
+                        onClicked: replaceMainDatabaseDialog.open();
+                    }
                 }
             }
 
@@ -535,7 +552,6 @@ ApplicationWindow {
                 }
             }
 
-
             DrawerItemDelegate {
                 id: settingsDrawerButton
                 Layout.fillWidth: true
@@ -565,7 +581,6 @@ ApplicationWindow {
             }
         }
     }
-
 
     Component {
         id: busyPage

@@ -1,5 +1,12 @@
 include_directories(.)
-find_package(Qt5 COMPONENTS Core Quick Gui Sql PrintSupport LinguistTools REQUIRED)
+find_package(Qt5
+    REQUIRED COMPONENTS
+    Core
+    Gui
+    Quick
+    Sql
+    PrintSupport
+    LinguistTools)
 add_definitions(-DCORE_LIBRARY)
 
 add_library(core SHARED

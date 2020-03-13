@@ -18,27 +18,11 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-RowLayout {
-    id: control
-    property alias text: label.text
-    property alias checked: _switch.checked
-
-    signal toggled()
-
+SwitchDelegate {
     width: parent.width
-    Layout.leftMargin: Units.mediumSpacing
-    Layout.rightMargin: Layout.leftMargin
-    
-    Label {
-        id: label
-        Layout.fillWidth: true
-        font.family: "Roboto Regular"
-        font.pixelSize: Units.fontSizeBodyAndButton
-        elide: Text.ElideRight
-    }
-    
-    Switch {
-        id: _switch
-        onToggled: control.toggled();
-    }
+    Layout.fillWidth: true
+    font.family: "Roboto Regular"
+    font.pixelSize: Units.fontSizeBodyAndButton
+    leftPadding: Units.mediumSpacing
+    rightPadding: leftPadding
 }

@@ -20,6 +20,7 @@
 #include <QObject>
 #include <QDate>
 #include <QList>
+#include <QVariantList>
 
 #include "core_global.h"
 
