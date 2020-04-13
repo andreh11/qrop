@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## Changed
+ - Improve filtering of plantings to show all plantings, or only the field or
+   greenhouse ones.
+
 ## Fixed
  - *Crop map* − Fix editing bug.
 

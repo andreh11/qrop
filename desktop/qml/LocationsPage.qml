@@ -32,6 +32,8 @@ Page {
     property alias hasSelection: locationView.hasSelection
     property alias rowCount: locationView.rowCount
     property bool showPlantingsPane: true
+    property bool showOnlyGreenhouse: filterField.filterIndex === 1
+    property bool showOnlyField: filterField.filterIndex === 2
 
     function refresh() {
         locationView.refresh();
@@ -120,12 +122,12 @@ Page {
         onActivated: seasonSpinBox.previousYear();
     }
 
-    Shortcut {
-        sequence: "Ctrl+G"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: greenhouseButton.toggle();
-    }
+//    Shortcut {
+//        sequence: "Ctrl+G"
+//        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
+//        context: Qt.ApplicationShortcut
+//        onActivated: greenhouseButton.toggle();
+//    }
 
     Shortcut {
         sequence: "Shift+A"
@@ -176,7 +178,7 @@ Page {
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted:  Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
-                                        greenhouseButton.checked)
+                                        page.showOnlyGreenhouse)
     }
 
     RoundButton {
@@ -337,15 +339,6 @@ Page {
                 ToolTip.visible: hovered
             }
 
-            ToolButton {
-                id: greenhouseButton
-                checkable: true
-                visible: !editMode
-                flat: true
-                text: qsTr("GH", "Abbreviation for \"greenhouse\"")
-                font.family: "Roboto Regular"
-                font.pixelSize: Units.fontSizeBodyAndButton
-            }
 
             Button {
                 id: duplicateButton
@@ -405,6 +398,11 @@ Page {
                 placeholderText: qsTr("Search Plantings")
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhPreferLowercase
+                filterModel: [
+                    qsTr("All"),
+                    qsTr("Greenhouse"),
+                    qsTr("Field"),
+                ]
             }
 
             Item {
@@ -469,7 +467,7 @@ Page {
                 z: 3
                 visible: !page.rowCount
                 anchors.centerIn: parent
-                primaryText: greenhouseButton.checked ? qsTr("No greenhouse locations yet") : qsTr('No locations yet')
+                primaryText: page.showOnlyGreenhouse ? qsTr("No greenhouse locations yet") : qsTr('No locations yet')
                 primaryButtonText: qsTr("Add")
 
                 onPrimaryButtonClicked: {
@@ -483,7 +481,7 @@ Page {
                 anchors.fill: parent
                 year: seasonSpinBox.year
                 season: seasonSpinBox.season
-                showOnlyGreenhouseLocations: greenhouseButton.checked
+                showOnlyGreenhouseLocations: page.showOnlyGreenhouse
                 showFamilyColor: familyColorButton.checked
                 editMode: page.editMode
                 firstColumnWidth: plantingsView.firstColumnWidth
@@ -554,11 +552,11 @@ Page {
                     anchors.centerIn: parent
                     spacing: Units.smallSpacing
                     primaryText: {
-                        if (filterField.text && greenhouseButton.checked)
+                        if (filterField.text && page.showOnlyGreenhouse)
                             qsTr('No more greenhouse plantings of “%1” to assign for this season.').arg(filterField.text)
                         else if (filterField.text)
                             qsTr('No more plantings of “%1” to assign for this season.').arg(filterField.text)
-                        else if (greenhouseButton.checked)
+                        else if (page.showOnlyGreenhouse)
                             qsTr('No more greenhouse plantings to assign for this season.')
                         else
                             qsTr('No more plantings to assign for this season.')
@@ -592,7 +590,8 @@ Page {
                     showOnlyUnassigned: true
                     showTimegraph: true
                     showOnlyTimegraph: true
-                    showOnlyGreenhouse: greenhouseButton.checked
+                    showOnlyGreenhouse: page.showOnlyGreenhouse
+                    showOnlyField: page.showOnlyField
                     showHeader: false
                     showHorizontalScrollBar: false
                     showVerticalScrollBar: true

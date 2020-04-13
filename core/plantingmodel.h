@@ -36,6 +36,7 @@ class CORESHARED_EXPORT PlantingModel : public SortFilterProxyModel
                        showOnlyUnassignedChanged)
     Q_PROPERTY(bool showOnlyGreenhouse READ showOnlyGreenhouse WRITE setShowOnlyGreenhouse NOTIFY
                        showOnlyGreenhouseChanged)
+    Q_PROPERTY(bool showOnlyField READ showOnlyField WRITE setShowOnlyField NOTIFY showOnlyFieldChanged)
     Q_PROPERTY(bool showOnlyHarvested READ showOnlyHarvested WRITE setShowOnlyHarvested NOTIFY showOnlyHarvestedChanged)
     Q_PROPERTY(int cropId READ cropId WRITE setCropId NOTIFY cropIdChanged)
     Q_PROPERTY(int keywordId READ keywordId WRITE setKeywordId NOTIFY keywordIdChanged)
@@ -61,6 +62,9 @@ public:
     bool showOnlyGreenhouse() const;
     void setShowOnlyGreenhouse(bool show);
 
+    bool showOnlyField() const;
+    void setShowOnlyField(bool show);
+
     bool showOnlyHarvested() const;
     void setShowOnlyHarvested(bool show);
 
@@ -81,6 +85,7 @@ private:
     bool m_showActivePlantings { false };
     bool m_showOnlyUnassigned { false };
     bool m_showOnlyGreenhouse { false };
+    bool m_showOnlyField { false };
     bool m_showOnlyHarvested { false };
     int m_cropId { -1 };
     int m_keywordId { -1 };
@@ -92,6 +97,7 @@ signals:
     void showActivePlantingsChanged();
     void showOnlyUnassignedChanged();
     void showOnlyGreenhouseChanged();
+    void showOnlyFieldChanged();
     void showOnlyHarvestedChanged();
     void cropIdChanged();
     void keywordIdChanged();

@@ -38,6 +38,7 @@ ListView {
     property alias keywordId: plantingModel.keywordId
 
     property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
+    property alias showOnlyField: plantingModel.showOnlyField
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
     property alias rowCount: plantingModel.rowCount
     property bool showOnlyActiveColor: false

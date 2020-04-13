@@ -84,7 +84,7 @@ ComboBox {
     onRowIdChanged: setRowId(rowId)
 
     Material.elevation: 0
-    width: parent.width
+//    width: parent.width
     padding: 0
     editable: true
 

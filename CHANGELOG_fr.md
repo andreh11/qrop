@@ -4,6 +4,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+### Changements
+ - Amélioration du filtre des séries : possiblité d'afficher toutes les séries,
+   ou seulement celles de plein champs ou sous abri.
+
 ### Corrections
  - *Parcellaire* − Correction du bug d'édition (impossiblité d'éditer un ou
    plusieurs emplacements).

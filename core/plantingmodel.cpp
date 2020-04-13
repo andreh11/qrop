@@ -139,6 +139,11 @@ bool PlantingModel::showOnlyGreenhouse() const
     return m_showOnlyGreenhouse;
 }
 
+bool PlantingModel::showOnlyField() const
+{
+    return m_showOnlyField;
+}
+
 void PlantingModel::setShowOnlyGreenhouse(bool show)
 {
     if (m_showOnlyGreenhouse == show)
@@ -147,6 +152,16 @@ void PlantingModel::setShowOnlyGreenhouse(bool show)
     m_showOnlyGreenhouse = show;
     invalidateFilter();
     emit showOnlyGreenhouseChanged();
+}
+
+void PlantingModel::setShowOnlyField(bool show)
+{
+    if (m_showOnlyField == show)
+        return;
+
+    m_showOnlyField = show;
+    invalidateFilter();
+    emit showOnlyFieldChanged();
 }
 
 bool PlantingModel::showOnlyHarvested() const
@@ -229,7 +244,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             && (!m_showActivePlantings
                 || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId))
-            && (!m_showOnlyGreenhouse || inGreenhouse)
+            && (!m_showOnlyGreenhouse || inGreenhouse) && (!m_showOnlyField || !inGreenhouse)
             && (!m_showOnlyHarvested
                 || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (m_cropId < 1 || cropId == m_cropId)

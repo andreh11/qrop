@@ -24,6 +24,11 @@ import io.qrop.components 1.0
 
 TextField {
     id: filterField
+
+    property alias filterModel: filterCB.model
+    property alias filterIndex: filterCB.currentIndex
+
+
     leftPadding: searchLogo.width + 16
     font.family: "Roboto Regular"
     font.pixelSize: Units.fontSizeBodyAndButton
@@ -70,11 +75,35 @@ TextField {
         focusPolicy: Qt.NoFocus
         Material.foreground: Material.color(Material.Grey,
                                             Material.Shade500)
-        anchors.right: parent.right
+        anchors.right: filterModel ? filterCB.left : parent.right
         anchors.verticalCenter: parent.verticalCenter
         text: "\ue5c9" // search
         font.family: "Material Icons"
         font.pixelSize: 24
         onClicked: filterField.clear()
+    }
+
+    VerticalThinDivider {
+        visible: filterCB.visible
+        anchors {
+            right: filterCB.left
+            top: parent.top
+            bottom: parent.bottom
+            topMargin: 7
+            bottomMargin: 6
+        }
+    }
+
+    ComboBox {
+        id: filterCB
+        model: 0
+        visible: model
+        anchors {
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+        }
+        flat: true
+        editable: false
     }
 }

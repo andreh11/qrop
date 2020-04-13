@@ -35,6 +35,9 @@ Page {
     property date todayDate: new Date()
     property alias searchField: filterField
 
+    property bool showOnlyGreenhouse: filterField.filterIndex === 1
+    property bool showOnlyField: filterField.filterIndex === 2
+
     property alias model: plantingsView.model
     property alias rowCount: plantingsView.rowCount
     property alias selectedIds: plantingsView.selectedIds
@@ -351,24 +354,6 @@ Page {
                         }
                     }
 
-                    ToolButton {
-                        id: greenhouseButton
-                        checkable: true
-                        visible: !checks
-                        flat: true
-                        text: qsTr("GH", "Abbreviation for \"greenhouse\"")
-                        font.family: "Roboto Regular"
-                        font.pixelSize: Units.fontSizeBodyAndButton
-
-                        Layout.leftMargin: -padding
-                        Layout.rightMargin: Layout.leftMargin
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: checked ? qsTr("Show all plantings")
-                                              : qsTr("Show only greenhouse plantings")
-                    }
-
                     IconButton {
                         id: timegraphButton
                         text: "\ue0b8"
@@ -384,7 +369,6 @@ Page {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
-
 
                     Button {
                         id: editButton
@@ -441,9 +425,16 @@ Page {
 
                     SearchField {
                         id: filterField
+                        placeholderText: qsTr("Search Plantings")
                         Layout.fillWidth: true
                         inputMethodHints: Qt.ImhPreferLowercase
                         visible: !checks
+
+                        filterModel: [
+                            qsTr("All"),
+                            qsTr("Greenhouse"),
+                            qsTr("Field"),
+                        ]
                     }
 
                     IconButton {
@@ -738,7 +729,8 @@ Page {
                 season: page.season
                 keywordId: chartPane.keywordId
                 showTimegraph: page.showTimegraph
-                showOnlyGreenhouse: greenhouseButton.checked
+                showOnlyGreenhouse: page.showOnlyGreenhouse
+                showOnlyField: page.showOnlyField
                 filterString: page.filterString
                 dragActive: false
                 anchors {

@@ -51,5 +51,4 @@ Item {
         Material.foreground: Material.accent
         Keys.onReturnPressed: clicked()
     }
-    
 }
