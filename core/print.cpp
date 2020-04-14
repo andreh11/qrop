@@ -285,7 +285,8 @@ void Print::printCropPlan(int year, int month, int week, const QUrl &path, const
     exportPdf(html, path);
 }
 
-void Print::printCalendar(int year, int month, int week, const QUrl &path, bool showOverdue)
+void Print::printCalendar(int year, int month, int week, const QUrl &path, bool showDone,
+                          bool showDue, bool showOverdue)
 {
     int begWeek;
     int endWeek;
@@ -313,7 +314,7 @@ void Print::printCalendar(int year, int month, int week, const QUrl &path, bool 
     QElapsedTimer t;
     t.start();
     for (int w = begWeek; w <= endWeek; w++)
-        html += calendarHtml(year, w, (week > 0 || month > 0) && showOverdue);
+        html += calendarHtml(year, w, showDone, showDue, (week > 0 || month > 0) && showOverdue);
     qDebug() << "Total time" << t.elapsed();
     exportPdf(html, path);
 }
@@ -584,7 +585,7 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
     return html;
 }
 
-QString Print::calendarHtml(int year, int week, bool showOverdue) const
+QString Print::calendarHtml(int year, int week, bool showDone, bool showDue, bool showOverdue) const
 {
     auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
 
@@ -610,9 +611,11 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
         QDate assignedDate = QDate::fromString(query.value("assigned_date").toString(), Qt::ISODate);
         QDate completedDate = QDate::fromString(query.value("completed_date").toString(), Qt::ISODate);
 
+        bool done = completedDate.isValid() && completedDate.weekNumber() == week;
         bool overdue = assignedDate.weekNumber() < week && !completedDate.isValid();
+        bool due = assignedDate.weekNumber() == week && !completedDate.isValid();
 
-        if (assignedDate.weekNumber() != week && (!showOverdue || !overdue))
+        if ((!showDone || !done) && (!showDue || !due) && (!showOverdue || !overdue))
             continue;
 
         int taskId = query.value("task_id").toInt();
@@ -623,6 +626,7 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
 
         const auto taskMethod = query.value("method").toString();
         const auto taskImplement = query.value("implement").toString();
+        const auto description = query.value("description").toString();
 
         if (taskTypeId != lastTaskTypeId) {
             i = 0;
@@ -664,46 +668,63 @@ QString Print::calendarHtml(int year, int week, bool showOverdue) const
                             .arg(record.value("crop").toString())
                             .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
                             .arg(record.value("variety").toString());
-            if (i % 2 == 1) {
-                html += QString("<tr style='font-weight: %1; background-color: #e0e0e0'>")
-                                .arg(overdue ? "bold" : "normal");
-            } else {
-                html += QString("<tr style='font-weight: %1'>").arg(overdue ? "bold" : "normal");
-            }
 
-            if (j == 0)
-                html += calendarInfo.tableRow
-                                .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
+            html += QString("<tr style='font-weight: %1; text-decoration: %2; "
+                            "background-color: %3'>")
+                            .arg(overdue ? "bold" : "normal")
+                            .arg(done ? "line-through" : "none")
+                            .arg(i % 2 == 1 ? "#e0e0e0" : "white");
+
+            if (j == 0) {
+                QString dateString("");
+                if (done) {
+                    dateString = MDate::formatDate(completedDate, year);
+                    if (completedDate.weekNumber() != assignedDate.weekNumber())
+                        dateString.append(" (" + MDate::formatDate(assignedDate, year) + ")");
+                } else if (overdue) {
+                    dateString = "(" + MDate::formatDate(assignedDate, year) + ")";
+                }
+                html += calendarInfo.tableRow.arg(dateString)
                                 .arg(plantingString)
                                 .arg(locationsName)
                                 .arg(m_task->description(taskId, year))
                                 .arg(keywordString)
-                                .arg("");
-            else
+                                .arg(description);
+            } else {
                 html += calendarInfo.tableRow.arg("")
                                 .arg(plantingString)
                                 .arg(locationsName)
                                 .arg("\"")
                                 .arg(keywordString)
-                                .arg("");
-
+                                .arg(description);
+            }
             j++;
         }
 
         if (plantingIdList.empty()) {
             QString locationsName = m_location->fullNameList(locationIdList);
 
-            if (i % 2 == 1)
-                html.append("<tr style='background-color: #e0e0e0'>");
-            else
-                html.append("<tr>");
-            html += calendarInfo.tableRow
-                            .arg(overdue ? "(" + MDate::formatDate(assignedDate, year) + ")" : "")
+            html += QString("<tr style='font-weight: %1; text-decoration: %2; "
+                            "background-color: %3'>")
+                            .arg(overdue ? "bold" : "normal")
+                            .arg(done ? "line-through" : "none")
+                            .arg(i % 2 == 1 ? "#e0e0e0" : "white");
+
+            QString dateString("");
+            if (done) {
+                dateString = MDate::formatDate(completedDate, year);
+                if (completedDate.weekNumber() != assignedDate.weekNumber())
+                    dateString.append(" (" + MDate::formatDate(assignedDate, year) + ")");
+            } else if (overdue) {
+                dateString = "(" + MDate::formatDate(assignedDate, year) + ")";
+            }
+
+            html += calendarInfo.tableRow.arg(dateString)
                             .arg("")
                             .arg(locationsName)
                             .arg(m_task->description(taskId, year))
                             .arg("")
-                            .arg("");
+                            .arg(description);
         }
 
         i++;

@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Changed
+ - *Calendar* : PDF output now follows the current view : week and
+   done/due/overdue filters (#205). 
  - Improve filtering of plantings to show all plantings, or only the field or
    greenhouse ones.
 
