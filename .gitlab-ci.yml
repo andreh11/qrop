@@ -25,22 +25,22 @@ master-build:linux:
   except:
     - tags
 
-master-build:android:
-  stage: build
-  image: a12e/docker-qt:5.12-android_armv7
-  variables:
-    QROP_BUILD_TYPE: "snapshot"
-  script:
-    - curl -OL 'https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.sh'
-    - chmod a+x cmake-3.15.4-Linux-x86_64.sh
-    - sudo ./cmake-3.15.4-Linux-x86_64.sh --prefix=/usr --skip-license
-    - rm cmake-3.15.4-Linux-x86_64.sh
-    - bash dist/android/build.sh
-    - bash dist/android/deploy.sh
-  only:
-    - master
-  except:
-    - tags
+#master-build:android:
+#  stage: build
+#  image: a12e/docker-qt:5.12-android_armv7
+#  variables:
+#    QROP_BUILD_TYPE: "snapshot"
+#  script:
+#    - curl -OL 'https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.sh'
+#    - chmod a+x cmake-3.15.4-Linux-x86_64.sh
+#    - sudo ./cmake-3.15.4-Linux-x86_64.sh --prefix=/usr --skip-license
+#    - rm cmake-3.15.4-Linux-x86_64.sh
+#    - bash dist/android/build.sh
+#    - bash dist/android/deploy.sh
+#  only:
+#    - master
+#  except:
+#    - tags
 
 release-build:linux:
   stage: build
