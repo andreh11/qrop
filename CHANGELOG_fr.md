@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+ - *Calendrier* : l'export PDF suit dorénavant la vue en cours : semaine et
+   filtre fait/à faire/en retard (#205).
  - Amélioration du filtre des séries : possiblité d'afficher toutes les séries,
    ou seulement celles de plein champs ou sous abri.
 

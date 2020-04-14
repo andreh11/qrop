@@ -60,6 +60,7 @@ public:
     Q_INVOKABLE static QString formatDate(const QDate &date, int currentYear,
                                           const QString &type = "", bool showIndicator = true);
 
+    Q_INVOKABLE static int month(const QDate &date) { return date.month(); }
     Q_INVOKABLE static int season(const QDate &date);
     Q_INVOKABLE static int seasonYear(const QDate &date);
     static QString seasonName(int season);
