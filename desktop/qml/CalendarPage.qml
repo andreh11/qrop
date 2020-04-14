@@ -135,15 +135,15 @@ Page {
         fileMode: Platform.FileDialog.SaveFile
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
-            var month = -1
-            var week = -1
+            var month = -1;
+            var week = -1;
 
             if (weekRadioButton.checked)
-                week = MDate.currentWeek();
+                week = page.week ;
             else if (monthRadioButton.checked)
-                month = MDate.currentMonth();
+                month = MDate.month(MDate.mondayOfWeek(page.week, page.year));
 
-            Print.printCalendar(page.year, month, week, file, showOverdueCheckBox.checked)
+            Print.printCalendar(page.year, month, week, file, showDoneCheckBox.checked,showDueCheckBox.checked, showOverdueCheckBox.checked)
         }
     }
 

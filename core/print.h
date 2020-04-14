@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void printCropPlan(int year, int month, int week, const QUrl &path,
                                    const QString &type = "entire");
     Q_INVOKABLE void printCalendar(int year, int month, int week, const QUrl &path,
+                                   bool showDone = false, bool showDue = true,
                                    bool showOverdue = false);
     Q_INVOKABLE void printCropMap(int year, int season, const QUrl &path,
                                   bool showFamilyColor = false, bool showOnlyGreenhouse = false);
@@ -70,7 +71,7 @@ private:
 
     // TODO: use TablePrinter
     QString cropPlanHtml(int year, int month, int week, const QString &type) const;
-    QString calendarHtml(int year, int week, bool showOverdue) const;
+    QString calendarHtml(int year, int week, bool showDone, bool showDue, bool showOverdue) const;
     QString harvestHtml(int year) const;
 
     // Crop map
