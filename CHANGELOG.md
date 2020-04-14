@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
    greenhouse ones.
 
 ## Fixed
+ - *Field map* − Fix refreshing bug when switch to field map view.
  - *Crop map* − Fix editing bug.
 
 ## 0.4.4 − 2020-01-28 
