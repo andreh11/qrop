@@ -11,6 +11,8 @@ Tous les changements importants seront documentés dans ce fichier.
    ou seulement celles de plein champs ou sous abri.
 
 ### Corrections
+ - *Parcellaire* − Correction du bug d'affichage pour les séries plurianuelles
+   (#169).
  - *Parcellaire* − Correction d'un bug de rafraîchissement lors du passage à la
    vue.
  - *Parcellaire* − Correction du bug d'édition (impossiblité d'éditer un ou

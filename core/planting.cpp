@@ -1120,8 +1120,6 @@ QString Planting::growBarDescription(int plantingId, int year, bool showNames) c
 QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year,
                                   bool showGreenhouseSow, bool showNames) const
 {
-    //    QElapsedTimer timer;
-    //    timer.start();
     const auto sowingDate =
             QDate::fromString(record.value(QStringLiteral("sowing_date")).toString(), Qt::ISODate);
     const auto plantingDate =
@@ -1142,8 +1140,6 @@ QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year
     const qreal harvestWidth =
             Helpers::widthBetween(harvestStart + graphStart, seasonBegin, endHarvestDate);
 
-    //    qDebug() << "planting info map" << timer.elapsed() << "ms";
-
     return { { "graphStart", graphStart },
              { "growStart", growStart },
              { "harvestStart", harvestStart },
@@ -1161,6 +1157,10 @@ QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year
 QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool showFamilyColor,
                                   bool showNames) const
 {
-    return drawInfoMap(recordFromId("planting_view", plantingId), season, year, showFamilyColor,
-                       showNames);
+    QElapsedTimer timer;
+    timer.start();
+    auto map = drawInfoMap(recordFromId("planting_view", plantingId), season, year, showFamilyColor,
+                           showNames);
+    qDebug() << "planting info map" << timer.elapsed() << "ms";
+    return map;
 }
