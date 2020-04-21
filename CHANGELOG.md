@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
    greenhouse ones.
 
 ## Fixed
+ - *Field map* − Fix planting timegraph for pluriannual crops (#169).
  - *Field map* − Fix refreshing bug when switch to field map view.
  - *Crop map* − Fix editing bug.
 

@@ -233,7 +233,7 @@ QList<int> Location::plantings(int locationId, const QDate &seasonBeg, const QDa
                         "AND ((planting_date BETWEEN '%2' AND '%3') "
                         "  OR (beg_harvest_date BETWEEN '%2' AND '%3') "
                         "  OR (end_harvest_date BETWEEN '%2' AND '%3') "
-                        "  OR (planting_date <= '%2' AND '%2' <= end_harvest_date)) "
+                        "  OR (planting_date <= '%2' AND '%3' <= end_harvest_date)) "
                         "ORDER BY (planting_date)");
 
     return queryIds(queryString.arg(locationId).arg(begString).arg(endString), "planting_id");
@@ -252,7 +252,7 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate 
                         "AND ((planting_date    BETWEEN '%2' AND '%3') "
                         "  OR (beg_harvest_date BETWEEN '%2' AND '%3') "
                         "  OR (end_harvest_date BETWEEN '%2' AND '%3') "
-                        "  OR (planting_date < '%2' AND '%2' < end_harvest_date)) "
+                        "  OR (planting_date < '%2' AND '%3' < end_harvest_date)) "
                         "ORDER BY (planting_date)");
     return queryBuilder(queryString.arg(locationId).arg(begString).arg(endString));
 }
@@ -279,7 +279,8 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
                         "LEFT JOIN location USING (location_id) "
                         "WHERE ((planting_date    BETWEEN '%1' AND '%2') "
                         "    OR (beg_harvest_date BETWEEN '%1' AND '%2') "
-                        "    OR (end_harvest_date BETWEEN '%1' AND '%2')) "
+                        "    OR (end_harvest_date BETWEEN '%1' AND '%2') "
+                        "    OR (planting_date < '%2' AND '%3' < end_harvest_date)) "
                         "ORDER BY location_id, planting_date");
     return queryBuilder(queryString.arg(begString).arg(endString));
 }
