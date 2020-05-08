@@ -28,7 +28,7 @@ fix_project_version()
 set(COMPANY "L'Atelier paysan")
 set(COPYRIGHT "Copyright (c) 2018-2020 André Hoarau")
 
-option(MAKE_TESTS "Make the tests" OFF)
+option(MAKE_TESTS "Make the tests" ON)
 
 # Get the current working branch
 execute_process(
@@ -151,7 +151,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
 
 #if(MAKE_TESTS)
-#    enable_testing(true)
-#    include_directories("${PROJECT_SOURCE_DIR}/tests")
-#    add_subdirectory(tests)
+    enable_testing(true)
+    include_directories("${PROJECT_SOURCE_DIR}/tests")
+    add_subdirectory(tests)
 #endif()

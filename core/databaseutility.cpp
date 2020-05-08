@@ -120,7 +120,8 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 std::unique_ptr<QSqlQuery> DatabaseUtility::queryFromIdList(const QString &tableName,
                                                             const QList<int> &idList) const
 {
-    Q_ASSERT(!tableName.isEmpty());
+    if (tableName.isEmpty())
+        return {};
     if (idList.isEmpty())
         return {};
 
@@ -141,24 +142,13 @@ std::unique_ptr<QSqlQuery> DatabaseUtility::queryFromIdList(const QString &table
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
                                                         const QList<int> &idList) const
 {
-    Q_ASSERT(!tableName.isEmpty());
-    if (idList.isEmpty())
-        return {};
-
-    QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
-    QString ids = "";
-    int i;
-    for (i = 0; i < idList.length() - 1; ++i)
-        ids.append(QString::number(idList[i]) + ", ");
-    ids.append(QString::number(idList[i]));
-
-    QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
-    debugQuery(query);
+    auto query = queryFromIdList(tableName, idList);
+    debugQuery(*query);
 
     QList<QSqlRecord> recordList;
-    while (query.next())
-        if (query.isValid())
-            recordList.push_back(query.record());
+    while (query->next())
+        if (query->isValid())
+            recordList.push_back(query->record());
 
     return recordList;
 }
