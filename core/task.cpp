@@ -59,6 +59,7 @@ QString Task::implement(int taskId) const
     return record.value("implement").toString();
 }
 
+// TODO: refactor
 QString Task::description(int taskId, int year) const
 {
     auto taskRecord = recordFromId("task_view", taskId);

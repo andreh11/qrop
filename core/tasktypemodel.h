@@ -38,6 +38,7 @@ protected:
 
 private:
     bool m_showPlantingTasks { true };
+    bool isPlantingTask(int sourceRow, const QModelIndex &sourceParent) const;
 
 signals:
     void showPlantingTasksChanged();

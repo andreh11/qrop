@@ -46,7 +46,7 @@ private:
     QList<int> m_plantingIdList;
     QList<int> m_plantingTemplateList;
     TaskTemplate *mTaskTemplate;
-    bool isApplied(int templateId) const;
+    bool applied(int templateId) const;
     void refreshTemplateList();
 };
 

@@ -34,11 +34,14 @@ bool NoteModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
     return leftCrop < rightCrop;
 }
 
+bool NoteModel::hasPlantingId(int sourceRow, const QModelIndex &sourceParent) const
+{
+    int plantingId = sourceRowValue(sourceRow, sourceParent, "planting_id").toInt();
+    return plantingId == m_plantingId;
+}
+
 bool NoteModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (m_plantingId < 0)
-        return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
-    int plantingId = sourceRowValue(sourceRow, sourceParent, "planting_id").toInt();
-    return plantingId == m_plantingId
+    return ((m_plantingId < 0) || hasPlantingId(sourceRow, sourceParent))
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

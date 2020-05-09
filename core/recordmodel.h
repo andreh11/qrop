@@ -24,7 +24,8 @@ public:
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
-    // private:
+private:
+    bool inYear(int sourceRow, const QModelIndex &sourceParent) const;
     //    int m_plantingId { -1 };
 };
 

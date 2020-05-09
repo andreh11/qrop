@@ -57,8 +57,9 @@ void TaskTemplateModel::toggle(int row)
 
     auto idx = index(row, 0);
 
-    auto templateId = sourceRowValue(mapToSource(idx).row(), QModelIndex(), "task_template_id").toInt();
-    if (isApplied(templateId))
+    auto templateId =
+            sourceRowValue(mapToSource(idx).row(), QModelIndex(), "task_template_id").toInt();
+    if (applied(templateId))
         mTaskTemplate->unapplyList(templateId, m_plantingIdList);
     else
         mTaskTemplate->applyList(templateId, m_plantingIdList);
@@ -70,10 +71,11 @@ void TaskTemplateModel::toggle(int row)
 QVariant TaskTemplateModel::data(const QModelIndex &idx, int role) const
 {
     QModelIndex sourceIndex = mapToSource(idx);
-    auto templateId = sourceRowValue(sourceIndex.row(), sourceIndex.parent(), "task_template_id").toInt();
+    auto templateId =
+            sourceRowValue(sourceIndex.row(), sourceIndex.parent(), "task_template_id").toInt();
     switch (role) {
     case AppliedRole:
-        return isApplied(templateId);
+        return applied(templateId);
     default:
         return SortFilterProxyModel::data(idx, role);
     }
@@ -86,7 +88,7 @@ QHash<int, QByteArray> TaskTemplateModel::roleNames() const
     return roles;
 }
 
-bool TaskTemplateModel::isApplied(int templateId) const
+bool TaskTemplateModel::applied(int templateId) const
 {
     return m_plantingTemplateList.contains(templateId);
 }
