@@ -1,9 +1,29 @@
+#include <QtTest>
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QDate>
 
-#include "tst_mdate.h"
 #include "mdate.h"
+
+class tst_MDate : public QObject
+{
+    Q_OBJECT
+
+public:
+    tst_MDate();
+    ~tst_MDate();
+
+private slots:
+    void dateFromWeekString();
+    void dateFromDateString();
+    void firstMondayOfYear_data();
+    void firstMondayOfYear();
+    //    void weekDates_data();
+    //    void weekDates();
+    void formatDate();
+    void season();
+    void seasonYear();
+};
 
 tst_MDate::tst_MDate() = default;
 
@@ -94,4 +114,6 @@ void tst_MDate::seasonYear()
     QCOMPARE(MDate::seasonYear(QDate(2003, 12, 1)), 2004);
 }
 
-QTEST_MAIN(tst_MDate)
+QTEST_APPLESS_MAIN(tst_MDate)
+
+#include "tst_mdate.moc"

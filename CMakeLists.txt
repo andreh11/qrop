@@ -130,6 +130,10 @@ set(SOURCE_FILES
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
+enable_testing()
+include_directories("${PROJECT_SOURCE_DIR}/tests")
+add_subdirectory(tests)
+
 if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(QML_FILES desktop/qml.qrc)
 endif()
@@ -149,9 +153,3 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Sql)
-
-#if(MAKE_TESTS)
-    enable_testing(true)
-    include_directories("${PROJECT_SOURCE_DIR}/tests")
-    add_subdirectory(tests)
-#endif()
