@@ -22,7 +22,6 @@ add_library(core SHARED
         inputmodel.cpp
         keyword.cpp
         keywordmodel.cpp
-        listmodel.cpp
         location.cpp
         locationmodel.cpp
         mdate.cpp
