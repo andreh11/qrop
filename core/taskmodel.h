@@ -88,14 +88,16 @@ private:
     bool m_showOverdue { false };
     int m_plantingId { -1 };
 
+    Location *m_location;
+    Planting *m_planting;
+    Task *m_task;
+
     void updateWeekDates();
     bool done(int row, const QModelIndex &parent) const;
     bool due(int row, const QModelIndex &parent) const;
     bool overdue(int row, const QModelIndex &parent) const;
-
-    Location *mLocation;
-    Planting *mPlanting;
-    Task *mTask;
+    bool assignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const;
+    bool inDateRange(int sourceRow, const QModelIndex &sourceParent) const;
 };
 
 #endif // TASKMODEL_H

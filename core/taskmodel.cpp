@@ -29,9 +29,9 @@
 
 TaskModel::TaskModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , mLocation(new Location(this))
-    , mPlanting(new Planting(this))
-    , mTask(new Task(this))
+    , m_location(new Location(this))
+    , m_planting(new Planting(this))
+    , m_task(new Task(this))
 {
     setSortColumn("assigned_date");
     m_filterDate = QDate();
@@ -41,20 +41,14 @@ TaskModel::TaskModel(QObject *parent, const QString &tableName)
 void TaskModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
-    QElapsedTimer timer;
-    timer.start();
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug() << "sortColumn time:" << timer.elapsed() << "ms";
     sortColumnChanged();
 }
 
 void TaskModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
-    QElapsedTimer timer;
-    timer.start();
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    qDebug() << "sortOrder time:" << timer.elapsed() << "ms";
     sortOrderChanged();
 }
 
@@ -303,20 +297,26 @@ bool TaskModel::overdue(int row, const QModelIndex &parent) const
     return !completed && assignedDate < m_mondayDate && MDate::isoYear(assignedDate) == m_year;
 }
 
-bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool TaskModel::assignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (m_plantingId > 0) {
-        auto plantingString = sourceRowValue(sourceRow, sourceParent, "plantings").toString();
-        QList<int> plantingIdList;
-        for (const auto &plantingId : plantingString.split(","))
-            plantingIdList.push_back(plantingId.toInt());
+    auto plantingString = sourceRowValue(sourceRow, sourceParent, "plantings").toString();
+    QList<int> plantingIdList;
+    for (const auto &plantingId : plantingString.split(","))
+        plantingIdList.push_back(plantingId.toInt());
 
-        return plantingIdList.contains(m_plantingId)
-                && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
-    }
+    return plantingIdList.contains(m_plantingId);
+}
 
-    bool inRange = (m_showOverdue && overdue(sourceRow, sourceParent))
+bool TaskModel::inDateRange(int sourceRow, const QModelIndex &sourceParent) const
+{
+    return (m_showOverdue && overdue(sourceRow, sourceParent))
             || (m_showDue && due(sourceRow, sourceParent))
             || (m_showDone && done(sourceRow, sourceParent));
-    return inRange && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+}
+
+bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    return (m_plantingId > 0 ? assignedToPlanting(sourceRow, sourceParent)
+                             : inDateRange(sourceRow, sourceParent))
+            && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

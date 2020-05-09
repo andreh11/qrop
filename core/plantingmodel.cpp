@@ -139,11 +139,6 @@ bool PlantingModel::showOnlyGreenhouse() const
     return m_showOnlyGreenhouse;
 }
 
-bool PlantingModel::showOnlyField() const
-{
-    return m_showOnlyField;
-}
-
 void PlantingModel::setShowOnlyGreenhouse(bool show)
 {
     if (m_showOnlyGreenhouse == show)
@@ -152,6 +147,11 @@ void PlantingModel::setShowOnlyGreenhouse(bool show)
     m_showOnlyGreenhouse = show;
     invalidateFilter();
     emit showOnlyGreenhouseChanged();
+}
+
+bool PlantingModel::showOnlyField() const
+{
+    return m_showOnlyField;
 }
 
 void PlantingModel::setShowOnlyField(bool show)
@@ -209,6 +209,7 @@ void PlantingModel::setKeywordId(int keywordId)
     emit keywordIdChanged();
 }
 
+/* TODO: remove, this shouldn't be in a model */
 int PlantingModel::revenue() const
 {
     QString queryString("SELECT SUM(bed_revenue) "
@@ -218,6 +219,7 @@ int PlantingModel::revenue() const
     return query.value(0).toInt();
 }
 
+/* TODO: remove, this shouldn't be in a model */
 qreal PlantingModel::totalBedLength() const
 {
     QString queryString("SELECT SUM(length) "
@@ -238,9 +240,9 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     bool inGreenhouse = sourceRowValue(sourceRow, sourceParent, "in_greenhouse").toInt() > 0;
     int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
 
-    bool inRange = (isDateInRange(sowingDate) || isDateInRange(plantingDate)
-                    || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate)
-                    || (plantingDate < seasonDates().first && harvestEndDate > seasonDates().second))
+    return (isDateInRange(sowingDate) || isDateInRange(plantingDate)
+            || isDateInRange(harvestBeginDate) || isDateInRange(harvestEndDate)
+            || (plantingDate < seasonDates().first && harvestEndDate > seasonDates().second))
             && (!m_showActivePlantings
                 || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
             && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId))
@@ -250,7 +252,6 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             && (m_cropId < 1 || cropId == m_cropId)
             && (m_keywordId < 1
                 || Helpers::listOfInt(sourceRowValue(sourceRow, sourceParent, "keyword_ids").toString())
-                           .contains(m_keywordId));
-
-    return inRange && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+                           .contains(m_keywordId))
+            && QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }
