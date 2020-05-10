@@ -70,6 +70,19 @@ void DatabaseUtility::setIdFieldName(const QString &name)
     m_idFieldName = name;
 }
 
+std::unique_ptr<QSqlQuery> DatabaseUtility::buildQuery(const QString &queryString) const
+{
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString);
+    query->exec();
+    if (query->lastError().type() != QSqlError::ErrorType::NoError) {
+        qWarning() << "[Query ERROR] " << query->lastError().text();
+        qWarning() << "[Query TEXT]: " << query->lastQuery();
+    }
+    return query;
+}
+
 void DatabaseUtility::debugQuery(const QSqlQuery &query) const
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
@@ -336,17 +349,4 @@ QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
     }
 
     return common;
-}
-
-std::unique_ptr<QSqlQuery> DatabaseUtility::queryBuilder(const QString &queryString)
-{
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(queryString);
-    query->exec();
-    if (query->lastError().type() != QSqlError::ErrorType::NoError) {
-        qWarning() << "[Query ERROR] " << query->lastError().text();
-        qWarning() << "[Query TEXT]: " << query->lastQuery();
-    }
-    return query;
 }

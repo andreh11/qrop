@@ -427,7 +427,7 @@ void Planting::duplicateListToYear(const QList<int> &idList, int year) const
 
 QList<int> Planting::yearPlantingList(int year) const
 {
-    QString queryString("SELECT *, strftime('%Y', planting_date) AS planting_year "
+    QString queryString("SELECT planting_id, strftime('%Y', planting_date) AS planting_year "
                         "FROM planting_view "
                         "WHERE planting_year = '%1'");
 

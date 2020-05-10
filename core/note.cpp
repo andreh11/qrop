@@ -122,6 +122,6 @@ void Note::addPhoto(const QUrl &path, int noteId) const
 
 QList<int> Note::photoList(int noteId) const
 {
-    QString queryString = "SELECT * FROM note_file WHERE note_id = %1";
+    QString queryString = "SELECT file_id FROM note_file WHERE note_id = %1";
     return queryIds(queryString.arg(noteId), "file_id");
 }

@@ -177,7 +177,7 @@ QString Location::fullNameList(const QList<int> &locationIdList) const
 /** Return the ids of the locations to which \a plantingId is assigned. */
 QList<int> Location::locations(int plantingId) const
 {
-    QString queryString("SELECT * FROM planting_location WHERE planting_id = %1");
+    QString queryString("SELECT location_id FROM planting_location WHERE planting_id = %1");
     return queryIds(queryString.arg(plantingId), "location_id");
 }
 
@@ -208,7 +208,7 @@ QList<int> Location::plantings(int locationId) const
 QList<int> Location::plantings(int locationId, const QDate &last) const
 {
     QString lastDateString = last.toString(Qt::ISODate);
-    QString queryString("SELECT * FROM planting_location "
+    QString queryString("SELECT planting_id FROM planting_location "
                         "LEFT JOIN planting_view USING (planting_id) "
                         "WHERE location_id = %1 "
                         "AND ((planting_date AND planting_date <= '%2') "
@@ -254,7 +254,7 @@ std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, const QDate 
                         "  OR (end_harvest_date BETWEEN '%2' AND '%3') "
                         "  OR (planting_date < '%2' AND '%3' < end_harvest_date)) "
                         "ORDER BY (planting_date)");
-    return queryBuilder(queryString.arg(locationId).arg(begString).arg(endString));
+    return buildQuery(queryString.arg(locationId).arg(begString).arg(endString));
 }
 
 std::unique_ptr<QSqlQuery> Location::plantingsQuery(int locationId, int season, int year) const
@@ -282,7 +282,7 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
                         "    OR (end_harvest_date BETWEEN '%1' AND '%2') "
                         "    OR (planting_date < '%2' AND '%3' < end_harvest_date)) "
                         "ORDER BY location_id, planting_date");
-    return queryBuilder(queryString.arg(begString).arg(endString));
+    return buildQuery(queryString.arg(begString).arg(endString));
 }
 
 QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
@@ -310,7 +310,7 @@ QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &
 
 QList<int> Location::children(int locationId) const
 {
-    QString queryString("SELECT * FROM location WHERE parent_id = %1");
+    QString queryString("SELECT location_id FROM location WHERE parent_id = %1");
     return queryIds(queryString.arg(locationId), "location_id");
 }
 
@@ -527,7 +527,7 @@ std::unique_ptr<QSqlQuery> Location::allPlantingTasksQuery(const QDate &seasonBe
                         "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY planting_id "
                         "ORDER BY planting_id");
-    return queryBuilder(queryString.arg(begString).arg(endString));
+    return buildQuery(queryString.arg(begString).arg(endString));
 }
 
 std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBeg,
@@ -545,7 +545,7 @@ std::unique_ptr<QSqlQuery> Location::allLocationTasksQuery(const QDate &seasonBe
                         "OR (date(completed_date, duration || ' days') BETWEEN '%1' AND '%2')) "
                         "GROUP BY location_id "
                         "ORDER BY location_id");
-    return queryBuilder(queryString.arg(begString).arg(endString));
+    return buildQuery(queryString.arg(begString).arg(endString));
 }
 
 QMap<int, QVariantList> Location::allNonOverlappingTaskList(const QMap<int, QVariantList> &plantingMap,
@@ -748,7 +748,7 @@ std::unique_ptr<QSqlQuery> Location::allHistoryQuery(int season, int year) const
             "LEFT JOIN planting_view USING (planting_id) "
             "WHERE planting_date BETWEEN '%1' AND '%2' "
             "ORDER BY location_id ASC, planting_date DESC");
-    return queryBuilder(queryString.arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
+    return buildQuery(queryString.arg(begin.toString(Qt::ISODate)).arg(end.toString(Qt::ISODate)));
 }
 
 /**

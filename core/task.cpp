@@ -304,25 +304,25 @@ void Task::removeLocationTasks(int locationId) const
 
 QList<int> Task::plantingTasks(int plantingId) const
 {
-    QString queryString = "SELECT * FROM planting_task WHERE planting_id = %1";
+    QString queryString = "SELECT task_id FROM planting_task WHERE planting_id = %1";
     return queryIds(queryString.arg(plantingId), "task_id");
 }
 
 QList<int> Task::taskPlantings(int taskId) const
 {
-    QString queryString = "SELECT * FROM planting_task WHERE task_id = %1";
+    QString queryString = "SELECT planting_id FROM planting_task WHERE task_id = %1";
     return queryIds(queryString.arg(taskId), "planting_id");
 }
 
 QList<int> Task::locationTasks(int locationId) const
 {
-    QString queryString = "SELECT * FROM location_task WHERE location_id = %1";
+    QString queryString = "SELECT task_id FROM location_task WHERE location_id = %1";
     return queryIds(queryString.arg(locationId), "task_id");
 }
 
 QList<int> Task::taskLocations(int taskId) const
 {
-    QString queryString = "SELECT * FROM location_task WHERE task_id = %1";
+    QString queryString = "SELECT location_id FROM location_task WHERE task_id = %1";
     return queryIds(queryString.arg(taskId), "location_id");
 }
 
