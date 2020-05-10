@@ -6,10 +6,10 @@
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT PictureImageProvider : public QQuickImageProvider
+class CORESHARED_EXPORT QrpImageProvider : public QQuickImageProvider
 {
 public:
-    PictureImageProvider();
+    QrpImageProvider();
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
 };
 

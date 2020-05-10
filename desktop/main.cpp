@@ -44,7 +44,7 @@
 #include "location.h"
 #include "mdate.h"
 #include "note.h"
-#include "pictureimageprovider.h"
+#include "qrpimageprovider.h"
 #include "planting.h"
 #include "print.h"
 #include "seedcompany.h"
@@ -360,7 +360,7 @@ int main(int argc, char *argv[])
             },
             Qt::QueuedConnection);
     engine.load(url);
-    engine.addImageProvider("pictures", new PictureImageProvider());
+    engine.addImageProvider("pictures", new QrpImageProvider());
 
     return app.exec();
 }

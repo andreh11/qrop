@@ -16,11 +16,6 @@
 
 pragma Singleton
 import QtQuick 2.0
-import Qt.labs.settings 1.0
-import QtQuick.Controls 2.4
-import QtQuick.Controls.Material 2.0
-
-import io.qrop.components 1.0
 
 QtObject {
     // font sizes - defaults from Google Material Design Guide
@@ -105,14 +100,6 @@ QtObject {
 
     function position(seasonBegin, date) {
         return coordinate(MDate.daysTo(seasonBegin, date))
-    }
-
-    function bedLength(length) {
-        if (settings.useStandardBedLength) {
-            return length/settings.standardBedLength
-        } else {
-            return length
-        }
     }
 
     // Set item to value only if it has not been manually modified by

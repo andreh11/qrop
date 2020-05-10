@@ -2,14 +2,14 @@
 #include <QDebug>
 #include <QByteArray>
 
-#include "pictureimageprovider.h"
+#include "qrpimageprovider.h"
 
-PictureImageProvider::PictureImageProvider()
+QrpImageProvider::QrpImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
 }
 
-QPixmap PictureImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+QPixmap QrpImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)

@@ -59,7 +59,7 @@ Dialog {
             
             Label {
                 width: parent.width
-                text: "v%1 (%2)".arg(BuildInfo.version).arg(BuildInfo.commit)
+                text: "v%1 (%2/%3)".arg(BuildInfo.version).arg(BuildInfo.commit).arg(BuildInfo.branch)
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize:  Units.fontSizeBodyAndButton

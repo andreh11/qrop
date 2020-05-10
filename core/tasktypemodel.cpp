@@ -45,6 +45,6 @@ bool TaskTypeModel::isPlantingTask(int sourceRow, const QModelIndex &sourceParen
 
 bool TaskTypeModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    return (m_showPlantingTasks || isPlantingTask(sourceRow, sourceParent))
+    return (m_showPlantingTasks || !isPlantingTask(sourceRow, sourceParent))
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

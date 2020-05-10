@@ -16,6 +16,12 @@ BuildInfo::BuildInfo(QObject *parent)
 #else
     m_commit(tr("Unknown commit hash"))
 #endif
+    ,
+#ifdef GIT_BRANCH
+    m_branch(GIT_BRANCH)
+#else
+    m_branch(tr("Unknown commit branch"))
+#endif
 {
 }
 
@@ -29,4 +35,10 @@ QString BuildInfo::commit() const
 {
     qDebug() << "COMMIT" << m_commit;
     return m_commit;
+}
+
+QString BuildInfo::branch() const
+{
+    qDebug() << "BRANCH" << m_branch;
+    return m_branch;
 }

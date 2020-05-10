@@ -28,7 +28,7 @@ add_library(core SHARED
         nametree.cpp
         note.cpp
         notemodel.cpp
-        pictureimageprovider.cpp
+        qrpimageprovider.cpp
         planting.cpp
         plantingmodel.cpp
         print.cpp

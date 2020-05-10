@@ -25,12 +25,12 @@
 class CORESHARED_EXPORT VarietyModel : public SortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(int cropId READ cropId WRITE setFilterCropId NOTIFY cropIdChanged)
+    Q_PROPERTY(int cropId READ cropId WRITE setCropId NOTIFY cropIdChanged)
 
 public:
     explicit VarietyModel(QObject *parent = nullptr, const QString &tableName = "variety_view");
     int cropId() const;
-    void setFilterCropId(int cropId);
+    void setCropId(int cropId);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -39,7 +39,7 @@ signals:
     void cropIdChanged();
 
 private:
-    int m_cropId{-1};
+    int m_cropId { -1 };
 };
 
 #endif // VARIETYMODEL_H
