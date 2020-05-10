@@ -130,9 +130,26 @@ set(SOURCE_FILES
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
-enable_testing()
-include_directories("${PROJECT_SOURCE_DIR}/tests")
-add_subdirectory(tests)
+# Tests
+set(ENABLE_TESTS TRUE CACHE BOOL "Build unit tests?")
+if (ENABLE_TESTS)
+    set(QT_USE_QTTEST TRUE)
+    enable_testing()
+    include_directories("${PROJECT_SOURCE_DIR}/tests")
+    add_subdirectory(tests)
+endif(ENABLE_TESTS)
+
+# Code coverage
+set(ENABLE_COVERAGE FALSE)
+IF(ENABLE_COVERAGE)
+  INCLUDE("cmake/modules/coverage/CodeCoverage.cmake")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+  SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+  SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+  SETUP_TARGET_FOR_COVERAGE(qrop_coverage ctest coverage)
+ENDIF(ENABLE_COVERAGE)
 
 if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(QML_FILES desktop/qml.qrc)
