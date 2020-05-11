@@ -93,11 +93,12 @@ private:
     Task *m_task;
 
     void updateWeekDates();
+    bool showPlantingTasks() const;
     bool done(int row, const QModelIndex &parent) const;
     bool due(int row, const QModelIndex &parent) const;
     bool overdue(int row, const QModelIndex &parent) const;
-    bool assignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const;
-    bool inDateRange(int sourceRow, const QModelIndex &sourceParent) const;
+    bool isAssignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const;
+    bool isInSeason(int sourceRow, const QModelIndex &sourceParent) const;
 };
 
 #endif // TASKMODEL_H

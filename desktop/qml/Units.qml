@@ -16,6 +16,7 @@
 
 pragma Singleton
 import QtQuick 2.0
+import QtQuick.Controls.Material 2.0
 
 QtObject {
     // font sizes - defaults from Google Material Design Guide
@@ -48,13 +49,19 @@ QtObject {
         "capitalization": Font.AllUppercase
     }
 
+    readonly property var headerFont: {
+        "family": "Roboto Medium"
+    }
+
     readonly property int smallSpacing: 8
     readonly property int formSpacing: 16
     readonly property int mediumSpacing: 20
     readonly property int largeSpacing: 24
 
-    readonly property int tableHeaderHeight: 56
-    readonly property int tableRowHeight: 52
+//    readonly property int tableHeaderHeight: 56
+//    readonly property int tableRowHeight: 52
+    readonly property int tableHeaderHeight: 46
+    readonly property int tableRowHeight: 42
 
     readonly property int desktopSideSheetWidth: 320
     readonly property color closeButtonColor: Qt.rgba(0.459, 0.459, 0.459)
@@ -81,26 +88,6 @@ QtObject {
     readonly property color pageColor: Material.color(Material.Grey, Material.Shade100)
 
     readonly property int dialogHeaderHeight: 72
-
-    function coordinate(day) {
-        if (day < 0)
-            return 0;
-        else if (day > 365)
-            return timegraphWidth;
-        else
-            return (day / 365.0) * timegraphWidth;
-    }
-
-    function widthBetween(pos, seasonBegin, date) {
-        var width = position(seasonBegin, date) - pos;
-        if (width < 0)
-            return 0;
-        return width;
-    }
-
-    function position(seasonBegin, date) {
-        return coordinate(MDate.daysTo(seasonBegin, date))
-    }
 
     // Set item to value only if it has not been manually modified by
     // the user. To do this, we use the manuallyModified boolean value.

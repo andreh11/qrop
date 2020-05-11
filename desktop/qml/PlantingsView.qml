@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2020 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ ListView {
     property alias showOnlyGreenhouse: plantingModel.showOnlyGreenhouse
     property alias showOnlyField: plantingModel.showOnlyField
     property alias showOnlyUnassigned: plantingModel.showOnlyUnassigned
+    property alias showFinished: plantingModel.showFinished
     property alias rowCount: plantingModel.rowCount
     property bool showOnlyActiveColor: false
     property bool showFamilyColor: false
@@ -51,7 +52,7 @@ ListView {
     property bool showTimegraph: true
     property bool dragActive: false
     property string filterColumn: "crop"
-    property int tableSortColumn: 5
+    property int tableSortColumn: 4
     property string tableSortOrder: "ascending"
 
     property var tableHeaderModel: [{

@@ -474,8 +474,8 @@ Page {
                     height: headerRow.height
                     width: parent.width
                     radius: 4
-
                     z: 3
+
                     Column {
                         width: parent.width
 

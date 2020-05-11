@@ -30,8 +30,11 @@ ItemDelegate {
     property bool showToolTip: true
 
     focusPolicy: Qt.NoFocus
-    height: 48
-    highlighted: isActive
+//    height: 72
+//    width: 72
+    implicitHeight: 56
+    implicitWidth: 72
+//    highlighted: isActive
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
 
@@ -43,32 +46,47 @@ ItemDelegate {
         delay: Qt.styleHints.mousePressAndHoldInterval
     }
 
-    contentItem: Row {
-        anchors.centerIn: parent
-        spacing: largeDisplay && railMode ? 0 : 24
 
-        Label {
-            id: iconLabel
-            color: "white"
-            width: 28
-            anchors.verticalCenter: parent.verticalCenter
-            font.family: "Material Icons"
-            font.pixelSize: 28
-            horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
+   contentItem: Item {
+       anchors.fill: parent
 
-        Label {
-            id: textLabel
-            text: control.text
-            color: "white"
-            anchors.verticalCenter: parent.verticalCenter
-            visible: !largeDisplay
-            width: visible ? implicitWidth : 0
-            font.family: "Roboto Regular"
-            verticalAlignment: Text.AlignVCenter
+    Label {
+        id: iconLabel
+        width: 24
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: isActive ? 14 : 16
         }
+        color: isActive ? Material.accent : Units.colorMediumEmphasis
+        font.family: "Material Icons"
+        font.pixelSize: 22
+        horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
     }
+
+    Label {
+        id: textLabel
+        visible: isActive
+        width: Math.min(parent.width - 2, implicitWidth)
+        text: control.text
+        font.family: "Roboto Condensed"
+        font.pixelSize: Units.fontSizeBodyAndButton
+        elide: Text.ElideRight
+        //            color: "white"
+        color: iconLabel.color
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: iconLabel.bottom
+            topMargin: 2
+        }
+
+        //            visible: !largeDisplay
+        //            width: visible ? implicitWidth : 0
+        //            height:
+        verticalAlignment: Text.AlignVCenter
+    }
+   }
 
 }

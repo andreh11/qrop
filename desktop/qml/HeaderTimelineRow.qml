@@ -25,8 +25,9 @@ Row {
 //                text: Qt.locale().monthName(modelData, Locale.ShortFormat)
                 text: MDate.shortMonthName(modelData + 1)
                 anchors.left: lineRectangle.right
-                font.family: "Roboto Condensed"
-                color: Material.color(Material.Grey, Material.Shade700)
+                font.family: Units.headerFont["family"]
+                font.pixelSize: Units.fontSizeTable
+                color: Units.colorHighEmphasis
                 width: 60 - 1
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter

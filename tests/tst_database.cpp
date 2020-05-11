@@ -51,8 +51,6 @@ void tst_Database::connectToDatabase()
     QVERIFY(QSqlDatabase::database().isValid());
 }
 
-// QTEST_MAIN(tst_Database)
-
 QTEST_APPLESS_MAIN(tst_Database)
 
 #include "tst_database.moc"

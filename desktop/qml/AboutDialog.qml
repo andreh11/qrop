@@ -25,7 +25,7 @@ import QtQuick.Window 2.10
 import io.qrop.components 1.0
 
 Dialog {
-    id: aboutDialog
+    id: root
     modal: true
     focus: true
     title: qsTr("About Qrop")
@@ -37,7 +37,7 @@ Dialog {
         Column {
             id: aboutColumn
             spacing: Units.mediumSpacing
-            width: aboutDialog.availableWidth -  2 * Units.smallSpacing
+            width: root.availableWidth -  2 * Units.smallSpacing
             
             Image {
                 id: image

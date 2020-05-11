@@ -23,7 +23,7 @@ import Qt.labs.settings 1.0
 import io.qrop.components 1.0
 
 Item {
-    id: control
+    id: root
 
     property int season: 2
     property int year
@@ -65,7 +65,7 @@ Item {
 
     Rectangle {
         id: todayLine
-        x: Units.position(seasonBegin, todayDate)
+        x: Helpers.position(seasonBegin, todayDate)
         z: 3
         visible: x != 0 && x != graphWidth
         width: 1
@@ -77,13 +77,13 @@ Item {
     }
 
     TaskTimeline {
-        id: taskTimegraphView
+        id: taskTimeline
         anchors.fill: parent
         visible: showTasks
         model: taskIdList
-        seasonBegin: control.seasonBegin
-        season: control.season
-        year: control.year
+        seasonBegin: root.seasonBegin
+        season: root.season
+        year: root.year
     }
 
     Item {
@@ -96,23 +96,23 @@ Item {
                 plantingId: modelData
 //                plantingId: modelData["plantingId"]
 //                drawMap: modelData
-                locationId: control.locationId
-                locationLength: control.locationLength
-                todayDate: control.todayDate
-                seasonBegin: control.seasonBegin
-                season: control.season
-                year: control.year
-                dragActive: control.dragActive
+                locationId: root.locationId
+                locationLength: root.locationLength
+                todayDate: root.todayDate
+                seasonBegin: root.seasonBegin
+                season: root.season
+                year: root.year
+                dragActive: root.dragActive
 
-                showGreenhouseSow: control.showGreenhouseSow
-                showNames: control.showNames
-                showOnlyActiveColor: control.showOnlyActiveColor
-                showFamilyColor: control.showFamilyColor
+                showGreenhouseSow: root.showGreenhouseSow
+                showNames: root.showNames
+                showOnlyActiveColor: root.showOnlyActiveColor
+                showFamilyColor: root.showFamilyColor
 
-                onSelected: control.plantingClicked(plantingId)
-                onPlantingMoved: control.plantingMoved();
-                onPlantingRemoved: control.plantingRemoved();
-                onDragFinished: control.dragFinished();
+                onSelected: root.plantingClicked(plantingId)
+                onPlantingMoved: root.plantingMoved();
+                onPlantingRemoved: root.plantingRemoved();
+                onDragFinished: root.dragFinished();
             }
         }
     }

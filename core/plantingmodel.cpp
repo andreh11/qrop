@@ -209,14 +209,32 @@ void PlantingModel::setKeywordId(int keywordId)
     emit keywordIdChanged();
 }
 
-/* TODO: remove, this shouldn't be in a model */
+bool PlantingModel::showFinished() const
+{
+    return m_showFinished;
+}
+
+void PlantingModel::setShowFinished(bool show)
+{
+    if (m_showFinished == show)
+        return;
+
+    m_showFinished = show;
+    invalidateFilter();
+    emit showFinishedChanged();
+}
+
 int PlantingModel::revenue() const
 {
-    QString queryString("SELECT SUM(bed_revenue) "
-                        "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
-    QSqlQuery query(queryString.arg(m_year));
-    query.next();
-    return query.value(0).toInt();
+    int revenue = 0;
+    QDate harvestDate;
+    for (int row = 0; row < rowCount(); ++row) {
+        harvestDate = QDate::fromString(rowValue(row, "beg_harvest_date").toString(), Qt::ISODate);
+        if (isDateInRange(harvestDate)) {
+            revenue += rowValue(row, "bed_revenue").toInt();
+        }
+    }
+    return revenue;
 }
 
 /* TODO: remove, this shouldn't be in a model */
@@ -238,6 +256,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
     QDate harvestBeginDate = sourceFieldDate(sourceRow, sourceParent, "beg_harvest_date");
     QDate harvestEndDate = sourceFieldDate(sourceRow, sourceParent, "end_harvest_date");
     bool inGreenhouse = sourceRowValue(sourceRow, sourceParent, "in_greenhouse").toInt() > 0;
+    bool isFinished = sourceRowValue(sourceRow, sourceParent, "finished").toInt() > 0;
     int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
 
     return (isDateInRange(sowingDate) || isDateInRange(plantingDate)
@@ -249,7 +268,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             && (!m_showOnlyGreenhouse || inGreenhouse) && (!m_showOnlyField || !inGreenhouse)
             && (!m_showOnlyHarvested
                 || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
-            && (m_cropId < 1 || cropId == m_cropId)
+            && (m_showFinished || !isFinished) && (m_cropId < 1 || cropId == m_cropId)
             && (m_keywordId < 1
                 || Helpers::listOfInt(sourceRowValue(sourceRow, sourceParent, "keyword_ids").toString())
                            .contains(m_keywordId))

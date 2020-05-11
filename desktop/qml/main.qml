@@ -72,8 +72,8 @@ ApplicationWindow {
     height: 768
     flags: Qt.Window
 
-    Material.primary: Material.Teal
-    Material.accent: Material.Blue
+    Material.primary: Material.color(Material.Teal, Material.Shade500)
+    Material.accent: Material.color(Material.Blue, Material.Shade600)
 
     onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
@@ -341,7 +341,7 @@ ApplicationWindow {
             ToolButton {
                 id: drawerButton
                 text: stackView.depth > 1 ? "\ue5c4" : "\ue5d2"
-                visible: !largeDisplay && !searchMode
+                visible: !searchMode
                 font.family: "Material Icons"
                 font.pixelSize: Units.fontSizeHeadline
                 onClicked: {
@@ -373,36 +373,49 @@ ApplicationWindow {
             Label {
                 id: titleLabel
                 text: stackView.currentItem.item.title
-                visible: !largeDisplay && !searchMode
+                visible: !searchMode
                 font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
-                Layout.fillWidth: true
+//                Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignLeft
                 verticalAlignment: Qt.AlignVCenter
             }
 
-            TextField  {
+            SearchField {
                 id: searchField
-                font.family: "Roboto Regular"
-                verticalAlignment: Qt.AlignVCenter
-                font.pixelSize: Units.fontSizeBodyAndButton
-                visible: largeDisplay || searchMode
-                color: "black"
-                placeholderText: qsTr("Search")
+                placeholderText: qsTr("Search Plantings")
                 Layout.fillWidth: true
-                background: Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height
-                }
+                inputMethodHints: Qt.ImhPreferLowercase
 
-                Shortcut {
-                    sequence : "Esc"
-                    onActivated: {
-                        searchField.clear()
-                        searchMode = false
-                    }
-                }
+                filterModel: [
+                    qsTr("All"),
+                    qsTr("Greenhouse"),
+                    qsTr("Field"),
+                ]
             }
+
+//            TextField  {
+//                id: searchField
+//                font.family: "Roboto Regular"
+//                verticalAlignment: Qt.AlignVCenter
+//                font.pixelSize: Units.fontSizeBodyAndButton
+//                visible: searchMode
+//                color: "black"
+//                placeholderText: qsTr("Search")
+//                Layout.fillWidth: true
+//                background: Rectangle {
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    height: parent.height
+//                }
+
+//                Shortcut {
+//                    sequence : "Esc"
+//                    onActivated: {
+//                        searchField.clear()
+//                        searchMode = false
+//                    }
+//                }
+//            }
 
             ToolButton {
                 id: saveButton
@@ -411,6 +424,7 @@ ApplicationWindow {
                 font.family: "Material Icons"
                 font.capitalization: Font.Capitalize
                 font.pixelSize: Units.fontSizeHeadline
+                Layout.margins: -padding
                 onClicked: {
                     stackView.currentItem.save()
                     stackView.pop()
@@ -418,15 +432,27 @@ ApplicationWindow {
                 }
             }
 
+//            ToolButton {
+//                id: searchButton
+//                visible: !searchMode && !showSaveButton
+//                text: "\ue8b6" // search
+//                font.family: "Material Icons"
+//                font.pixelSize: Units.fontSizeHeadline
+//                Layout.margins: -padding
+//                onClicked: {
+//                    searchMode = true
+//                    searchField.focus = true
+//                }
+//            }
+
             ToolButton {
-                id: searchButton
-                visible: !largeDisplay && !searchMode && !showSaveButton
-                text: "\ue8b6" // search
+                id: overflowMenu
+                visible: !searchMode
+                text: "\ue5d4" // menu
                 font.family: "Material Icons"
                 font.pixelSize: Units.fontSizeHeadline
+                Layout.margins: -padding
                 onClicked: {
-                    searchMode = true
-                    searchField.focus = true
                 }
             }
         }
@@ -435,18 +461,21 @@ ApplicationWindow {
     Drawer {
         id: drawer
         //        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
-        //        width: childrenRect.width
+//                width: childrenRect.width
         height: window.height
+//        width: 72
         //        height: window.height - toolBar.height
 //        y: menuBar.height
         modal: !largeDisplay
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
-        Material.background: Material.primary
+//        Material.background: Material.primary
+        Material.background: "white"
 
         ColumnLayout {
             anchors.fill: parent
+            spacing: 0
 
             Repeater {
                 model: navigationModel

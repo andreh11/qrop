@@ -37,6 +37,7 @@ Page {
 
     property bool showOnlyGreenhouse: filterField.filterIndex === 1
     property bool showOnlyField: filterField.filterIndex === 2
+    property alias showFinished: showFinishButton.checked
 
     property alias model: plantingsView.model
     property alias rowCount: plantingsView.rowCount
@@ -370,6 +371,22 @@ Page {
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
+                    IconButton {
+                        id: showFinishButton
+                        text: "\ue876"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: false
+
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide finished plantings") : qsTr("Show finished plantings")
+                    }
+
                     Button {
                         id: editButton
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
@@ -402,6 +419,73 @@ Page {
                         visible: checks > 0
                         Material.foreground: "white"
                         onClicked: removeSelected()
+                    }
+
+                    Button {
+                        id: finishiButton
+                        flat: true
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        text: qsTr("Finish")
+                        visible: checks > 0
+                        Material.foreground: "white"
+                        onClicked: finishDialog.open()
+                        Dialog {
+                            id: finishDialog
+                            title: qsTr("Finish plantings")
+                            y: parent.height
+                            margins: 0
+
+                            onAccepted: {
+                                Planting.finish(page.selectedIdList(), lvFinishReason.currentIndex);
+                                plantingsView.unselectAll();
+                                page.refresh();
+                            }
+
+                            ColumnLayout {
+                                Label {
+                                    text: qsTr("Why are you finishing these plantings?")
+                                    font.family: "Roboto Regular"
+                                    font.pixelSize: Units.fontSizeBodyAndButton
+                                }
+
+                            ListView {
+                                id: lvFinishReason
+                                width: parent.width
+                                height: childrenRect.height
+                                implicitHeight: childrenRect.height
+                                boundsBehavior: Flickable.StopAtBounds
+                                model: [
+                                    qsTr("Finished harvest "),
+                                    qsTr("Crop failure"),
+                                    qsTr("Never seeded"),
+                                    qsTr("Never transplanted")
+                                ]
+
+                                delegate: RadioButton {
+                                    text: modelData
+                                }
+
+                            }
+                            }
+
+                            footer: DialogButtonBox {
+                                Button {
+                                    flat: true
+                                    text: qsTr("Cancel")
+                                    Material.foreground: Material.accent
+                                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                                }
+
+                                Button {
+                                    Material.background: Material.accent
+                                    Material.foreground: "white"
+                                    text: qsTr("Finish")
+
+                                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                                }
+                            }
+                        }
+
                     }
 
                     Button {
@@ -537,6 +621,11 @@ Page {
                         season: MDate.season(todayDate)
                         year: MDate.seasonYear(todayDate)
                     }
+
+//                    TitleLabel {
+//                        title: "Revenue"
+//                        text: qsTr("%L1 €").arg(plantingsView.revenue)
+//                    }
 
                     IconButton {
                         id: menuButton
@@ -731,6 +820,7 @@ Page {
                 showTimegraph: page.showTimegraph
                 showOnlyGreenhouse: page.showOnlyGreenhouse
                 showOnlyField: page.showOnlyField
+                showFinished: page.showFinished
                 filterString: page.filterString
                 dragActive: false
                 anchors {

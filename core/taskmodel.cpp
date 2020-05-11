@@ -76,61 +76,6 @@ bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) cons
 
         before = leftDate < rightDate;
     }
-    //    else if (m_sortColumn == QStringLiteral("plantings")) {
-    //        int leftId = rowValue(left.row(), left.parent(), QStringLiteral("task_id")).toInt();
-    //        int rightId = rowValue(right.row(), right.parent(),
-    //        QStringLiteral("task_id")).toInt(); auto leftPlantingList =
-    //        mTask->taskPlantings(leftId); auto rightPlantingList = mTask->taskPlantings(rightId);
-
-    //        int leftPlantingId = leftPlantingList.isEmpty() ? -1 : leftPlantingList.first();
-    //        int rightPlantingId = rightPlantingList.isEmpty() ? -1 : rightPlantingList.first();
-
-    //        if (leftPlantingId == rightPlantingId) {
-    //            before = true;
-    //        } else if (leftPlantingId > 0 && rightPlantingId > 0) {
-    //            auto recordList = mPlanting->recordListFromIdList(QStringLiteral("planting_view"),
-    //                                                              { leftPlantingId, rightPlantingId });
-    //            auto leftRecord = recordList.at(0);
-    //            auto rightRecord = recordList.at(1);
-
-    //            QString leftCrop = leftRecord.value(QStringLiteral("crop")).toString();
-    //            QString rightCrop = rightRecord.value(QStringLiteral("crop")).toString();
-    //            int comp = leftCrop.compare(rightCrop);
-    //            if (comp == -1)
-    //                before = true;
-    //            else if (comp == 1)
-    //                before = false;
-    //            else
-    //                before = (leftRecord.value(QStringLiteral("variety"))
-    //                          < rightRecord.value(QStringLiteral("variety")));
-    //        }
-    //    } else if (m_sortColumn == QStringLiteral("locations")) {
-    //        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
-    //        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
-    //        auto leftLocationList = mTask->taskLocations(leftId);
-    //        auto rightLocationList = mTask->taskLocations(rightId);
-
-    //        if (leftLocationList.isEmpty()) { // planting task
-    //            auto leftPlantingList = mTask->taskPlantings(leftId);
-    //            if (!leftPlantingList.isEmpty())
-    //                leftLocationList = mLocation->locations(leftPlantingList.first());
-    //        }
-
-    //        if (rightLocationList.isEmpty()) { // planting task
-    //            auto rightPlantingList = mTask->taskPlantings(rightId);
-    //            if (!rightPlantingList.isEmpty())
-    //                rightLocationList = mLocation->locations(rightPlantingList.first());
-    //        }
-
-    //        int leftLocationId = leftLocationList.isEmpty() ? -1 : leftLocationList.first();
-    //        int rightLocationId = rightLocationList.isEmpty() ? -1 : rightLocationList.first();
-
-    //        before = mLocation->fullName(leftLocationId) < mLocation->fullName(rightLocationId);
-    //    } else if (m_sortColumn == "descr") {
-    //        int leftId = rowValue(left.row(), left.parent(), "task_id").toInt();
-    //        int rightId = rowValue(right.row(), right.parent(), "task_id").toInt();
-    //        before = mTask->description(leftId) < mTask->description(rightId);
-    //    }
 
     return before;
 }
@@ -297,7 +242,7 @@ bool TaskModel::overdue(int row, const QModelIndex &parent) const
     return !completed && assignedDate < m_mondayDate && MDate::isoYear(assignedDate) == m_year;
 }
 
-bool TaskModel::assignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const
+bool TaskModel::isAssignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const
 {
     auto plantingString = sourceRowValue(sourceRow, sourceParent, "plantings").toString();
     QList<int> plantingIdList;
@@ -307,16 +252,21 @@ bool TaskModel::assignedToPlanting(int sourceRow, const QModelIndex &sourceParen
     return plantingIdList.contains(m_plantingId);
 }
 
-bool TaskModel::inDateRange(int sourceRow, const QModelIndex &sourceParent) const
+bool TaskModel::isInSeason(int sourceRow, const QModelIndex &sourceParent) const
 {
     return (m_showOverdue && overdue(sourceRow, sourceParent))
             || (m_showDue && due(sourceRow, sourceParent))
             || (m_showDone && done(sourceRow, sourceParent));
 }
 
+bool TaskModel::showPlantingTasks() const
+{
+    return m_plantingId > 0;
+}
+
 bool TaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    return (m_plantingId > 0 ? assignedToPlanting(sourceRow, sourceParent)
-                             : inDateRange(sourceRow, sourceParent))
+    return (showPlantingTasks() ? isAssignedToPlanting(sourceRow, sourceParent)
+                                : isInSeason(sourceRow, sourceParent))
             && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

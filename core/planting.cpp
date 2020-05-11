@@ -94,7 +94,7 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-    const auto plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
+    const auto plantingDate = MDate::dateFromIsoString(map["planting_date"].toString());
     QVariantMap newMap(map);
     QList<int> idList;
 
@@ -382,6 +382,12 @@ int Planting::duplicate(int id) const
     m_task->duplicatePlantingTasks(id, newId);
     m_keyword->duplicateKeywords(id, newId);
     return newId;
+}
+
+void Planting::finish(const QList<int> &plantingIdList, int finishedReasonId)
+{
+    QVariantMap map({ { "finished", 1 }, { "finished_reason_id", finishedReasonId } });
+    DatabaseUtility::updateList(plantingIdList, map);
 }
 
 /**
