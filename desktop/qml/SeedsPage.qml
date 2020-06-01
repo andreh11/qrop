@@ -34,6 +34,7 @@ Page {
     property int checks: 0
     property alias listView: seedListView
     property date todayDate: new Date()
+    property bool shortcutEnabled: navigationIndex === 4
 
     property int tableSortColumn: 1
     property string tableSortOrder: "ascending"
@@ -96,36 +97,17 @@ Page {
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
     }
-
-    //    Shortcut {
-    //        sequences: ["Up", "Down", "Left", "Right"]
-    //        enabled: navigationIndex === 4
-    //        context: Qt.ApplicationShortcut
-    //        onActivated: {
-    //            seedListView.currentIndex = 0
-    //            seedListView.forceActiveFocus();
-    //        }
-    //    }
 
     SeedListModel {
         id: seedListModel
@@ -151,7 +133,6 @@ Page {
         sortOrder: tableSortOrder
     }
 
-
     TransplantListModel {
         id: transplantListModel
         year: page.year
@@ -168,11 +149,11 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("CSV (*.csv)")]
         onAccepted: {
-            if (seedsRadioButton.checked)
+            if (seedsRadioButton.checked) {
                 seedListModel.csvExport(file);
-            else
+            } else {
                 transplantListModel.csvExport(file);
-//                Print.printTransplantList(page.year, file);
+            }
         }
     }
 
@@ -184,11 +165,12 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
-            if (seedsRadioButton.checked)
+            if (seedsRadioButton.checked) {
                 Print.printSeedList(page.year, file, monthRangeButton.checked
                                     ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
-            else
+            } else {
                 Print.printTransplantList(page.year, file);
+            }
         }
     }
 

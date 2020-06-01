@@ -135,7 +135,7 @@ Dialog {
         property bool showAllPlantingIfNoneInWindow
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut

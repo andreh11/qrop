@@ -178,13 +178,6 @@ ComboBox {
 
                 Keys.priority: Keys.AfterItem
 
-//                Shortcut {
-//                    sequence: "Down"
-//                    enabled: listView.visible && listView.currentIndex === listView.count - 1 && showAddItem
-//                    context: Qt.ApplicationShortcut
-//                    onActivated: addItemRectangle.forceActiveFocus();
-//                }
-
                 ScrollBar.vertical: ScrollBar { }
 
                 delegate: ItemDelegate {

@@ -118,5 +118,6 @@
         <file>qml/SettingsPane.qml</file>
         <file>qml/SettingsPaneDivider.qml</file>
         <file>qml/TitleLabel.qml</file>
+        <file>qml/ApplicationShortcut.qml</file>
     </qresource>
 </RCC>

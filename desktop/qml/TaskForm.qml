@@ -210,31 +210,27 @@ Flickable {
     implicitHeight: !templateMode && sowPlantTask ? datesGroupBox.implicitHeight + 100 : mainColumn.implicitHeight + 100
     Layout.minimumHeight: implicitHeight
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: [StandardKey.Find]
         enabled: control.visible && plantingSearchField.visible
-        context: Qt.ApplicationShortcut
         onActivated: plantingSearchField.forceActiveFocus()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+J"]
         enabled: control.visible && currentPlantingsCheckbox.visible
-        context: Qt.ApplicationShortcut
         onActivated: currentPlantingsCheckbox.toggle()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: StandardKey.SelectAll
         enabled: control.visible && plantingList.visible
-        context: Qt.ApplicationShortcut
         onActivated: plantingList.selectAll();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: StandardKey.Deselect
         enabled: control.visible && plantingList.visible
-        context: Qt.ApplicationShortcut
         onActivated: plantingList.unselectAll();
     }
 

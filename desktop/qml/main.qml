@@ -66,6 +66,38 @@ ApplicationWindow {
         }
     }
 
+    function switchToNextPane() {
+        if (navigationIndex === navigationModel.length)
+            navigationIndex = 0;
+        else
+            navigationIndex++;
+    }
+
+    function switchToPreviousPane() {
+        if (navigationIndex === 0)
+            navigationIndex = navigationModel.length;
+        else
+            navigationModel--;
+    }
+
+    function switchToDatabase(db) {
+        if (db === "main") {
+            if (currentDatabaseFile !== "") {
+                Database.connectToDatabase();
+                currentDatabaseFile = "";
+            }
+        }  else if (db === "second") {
+            if (currentDatabaseFile !== "second") {
+                Database.connectToDatabase(secondDatabaseFile);
+                currentDatabaseFile = secondDatabaseFile;
+            }
+        }
+        if (locationsPage.item) {
+            locationsPage.item.reload();
+        }
+        stackView.currentItem.item.refresh();
+    }
+
     title: "Qrop"
     visible: true
     width: 1024
@@ -91,27 +123,8 @@ ApplicationWindow {
         }
     }
 
-    function switchToDatabase(db) {
-        if (db === "main") {
-            if (currentDatabaseFile !== "") {
-                Database.connectToDatabase();
-                currentDatabaseFile = "";
-            }
-        }  else if (db === "second") {
-            if (currentDatabaseFile !== "second") {
-                Database.connectToDatabase(secondDatabaseFile);
-                currentDatabaseFile = secondDatabaseFile;
-            }
-        }
-        if (locationsPage.item) {
-            locationsPage.item.reload();
-        }
-        stackView.currentItem.item.refresh();
-    }
-
     Platform.FileDialog {
         id: openDatabaseDialog
-
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.OpenFile
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
@@ -124,7 +137,6 @@ ApplicationWindow {
 
     Platform.FileDialog {
         id: newDatabaseDialog
-
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.SaveFile
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
@@ -137,7 +149,6 @@ ApplicationWindow {
 
     Platform.FileDialog {
         id: saveMainDatabaseDialog
-
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.SaveFile
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
@@ -149,7 +160,6 @@ ApplicationWindow {
 
     Platform.FileDialog {
         id: replaceMainDatabaseDialog
-
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.OpenFile
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
@@ -162,7 +172,6 @@ ApplicationWindow {
 
     Platform.FileDialog {
         id: saveSecondDatabaseDialog
-
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.SaveFile
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
@@ -171,7 +180,6 @@ ApplicationWindow {
             Database.copy(secondDatabaseFile, file);
         }
     }
-
 
     Loader {
         id: plantingsPage
@@ -199,76 +207,25 @@ ApplicationWindow {
         property bool showPlantingSuccessionNumber
     }
 
-    Shortcut {
-        sequence: StandardKey.Quit
-        context: Qt.ApplicationShortcut
-        onActivated: Qt.quit()
-    }
+    ApplicationShortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
 
-    Shortcut {
-        sequence: "Ctrl+1"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = 0
-    }
+    ApplicationShortcut { sequence: "Ctrl+1"; onActivated: navigationIndex = 0 }
 
-    Shortcut {
-        sequence: "Ctrl+2"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = 1
-    }
+    ApplicationShortcut { sequence: "Ctrl+2"; onActivated: navigationIndex = 1 }
 
-    Shortcut {
-        sequence: "Ctrl+3"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = 2
-    }
+    ApplicationShortcut { sequence: "Ctrl+3"; onActivated: navigationIndex = 2 }
 
-    Shortcut {
-        sequence: "Ctrl+4"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = 3
-    }
+    ApplicationShortcut { sequence: "Ctrl+4"; onActivated: navigationIndex = 3 }
 
-    Shortcut {
-        sequence: "Ctrl+5"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = 4
-    }
+    ApplicationShortcut { sequence: "Ctrl+5"; onActivated: navigationIndex = 4 }
 
-    Shortcut {
-        sequence: "Ctrl+0"
-        context: Qt.ApplicationShortcut
-        onActivated: navigationIndex = navigationModel.length
-    }
+    ApplicationShortcut { sequence: "Ctrl+0"; onActivated: navigationIndex = navigationModel.length }
 
-    Shortcut {
-        sequence: StandardKey.NextChild
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            if (navigationIndex === navigationModel.length)
-                navigationIndex = 0;
-            else
-                navigationIndex++;
-        }
-    }
+    ApplicationShortcut { sequence: StandardKey.NextChild; onActivated: switchToNextPane() }
 
-    Shortcut {
-        sequence: StandardKey.PreviousChild
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            if (navigationIndex === 0)
-                navigationIndex = navigationModel.length;
-            else
-                navigationModel--;
-        }
-    }
+    ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
 
-    Shortcut {
-        objectName: "fullScreenToggleShortcut"
-        context: Qt.ApplicationShortcut
-        sequence: "F11"
-        onActivated: toggleFullScreen()
-    }
+    ApplicationShortcut { sequence: "F11"; onActivated: toggleFullScreen() }
 
     Settings {
         id: settings
@@ -376,29 +333,6 @@ ApplicationWindow {
                 ]
             }
 
-//            TextField  {
-//                id: searchField
-//                font.family: "Roboto Regular"
-//                verticalAlignment: Qt.AlignVCenter
-//                font.pixelSize: Units.fontSizeBodyAndButton
-//                visible: searchMode
-//                color: "black"
-//                placeholderText: qsTr("Search")
-//                Layout.fillWidth: true
-//                background: Rectangle {
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    height: parent.height
-//                }
-
-//                Shortcut {
-//                    sequence : "Esc"
-//                    onActivated: {
-//                        searchField.clear()
-//                        searchMode = false
-//                    }
-//                }
-//            }
-
             ToolButton {
                 id: saveButton
                 visible: showSaveButton
@@ -413,19 +347,6 @@ ApplicationWindow {
                     showSaveButton = false
                 }
             }
-
-//            ToolButton {
-//                id: searchButton
-//                visible: !searchMode && !showSaveButton
-//                text: "\ue8b6" // search
-//                font.family: "Material Icons"
-//                font.pixelSize: Units.fontSizeHeadline
-//                Layout.margins: -padding
-//                onClicked: {
-//                    searchMode = true
-//                    searchField.focus = true
-//                }
-//            }
 
             ToolButton {
                 id: overflowMenu

@@ -32,6 +32,7 @@ Page {
     property bool filterMode: false
     property string filterText: ""
     property int checks: 0
+    property bool shortcutEnabled: navigationIndex === 1 && !taskDialog.activeFocus
 
     title: qsTr("Task calendar")
     focus: true
@@ -42,77 +43,49 @@ Page {
         taskView.refresh();
     }
 
-    Shortcut {
-        sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 1 && addButton.visible && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: addButton.clicked()
+    ApplicationShortcut {
+        sequences: ["Ctrl+N"]; enabled: shortcutEnabled && addButton.visible; onActivated: addButton.clicked()
     }
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+Right"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Left"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear()
     }
 
-    Shortcut {
+    ApplicationShortcut {
+        sequence: "Ctrl+J"; enabled: shortcutEnabled; onActivated: showDoneCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+K"; enabled: shortcutEnabled; onActivated: showDueCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+L"; enabled: shortcutEnabled; onActivated: showOverdueCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 1 && !taskView.activeFocus && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !taskView.activeFocus
         onActivated: {
             taskView.currentIndex = 0
             taskView.forceActiveFocus();
         }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+J"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: showDoneCheckBox.toggle();
-    }
-
-    Shortcut {
-        sequence: "Ctrl+K"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: showDueCheckBox.toggle();
-    }
-
-    Shortcut {
-        sequence: "Ctrl+L"
-        enabled: navigationIndex === 1 && !taskDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: showOverdueCheckBox.toggle();
     }
 
     TaskDialog {

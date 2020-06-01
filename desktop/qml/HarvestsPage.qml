@@ -34,6 +34,7 @@ Page {
     property alias listView: harvestView
     property date todayDate: new Date()
     property bool dialogOpened: false
+    property bool shortcutEnabled: navigationIndex === 3 && !dialogOpened
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
@@ -67,52 +68,33 @@ Page {
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: addButton.clicked()
+    ApplicationShortcut {
+        sequences: ["Ctrl+N"]; enabled: shortcutEnabled; onActivated: addButton.clicked()
     }
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: searchField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: searchField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+Right"
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Left"
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 3 && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 3 && !harvestView.activeFocus && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !harvestView.activeFocus
         onActivated: {
             harvestView.currentIndex = 0
             harvestView.forceActiveFocus();
