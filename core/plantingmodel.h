@@ -91,11 +91,24 @@ private:
     bool m_showOnlyGreenhouse { false };
     bool m_showOnlyField { false };
     bool m_showOnlyHarvested { false };
-    bool m_showFinished { true };
+    bool m_showFinished { false };
     int m_cropId { -1 };
     int m_keywordId { -1 };
-    Location *location;
-    Planting *planting;
+    Location *m_location;
+    Planting *m_planting;
+
+    inline QDate plantingDate(int row) const
+    {
+        return QDate::fromString(rowValue(row, "planting_date").toString(), Qt::ISODate);
+    }
+    inline QDate beginHarvestDate(int row) const
+    {
+        return QDate::fromString(rowValue(row, "beg_harvest_date").toString(), Qt::ISODate);
+    }
+    inline QDate endHarvestDate(int row) const
+    {
+        return QDate::fromString(rowValue(row, "end_harvest_date").toString(), Qt::ISODate);
+    }
 
 signals:
     void weekChanged();

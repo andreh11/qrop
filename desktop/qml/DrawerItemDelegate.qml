@@ -30,63 +30,56 @@ ItemDelegate {
     property bool showToolTip: true
 
     focusPolicy: Qt.NoFocus
-//    height: 72
-//    width: 72
+    //    height: 72
+    //    width: 72
     implicitHeight: 56
     implicitWidth: 72
-//    highlighted: isActive
+    //    highlighted: isActive
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
+    highlighted: isActive
 
-    ToolTip {
-        x: control.width + Units.smallSpacing
-        y: (control.height - height) / 2
-        text: control.text
-        visible: control.showToolTip && largeDisplay && control.hovered
-        delay: Qt.styleHints.mousePressAndHoldInterval
-    }
+    contentItem: Item {
+        anchors.fill: parent
 
-
-   contentItem: Item {
-       anchors.fill: parent
-
-    Label {
-        id: iconLabel
-        width: 24
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: isActive ? 14 : 16
-        }
-        color: isActive ? Material.accent : Units.colorMediumEmphasis
-        font.family: "Material Icons"
-        font.pixelSize: 22
-        horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-    }
-
-    Label {
-        id: textLabel
-        visible: isActive
-        width: Math.min(parent.width - 2, implicitWidth)
-        text: control.text
-        font.family: "Roboto Condensed"
-        font.pixelSize: Units.fontSizeBodyAndButton
-        elide: Text.ElideRight
-        //            color: "white"
-        color: iconLabel.color
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: iconLabel.bottom
-            topMargin: 2
+        Label {
+            id: iconLabel
+            width: 24
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 12
+            }
+//            color: isActive ? Material.accent : "white"
+            color: "white"
+            font.family: "Material Icons"
+            font.pixelSize: 24
+            horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
         }
 
-        //            visible: !largeDisplay
-        //            width: visible ? implicitWidth : 0
-        //            height:
-        verticalAlignment: Text.AlignVCenter
+        Label {
+            id: textLabel
+            //        visible: isActive || hovered
+            width: Math.min(parent.width - 2, implicitWidth)
+            text: control.text
+            font.family: "Roboto Condensed"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            elide: Text.ElideRight
+            //            color: "white"
+            color: iconLabel.color
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: iconLabel.bottom
+                topMargin: 0
+            }
+
+            //            visible: !largeDisplay
+            //            width: visible ? implicitWidth : 0
+            //            height:
+            verticalAlignment: Text.AlignVCenter
+        }
     }
-   }
 
 }

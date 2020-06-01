@@ -19,6 +19,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPdfWriter>
 #include <QPrinter>
 #include <QSettings>

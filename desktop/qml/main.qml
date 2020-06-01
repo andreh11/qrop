@@ -178,37 +178,19 @@ ApplicationWindow {
         source: "PlantingsPage.qml"
     }
 
-    Loader {
-        id: calendarPage
-//        asynchronous: true
-//        visible: status == Loader.Ready
-    }
+    Loader { id: calendarPage }
 
-    Loader {
-        id: locationsPage
-//        asynchronous: true
-//        visible: status == Loader.Ready
-    }
+    Loader { id: locationsPage }
 
-    Loader {
-        id: harvestsPage
-    }
+    Loader { id: harvestsPage }
 
-    Loader {
-        id: chartsPage
-    }
+    Loader { id: chartsPage }
 
-    Loader {
-        id: notesPage
-    }
+    Loader { id: notesPage }
 
-    Loader {
-        id: seedListPage
-    }
+    Loader { id: seedListPage }
 
-    Loader {
-        id: settingsPage
-    }
+    Loader { id: settingsPage }
 
     Settings {
         id: mainSettings
@@ -470,8 +452,8 @@ ApplicationWindow {
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
-//        Material.background: Material.primary
-        Material.background: "white"
+        Material.background: Material.primary
+//        Material.background: "white"
 
         ColumnLayout {
             anchors.fill: parent
@@ -674,9 +656,11 @@ ApplicationWindow {
                 if (locationsPage.status === Loader.Null) {
                     stackView.replace(busyPage);
                     locationsPage.source = "LocationsPage.qml";
+                    locationsPage.item.reload();
+                } else {
+                    locationsPage.item.refresh();
                 }
                 stackView.replace(locationsPage)
-                locationsPage.item.refresh();
                 break
             case 3:
                 if (harvestsPage.status === Loader.Null)
@@ -703,11 +687,13 @@ ApplicationWindow {
                 notesPage.item.refresh();
                 break
             case 7:
-                if (settingsPage.status === Loader.Null)
+                if (settingsPage.status === Loader.Null) {
                     settingsPage.setSource("SettingsPage.qml",
                                            { "paneWidth": Math.min(600, stackView.width * 0.8) })
+                } else {
+                    settingsPage.item.refresh();
+                }
                 stackView.replace(settingsPage)
-//                settingsPage.item.refresh();
                 break
             }
         }

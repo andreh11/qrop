@@ -52,7 +52,7 @@ QString Database::databasePath()
 void Database::deleteDatabase()
 {
     qInfo() << "Deleting database...";
-    QSqlDatabase::database().close();
+    close();
     QString fileName = databasePath();
     QFile::remove(fileName);
 }
@@ -129,9 +129,18 @@ void Database::migrate()
                 execSqlFile(fileInfo.absoluteFilePath());
             }
         }
+        shrink();
     } else {
         qInfo() << "Latest database version:" << dbVersion;
     }
+}
+
+QString Database::fileNameFrom(const QUrl &url)
+{
+    QString fileName;
+    if (url.isEmpty()) // default database path
+        return databasePath();
+    return url.toLocalFile();
 }
 
 void Database::connectToDatabase(const QUrl &url)
@@ -142,19 +151,12 @@ void Database::connectToDatabase(const QUrl &url)
         if (!database.isValid())
             qFatal("Cannot add database: %s", qPrintable(database.lastError().text()));
     }
+    close();
 
-    if (database.isOpen())
-        database.close();
-
-    QString fileName;
-    bool create = false;
-    if (url.isEmpty()) // default database path
-        fileName = databasePath();
-    else
-        fileName = url.toLocalFile();
+    QString fileName = fileNameFrom(url);
 
     QFileInfo fileInfo(fileName);
-    create = !fileInfo.exists();
+    bool create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     qInfo() << "Database file:" << fileName;
@@ -165,20 +167,27 @@ void Database::connectToDatabase(const QUrl &url)
     }
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
-
-    //#if defined(Q_OS_WIN)
-    //    // Try to improve SQLite performance on Windows. But the database may become
-    //    // corrupted in case of crash!
-    //    query.exec("PRAGMA synchronous = OFF");
-    //    query.exec("PRAGMA journal_mode = MEMORY");
-    //    query.exec("PRAGMA locking_mode = EXCLUSIVE");
-    //#endif
+    query.exec("PRAGMA journal_mode = WAL");
+    query.exec("PRAGMA wal_autocheckpoint = 16");
+    query.exec("PRAGMA journal_size_limit = 1536");
 
     if (create) {
         createDatabase();
     } else {
         migrate();
     }
+}
+
+void Database::close()
+{
+    auto database = QSqlDatabase::database();
+    if (!database.isOpen())
+        return;
+
+    qDebug() << "Optimizing database...";
+    QSqlQuery query("PRAGMA optimize");
+    qDebug() << "Closing database...";
+    QSqlDatabase::database().close();
 }
 
 void Database::execSqlFile(const QString &fileName, const QString &separator)
@@ -337,4 +346,11 @@ void Database::resetDatabase()
     deleteDatabase();
     connectToDatabase();
     createDatabase();
+}
+
+void Database::shrink()
+{
+    if (!QSqlDatabase::database().isOpen())
+        return;
+    QSqlQuery query("VACUUM");
 }

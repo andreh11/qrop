@@ -50,7 +50,7 @@ QtObject {
     }
 
     readonly property var headerFont: {
-        "family": "Roboto Medium"
+        "family": "Roboto Condensed"
     }
 
     readonly property int smallSpacing: 8

@@ -38,6 +38,10 @@ Item {
     signal plantingRemoved()
     signal dragFinished();
 
+    onPlantingIdChanged: {
+
+    }
+
     property bool useStandardBedLength
     property int standardBedLength
     property bool showPlantingSuccessionNumber
@@ -49,7 +53,6 @@ Item {
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
-    clip: true
 
 //    anchors {
 //        left: parent.left

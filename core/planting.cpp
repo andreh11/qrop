@@ -1167,6 +1167,6 @@ QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool sho
     timer.start();
     auto map = drawInfoMap(recordFromId("planting_view", plantingId), season, year, showFamilyColor,
                            showNames);
-    qDebug() << "planting info map" << timer.elapsed() << "ms";
+    qDebug() << timer.elapsed() << "ms";
     return map;
 }

@@ -308,6 +308,31 @@ void registerTypes()
                                               });
 }
 
+// class Worker : QObject {
+//    Q_OBJECT
+
+// public:
+//    Worker(QObject *parent = nullptr);
+//    ~Worker();
+
+// public slots:
+//    void execQuery(const QString &queryString);
+
+// signals:
+//    void results(const QList<QSqlRecord> &records);
+
+// private:
+//    QSqlDatabase m_database;
+//};
+
+// class QueryThread : QThread
+//{
+//    Q_OBJECT
+
+// public:
+
+//};
+
 int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
@@ -337,8 +362,10 @@ int main(int argc, char *argv[])
     registerFonts();
     registerTypes();
 
-    Database db;
+    //    Database db;
     Database::connectToDatabase();
+
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
 
     //#if defined(Q_OS_ANDROID)
     //    QtAndroid::runOnAndroidThread([=]() {

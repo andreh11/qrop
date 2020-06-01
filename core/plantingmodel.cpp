@@ -27,14 +27,12 @@
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
-    , location(new Location(this))
-    , planting(new Planting(this))
+    , m_location(new Location(this))
+    , m_planting(new Planting(this))
 {
     setSortColumn("crop");
     connect(this, SIGNAL(countChanged()), this, SIGNAL(revenueChanged()));
     connect(this, SIGNAL(countChanged()), this, SIGNAL(totalBedLengthChanged()));
-    //    connect(this, SIGNAL(filterYearChanged()), this, SLOT(dataChangedForAll()));
-    //    connect(this, SIGNAL(filterSeasonChanged()), this, SLOT(dataChangedForAll()));
 }
 
 bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -62,8 +60,8 @@ bool PlantingModel::lessThan(const QModelIndex &left, const QModelIndex &right) 
         int leftId = sourceRowValue(left.row(), left.parent(), QStringLiteral("planting_id")).toInt();
         int rightId =
                 sourceRowValue(right.row(), right.parent(), QStringLiteral("planting_id")).toInt();
-        return location->fullNameList(location->locations(leftId))
-                       .localeAwareCompare(location->fullNameList(location->locations(rightId)))
+        return m_location->fullNameList(m_location->locations(leftId))
+                       .localeAwareCompare(m_location->fullNameList(m_location->locations(rightId)))
                 == -1;
     }
 
@@ -75,8 +73,8 @@ QVariant PlantingModel::data(const QModelIndex &proxyIndex, int role) const
     Q_ASSERT(checkIndex(proxyIndex, CheckIndexOption::IndexIsValid));
     switch (role) {
     case InfoMap:
-        return planting->drawInfoMap(m_model->record(mapToSource(proxyIndex).row()), m_season,
-                                     m_year, true, false);
+        return m_planting->drawInfoMap(m_model->record(mapToSource(proxyIndex).row()), m_season,
+                                       m_year, true, false);
     default:
         return SortFilterProxyModel::data(proxyIndex, role);
     }
@@ -227,24 +225,23 @@ void PlantingModel::setShowFinished(bool show)
 int PlantingModel::revenue() const
 {
     int revenue = 0;
-    QDate harvestDate;
-    for (int row = 0; row < rowCount(); ++row) {
-        harvestDate = QDate::fromString(rowValue(row, "beg_harvest_date").toString(), Qt::ISODate);
-        if (isDateInRange(harvestDate)) {
+    for (int row = 0; row < rowCount(); ++row)
+        if (isDateInRange(beginHarvestDate(row)))
             revenue += rowValue(row, "bed_revenue").toInt();
-        }
-    }
     return revenue;
 }
 
-/* TODO: remove, this shouldn't be in a model */
 qreal PlantingModel::totalBedLength() const
 {
-    QString queryString("SELECT SUM(length) "
-                        "FROM planting_view WHERE strftime(\"%Y\", beg_harvest_date) = \"%1\"");
-    QSqlQuery query(queryString.arg(m_year));
-    query.next();
-    return query.value(0).toInt();
+    qreal length = 0;
+
+    for (int row = 0; row < rowCount(); ++row) {
+        if (isDateInRange(plantingDate(row)) || isDateInRange(beginHarvestDate(row))
+            || isDateInRange(endHarvestDate(row))) {
+            length += rowValue(row, "bed_revenue").toInt();
+        }
+    }
+    return length;
 }
 
 bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
@@ -264,7 +261,7 @@ bool PlantingModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
             || (plantingDate < seasonDates().first && harvestEndDate > seasonDates().second))
             && (!m_showActivePlantings
                 || (sowingDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))
-            && (!m_showOnlyUnassigned || length > planting->assignedLength(plantingId))
+            && (!m_showOnlyUnassigned || length > m_planting->assignedLength(plantingId))
             && (!m_showOnlyGreenhouse || inGreenhouse) && (!m_showOnlyField || !inGreenhouse)
             && (!m_showOnlyHarvested
                 || (harvestBeginDate.weekNumber() <= m_week && m_week <= harvestEndDate.weekNumber()))

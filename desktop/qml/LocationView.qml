@@ -91,7 +91,7 @@ Item {
     signal addPlantingLength(real length)
 
     function refresh() {
-        locationModel.refresh();
+        locationModel.refreshTree();
     }
 
     function reload() {

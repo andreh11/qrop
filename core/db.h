@@ -30,7 +30,8 @@ public:
 
     static QString databasePath();
     static Q_INVOKABLE void connectToDatabase(const QUrl &url = QUrl());
-    static void execSqlFile(const QString &fileName, const QString &separator = ";");
+    static void close();
+    static void execSqlFile(const QString &fileNameFrom, const QString &separator = ";");
     static void migrate();
     static void backupDatabase();
     static Q_INVOKABLE void saveAs(const QUrl &url);
@@ -44,6 +45,8 @@ public:
 private:
     static int databaseVersion();
     static void removeFileIfExists(const QUrl &url);
+    static QString fileNameFrom(const QUrl &url);
+    static void shrink();
 };
 
 #endif // DB_H
