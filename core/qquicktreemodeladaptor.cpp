@@ -34,7 +34,7 @@
 **
 ****************************************************************************/
 
-#include <math.h>
+#include <cmath>
 
 #include <QDebug>
 #include <QStack>

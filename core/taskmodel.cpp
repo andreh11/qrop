@@ -42,14 +42,14 @@ void TaskModel::setSortColumn(const QString &columnName)
 {
     m_sortColumn = columnName;
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    sortColumnChanged();
+    emit sortColumnChanged();
 }
 
 void TaskModel::setSortOrder(const QString &order)
 {
     m_sortOrder = order;
     sort(0, m_sortOrder == "ascending" ? Qt::AscendingOrder : Qt::DescendingOrder);
-    sortOrderChanged();
+    emit sortOrderChanged();
 }
 
 bool TaskModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -160,7 +160,7 @@ void TaskModel::setShowDone(bool showDone)
 
     m_showDone = showDone;
     invalidateFilter();
-    showDoneChanged();
+    emit showDoneChanged();
 }
 
 bool TaskModel::showDue() const
@@ -174,7 +174,7 @@ void TaskModel::setShowDue(bool showDue)
         return;
     m_showDue = showDue;
     invalidateFilter();
-    showDueChanged();
+    emit showDueChanged();
 }
 
 bool TaskModel::showOverdue() const
@@ -189,7 +189,7 @@ void TaskModel::setShowOverdue(bool showOverdue)
 
     m_showOverdue = showOverdue;
     invalidateFilter();
-    showOverdueChanged();
+    emit showOverdueChanged();
 }
 
 int TaskModel::plantingId() const
@@ -203,7 +203,7 @@ void TaskModel::setPlantingId(int id)
         return;
 
     m_plantingId = id;
-    plantingIdChanged();
+    emit plantingIdChanged();
     invalidateFilter();
 }
 

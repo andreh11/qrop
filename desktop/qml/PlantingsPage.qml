@@ -503,12 +503,7 @@ Page {
                         Layout.fillWidth: true
                         inputMethodHints: Qt.ImhPreferLowercase
                         visible: !checks
-
-                        filterModel: [
-                            qsTr("All"),
-                            qsTr("Greenhouse"),
-                            qsTr("Field"),
-                        ]
+                        filterModel: [qsTr("All"), qsTr("Greenhouse"), qsTr("Field")]
                     }
 
                     IconButton {

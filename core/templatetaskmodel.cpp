@@ -52,7 +52,7 @@ void TemplateTaskModel::setTaskTemplateId(int taskTemplateId)
 
     m_taskTemplateId = taskTemplateId;
     invalidateFilter();
-    taskTemplateIdChanged();
+    emit taskTemplateIdChanged();
 }
 
 int TemplateTaskModel::templateDateType() const
@@ -66,7 +66,7 @@ void TemplateTaskModel::setTemplateDateType(int templateDateType)
         return;
     m_templateDateType = templateDateType;
     invalidateFilter();
-    templateDateTypeChanged();
+    emit templateDateTypeChanged();
 }
 
 bool TemplateTaskModel::beforeDate() const
@@ -81,7 +81,7 @@ void TemplateTaskModel::setBeforeDate(bool before)
 
     m_beforeDate = before;
     invalidateFilter();
-    beforeDateChanged();
+    emit beforeDateChanged();
 }
 
 bool TemplateTaskModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

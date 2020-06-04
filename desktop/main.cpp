@@ -85,14 +85,6 @@
 #include "qropdoublevalidator.h"
 #include "timevalidator.h"
 
-static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-    auto *planting = new Planting();
-    return planting;
-}
-
 void registerFonts()
 {
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
@@ -132,10 +124,14 @@ void registerTypes()
     qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
-
     qmlRegisterType<QQuickTreeModelAdaptor>("io.qrop.components", 1, 0, "TreeModelAdaptor");
 
-    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
+    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting",
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                           Q_UNUSED(engine)
+                                           Q_UNUSED(scriptEngine)
+                                           return new Planting;
+                                       });
 
     qmlRegisterSingletonType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {

@@ -32,15 +32,12 @@ int CropModel::familyId() const
 
 void CropModel::setFamilyId(int familyId)
 {
-    if (familyId == m_familyId)
+    if (familyId == m_familyId) {
         return;
-
+    }
     m_familyId = familyId;
 
-    if (m_familyId < 1) {
-        qInfo("[CropModel] null filter");
-    } else {
-        //        setFilterFixedString(QString(familyId));
+    if (m_familyId > 0) {
         const QString filterString = QString::fromLatin1("family_id = %1").arg(familyId);
         m_model->setFilter(filterString);
     }

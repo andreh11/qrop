@@ -34,7 +34,7 @@ void TaskTypeModel::setShowPlantingTasks(bool show)
 
     m_showPlantingTasks = show;
     invalidateFilter();
-    showPlantingTasksChanged();
+    emit showPlantingTasksChanged();
 }
 
 bool TaskTypeModel::isPlantingTask(int sourceRow, const QModelIndex &sourceParent) const

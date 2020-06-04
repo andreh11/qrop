@@ -67,17 +67,19 @@ ApplicationWindow {
     }
 
     function switchToNextPane() {
-        if (navigationIndex === navigationModel.length)
+        if (navigationIndex === navigationModel.length) {
             navigationIndex = 0;
-        else
+        } else {
             navigationIndex++;
+        }
     }
 
     function switchToPreviousPane() {
-        if (navigationIndex === 0)
+        if (navigationIndex === 0) {
             navigationIndex = navigationModel.length;
-        else
+        } else {
             navigationModel--;
+        }
     }
 
     function switchToDatabase(db) {
@@ -92,6 +94,7 @@ ApplicationWindow {
                 currentDatabaseFile = secondDatabaseFile;
             }
         }
+
         if (locationsPage.item) {
             locationsPage.item.reload();
         }
@@ -315,7 +318,6 @@ ApplicationWindow {
                 visible: !searchMode
                 font.pixelSize: Units.fontSizeTitle
                 font.family: "Roboto Medium"
-//                Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignLeft
                 verticalAlignment: Qt.AlignVCenter
             }
@@ -325,12 +327,7 @@ ApplicationWindow {
                 placeholderText: qsTr("Search Plantings")
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhPreferLowercase
-
-                filterModel: [
-                    qsTr("All"),
-                    qsTr("Greenhouse"),
-                    qsTr("Field"),
-                ]
+                filterModel: [ qsTr("All"), qsTr("Greenhouse"), qsTr("Field")]
             }
 
             ToolButton {

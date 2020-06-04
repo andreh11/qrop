@@ -40,7 +40,7 @@ void TaskTemplateModel::setPlantingIdList(const QList<int> &idList)
 
     m_plantingIdList = idList;
     refreshTemplateList();
-    plantingIdListChanged();
+    emit plantingIdListChanged();
     refresh();
 }
 
@@ -65,7 +65,7 @@ void TaskTemplateModel::toggle(int row)
         mTaskTemplate->applyList(templateId, m_plantingIdList);
 
     refreshTemplateList();
-    dataChanged(idx, idx);
+    emit dataChanged(idx, idx);
 }
 
 QVariant TaskTemplateModel::data(const QModelIndex &idx, int role) const

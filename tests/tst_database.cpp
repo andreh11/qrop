@@ -11,10 +11,10 @@ class tst_Database : public QObject
 
 public:
     tst_Database();
-    ~tst_Database();
+    ~tst_Database() override;
 
 private:
-    Database *mDatabase;
+    Database *mDatabase { nullptr };
 
 private slots:
     void databasePath();
@@ -23,10 +23,7 @@ private slots:
     void cleanup();
 };
 
-tst_Database::tst_Database()
-    : mDatabase(nullptr)
-{
-}
+tst_Database::tst_Database() { }
 
 tst_Database::~tst_Database() = default;
 

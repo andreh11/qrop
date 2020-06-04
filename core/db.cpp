@@ -137,7 +137,6 @@ void Database::migrate()
 
 QString Database::fileNameFrom(const QUrl &url)
 {
-    QString fileName;
     if (url.isEmpty()) // default database path
         return databasePath();
     return url.toLocalFile();
@@ -185,7 +184,8 @@ void Database::close()
         return;
 
     qDebug() << "Optimizing database...";
-    QSqlQuery query("PRAGMA optimize");
+    QSqlQuery query;
+    query.exec("PRAGMA optimize");
     qDebug() << "Closing database...";
     QSqlDatabase::database().close();
 }
@@ -352,5 +352,6 @@ void Database::shrink()
 {
     if (!QSqlDatabase::database().isOpen())
         return;
-    QSqlQuery query("VACUUM");
+    QSqlQuery query;
+    query.exec("VACUUM");
 }

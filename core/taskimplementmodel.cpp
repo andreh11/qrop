@@ -38,7 +38,7 @@ void TaskImplementModel::setMethodId(int methodId)
 
     m_methodId = methodId;
     invalidateFilter();
-    methodIdChanged();
+    emit methodIdChanged();
 }
 
 bool TaskImplementModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
