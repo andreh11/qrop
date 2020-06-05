@@ -33,6 +33,8 @@ Page {
     property bool showUnitPane: false
     property bool showTaskTypePane: false
 
+    function refresh() { }
+
     title: qsTr("Settings")
     Material.background: largeDisplay ? Units.pageColor : "white"
 

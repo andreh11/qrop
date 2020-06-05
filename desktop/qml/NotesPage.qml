@@ -65,7 +65,7 @@ Page {
     focus: true
     padding: 0
 
-    Material.background: Material.color(Material.Grey, Material.Shade100)
+    Material.background: Units.pageColor
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 

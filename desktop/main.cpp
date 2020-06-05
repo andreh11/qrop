@@ -304,30 +304,21 @@ void registerTypes()
                                               });
 }
 
-// class Worker : QObject {
-//    Q_OBJECT
+void installTranslator()
+{
+    auto translator(new QTranslator);
+    const QString &lang = QLocale::system().name();
+    QSettings settings;
+    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
+    qDebug() << "LANG " << lang << preferredLanguage;
 
-// public:
-//    Worker(QObject *parent = nullptr);
-//    ~Worker();
+    if (preferredLanguage == "system")
+        translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
+    else
+        translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
 
-// public slots:
-//    void execQuery(const QString &queryString);
-
-// signals:
-//    void results(const QList<QSqlRecord> &records);
-
-// private:
-//    QSqlDatabase m_database;
-//};
-
-// class QueryThread : QThread
-//{
-//    Q_OBJECT
-
-// public:
-
-//};
+    QApplication::installTranslator(translator);
+}
 
 int main(int argc, char *argv[])
 {
@@ -342,36 +333,13 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.4.4");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
-    QTranslator translator;
-    const QString &lang = QLocale::system().name();
-    QSettings settings;
-    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
-    qDebug() << "LANG " << lang << preferredLanguage;
-
-    if (preferredLanguage == "system")
-        translator.load(QLocale(), "qrop", "_", ":/translations", ".qm");
-    else
-        translator.load(":/translations/qrop_" + preferredLanguage + ".qm");
-
-    QApplication::installTranslator(&translator);
-
     registerFonts();
     registerTypes();
+    installTranslator();
 
-    //    Database db;
     Database::connectToDatabase();
 
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
-
-    //#if defined(Q_OS_ANDROID)
-    //    QtAndroid::runOnAndroidThread([=]() {
-    //        QAndroidJniObject window =
-    //                QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-    //        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-    //        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-    //        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
-    //    });
-    //#endif
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

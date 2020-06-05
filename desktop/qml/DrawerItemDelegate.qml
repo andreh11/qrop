@@ -24,7 +24,7 @@ ItemDelegate {
     id: control
 
     property string page
-    property bool isActive: index === navigationIndex
+    property bool isActive: false
     property alias iconText: iconLabel.text
     property alias iconColor: iconLabel.color
     property bool showToolTip: true

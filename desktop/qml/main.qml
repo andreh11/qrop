@@ -27,27 +27,29 @@ import io.qrop.components 1.0
 ApplicationWindow {
     id: window
 
-    property var navigationModel: [
-        { source: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8" },
-        { source: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614" },
-        { source: locationsPage, name: qsTr("Crop Map"),  iconText: "\ue55b" },
-        { source: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896" },
-        { source: seedListPage,  name: qsTr("Seed list"), iconText: "\ue8ef" },
-        { source: chartsPage,    name: qsTr("Charts"),    iconText: "\ue801" },
-        { source: notesPage,     name: qsTr("Notes"),     iconText: "\ue616" }
-    ]
-    property int navigationIndex: 0
-
     readonly property bool largeDisplay: width > 800
     readonly property bool smallDisplay: width < 500
     property bool railMode: width > 1200
     property bool searchMode: false
     property bool showSaveButton: false
-    property string searchString: searchField.text
-    property alias stackView: stackView
+//    property string searchString: searchField.text
     property int oldWindowVisibility: Window.Windowed
+
     property string currentDatabaseFile: "" // "" is main database
     property string secondDatabaseFile: ""
+
+    property int navigationIndex: 0
+    property var navigationModel: [
+        { loader: plantingsPage, name: qsTr("Plantings"), iconText: "\ue0b8", component: "PlantingsPage.qml" },
+        { loader: calendarPage,  name: qsTr("Tasks"),     iconText: "\ue614", component: "CalendarPage.qml" },
+        { loader: locationsPage, name: qsTr("Crop Map"),  iconText: "\ue55b", component: "LocationsPage.qml" },
+        { loader: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896", component: "HarvestsPage.qml" },
+        { loader: seedListPage,  name: qsTr("Seed list"), iconText: "\ue8ef", component: "SeedsPage.qml" },
+        { loader: chartsPage,    name: qsTr("Charts"),    iconText: "\ue801", component: "ChartsPage.qml" },
+        { loader: notesPage,     name: qsTr("Notes"),     iconText: "\ue616", component: "NotesPage.qml" },
+        { loader: settingsPage,  name: qsTr("Settings"),  iconText: "\ue616", component: "SettingsPage.qml",
+          bindings: { "paneWidth": Math.min(600, stackLayout.width * 0.8) }}
+    ]
 
     // TODO: put this in a separate file
     readonly property var monthsOrder : [
@@ -88,7 +90,7 @@ ApplicationWindow {
                 Database.connectToDatabase();
                 currentDatabaseFile = "";
             }
-        }  else if (db === "second") {
+        } else if (db === "second") {
             if (currentDatabaseFile !== "second") {
                 Database.connectToDatabase(secondDatabaseFile);
                 currentDatabaseFile = secondDatabaseFile;
@@ -110,21 +112,8 @@ ApplicationWindow {
     Material.primary: Material.color(Material.Teal, Material.Shade500)
     Material.accent: Material.color(Material.Blue, Material.Shade600)
 
-    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
-
-    Dialog {
-        id: imageDialog
-        property alias path: dialogPhotoImage.source
-        x: (window.width - width) / 2
-        y: (window.height - height) / 2
-
-        Image {
-            id: dialogPhotoImage
-            width: parent.width*0.8
-            height: parent.height*0.8
-            fillMode: Image.PreserveAspectFit
-        }
-    }
+//    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
+//    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
 
     Platform.FileDialog {
         id: openDatabaseDialog
@@ -184,24 +173,6 @@ ApplicationWindow {
         }
     }
 
-    Loader {
-        id: plantingsPage
-        source: "PlantingsPage.qml"
-    }
-
-    Loader { id: calendarPage }
-
-    Loader { id: locationsPage }
-
-    Loader { id: harvestsPage }
-
-    Loader { id: chartsPage }
-
-    Loader { id: notesPage }
-
-    Loader { id: seedListPage }
-
-    Loader { id: settingsPage }
 
     Settings {
         id: mainSettings
@@ -209,26 +180,6 @@ ApplicationWindow {
         property int standardBedLength
         property bool showPlantingSuccessionNumber
     }
-
-    ApplicationShortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
-
-    ApplicationShortcut { sequence: "Ctrl+1"; onActivated: navigationIndex = 0 }
-
-    ApplicationShortcut { sequence: "Ctrl+2"; onActivated: navigationIndex = 1 }
-
-    ApplicationShortcut { sequence: "Ctrl+3"; onActivated: navigationIndex = 2 }
-
-    ApplicationShortcut { sequence: "Ctrl+4"; onActivated: navigationIndex = 3 }
-
-    ApplicationShortcut { sequence: "Ctrl+5"; onActivated: navigationIndex = 4 }
-
-    ApplicationShortcut { sequence: "Ctrl+0"; onActivated: navigationIndex = navigationModel.length }
-
-    ApplicationShortcut { sequence: StandardKey.NextChild; onActivated: switchToNextPane() }
-
-    ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
-
-    ApplicationShortcut { sequence: "F11"; onActivated: toggleFullScreen() }
 
     Settings {
         id: settings
@@ -239,6 +190,19 @@ ApplicationWindow {
         property alias windowWidth: window.width
         property alias windowVisibility: window.visibility
     }
+
+    ApplicationShortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
+    ApplicationShortcut { sequence: "Ctrl+1"; onActivated: navigationIndex = 0 }
+    ApplicationShortcut { sequence: "Ctrl+2"; onActivated: navigationIndex = 1 }
+    ApplicationShortcut { sequence: "Ctrl+3"; onActivated: navigationIndex = 2 }
+    ApplicationShortcut { sequence: "Ctrl+4"; onActivated: navigationIndex = 3 }
+    ApplicationShortcut { sequence: "Ctrl+5"; onActivated: navigationIndex = 4 }
+    ApplicationShortcut { sequence: "Ctrl+6"; onActivated: navigationIndex = 5 }
+    ApplicationShortcut { sequence: "Ctrl+7"; onActivated: navigationIndex = 6 }
+    ApplicationShortcut { sequence: "Ctrl+0"; onActivated: navigationIndex = navigationModel.length - 1 }
+    ApplicationShortcut { sequence: StandardKey.NextChild; onActivated: switchToNextPane() }
+    ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
+    ApplicationShortcut { sequence: "F11"; onActivated: toggleFullScreen() }
 
     Component {
         id: searchBar
@@ -264,127 +228,35 @@ ApplicationWindow {
         }
     }
 
-    header: ToolBar {
-        id: toolBar
-        visible: !largeDisplay
-        leftPadding: 8 + (largeDisplay ? drawer.width : 0)
-        rightPadding: 8
-        height: 56
-        Material.elevation: 0
-        contentHeight: drawerButton.implicitHeight
-        Material.background: searchMode ? "white" : Material.primary
-        Material.foreground: "white"
-        z: 1
-
-        RowLayout {
-            spacing: Units.mediumSpacing
-            anchors.fill: parent
-
-            ToolButton {
-                id: drawerButton
-                text: stackView.depth > 1 ? "\ue5c4" : "\ue5d2"
-                visible: !searchMode
-                font.family: "Material Icons"
-                font.pixelSize: Units.fontSizeHeadline
-                onClicked: {
-                    if (largeDisplay) {
-                        railMode = !railMode
-                    } else if (stackView.depth > 1) {
-                        stackView.pop()
-                    } else if (drawer.opened) {
-                        drawer.close()
-                    } else {
-                        drawer.open()
-                    }
-                }
-            }
-
-            ToolButton {
-                id: backButton
-                visible: searchMode
-                text: "\ue5c4" // arrow_back
-                Material.foreground: Material.accent
-                font.family: "Material Icons"
-                font.pixelSize: Units.fontSizeHeadline
-                onClicked: {
-                    searchField.clear()
-                    searchMode = false
-                }
-            }
-
-            Label {
-                id: titleLabel
-                text: stackView.currentItem.item.title
-                visible: !searchMode
-                font.pixelSize: Units.fontSizeTitle
-                font.family: "Roboto Medium"
-                horizontalAlignment: Qt.AlignLeft
-                verticalAlignment: Qt.AlignVCenter
-            }
-
-            SearchField {
-                id: searchField
-                placeholderText: qsTr("Search Plantings")
-                Layout.fillWidth: true
-                inputMethodHints: Qt.ImhPreferLowercase
-                filterModel: [ qsTr("All"), qsTr("Greenhouse"), qsTr("Field")]
-            }
-
-            ToolButton {
-                id: saveButton
-                visible: showSaveButton
-                text: "\ue876"
-                font.family: "Material Icons"
-                font.capitalization: Font.Capitalize
-                font.pixelSize: Units.fontSizeHeadline
-                Layout.margins: -padding
-                onClicked: {
-                    stackView.currentItem.save()
-                    stackView.pop()
-                    showSaveButton = false
-                }
-            }
-
-            ToolButton {
-                id: overflowMenu
-                visible: !searchMode
-                text: "\ue5d4" // menu
-                font.family: "Material Icons"
-                font.pixelSize: Units.fontSizeHeadline
-                Layout.margins: -padding
-                onClicked: {
-                }
-            }
-        }
-    }
-
     Drawer {
         id: drawer
         //        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
-//                width: childrenRect.width
+        //                width: childrenRect.width
         height: window.height
-//        width: 72
+        //        width: 72
         //        height: window.height - toolBar.height
-//        y: menuBar.height
+        //        y: menuBar.height
         modal: !largeDisplay
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
         Material.background: Material.primary
-//        Material.background: "white"
+        //        Material.background: "white"
 
         ColumnLayout {
             anchors.fill: parent
             spacing: 0
 
             Repeater {
-                model: navigationModel
+                // We remove the last item because Settings icon is a the bottom of the Drawer.
+                model: navigationModel.slice(0, -1)
 
                 DrawerItemDelegate {
                     Layout.fillWidth: true
                     width: drawer.width
                     text: modelData.name
                     iconText: modelData.iconText
+                    isActive: index === navigationIndex
                     onClicked: {
                         navigationIndex = index
                         if (!largeDisplay)
@@ -490,7 +362,7 @@ ApplicationWindow {
                 isActive: navigationModel.length == navigationIndex
 
                 onClicked: {
-                    navigationIndex = navigationModel.length
+                    navigationIndex = navigationModel.length - 1
                     if (!largeDisplay)
                         drawer.close()
                 }
@@ -511,110 +383,62 @@ ApplicationWindow {
         }
     }
 
-    Component {
-        id: busyPage
-        Page {
-            BusyIndicator {
-                anchors.centerIn: parent
-                running: true
-            }
+    Rectangle {
+        id: busyRectangle
+        visible: stackLayout.isLoading
+        width: parent.width
+        height: Units.toolBarHeight
+        Material.elevation: 2
+
+        ThinDivider {
+            id: topDivider
+            anchors.top: parent.bottom
+            width: parent.width
+        }
+
+        ProgressBar {
+            anchors { top: topDivider.bottom; left: parent.left; right: parent.right }
+            indeterminate: true
         }
     }
 
-    StackView {
-        id: stackView
+    StackLayout {
+        id: stackLayout
+
+        property bool isLoading: children[currentIndex].status === Loader.Loading
+
         focus: true
         anchors.fill: parent
         anchors.leftMargin: largeDisplay ? drawer.width : undefined
         anchors.rightMargin: 0
-        topPadding: 20
-        leftPadding: 20
-        rightPadding: 20
-        bottomPadding: 20
+        currentIndex: navigationIndex
 
-        initialItem: plantingsPage
-        replaceEnter: null
-        replaceExit: null
-
-        Rectangle {
-            id: buttonRectangle
-            visible: stackView.currentItem.status === Loader.Loading
-            //            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
-            width: parent.width
-            height: Units.toolBarHeight
-            Material.elevation: 2
-
-            ThinDivider {
-                id: topDivider
-                anchors.top: buttonRectangle.bottom
-                width: parent.width
+        onCurrentIndexChanged: {
+            let index = currentIndex;
+            if (index >= navigationModel.length) {
+                return;
             }
 
-            ProgressBar {
-                anchors { top: topDivider.top; left: parent.left; right: parent.right }
-                indeterminate: true
+            if (navigationModel[index].loader.status === Loader.Null) {
+                if (navigationModel[index].bindings) {
+                    navigationModel[index].loader.setSource(navigationModel[index].component,
+                                                      navigationModel[index].bindings);
+                } else {
+                    navigationModel[index].loader.setSource(navigationModel[index].component);
+                }
+            } else {
+                navigationModel[index].loader.item.refresh();
             }
         }
 
-        function activatePage(index) {
-            switch (index) {
-            case 0:
-                if (plantingsPage.status === Loader.Null)
-                    plantingsPage.source = "PlantingsPage.qml";
-                stackView.replace(plantingsPage)
-                plantingsPage.item.refresh();
-                break;
-            case 1:
-                if (calendarPage.status === Loader.Null)
-                    calendarPage.source = "CalendarPage.qml";
-                stackView.replace(calendarPage);
-                calendarPage.item.refresh();
-                break
-            case 2:
-                if (locationsPage.status === Loader.Null) {
-                    stackView.replace(busyPage);
-                    locationsPage.source = "LocationsPage.qml";
-                    locationsPage.item.reload();
-                } else {
-                    locationsPage.item.refresh();
-                }
-                stackView.replace(locationsPage)
-                break
-            case 3:
-                if (harvestsPage.status === Loader.Null)
-                    harvestsPage.source = "HarvestsPage.qml";
-                stackView.replace(harvestsPage)
-                harvestsPage.item.refresh();
-                break
-            case 4:
-                if (seedListPage.status === Loader.Null)
-                    seedListPage.source = "SeedsPage.qml";
-                stackView.replace(seedListPage)
-                seedListPage.item.refresh();
-                break
-            case 5:
-                if (chartsPage.status === Loader.Null)
-                    chartsPage.source = "ChartsPage.qml";
-                stackView.replace(chartsPage)
-                chartsPage.item.refresh();
-                break
-            case 6:
-                if (notesPage.status === Loader.Null)
-                    notesPage.source = "NotesPage.qml";
-                stackView.replace(notesPage)
-                notesPage.item.refresh();
-                break
-            case 7:
-                if (settingsPage.status === Loader.Null) {
-                    settingsPage.setSource("SettingsPage.qml",
-                                           { "paneWidth": Math.min(600, stackView.width * 0.8) })
-                } else {
-                    settingsPage.item.refresh();
-                }
-                stackView.replace(settingsPage)
-                break
-            }
-        }
+        Loader { id: plantingsPage; source: "PlantingsPage.qml"; asynchronous: true }
+        Loader { id: calendarPage; asynchronous: true }
+        Loader { id: locationsPage; asynchronous: true  }
+        Loader { id: harvestsPage; asynchronous: true  }
+        Loader { id: seedListPage; asynchronous: true  }
+        Loader { id: chartsPage; asynchronous: true  }
+        Loader { id: notesPage; asynchronous: true  }
+        Loader { id: settingsPage; asynchronous: true  }
     }
 
     AboutDialog {
