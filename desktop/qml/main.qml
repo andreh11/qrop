@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2020 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ ApplicationWindow {
     property bool railMode: width > 1200
     property bool searchMode: false
     property bool showSaveButton: false
-//    property string searchString: searchField.text
     property int oldWindowVisibility: Window.Windowed
 
     property string currentDatabaseFile: "" // "" is main database
@@ -112,9 +111,6 @@ ApplicationWindow {
     Material.primary: Material.color(Material.Teal, Material.Shade500)
     Material.accent: Material.color(Material.Blue, Material.Shade600)
 
-//    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
-//    onNavigationIndexChanged: stackView.activatePage(navigationIndex)
-
     Platform.FileDialog {
         id: openDatabaseDialog
         defaultSuffix: "sqlite"
@@ -173,7 +169,6 @@ ApplicationWindow {
         }
     }
 
-
     Settings {
         id: mainSettings
         property bool useStandardBedLength
@@ -204,44 +199,14 @@ ApplicationWindow {
     ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
     ApplicationShortcut { sequence: "F11"; onActivated: toggleFullScreen() }
 
-    Component {
-        id: searchBar
-        ToolBar {
-            width: parent.width
-            visible: false
-            contentHeight: backIcon.implicitHeight
-            Material.foreground: "white"
-
-            RowLayout {
-                spacing: Units.mediumDuration
-                anchors.fill: parent
-                BackIcon {
-                    id: backIcon
-                }
-                TextField {
-                    placeholderText: qsTr("Search")
-                    width: 200
-                    color: Material.Grey
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-        }
-    }
-
     Drawer {
         id: drawer
-        //        width: largeDisplay && railMode ? programLabel.width : Math.max(window.width * 0.10, 200)
-        //                width: childrenRect.width
         height: window.height
-        //        width: 72
-        //        height: window.height - toolBar.height
-        //        y: menuBar.height
         modal: !largeDisplay
         interactive: !largeDisplay
         position: largeDisplay ? 1 : 0
         visible: largeDisplay
         Material.background: Material.primary
-        //        Material.background: "white"
 
         ColumnLayout {
             anchors.fill: parent
@@ -276,9 +241,7 @@ ApplicationWindow {
                 isActive: currentDatabaseFile == ""
 
                 onClicked: switchToDatabase("main");
-                onPressAndHold: {
-                    mainDatabaseMenu.open();
-                }
+                onPressAndHold: mainDatabaseMenu.open();
 
                 Menu {
                     id: mainDatabaseMenu
@@ -286,15 +249,8 @@ ApplicationWindow {
                     x: parent.width
                     margins: 0
 
-                    MenuItem {
-                        text: qsTr("Export")
-                        onClicked: saveMainDatabaseDialog.open();
-                    }
-
-                    MenuItem {
-                        text: qsTr("Replace")
-                        onClicked: replaceMainDatabaseDialog.open();
-                    }
+                    MenuItem { text: qsTr("Export"); onClicked: saveMainDatabaseDialog.open(); }
+                    MenuItem { text: qsTr("Replace"); onClicked: replaceMainDatabaseDialog.open(); }
                 }
             }
 
@@ -317,9 +273,7 @@ ApplicationWindow {
                         databaseMenu.open();
                 }
 
-                onPressAndHold: {
-                    databaseMenu.open();
-                }
+                onPressAndHold: databaseMenu.open();
 
                 ToolTip {
                     text: secondDatabaseFile == "" ? qsTr("No other database opened")
@@ -335,16 +289,8 @@ ApplicationWindow {
                     x: parent.width
                     margins: 0
 
-                    MenuItem {
-                        text: qsTr("New")
-                        onClicked: newDatabaseDialog.open();
-                    }
-
-                    MenuItem {
-                        text: qsTr("Open")
-                        onClicked: openDatabaseDialog.open();
-                    }
-
+                    MenuItem { text: qsTr("New"); onClicked: newDatabaseDialog.open(); }
+                    MenuItem { text: qsTr("Open"); onClicked: openDatabaseDialog.open(); }
                     MenuItem {
                         text: qsTr("Export")
                         onClicked: saveSecondDatabaseDialog.open();
@@ -376,9 +322,7 @@ ApplicationWindow {
                 iconText: "\ue887"
                 isActive: false
 
-                onClicked: {
-                    aboutDialog.open();
-                }
+                onClicked: aboutDialog.open();
             }
         }
     }

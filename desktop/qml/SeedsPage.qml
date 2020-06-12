@@ -204,11 +204,7 @@ Page {
             width: parent.width
             height: Units.toolBarHeight
 
-            ButtonGroup {
-                buttons: checkButtonRow.children
-            }
-
-            Row {
+            TabBar {
                 id: checkButtonRow
                 anchors {
                     left: parent.left
@@ -216,15 +212,17 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: seedsRadioButton
                     checked: true
                     text: qsTr("Seeds")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: transplantsRadioButton
                     text: qsTr("Transplants")
+                    width: implicitWidth
                 }
             }
 
@@ -244,11 +242,7 @@ Page {
                 }
             }
 
-            ButtonGroup {
-                buttons: rangeButtonRow.children
-            }
-
-            Row {
+            TabBar {
                 id: rangeButtonRow
                 visible: seedsRadioButton.checked
                 anchors {
@@ -257,20 +251,23 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: yearRangeButton
                     checked: true
                     text: qsTr("Year")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: quarterRangeButton
                     text: qsTr("Quarter")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: monthRangeButton
                     text: qsTr("Month")
+                    width: implicitWidth
                 }
             }
 

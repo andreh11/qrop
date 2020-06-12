@@ -455,7 +455,6 @@ Page {
         }
     }
 
-
     SettingsSeedCompanyPane {
         id: seedCompanyPane
         height: parent.height

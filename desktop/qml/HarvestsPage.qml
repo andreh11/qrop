@@ -484,7 +484,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: "%L1 %2".arg(Math.round(model.quantity)).arg(model.unit)
+                                text: "%L1 %2".arg(Math.round(model.quantity * 100) /100).arg(model.unit)
                                 width: tableHeaderModel[2].width
                                 anchors.verticalCenter: parent.verticalCenter
                             }
