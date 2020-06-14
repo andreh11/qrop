@@ -34,6 +34,7 @@ Page {
     property int checks: 0
     property alias listView: seedListView
     property date todayDate: new Date()
+    property bool shortcutEnabled: navigationIndex === 4
 
     property int tableSortColumn: 1
     property string tableSortOrder: "ascending"
@@ -96,36 +97,17 @@ Page {
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 4
-        context: Qt.ApplicationShortcut
-        onActivated: weekSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
     }
-
-    //    Shortcut {
-    //        sequences: ["Up", "Down", "Left", "Right"]
-    //        enabled: navigationIndex === 4
-    //        context: Qt.ApplicationShortcut
-    //        onActivated: {
-    //            seedListView.currentIndex = 0
-    //            seedListView.forceActiveFocus();
-    //        }
-    //    }
 
     SeedListModel {
         id: seedListModel
@@ -151,7 +133,6 @@ Page {
         sortOrder: tableSortOrder
     }
 
-
     TransplantListModel {
         id: transplantListModel
         year: page.year
@@ -168,11 +149,11 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("CSV (*.csv)")]
         onAccepted: {
-            if (seedsRadioButton.checked)
+            if (seedsRadioButton.checked) {
                 seedListModel.csvExport(file);
-            else
+            } else {
                 transplantListModel.csvExport(file);
-//                Print.printTransplantList(page.year, file);
+            }
         }
     }
 
@@ -184,11 +165,12 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
-            if (seedsRadioButton.checked)
+            if (seedsRadioButton.checked) {
                 Print.printSeedList(page.year, file, monthRangeButton.checked
                                     ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
-            else
+            } else {
                 Print.printTransplantList(page.year, file);
+            }
         }
     }
 
@@ -222,11 +204,7 @@ Page {
             width: parent.width
             height: Units.toolBarHeight
 
-            ButtonGroup {
-                buttons: checkButtonRow.children
-            }
-
-            Row {
+            TabBar {
                 id: checkButtonRow
                 anchors {
                     left: parent.left
@@ -234,15 +212,17 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: seedsRadioButton
                     checked: true
                     text: qsTr("Seeds")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: transplantsRadioButton
                     text: qsTr("Transplants")
+                    width: implicitWidth
                 }
             }
 
@@ -262,11 +242,7 @@ Page {
                 }
             }
 
-            ButtonGroup {
-                buttons: rangeButtonRow.children
-            }
-
-            Row {
+            TabBar {
                 id: rangeButtonRow
                 visible: seedsRadioButton.checked
                 anchors {
@@ -275,20 +251,23 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: yearRangeButton
                     checked: true
                     text: qsTr("Year")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: quarterRangeButton
                     text: qsTr("Quarter")
+                    width: implicitWidth
                 }
 
-                ButtonCheckBox {
+                TabButton {
                     id: monthRangeButton
                     text: qsTr("Month")
+                    width: implicitWidth
                 }
             }
 
@@ -474,8 +453,8 @@ Page {
                     height: headerRow.height
                     width: parent.width
                     radius: 4
-
                     z: 3
+
                     Column {
                         width: parent.width
 

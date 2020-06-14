@@ -26,6 +26,7 @@ protected:
 
 private:
     int m_plantingId { -1 };
+    bool hasPlantingId(int sourceRow, const QModelIndex &sourceParent) const;
 };
 
 #endif // SQLNOTEMODEL_H

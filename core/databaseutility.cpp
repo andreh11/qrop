@@ -70,6 +70,19 @@ void DatabaseUtility::setIdFieldName(const QString &name)
     m_idFieldName = name;
 }
 
+std::unique_ptr<QSqlQuery> DatabaseUtility::buildQuery(const QString &queryString) const
+{
+    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
+    query->setForwardOnly(true);
+    query->prepare(queryString);
+    query->exec();
+    if (query->lastError().type() != QSqlError::ErrorType::NoError) {
+        qWarning() << "[Query ERROR] " << query->lastError().text();
+        qWarning() << "[Query TEXT]: " << query->lastQuery();
+    }
+    return query;
+}
+
 void DatabaseUtility::debugQuery(const QSqlQuery &query) const
 {
     if (query.lastError().type() == QSqlError::ErrorType::NoError) {
@@ -120,7 +133,8 @@ QSqlRecord DatabaseUtility::recordFromId(const QString &tableName, int id) const
 std::unique_ptr<QSqlQuery> DatabaseUtility::queryFromIdList(const QString &tableName,
                                                             const QList<int> &idList) const
 {
-    Q_ASSERT(!tableName.isEmpty());
+    if (tableName.isEmpty())
+        return {};
     if (idList.isEmpty())
         return {};
 
@@ -141,24 +155,13 @@ std::unique_ptr<QSqlQuery> DatabaseUtility::queryFromIdList(const QString &table
 QList<QSqlRecord> DatabaseUtility::recordListFromIdList(const QString &tableName,
                                                         const QList<int> &idList) const
 {
-    Q_ASSERT(!tableName.isEmpty());
-    if (idList.isEmpty())
-        return {};
-
-    QString queryString("SELECT * FROM %1 WHERE %2 in (%3)");
-    QString ids = "";
-    int i;
-    for (i = 0; i < idList.length() - 1; ++i)
-        ids.append(QString::number(idList[i]) + ", ");
-    ids.append(QString::number(idList[i]));
-
-    QSqlQuery query(queryString.arg(tableName).arg(tableName + "_id").arg(ids));
-    debugQuery(query);
+    auto query = queryFromIdList(tableName, idList);
+    debugQuery(*query);
 
     QList<QSqlRecord> recordList;
-    while (query.next())
-        if (query.isValid())
-            recordList.push_back(query.record());
+    while (query->next())
+        if (query->isValid())
+            recordList.push_back(query->record());
 
     return recordList;
 }
@@ -346,17 +349,4 @@ QVariantMap DatabaseUtility::commonValues(const QList<int> &idList) const
     }
 
     return common;
-}
-
-std::unique_ptr<QSqlQuery> DatabaseUtility::queryBuilder(const QString &queryString)
-{
-    std::unique_ptr<QSqlQuery> query(new QSqlQuery());
-    query->setForwardOnly(true);
-    query->prepare(queryString);
-    query->exec();
-    if (query->lastError().type() != QSqlError::ErrorType::NoError) {
-        qWarning() << "[Query ERROR] " << query->lastError().text();
-        qWarning() << "[Query TEXT]: " << query->lastQuery();
-    }
-    return query;
 }

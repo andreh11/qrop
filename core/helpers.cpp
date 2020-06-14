@@ -101,7 +101,6 @@ QString Helpers::acronymize(const QString &string)
         for (int i = 0; i < stringList.length(); i++)
             s += stringList[i][0].toUpper();
         return s;
-    } else {
-        return stringList[0][0] + stringList[0][1].toUpper();
     }
+    return stringList[0][0] + stringList[0][1].toUpper();
 }

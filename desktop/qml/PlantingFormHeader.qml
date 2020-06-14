@@ -149,39 +149,18 @@ Rectangle {
             }
         }
 
-        ColumnLayout {
+        TitleLabel {
+            id: estimatedYieldLabel
             visible: showYieldAndRevenue
-            Label {
-                text: qsTr("Yield")
-                Layout.alignment: Qt.AlignRight
-                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
-                color: Qt.rgba(0,0,0, 0.50)
-            }
-            Label {
-                id: estimatedYieldLabel
-                text: "%L1 %2".arg(estimatedYield).arg(unitText)
-                Layout.alignment: Qt.AlignRight
-                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton; }
-                color: Qt.rgba(0,0,0, 0.87)
-            }
+            title: qsTr("Yield")
+            text: "%L1 %2".arg(estimatedYield).arg(unitText)
         }
         
-        ColumnLayout {
+        TitleLabel {
+            id: estimatedRevenueLabel
             visible: showYieldAndRevenue
-            Label {
-                text: qsTr("Revenue")
-                font { family: "Roboto Regular"; pixelSize: Units.fontSizeCaption }
-                color: Qt.rgba(0,0,0, 0.50)
-                Layout.alignment: Qt.AlignRight
-            }
-            Label {
-                id: estimatedRevenueLabel
-                text: qsTr("$%L1").arg(estimatedRevenue)
-                horizontalAlignment: Text.AlignHCenter
-                font { family: "Roboto Regular"; pixelSize: Units.fontSizeBodyAndButton }
-                color: Qt.rgba(0,0,0, 0.87)
-                Layout.alignment: Qt.AlignRight
-            }
+            title: qsTr("Revenue")
+            text: qsTr("$%L1").arg(estimatedRevenue)
         }
     }
 }

@@ -34,10 +34,12 @@ Page {
     property bool showPlantingsPane: true
     property bool showOnlyGreenhouse: filterField.filterIndex === 1
     property bool showOnlyField: filterField.filterIndex === 2
+    property bool shortcutEnabled: navigationIndex === 2 && filterField.visible
+                                   && !addDialog.activeFocus && !editDialog.activeFocus
 
     function refresh() {
         locationView.refresh();
-        plantingsView.refresh()
+        plantingsView.refresh();
     }
 
     function reload() {
@@ -57,111 +59,48 @@ Page {
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+P"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-
-        context: Qt.ApplicationShortcut
-        onActivated: showPlantingPaneButton.clicked()
+    ApplicationShortcut {
+        sequence: "Ctrl+P"; enabled: shortcutEnabled; onActivated: showPlantingPaneButton.clicked()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Right"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-
-        context: Qt.ApplicationShortcut
-        onActivated: seasonSpinBox.nextSeason()
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextSeason()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Left"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-
-        context: Qt.ApplicationShortcut
-        onActivated: seasonSpinBox.previousSeason();
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousSeason();
     }
 
-//    Shortcut {
-//        sequences: ["Up", "Down", "Left", "Right"]
-//        enabled: navigationIndex === 2 && !locationView.activeFocus
-//                 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-//        context: Qt.ApplicationShortcut
-//        onActivated: {
-//            locationView.currentIndex = 0
-//            locationView.forceActiveFocus();
-//        }
-//    }
-    //    Shortcut {
-    //        sequences: ["Up", "Down", "Left", "Right"]
-    //        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-    //        context: Qt.ApplicationShortcut
-    //        onActivated: {
-    //            plantingsView.currentIndex = 0
-    //            plantingsView.forceActiveFocus();
-    //        }
-    //    }
-
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: seasonSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: seasonSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousYear();
     }
 
-//    Shortcut {
-//        sequence: "Ctrl+G"
-//        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-//        context: Qt.ApplicationShortcut
-//        onActivated: greenhouseButton.toggle();
-//    }
-
-    Shortcut {
-        sequence: "Shift+A"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: expandButton.expandLevel(0)
+    ApplicationShortcut {
+        sequence: "Shift+A"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(0)
     }
 
-    Shortcut {
-        sequence: "Shift+B"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: expandButton.expandLevel(1)
+    ApplicationShortcut {
+        sequence: "Shift+B"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(1)
     }
 
-    Shortcut {
-        sequence: "Shift+C"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: expandButton.expandLevel(2)
+    ApplicationShortcut {
+        sequence: "Shift+C"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(2)
     }
 
-    Shortcut {
-        sequence: "Shift+D"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: expandButton.expandLevel(3)
+    ApplicationShortcut {
+        sequence: "Shift+D"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(3)
     }
 
-    Shortcut {
-        sequence: "Shift+E"
-        enabled: navigationIndex === 2 && filterField.visible && !addDialog.activeFocus && !editDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: expandButton.expandLevel(4)
+    ApplicationShortcut {
+        sequence: "Shift+E"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(4)
     }
 
     onEditModeChanged: {
@@ -293,8 +232,9 @@ Page {
                         locationView.collapseAll(level, false)
                     } else {
                         locationView.expandAll(level)
-                        for (var i = 0; i < level; i++)
+                        for (var i = 0; i < level; i++) {
                             expandBoolList[i] = true
+                        }
                     }
                     expandBoolList[level] = !expandBoolList[level]
                     expandBoolListChanged();
@@ -376,14 +316,6 @@ Page {
                 }
             }
 
-            //            CheckBox {
-            //                id: unassignedPlantingsCheckbox
-            //                text: qsTr("Show unassigned plantings")
-            //                Layout.leftMargin: 16
-            //                visible: !editMode
-            //                checked: true
-            //            }
-
             CheckBox {
                 id: emptyLocationsCheckbox
                 text: qsTr("Only show empty locations")
@@ -410,7 +342,6 @@ Page {
                 visible: editMode
                 Layout.fillWidth: true
             }
-
 
             SeasonSpinBox {
                 id: seasonSpinBox
@@ -491,14 +422,11 @@ Page {
 
         Pane {
             id: plantingsPane
-            //            visible: unassignedPlantingsCheckbox.checked & !editMode
             visible: !editMode
 
             padding: 0
             Layout.fillWidth: true
-            //            Layout.fillHeight: true
             Layout.minimumHeight: showPlantingsPane ? page.height / 4 : 0
-            //            Layout.minimumHeight: unassignedPlantingsCheckbox.checked ? page.height / 4 : 10
             Material.elevation: 2
             Material.background: "white"
 

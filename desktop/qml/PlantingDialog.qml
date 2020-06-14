@@ -120,10 +120,9 @@ Dialog {
     leftPadding: Units.mediumSpacing
     rightPadding: leftPadding
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
-        context: Qt.ApplicationShortcut
         onActivated: {
             if (plantingForm.accepted)
                 dialogFooter.apply();

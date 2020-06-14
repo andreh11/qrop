@@ -21,7 +21,9 @@ Item {
     property int year
     property date seasonBegin
 
-    property var drawMap: Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showNames)
+    property var drawMap: plantingId > 0
+                          ? Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showNames)
+                          : {}
 //    property var drawMap
     property color cropColor: drawMap["cropColor"]
     property color familyColor: drawMap["familyColor"]
@@ -36,6 +38,10 @@ Item {
     signal plantingRemoved()
     signal dragFinished();
 
+    onPlantingIdChanged: {
+
+    }
+
     property bool useStandardBedLength
     property int standardBedLength
     property bool showPlantingSuccessionNumber
@@ -47,7 +53,6 @@ Item {
     height: Units.rowHeight
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
-    clip: true
 
 //    anchors {
 //        left: parent.left

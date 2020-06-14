@@ -94,7 +94,7 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-    const auto plantingDate = QDate::fromString(map["planting_date"].toString(), Qt::ISODate);
+    const auto plantingDate = MDate::dateFromIsoString(map["planting_date"].toString());
     QVariantMap newMap(map);
     QList<int> idList;
 
@@ -384,6 +384,12 @@ int Planting::duplicate(int id) const
     return newId;
 }
 
+void Planting::finish(const QList<int> &plantingIdList, int finishedReasonId)
+{
+    QVariantMap map({ { "finished", 1 }, { "finished_reason_id", finishedReasonId } });
+    DatabaseUtility::updateList(plantingIdList, map);
+}
+
 /**
  * Duplicate a planting to another \a year.
  *
@@ -427,7 +433,7 @@ void Planting::duplicateListToYear(const QList<int> &idList, int year) const
 
 QList<int> Planting::yearPlantingList(int year) const
 {
-    QString queryString("SELECT *, strftime('%Y', planting_date) AS planting_year "
+    QString queryString("SELECT planting_id, strftime('%Y', planting_date) AS planting_year "
                         "FROM planting_view "
                         "WHERE planting_year = '%1'");
 
@@ -1161,6 +1167,6 @@ QVariantMap Planting::drawInfoMap(int plantingId, int season, int year, bool sho
     timer.start();
     auto map = drawInfoMap(recordFromId("planting_view", plantingId), season, year, showFamilyColor,
                            showNames);
-    qDebug() << "planting info map" << timer.elapsed() << "ms";
+    qDebug() << timer.elapsed() << "ms";
     return map;
 }

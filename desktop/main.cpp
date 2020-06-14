@@ -44,7 +44,7 @@
 #include "location.h"
 #include "mdate.h"
 #include "note.h"
-#include "pictureimageprovider.h"
+#include "qrpimageprovider.h"
 #include "planting.h"
 #include "print.h"
 #include "seedcompany.h"
@@ -85,14 +85,6 @@
 #include "qropdoublevalidator.h"
 #include "timevalidator.h"
 
-static QObject *plantingCallback(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-    auto *planting = new Planting();
-    return planting;
-}
-
 void registerFonts()
 {
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
@@ -132,10 +124,14 @@ void registerTypes()
     qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
     qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
     qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
-
     qmlRegisterType<QQuickTreeModelAdaptor>("io.qrop.components", 1, 0, "TreeModelAdaptor");
 
-    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting", plantingCallback);
+    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting",
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                           Q_UNUSED(engine)
+                                           Q_UNUSED(scriptEngine)
+                                           return new Planting;
+                                       });
 
     qmlRegisterSingletonType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -308,6 +304,22 @@ void registerTypes()
                                               });
 }
 
+void installTranslator()
+{
+    auto translator(new QTranslator);
+    const QString &lang = QLocale::system().name();
+    QSettings settings;
+    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
+    qDebug() << "LANG " << lang << preferredLanguage;
+
+    if (preferredLanguage == "system")
+        translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
+    else
+        translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
+
+    QApplication::installTranslator(translator);
+}
+
 int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
@@ -321,34 +333,13 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.4.4");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
-    QTranslator translator;
-    const QString &lang = QLocale::system().name();
-    QSettings settings;
-    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
-    qDebug() << "LANG " << lang << preferredLanguage;
-
-    if (preferredLanguage == "system")
-        translator.load(QLocale(), "qrop", "_", ":/translations", ".qm");
-    else
-        translator.load(":/translations/qrop_" + preferredLanguage + ".qm");
-
-    QApplication::installTranslator(&translator);
-
     registerFonts();
     registerTypes();
+    installTranslator();
 
-    Database db;
     Database::connectToDatabase();
 
-    //#if defined(Q_OS_ANDROID)
-    //    QtAndroid::runOnAndroidThread([=]() {
-    //        QAndroidJniObject window =
-    //                QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-    //        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-    //        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-    //        window.callMethod<void>("setStatusBarColor", "(I)V", 0xff80CBC4); // Desired statusbar color
-    //    });
-    //#endif
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -360,7 +351,7 @@ int main(int argc, char *argv[])
             },
             Qt::QueuedConnection);
     engine.load(url);
-    engine.addImageProvider("pictures", new PictureImageProvider());
+    engine.addImageProvider("pictures", new QrpImageProvider());
 
     return app.exec();
 }

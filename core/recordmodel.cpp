@@ -19,9 +19,14 @@ RecordModel::RecordModel(QObject *parent, const QString &tableName)
 //    return leftCrop < rightCrop;
 //}
 
-bool RecordModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool RecordModel::inYear(int sourceRow, const QModelIndex &sourceParent) const
 {
     QDate date = sourceFieldDate(sourceRow, sourceParent, "date");
-    bool isInYear = QDate(m_year, 1, 1) <= date && date <= QDate(m_year, 12, 31);
-    return isInYear && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    return QDate(m_year, 1, 1) <= date && date <= QDate(m_year, 12, 31);
+}
+
+bool RecordModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    return inYear(sourceRow, sourceParent)
+            && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

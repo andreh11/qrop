@@ -24,7 +24,7 @@ import io.qrop.components 1.0
 
 // TODO: refactor
 Page {
-    id: page
+    id: root
 
     property int paneWidth: 600
     property bool showFamilyPane: false
@@ -33,13 +33,7 @@ Page {
     property bool showUnitPane: false
     property bool showTaskTypePane: false
 
-    function refresh() {
-        familyPane.refresh();
-        keywordPane.refresh();
-        seedCompanyPane.refresh();
-        unitPane.refresh();
-        taskTypePane.refresh();
-    }
+    function refresh() { }
 
     title: qsTr("Settings")
     Material.background: largeDisplay ? Units.pageColor : "white"
@@ -190,9 +184,7 @@ Page {
                                 }
                             }
                         }
-
                     }
-
                 }
 
                 SettingsPaneDivider { }
@@ -265,7 +257,7 @@ Page {
                         SettingsSwitch {
                             id: standardBedLengthSwitch
                             text: qsTr("Standard bed length")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         RowLayout {
@@ -312,31 +304,31 @@ Page {
                         SettingsSwitch {
                             id: showSeedCompanySwitch
                             text: qsTr("Show seed company beside variety names")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: showPlantingSuccessionNumberSwitch
                             text: qsTr("Show planting succession numbers")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: durationsByDefaultSwitch
                             text: qsTr("Compute from durations by default")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: showDurationFieldSwitch
                             text: qsTr("Show duration fields")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: showDensityFieldSwitch
                             text: qsTr("Show density field")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
                     }
                 }
@@ -356,19 +348,19 @@ Page {
                         SettingsSwitch {
                             id: showFullNameSwitch
                             text: qsTr("Show complete name of locations")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: allowPlantingsConflictSwitch
                             text: qsTr("Allow plantings conflicts on same location")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
 
                         SettingsSwitch {
                             id: showTaskOnFieldMap
                             text: qsTr("Show tasks")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
                     }
                 }
@@ -388,7 +380,7 @@ Page {
                         SettingsSwitch {
                             id: showAllPlantingIfNoneInWindonSwitch
                             text: qsTr("Show all plantings if there is none in harvest window")
-                            onToggled: restartSnackbar.open();
+                            onClicked: restartSnackbar.open();
                         }
                     }
                 }
@@ -437,31 +429,45 @@ Page {
         id: familyPane
         height: parent.height
         width: parent.width
-        paneWidth: page.paneWidth
+        paneWidth: root.paneWidth
         visible: showFamilyPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showFamilyPane = false
+        onVisibleChanged: {
+            if (visible) {
+                refresh();
+            }
+        }
     }
 
     SettingsKeywordPane {
         id: keywordPane
         height: parent.height
         width: parent.width
-        paneWidth: page.paneWidth
+        paneWidth: root.paneWidth
         visible: showKeywordPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showKeywordPane = false
+        onVisibleChanged: {
+            if (visible) {
+                refresh();
+            }
+        }
     }
-
 
     SettingsSeedCompanyPane {
         id: seedCompanyPane
         height: parent.height
         width: parent.width
-        paneWidth: page.paneWidth
+        paneWidth: root.paneWidth
         visible: showSeedCompanyPane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showSeedCompanyPane = false
+        onVisibleChanged: {
+            if (visible) {
+                refresh();
+            }
+        }
     }
 
     SettingsUnitPane {
@@ -469,19 +475,29 @@ Page {
         height: parent.height
         visible: showUnitPane
         width: parent.width
-        paneWidth: page.paneWidth
+        paneWidth: root.paneWidth
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showUnitPane = false
+        onVisibleChanged: {
+            if (visible) {
+                refresh();
+            }
+        }
     }
 
     SettingsTaskPane {
         id: taskTypePane
         height: parent.height
         width: parent.width
-        paneWidth: page.paneWidth
+        paneWidth: root.paneWidth
         visible: showTaskTypePane
         anchors.horizontalCenter: parent.horizontalCenter
         onClose: showTaskTypePane = false
+        onVisibleChanged: {
+            if (visible) {
+                refresh();
+            }
+        }
     }
 }
 

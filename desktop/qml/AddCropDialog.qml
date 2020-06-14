@@ -24,7 +24,7 @@ import Qt.labs.platform 1.0 as Lab
 import io.qrop.components 1.0
 
 Dialog {
-    id: addCropDialog
+    id: root
 
     readonly property string cropName: cropNameField.text.trim()
     property alias color: colorPicker.color
@@ -51,15 +51,15 @@ Dialog {
 
     footer: AddDialogButtonBox {
         width: parent.width
-        onAccepted: addCropDialog.accept()
-        onRejected: addCropDialog.reject()
+        onAccepted: root.accept()
+        onRejected: root.reject()
         acceptableInput: acceptableForm
     }
 
     ColumnLayout {
-        Keys.onReturnPressed: if (acceptableForm) addCropDialog.accept();
-        Keys.onEscapePressed: addCropDialog.reject()
-        Keys.onBackPressed: addCropDialog.reject() // especially necessary on Android
+        Keys.onReturnPressed: if (acceptableForm) root.accept();
+        Keys.onEscapePressed: root.reject()
+        Keys.onBackPressed: root.reject() // especially necessary on Android
         anchors.fill: parent
         spacing: Units.mediumSpacing
 
@@ -69,7 +69,7 @@ Dialog {
             validator: RegExpValidator { regExp: /\w[\w -]*/ }
             Layout.fillWidth: true
             Layout.minimumWidth: 100
-            Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
+            Keys.onReturnPressed: if (acceptableForm && !popup.opened) root.accept();
         }
 
         ComboTextField {
@@ -82,8 +82,8 @@ Dialog {
             model: FamilyModel {
                 id: familyModel
             }
-            Keys.onReturnPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
-            Keys.onEnterPressed: if (acceptableForm && !popup.opened) addCropDialog.accept();
+            Keys.onReturnPressed: if (acceptableForm && !popup.opened) root.accept();
+            Keys.onEnterPressed: if (acceptableForm && !popup.opened) root.accept();
             Layout.minimumWidth: 150
             Layout.fillWidth: true
         }

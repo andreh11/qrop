@@ -21,7 +21,6 @@
 VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
-    setFilterCropId(1);
     setFilterKeyStringColumn("variety");
     setSortColumn("variety");
 }
@@ -31,7 +30,7 @@ int VarietyModel::cropId() const
     return m_cropId;
 }
 
-void VarietyModel::setFilterCropId(int cropId)
+void VarietyModel::setCropId(int cropId)
 {
     if (cropId == m_cropId)
         return;

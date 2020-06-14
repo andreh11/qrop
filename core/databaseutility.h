@@ -45,6 +45,7 @@ public:
     QString idFieldName() const;
     void setIdFieldName(const QString &fieldName);
 
+    std::unique_ptr<QSqlQuery> buildQuery(const QString &queryString) const;
     void debugQuery(const QSqlQuery &query) const;
 
     QList<int> queryIds(const QString &queryString, const QString &idFieldName) const;
@@ -73,8 +74,6 @@ public:
                     int id2) const;
     Q_INVOKABLE void rollback() const;
     Q_INVOKABLE virtual QVariantMap commonValues(const QList<int> &idList) const;
-
-    static std::unique_ptr<QSqlQuery> queryBuilder(const QString &queryString);
 
 protected:
     QString m_table;

@@ -54,8 +54,8 @@ Item {
         anchors.left: horizontalAlignment === Text.AlignLeft ? parent.left : undefined
         anchors.right: horizontalAlignment === Text.AlignRight ? parent.right : undefined
         elide: Text.ElideRight
-        color: Units.colorMediumEmphasis
-        font.family: condensed ? "Roboto Condensed" : "Roboto Regular"
+        color: Units.colorHighEmphasis
+        font.family: Units.headerFont["family"]
         font.pixelSize: Units.fontSizeTable
         horizontalAlignment: control.horizontalAlignment
     }
@@ -79,10 +79,10 @@ Item {
                 color: Units.colorMediumEmphasis
                 rotation: 0
             }
-            PropertyChanges {
-                target: headerLabel
-                color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
-            }
+//            PropertyChanges {
+//                target: headerLabel
+//                color: mouseArea.containsMouse ? Units.colorHighEmphasis : Units.colorMediumEmphasis
+//            }
         },
 
         State {
@@ -95,7 +95,7 @@ Item {
             }
             PropertyChanges {
                 target: headerLabel
-                color: Units.colorHighEmphasis
+//                color: Units.colorHighEmphasis
             }
 
         },
@@ -111,7 +111,7 @@ Item {
             }
             PropertyChanges {
                 target: headerLabel
-                color: Units.colorHighEmphasis
+//                color: Units.colorHighEmphasis
             }
         }
     ]

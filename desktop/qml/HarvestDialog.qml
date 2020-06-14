@@ -28,7 +28,7 @@ Dialog {
     property int year
     property int plantingId: -1
 //    property alias cropId: plantingFormHeader.cropId
-    property int quantity: Number(quantityField.text)
+    property double quantity: Number.fromLocaleString(quantityField.text)
     property alias dateString: datePicker.isoDateString
     property alias time: laborTimeField.text
     property var selectedIdList: plantingList.selectedIdList()
@@ -88,11 +88,11 @@ Dialog {
     }
 
     function addHarvest() {
-        var d = selectedIdList.length
-        var qty = Number(quantity/d)
-        var time = MDate.stringFromTime(MDate.divided(MDate.timeFromString(laborTimeField.text), d))
-        console.log("TIME", time)
-        for (var i = 0; i < selectedIdList.length; i++) {
+        let plantingsNumber = selectedIdList.length
+        let qty = Number(quantity/plantingsNumber)
+        console.log(quantity, qty)
+        let time = MDate.stringFromTime(MDate.divided(MDate.timeFromString(laborTimeField.text), plantingsNumber))
+        for (let i = 0; i < selectedIdList.length; i++) {
             Harvest.add({ "date": datePicker.isoDateString,
                           "time": time,
                           "quantity": qty,
@@ -135,7 +135,7 @@ Dialog {
         property bool showAllPlantingIfNoneInWindow
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
         context: Qt.ApplicationShortcut
@@ -166,7 +166,7 @@ Dialog {
                 suffixText: selectedIdList ? Planting.unit(selectedIdList[0]) : ""
                 floatingLabel: true
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: IntValidator {
+                validator: QropDoubleValidator {
                     bottom: 0
                     top: 999
                 }

@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void duplicateListToYear(const QList<int> &idList, int year) const;
     Q_INVOKABLE QVariantMap commonValues(const QList<int> &idList) const override;
     Q_INVOKABLE bool sameCrop(const QList<int> &idList) const;
+    Q_INVOKABLE void finish(const QList<int> &plantingIdList, int finishedReasonId);
 
     Q_INVOKABLE QString cropName(int plantingId) const;
     Q_INVOKABLE int cropId(int plantingId) const;

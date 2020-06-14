@@ -91,7 +91,7 @@ Item {
     signal addPlantingLength(real length)
 
     function refresh() {
-        locationModel.refresh();
+        locationModel.refreshTree();
     }
 
     function reload() {
@@ -670,7 +670,7 @@ Item {
         Rectangle {
             id: plantingBeginningLine
             x: firstColumnWidth
-               + Units.position(root.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
+               + Helpers.position(root.seasonBegin, plantingEditMode ? editedPlantingPlantingDate
                                                                    : root.plantingDate)
             visible: plantingEditMode || root.draggedPlantingId > 0
             anchors.top: parent.top
@@ -683,7 +683,7 @@ Item {
             id: plantingEndLine
             width: 2
             x: firstColumnWidth
-               + Units.position(root.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
+               + Helpers.position(root.seasonBegin, plantingEditMode ? editedPlantingEndHarvestDate
                                                                    : root.endHarvestDate)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -693,7 +693,7 @@ Item {
 
         Rectangle {
             id: todayLine
-            property int _pos: Units.position(seasonBegin, todayDate)
+            property int _pos: Helpers.position(seasonBegin, todayDate)
             x: firstColumnWidth + _pos
             z: 1
             visible: (_pos > 0) && (_pos < Units.timegraphWidth)

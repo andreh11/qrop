@@ -34,13 +34,17 @@ void TaskTypeModel::setShowPlantingTasks(bool show)
 
     m_showPlantingTasks = show;
     invalidateFilter();
-    showPlantingTasksChanged();
+    emit showPlantingTasksChanged();
+}
+
+bool TaskTypeModel::isPlantingTask(int sourceRow, const QModelIndex &sourceParent) const
+{
+    int taskTypeId = sourceRowValue(sourceRow, sourceParent, "task_type_id").toInt();
+    return taskTypeId <= 3;
 }
 
 bool TaskTypeModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    int taskTypeId = sourceRowValue(sourceRow, sourceParent, "task_type_id").toInt();
-    bool isPlantingTask = taskTypeId <= 3;
-    return SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)
-            && (m_showPlantingTasks || !isPlantingTask);
+    return (m_showPlantingTasks || !isPlantingTask(sourceRow, sourceParent))
+            && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

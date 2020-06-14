@@ -22,14 +22,13 @@ add_library(core SHARED
         inputmodel.cpp
         keyword.cpp
         keywordmodel.cpp
-        listmodel.cpp
         location.cpp
         locationmodel.cpp
         mdate.cpp
         nametree.cpp
         note.cpp
         notemodel.cpp
-        pictureimageprovider.cpp
+        qrpimageprovider.cpp
         planting.cpp
         plantingmodel.cpp
         print.cpp

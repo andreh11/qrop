@@ -1,14 +1,29 @@
+#include <QtTest>
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QDate>
 
-#include "tst_database.h"
 #include "db.h"
 
-tst_Database::tst_Database()
-    : mDatabase(nullptr)
+class tst_Database : public QObject
 {
-}
+    Q_OBJECT
+
+public:
+    tst_Database();
+    ~tst_Database() override;
+
+private:
+    Database *mDatabase { nullptr };
+
+private slots:
+    void databasePath();
+    void connectToDatabase();
+    void init();
+    void cleanup();
+};
+
+tst_Database::tst_Database() { }
 
 tst_Database::~tst_Database() = default;
 
@@ -33,4 +48,6 @@ void tst_Database::connectToDatabase()
     QVERIFY(QSqlDatabase::database().isValid());
 }
 
-QTEST_MAIN(tst_Database)
+QTEST_APPLESS_MAIN(tst_Database)
+
+#include "tst_database.moc"

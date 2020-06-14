@@ -24,36 +24,36 @@ ItemDelegate {
     id: control
 
     property string page
-    property bool isActive: index === navigationIndex
+    property bool isActive: false
     property alias iconText: iconLabel.text
     property alias iconColor: iconLabel.color
     property bool showToolTip: true
 
     focusPolicy: Qt.NoFocus
-    height: 48
-    highlighted: isActive
+    //    height: 72
+    //    width: 72
+    implicitHeight: 56
+    implicitWidth: 72
+    //    highlighted: isActive
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
+    highlighted: isActive
 
-    ToolTip {
-        x: control.width + Units.smallSpacing
-        y: (control.height - height) / 2
-        text: control.text
-        visible: control.showToolTip && largeDisplay && control.hovered
-        delay: Qt.styleHints.mousePressAndHoldInterval
-    }
-
-    contentItem: Row {
-        anchors.centerIn: parent
-        spacing: largeDisplay && railMode ? 0 : 24
+    contentItem: Item {
+        anchors.fill: parent
 
         Label {
             id: iconLabel
+            width: 24
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 12
+            }
+//            color: isActive ? Material.accent : "white"
             color: "white"
-            width: 28
-            anchors.verticalCenter: parent.verticalCenter
             font.family: "Material Icons"
-            font.pixelSize: 28
+            font.pixelSize: 24
             horizontalAlignment: largeDisplay && railMode ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -61,12 +61,23 @@ ItemDelegate {
 
         Label {
             id: textLabel
+            //        visible: isActive || hovered
+            width: Math.min(parent.width - 2, implicitWidth)
             text: control.text
-            color: "white"
-            anchors.verticalCenter: parent.verticalCenter
-            visible: !largeDisplay
-            width: visible ? implicitWidth : 0
-            font.family: "Roboto Regular"
+            font.family: "Roboto Condensed"
+            font.pixelSize: Units.fontSizeBodyAndButton
+            elide: Text.ElideRight
+            //            color: "white"
+            color: iconLabel.color
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: iconLabel.bottom
+                topMargin: 0
+            }
+
+            //            visible: !largeDisplay
+            //            width: visible ? implicitWidth : 0
+            //            height:
             verticalAlignment: Text.AlignVCenter
         }
     }

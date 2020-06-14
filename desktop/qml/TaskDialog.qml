@@ -131,10 +131,9 @@ Dialog {
                         ? taskForm.implicitHeight + Units.smallSpacing
                         : parent.height - 2 * Units.smallSpacing
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
         enabled: dialog.visible
-        context: Qt.ApplicationShortcut
         onActivated: {
             if (taskForm.accepted)
                 dialogFooter.apply();

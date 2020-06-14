@@ -29,6 +29,7 @@ Page {
 
     property bool showTimegraph: timegraphButton.checked
     property bool filterMode: false
+    property bool shortcutEnabled: navigationIndex === 0 && !dialogOpened
     property alias filterString: filterField.text
     property alias year: seasonSpinBox.year
     property alias season: seasonSpinBox.season
@@ -37,6 +38,7 @@ Page {
 
     property bool showOnlyGreenhouse: filterField.filterIndex === 1
     property bool showOnlyField: filterField.filterIndex === 2
+    property alias showFinished: showFinishButton.checked
 
     property alias model: plantingsView.model
     property alias rowCount: plantingsView.rowCount
@@ -53,36 +55,39 @@ Page {
     }
 
     function selectedIdList() {
-        var idList = []
-        for (var key in selectedIds)
-            if (selectedIds[key])
-                idList.push(key)
+        let idList = [];
+        for (let key in selectedIds) {
+            if (selectedIds[key]) {
+                idList.push(key);
+            }
+        }
         return idList;
     }
 
     function duplicateSelected() {
-        var idList = selectedIdList();
-        Planting.duplicateList(idList)
-        plantingsView.unselectAll()
-        page.refresh()
+        let idList = selectedIdList();
+        Planting.duplicateList(idList);
+        plantingsView.unselectAll();
+        page.refresh();
         plantingsView.selectedIdsChanged();
     }
 
     function duplicateSelectedNextYear() {
-        var idList = selectedIdList();
-        Planting.duplicateListToYear(idList, year + 1)
-        plantingsView.unselectAll()
-        page.refresh()
+        let idList = selectedIdList();
+        Planting.duplicateListToYear(idList, year + 1);
+        plantingsView.unselectAll();
+        page.refresh();
         plantingsView.selectedIdsChanged();
     }
 
     function removeSelected() {
-        var ids = []
-        for (var key in selectedIds)
+        let ids = []
+        for (let key in selectedIds) {
             if (selectedIds[key]) {
-                selectedIds[key] = false
-                ids.push(key)
+                selectedIds[key] = false;
+                ids.push(key);
             }
+        }
         Planting.removeList(ids)
         page.refresh()
         plantingsView.selectedIdsChanged()
@@ -92,98 +97,84 @@ Page {
     padding: 0
     Material.background: "white"
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 0 && addButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && addButton.visible
         onActivated: addButton.clicked()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Ctrl+T"]
-        enabled: navigationIndex === 0 && addButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
-        onActivated: timegraphButton.toggle();
+        enabled: shortcutEnabled && addButton.visible
+        onActivated: timegraphButton.toggle()
     }
 
-
-    Shortcut {
+    ApplicationShortcut {
         sequences: [StandardKey.Find]
-        enabled: navigationIndex === 0 && filterField.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && filterField.visible
         onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+E"
-        enabled: navigationIndex === 0 && editButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && editButton.visible
         onActivated: editButton.clicked()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+D"
-        enabled: navigationIndex === 0 && duplicateButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && duplicateButton.visible
         onActivated: duplicateButton.clicked()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: StandardKey.Delete
-        enabled: navigationIndex === 0 && deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && deleteButton.visible
         onActivated: deleteButton.clicked()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: StandardKey.SelectAll
-        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !deleteButton.visible
         onActivated: plantingsView.selectAll();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: StandardKey.Deselect
-        enabled: navigationIndex === 0 && deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && deleteButton.visible
         onActivated: plantingsView.unselectAll()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+Right"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !deleteButton.visible
         onActivated: seasonSpinBox.nextSeason()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+Left"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !deleteButton.visible
         onActivated: seasonSpinBox.previousSeason();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 0 && !plantingsView.activeFocus && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !plantingsView.activeFocus
         onActivated: {
             plantingsView.currentIndex = 0
             plantingsView.forceActiveFocus();
         }
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+Up"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !deleteButton.visible
         onActivated: seasonSpinBox.nextYear()
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequence: "Ctrl+Down"
-        enabled: navigationIndex === 0 && !deleteButton.visible && !dialogOpened
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !deleteButton.visible
         onActivated: seasonSpinBox.previousYear();
     }
 
@@ -228,7 +219,6 @@ Page {
         }
     }
 
-
     Snackbar {
         id: editPlantingsSnackBar
 
@@ -267,7 +257,7 @@ Page {
         folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
         nameFilters: [qsTr("PDF (*.pdf)")]
         onAccepted: {
-            var type
+            let type = "";
             if (printTypeComboBox.currentIndex === 0)
                 type  = "entire"
             else if (printTypeComboBox.currentIndex === 1)
@@ -277,14 +267,15 @@ Page {
             else if (printTypeComboBox.currentIndex === 3)
                 type  = "field_transplanting"
 
-            var month = -1
-            var week = -1
-            var rangeIndex = printDateRangeComboBox.currentIndex
+            let month = -1
+            let week = -1
+            let rangeIndex = printDateRangeComboBox.currentIndex
 
-            if (rangeIndex === 0)
+            if (rangeIndex === 0) {
                 week = MDate.currentWeek();
-            else if (rangeIndex === 1)
+            } else if (rangeIndex === 1) {
                 month = MDate.currentMonth();
+            }
 
             Print.printCropPlan(page.year, month, week, file, type)
         }
@@ -370,6 +361,22 @@ Page {
                         ToolTip.text: checked ? qsTr("Hide timegraph") : qsTr("Show timegraph")
                     }
 
+                    IconButton {
+                        id: showFinishButton
+                        text: "\ue876"
+                        hoverEnabled: true
+                        visible: largeDisplay && checks == 0
+                        checkable: true
+                        checked: false
+
+                        Layout.leftMargin: -padding
+                        Layout.rightMargin: Layout.leftMargin
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: checked ? qsTr("Hide finished plantings") : qsTr("Show finished plantings")
+                    }
+
                     Button {
                         id: editButton
                         Layout.leftMargin: 16 - ((background.width - contentItem.width) / 4)
@@ -405,6 +412,73 @@ Page {
                     }
 
                     Button {
+                        id: finishiButton
+                        flat: true
+                        font.pixelSize: Units.fontSizeBodyAndButton
+                        text: qsTr("Finish")
+                        visible: checks > 0
+                        Material.foreground: "white"
+                        onClicked: finishDialog.open()
+                        Dialog {
+                            id: finishDialog
+                            title: qsTr("Finish plantings")
+                            y: parent.height
+                            margins: 0
+
+                            onAccepted: {
+                                Planting.finish(page.selectedIdList(), lvFinishReason.currentIndex);
+                                plantingsView.unselectAll();
+                                page.refresh();
+                            }
+
+                            ColumnLayout {
+                                Label {
+                                    text: qsTr("Why are you finishing these plantings?")
+                                    font.family: "Roboto Regular"
+                                    font.pixelSize: Units.fontSizeBodyAndButton
+                                }
+
+                            ListView {
+                                id: lvFinishReason
+                                width: parent.width
+                                height: childrenRect.height
+                                implicitHeight: childrenRect.height
+                                boundsBehavior: Flickable.StopAtBounds
+                                model: [
+                                    qsTr("Finished harvest "),
+                                    qsTr("Crop failure"),
+                                    qsTr("Never seeded"),
+                                    qsTr("Never transplanted")
+                                ]
+
+                                delegate: RadioButton {
+                                    text: modelData
+                                }
+
+                            }
+                            }
+
+                            footer: DialogButtonBox {
+                                Button {
+                                    flat: true
+                                    text: qsTr("Cancel")
+                                    Material.foreground: Material.accent
+                                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                                }
+
+                                Button {
+                                    Material.background: Material.accent
+                                    Material.foreground: "white"
+                                    text: qsTr("Finish")
+
+                                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                                }
+                            }
+                        }
+
+                    }
+
+                    Button {
                         id: duplicateNextYear
                         flat: true
                         text: qsTr("Duplicate to next year")
@@ -429,12 +503,7 @@ Page {
                         Layout.fillWidth: true
                         inputMethodHints: Qt.ImhPreferLowercase
                         visible: !checks
-
-                        filterModel: [
-                            qsTr("All"),
-                            qsTr("Greenhouse"),
-                            qsTr("Field"),
-                        ]
+                        filterModel: [qsTr("All"), qsTr("Greenhouse"), qsTr("Field")]
                     }
 
                     IconButton {
@@ -537,6 +606,11 @@ Page {
                         season: MDate.season(todayDate)
                         year: MDate.seasonYear(todayDate)
                     }
+
+//                    TitleLabel {
+//                        title: "Revenue"
+//                        text: qsTr("%L1 €").arg(plantingsView.revenue)
+//                    }
 
                     IconButton {
                         id: menuButton
@@ -731,6 +805,7 @@ Page {
                 showTimegraph: page.showTimegraph
                 showOnlyGreenhouse: page.showOnlyGreenhouse
                 showOnlyField: page.showOnlyField
+                showFinished: page.showFinished
                 filterString: page.filterString
                 dragActive: false
                 anchors {

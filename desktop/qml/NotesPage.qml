@@ -34,6 +34,7 @@ Page {
     property int checks: 0
     property alias listView: recordView
     property date todayDate: new Date()
+    property bool shortcutEnabled: navigationIndex === 3 && !harvestDialog.activeFocus
 
     property int tableSortColumn: 0
     property string tableSortOrder: "descending"
@@ -64,56 +65,37 @@ Page {
     focus: true
     padding: 0
 
-    Material.background: Material.color(Material.Grey, Material.Shade100)
+    Material.background: Units.pageColor
 
     onTableSortColumnChanged: tableSortOrder = "descending"
 
-    Shortcut {
-        sequences: ["Ctrl+N"]
-        enabled: navigationIndex === 3 && addButton.visible && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: addButton.clicked()
+    ApplicationShortcut {
+        sequences: ["Ctrl+N"]; enabled: shortcutEnabled && addButton.visible; onActivated: addButton.clicked()
     }
 
-    Shortcut {
-        sequences: [StandardKey.Find]
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: filterField.forceActiveFocus();
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
     }
 
-    Shortcut {
-        sequence: "Ctrl+Right"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: yearSpinBox.nextWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: yearSpinBox.nextWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Left"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: yearSpinBox.previousWeek()
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: yearSpinBox.previousWeek()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Up"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: yearSpinBox.nextYear()
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: yearSpinBox.nextYear()
     }
 
-    Shortcut {
-        sequence: "Ctrl+Down"
-        enabled: navigationIndex === 3 && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
-        onActivated: yearSpinBox.previousYear();
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: yearSpinBox.previousYear();
     }
 
-    Shortcut {
+    ApplicationShortcut {
         sequences: ["Up", "Down", "Left", "Right"]
-        enabled: navigationIndex === 3 && !recordView.activeFocus && !harvestDialog.activeFocus
-        context: Qt.ApplicationShortcut
+        enabled: shortcutEnabled && !recordView.activeFocus
         onActivated: {
             recordView.currentIndex = 0
             recordView.forceActiveFocus();
@@ -242,13 +224,32 @@ Page {
             width: parent.width
         }
 
+        Pane {
+            Material.background: "white"
+            width: Math.min(rowWidth, parent.width * 0.8)
+            anchors {
+                top: topDivider.bottom
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+                topMargin: Units.smallSpacing
+                bottomMargin: Units.smallSpacing
+            }
+            padding: 0
+            background: Rectangle {
+                color: "white"
+                border.color: Qt.rgba(0, 0, 0, 0.12) // From Material guidelines
+                radius: 4
+                border.width: 1
+            }
+
         ListView {
             id: recordView
-            width: Math.max(rowWidth, parent.width * 0.8)
             clip: true
-            spacing: 4
+//            spacing: 4
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.HorizontalAndVerticalFlick
+            anchors.fill: parent
+            anchors.margins: 1
 
             anchors {
                 top: topDivider.bottom
@@ -302,24 +303,16 @@ Page {
                 id: headerRectangle
                 height: headerRow.height
                 width: parent.width
-                color: Material.color(Material.Grey, Material.Shade100)
+                radius: 4
                 z: 3
                 Column {
                     width: parent.width
 
                     Row {
                         id: headerRow
-                        height: Units.rowHeight
+                        height: Units.tableHeaderHeight
                         spacing: Units.smallSpacing
-                        leftPadding: Units.smallSpacing
-
-//                        Item {
-//                            visible: true
-//                            id: headerCheckbox
-//                            anchors.verticalCenter: headerRow.verticalCenter
-//                            width: parent.height
-//                            height: width
-//                        }
+                        leftPadding: Units.formSpacing
 
                         Repeater {
                             model: page.tableHeaderModel
@@ -339,18 +332,26 @@ Page {
                             }
                         }
                     }
+                        ThinDivider { width: parent.width }
                 }
             }
 
             delegate: Rectangle {
                 id: delegate
-                color: "white"
-                border.color: Material.color(Material.Grey, Material.Shade400)
-                border.width: rowMouseArea.containsMouse ? 1 : 0
+                    color: rowMouseArea.containsMouse
+                           ? Material.color(Material.Grey, Material.Shade100)
+                           : "white"
+                    radius: 2
+                    height: Units.tableRowHeight
+                    width: parent.width
 
-                radius: 2
-                height: Units.rowHeight
-                width: parent.width
+//                color: "white"
+//                border.color: Material.color(Material.Grey, Material.Shade400)
+//                border.width: rowMouseArea.containsMouse ? 1 : 0
+
+//                radius: 2
+//                height: Units.rowHeight
+//                width: parent.width
 
                 function editHarvest() {
                     harvestDialog.edit(model.harvest_id, model.crop_id);
@@ -412,6 +413,7 @@ Page {
 
                         Label {
                             text: MDate.formatDate(model.date, year)
+                            font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             width: tableHeaderModel[0].width
                             anchors.verticalCenter: parent.verticalCenter
@@ -428,6 +430,7 @@ Page {
                                 else
                                     return qsTr("Unknown");
                             }
+                            font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             width: tableHeaderModel[1].width
                             anchors.verticalCenter: parent.verticalCenter
@@ -436,6 +439,7 @@ Page {
 
                         Label {
                             text: model.details
+                            font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             width: tableHeaderModel[2].width
                             anchors.verticalCenter: parent.verticalCenter
@@ -450,13 +454,19 @@ Page {
 
                         Label {
                             text: Location.fullNameList(model.locations.split(","))
+                            font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             width: tableHeaderModel[2].width
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
                 }
+                ThinDivider {
+                    anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
+                }
             }
         }
     }
+}
+
 }

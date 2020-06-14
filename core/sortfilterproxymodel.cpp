@@ -73,7 +73,7 @@ int SortFilterProxyModel::idRow(int id) const
 void SortFilterProxyModel::refresh()
 {
     m_model->select();
-    countChanged();
+    emit countChanged();
 }
 
 // TODO: not working
@@ -124,7 +124,7 @@ void SortFilterProxyModel::setFilterYear(int year)
         return;
 
     m_year = year;
-    filterYearChanged();
+    emit filterYearChanged();
     invalidateFilter();
 }
 
@@ -138,7 +138,7 @@ void SortFilterProxyModel::setFilterSeason(int season)
     else
         m_season = 1; // default to Spring
 
-    filterSeasonChanged();
+    emit filterSeasonChanged();
     invalidateFilter();
 }
 
@@ -152,7 +152,7 @@ void SortFilterProxyModel::setSortColumn(const QString &columnName)
     m_sortColumn = columnName;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    sortColumnChanged();
+    emit sortColumnChanged();
 }
 
 void SortFilterProxyModel::setSortOrder(const QString &order)
@@ -160,7 +160,7 @@ void SortFilterProxyModel::setSortOrder(const QString &order)
     m_sortOrder = order;
     sort(roleIndex(m_sortColumn),
          m_sortOrder == QLatin1String("ascending") ? Qt::AscendingOrder : Qt::DescendingOrder);
-    sortOrderChanged();
+    emit sortOrderChanged();
 }
 
 std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const

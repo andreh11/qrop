@@ -100,7 +100,7 @@ void LocationModel::refresh()
 
 void LocationModel::refreshIndex(const QModelIndex &index)
 {
-    dataChanged(index, index);
+    emit dataChanged(index, index);
 }
 
 /** Emit dataChanged signal for all indexes of the subtree whose root is \a root. */
@@ -241,7 +241,7 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
                 l -= m_location->addPlanting(plantingId, lid, l, dates.first, dates.second);
             }
         }
-        dataChanged(index(0, 0, idx), index(row - 1, 0, idx));
+        emit dataChanged(index(0, 0, idx), index(row - 1, 0, idx));
     } else if (addToSiblings) {
         qreal l = length;
         int startRow = idx.row();
@@ -255,7 +255,7 @@ void LocationModel::addPlanting(const QModelIndex &idx, int plantingId, qreal le
                 l -= m_location->addPlanting(plantingId, lid, l, dates.first, dates.second);
             }
         }
-        dataChanged(index(startRow, 0, parent), index(row - 1, 0, parent));
+        emit dataChanged(index(startRow, 0, parent), index(row - 1, 0, parent));
     } else {
         int lid = locationId(idx);
         m_location->addPlanting(plantingId, lid, length, dates.first, dates.second);
@@ -357,7 +357,6 @@ QString LocationModel::rotationConflictingDescription(const QModelIndex &index) 
     auto query = m_location->queryFromIdList("planting_view", list);
     const int lid = locationId(index);
     QString text;
-    QList<int> conflictList;
     while (query->next()) {
         text += QString("%1, %2 %3")
                         .arg(query->value("crop").toString())

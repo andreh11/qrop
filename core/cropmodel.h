@@ -25,12 +25,12 @@
 class CORESHARED_EXPORT CropModel : public SortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(int familyId READ familyId WRITE setFilterFamilyId NOTIFY familyIdChanged)
+    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId NOTIFY familyIdChanged)
 
 public:
     explicit CropModel(QObject *parent = nullptr, const QString &tableName = "crop");
     int familyId() const;
-    void setFilterFamilyId(int familyId);
+    void setFamilyId(int familyId);
 
 signals:
     void familyIdChanged();

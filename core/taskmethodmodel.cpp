@@ -38,7 +38,7 @@ void TaskMethodModel::setTypeId(int typeId)
 
     m_typeId = typeId;
     invalidateFilter();
-    typeIdChanged();
+    emit typeIdChanged();
 }
 
 bool TaskMethodModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
