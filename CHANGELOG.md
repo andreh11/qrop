@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
    greenhouse ones.
 
 ## Fixed
+ - *Task dialog* − Fix display bug for location view: part of it wasn't alway
+   visible (#201).
  - *Field map* − Fix planting timegraph for pluriannual crops (#169).
  - *Field map* − Fix refreshing bug when switch to field map view.
  - *Crop map* − Fix editing bug.
