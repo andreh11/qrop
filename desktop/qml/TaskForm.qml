@@ -531,25 +531,25 @@ Flickable {
                     editMode: false
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.minimumHeight: 400
+                    Layout.minimumHeight: 50
                 }
 
                 Label {
                     id: selectedLocationLabel
+                    visible: !locationEmptyLabel.visible
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
                     text: qsTr("Selected locations: %1").arg(Location.fullNameList(locationView.selectedIdList))
-                    Layout.minimumHeight: 26
                     Layout.fillWidth: true
                 }
 
                 Label {
+                    id: locationEmptyLabel
                     visible: locationTask && !locationIdList.length
                     text: qsTr("Choose at least one location")
                     color: Units.colorError
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
-                    Layout.leftMargin: Units.smallSpacing
                 }
             }
         }

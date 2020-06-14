@@ -169,6 +169,4 @@ Dialog {
         applyEnabled: formAccepted
         mode: dialog.mode
     }
-
-
 }
