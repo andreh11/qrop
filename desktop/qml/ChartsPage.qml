@@ -19,8 +19,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
-//import QtCharts 2.2
-
 import io.qrop.components 1.0
 
 Page {
@@ -242,25 +240,6 @@ Page {
                 anchors.margins: 1
 
                 model: cropStatModel
-                //                highlightMoveDuration: 0
-                //                highlightResizeDuration: 0
-                //                highlight: Rectangle {
-                //                    visible: cropStatView.activeFocus
-                //                    z:3;
-                //                    opacity: 0.1;
-                //                    color: Material.primary
-                //                    radius: 2
-                //                }
-
-                //                ScrollBar.vertical: ScrollBar {
-                //                    parent: cropStatView.parent
-                //                    anchors {
-                //                        top: parent.top
-                //                        topMargin: buttonRectangle.height + topDivider.height
-                //                        right: parent.right
-                //                        bottom: parent.bottom
-                //                    }
-                //                }
 
                 ScrollBar.vertical: ScrollBar {}
                 ScrollBar.horizontal: ScrollBar {}
@@ -359,63 +338,6 @@ Page {
                     }
                 }
             }
-
-            //            Row {
-            //                z: 2
-            //                spacing: 0
-            //                anchors {
-            //                    top: parent.top
-            //                    right: parent.right
-            //                }
-
-            //                ButtonCheckBox {
-            //                    id: spaceCheckBox
-            //                    text: qsTr("Space")
-            //                    autoExclusive: true
-            //                    checked: true
-            //                }
-
-            //                ButtonCheckBox {
-            //                    id: revenueCheckBox
-            //                    text: qsTr("Revenue")
-            //                    autoExclusive: true
-            //                    onCheckedChanged: refresh();
-            //                }
-            //            }
-
-            //            ScrollView {
-            //                anchors.fill: parent
-            //                clip: true
-
-
-            //                contentHeight: height * 2
-
-            //                DistributionChart {
-            //                    id: cropDistributionChart
-            //                    visible: spaceCheckBox.checked
-            //                    height: parent.height * 2
-            //                    width: parent.width
-            //                    year: page.year
-            //                    greenhouse: greenhouseCheckBox.checked
-            //                }
-
-            //                CropRevenueChart {
-            //                    id: cropRevenueChart
-            //                    width: parent.width
-            //                    height: parent.height * 2
-            //                    visible: revenueCheckBox.checked
-            //                    year: page.year
-            //                    greenhouse: greenhouseCheckBox.checked
-            //                }
-            //            }
-
-            //        Pane {
-            //            visible: false
-            //            Material.elevation: 1
-            //            Material.background: "white"
-            //            Layout.fillWidth: true
-            //            Layout.fillHeight: true
-            //        }
         }
     }
 }
