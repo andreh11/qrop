@@ -184,6 +184,7 @@ Item {
 
             DayOfWeekRow {
                 Layout.fillWidth: true
+                implicitHeight: Units.rowHeight
                 spacing: grid.spacing
                 locale: grid.locale
                 delegate: Text {
@@ -202,17 +203,13 @@ Item {
                 locale: grid.locale
                 Layout.fillHeight: true
                 spacing: grid.spacing
+                implicitWidth: Units.rowHeight
                 delegate: Text {
                     text: model.weekNumber
                     color: Material.accent
                     font.family: "Roboto Condensed"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                    }
                 }
             }
 

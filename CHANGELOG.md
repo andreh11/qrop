@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
    greenhouse ones.
 
 ## Fixed
+ - *Calendar widget* − Fix days and week number display.
  - *Charts* − Update the view when database is changed (#214).
  - *Task dialog* − Fix display bug for location view: part of it wasn't alway
    visible (#201).

@@ -13,6 +13,8 @@ Tous les changements importants seront documentés dans ce fichier.
    ou seulement celles de plein champs ou sous abri.
 
 ### Corrections
+ - *Widget calendrier* − Correction de l'affichage des jours et numéros de
+   semaine.
  - *Graphiques* − Correction de la mise-à-jour de la vue lorsqu'une autre base
    de données est sélectionnée (#214).
  - *Dialogue des tâches* − Correction du bug d'affichage des emplacements : une
