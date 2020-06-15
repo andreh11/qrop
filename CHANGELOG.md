@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-## Changed
+## Changed 
+ - *Charts* : the whole view is now updated when the user search for a planting.
  - *Calendar* : PDF output now follows the current view : week and
    done/due/overdue filters (#205). 
  - Improve filtering of plantings to show all plantings, or only the field or
    greenhouse ones.
 
 ## Fixed
+ - *Charts* − Update the view when database is changed (#214).
  - *Task dialog* − Fix display bug for location view: part of it wasn't alway
    visible (#201).
  - *Field map* − Fix planting timegraph for pluriannual crops (#169).

@@ -5,12 +5,16 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+ - *Graphique* : toutes les données de la vue sont mises à jour lorsque
+   l'utilisateurice effectue une recherche sur les séries.
  - *Calendrier* : l'export PDF suit dorénavant la vue en cours : semaine et
    filtre fait/à faire/en retard (#205).
  - Amélioration du filtre des séries : possiblité d'afficher toutes les séries,
    ou seulement celles de plein champs ou sous abri.
 
 ### Corrections
+ - *Graphiques* − Correction de la mise-à-jour de la vue lorsqu'une autre base
+   de données est sélectionnée (#214).
  - *Dialogue des tâches* − Correction du bug d'affichage des emplacements : une
    partie de la vue n'était pas toujours visible (#201).
  - *Parcellaire* − Correction du bug d'affichage pour les séries plurianuelles

@@ -99,7 +99,7 @@ ApplicationWindow {
         if (locationsPage.item) {
             locationsPage.item.reload();
         }
-        stackView.currentItem.item.refresh();
+        stackLayout.currentItem.refresh();
     }
 
     title: "Qrop"
@@ -350,6 +350,7 @@ ApplicationWindow {
         id: stackLayout
 
         property bool isLoading: children[currentIndex].status === Loader.Loading
+        property var currentItem: children[currentIndex].item
 
         focus: true
         anchors.fill: parent
