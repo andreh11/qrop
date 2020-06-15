@@ -25,11 +25,30 @@
 class CORESHARED_EXPORT CropStatModel : public SortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int revenue READ revenue NOTIFY revenueChanged)
+    Q_PROPERTY(qreal fieldLength READ fieldLength NOTIFY fieldLengthChanged)
+    Q_PROPERTY(qreal greenhouseLength READ greenhouseLength NOTIFY greenhouseLengthChanged)
+    Q_PROPERTY(int varietyNumber READ varietyNumber NOTIFY varietyNumberChanged)
+
 public:
     explicit CropStatModel(QObject *parent = nullptr, const QString &tableName = "crop_stat_view");
 
+    int revenue() const;
+    qreal fieldLength() const;
+    qreal greenhouseLength() const;
+    int varietyNumber() const;
+
+signals:
+    void revenueChanged();
+    void fieldLengthChanged();
+    void greenhouseLengthChanged();
+    void varietyNumberChanged();
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    qreal length(bool greenhouse) const;
 };
 
 #endif // CROPSTATMODEL_H

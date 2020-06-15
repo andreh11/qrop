@@ -134,26 +134,6 @@ Page {
             anchors.fill: parent
             spacing: Units.smallSpacing
 
-            //            Row {
-            //                id: checkButtonRow
-            //                spacing: 0
-
-            //                ButtonCheckBox {
-            //                    id: fieldCheckBox
-            //                    checked: true
-            //                    text: qsTr("Field")
-            //                    autoExclusive: true
-            //                    onCheckedChanged: refresh();
-            //                }
-
-            //                ButtonCheckBox {
-            //                    id: greenhouseCheckBox
-            //                    text: qsTr("Greenhouse")
-            //                    autoExclusive: true
-            //                }
-
-            //                Layout.leftMargin: 16
-            //            }
             SearchField {
                 id: filterField
                 placeholderText: qsTr("Search...")
@@ -201,11 +181,11 @@ Page {
             spacing: Units.mediumSpacing
 
             StatCard {
-                title: qsTr("Estimated revenue")
-                text: qsTr("$%L1").arg(Planting.revenue(page.year))
 
-                //                Material.background: Material.color(Material.Green, Material.Shade400)
-                Material.background: "white"
+                title: qsTr("Estimated revenue")
+                text: qsTr("$%L1").arg(cropStatModel.revenue)
+
+                Material.background: Material.color(Material.Green, Material.Shade400)
                 Layout.preferredHeight: 100
                 Layout.preferredWidth: 200
             }
@@ -213,9 +193,9 @@ Page {
             StatCard {
                 title: qsTr("Number of beds")
                 subtitle: qsTr("Field")
-                text: "%L1".arg(Helpers.bedLength(Planting.totalLengthForYear(page.year, false)))
+                text: "%L1".arg(Helpers.bedLength(cropStatModel.fieldLength))
 
-                Material.background: "white"
+                Material.background: Material.color(Material.Blue, Material.Shade400)
                 Layout.preferredHeight: 100
                 Layout.preferredWidth: 200
             }
@@ -223,19 +203,18 @@ Page {
             StatCard {
                 title: qsTr("Number of beds")
                 subtitle: qsTr("Greenhouse")
-                text: "%L1".arg(Helpers.bedLength(Planting.totalLengthForYear(page.year, true)))
+                text: "%L1".arg(Helpers.bedLength(cropStatModel.greenhouseLength))
 
-                Material.background: "white"
+                Material.background: Material.color(Material.Orange, Material.Shade400)
                 Layout.preferredHeight: 100
                 Layout.preferredWidth: 200
             }
 
             StatCard {
-                title: qsTr("Number of crops")
-                text: "%L1".arg(cropStatModel.rowCount)
+                title: qsTr("Number of cultivars")
+                text: "%L1".arg(cropStatModel.varietyNumber)
 
-                //                Material.background: Material.color(Material.Pink, Material.Shade400)
-                Material.background: "white"
+                Material.background: Material.color(Material.Pink, Material.Shade400)
                 Layout.preferredHeight: 100
                 Layout.preferredWidth: 200
             }
