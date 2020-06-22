@@ -30,6 +30,7 @@ Item {
     property var map: validId ? Planting.mapFromId("planting_view", plantingId) : {}
     property string crop: validId ? map['crop'] : ""
     property string variety: validId ? map['variety'] : ""
+    property string seedCompany: validId ? map['seed_company'] : ""
     property date sowingDate: validId ? map['sowing_date'] : ""
     property date endHarvestDate: validId ? map['end_harvest_date'] : ""
     property int rank: validId ? map['planting_rank'] : ""
@@ -47,13 +48,21 @@ Item {
         property bool useStandardBedLength
         property int standardBedLength
         property bool showPlantingSuccessionNumber
+        property bool showSeedCompanyBesideVariety
     }
 
     Column {
         id: column
 
         Text {
-            text: validId ? "%1, %2".arg(crop).arg(variety) : " "
+            text: {
+                if (!validId)
+                    return ""
+                if (settings.showSeedCompanyBesideVariety)
+                    return "%1, %2 (%3.)".arg(crop).arg(variety).arg(seedCompany.slice(0,3));
+                return "%1, %2".arg(crop).arg(variety);
+
+            }
             font.family: "Roboto Regular"
             font.pixelSize: Units.fontSizeTable
             elide: Text.ElideRight
@@ -64,7 +73,7 @@ Item {
                 if (!validId)
                     return ""
 
-                var txt = ""
+                let txt = ""
 
                 if (showRank && settings.showPlantingSuccessionNumber) {
                     txt += "#%1 ".arg(rank)
