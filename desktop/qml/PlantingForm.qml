@@ -579,6 +579,7 @@ Flickable {
         property int standardBedWidth
         property int standardPathWidth
         property string dateType
+        property bool showSeedCompanyBesideVariety
     }
 
     Settings {
@@ -596,9 +597,11 @@ Flickable {
         onCropIdChanged: {
             varietyField.reset()
 
-            if (cropId < 0)
+            if (cropId < 0) {
                 return;
-            var defaultVarietyId = Variety.defaultVariety(cropId);
+            }
+
+            let defaultVarietyId = Variety.defaultVariety(cropId);
             if (defaultVarietyId > 0) {
                 varietyField.setSelectedId(defaultVarietyId);
                 varietyField.text = Variety.varietyName(defaultVarietyId)
@@ -613,7 +616,6 @@ Flickable {
         width: control.width
         spacing: Units.smallSpacing
         padding: 0
-        //        spacing: 0
 
         FormGroupBox {
             id: varietyBox
@@ -627,7 +629,12 @@ Flickable {
                     id: varietyField
                     enabled: cropId > 0
                     Layout.topMargin: Units.mediumSpacing
-                    textRole: function (model) { return model.variety; }
+                    textRole: function (model) {
+                        if (settings.showSeedCompanyBesideVariety) {
+                            return "%1 (%2.)".arg(model.variety).arg(model.seed_company.slice(0,3));
+                        }
+                        return model.variety;
+                    }
                     idRole: function (model) { return model.variety_id; }
                     showAddItem: true
                     addItemText: text ? qsTr('Add new variety "%1"').arg(text) : qsTr("Add new variety")

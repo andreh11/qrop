@@ -5,6 +5,8 @@ Tous les changements importants seront documentés dans ce fichier.
 ## Non publiés
 
 ### Changements
+ - *Series* − Toujours afficher le nom du fournisseur si la fonctionnalité a été
+   activée (#176).
  - *Graphique* : toutes les données de la vue sont mises à jour lorsque
    l'utilisateurice effectue une recherche sur les séries.
  - *Calendrier* : l'export PDF suit dorénavant la vue en cours : semaine et
