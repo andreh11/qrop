@@ -1,6 +1,6 @@
 version: 0.4-{build}
 clone_folder: C:\projects\qrop
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 branches:
   only:
@@ -14,7 +14,7 @@ environment:
       arch: x86
 
 install:
-  - '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
+  - '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%'
   - set QTDIR=C:\Qt\5.12.8\%suffix%
   - set PATH=%PATH%;%QTDIR%\bin;
   - mkdir C:\Code
