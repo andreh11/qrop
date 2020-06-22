@@ -589,15 +589,24 @@ ListView {
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideRight
                     width: 100
-
-                    Image {
-                        z: -1
+                    height: parent.height
+                    Canvas {
+                        id: mycanvas
+                        width: height
+                        height: parent.height * 0.6
                         visible: model.in_greenhouse === 1
-                        height: parent.height
+//                        anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
-                        fillMode: Image.PreserveAspectFit
-                        source: "/ghicon.png"
-
+                        z: -1
+                        onPaint: {
+                            if (model.in_greenhouse === 0)
+                                return;
+                            var context = getContext("2d");
+                            context.fillStyle = "light green"
+                            context.strokeStyle = Units.colorMediumEmphasis
+                            context.arc(width/2, height, height/2, 0, Math.PI, true)
+                            context.stroke();
+                        }
                     }
                 }
 

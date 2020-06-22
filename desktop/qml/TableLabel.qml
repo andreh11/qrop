@@ -27,4 +27,5 @@ Label {
     }
     color: Units.colorHighEmphasis
     elide: Text.ElideRight
+    verticalAlignment: Text.AlignVCenter
 }
