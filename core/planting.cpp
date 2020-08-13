@@ -386,6 +386,7 @@ int Planting::duplicate(int id) const
 
 void Planting::finish(const QList<int> &plantingIdList, int finishedReasonId)
 {
+    qDebug() << plantingIdList << finishedReasonId;
     QVariantMap map({ { "finished", 1 }, { "finished_reason_id", finishedReasonId } });
     DatabaseUtility::updateList(plantingIdList, map);
 }

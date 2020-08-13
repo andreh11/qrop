@@ -426,7 +426,7 @@ Page {
                             margins: 0
 
                             onAccepted: {
-                                Planting.finish(page.selectedIdList(), lvFinishReason.currentIndex);
+                                Planting.finish(page.selectedIdList(), lvFinishReason.currentIndex + 1);
                                 plantingsView.unselectAll();
                                 page.refresh();
                             }
@@ -440,6 +440,9 @@ Page {
 
                             ListView {
                                 id: lvFinishReason
+
+                                onCurrentIndexChanged: console.log(currentIndex)
+
                                 width: parent.width
                                 height: childrenRect.height
                                 implicitHeight: childrenRect.height
@@ -451,8 +454,12 @@ Page {
                                     qsTr("Never transplanted")
                                 ]
 
-                                delegate: RadioButton {
+                                delegate: RadioDelegate {
                                     text: modelData
+                                    onCheckedChanged: {
+                                        if (checked)
+                                            lvFinishReason.currentIndex = index
+                                    }
                                 }
 
                             }

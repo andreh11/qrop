@@ -94,8 +94,8 @@ void Database::replaceMainDatabase(const QUrl &url)
 {
     //    removeFileIfExists(databasePath());
     QFileInfo fileInfo(databasePath());
-    qDebug() << url.toLocalFile() << fileInfo.absolutePath();
-    QFile::copy(url.toLocalFile(), fileInfo.absoluteFilePath());
+    qDebug() << url.toLocalFile() << fileInfo.absoluteFilePath();
+    //    QFile::copy(url.toLocalFile(), fileInfo.absoluteFilePath());
 }
 
 void Database::copy(const QUrl &from, const QUrl &to)
