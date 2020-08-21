@@ -31,21 +31,21 @@
 #include <QElapsedTimer>
 
 #include "helpers.h"
-#include "keyword.h"
-#include "location.h"
-#include "locationmodel.h"
-#include "harvestmodel.h"
 #include "mdate.h"
-#include "planting.h"
 #include "print.h"
-#include "task.h"
-
 #include "tableprinter.h"
 
-#include "seedlistmodel.h"
-#include "seedlistmonthmodel.h"
-#include "seedlistquartermodel.h"
-#include "transplantlistmodel.h"
+#include "dbutils/keyword.h"
+#include "dbutils/location.h"
+#include "dbutils/planting.h"
+#include "dbutils/task.h"
+
+#include "models/harvestmodel.h"
+#include "models/locationmodel.h"
+#include "models/seedlistmodel.h"
+#include "models/seedlistmonthmodel.h"
+#include "models/seedlistquartermodel.h"
+#include "models/transplantlistmodel.h"
 
 Print::Print(QObject *parent)
     : QObject(parent)
@@ -845,7 +845,7 @@ void Print::paintHeader(QPainter &painter, int season, int year)
         QRectF rect(m_firstColumnWidth + m * m_monthWidth, 0, m_monthWidth, m_rowHeight);
         painter.drawRect(rect);
         painter.drawText(rect, Qt::AlignCenter,
-                         MDate::shortMonthName(1 + MDate::monthsOrder[season][m]));
+                         MDate::shortMonthName(1 + MDate::monthsOrder(season)[m].toInt()));
     }
     painter.translate(0, m_rowHeight);
 }

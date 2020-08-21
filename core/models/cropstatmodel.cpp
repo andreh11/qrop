@@ -14,8 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "cropstatmodel.h"
 #include <QDate>
+
+#include "cropstatmodel.h"
 
 CropStatModel::CropStatModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)

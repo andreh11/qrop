@@ -9,7 +9,7 @@ Row {
     property int season: 1
     
     Repeater {
-        model: monthsOrder[season]
+        model: MDate.monthsOrder(season)
         Item {
             width: Units.monthWidth
             height: parent.height

@@ -18,12 +18,14 @@
 #include <QDebug>
 #include <QVector>
 
-#include "databaseutility.h"
+#include "helpers.h"
+
+#include "dbutils/databaseutility.h"
+#include "dbutils/location.h"
+#include "dbutils/planting.h"
+
 #include "plantingmodel.h"
 #include "sqltablemodel.h"
-#include "location.h"
-#include "planting.h"
-#include "helpers.h"
 
 PlantingModel::PlantingModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)

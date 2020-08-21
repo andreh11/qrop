@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2020 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@
 #include <QSqlDriver>
 
 #include "db.h"
-#include "family.h"
-#include "location.h"
-#include "task.h"
-#include "variety.h"
+#include "dbutils/family.h"
+#include "dbutils/location.h"
+#include "dbutils/task.h"
+#include "dbutils/variety.h"
 
 Database::Database(QObject *parent)
     : QObject(parent)

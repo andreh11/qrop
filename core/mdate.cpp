@@ -22,14 +22,21 @@
 
 #include "mdate.h"
 
-const QList<QList<int>> MDate::monthsOrder({ { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 },
-                                             { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 },
-                                             { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
-                                             { 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2 } });
-
 MDate::MDate(QObject *parent)
     : QObject(parent)
 {
+}
+
+QVariantList MDate::monthsOrder(int season)
+{
+    if (season < 0 || season > 3)
+        return {};
+
+    const QList<QVariantList> order({ { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 },
+                                      { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 },
+                                      { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
+                                      { 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2 } });
+    return order[season];
 }
 
 int MDate::isoWeek(const QDate &date)
@@ -91,7 +98,7 @@ int MDate::currentYear()
 }
 
 /**
- * Format date according to preferred format. If \a showIndicator if
+ * Format \a date according to preferred format. If \a showIndicator if
  * false, the year indicators < and > will never be shown.
  */
 QString MDate::formatDate(const QDate &date, int currentYear, const QString &type, bool showIndicator)

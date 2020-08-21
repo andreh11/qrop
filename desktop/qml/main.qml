@@ -50,14 +50,6 @@ ApplicationWindow {
           bindings: { "paneWidth": Math.min(600, stackLayout.width * 0.8) }}
     ]
 
-    // TODO: put this in a separate file
-    readonly property var monthsOrder : [
-        [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5],
-        [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2]
-    ]
-
     function toggleFullScreen() {
         if (window.visibility === Window.FullScreen) {
             window.visibility = oldWindowVisibility

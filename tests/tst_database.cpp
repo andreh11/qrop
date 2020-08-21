@@ -3,7 +3,7 @@
 #include <QSqlDatabase>
 #include <QDate>
 
-#include "db.h"
+#include "dbutils/db.h"
 
 class tst_Database : public QObject
 {
