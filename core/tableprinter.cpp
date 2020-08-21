@@ -38,11 +38,12 @@
 #include <QPrinter>
 #include <QPagedPaintDevice>
 
-#include "tableprinter.h"
-#include "sortfilterproxymodel.h"
-#include "mdate.h"
-#include "location.h"
 #include "helpers.h"
+#include "mdate.h"
+#include "tableprinter.h"
+
+#include "dbutils/location.h"
+#include "models/sortfilterproxymodel.h"
 
 TablePrinter::TablePrinter(QPainter *painter, QPagedPaintDevice *printer)
     : m_model(nullptr)

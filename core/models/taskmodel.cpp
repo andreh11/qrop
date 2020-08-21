@@ -20,9 +20,9 @@
 #include <QSqlRecord>
 #include <QElapsedTimer>
 
-#include "location.h"
-#include "planting.h"
-#include "task.h"
+#include "dbutils/location.h"
+#include "dbutils/planting.h"
+#include "dbutils/task.h"
 
 #include "mdate.h"
 #include "taskmodel.h"

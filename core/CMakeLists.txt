@@ -10,56 +10,60 @@ find_package(Qt5
 add_definitions(-DCORE_LIBRARY)
 
 add_library(core SHARED
-        cropmodel.cpp
-        cropstatmodel.cpp
-        databaseutility.cpp
-        db.cpp
-        expensecategorymodel.cpp
-        expensemodel.cpp
-        family.cpp
-        familymodel.cpp
-        harvestmodel.cpp
-        inputmodel.cpp
-        keyword.cpp
-        keywordmodel.cpp
-        location.cpp
-        locationmodel.cpp
+        buildinfo.cpp
+        core_resources.qrc
+        helpers.cpp
         mdate.cpp
         nametree.cpp
-        note.cpp
-        notemodel.cpp
-        qrpimageprovider.cpp
-        planting.cpp
-        plantingmodel.cpp
         print.cpp
-        recordmodel.cpp
-        rolemodel.cpp
-        seedcompanymodel.cpp
-        seedlistmodel.cpp
-        seedlistmonthmodel.cpp
-        seedlistquartermodel.cpp
-        sortfilterproxymodel.cpp
-        task.cpp
-        taskimplementmodel.cpp
-        taskmethodmodel.cpp
-        taskmodel.cpp
-        tasktemplatemodel.cpp
-        tasktypemodel.cpp
-        transplantlistmodel.cpp
-        treemodel.cpp
-        unitmodel.cpp
-        usermodel.cpp
-        variety.cpp
-        varietymodel.cpp
-        buildinfo.cpp
-        helpers.cpp
-        seedcompany.cpp
-        sqltablemodel.cpp
-        tasktemplate.cpp
-        templatetask.cpp
-        templatetaskmodel.cpp
+        qrpimageprovider.cpp
         tableprinter.cpp
-        qquicktreemodeladaptor.cpp
-	core_resources.qrc)
+
+        dbutils/db.cpp
+        dbutils/databaseutility.cpp
+        dbutils/family.cpp
+        dbutils/keyword.cpp
+        dbutils/location.cpp
+        dbutils/note.cpp
+        dbutils/planting.cpp
+        dbutils/seedcompany.cpp
+        dbutils/task.cpp
+        dbutils/tasktemplate.cpp
+        dbutils/templatetask.cpp
+        dbutils/variety.cpp
+
+        models/cropmodel.cpp
+        models/cropstatmodel.cpp
+        models/expensecategorymodel.cpp
+        models/expensemodel.cpp
+        models/familymodel.cpp
+        models/harvestmodel.cpp
+        models/inputmodel.cpp
+        models/keywordmodel.cpp
+        models/locationmodel.cpp
+        models/notemodel.cpp
+        models/plantingmodel.cpp
+        models/qquicktreemodeladaptor.cpp
+        models/recordmodel.cpp
+        models/rolemodel.cpp
+        models/seedcompanymodel.cpp
+        models/seedlistmodel.cpp
+        models/seedlistmonthmodel.cpp
+        models/seedlistquartermodel.cpp
+        models/sortfilterproxymodel.cpp
+        models/sqltablemodel.cpp
+        models/taskimplementmodel.cpp
+        models/taskmethodmodel.cpp
+        models/taskmodel.cpp
+        models/tasktemplatemodel.cpp
+        models/tasktypemodel.cpp
+        models/templatetaskmodel.cpp
+        models/transplantlistmodel.cpp
+        models/treemodel.cpp
+        models/unitmodel.cpp
+        models/usermodel.cpp
+        models/varietymodel.cpp
+        )
+
 
 target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)

@@ -19,7 +19,7 @@
 #include <QString>
 
 #include "tasktemplatemodel.h"
-#include "tasktemplate.h"
+#include "dbutils/tasktemplate.h"
 
 TaskTemplateModel::TaskTemplateModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)

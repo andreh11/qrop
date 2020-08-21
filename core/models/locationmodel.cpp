@@ -22,8 +22,8 @@
 #include "locationmodel.h"
 #include "sqltablemodel.h"
 #include "treemodel.h"
-#include "location.h"
-#include "planting.h"
+#include "dbutils/location.h"
+#include "dbutils/planting.h"
 #include "mdate.h"
 #include "helpers.h"
 
