@@ -5,7 +5,7 @@ stages:
 
 normal-build:linux:
   stage: build
-  image: andreh11/qt:5.12.5-trusty
+  image: andreh11/qt:5.12.9-trusty
   script:
     - bash dist/linux/build.sh
   except:
@@ -14,7 +14,7 @@ normal-build:linux:
 
 master-build:linux:
   stage: build
-  image: andreh11/qt:5.12.5-trusty
+  image: andreh11/qt:5.12.9-trusty
   variables:
     QROP_BUILD_TYPE: "snapshot"
   script:
@@ -45,7 +45,7 @@ master-build:android:
 
 release-build:linux:
   stage: build
-  image: andreh11/qt:5.12.5-trusty
+  image: andreh11/qt:5.12.9-trusty
   variables:
     QROP_BUILD_TYPE: "release"
   script:
@@ -61,7 +61,7 @@ release-build:linux:
 
 release-deploy:linux:
   stage: deploy
-  image: andreh11/qt:5.12.5-trusty
+  image: andreh11/qt:5.12.9-trusty
   variables:
     QROP_BUILD_TYPE: "release"
   script:
