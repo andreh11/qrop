@@ -6,7 +6,7 @@
 software designed by market gardeners, for market gardeners, with the help of
 the wonderful French coop [L'Atelier paysan](https://latelierpaysan.org).
 
-Qrop is available on GNU/Linux, macOS and Windows.
+Qrop is available on GNU/Linux, macOS and Windows and (soon) Android.
 
 **Warning:** this is alpha software with known bugs. It runs, and work at least
 some of the times, but use at your own risk.
