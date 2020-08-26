@@ -24,22 +24,22 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="40"/>
         <source>Add New Crop</source>
-        <translation>Aldoni nova kulturon</translation>
+        <translation>Aldoni novan kultivaĵon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Kultivaĵo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="97"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Koloro</translation>
     </message>
 </context>
 <context>
@@ -47,12 +47,12 @@
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="39"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="48"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezigni</translation>
     </message>
 </context>
 <context>
@@ -60,22 +60,22 @@
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="37"/>
         <source>Do not close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne fermu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="46"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezigni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi</translation>
     </message>
 </context>
 <context>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="15"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni novan familion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="39"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="52"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Koloro</translation>
     </message>
 </context>
 <context>
@@ -101,12 +101,12 @@
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="16"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni novan familion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="33"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Ŝlosilvorto</translation>
     </message>
 </context>
 <context>
@@ -114,12 +114,12 @@
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="35"/>
         <source>Add Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni unuon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="68"/>
         <source>Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Mallongigo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="79"/>
