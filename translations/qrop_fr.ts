@@ -317,7 +317,7 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="333"/>
         <source>Check at least one type to see them</source>
-        <translation>Sélectionnez au moins un type de tâche pour en voir !</translation>
+        <translation>Sélectionnez au moins un type de tâche pour en voir</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="341"/>
@@ -1194,7 +1194,7 @@
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="50"/>
         <source>Remaining beds: %L1</source>
-        <translation>Planches restantes: %L1</translation>
+        <translation>Planches restantes : %L1</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
@@ -1381,17 +1381,17 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="486"/>
         <source>No more plantings of “%1” to assign for this season.</source>
-        <translation>Plus de séries de « %1 » à affecter pour cette saison</translation>
+        <translation>Plus de séries de « %1 » à affecter pour cette saison.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="488"/>
         <source>No more greenhouse plantings to assign for this season.</source>
-        <translation>Plus de séries sous abris à affecter pour cette saison</translation>
+        <translation>Plus de séries sous abris à affecter pour cette saison.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="490"/>
         <source>No more plantings to assign for this season.</source>
-        <translation>Plus de séries à affecter pour cette saison</translation>
+        <translation>Plus de séries à affecter pour cette saison.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="492"/>
@@ -1908,12 +1908,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1066"/>
         <source>Locations: %1</source>
-        <translation>Emplacements: %1</translation>
+        <translation>Emplacements : %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1079"/>
         <source>Remaining beds: %L1</source>
-        <translation>Planches restantes: %L1</translation>
+        <translation>Planches restantes : %L1</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingForm.qml" line="1080"/>
@@ -1989,14 +1989,14 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1213"/>
         <source>Enter a quantity!</source>
-        <translation>Entrez une quantité</translation>
+        <translation>Entrez une quantité !</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingForm.qml" line="1214"/>
         <source>Quantity: %L1 g</source>
         <translation>
-            <numerusform>Quantité: %L1 g</numerusform>
-            <numerusform>Quantité: %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
         </translation>
     </message>
     <message>
@@ -2636,12 +2636,12 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="647"/>
         <source>Import crop plan...</source>
-        <translation>Importer un plan de culture</translation>
+        <translation>Importer un plan de culture...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="652"/>
         <source>Export crop plan...</source>
-        <translation>Exporter le plan de culture</translation>
+        <translation>Exporter le plan de culture...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="659"/>
@@ -2702,7 +2702,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="448"/>
         <source>Finished harvest </source>
-        <translation>Récolte terminée</translation>
+        <translation>Récolte terminée </translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="449"/>
@@ -3395,7 +3395,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="110"/>
         <source>All plantings will be lost.</source>
-        <translation>Toutes les séries seront perdues</translation>
+        <translation>Toutes les séries seront perdues.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="173"/>
@@ -3439,7 +3439,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="129"/>
         <source>All crops and plantings will be lost.</source>
-        <translation>Toutes les espèces et séries seront perdues</translation>
+        <translation>Toutes les espèces et séries seront perdues.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="153"/>
@@ -3490,7 +3490,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="68"/>
         <source>All related tasks will lose their implement.</source>
-        <translation>Toutes les tâches concernées perdront leur outil</translation>
+        <translation>Toutes les tâches concernées perdront leur outil.</translation>
     </message>
 </context>
 <context>
@@ -3772,7 +3772,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="70"/>
         <source>All related tasks will lose their method.</source>
-        <translation>Toutes les tâches concernées perdront leur méthode</translation>
+        <translation>Toutes les tâches concernées perdront leur méthode.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="92"/>
@@ -3820,7 +3820,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="100"/>
         <source>All related tasks will be lost.</source>
-        <translation>Toutes les tâches concernées seront perdues</translation>
+        <translation>Toutes les tâches concernées seront perdues.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="122"/>
@@ -3978,7 +3978,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="116"/>
         <source>Done on %1. Click to undo.</source>
-        <translation>Effectuée le %1. Cliquer pour défaire</translation>
+        <translation>Effectuée le %1. Cliquer pour défaire.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="117"/>
@@ -4260,12 +4260,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="306"/>
         <source>Hide plantings and locations details</source>
-        <translation>Cacher le détail des séries et emplacements.</translation>
+        <translation>Cacher le détail des séries et emplacements</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="307"/>
         <source>Show plantings and locations details</source>
-        <translation>Afficher le détail des séries et emplacements.</translation>
+        <translation>Afficher le détail des séries et emplacements</translation>
     </message>
     <message numerus="yes">
         <source>%L1 bed @ </source>
@@ -4379,7 +4379,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="373"/>
         <source>Sowing/planting </source>
-        <translation>Semis/plantation</translation>
+        <translation>Semis/plantation </translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="391"/>
