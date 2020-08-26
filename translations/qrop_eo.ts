@@ -6,7 +6,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="31"/>
         <source>About Qrop</source>
-        <translation type="unfinished"></translation>
+        <translation>Pri Qrop</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="71"/>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="40"/>
         <source>Add New Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni nova kulturon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
