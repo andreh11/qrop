@@ -1200,8 +1200,8 @@
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante : %L1 m</numerusform>
-            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
         </translation>
     </message>
     <message>
@@ -1919,8 +1919,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1080"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante : %L1 m</numerusform>
-            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1  m</numerusform>
         </translation>
     </message>
     <message>
@@ -1995,8 +1995,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1214"/>
         <source>Quantity: %L1 g</source>
         <translation>
-            <numerusform>Quantité : %L1 g</numerusform>
-            <numerusform>Quantité : %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
         </translation>
     </message>
     <message>
@@ -2924,7 +2924,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="159"/>
         <source>Revenue</source>
-        <translation>C.A.</translation>
+        <translation>CA</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="165"/>
@@ -3018,7 +3018,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="173"/>
         <location filename="../core/print.cpp" line="212"/>
         <source>Length</source>
-        <translation>Lgr.</translation>
+        <translation>Longueur</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="99"/>
