@@ -312,7 +312,7 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="321"/>
         <source>No tasks to show</source>
-        <translation type="unfinished">Neniu tasko</translation>
+        <translation>Neniu montrenda tasko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="333"/>
@@ -904,12 +904,12 @@
     <message>
         <location filename="../core/db.cpp" line="300"/>
         <source>Unknown company</source>
-        <translation type="unfinished"></translation>
+        <translation>Nekonita provizinto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="321"/>
         <source>Direct sow</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekta semado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="322"/>
@@ -951,27 +951,27 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="127"/>
         <source>Add Harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni rikolton</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="127"/>
         <source>Edit Harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi rikolton</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="165"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvanto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="183"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="196"/>
         <source>Labor Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Labortempo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="235"/>
@@ -986,7 +986,7 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="247"/>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuna</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="250"/>
@@ -1027,12 +1027,12 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="44"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvanto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="45"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="46"/>
@@ -1042,12 +1042,12 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="64"/>
         <source>Harvests</source>
-        <translation type="unfinished"></translation>
+        <translation>Rikoltoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="109"/>
         <source>Harvest added</source>
-        <translation type="unfinished"></translation>
+        <translation>Rikolto aldonita</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="118"/>
