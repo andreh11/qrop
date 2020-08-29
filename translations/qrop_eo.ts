@@ -11,12 +11,12 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="71"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plursistema ilo por planado kaj sekvado de utilĝardenaj kulturoj. Kreita de geutilĝardenistoj por geutilĝardenistoj, helpe de la franca kooperativo &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L’atelier paysan&lt;/a&gt; (la kamparana metiejo).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="96"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiu programo distribuiĝas SEN IA AJN GARANTIO. Por pli da detaloj, vidu &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNUa Ĝenerala Publika Permesilo, 3-a versio&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="79"/>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>Plena nomo</translation>
     </message>
 </context>
 <context>
@@ -132,22 +132,22 @@
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="41"/>
         <source>Add New Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni variaĵon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="74"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Variaĵo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="86"/>
         <source>Choose a company</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektu liveranton</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="87"/>
         <source>Seed Company</source>
-        <translation type="unfinished"></translation>
+        <translation>Liveranto</translation>
     </message>
 </context>
 <context>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../core/buildinfo.cpp" line="11"/>
         <source>Unknown build version</source>
-        <translation type="unfinished"></translation>
+        <translation>Nekonata kunmetaĵa versio</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="17"/>
         <source>Unknown commit hash</source>
-        <translation type="unfinished"></translation>
+        <translation>Nekonata haketo de enmeto</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="23"/>
         <source>Unknown commit branch</source>
-        <translation type="unfinished"></translation>
+        <translation>Nekonata enmeta branĉo</translation>
     </message>
 </context>
 <context>
@@ -197,132 +197,132 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="37"/>
         <source>Task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Taskokalendaro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="109"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/CalendarPage.qml" line="151"/>
         <source>%L1 task(s) selected</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 elektita tasko</numerusform>
+            <numerusform>%L1 elektitaj taskoj</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="164"/>
         <source>Add task</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni taskon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="173"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Modeloj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="184"/>
         <source>Search Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Serĉi taskojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="196"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Farita</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="202"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation>Farota</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="207"/>
         <source>Overdue</source>
-        <translation type="unfinished"></translation>
+        <translation>Malfrua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="228"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="234"/>
         <source>Print the task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Presi la taskokalendaron</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="246"/>
         <source>Current week</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuna semajno</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="252"/>
         <source>Current month</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuna monato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="257"/>
         <source>Current year</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuna jaro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="265"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="274"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Presi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="305"/>
         <source>No tasks done, due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farita, farota aŭ malfrua en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="307"/>
         <source>No tasks done or due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farita aŭ farota en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="309"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farita aŭ malfrua en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="311"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="313"/>
         <source>No tasks due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farota aŭ malfrua en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="315"/>
         <source>No tasks done week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farita semajne %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="317"/>
         <source>No task due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko farota en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="319"/>
         <source>No tasks overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu tasko malfrua en la semajno %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="321"/>
         <source>No tasks to show</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neniu tasko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="333"/>
         <source>Check at least one type to see them</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektu almenaŭ unu tipon de tasko por vidi iujn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="341"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni</translation>
     </message>
     <message>
         <source>No tasks to show. Check at least one type to see them!</source>
@@ -439,98 +439,98 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="29"/>
         <source>Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikaĵoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="37"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Specio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="42"/>
         <source>Varieties</source>
-        <translation type="unfinished"></translation>
+        <translation>Variaĵoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="47"/>
         <source>Total length</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuta longo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="52"/>
         <source>Total yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuta rendimento</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="57"/>
         <source>Total Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuta spezosumo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="62"/>
         <source>Field length</source>
-        <translation type="unfinished"></translation>
+        <translation>Kampolongo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="67"/>
         <source>Field yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamporendimento</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="72"/>
         <source>Field Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Kampa spezosumo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="77"/>
         <source>Greenhouse length</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceja longo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="82"/>
         <source>Greenhouse yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceja rendimento</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="87"/>
         <source>Greenhouse Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceja spezosumo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="139"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Serĉi...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="185"/>
         <source>Estimated revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Taksita spezosumo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="186"/>
         <source>$%L1</source>
-        <translation type="unfinished"></translation>
+        <translation>%L1 €</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="194"/>
         <location filename="../desktop/qml/ChartsPage.qml" line="204"/>
         <source>Number of beds</source>
-        <translation type="unfinished"></translation>
+        <translation>Bedonombro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="195"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Kampo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="205"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Forcejo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="214"/>
         <source>Number of cultivars</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombro de variaĵoj</translation>
     </message>
     <message>
         <source>Number of crops</source>
@@ -550,17 +550,17 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
         <source>Unassign</source>
-        <translation type="unfinished"></translation>
+        <translation>Malatribui</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="173"/>
         <source>Split</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi</translation>
     </message>
 </context>
 <context>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../desktop/qml/CropRevenueChart.qml" line="25"/>
         <source>Crop revenue distribution (in €)</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuo de la spezosumo (en €)</translation>
     </message>
 </context>
 <context>
@@ -579,7 +579,7 @@
         <location filename="../core/db.cpp" line="250"/>
         <location filename="../core/db.cpp" line="251"/>
         <source>Alliaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Aliumacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="239"/>
@@ -588,7 +588,7 @@
         <location filename="../core/db.cpp" line="254"/>
         <location filename="../core/db.cpp" line="255"/>
         <source>Apiaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Apiacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="240"/>
@@ -596,7 +596,7 @@
         <location filename="../core/db.cpp" line="257"/>
         <location filename="../core/db.cpp" line="258"/>
         <source>Asteraceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Asteracoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="241"/>
@@ -608,7 +608,7 @@
         <location filename="../core/db.cpp" line="264"/>
         <location filename="../core/db.cpp" line="265"/>
         <source>Brassicaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Brasikacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="242"/>
@@ -616,7 +616,7 @@
         <location filename="../core/db.cpp" line="267"/>
         <location filename="../core/db.cpp" line="268"/>
         <source>Chenopodiaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Kenopodiacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="243"/>
@@ -626,7 +626,7 @@
         <location filename="../core/db.cpp" line="272"/>
         <location filename="../core/db.cpp" line="273"/>
         <source>Cucurbitaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Kukurbacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="244"/>
@@ -634,7 +634,7 @@
         <location filename="../core/db.cpp" line="275"/>
         <location filename="../core/db.cpp" line="276"/>
         <source>Fabaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Fabacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="245"/>
@@ -643,253 +643,253 @@
         <location filename="../core/db.cpp" line="279"/>
         <location filename="../core/db.cpp" line="280"/>
         <source>Solanaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Solanacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="246"/>
         <location filename="../core/db.cpp" line="281"/>
         <source>Valerianaceae</source>
-        <translation type="unfinished"></translation>
+        <translation>Valerianacoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="249"/>
         <source>Garlic</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajlo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="250"/>
         <source>Onion</source>
-        <translation type="unfinished"></translation>
+        <translation>Cepo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="251"/>
         <source>Leek</source>
-        <translation type="unfinished"></translation>
+        <translation>Poreo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="252"/>
         <source>Carrot</source>
-        <translation type="unfinished"></translation>
+        <translation>Karoto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="253"/>
         <source>Celery</source>
-        <translation type="unfinished"></translation>
+        <translation>Celerio</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="254"/>
         <source>Fennel</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenkolo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="255"/>
         <source>Parsnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastinako</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="256"/>
         <source>Chicory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cikorio</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="257"/>
         <source>Belgian endive</source>
-        <translation type="unfinished"></translation>
+        <translation>Endivio</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="258"/>
         <source>Lettuce</source>
-        <translation type="unfinished"></translation>
+        <translation>Laktuko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="259"/>
         <source>Cabbage</source>
-        <translation type="unfinished"></translation>
+        <translation>Blanka brasiko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="260"/>
         <source>Brussel Sprouts</source>
-        <translation type="unfinished"></translation>
+        <translation>Burĝonbrasiko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="261"/>
         <source>Kohlrabi</source>
-        <translation type="unfinished"></translation>
+        <translation>Tigobrasiko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="262"/>
         <source>Cauliflower</source>
-        <translation type="unfinished"></translation>
+        <translation>Florbrasiko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="263"/>
         <source>Broccoli</source>
-        <translation type="unfinished"></translation>
+        <translation>Brokolo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="264"/>
         <source>Turnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Napo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="265"/>
         <source>Radish</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruĝa rafaneto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="266"/>
         <source>Beetroot</source>
-        <translation type="unfinished"></translation>
+        <translation>Beto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="267"/>
         <source>Chard</source>
-        <translation type="unfinished"></translation>
+        <translation>Folibeto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="268"/>
         <source>Spinach</source>
-        <translation type="unfinished"></translation>
+        <translation>Spinaco</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="269"/>
         <source>Cucumber</source>
-        <translation type="unfinished"></translation>
+        <translation>Kukumo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="270"/>
         <source>Zucchini</source>
-        <translation type="unfinished"></translation>
+        <translation>Kukurbeto</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="271"/>
         <source>Melon</source>
-        <translation type="unfinished"></translation>
+        <translation>Melono</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="272"/>
         <source>Watermelon</source>
-        <translation type="unfinished"></translation>
+        <translation>Akvomelono</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="273"/>
         <source>Winter squash</source>
-        <translation type="unfinished"></translation>
+        <translation>Kukurbo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="274"/>
         <source>Bean</source>
-        <translation type="unfinished"></translation>
+        <translation>Fazeolo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="275"/>
         <source>Fava bean</source>
-        <translation type="unfinished"></translation>
+        <translation>Fabo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="276"/>
         <source>Pea</source>
-        <translation type="unfinished"></translation>
+        <translation>Ĝardena pizo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="277"/>
         <source>Eggplant</source>
-        <translation type="unfinished"></translation>
+        <translation>Melongeno</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="278"/>
         <source>Pepper</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapsiko</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="279"/>
         <source>Potatoe</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpomo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="280"/>
         <source>Tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomato</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="281"/>
         <source>Mâche</source>
-        <translation type="unfinished"></translation>
+        <translation>Valerianelo (V. locusta)</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="283"/>
         <source>Cultivation and Tillage</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundprilaborado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="284"/>
         <source>Fertilize and Amend</source>
-        <translation type="unfinished"></translation>
+        <translation>Fekundigo kaj kromternutraĵoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="285"/>
         <source>Irrigate</source>
-        <translation type="unfinished"></translation>
+        <translation>Irigacio</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="286"/>
         <source>Maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation>Bontenado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="287"/>
         <source>Pest and Disease</source>
-        <translation type="unfinished"></translation>
+        <translation>Parazitoj kaj malsanoj</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="288"/>
         <source>Prune</source>
-        <translation type="unfinished"></translation>
+        <translation>Stucado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="289"/>
         <source>Row Cover and Mulch</source>
-        <translation type="unfinished"></translation>
+        <translation>Baŝado kaj mulĉo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="290"/>
         <source>Stale Bed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antaŭsemado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="291"/>
         <source>Thin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maldensigado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="292"/>
         <source>Trellis</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Palisado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="293"/>
         <source>Weed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serkado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="295"/>
         <source>kilogram</source>
-        <translation type="unfinished"></translation>
+        <translation>kilogramo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="295"/>
         <source>kg</source>
-        <translation type="unfinished"></translation>
+        <translation>kg</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="296"/>
         <source>bunch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">garbo</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="296"/>
         <source>bn</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gb</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="297"/>
