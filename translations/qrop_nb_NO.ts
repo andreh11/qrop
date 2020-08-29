@@ -6,7 +6,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="31"/>
         <source>About Qrop</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="71"/>
@@ -34,12 +34,12 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="97"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farge</translation>
     </message>
 </context>
 <context>
@@ -47,12 +47,12 @@
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="39"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="48"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -60,22 +60,22 @@
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="37"/>
         <source>Do not close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikke lukk</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="46"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediger</translation>
     </message>
 </context>
 <context>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="15"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til ny familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="39"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="52"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farge</translation>
     </message>
 </context>
 <context>
@@ -101,12 +101,12 @@
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="16"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til ny familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="33"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Nøkkelord</translation>
     </message>
 </context>
 <context>
@@ -114,17 +114,17 @@
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="35"/>
         <source>Add Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til enhet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="68"/>
         <source>Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Forkortelse</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="79"/>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullt navn</translation>
     </message>
 </context>
 <context>
@@ -142,12 +142,12 @@
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="86"/>
         <source>Choose a company</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg et selskap</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="87"/>
         <source>Seed Company</source>
-        <translation type="unfinished"></translation>
+        <translation>Frøselskap</translation>
     </message>
 </context>
 <context>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../core/buildinfo.cpp" line="11"/>
         <source>Unknown build version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent byggversjon</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="17"/>
         <source>Unknown commit hash</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent innsendelses-sjekksum</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="23"/>
         <source>Unknown commit branch</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent innsendelsesforgrening</translation>
     </message>
 </context>
 <context>
@@ -197,40 +197,40 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="37"/>
         <source>Task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjøremålskalender</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="109"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/CalendarPage.qml" line="151"/>
         <source>%L1 task(s) selected</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 gjøremål valgt</numerusform>
+            <numerusform>%L1 gjøremål valgt</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="164"/>
         <source>Add task</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til gjøremål</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="173"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Maler</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="184"/>
         <source>Search Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Søk i gjøremål</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="196"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferdig</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="202"/>
@@ -246,32 +246,32 @@
         <location filename="../desktop/qml/CalendarPage.qml" line="228"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="234"/>
         <source>Print the task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut gjøremålskalender</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="246"/>
         <source>Current week</source>
-        <translation type="unfinished"></translation>
+        <translation>Inneværende uke</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="252"/>
         <source>Current month</source>
-        <translation type="unfinished"></translation>
+        <translation>Nåværende måned</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="257"/>
         <source>Current year</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjeldende år</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="265"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="274"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="305"/>
@@ -654,12 +654,12 @@
     <message>
         <location filename="../core/db.cpp" line="249"/>
         <source>Garlic</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvitløk</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="250"/>
         <source>Onion</source>
-        <translation type="unfinished"></translation>
+        <translation>Løk</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="251"/>
@@ -714,7 +714,7 @@
     <message>
         <location filename="../core/db.cpp" line="261"/>
         <source>Kohlrabi</source>
-        <translation type="unfinished"></translation>
+        <translation>Kålrabi</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="262"/>
@@ -724,17 +724,17 @@
     <message>
         <location filename="../core/db.cpp" line="263"/>
         <source>Broccoli</source>
-        <translation type="unfinished"></translation>
+        <translation>Brokkoli</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="264"/>
         <source>Turnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Turnips</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="265"/>
         <source>Radish</source>
-        <translation type="unfinished"></translation>
+        <translation>Reddik</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="266"/>
@@ -749,12 +749,12 @@
     <message>
         <location filename="../core/db.cpp" line="268"/>
         <source>Spinach</source>
-        <translation type="unfinished"></translation>
+        <translation>Spinat</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="269"/>
         <source>Cucumber</source>
-        <translation type="unfinished"></translation>
+        <translation>Agurk</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="270"/>
@@ -764,12 +764,12 @@
     <message>
         <location filename="../core/db.cpp" line="271"/>
         <source>Melon</source>
-        <translation type="unfinished"></translation>
+        <translation>Melon</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="272"/>
         <source>Watermelon</source>
-        <translation type="unfinished"></translation>
+        <translation>Vannmelon</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="273"/>
@@ -789,7 +789,7 @@
     <message>
         <location filename="../core/db.cpp" line="276"/>
         <source>Pea</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erter</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="277"/>
@@ -809,7 +809,7 @@
     <message>
         <location filename="../core/db.cpp" line="280"/>
         <source>Tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomat</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="281"/>
@@ -961,17 +961,17 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="165"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengde</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="183"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="196"/>
         <source>Labor Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeidstid</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="235"/>
@@ -986,7 +986,7 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="247"/>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Nåværende</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="250"/>
@@ -1177,7 +1177,7 @@
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="180"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengde</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="197"/>
@@ -1212,7 +1212,7 @@
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="67"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Lukk</translation>
     </message>
 </context>
 <context>
@@ -1220,7 +1220,7 @@
     <message>
         <location filename="../desktop/qml/LocationView.qml" line="354"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
 </context>
 <context>
@@ -1233,7 +1233,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="118"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="144"/>
@@ -1306,7 +1306,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="297"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="305"/>
@@ -1336,7 +1336,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="335"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivhus</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="336"/>
@@ -1428,33 +1428,33 @@
     <message>
         <location filename="../core/mdate.cpp" line="218"/>
         <source>Winter</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinter</translation>
     </message>
     <message>
         <location filename="../core/mdate.cpp" line="220"/>
         <source>Spring</source>
-        <translation type="unfinished"></translation>
+        <translation>Vår</translation>
     </message>
     <message>
         <location filename="../core/mdate.cpp" line="222"/>
         <source>Summer</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommer</translation>
     </message>
     <message>
         <location filename="../core/mdate.cpp" line="224"/>
         <source>Fall</source>
-        <translation type="unfinished"></translation>
+        <translation>Høst</translation>
     </message>
     <message>
         <location filename="../core/mdate.cpp" line="280"/>
         <source>today</source>
-        <translation type="unfinished"></translation>
+        <translation>i dag</translation>
     </message>
     <message>
         <location filename="../core/mdate.cpp" line="287"/>
         <source>today</source>
         <comment>abbreviation</comment>
-        <translation type="unfinished"></translation>
+        <translation>i dag</translation>
     </message>
 </context>
 <context>
@@ -1470,12 +1470,12 @@
     <message>
         <location filename="../desktop/qml/MyComboBox.qml" line="35"/>
         <source>Bad input</source>
-        <translation type="unfinished"></translation>
+        <translation>Feilaktig inndata</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MyComboBox.qml" line="40"/>
         <source>Add Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til element</translation>
     </message>
 </context>
 <context>
@@ -1487,7 +1487,7 @@
     <message>
         <location filename="../desktop/qml/MyTextField.qml" line="33"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Feil</translation>
     </message>
 </context>
 <context>
@@ -1495,7 +1495,7 @@
     <message>
         <location filename="../desktop/qml/NoteButton.qml" line="13"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notiser</translation>
     </message>
 </context>
 <context>
@@ -1503,17 +1503,17 @@
     <message>
         <location filename="../desktop/qml/NoteSideSheet.qml" line="47"/>
         <source>Pictures (*.jpg *.JPG *.jpeg *.JPEG *.png *.PNG *.gif *.GIF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder (*.jpg *.JPG *.jpeg *.JPEG *.png *.PNG *.gif *.GIF)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NoteSideSheet.qml" line="47"/>
         <source>All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle filer (*)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NoteSideSheet.qml" line="112"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notiser</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NoteSideSheet.qml" line="173"/>
@@ -1528,7 +1528,7 @@
     <message>
         <location filename="../desktop/qml/NoteSideSheet.qml" line="347"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
 </context>
 <context>
@@ -1536,12 +1536,12 @@
     <message>
         <location filename="../desktop/qml/NotesEditPage.qml" line="26"/>
         <source>New Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny notis</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesEditPage.qml" line="54"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
 </context>
 <context>
@@ -1553,17 +1553,17 @@
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="42"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="43"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="44"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaljer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="45"/>
@@ -1615,7 +1615,7 @@
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="402"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="425"/>
@@ -1625,17 +1625,17 @@
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="427"/>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Notis</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="429"/>
         <source>Harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Høsting</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="431"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent</translation>
     </message>
     <message>
         <source>Quantity</source>
@@ -1651,12 +1651,12 @@
     <message>
         <location filename="../core/planting.cpp" line="926"/>
         <source>Unknown company</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent selskap</translation>
     </message>
     <message>
         <location filename="../core/planting.cpp" line="932"/>
         <source>Unkown company</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent selskap</translation>
     </message>
     <message>
         <location filename="../core/planting.cpp" line="1082"/>
@@ -1781,7 +1781,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="742"/>
         <source>Density (m²)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tetthet (m²)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="770"/>
@@ -1791,17 +1791,17 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="778"/>
         <source>Single planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkeltstående beplantning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="782"/>
         <source>Weeks between</source>
-        <translation type="unfinished"></translation>
+        <translation>Uker mellom</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="806"/>
         <source>Direct seed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Direkte såing</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="826"/>
@@ -1843,17 +1843,17 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="895"/>
         <source>Greenhouse duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivhusvarighet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="933"/>
         <source>Harvest window</source>
-        <translation type="unfinished"></translation>
+        <translation>Høstingsvindu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="951"/>
         <source>Planting dates</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantedatoer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="951"/>
@@ -2017,12 +2017,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1247"/>
         <source>Add the unit &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til enheten «%1»</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1247"/>
         <source>Add a unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til en enhet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1276"/>
@@ -2032,7 +2032,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1291"/>
         <source>Price/</source>
-        <translation type="unfinished"></translation>
+        <translation>Pris/</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1300"/>
@@ -2586,12 +2586,12 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="563"/>
         <source>Hide notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Skjul notiser</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="563"/>
         <source>Show notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis notiser</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="579"/>
@@ -2691,18 +2691,18 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="691"/>
         <source>Current year</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjeldende år</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="464"/>
         <location filename="../desktop/qml/PlantingsPage.qml" line="701"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="448"/>
         <source>Finished harvest </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fullfør innhøsting </translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="449"/>
@@ -3018,14 +3018,14 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="173"/>
         <location filename="../core/print.cpp" line="212"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lengde</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="99"/>
         <location filename="../core/print.cpp" line="175"/>
         <location filename="../core/print.cpp" line="214"/>
         <source>Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Rader</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="100"/>
@@ -3249,12 +3249,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="137"/>
         <source>Next season</source>
-        <translation type="unfinished"></translation>
+        <translation>Neste sesong</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="148"/>
         <source>Previous season</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige sesong</translation>
     </message>
     <message>
         <source>Previous year</source>
@@ -3270,7 +3270,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="42"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="47"/>
@@ -3355,7 +3355,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="269"/>
         <source>Month</source>
-        <translation type="unfinished"></translation>
+        <translation>Måned</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="293"/>
@@ -3372,12 +3372,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="505"/>
         <source>%L1 kg</source>
-        <translation type="unfinished"></translation>
+        <translation>%L1 kg</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="506"/>
         <source>%L1 g</source>
-        <translation type="unfinished"></translation>
+        <translation>%L1 g</translation>
     </message>
 </context>
 <context>
@@ -3390,7 +3390,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="103"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="110"/>
@@ -3485,7 +3485,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="62"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="68"/>
@@ -3498,27 +3498,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="65"/>
         <source>Keywords</source>
-        <translation type="unfinished"></translation>
+        <translation>Nøkkelord</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="72"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="81"/>
         <source>Add keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til nøkkelord</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="128"/>
         <source>Remove keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern nøkkelord</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="138"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <source>Keyword</source>
@@ -3534,7 +3534,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Innstillinger</translation>
     </message>
     <message>
         <source>Recent the application for modifications to take effect</source>
@@ -3552,27 +3552,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="125"/>
         <source>Date type</source>
-        <translation type="unfinished"></translation>
+        <translation>Datotype</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="137"/>
         <source>Week</source>
-        <translation type="unfinished"></translation>
+        <translation>Uke</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="137"/>
         <source>Full</source>
-        <translation type="unfinished"></translation>
+        <translation>Full</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="156"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="175"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="306"/>
@@ -3726,27 +3726,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="72"/>
         <source>Seeds companies</source>
-        <translation type="unfinished"></translation>
+        <translation>Frøselskaper</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="80"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="88"/>
         <source>Add a seed company</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til frøselskap</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="140"/>
         <source>Remove seed company</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern frøselskap</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="150"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <source>Add seed company</source>
@@ -3762,12 +3762,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="55"/>
         <source>Remove method</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern metode</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="63"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="70"/>
@@ -3853,17 +3853,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="65"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="136"/>
         <source>Remove unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern enhet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="146"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern %1?</translation>
     </message>
 </context>
 <context>
@@ -3876,7 +3876,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="118"/>
         <source>Delete %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett %1?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="124"/>
@@ -3889,7 +3889,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SimpleAddDialog.qml" line="21"/>
         <source>Add New Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til nytt element</translation>
     </message>
 </context>
 <context>
@@ -3968,12 +3968,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="89"/>
         <source>Choose a type</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg en type</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="100"/>
         <source>Add Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til type</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="116"/>
@@ -3991,7 +3991,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="252"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metode</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="255"/>
@@ -4001,12 +4001,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="255"/>
         <source>Add new method</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til ny metode</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="274"/>
         <source>Add Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til metode</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="291"/>
@@ -4245,12 +4245,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="229"/>
         <source>Move to next week</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytt til neste uke</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="244"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="271"/>
@@ -4369,27 +4369,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="308"/>
         <source>Add task</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til gjøremål</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="355"/>
         <source>Greenhouse sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivhussåing</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="373"/>
         <source>Sowing/planting </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Såing/beplantning </translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="391"/>
         <source>First harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Første innhøsting</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="409"/>
         <source>Last harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Siste innhøsting</translation>
     </message>
     <message>
         <source>Duplicate template</source>
@@ -4409,13 +4409,13 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="27"/>
         <source>Enter a valid time format (HH:MM)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv inn et gyldig datoformat (TT:MM)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="32"/>
         <source>h</source>
         <comment>Abbreviaton for hour</comment>
-        <translation type="unfinished"></translation>
+        <translation>t</translation>
     </message>
 </context>
 <context>
@@ -4442,7 +4442,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/variety.cpp" line="69"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent</translation>
     </message>
 </context>
 <context>
@@ -4466,12 +4466,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/WeekSpinBox.qml" line="143"/>
         <source>Next season</source>
-        <translation type="unfinished"></translation>
+        <translation>Neste sesong</translation>
     </message>
     <message>
         <location filename="../desktop/qml/WeekSpinBox.qml" line="154"/>
         <source>Previous season</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige sesong</translation>
     </message>
 </context>
 <context>
@@ -4483,12 +4483,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/main.qml" line="42"/>
         <source>Plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Beplantninger</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="43"/>
         <source>Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjøremål</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="44"/>
@@ -4498,12 +4498,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/main.qml" line="45"/>
         <source>Harvests</source>
-        <translation type="unfinished"></translation>
+        <translation>Innhøstinger</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="46"/>
         <source>Seed list</source>
-        <translation type="unfinished"></translation>
+        <translation>Frøliste</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="47"/>
@@ -4542,59 +4542,59 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/main.qml" line="239"/>
         <source>Main database</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoveddatabase</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="248"/>
         <source>Main database menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoveddatabase-meny</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="253"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstatt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="261"/>
         <source>Second database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sekundær database</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="279"/>
         <source>No other database opened</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen annen database åpnet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="288"/>
         <source>Database menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Database-meny</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="292"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="293"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Åpne</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="252"/>
         <location filename="../desktop/qml/main.qml" line="295"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="49"/>
         <location filename="../desktop/qml/main.qml" line="306"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Innstillinger</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="321"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
@@ -4607,7 +4607,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/main.qml" line="48"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notiser</translation>
     </message>
     <message>
         <source>File</source>
