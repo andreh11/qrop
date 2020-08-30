@@ -11,12 +11,12 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="71"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertkøy for flere plattformer for avlingsplanlegging og registrering. Laget av bønder, for bønder. Med hjelp fra det Franske kooperativet &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="96"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dette programmet har ABSOLUTT INGEN GARANTI, besøk &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GPLv3&lt;/a&gt; for flere detaljer.</translation>
     </message>
 </context>
 <context>
@@ -24,12 +24,12 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="40"/>
         <source>Add New Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til ny avling</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Avling</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
@@ -132,12 +132,12 @@
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="41"/>
         <source>Add New Variety</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til ny avart</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="74"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avart</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="86"/>
@@ -235,12 +235,12 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="202"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation>Forefallende</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="207"/>
         <source>Overdue</source>
-        <translation type="unfinished"></translation>
+        <translation>Forfalt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="228"/>
@@ -276,53 +276,53 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="305"/>
         <source>No tasks done, due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål utført, forfallende eller forfalt for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="307"/>
         <source>No tasks done or due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål utførte eller forefallende for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="309"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål utførte eller forfalte for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="311"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="313"/>
         <source>No tasks due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål forefallende eller forfalt for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="315"/>
         <source>No tasks done week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål utført uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="317"/>
         <source>No task due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="319"/>
         <source>No tasks overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål forefalt for uke %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="321"/>
         <source>No tasks to show</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen gjøremål å vise</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="333"/>
         <source>Check at least one type to see them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klikk på minst én type for å se dem</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="341"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til</translation>
     </message>
     <message>
         <source>No tasks to show. Check at least one type to see them!</source>
@@ -439,22 +439,22 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="29"/>
         <source>Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Diagrammer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="37"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Avling</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="42"/>
         <source>Varieties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avarter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="47"/>
         <source>Total length</source>
-        <translation type="unfinished"></translation>
+        <translation>Total lengde</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="52"/>
