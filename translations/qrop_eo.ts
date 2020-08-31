@@ -894,12 +894,12 @@
     <message>
         <location filename="../core/db.cpp" line="297"/>
         <source>head</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ero</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="297"/>
         <source>hd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">er</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="300"/>
@@ -914,12 +914,12 @@
     <message>
         <location filename="../core/db.cpp" line="322"/>
         <source>Greenhouse sow</source>
-        <translation type="unfinished"></translation>
+        <translation>Varta semado</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="323"/>
         <source>Transplant</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantejo</translation>
     </message>
     <message>
         <source>Transplant sow</source>
@@ -935,7 +935,7 @@
     <message>
         <location filename="../desktop/qml/DatePicker.qml" line="62"/>
         <source>Done on %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Farita %1</translation>
     </message>
 </context>
 <context>
@@ -943,7 +943,7 @@
     <message>
         <location filename="../desktop/qml/DistributionChart.qml" line="25"/>
         <source>Crop space distribution (in bed meter)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spacodistribuo (metrojn de bedo)</translation>
     </message>
 </context>
 <context>
@@ -976,12 +976,12 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="235"/>
         <source>Unselect all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Malelekti ĉiujn seriojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="236"/>
         <source>Select all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Elekti ĉiujn seriojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="247"/>
@@ -991,12 +991,12 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="250"/>
         <source>Show only currently harvested plantings for date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Montri nur la nun rikoltatajn seriojn  laŭ la specifa dato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="251"/>
         <source>Show all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Montri ĉiujn seriojn</translation>
     </message>
     <message>
         <source>kg</source>
@@ -1017,12 +1017,12 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="42"/>
         <source>Planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Serio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="43"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="44"/>
@@ -1037,7 +1037,7 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="46"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Daŭro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="64"/>
@@ -1052,7 +1052,7 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="118"/>
         <source>Harvest modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Rikolto modifita</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="127"/>
@@ -1062,32 +1062,32 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="147"/>
         <source>No harvests for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neniu rikolto semajne %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="155"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="175"/>
         <source>Add harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni rikolton</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="216"/>
         <source>Search harvests</source>
-        <translation type="unfinished"></translation>
+        <translation>Serĉi rikoltojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="247"/>
         <source>Print the harvests list</source>
-        <translation type="unfinished"></translation>
+        <translation>Presi rikoltoliston</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="445"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Forigi</translation>
     </message>
     <message numerus="yes">
         <source>%L1 harvest(s) selected</source>
@@ -1114,27 +1114,27 @@
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="102"/>
         <source>Greenhouse start date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komenca dato de semado</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="117"/>
         <source>Field sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Semado</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="117"/>
         <source>Field planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantejo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="132"/>
         <source>First harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Unua rikolto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="147"/>
         <source>Last harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Lasta rikolto</translation>
     </message>
 </context>
 <context>
@@ -1142,32 +1142,32 @@
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="108"/>
         <source>Add Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni lokojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="108"/>
         <source>Edit Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi lokojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="132"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nomo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="143"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Longo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="144"/>
         <source>bed m</source>
-        <translation type="unfinished"></translation>
+        <translation>m bedo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="160"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Larĝo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="161"/>
@@ -1177,12 +1177,12 @@
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="180"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="197"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forcejo</translation>
     </message>
     <message>
         <source>cm</source>
@@ -1194,25 +1194,25 @@
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="50"/>
         <source>Remaining beds: %L1</source>
-        <translation type="unfinished"></translation>
+        <translation>Restantaj bedoj: %L1</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Restanta larĝo: %L1 m</numerusform>
+            <numerusform>Restanta larĝo: %L1 m</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="57"/>
         <source>Unassign all beds</source>
-        <translation type="unfinished"></translation>
+        <translation>Malelekti ĉiujn bedojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="67"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermi</translation>
     </message>
 </context>
 <context>
@@ -1220,7 +1220,7 @@
     <message>
         <location filename="../desktop/qml/LocationView.qml" line="354"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nomo</translation>
     </message>
 </context>
 <context>
@@ -1228,7 +1228,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="57"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="118"/>
@@ -1238,37 +1238,37 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="144"/>
         <source>Edit Crop Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi la parcelaron</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="144"/>
         <source>Assign locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Atribui lokojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="157"/>
         <source>Rotation problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Problemo de rotacio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="178"/>
         <source>Add sublocations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni sublokojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="178"/>
         <source>Add Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldoni lokojn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="195"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="248"/>
         <source>Expand and collapse location levels</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malkaŝi kaj kaŝi la lokojn laŭ la niveloj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="275"/>
@@ -1858,12 +1858,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="951"/>
         <source>(first succession)</source>
-        <translation type="unfinished"></translation>
+        <translation>(unua serio)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="965"/>
         <source>Greenhouse start date</source>
-        <translation type="unfinished"></translation>
+        <translation>Komenca dato de semado</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="967"/>
@@ -1873,22 +1873,22 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="987"/>
         <source>Field planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantejo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="987"/>
         <source>Field sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Semado</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="990"/>
         <source>Harvest before planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Rikolto antaŭ plantado</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1012"/>
         <source>First harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Unua rikolto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1015"/>
