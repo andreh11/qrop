@@ -75,7 +75,7 @@
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Edit</source>
-        <translation>Éditer</translation>
+        <translation>Modifier</translation>
     </message>
 </context>
 <context>
@@ -464,7 +464,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="57"/>
         <source>Total Revenue</source>
-        <translation>C.A. total</translation>
+        <translation>CA total</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="62"/>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="72"/>
         <source>Field Revenue</source>
-        <translation>C.A. PC</translation>
+        <translation>CA PC</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="77"/>
@@ -494,12 +494,12 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="87"/>
         <source>Greenhouse Revenue</source>
-        <translation>C.A. SA</translation>
+        <translation>CA SA</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="139"/>
         <source>Search...</source>
-        <translation>Rechercher...</translation>
+        <translation>Rechercher…</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="185"/>
@@ -550,7 +550,7 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation>Éditer</translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
@@ -956,7 +956,7 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="127"/>
         <source>Edit Harvest</source>
-        <translation>Éditer la récolte</translation>
+        <translation>Modifier la récolte</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="165"/>
@@ -1147,7 +1147,7 @@
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="108"/>
         <source>Edit Locations</source>
-        <translation>Éditer les emplacements</translation>
+        <translation>Modifier les emplacements</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="132"/>
@@ -1238,7 +1238,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="144"/>
         <source>Edit Crop Map</source>
-        <translation>Éditer le parcellaire</translation>
+        <translation>Modifier le parcellaire</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="144"/>
@@ -1263,7 +1263,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="195"/>
         <source>Edit</source>
-        <translation>Éditer</translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="248"/>
@@ -1689,7 +1689,7 @@
     <message>
         <location filename="../desktop/qml/PlantingDialog.qml" line="116"/>
         <source>Edit planting(s)</source>
-        <translation>Éditer des séries</translation>
+        <translation>Modifier des séries</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingDialog.qml" line="144"/>
@@ -2169,7 +2169,7 @@
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="63"/>
         <source>Bulk edit</source>
-        <translation>Édition par lot</translation>
+        <translation>Modification par lot</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="110"/>
@@ -2530,7 +2530,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="384"/>
         <source>Edit</source>
-        <translation>Éditer</translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="397"/>
@@ -3945,7 +3945,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialog.qml" line="123"/>
         <source>Edit Task</source>
-        <translation>Éditer la tâche</translation>
+        <translation>Modifier la tâche</translation>
     </message>
 </context>
 <context>
@@ -4300,7 +4300,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="79"/>
         <source>Edit task</source>
-        <translation>Éditer la tâche</translation>
+        <translation>Modifier la tâche</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="91"/>
