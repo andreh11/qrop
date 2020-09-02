@@ -1316,7 +1316,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="311"/>
         <source>This will remove the selected locations and their sublocations. The whole planting history will be lost!</source>
-        <translation>Cela supprimer tous les emplacements sélectionnés, ainsi que tous leurs sous-emplacement. L&apos;historique des séries sera perdu !</translation>
+        <translation>Cela supprimera tous les emplacements sélectionnés, ainsi que tous leurs sous-emplacements. L&apos;historique des séries sera perdu !</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="321"/>
@@ -4092,7 +4092,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="479"/>
         <source>Show only active plantings for due date</source>
-        <translation>Afficher uniquement les séries active pour la date prévue</translation>
+        <translation>Afficher uniquement les séries actives pour la date prévue</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="480"/>
@@ -4409,7 +4409,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="27"/>
         <source>Enter a valid time format (HH:MM)</source>
-        <translation>Entrez une date valide (HH:MM)</translation>
+        <translation>Entrez un horaire valide (HH:MM)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="32"/>
