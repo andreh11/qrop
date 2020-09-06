@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>translations/qrop_fr.qm</file>
+        <file>translations/qrop_eo.qm</file>
+        <file>translations/qrop_nb_NO.qm</file>
     </qresource>
 </RCC>

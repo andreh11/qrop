@@ -113,6 +113,8 @@ add_subdirectory(core)
 ## Translations
 set(TS_FILES
     translations/qrop_fr.ts
+    translations/qrop_eo.ts
+    translations/qrop_nb_NO.ts
     )
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${PROJECT_SOURCE_DIR}/translations")
 #file(GLOB_RECURSE TS_SOURCES "*.cpp" "*.h" "*.qml")
