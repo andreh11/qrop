@@ -1,7 +1,5 @@
-
-
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2020 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
@@ -44,37 +43,36 @@ Item {
     }
 
     function resetBindings() {
-        month = date.getMonth()
-        year = date.getFullYear()
+        month = date.getMonth();
+        year = date.getFullYear();
     }
 
     function sameDates(date1, date2) {
         return (date1.getDate() === date2.getDate())
                 && (date1.getMonth() === date2.getMonth())
-                && (date1.getFullYear() === date2.getFullYear())
+                && (date1.getFullYear() === date2.getFullYear());
     }
 
     function goBackward() {
         if (month == 0) {
-            month = 11
-            year = year - 1
+            month = 11;
+            year = year - 1;
         } else {
-            month--
+            month--;
         }
     }
 
     function goForward() {
         if (month == 11) {
-            month = 0
-            year = year + 1
+            month = 0;
+            year = year + 1;
         } else {
-            month++
+            month++;
         }
     }
 
     function firstOfMonth(month) {
-        var date = new Date(2018, month, 1)
-        return date
+        return new Date(2018, month, 1);
     }
 
     Column {
@@ -219,6 +217,7 @@ Item {
                 locale: grid.locale
                 delegate: Text {
                     font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeCaption
                     text: model.narrowName
                     color: Material.color(Material.Grey, Material.Shade600)
                     horizontalAlignment: Text.AlignHCenter
@@ -238,6 +237,7 @@ Item {
                     text: model.weekNumber
                     color: Material.accent
                     font.family: "Roboto Regular"
+                    font.pixelSize: Units.fontSizeCaption
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -261,6 +261,7 @@ Item {
                         anchors.centerIn: parent
                         text: model.day
                         font.family: "Roboto Regular"
+                        font.pixelSize: Units.fontSizeCaption
                         height: width
                         color: {
                             if (parent.checked)
