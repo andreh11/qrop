@@ -15,7 +15,7 @@
  */
 
 #include "harvestmodel.h"
-#include "mdate.h"
+#include "qrpdate.h"
 
 HarvestModel::HarvestModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -53,7 +53,7 @@ void HarvestModel::setWeek(int week)
 }
 void HarvestModel::updateWeekDates()
 {
-    std::tie(m_mondayDate, m_sundayDate) = MDate::weekDates(m_week, m_year);
+    std::tie(m_mondayDate, m_sundayDate) = QrpDate::weekDates(m_week, m_year);
     // We have to use both of these to get everything working.
     invalidateFilter();
     invalidate();

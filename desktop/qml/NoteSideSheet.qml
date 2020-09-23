@@ -238,8 +238,8 @@ Frame {
                                 Layout.fillWidth: true
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
-                                text: "%1 − %2".arg(MDate.formatDate(model.date, 2019))
-                                               .arg(MDate.formatDate(model.date, 2019, "date"))
+                                text: "%1 − %2".arg(QrpDate.formatDate(model.date, 2019))
+                                               .arg(QrpDate.formatDate(model.date, 2019, "date"))
                                 color: Units.colorMediumEmphasis
                             }
 

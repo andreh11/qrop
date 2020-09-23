@@ -76,8 +76,8 @@ Column {
 //        visible: chooseLocationMode
         clip: true
         
-        season: MDate.season(plantingDate)
-        year: MDate.seasonYear(plantingDate)
+        season: QrpDate.season(plantingDate)
+        year: QrpDate.seasonYear(plantingDate)
         //                    width: parent.width
         //                    height: 400
         height: treeViewHeight + headerHeight

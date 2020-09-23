@@ -14,31 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
-#include <QDoubleValidator>
-#include <QFileSystemModel>
-#include <QFontDatabase>
-#include <QHash>
-#include <QIcon>
-#include <QLibraryInfo>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QQuickView>
-#include <QSettings>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QStandardPaths>
-#include <QTranslator>
-#include <QVariantMap>
-
-//#if defined(Q_OS_ANDROID)
-//#include <QtAndroid>
-//#include <QAndroidJniObject>
-//#endif
-
 #include "buildinfo.h"
 #include "helpers.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "nametree.h"
 #include "print.h"
 #include "qrpimageprovider.h"
@@ -85,6 +63,29 @@
 
 #include "qropdoublevalidator.h"
 #include "timevalidator.h"
+
+#include <QApplication>
+#include <QDoubleValidator>
+#include <QFileSystemModel>
+#include <QFontDatabase>
+#include <QHash>
+#include <QIcon>
+#include <QLibraryInfo>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickView>
+#include <QSettings>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QStandardPaths>
+#include <QTranslator>
+#include <QVariantMap>
+#include <QQmlFileSelector>
+
+//#if defined(Q_OS_ANDROID)
+//#include <QtAndroid>
+//#include <QAndroidJniObject>
+//#endif
 
 void registerFonts()
 {
@@ -205,13 +206,13 @@ void registerTypes()
                                            return location;
                                        });
 
-    qmlRegisterSingletonType<MDate>("io.qrop.components", 1, 0, "MDate",
-                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                        Q_UNUSED(engine)
-                                        Q_UNUSED(scriptEngine)
-                                        auto *mdate = new MDate();
-                                        return mdate;
-                                    });
+    qmlRegisterSingletonType<QrpDate>("io.qrop.components", 1, 0, "QrpDate",
+                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                          Q_UNUSED(engine)
+                                          Q_UNUSED(scriptEngine)
+                                          auto *mdate = new QrpDate();
+                                          return mdate;
+                                      });
 
     qmlRegisterSingletonType<Database>("io.qrop.components", 1, 0, "Database",
                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -331,7 +332,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("AH");
     QApplication::setOrganizationDomain("io.qrop");
     QApplication::setApplicationDisplayName("Qrop");
-    QApplication::setApplicationVersion("0.4.4");
+    QApplication::setApplicationVersion("0.4.5");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
     registerFonts();
@@ -343,6 +344,7 @@ int main(int argc, char *argv[])
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
 
     QQmlApplicationEngine engine;
+    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,

@@ -20,7 +20,7 @@
 
 #include "sortfilterproxymodel.h"
 #include "sqltablemodel.h"
-#include "mdate.h"
+#include "qrpdate.h"
 
 SortFilterProxyModel::SortFilterProxyModel(QObject *parent, const QString &tableName)
     : QSortFilterProxyModel(parent)
@@ -165,7 +165,7 @@ void SortFilterProxyModel::setSortOrder(const QString &order)
 
 std::pair<QDate, QDate> SortFilterProxyModel::seasonDates() const
 {
-    return MDate::seasonDates(m_season, m_year);
+    return QrpDate::seasonDates(m_season, m_year);
 }
 
 QVariant SortFilterProxyModel::rowValue(const QModelIndex &index, const QString &field) const

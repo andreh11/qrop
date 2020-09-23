@@ -196,8 +196,8 @@ Page {
                 WeekSpinBox {
                     id: yearSpinBox
                     visible: checks === 0
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
+                    week: QrpDate.currentWeek();
+                    year: QrpDate.currentYear();
                     showOnlyYear: true
                 }
 
@@ -412,7 +412,7 @@ Page {
                         leftPadding: Units.formSpacing
 
                         Label {
-                            text: MDate.formatDate(model.date, year)
+                            text: QrpDate.formatDate(model.date, year)
                             font.family: "Roboto Regular"
                             elide: Text.ElideRight
                             width: tableHeaderModel[0].width

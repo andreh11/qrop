@@ -326,8 +326,8 @@ ListView {
                     }
                     
                     TableLabel {
-                        text: MDate.isoWeek(model.assigned_date) !== week ? MDate.formatDate(model.assigned_date, year, "")
-                                                                          : MDate.dayName(model.assigned_date)
+                        text: QrpDate.isoWeek(model.assigned_date) !== week ? QrpDate.formatDate(model.assigned_date, year, "")
+                                                                          : QrpDate.dayName(model.assigned_date)
                         elide: Text.ElideRight
                         width: tableHeaderModel[3].width
                         anchors.verticalCenter: parent.verticalCenter

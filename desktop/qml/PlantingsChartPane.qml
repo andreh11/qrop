@@ -34,7 +34,7 @@ Item {
     function computeField() {
         var bedLength = Location.totalBedLength(false);
         var fieldList = Planting.totalLengthByWeek(season, year, keywordId, false)
-        var dateList = MDate.seasonMondayDates(season, year);
+        var dateList = QrpDate.seasonMondayDates(season, year);
         var max = 0
         for (var i = 0; i < fieldList.length; i++) {
             if (percentage) {
@@ -55,7 +55,7 @@ Item {
     function computeGreenhouse() {
         var bedLength = Location.totalBedLength(true);
         var fieldList = Planting.totalLengthByWeek(season, year, keywordId, true)
-        var dateList = MDate.seasonMondayDates(season, year);
+        var dateList = QrpDate.seasonMondayDates(season, year);
         for (var i = 0; i < fieldList.length; i++) {
             if (percentage) {
                 greenhouseChart.append(dateList[i].getTime(), fieldList[i]/bedLength);
@@ -180,8 +180,8 @@ Item {
         DateTimeAxis {
             id: xValuesAxis
             format: "MMM"
-            min: MDate.seasonBeginning(season,year)
-            max: MDate.seasonEnd(season, year)
+            min: QrpDate.seasonBeginning(season,year)
+            max: QrpDate.seasonEnd(season, year)
             tickCount: 12
             titleVisible: false
         }

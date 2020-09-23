@@ -15,8 +15,9 @@
  */
 
 #include "buildinfo.h"
-#include <QDebug>
 #include "version.h"
+
+#include <QDebug>
 
 BuildInfo::BuildInfo(QObject *parent)
     : QObject(parent)

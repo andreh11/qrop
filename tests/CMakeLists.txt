@@ -11,4 +11,5 @@ function(TEST NAME FILE)
 endfunction()
 
 TEST(TstDatabase tst_database.cpp)
-TEST(TstMDate tst_mdate.cpp)
+TEST(TstQrpDate tst_qrpdate.cpp)
+TEST(TstHelpers tst_helpers.cpp)

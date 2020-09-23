@@ -9,7 +9,7 @@ Row {
     property int season: 1
     
     Repeater {
-        model: MDate.monthsOrder(season)
+        model: QrpDate.monthsOrder(season)
         Item {
             width: Units.monthWidth
             height: parent.height
@@ -23,7 +23,7 @@ Row {
             
             Label {
 //                text: Qt.locale().monthName(modelData, Locale.ShortFormat)
-                text: MDate.shortMonthName(modelData + 1)
+                text: QrpDate.shortMonthName(modelData + 1)
                 anchors.left: lineRectangle.right
                 font.family: Units.headerFont["family"]
                 font.pixelSize: Units.fontSizeTable

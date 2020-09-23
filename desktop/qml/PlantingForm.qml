@@ -65,7 +65,7 @@ Flickable {
     readonly property string plantingDate: fieldPlantingDateField.calendarDate
     readonly property string plantingDateString: fieldPlantingDateField.isoDateString
     readonly property string begHarvestDate: begHarvestDateField.isoDateString
-    readonly property string endHarvestDate: Qt.formatDate(MDate.addDays(
+    readonly property string endHarvestDate: Qt.formatDate(QrpDate.addDays(
                                                                begHarvestDateField.calendarDate,
                                                                harvestWindow),
                                                            "yyyy-MM-dd")
@@ -320,13 +320,13 @@ Flickable {
         setFieldValue(rowsPerBedField, val['rows']);
         setFieldValue(inGreenhouseCheckBox, val['in_greenhouse'] === 1 ? true : false);
 
-        var pDate = mode === "add" ? new Date() : MDate.dateFromIsoString(val["planned_planting_date"])
+        var pDate = mode === "add" ? new Date() : QrpDate.dateFromIsoString(val["planned_planting_date"])
 
         if (mode === "edit") {
-            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
-            greenhouseStartDateField.effectiveDate = MDate.dateFromIsoString(val["sowing_date"])
+            fieldPlantingDateField.effectiveDate = QrpDate.dateFromIsoString(val["planting_date"])
+            greenhouseStartDateField.effectiveDate = QrpDate.dateFromIsoString(val["sowing_date"])
             //            begHarvestDateField.effectiveDate
-            //            fieldPlantingDateField.effectiveDate = MDate.dateFromIsoString(val["planting_date"])
+            //            fieldPlantingDateField.effectiveDate = QrpDate.dateFromIsoString(val["planting_date"])
         }
 
         initMode = true;
@@ -441,9 +441,9 @@ Flickable {
             return;
 
         if (picker2 === endHarvestDateField && settings.dateType === "week") {
-            durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate) + 7
+            durationField.text = QrpDate.daysTo(picker1.calendarDate, picker2.calendarDate) + 7
         } else
-            durationField.text = MDate.daysTo(picker1.calendarDate, picker2.calendarDate)
+            durationField.text = QrpDate.daysTo(picker1.calendarDate, picker2.calendarDate)
         durationField.manuallyModified = true
 
         // Mark sow/planting field date as modified (for proper update).
@@ -480,10 +480,10 @@ Flickable {
             to.calendarDate = from.calendarDate;
         } else if (settings.dateType === "week"
                    && (to === endHarvestDateField || from === endHarvestDateField)) {
-            to.calendarDate = MDate.addDays(from.calendarDate,
+            to.calendarDate = QrpDate.addDays(from.calendarDate,
                                             (Number(duration.text) - 7) * direction);
         } else {
-            to.calendarDate = MDate.addDays(from.calendarDate,
+            to.calendarDate = QrpDate.addDays(from.calendarDate,
                                             Number(duration.text) * direction);
         }
     }
@@ -1114,8 +1114,8 @@ Flickable {
 
                     property date plantingDate: fieldPlantingDateField.calendarDate
 
-                    season: MDate.season(plantingDate)
-                    year: MDate.seasonYear(plantingDate)
+                    season: QrpDate.season(plantingDate)
+                    year: QrpDate.seasonYear(plantingDate)
                     height: treeViewHeight
                     // TODO: remove magic number
                     firstColumnWidth: 150
@@ -1125,7 +1125,7 @@ Flickable {
 
                     editedPlantingLength: plantingLength
                     editedPlantingPlantingDate: plantingDate
-                    editedPlantingEndHarvestDate: MDate.addDays(begHarvestDateField.calendarDate,
+                    editedPlantingEndHarvestDate: QrpDate.addDays(begHarvestDateField.calendarDate,
                                                                 harvestWindow)
 
                     onSelectedIndexesChanged: locationsModified = true

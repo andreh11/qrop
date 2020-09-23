@@ -297,12 +297,12 @@ ListView {
                 }
 
                 Label {
-                    property date displayDate: MDate.isValid(model.completed_date)
+                    property date displayDate: QrpDate.isValid(model.completed_date)
                                                ? model.completed_date
                                                : model.assigned_date
-                    text: MDate.isoWeek(displayDate) !== week
-                          ? MDate.formatDate(displayDate, year, "")
-                          : MDate.shortDayName(displayDate)
+                    text: QrpDate.isoWeek(displayDate) !== week
+                          ? QrpDate.formatDate(displayDate, year, "")
+                          : QrpDate.shortDayName(displayDate)
                     elide: Text.ElideRight
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton

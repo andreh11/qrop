@@ -346,8 +346,8 @@ Page {
             SeasonSpinBox {
                 id: seasonSpinBox
                 visible: !editMode
-                season: MDate.season(todayDate)
-                year: MDate.seasonYear(todayDate)
+                season: QrpDate.season(todayDate)
+                year: QrpDate.seasonYear(todayDate)
             }
 
             IconButton {

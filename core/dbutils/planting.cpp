@@ -30,7 +30,7 @@
 #include "family.h"
 #include "keyword.h"
 #include "location.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "planting.h"
 #include "task.h"
 #include "variety.h"
@@ -94,7 +94,7 @@ int Planting::add(const QVariantMap &map) const
 QList<int> Planting::addSuccessions(int successions, int weeksBetween, const QVariantMap &map) const
 {
     const int daysBetween = weeksBetween * 7;
-    const auto plantingDate = MDate::dateFromIsoString(map["planting_date"].toString());
+    const auto plantingDate = QrpDate::dateFromIsoString(map["planting_date"].toString());
     QVariantMap newMap(map);
     QList<int> idList;
 
@@ -412,9 +412,9 @@ int Planting::duplicateToYear(int id, int year) const
     int fromWeek = fromDate.weekNumber();
     QDate toDate;
     if (fromWeek == 53)
-        toDate = MDate::mondayOfWeek(1, year + 1).addDays(fromDate.dayOfWeek() - 1);
+        toDate = QrpDate::mondayOfWeek(1, year + 1).addDays(fromDate.dayOfWeek() - 1);
     else
-        toDate = MDate::mondayOfWeek(fromWeek, year).addDays(fromDate.dayOfWeek() - 1);
+        toDate = QrpDate::mondayOfWeek(fromWeek, year).addDays(fromDate.dayOfWeek() - 1);
     map["planting_date"] = toDate.toString(Qt::ISODate);
 
     int newId = add(map);
@@ -557,10 +557,10 @@ QVector<QDate> Planting::dates(int plantingId) const
     auto record = recordFromId("planting_view", plantingId);
     if (record.isEmpty())
         return {};
-    return { MDate::dateFromIsoString(record.value("sowing_date").toString()),
-             MDate::dateFromIsoString(record.value("planting_date").toString()),
-             MDate::dateFromIsoString(record.value("beg_harvest_date").toString()),
-             MDate::dateFromIsoString(record.value("end_harvest_date").toString()) };
+    return { QrpDate::dateFromIsoString(record.value("sowing_date").toString()),
+             QrpDate::dateFromIsoString(record.value("planting_date").toString()),
+             QrpDate::dateFromIsoString(record.value("beg_harvest_date").toString()),
+             QrpDate::dateFromIsoString(record.value("end_harvest_date").toString()) };
 }
 
 QDate Planting::sowingDate(int plantingId) const
@@ -638,7 +638,7 @@ qreal Planting::lengthToAssign(int plantingId) const
 qreal Planting::totalLengthForWeek(int week, int year, int keywordId, bool greenhouse) const
 {
     QDate date;
-    std::tie(date, std::ignore) = MDate::weekDates(week, year);
+    std::tie(date, std::ignore) = QrpDate::weekDates(week, year);
     int inGreenhouse = greenhouse ? 1 : 0;
     QString queryString;
     QSqlQuery query;
@@ -701,7 +701,7 @@ QVariantList Planting::totalLengthByWeek(int season, int year, int keywordId, bo
     QVariantList list;
     QDate beg;
     QDate end;
-    std::tie(beg, end) = MDate::seasonDates(season, year);
+    std::tie(beg, end) = QrpDate::seasonDates(season, year);
 
     while (beg <= end) {
         int w;
@@ -890,26 +890,26 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             } else if (field == "planting_type") {
                 plantingType = line[i].trimmed().toInt();
             } else if (field == "sowing_date") {
-                sdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                sdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!sdate.isValid()) {
                     qDebug() << "Bad date format, should be week number:" << line[i];
                     return;
                 }
             } else if (field == "planting_date") {
-                pdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                pdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!pdate.isValid()) {
                     qDebug() << "Bad date format, should be week number:" << line[i];
                     return;
                 }
                 map[field] = pdate;
             } else if (field == "beg_harvest_date") {
-                bhdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                bhdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!bhdate.isValid()) {
                     qDebug() << "Bad date format, should be week number:" << line[i];
                     return;
                 }
             } else if (field == "end_harvest_date") {
-                ehdate = MDate::dateFromWeekString(line[i].trimmed(), year);
+                ehdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!ehdate.isValid()) {
                     qDebug() << "Bad date format, should be week number:" << line[i];
                     return;
@@ -1108,14 +1108,14 @@ QString Planting::growBarDescription(const QSqlRecord &record, int year, bool sh
     const QDate plantingDate = QDate::fromString(record.value("planting_date").toString(), Qt::ISODate);
 
     if (!showNames)
-        return MDate::formatDate(plantingDate, year, "", false);
+        return QrpDate::formatDate(plantingDate, year, "", false);
 
     const auto crop = record.value("crop").toString();
     const auto variety = record.value("variety").toString();
     const auto crop2 = QStringRef(&crop, 0, 2);
     const QString rank = record.value("planting_rank").toString();
 
-    return MDate::formatDate(plantingDate, year, "", false) % QStringLiteral(" ") % crop2
+    return QrpDate::formatDate(plantingDate, year, "", false) % QStringLiteral(" ") % crop2
             % QStringLiteral(" ") % rank % QStringLiteral(" ") % variety;
 }
 
@@ -1136,7 +1136,7 @@ QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year
     const auto endHarvestDate =
             QDate::fromString(record.value(QStringLiteral("end_harvest_date")).toString(), Qt::ISODate);
 
-    const auto seasonBegin = MDate::seasonBeginning(season, year);
+    const auto seasonBegin = QrpDate::seasonBeginning(season, year);
     const qreal graphStart =
             Helpers::position(seasonBegin, showGreenhouseSow ? sowingDate : plantingDate);
     const qreal growStart = Helpers::position(seasonBegin, plantingDate) - graphStart;
@@ -1154,8 +1154,8 @@ QVariantMap Planting::drawInfoMap(const QSqlRecord &record, int season, int year
              { "growWidth", growWidth },
              { "harvestWidth", harvestWidth },
              { "plantingId", record.value("planting_id") },
-             { "sowingDate", MDate::formatDate(sowingDate, year, "", false) },
-             { "begHarvestDate", MDate::formatDate(begHarvestDate, year, "", false) },
+             { "sowingDate", QrpDate::formatDate(sowingDate, year, "", false) },
+             { "begHarvestDate", QrpDate::formatDate(begHarvestDate, year, "", false) },
              { "cropColor", record.value("crop_color") },
              { "familyColor", record.value("family_color") },
              { "growBarDescription", growBarDescription(record, year, showNames) } };

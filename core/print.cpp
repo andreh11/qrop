@@ -31,7 +31,7 @@
 #include <QElapsedTimer>
 
 #include "helpers.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "print.h"
 #include "tableprinter.h"
 
@@ -480,7 +480,7 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
     auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
     QString titleMW;
     if (month >= 1 && month <= 12)
-        titleMW.append(QString(" (%1)").arg(MDate::monthName(month)));
+        titleMW.append(QString(" (%1)").arg(QrpDate::monthName(month)));
     else if (week >= 1 && week <= 53)
         titleMW.append(QString(" (%1)").arg(week));
 
@@ -537,20 +537,20 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
                                  + (showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber)
                                                                  : ""))
                             .arg(variety)
-                            .arg(MDate::formatDate(sowingDate, year))
-                            .arg(MDate::formatDate(plantingDate, year))
-                            .arg(MDate::formatDate(begHarvestDate, year))
-                            .arg(MDate::formatDate(endHarvestDate, year))
+                            .arg(QrpDate::formatDate(sowingDate, year))
+                            .arg(QrpDate::formatDate(plantingDate, year))
+                            .arg(QrpDate::formatDate(begHarvestDate, year))
+                            .arg(QrpDate::formatDate(endHarvestDate, year))
                             .arg(length)
                             .arg(rows)
                             .arg(spacing)
                             .arg(locationsName);
         else if (type == "greenhouse")
             html += cropPlanMap[type]
-                            .tableRow.arg(MDate::formatDate(sowingDate, year))
+                            .tableRow.arg(QrpDate::formatDate(sowingDate, year))
                             .arg(crop)
                             .arg(variety)
-                            .arg(MDate::formatDate(plantingDate, year))
+                            .arg(QrpDate::formatDate(plantingDate, year))
                             .arg(trayNumber)
                             .arg(traySize)
                             .arg(seedsPerHole)
@@ -558,10 +558,10 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
                             .arg(seedsQuantity);
         else if (type == "field_sowing")
             html += cropPlanMap[type]
-                            .tableRow.arg(MDate::formatDate(sowingDate, year))
+                            .tableRow.arg(QrpDate::formatDate(sowingDate, year))
                             .arg(crop)
                             .arg(variety)
-                            .arg(MDate::formatDate(begHarvestDate, year))
+                            .arg(QrpDate::formatDate(begHarvestDate, year))
                             .arg(length)
                             .arg(spacing)
                             .arg(rows)
@@ -569,10 +569,10 @@ QString Print::cropPlanHtml(int year, int month, int week, const QString &type) 
                             .arg(locationsName);
         else if (type == "field_transplanting")
             html += cropPlanMap[type]
-                            .tableRow.arg(MDate::formatDate(plantingDate, year))
+                            .tableRow.arg(QrpDate::formatDate(plantingDate, year))
                             .arg(crop)
                             .arg(variety)
-                            .arg(MDate::formatDate(begHarvestDate, year))
+                            .arg(QrpDate::formatDate(begHarvestDate, year))
                             .arg(length)
                             .arg(spacing)
                             .arg(rows)
@@ -592,7 +592,7 @@ QString Print::calendarHtml(int year, int week, bool showDone, bool showDue, boo
 
     QString titleMW;
     if (week >= 1 && week <= 53) {
-        QDate monday = MDate::mondayOfWeek(week, year);
+        QDate monday = QrpDate::mondayOfWeek(week, year);
         QDate sunday = monday.addDays(6);
         titleMW.append(
                 tr(" W%1, %2 − %3").arg(week).arg(monday.toString("dd/MM")).arg(sunday.toString("dd/MM")));
@@ -679,11 +679,11 @@ QString Print::calendarHtml(int year, int week, bool showDone, bool showDue, boo
             if (j == 0) {
                 QString dateString("");
                 if (done) {
-                    dateString = MDate::formatDate(completedDate, year);
+                    dateString = QrpDate::formatDate(completedDate, year);
                     if (completedDate.weekNumber() != assignedDate.weekNumber())
-                        dateString.append(" (" + MDate::formatDate(assignedDate, year) + ")");
+                        dateString.append(" (" + QrpDate::formatDate(assignedDate, year) + ")");
                 } else if (overdue) {
-                    dateString = "(" + MDate::formatDate(assignedDate, year) + ")";
+                    dateString = "(" + QrpDate::formatDate(assignedDate, year) + ")";
                 }
                 html += calendarInfo.tableRow.arg(dateString)
                                 .arg(plantingString)
@@ -713,11 +713,11 @@ QString Print::calendarHtml(int year, int week, bool showDone, bool showDue, boo
 
             QString dateString("");
             if (done) {
-                dateString = MDate::formatDate(completedDate, year);
+                dateString = QrpDate::formatDate(completedDate, year);
                 if (completedDate.weekNumber() != assignedDate.weekNumber())
-                    dateString.append(" (" + MDate::formatDate(assignedDate, year) + ")");
+                    dateString.append(" (" + QrpDate::formatDate(assignedDate, year) + ")");
             } else if (overdue) {
-                dateString = "(" + MDate::formatDate(assignedDate, year) + ")";
+                dateString = "(" + QrpDate::formatDate(assignedDate, year) + ")";
             }
 
             html += calendarInfo.tableRow.arg(dateString)
@@ -769,7 +769,7 @@ QString Print::harvestHtml(int year) const
 
         html += harvestInfo.tableRow
                         .arg(QString("%1 %2")
-                                     .arg(MDate::formatDate(date, year, "", false))
+                                     .arg(QrpDate::formatDate(date, year, "", false))
                                      .arg(date.toString("ddd")))
                         .arg(QString("%1%2, %3")
                                      .arg(crop)
@@ -832,7 +832,7 @@ void Print::paintHeader(QPainter &painter, int season, int year)
 
     painter.save();
     painter.drawText(headerRect, Qt::AlignLeft,
-                     QString("%1 %2").arg(MDate::seasonName(season)).arg(year));
+                     QString("%1 %2").arg(QrpDate::seasonName(season)).arg(year));
     painter.drawText(headerRect, Qt::AlignRight, QString::number(m_pageNumber));
     painter.restore();
 
@@ -845,7 +845,7 @@ void Print::paintHeader(QPainter &painter, int season, int year)
         QRectF rect(m_firstColumnWidth + m * m_monthWidth, 0, m_monthWidth, m_rowHeight);
         painter.drawRect(rect);
         painter.drawText(rect, Qt::AlignCenter,
-                         MDate::shortMonthName(1 + MDate::monthsOrder(season)[m].toInt()));
+                         QrpDate::shortMonthName(1 + QrpDate::monthsOrder(season)[m].toInt()));
     }
     painter.translate(0, m_rowHeight);
 }
@@ -881,9 +881,9 @@ int Print::datePosition(const QDate &date)
 void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 {
     const auto record = m_planting->recordFromId("planting_view", plantingId);
-    const auto plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
-    QDate begHarvestDate = MDate::dateFromIsoString(record.value("beg_harvest_date").toString());
-    QDate endHarvestDate = MDate::dateFromIsoString(record.value("end_harvest_date").toString());
+    const auto plantingDate = QrpDate::dateFromIsoString(record.value("planting_date").toString());
+    QDate begHarvestDate = QrpDate::dateFromIsoString(record.value("beg_harvest_date").toString());
+    QDate endHarvestDate = QrpDate::dateFromIsoString(record.value("end_harvest_date").toString());
     auto showPlantingSuccessionNumber = m_settings->value("showPlantingSuccessionNumber").toBool();
 
     QString colorString;
@@ -922,7 +922,7 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
         QFontMetrics fm(painter.font());
         auto description =
                 QString("%1 %2%3, %4")
-                        .arg(MDate::formatDate(plantingDate, year, "", false))
+                        .arg(QrpDate::formatDate(plantingDate, year, "", false))
                         .arg(cropName)
                         .arg(showPlantingSuccessionNumber ? QString(" %1").arg(successionNumber) : "")
                         .arg(varietyName);
@@ -935,13 +935,13 @@ void Print::paintPlantingTimegraph(QPainter &painter, int plantingId, int year)
 
     if (harvestRect.width() > m_monthWidth * 0.2) {
         painter.drawText(harvestRect.adjusted(m_textPadding, 0, 0, 0), Qt::AlignVCenter,
-                         MDate::formatDate(begHarvestDate, year, "", false));
+                         QrpDate::formatDate(begHarvestDate, year, "", false));
         // Print end harvest date if there is enough space and the date is in the current season.
         if ((harvestRect.width() > m_monthWidth * 0.5)
             && (endHarvestDate <= m_locationModel->seasonDates().second)) {
             painter.drawText(QRectF(point3, point4).adjusted(0, 0, -m_textPadding, 0),
                              Qt::AlignVCenter | Qt::AlignRight,
-                             MDate::formatDate(endHarvestDate, year, "", false));
+                             QrpDate::formatDate(endHarvestDate, year, "", false));
         }
     }
 
@@ -956,7 +956,7 @@ void Print::paintTaskTimeGraph(QPainter &painter, int taskId, int rows)
     if (duration < 1)
         return;
 
-    const QDate assignedDate = MDate::dateFromIsoString(record.value("assigned_date").toString());
+    const QDate assignedDate = QrpDate::dateFromIsoString(record.value("assigned_date").toString());
     const QDate taskEndDate = assignedDate.addDays(duration);
     const QString type = record.value("type").toString();
     const QString color = record.value("color").toString();

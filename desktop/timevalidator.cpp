@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "timevalidator.h"
+
 #include <QDebug>
 #include <QTime>
-
-#include "timevalidator.h"
 
 TimeValidator::TimeValidator(QObject *parent)
     : QValidator(parent)

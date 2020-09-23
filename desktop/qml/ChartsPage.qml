@@ -148,8 +148,8 @@ Page {
             WeekSpinBox {
                 id: weekSpinBox
                 visible: true
-                week: MDate.currentWeek();
-                year: MDate.currentYear();
+                week: QrpDate.currentWeek();
+                year: QrpDate.currentYear();
                 showOnlyYear: true
                 Layout.rightMargin: 16
             }

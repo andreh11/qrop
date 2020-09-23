@@ -225,8 +225,8 @@ Page {
             WeekSpinBox {
                 id: weekSpinBox
                 visible: checks === 0
-                week: MDate.currentWeek();
-                year: MDate.currentYear();
+                week: QrpDate.currentWeek();
+                year: QrpDate.currentYear();
                 anchors {
                     right: printButton.left
                     verticalCenter: parent.verticalCenter
@@ -490,7 +490,7 @@ Page {
                             }
 
                             TableLabel {
-                                text: MDate.dayName(model.date)
+                                text: QrpDate.dayName(model.date)
                                 width: tableHeaderModel[3].width
                                 anchors.verticalCenter: parent.verticalCenter
                             }

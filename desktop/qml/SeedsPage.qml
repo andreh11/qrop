@@ -275,8 +275,8 @@ Page {
                 id: weekSpinBox
                 showOnlyYear: true
                 visible: checks === 0
-                week: MDate.currentWeek();
-                year: MDate.currentYear();
+                week: QrpDate.currentWeek();
+                year: QrpDate.currentYear();
                 anchors {
                     right: csvButton.left
                     verticalCenter: parent.verticalCenter
@@ -401,7 +401,7 @@ Page {
                         Text {
                             text: (seedsRadioButton.checked && monthRangeButton.checked)
 //                                  ? Qt.locale().monthName(Number(section) - 1, Locale.LongFormat)
-                                  ? MDate.monthName(Number(section))
+                                  ? QrpDate.monthName(Number(section))
                                   : section
                             anchors.verticalCenter: parent.verticalCenter
                             leftPadding: Units.formSpacing
@@ -495,7 +495,7 @@ Page {
                     id: delegate
 
                     property var labelList: [
-                        seedsRadioButton.checked ? "" : MDate.formatDate(model.planting_date, page.year),
+                        seedsRadioButton.checked ? "" : QrpDate.formatDate(model.planting_date, page.year),
                         model.crop,
                         model.variety,
                         model.seed_company,

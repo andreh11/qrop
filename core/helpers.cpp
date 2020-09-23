@@ -14,13 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "qrpdate.h"
+#include "helpers.h"
+#include "dbutils/location.h"
+
 #include <QDate>
 #include <QDebug>
 #include <QSettings>
 
-#include "mdate.h"
-#include "helpers.h"
-#include "dbutils/location.h"
 #include <cmath>
 
 Helpers::Helpers(QObject *parent)
@@ -39,7 +40,7 @@ qreal Helpers::coordinate(qint64 dayNumber)
 
 qreal Helpers::position(const QDate &seasonBegin, const QDate &date)
 {
-    return coordinate(MDate::daysTo(seasonBegin, date));
+    return coordinate(QrpDate::daysTo(seasonBegin, date));
 }
 
 qreal Helpers::widthBetween(qreal pos, const QDate &seasonBegin, const QDate &date)
@@ -95,12 +96,20 @@ QList<int> Helpers::variantToIntList(const QVariantList &list)
 
 QString Helpers::acronymize(const QString &string)
 {
-    auto stringList = string.split(" ");
+    if (string.isEmpty())
+        return {};
+
+    auto stringList = string.simplified().split(" ");
     if (stringList.length() > 1) {
         QString s;
-        for (int i = 0; i < stringList.length(); i++)
-            s += stringList[i][0].toUpper();
+        auto end = stringList.constEnd();
+        for (auto it = stringList.constBegin(); it != end; ++it)
+            s += (*it)[0].toUpper();
         return s;
     }
-    return stringList[0][0] + stringList[0][1].toUpper();
+
+    auto &first = stringList.first();
+    if (first.length() < 2)
+        return first;
+    return QString(first[0].toUpper()) + first[1].toUpper();
 }

@@ -19,7 +19,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-#include "mdate.h"
+#include "qrpdate.h"
 #include "templatetaskmodel.h"
 
 TemplateTaskModel::TemplateTaskModel(QObject *parent, const QString &tableName)

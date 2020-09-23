@@ -1,8 +1,8 @@
-#ifndef BUILDINFO_H
-#define BUILDINFO_H
+#pragma once
+
+#include "core_global.h"
 
 #include <QObject>
-#include "core_global.h"
 
 class CORESHARED_EXPORT BuildInfo : public QObject
 {
@@ -22,5 +22,3 @@ private:
     QString m_commit;
     QString m_branch;
 };
-
-#endif // BUILDINFO_H

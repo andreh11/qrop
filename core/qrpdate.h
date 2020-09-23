@@ -14,17 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MDATE_H
-#define MDATE_H
-
-#include <QObject>
-#include <QDate>
-#include <QList>
-#include <QVariantList>
+#pragma once
 
 #include "core_global.h"
 
-class CORESHARED_EXPORT MDate : public QObject
+#include <QDate>
+#include <QList>
+#include <QObject>
+#include <QVariantList>
+
+class CORESHARED_EXPORT QrpDate : public QObject
 {
     Q_OBJECT
 
@@ -32,7 +31,7 @@ public:
     enum Season { Winter = 0, Spring, Summer, Fall };
     Q_ENUM(Season)
 
-    explicit MDate(QObject *parent = nullptr);
+    explicit QrpDate(QObject *parent = nullptr);
 
     Q_INVOKABLE static QVariantList monthsOrder(int season);
     Q_INVOKABLE static bool longYear(int year);
@@ -79,5 +78,3 @@ public:
 private:
     static QString dateToString(const QDate &date, const QString &format);
 };
-
-#endif // MDATE_H

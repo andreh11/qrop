@@ -24,7 +24,7 @@
 
 #include "task.h"
 #include "templatetask.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "helpers.h"
 
 Task::Task(QObject *parent)
@@ -81,8 +81,8 @@ QString Task::description(int taskId, int year) const
         double trays = record.value("trays_to_start").toDouble();
         int traySize = record.value("tray_size").toInt();
         int seedsPerHole = record.value("seeds_per_hole").toInt();
-        QDate plantingDate = MDate::dateFromIsoString(record.value("planting_date").toString());
-        QString plantingDateString = MDate::formatDate(plantingDate, year, "week", true);
+        QDate plantingDate = QrpDate::dateFromIsoString(record.value("planting_date").toString());
+        QString plantingDateString = QrpDate::formatDate(plantingDate, year, "week", true);
 
         if (seedsPerHole > 1)
             return QString(tr("%L1 x %L2, %L3 seeds [%4]"))
@@ -733,7 +733,7 @@ QVariantMap Task::drawInfoMap(int taskId, int season, int year) const
         }
     }
 
-    const auto seasonBegin = MDate::seasonBeginning(season, year);
+    const auto seasonBegin = QrpDate::seasonBeginning(season, year);
     const qreal graphStart = Helpers::position(seasonBegin, assignedDate);
     const qreal width = Helpers::widthBetween(graphStart, seasonBegin, assignedDate.addDays(duration));
 
@@ -743,8 +743,8 @@ QVariantMap Task::drawInfoMap(int taskId, int season, int year) const
 
     return { { "graphStart", graphStart },
              { "width", width },
-             { "assignedDate", MDate::formatDate(assignedDate, year, "", false) },
-             { "completedDate", MDate::formatDate(completedDate, year, "", false) },
+             { "assignedDate", QrpDate::formatDate(assignedDate, year, "", false) },
+             { "completedDate", QrpDate::formatDate(completedDate, year, "", false) },
              { "color", record.value("color").toString() },
              { "duration", duration },
              { "description", description },

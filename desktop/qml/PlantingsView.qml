@@ -537,11 +537,11 @@ ListView {
 
                 readonly property var labelList: [
                     model.locations ? Location.fullNameList(model.locations.split(",")) : "",
-                    model.planting_type !== 3 ? MDate.formatDate(seedingDate, year) : "",
-                    model.planting_type !== 1 ? MDate.formatDate(transplantingDate, year) : "",
-                    MDate.formatDate(beginHarvestDate, year),
-                    settings.dateType === "week" ? MDate.formatDate(MDate.addDays(endHarvestDate, -7), year)
-                                                 : MDate.formatDate(endHarvestDate, year),
+                    model.planting_type !== 3 ? QrpDate.formatDate(seedingDate, year) : "",
+                    model.planting_type !== 1 ? QrpDate.formatDate(transplantingDate, year) : "",
+                    QrpDate.formatDate(beginHarvestDate, year),
+                    settings.dateType === "week" ? QrpDate.formatDate(QrpDate.addDays(endHarvestDate, -7), year)
+                                                 : QrpDate.formatDate(endHarvestDate, year),
                     model.planting_type === 2 ? qsTr("%L1 d", "Abbreviation for day").arg(model.dtt) : "",
                     qsTr("%L1 d", "Abbreviation for day").arg(model.dtm),
                     qsTr("%L1 d", "Abbreviation for day").arg(model.harvest_window),

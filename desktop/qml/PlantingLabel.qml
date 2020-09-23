@@ -79,7 +79,7 @@ Item {
                     txt += "#%1 ".arg(rank)
                 }
 
-                txt += qsTr("%1−%2").arg(MDate.formatDate(sowingDate, year)).arg(MDate.formatDate(endHarvestDate, year))
+                txt += qsTr("%1−%2").arg(QrpDate.formatDate(sowingDate, year)).arg(QrpDate.formatDate(endHarvestDate, year))
 
                 if (locations & !showOnlyDates) {
                     console.log("TYPE", typeof locations, "CONTENT", locations);

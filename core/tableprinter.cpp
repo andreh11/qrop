@@ -39,7 +39,7 @@
 #include <QPagedPaintDevice>
 
 #include "helpers.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "tableprinter.h"
 
 #include "dbutils/location.h"
@@ -257,8 +257,8 @@ void TablePrinter::drawRow(int row)
             flags |= Qt::AlignRight;
             break;
         case TablePrinter::Week: {
-            QDate date = MDate::dateFromIsoString(value.toString());
-            string = MDate::formatDate(date, m_year);
+            QDate date = QrpDate::dateFromIsoString(value.toString());
+            string = QrpDate::formatDate(date, m_year);
             break;
         }
         case TablePrinter::Locations: {
@@ -292,7 +292,7 @@ void TablePrinter::breakPage()
 QVariant TablePrinter::sectionValue(int row, const QString &sectionName) const
 {
     if (sectionName == "month")
-        return MDate::monthName(m_model->rowValue(row, sectionName).toInt());
+        return QrpDate::monthName(m_model->rowValue(row, sectionName).toInt());
     return m_model->rowValue(row, sectionName);
 }
 

@@ -13,7 +13,7 @@ add_library(core SHARED
         buildinfo.cpp
         core_resources.qrc
         helpers.cpp
-        mdate.cpp
+        qrpdate.cpp
         nametree.cpp
         print.cpp
         qrpimageprovider.cpp

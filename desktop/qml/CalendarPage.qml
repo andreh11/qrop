@@ -114,7 +114,7 @@ Page {
             if (weekRadioButton.checked)
                 week = page.week ;
             else if (monthRadioButton.checked)
-                month = MDate.month(MDate.mondayOfWeek(page.week, page.year));
+                month = QrpDate.month(QrpDate.mondayOfWeek(page.week, page.year));
 
             Print.printCalendar(page.year, month, week, file, showDoneCheckBox.checked,showDueCheckBox.checked, showOverdueCheckBox.checked)
         }
@@ -211,8 +211,8 @@ Page {
 
                 WeekSpinBox {
                     id: weekSpinBox
-                    week: MDate.currentWeek();
-                    year: MDate.currentYear();
+                    week: QrpDate.currentWeek();
+                    year: QrpDate.currentYear();
                 }
 
                 IconButton {

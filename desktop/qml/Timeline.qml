@@ -28,7 +28,7 @@ Item {
     property int season: 2
     property int year
     property date todayDate: new Date()
-    readonly property date seasonBegin: MDate.seasonBeginning(season, year)
+    readonly property date seasonBegin: QrpDate.seasonBeginning(season, year)
     property int monthWidth: Units.monthWidth
     readonly property int graphWidth: 12 * monthWidth
     property var plantingIdList

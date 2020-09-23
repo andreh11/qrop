@@ -29,15 +29,15 @@ Item {
     property alias labelText: textField.labelText
     property alias errorText: textField.errorText
     property alias hasError: textField.hasError
-    property int currentYear: MDate.currentYear()
+    property int currentYear: QrpDate.currentYear()
 
     property date calendarDate: new Date()
     property date effectiveDate
-    readonly property int week: MDate.isoWeek(calendarDate)
+    readonly property int week: QrpDate.isoWeek(calendarDate)
     readonly property string isoDateString: Qt.formatDate(calendarDate, "yyyy-MM-dd")
     property string mode: "date" // date or week
     property bool showDateHelper: true
-    property string dateHelperText: MDate.formatDate(calendarDate, currentYear,
+    property string dateHelperText: QrpDate.formatDate(calendarDate, currentYear,
                                                      mode === "date" ? "week" : "date")
     signal editingFinished()
 
@@ -58,10 +58,10 @@ Item {
         id: textField
 
         width: parent.width
-        helperText: MDate.isValid(effectiveDate) && effectiveDate !== calendarDate
-                    ? qsTr("Done on %1").arg(MDate.formatDate(effectiveDate, currentYear))
+        helperText: QrpDate.isValid(effectiveDate) && effectiveDate !== calendarDate
+                    ? qsTr("Done on %1").arg(QrpDate.formatDate(effectiveDate, currentYear))
                     : ""
-        text: MDate.formatDate(calendarDate, currentYear)
+        text: QrpDate.formatDate(calendarDate, currentYear)
         inputMethodHints: mode === "date" ? Qt.ImhDate : Qt.ImhDigitsOnly
         validator: RegExpValidator {
             regExp: mode === "date"
@@ -70,8 +70,8 @@ Item {
         }
 
         function setDate() {
-            var newDate = mode === "date" ? MDate.dateFromDateString(text, currentYear)
-                                          : MDate.dateFromWeekString(text, currentYear);
+            var newDate = mode === "date" ? QrpDate.dateFroQrpDateString(text, currentYear)
+                                          : QrpDate.dateFromWeekString(text, currentYear);
             if (newDate.toLocaleString(Qt.locale()))
                 calendarDate = newDate;
 

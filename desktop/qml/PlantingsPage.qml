@@ -272,9 +272,9 @@ Page {
             let rangeIndex = printDateRangeComboBox.currentIndex
 
             if (rangeIndex === 0) {
-                week = MDate.currentWeek();
+                week = QrpDate.currentWeek();
             } else if (rangeIndex === 1) {
-                month = MDate.currentMonth();
+                month = QrpDate.currentMonth();
             }
 
             Print.printCropPlan(page.year, month, week, file, type)
@@ -610,8 +610,8 @@ Page {
                     SeasonSpinBox {
                         id: seasonSpinBox
                         visible: checks === 0
-                        season: MDate.season(todayDate)
-                        year: MDate.seasonYear(todayDate)
+                        season: QrpDate.season(todayDate)
+                        year: QrpDate.seasonYear(todayDate)
                     }
 
 //                    TitleLabel {
@@ -865,8 +865,8 @@ Page {
                 z: 0
                 visible: false
                 width: Math.min(Units.desktopSideSheetWidth, window.width*0.3)
-                year: MDate.isoYear(todayDate)
-                week: MDate.isoWeek(todayDate)
+                year: QrpDate.isoYear(todayDate)
+                week: QrpDate.isoWeek(todayDate)
                 plantingIdList: selectedIdList()
 
                 Material.elevation: 0

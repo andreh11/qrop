@@ -10,7 +10,7 @@ Item {
     
     property int week: 1
     property int year: 2018
-    property bool longYear: MDate.longYear(year)
+    property bool longYear: QrpDate.longYear(year)
     property int lastWeek: longYear ? 53 : 52
     property bool showOnlyYear: false
     

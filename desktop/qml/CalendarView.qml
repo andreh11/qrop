@@ -122,7 +122,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Label {
-                text: "%1".arg(MDate.monthName(month + 1))
+                text: "%1".arg(QrpDate.monthName(month + 1))
                 font.family: "Roboto Medium"
                 font.capitalization: Font.Capitalize
                 font.pixelSize: Units.fontSizeBodyAndButton

@@ -191,7 +191,7 @@ Flickable {
         methodField.reset();
         implementField.reset();
 
-        dueDatepicker.calendarDate = MDate.dateFromWeekString(control.week);
+        dueDatepicker.calendarDate = QrpDate.dateFromWeekString(control.week);
         durationField.text = "0";
         laborTimeField.reset();
         descriptionTextArea.clear();
@@ -349,7 +349,7 @@ Flickable {
                         floatingLabel: true
                         Layout.minimumWidth: 100
                         Layout.fillWidth: true
-                        calendarDate: MDate.dateFromWeekString(control.week)
+                        calendarDate: QrpDate.dateFromWeekString(control.week)
                     }
 
                     MyTextField {

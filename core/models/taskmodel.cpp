@@ -24,7 +24,7 @@
 #include "dbutils/planting.h"
 #include "dbutils/task.h"
 
-#include "mdate.h"
+#include "qrpdate.h"
 #include "taskmodel.h"
 
 TaskModel::TaskModel(QObject *parent, const QString &tableName)
@@ -209,7 +209,7 @@ void TaskModel::setPlantingId(int id)
 
 void TaskModel::updateWeekDates()
 {
-    std::tie(m_mondayDate, m_sundayDate) = MDate::weekDates(m_week, m_year);
+    std::tie(m_mondayDate, m_sundayDate) = QrpDate::weekDates(m_week, m_year);
     // Strangely, we have to use both of these to get everything working.
     invalidateFilter();
     invalidate();
@@ -239,7 +239,7 @@ bool TaskModel::overdue(int row, const QModelIndex &parent) const
     bool completed = sourceRowValue(row, parent, "completed_date").toString() != "";
     if (m_plantingId > 0)
         return !completed && assignedDate < QDate::currentDate();
-    return !completed && assignedDate < m_mondayDate && MDate::isoYear(assignedDate) == m_year;
+    return !completed && assignedDate < m_mondayDate && QrpDate::isoYear(assignedDate) == m_year;
 }
 
 bool TaskModel::isAssignedToPlanting(int sourceRow, const QModelIndex &sourceParent) const

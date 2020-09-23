@@ -19,7 +19,7 @@
 #include <QSqlRecord>
 #include <QVariantMap>
 
-#include "mdate.h"
+#include "qrpdate.h"
 #include "keyword.h"
 
 Keyword::Keyword(QObject *parent)
@@ -106,7 +106,7 @@ qreal Keyword::totalBedLenght(int keywordId, int season, int year) const
 {
     QDate beg;
     QDate end;
-    std::tie(beg, end) = MDate::seasonDates(season, year);
+    std::tie(beg, end) = QrpDate::seasonDates(season, year);
     QString queryString("SELECT sum(length) "
                         "FROM planting_view "
                         "JOIN planting_keyword USING (planting_id) "

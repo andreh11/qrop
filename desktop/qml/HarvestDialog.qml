@@ -91,7 +91,7 @@ Dialog {
         let plantingsNumber = selectedIdList.length
         let qty = Number(quantity/plantingsNumber)
         console.log(quantity, qty)
-        let time = MDate.stringFromTime(MDate.divided(MDate.timeFromString(laborTimeField.text), plantingsNumber))
+        let time = QrpDate.stringFromTime(QrpDate.divided(QrpDate.timeFromString(laborTimeField.text), plantingsNumber))
         for (let i = 0; i < selectedIdList.length; i++) {
             Harvest.add({ "date": datePicker.isoDateString,
                           "time": time,

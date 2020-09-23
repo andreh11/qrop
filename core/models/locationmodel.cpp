@@ -24,7 +24,7 @@
 #include "treemodel.h"
 #include "dbutils/location.h"
 #include "dbutils/planting.h"
-#include "mdate.h"
+#include "qrpdate.h"
 #include "helpers.h"
 
 LocationModel::LocationModel(QObject *parent, const QString &tableName)
@@ -167,7 +167,7 @@ QVariantList LocationModel::plantings(int locationId, int season, int year) cons
 
     QDate beg;
     QDate end;
-    std::tie(beg, end) = MDate::seasonDates(season, year);
+    std::tie(beg, end) = QrpDate::seasonDates(season, year);
 
     QVariantList list;
     for (int id : m_location->plantings(locationId, beg, end))
@@ -203,7 +203,7 @@ QVariantList LocationModel::tasks(const QModelIndex &index, int season, int year
     int lid = locationId(index);
     QDate beg;
     QDate end;
-    std::tie(beg, end) = MDate::seasonDates(season, year);
+    std::tie(beg, end) = QrpDate::seasonDates(season, year);
 
     QVariantList list;
     for (int id : m_location->tasks(lid, beg, end))
@@ -361,7 +361,7 @@ QString LocationModel::rotationConflictingDescription(const QModelIndex &index) 
         text += QString("%1, %2 %3")
                         .arg(query->value("crop").toString())
                         .arg(query->value("variety").toString())
-                        .arg(MDate::dateFromIsoString(query->value("planting_date").toString()).year());
+                        .arg(QrpDate::dateFromIsoString(query->value("planting_date").toString()).year());
 
         auto q = m_location->queryFromIdList(
                 "planting_view",
@@ -370,7 +370,7 @@ QString LocationModel::rotationConflictingDescription(const QModelIndex &index) 
             text += QString(" ⋅ %1, %2 %3")
                             .arg(q->value("crop").toString())
                             .arg(q->value("variety").toString())
-                            .arg(MDate::dateFromIsoString(q->value("planting_date").toString()).year());
+                            .arg(QrpDate::dateFromIsoString(q->value("planting_date").toString()).year());
         }
         text += "\n";
     }
@@ -750,7 +750,7 @@ bool LocationModel::buildNonOverlapPlantingMap()
 /** @return true if the map has changed, false otherwise */
 bool LocationModel::buildNonOverlapTaskMap()
 {
-    const auto dates = MDate::seasonDates(filterSeason(), filterYear());
+    const auto dates = QrpDate::seasonDates(filterSeason(), filterYear());
     const auto newMap =
             m_location->allNonOverlappingTaskList(m_nonOverlapPlantingMap, dates.first, dates.second);
 
@@ -844,7 +844,7 @@ void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex 
         return;
     }
 
-    auto pair = MDate::seasonDates(filterSeason(), filterYear());
+    auto pair = QrpDate::seasonDates(filterSeason(), filterYear());
     int lid = locationId(topLeft);
     auto newList = m_location->nonOverlappingPlantingList(lid, pair.first, pair.second);
     if (m_nonOverlapPlantingMap[lid] == newList)

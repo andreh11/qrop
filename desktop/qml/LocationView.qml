@@ -36,8 +36,8 @@ Item {
     property alias year: locationModel.year
     property alias season: locationModel.season
 
-    readonly property date seasonBegin: MDate.seasonBeginning(season, year)
-    readonly property date seasonEnd: MDate.seasonEnd(season, year)
+    readonly property date seasonBegin: QrpDate.seasonBeginning(season, year)
+    readonly property date seasonEnd: QrpDate.seasonEnd(season, year)
     property date todayDate: new Date()
     property int firstColumnWidth
     property int editedPlantingId: -1

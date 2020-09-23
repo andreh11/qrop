@@ -13,11 +13,11 @@ ColumnLayout {
     property int plantingId
     property int year
 
-    property int dtt: MDate.daysTo(greenhouseStartDateField.calendarDate,
+    property int dtt: QrpDate.daysTo(greenhouseStartDateField.calendarDate,
                                    plantingDateField.calendarDate)
-    property int dtm: MDate.daysTo(plantingDateField.calendarDate,
+    property int dtm: QrpDate.daysTo(plantingDateField.calendarDate,
                                    begHarvestDateField.calendarDate)
-    property int harvestWindow: MDate.daysTo(begHarvestDateField.calendarDate,
+    property int harvestWindow: QrpDate.daysTo(begHarvestDateField.calendarDate,
                                              endHarvestDateField.calendarDate)
 
     property int plantingType: Planting.type(plantingId)
