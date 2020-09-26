@@ -227,7 +227,8 @@ void PlantingModel::setShowFinished(bool show)
 int PlantingModel::revenue() const
 {
     int revenue = 0;
-    for (int row = 0; row < rowCount(); ++row)
+    int rows = rowCount();
+    for (int row = 0; row < rows; ++row)
         if (isDateInRange(beginHarvestDate(row)))
             revenue += rowValue(row, "bed_revenue").toInt();
     return revenue;
@@ -237,7 +238,8 @@ qreal PlantingModel::totalBedLength() const
 {
     qreal length = 0;
 
-    for (int row = 0; row < rowCount(); ++row) {
+    int rows = rowCount();
+    for (int row = 0; row < rows; ++row) {
         if (isDateInRange(plantingDate(row)) || isDateInRange(beginHarvestDate(row))
             || isDateInRange(endHarvestDate(row))) {
             length += rowValue(row, "bed_revenue").toInt();

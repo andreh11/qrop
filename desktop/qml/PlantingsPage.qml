@@ -315,11 +315,9 @@ Page {
             padding: 0
             height: parent.height
             Material.elevation: 2
-//            visible: largeDisplay
 
             Rectangle {
                 id: buttonRectangle
-                //            color: checks > 0 ? Material.color(Material.Cyan, Material.Shade100) : "white"
                 color: checks > 0 ? Material.accent : "white"
                 visible: true
                 width: parent.width
@@ -388,7 +386,6 @@ Page {
                         onClicked: {
                             plantingDialog.editPlantings(selectedIdList());
                         }
-
                     }
 
                     Button {
@@ -422,8 +419,6 @@ Page {
                         Dialog {
                             id: finishDialog
                             title: qsTr("Finish plantings")
-                            y: parent.height
-                            margins: 0
 
                             onAccepted: {
                                 Planting.finish(page.selectedIdList(), lvFinishReason.currentIndex + 1);
@@ -438,31 +433,31 @@ Page {
                                     font.pixelSize: Units.fontSizeBodyAndButton
                                 }
 
-                            ListView {
-                                id: lvFinishReason
+                                ListView {
+                                    id: lvFinishReason
 
-                                onCurrentIndexChanged: console.log(currentIndex)
+                                    onCurrentIndexChanged: console.log(currentIndex)
 
-                                width: parent.width
-                                height: childrenRect.height
-                                implicitHeight: childrenRect.height
-                                boundsBehavior: Flickable.StopAtBounds
-                                model: [
-                                    qsTr("Finished harvest "),
-                                    qsTr("Crop failure"),
-                                    qsTr("Never seeded"),
-                                    qsTr("Never transplanted")
-                                ]
+                                    width: parent.width
+                                    height: childrenRect.height
+                                    implicitHeight: childrenRect.height
+                                    boundsBehavior: Flickable.StopAtBounds
+                                    model: [
+                                        qsTr("Finished harvest "),
+                                        qsTr("Crop failure"),
+                                        qsTr("Never seeded"),
+                                        qsTr("Never transplanted")
+                                    ]
 
-                                delegate: RadioDelegate {
-                                    text: modelData
-                                    onCheckedChanged: {
-                                        if (checked)
-                                            lvFinishReason.currentIndex = index
+                                    delegate: RadioDelegate {
+                                        text: modelData
+                                        onCheckedChanged: {
+                                            if (checked)
+                                                lvFinishReason.currentIndex = index
+                                        }
                                     }
-                                }
 
-                            }
+                                }
                             }
 
                             footer: DialogButtonBox {
@@ -482,7 +477,6 @@ Page {
                                 }
                             }
                         }
-
                     }
 
                     Button {
@@ -637,27 +631,25 @@ Page {
                         Menu {
                             id: cropMenu
                             title: qsTr("Crop plan")
-                            y: parent.height
-                            closePolicy: Popup.CloseOnPressOutsideParent
 
                             MenuItem {
                                 text: qsTr("Export as PDF...")
-                                onClicked: printDialog.open();
+                                onTriggered: printDialog.open();
                             }
 
                             MenuItem {
                                 text: qsTr("Duplicate crop plan...")
-                                onClicked: duplicateCropPlanDialog.open();
+                                onTriggered: duplicateCropPlanDialog.open();
                             }
 
                             MenuItem {
                                 text: qsTr("Import crop plan...")
-                                onClicked: importCropPlanDialog.open()
+                                onTriggered: importCropPlanDialog.open()
                             }
 
                             MenuItem {
                                 text: qsTr("Export crop plan...")
-                                onClicked: exportCropPlanDialog.open()
+                                onTriggered: exportCropPlanDialog.open()
                             }
                         }
 
@@ -675,8 +667,8 @@ Page {
 
                                 MyComboBox {
                                     id: printTypeComboBox
-                                    editable: false
                                     labelText: qsTr("Type")
+                                    editable: false
                                     Layout.fillWidth: true
                                     showAddItem: false
                                     model: [
@@ -689,15 +681,15 @@ Page {
 
                                 MyComboBox {
                                     id: printDateRangeComboBox
-                                    editable: false
                                     labelText: qsTr("Date range")
+                                    editable: false
+                                    Layout.fillWidth: true
                                     showAddItem: false
                                     model: [
                                         qsTr("Current week"),
                                         qsTr("Current month"),
                                         qsTr("Current year"),
                                     ]
-                                    Layout.fillWidth: true
                                 }
                             }
 
@@ -821,7 +813,7 @@ Page {
                     bottom: chartPane.top
                     right: {
                         if (taskSideSheet.visible)
-                           taskSideSheet.left
+                            taskSideSheet.left
                         else if (noteSideSheet.visible)
                             noteSideSheet.left
                         else
@@ -846,7 +838,7 @@ Page {
                 year: page.year
                 season: page.season
                 anchors {
-//                    top: topDivider.bottom
+                    //                    top: topDivider.bottom
                     left: parent.left
                     right: parent.right
                     bottom: parent.bottom
@@ -886,7 +878,7 @@ Page {
                 height: plantingsView.height
                 width: visible ? Math.min(Units.desktopSideSheetWidth, window.width*0.3) : 0
                 plantingId: page.checks ? page.selectedIdList()[0] : -1
-//                onClosed: photoPane.visible = false
+                //                onClosed: photoPane.visible = false
                 onShowPhoto: {
                     photoPane.photoIdList = Note.photoList(noteId)
                     photoPane.visible = true

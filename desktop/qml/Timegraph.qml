@@ -24,7 +24,6 @@ Item {
     property var drawMap: plantingId > 0
                           ? Planting.drawInfoMap(plantingId, season, year, showGreenhouseSow, showNames)
                           : {}
-//    property var drawMap
     property color cropColor: drawMap["cropColor"]
     property color familyColor: drawMap["familyColor"]
     property color plantingColor: showFamilyColor ? familyColor : cropColor
@@ -33,18 +32,14 @@ Item {
     readonly property bool current: Planting.isActive(plantingId)
     readonly property alias hovered: dragArea.containsMouse
 
+    property bool useStandardBedLength
+    property int standardBedLength
+    property bool showPlantingSuccessionNumber
+
     signal selected(int id)
     signal plantingMoved()
     signal plantingRemoved()
     signal dragFinished();
-
-    onPlantingIdChanged: {
-
-    }
-
-    property bool useStandardBedLength
-    property int standardBedLength
-    property bool showPlantingSuccessionNumber
 
     function refresh() {
         plantingIdChanged();
@@ -54,13 +49,7 @@ Item {
     implicitHeight: Units.rowHeight
     width: harvestBar.x + harvestBar.width
 
-//    anchors {
-//        left: parent.left
-////        leftMargin: Helpers.position(seasonBegin, showGreenhouseSow ? seedingDate : plantingDate)
-//        leftMargin: positions[0]
-//    }
     x: drawMap["graphStart"]
-//    z: dragArea.containsMouse ? 4 : 1
 
     ToolTip.visible: dragArea.containsMouse
     ToolTip.delay: 200
