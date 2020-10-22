@@ -903,27 +903,39 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
             } else if (field == "sowing_date") {
                 sdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!sdate.isValid()) {
-                    qDebug() << "Bad date format, should be week number:" << line[i];
-                    return;
+                    sdate = QrpDate::dateFromIsoString(line[i].trimmed());
+                    if(!sdate.isValid()){
+                        qDebug() << "Bad date format, should be week number:" << line[i];
+                        return;
+                    }
                 }
             } else if (field == "planting_date") {
                 pdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!pdate.isValid()) {
-                    qDebug() << "Bad date format, should be week number:" << line[i];
-                    return;
+                    pdate = QrpDate::dateFromIsoString(line[i].trimmed());
+                    if(!pdate.isValid()){
+                        qDebug() << "Bad date format, should be week number:" << line[i];
+                        return;
+                    }
                 }
                 map[field] = pdate;
             } else if (field == "beg_harvest_date") {
                 bhdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!bhdate.isValid()) {
-                    qDebug() << "Bad date format, should be week number:" << line[i];
-                    return;
+                    bhdate = QrpDate::dateFromIsoString(line[i].trimmed());
+                    if(!bhdate.isValid()){
+                        qDebug() << "Bad date format, should be week number:" << line[i];
+                        return;
+                    }
                 }
             } else if (field == "end_harvest_date") {
                 ehdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!ehdate.isValid()) {
-                    qDebug() << "Bad date format, should be week number:" << line[i];
-                    return;
+                    ehdate = QrpDate::dateFromIsoString(line[i].trimmed());
+                    if(!ehdate.isValid()){
+                        qDebug() << "Bad date format, should be week number:" << line[i];
+                        return;
+                    }
                 }
             } else if (field == "in_greenhouse") {
                 inGreenhouse = line[i].toInt();
