@@ -101,9 +101,9 @@ Item {
                 id: buttonRectangle
                 radius: 46
                 color: modelData
-                border.color: buttonDelegate.GridView.isCurrentItem ? Material.primary : "transparent"
+                border.color: checked ? Material.primary : "transparent"
                 border.width: 2
-                opacity: buttonDelegate.GridView.isCurrentItem ? 1 : 0.9
+                opacity: checked ? 1 : 0.7
 
                 Label {
                     font { family: "Material Icons"; pixelSize: Units.fontSizeHeadline }
