@@ -4,17 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-## Changed 
+## Changed
  - *Date picker* - Improve date picker and follow last Material guidelines.
  - *Plantings* − Always show seed company next to variety name if the feature is
    activated (#176).
  - *Charts* − the whole view is now updated when the user search for a planting.
  - *Calendar* − PDF output now follows the current view : week and
-   done/due/overdue filters (#205). 
+   done/due/overdue filters (#205).
  - Improve filtering of plantings to show all plantings, or only the field or
    greenhouse ones.
 
 ## Fixed
+ - *Seed list* − Fix month and quart list update when switching between databases (#241).
  - *Calendar widget* − Fix days and week number display.
  - *Charts* − Update the view when database is changed (#214).
  - *Task dialog* − Fix display bug for location view: part of it wasn't alway
@@ -23,7 +24,7 @@ All notable changes to this project will be documented in this file.
  - *Field map* − Fix refreshing bug when switch to field map view.
  - *Crop map* − Fix editing bug.
 
-## 0.4.4 − 2020-01-28 
+## 0.4.4 − 2020-01-28
 
 ### Changed
  - *Planting dialog* − Show density field even if the beds aren't standardized.
@@ -35,12 +36,12 @@ All notable changes to this project will be documented in this file.
  - *Planting dialog* − Fix bad seeds numbers for direct seeded planting
    with multiple seeds per hole.
 
-## 0.4.3 "Albens" − 2020-01-23 
+## 0.4.3 "Albens" − 2020-01-23
 
 ### Fixed
   - *Settings* − Fix scrollbar behavior.
 
-## 0.4.2 "Albens" − 2020-01-23 
+## 0.4.2 "Albens" − 2020-01-23
 
 ### Added
   - *Settings* − Add dropbox to select the language (#156).
@@ -56,7 +57,7 @@ All notable changes to this project will be documented in this file.
   - Fixed date picker's bad year selection (#171).
   - *PDF* - Field map: Fix wrong location height when aren't displayed (#157).
 
-## 0.4.1. - 2019-12-02 
+## 0.4.1. - 2019-12-02
 
 ### Changed
   - *Settings* − Use integer text field instead of spinbox (#149).

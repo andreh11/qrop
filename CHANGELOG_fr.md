@@ -17,6 +17,10 @@ Tous les changements importants seront documentés dans ce fichier.
    ou seulement celles de plein champs ou sous abri.
 
 ### Corrections
+ - *Liste de semences* − Correction de la mise à jour des liste par
+   mois et par trimestre lors du passage d'une base de données à une
+   autre (#241).
+ - *Seed list* − Fix month and quart list update when switching between databases (#241).
  - *Widget calendrier* − Correction de l'affichage des jours et numéros de
    semaine.
  - *Graphiques* − Correction de la mise-à-jour de la vue lorsqu'une autre base
@@ -30,7 +34,7 @@ Tous les changements importants seront documentés dans ce fichier.
  - *Parcellaire* − Correction du bug d'édition (impossiblité d'éditer un ou
    plusieurs emplacements).
 
-## 0.4.4 − 2020-01-28 
+## 0.4.4 − 2020-01-28
 
 ### Corrections
  - *Parcellaire* − Correction de la mise à jour de la sélection lors de l'ajout
@@ -42,10 +46,10 @@ Tous les changements importants seront documentés dans ce fichier.
  - *Dialogue des séries* − Correction du mauvais nombre de semences pour
    des séries en semis direct avec plusieurs graines par trou.
 
-## 0.4.3 « Albens » − 2020-01-23 
+## 0.4.3 « Albens » − 2020-01-23
   - *Paramètres* − Correction du comportement de barre de défilement.
 
-## 0.4.2 « Albens » − 2020-01-23 
+## 0.4.2 « Albens » − 2020-01-23
 
 ### Ajouts
   - *Paramètres* − Ajout d'un menu déroulant pour sélectionner la langue (#156).
@@ -63,11 +67,11 @@ Tous les changements importants seront documentés dans ce fichier.
   - *PDF* − Parcellaire : correction de la hauteur des emplacemens lorsque les
     tâches ne sont pas affichées.
 
-## 0.4.1. - 2019-12-02 
+## 0.4.1. - 2019-12-02
 
 ### Changements
   - *Paramètres* − Champs entier à la place des boutons fléchés (#149).
-  
+
 ### Corrections
   - *Parcellaire* − Correction d'un bogue faisant crasher le programme lors de
     la création d'un nouveau parcellaire.
@@ -104,9 +108,9 @@ Tous les changements importants seront documentés dans ce fichier.
   - *Édition des séries* − Correction du bogue qui empêchait les conflits de
     séries lorsque ceux-ci étaient activés.
   - *Semences et plants* − Correction de la fonction de tri des dates et noms.
-  - Correction de la longueur à assigner lors d'une assignation multiple à un 
+  - Correction de la longueur à assigner lors d'une assignation multiple à un
     emplacement.
- 
+
 ## 0.3 - 2019-06-15
 
 ### Ajouts
@@ -142,7 +146,7 @@ Tous les changements importants seront documentés dans ce fichier.
     été plantées ou semées.
 
 ### Corrections
-  - Correction du bogue des mois 10-11-12 pour les sélectionneurs de dates 
+  - Correction du bogue des mois 10-11-12 pour les sélectionneurs de dates
     complètes (#114).
   - *Plan de culture* − Dupliquer les étiquettes lorsque les séries sont
     dupliquées.
