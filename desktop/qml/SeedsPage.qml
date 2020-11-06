@@ -290,8 +290,8 @@ Page {
 
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
-                                                       : qsTr("Print the transplant order list")
+                ToolTip.text: seedsRadioButton.checked ? qsTr("Export the seed list")
+                                                       : qsTr("Export the transplant list")
 
                 onClicked: csvDialog.open()
                 anchors {
