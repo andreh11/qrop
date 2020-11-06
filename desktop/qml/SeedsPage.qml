@@ -85,6 +85,8 @@ Page {
         // and view position will be reset.
         var currentY = seedListView.contentY
         seedListModel.refresh();
+        seedListMonthModel.refresh();
+        seedListQuarterModel.refresh();
         transplantListModel.refresh();
         seedListView.contentY = currentY
     }

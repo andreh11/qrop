@@ -18,6 +18,10 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ### Corrections
  - *Semences* − Correction du texte de l'infobulle du bouton d'export (#244).
+ - *Liste de semences* − Correction de la mise à jour des liste par
+   mois et par trimestre lors du passage d'une base de données à une
+   autre (#241).
+ - *Seed list* − Fix month and quart list update when switching between databases (#241).
  - *Widget calendrier* − Correction de l'affichage des jours et numéros de
    semaine.
  - *Graphiques* − Correction de la mise-à-jour de la vue lorsqu'une autre base
