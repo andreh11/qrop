@@ -241,8 +241,8 @@ ApplicationWindow {
                     x: parent.width
                     margins: 0
 
-                    MenuItem { text: qsTr("Export"); onClicked: saveMainDatabaseDialog.open(); }
-                    MenuItem { text: qsTr("Replace"); onClicked: replaceMainDatabaseDialog.open(); }
+                    MenuItem { text: qsTr("Export"); onTriggered: saveMainDatabaseDialog.open(); }
+                    MenuItem { text: qsTr("Replace"); onTriggered: replaceMainDatabaseDialog.open(); }
                 }
             }
 

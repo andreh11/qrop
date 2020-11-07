@@ -36,7 +36,7 @@ ComboBox {
     property bool persistentPrefix: false
     property bool persistentSuffix: false
 
-    property bool showAddItem: false
+    property alias showAddItem: addItemRectangle.visible
     property string addItemText: qsTr("Add Item")
 
     property bool floatingLabel: false
@@ -74,17 +74,17 @@ ComboBox {
                              Math.max(contentItem.implicitHeight,
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
-//    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-//                            leftPadding + rightPadding)
-//                            || contentWidth + leftPadding + rightPadding
-//    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
-//                             background ? background.implicitHeight : 0,
-//                             topPadding + bottomPadding)
+    //    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+    //                            leftPadding + rightPadding)
+    //                            || contentWidth + leftPadding + rightPadding
+    //    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
+    //                             background ? background.implicitHeight : 0,
+    //                             topPadding + bottomPadding)
 
     onRowIdChanged: setRowId(rowId)
 
     Material.elevation: 0
-//    width: parent.width
+    //    width: parent.width
     padding: 0
     editable: true
 
@@ -156,7 +156,7 @@ ComboBox {
         }
 
         onOpened: {
-                listView.positionViewAtBeginning();
+            listView.positionViewAtBeginning();
         }
 
         contentItem: Column {
@@ -186,40 +186,39 @@ ComboBox {
                     font.family: "Robo Regular"
                     width: parent.width
                 }
-        }
-
-        Rectangle {
-            id: addItemRectangle
-            visible: showAddItem
-            implicitHeight: visible ? addItemDelegate.implicitHeight : 0
-            width: parent.width
-            color: "white"
-            z: 5
-            focus: true
-//            anchors.bottom: parent.bottom
-
-            ItemDelegate {
-                id: addItemDelegate
-                text: control.addItemText
-                width: parent.width
-                leftPadding: addItemIcon.width + Units.smallSpacing
-                z: 3
-                focus: true
-                Material.background: "white"
-                background.opacity: 1
-
-                Label {
-                    id: addItemIcon
-                    leftPadding: Units.smallSpacing
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "\ue147"
-                    font.family: "Material Icons"
-                    font.pixelSize: Units.fontSizeHeadline
-                    Material.foreground: Material.accent
-                }
-                onClicked: addItemClicked()
             }
-        }
+
+            Rectangle {
+                id: addItemRectangle
+                //            implicitHeight: visible ? addItemDelegate.implicitHeight : 0
+                //            width: parent.width
+                //            color: "white"
+                z: 5
+                focus: true
+                //            anchors.bottom: parent.bottom
+
+                ItemDelegate {
+                    id: addItemDelegate
+                    text: control.addItemText
+                    width: parent.width
+                    leftPadding: addItemIcon.width + Units.smallSpacing
+                    z: 3
+                    focus: true
+                    Material.background: "white"
+                    background.opacity: 1
+
+                    Label {
+                        id: addItemIcon
+                        leftPadding: Units.smallSpacing
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "\ue147"
+                        font.family: "Material Icons"
+                        font.pixelSize: Units.fontSizeHeadline
+                        Material.foreground: Material.accent
+                    }
+                    onClicked: addItemClicked()
+                }
+            }
         }
     }
 
@@ -233,7 +232,7 @@ ComboBox {
         verticalAlignment: control.contentItem.verticalAlignment
         elide: Text.ElideRight
         renderType: control.contentItem.renderType
-//        visible: !control.contentItem.length
+        //        visible: !control.contentItem.length
         leftPadding: 10
         visible: false
     }
