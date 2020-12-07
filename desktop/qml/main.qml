@@ -47,7 +47,7 @@ ApplicationWindow {
         { loader: harvestsPage,  name: qsTr("Harvests"),  iconText: "\ue896", component: "HarvestsPage.qml" },
         { loader: seedListPage,  name: qsTr("Seed list"), iconText: "\ue8ef", component: "SeedsPage.qml" },
         { loader: chartsPage,    name: qsTr("Charts"),    iconText: "\ue801", component: "ChartsPage.qml" },
-        { loader: notesPage,     name: qsTr("Notes"),     iconText: "\ue616", component: "NotesPage.qml" },
+//        { loader: notesPage,     name: qsTr("Notes"),     iconText: "\ue616", component: "NotesPage.qml" },
         { loader: settingsPage,  name: qsTr("Settings"),  iconText: "\ue616", component: "SettingsPage.qml",
           bindings: { "paneWidth": Math.min(600, stackLayout.width * 0.8) }}
     ]
@@ -208,7 +208,7 @@ ApplicationWindow {
     ApplicationShortcut { sequence: "Ctrl+4"; onActivated: navigationIndex = 3 }
     ApplicationShortcut { sequence: "Ctrl+5"; onActivated: navigationIndex = 4 }
     ApplicationShortcut { sequence: "Ctrl+6"; onActivated: navigationIndex = 5 }
-    ApplicationShortcut { sequence: "Ctrl+7"; onActivated: navigationIndex = 6 }
+//    ApplicationShortcut { sequence: "Ctrl+7"; onActivated: navigationIndex = 6 }
     ApplicationShortcut { sequence: "Ctrl+0"; onActivated: navigationIndex = navigationModel.length - 1 }
     ApplicationShortcut { sequence: StandardKey.NextChild; onActivated: switchToNextPane() }
     ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
@@ -443,8 +443,8 @@ ApplicationWindow {
         Loader { id: harvestsPage; asynchronous: true  }
         Loader { id: seedListPage; asynchronous: true  }
         Loader { id: chartsPage; asynchronous: true  }
-        Loader { id: notesPage; asynchronous: true  }
-        Loader { id: settingsPage; asynchronous: true  }
+//        Loader { id: notesPage; asynchronous: true  }
+        Loader { id: settingsPage; asynchronous: false  }
     }
 
     AboutDialog {
