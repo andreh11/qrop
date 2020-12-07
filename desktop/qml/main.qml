@@ -34,8 +34,10 @@ ApplicationWindow {
     property bool showSaveButton: false
     property int oldWindowVisibility: Window.Windowed
 
-    property string currentDatabaseFile: "" // "" is main database
-    property string secondDatabaseFile: ""
+    property string firstDatabaseFile: settings.firstDatabaseFile
+    property string secondDatabaseFile: settings.secondDatabaseFile
+    property int currentDatabase: settings.currentDatabase
+    property string lastFolder: settings.lastFolder
 
     property int navigationIndex: 0
     property var navigationModel: [
@@ -76,18 +78,7 @@ ApplicationWindow {
     }
 
     function switchToDatabase(db) {
-        if (db === "main") {
-            if (currentDatabaseFile !== "") {
-                Database.connectToDatabase();
-                currentDatabaseFile = "";
-            }
-        } else if (db === "second") {
-            if (currentDatabaseFile !== "second") {
-                Database.connectToDatabase(secondDatabaseFile);
-                currentDatabaseFile = secondDatabaseFile;
-            }
-        }
-
+        Database.connectToDatabase(window.currentDatabase === 1 ? firstDatabaseFile : secondDatabaseFile)
         if (locationsPage.item) {
             locationsPage.item.reload();
         }
@@ -104,49 +95,69 @@ ApplicationWindow {
     Material.accent: Material.color(Material.Blue, Material.Shade600)
 
     Platform.FileDialog {
-        id: openDatabaseDialog
+        id: openFirstDatabaseDialog
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.OpenFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
         onAccepted: {
-            secondDatabaseFile = file;
-            switchToDatabase("second");
+            firstDatabaseFile = file;
+            currentDatabase = 1;
+            switchToDatabase();
         }
     }
 
     Platform.FileDialog {
-        id: newDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("SQLITE (*.sqlite)")]
-        onAccepted: {
-            secondDatabaseFile = file;
-            switchToDatabase("second");
-        }
-    }
-
-    Platform.FileDialog {
-        id: saveMainDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("SQLITE (*.sqlite)")]
-        onAccepted: {
-            Database.saveAs(file);
-        }
-    }
-
-    Platform.FileDialog {
-        id: replaceMainDatabaseDialog
+        id: openSecondDatabaseDialog
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.OpenFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
         onAccepted: {
-            Database.replaceMainDatabase(file);
-            switchToDatabase("main");
+            secondDatabaseFile = file;
+            currentDatabase = 2;
+            switchToDatabase();
+            window.lastFolder = folder
+        }
+    }
+
+    Platform.FileDialog {
+        id: newFirstDatabaseDialog
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
+        onAccepted: {
+            firstDatabaseFile = file;
+            currentDatabase = 1;
+            switchToDatabase();
+            window.lastFolder = folder
+        }
+    }
+
+    Platform.FileDialog {
+        id: newSecondDatabaseDialog
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
+        onAccepted: {
+            secondDatabaseFile = file;
+            currentDatabase = 2;
+            switchToDatabase();
+            window.lastFolder = folder
+        }
+    }
+
+    Platform.FileDialog {
+        id: saveFirstDatabaseDialog
+        defaultSuffix: "sqlite"
+        fileMode: Platform.FileDialog.SaveFile
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
+        onAccepted: {
+            Database.copy(firstDatabaseFile, file);
+            window.lastFolder = folder
         }
     }
 
@@ -154,10 +165,11 @@ ApplicationWindow {
         id: saveSecondDatabaseDialog
         defaultSuffix: "sqlite"
         fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("SQLITE (*.sqlite)")]
+        folder: window.lastFolder
+        nameFilters: [("SQLite (*.db *.sqlite)")]
         onAccepted: {
             Database.copy(secondDatabaseFile, file);
+            window.lastFolder = folder
         }
     }
 
@@ -170,12 +182,23 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property alias railMode: window.railMode
         property alias windowX: window.x
         property alias windowY: window.y
         property alias windowHeight: window.height
         property alias windowWidth: window.width
         property alias windowVisibility: window.visibility
+
+        property string firstDatabaseFile: Database.defaultDatabasePathUrl()
+        property string secondDatabaseFile: ""
+        property int currentDatabase: 1
+        property url lastFolder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
+    }
+
+    Component.onDestruction: {
+        settings.firstDatabaseFile = window.firstDatabaseFile
+        settings.secondDatabaseFile = window.secondDatabaseFile
+        settings.currentDatabase = window.currentDatabase
+        settings.lastFolder = window.lastFolder
     }
 
     ApplicationShortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
@@ -228,11 +251,17 @@ ApplicationWindow {
                 id: mainDatabase
                 Layout.fillWidth: true
                 width: drawer.width
-                text: qsTr("Main database")
                 iconText: "\ue400"
-                isActive: currentDatabaseFile == ""
+                isActive: currentDatabase === 1
+                showToolTip: false
 
-                onClicked: switchToDatabase("main");
+                onClicked: {
+                    if (currentDatabase !== 1) {
+                        currentDatabase = 1;
+                        switchToDatabase();
+                    }
+                }
+
                 onPressAndHold: mainDatabaseMenu.open();
 
                 Menu {
@@ -241,8 +270,25 @@ ApplicationWindow {
                     x: parent.width
                     margins: 0
 
-                    MenuItem { text: qsTr("Export"); onTriggered: saveMainDatabaseDialog.open(); }
-                    MenuItem { text: qsTr("Replace"); onTriggered: replaceMainDatabaseDialog.open(); }
+                    MenuItem {
+                        text: qsTr("New...");
+                        onTriggered: newFirstDatabaseDialog.open();
+                    }
+                    MenuItem {
+                        text: qsTr("Open...");
+                        onTriggered: openFirstDatabaseDialog.open();
+                    }
+                    MenuItem {
+                        text: qsTr("Export...");
+                        onTriggered: saveFirstDatabaseDialog.open();
+                    }
+                }
+
+                ToolTip {
+                    text: firstDatabaseFile
+                    visible: parent.hovered
+                    x: parent.width + Units.smallSpacing
+                    y: height/4
                 }
             }
 
@@ -250,19 +296,23 @@ ApplicationWindow {
                 id: secondDatabaseButton
                 Layout.fillWidth: true
                 width: drawer.width
-                text: qsTr("Second database")
                 showToolTip: false
                 iconText: "\ue401"
-                iconColor: secondDatabaseFile === "" ?  Material.color(Material.Grey,
-                                                                       Material.Shade400)
-                                                     : "white"
-                isActive: currentDatabaseFile != ""
+                iconColor: secondDatabaseFile === ""
+                           ?  Material.color(Material.Grey, Material.Shade400)
+                           : "white"
+
+                isActive: currentDatabase === 2
 
                 onClicked: {
-                    if (secondDatabaseFile != "")
-                        switchToDatabase("second");
-                    else
-                        databaseMenu.open();
+                    if (currentDatabase !== 2) {
+                        if (secondDatabaseFile !== "") {
+                            currentDatabase = 2
+                            switchToDatabase();
+                        } else {
+                            databaseMenu.open();
+                        }
+                    }
                 }
 
                 onPressAndHold: databaseMenu.open();
@@ -281,12 +331,29 @@ ApplicationWindow {
                     x: parent.width
                     margins: 0
 
-                    MenuItem { text: qsTr("New"); onClicked: newDatabaseDialog.open(); }
-                    MenuItem { text: qsTr("Open"); onClicked: openDatabaseDialog.open(); }
                     MenuItem {
-                        text: qsTr("Export")
-                        onClicked: saveSecondDatabaseDialog.open();
+                        text: qsTr("New...");
+                        onTriggered: newSecondDatabaseDialog.open()
+                    }
+                    MenuItem {
+                        text: qsTr("Open...");
+                        onTriggered: openSecondDatabaseDialog.open();
+                    }
+                    MenuItem {
+                        text: qsTr("Export...")
                         enabled: secondDatabaseFile !== ""
+                        onTriggered: saveSecondDatabaseDialog.open();
+                    }
+                    MenuItem {
+                        text: qsTr("Close");
+                        enabled: secondDatabaseFile !== ""
+                        onTriggered: {
+                            if (currentDatabase === 2) {
+                                currentDatabase = 1;
+                                switchToDatabase();
+                            }
+                            secondDatabaseFile = ""
+                        }
                     }
                 }
             }

@@ -205,7 +205,6 @@ Page {
                     ButtonCheckBox {
                         id: showOverdueCheckBox
                         text: qsTr("Overdue")
-                        checked: false
                     }
                 }
 
