@@ -171,13 +171,10 @@ void Database::connectToDatabase(const QUrl &url)
     close();
 
     QString fileName = fileNameFrom(url);
-    qDebug() << url << fileName;
-
     QFileInfo fileInfo(fileName);
     bool create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
-    qInfo() << "Database file:" << fileName;
     database.setDatabaseName(fileName);
     if (!database.open()) {
         QFile::remove(fileName);
