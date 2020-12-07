@@ -251,6 +251,7 @@ ApplicationWindow {
                 id: mainDatabase
                 Layout.fillWidth: true
                 width: drawer.width
+                text: Helpers.urlBaseName(firstDatabaseFile)
                 iconText: "\ue400"
                 isActive: currentDatabase === 1
                 showToolTip: false
@@ -298,6 +299,7 @@ ApplicationWindow {
                 width: drawer.width
                 showToolTip: false
                 iconText: "\ue401"
+                text: secondDatabaseFile === "" ? "" : Helpers.urlBaseName(secondDatabaseFile)
                 iconColor: secondDatabaseFile === ""
                            ?  Material.color(Material.Grey, Material.Shade400)
                            : "white"
