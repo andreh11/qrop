@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <QDate>
+#include <QUrl>
 
 #include "core_global.h"
 
@@ -35,6 +36,7 @@ public:
     static QVariantList listOfVariant(const QString &s, const QString &sep = ",");
     Q_INVOKABLE static qreal bedLength(qreal length);
     Q_INVOKABLE static QVariantList intToVariantList(const QList<int> &list);
+    Q_INVOKABLE static QString urlBaseName(const QUrl &url);
     static QList<int> variantToIntList(const QVariantList &list);
     static QString acronymize(const QString &string);
 

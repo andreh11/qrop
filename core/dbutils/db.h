@@ -28,7 +28,8 @@ class CORESHARED_EXPORT Database : public QObject
 public:
     explicit Database(QObject *parent = nullptr);
 
-    static QString databasePath();
+    static QString defaultDatabasePath();
+    static Q_INVOKABLE QUrl defaultDatabasePathUrl();
     static Q_INVOKABLE void connectToDatabase(const QUrl &url = QUrl());
     static void close();
     static void execSqlFile(const QString &fileNameFrom, const QString &separator = ";");

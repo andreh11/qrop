@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 #include <QUrl>
 #include <QSqlDriver>
+#include <QSettings>
 
 #include "db.h"
 #include "dbutils/family.h"
@@ -37,7 +38,7 @@ Database::Database(QObject *parent)
 {
 }
 
-QString Database::databasePath()
+QString Database::defaultDatabasePath()
 {
     const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (!writeDir.mkpath("."))
@@ -49,11 +50,16 @@ QString Database::databasePath()
     return fileName;
 }
 
+QUrl Database::defaultDatabasePathUrl()
+{
+    return QUrl::fromLocalFile(defaultDatabasePath());
+}
+
 void Database::deleteDatabase()
 {
     qInfo() << "Deleting database...";
     close();
-    QString fileName = databasePath();
+    QString fileName = defaultDatabasePath();
     QFile::remove(fileName);
 }
 
@@ -68,7 +74,7 @@ void Database::backupDatabase()
 {
     QDebug debug = qDebug();
     debug << "Backing up database...";
-    QFileInfo fileInfo(databasePath());
+    QFileInfo fileInfo(defaultDatabasePath());
     auto today = QDate::currentDate();
     QString backupFileName =
             QString("%1-%2.sqlite").arg(fileInfo.baseName(), today.toString(Qt::ISODate));
@@ -86,14 +92,14 @@ void Database::removeFileIfExists(const QUrl &url)
 void Database::saveAs(const QUrl &url)
 {
     removeFileIfExists(url);
-    QFileInfo fileInfo(databasePath());
+    QFileInfo fileInfo(defaultDatabasePath());
     QFile::copy(fileInfo.absoluteFilePath(), url.toLocalFile());
 }
 
 void Database::replaceMainDatabase(const QUrl &url)
 {
     //    removeFileIfExists(databasePath());
-    QFileInfo fileInfo(databasePath());
+    QFileInfo fileInfo(defaultDatabasePath());
     qDebug() << url.toLocalFile() << fileInfo.absoluteFilePath();
     //    QFile::copy(url.toLocalFile(), fileInfo.absoluteFilePath());
 }
@@ -137,8 +143,20 @@ void Database::migrate()
 
 QString Database::fileNameFrom(const QUrl &url)
 {
-    if (url.isEmpty()) // default database path
-        return databasePath();
+    if (url.isEmpty()) {
+        QSettings settings;
+        int currentDatabase = settings.value("currentDatabase").toInt();
+        QString firstDatabaseFile =
+                settings.value("firstDatabaseFile", defaultDatabasePath()).toString();
+        QString secondDatabaseFile = settings.value("secondDatabaseFile", "").toString();
+        qDebug() << currentDatabase << firstDatabaseFile << secondDatabaseFile;
+
+        if (currentDatabase == 1)
+            return QUrl(firstDatabaseFile).toLocalFile();
+        else if (currentDatabase == 2 && !secondDatabaseFile.isEmpty())
+            return QUrl(secondDatabaseFile).toLocalFile();
+        return defaultDatabasePath();
+    }
     return url.toLocalFile();
 }
 
@@ -153,12 +171,10 @@ void Database::connectToDatabase(const QUrl &url)
     close();
 
     QString fileName = fileNameFrom(url);
-
     QFileInfo fileInfo(fileName);
     bool create = !fileInfo.exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
-    qInfo() << "Database file:" << fileName;
     database.setDatabaseName(fileName);
     if (!database.open()) {
         QFile::remove(fileName);

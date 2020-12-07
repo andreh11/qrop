@@ -21,6 +21,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QSettings>
+#include <QFileInfo>
 
 #include <cmath>
 
@@ -112,4 +113,11 @@ QString Helpers::acronymize(const QString &string)
     if (first.length() < 2)
         return first;
     return QString(first[0].toUpper()) + first[1].toUpper();
+}
+
+QString Helpers::urlBaseName(const QUrl &url)
+{
+    QString fileName = url.toLocalFile();
+    QFileInfo fileInfo(fileName);
+    return fileInfo.baseName();
 }

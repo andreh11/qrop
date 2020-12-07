@@ -39,7 +39,7 @@ void tst_Database::cleanup()
 
 void tst_Database::databasePath()
 {
-    QVERIFY(mDatabase->databasePath().contains("qrop.db"));
+    QVERIFY(mDatabase->defaultDatabasePath().contains("qrop.db"));
 }
 
 void tst_Database::connectToDatabase()

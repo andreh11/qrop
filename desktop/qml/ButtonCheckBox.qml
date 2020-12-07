@@ -51,7 +51,7 @@ Button {
     }
 
     background: Rectangle {
-        implicitHeight: Units.chipHeight
+        implicitHeight: Units.buttonHeight
         anchors.verticalCenter: control.verticalCenter
         radius: 0
         border.width: 1

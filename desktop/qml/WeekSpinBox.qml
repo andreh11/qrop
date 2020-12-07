@@ -7,13 +7,13 @@ import io.qrop.components 1.0
 
 Item {
     id: control
-    
+
     property int week: 1
     property int year: 2018
     property bool longYear: QrpDate.longYear(year)
     property int lastWeek: longYear ? 53 : 52
     property bool showOnlyYear: false
-    
+
     function previousYear() {
         let setLastWeek = false;
         if (week == 53)
@@ -40,7 +40,7 @@ Item {
             week--;
         }
     }
-    
+
     function nextWeek() {
         if (week == lastWeek) {
             week = 1;
@@ -50,8 +50,8 @@ Item {
         }
     }
 
-    implicitHeight: buttonLayout.implicitHeight
     implicitWidth: buttonLayout.implicitWidth
+    implicitHeight: Units.buttonHeight
     height: implicitHeight
     width: implicitWidth
 
@@ -85,7 +85,33 @@ Item {
         id: buttonLayout
         anchors.fill: parent
         spacing: Units.smallSpacing
-        
+
+        Label {
+            id: previousWeekButton
+            leftPadding: Units.smallSpacing / 2
+            text: "\ue408"
+            font.family: "Material Icons"
+            //            Layout.rightMargin: -16
+            font.pointSize: 16
+            //            flat: true
+            ToolTip.visible: previousMouseArea.containsMouse
+            ToolTip.text: qsTr("Previous season")
+            color: previousMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
+
+            MouseArea {
+                id: previousMouseArea
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: {
+                    if (showOnlyYear || (mouse.modifiers & Qt.ControlModifier))
+                        previousYear();
+                    else
+                        previousWeek();
+                }
+            }
+        }
+
+
         TextInput {
             id: weekInput
             text: week
@@ -97,11 +123,11 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: 20
-//            Layout.preferredWidth: width
+            //            Layout.preferredWidth: width
             onTextChanged: week = Number(text)
             Layout.preferredWidth: 30
         }
-        
+
         TextInput {
             id: yearInput
             text: year
@@ -115,58 +141,29 @@ Item {
             verticalAlignment: Text.AlignVCenter
             onTextChanged: year = Number(text)
         }
-        
-        ColumnLayout {
-            spacing: -8
-            Layout.rightMargin: 4
 
-            Label {
-                id: nextSeasonButton
-                text: "\ue5ce"
-                font.family: "Material Icons"
-                font.pointSize: 16
-                color: nextMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
+        Label {
+            id: nextSeasonButton
+            rightPadding: Units.smallSpacing / 2
+            text: "\ue409"
+            font.family: "Material Icons"
+            font.pointSize: 16
+            color: nextMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
 
-                MouseArea {
-                    id: nextMouseArea
-                    hoverEnabled: true
-                    anchors.fill: parent
-                    onClicked: {
-                        if (showOnlyYear || (mouse.modifiers & Qt.ControlModifier))
-                            nextYear();
-                        else
-                            nextWeek();
-                    }
-                }
-
-                ToolTip.visible: nextMouseArea.containsMouse
-                ToolTip.text: qsTr("Next season")
-            }
-
-            Text {
-                id: previousWeekButton
-                text: "\ue5cf"
-                font.family: "Material Icons"
-                //            Layout.rightMargin: -16
-                font.pointSize: 16
-                //            flat: true
-                ToolTip.visible: previousMouseArea.containsMouse
-                ToolTip.text: qsTr("Previous season")
-                color: previousMouseArea.pressed ? Qt.rgba(0,0,0,0.38) : "black"
-
-                MouseArea {
-                    id: previousMouseArea
-                    hoverEnabled: true
-                    anchors.fill: parent
-                    onClicked: {
-                        if (showOnlyYear || (mouse.modifiers & Qt.ControlModifier))
-                            previousYear();
-                        else
-                            previousWeek();
-                    }
+            MouseArea {
+                id: nextMouseArea
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: {
+                    if (showOnlyYear || (mouse.modifiers & Qt.ControlModifier))
+                        nextYear();
+                    else
+                        nextWeek();
                 }
             }
 
+            ToolTip.visible: nextMouseArea.containsMouse
+            ToolTip.text: qsTr("Next season")
         }
     }
 }

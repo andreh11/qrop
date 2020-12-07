@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Changed
+ - *Database* − Both database buttons behave the same way and remember last
+   opened database (#219).
  - *Date picker* - Improve date picker and follow last Material guidelines.
  - *Plantings* − Always show seed company next to variety name if the feature is
    activated (#176).
