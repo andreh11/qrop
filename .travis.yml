@@ -22,22 +22,29 @@ matrix:
     if: branch = master AND tag IS blank
     env:
     - QROP_PLATFORM="osx"
-    - PATH="/usr/local/opt/qt/bin:$PATH"
-    - LDFLAGS="-L/usr/local/opt/qt/lib"
-    - CPPFLAGS="-I/usr/local/opt/qt/include"
-    - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+    - QT_ROOT=${TRAVIS_BUILD_DIR}/Qt/5.13.0/clang_64
+    - QT_QPA_PLATFORM_PLUGIN_PATH=${QT_ROOT}/plugins
+    - PATH=${QT_ROOT}/bin:$PATH
+    - CMAKE_PREFIX_PATH=${QT_ROOT}/lib/cmake
+    # - PATH="/usr/local/opt/qt/bin:$PATH"
+    - LDFLAGS="-L${QT_ROOT}/lib"
+    - CPPFLAGS="-I${QT_ROOT}/include"
+    - PKG_CONFIG_PATH="${QT_ROOT}/lib/pkgconfig"
     - QROP_BUILD_TYPE="snapshot"
     osx_image: xcode10.2
     compiler: clang
     addons:
       homebrew:
         packages:
-        - qt
+        # - qt
         - tree
         update: true
 
 script:
   - echo "[Building]"
+  - mkdir -p Qt/5.13.0
+  - curl --output Qt-5.13.0-mac.tar.xz https://f002.backblazeb2.com/file/Subsurface-Travis/Qt-5.13.0-mac.tar.xz
+  - tar -xJ -C Qt/5.13.0 -f Qt-5.13.0-mac.tar.xz
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
 after_success:
