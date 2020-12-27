@@ -88,6 +88,25 @@ Dialog {
         setFieldValue(greenhouseCheckBox, val['greenhouse'] === 1 ? true : false);
     }
 
+    // Direct access to fields for testing purpose
+    function get_field(fieldName) {
+        switch (fieldName) {
+        case "name":
+            return nameField;
+        case "bed_width":
+            return widthField;
+        case "bed_length":
+            return lengthField;
+        case "quantity":
+            return quantityField;
+        case "greenhouse":
+            return greenhouseCheckBox;
+        default:
+            console.log("Invalid field-name \"" + fieldName + "\" in get_field");
+            return null;
+        }
+    }
+
     onAboutToShow: {
         clearForm();
         if (mode === "edit") {
@@ -98,10 +117,9 @@ Dialog {
             var valueMap = Location.commonValues(locationIdList);
             setFormValues(valueMap);
         }
-
-        if (nameField.visible)
+        if (mode === "add")   // Can't rely on nameField.visible since dialog is not shown yet
             nameField.forceActiveFocus();
-        else if (lengthField.visible)
+        else
             lengthField.forceActiveFocus()
     }
 

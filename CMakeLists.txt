@@ -124,7 +124,6 @@ configure_file(translations.qrc ${PROJECT_SOURCE_DIR} COPYONLY)
 
 set(SOURCE_FILES
     desktop/main.cpp
-    desktop/qropdoublevalidator.cpp
     desktop/timevalidator.cpp
     desktop/resources.qrc
     translations.qrc

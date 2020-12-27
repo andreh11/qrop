@@ -18,6 +18,7 @@ add_library(core SHARED
         print.cpp
         qrpimageprovider.cpp
         tableprinter.cpp
+        qropdoublevalidator.cpp
 
         dbutils/db.cpp
         dbutils/databaseutility.cpp
