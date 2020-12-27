@@ -27,7 +27,7 @@ import io.qrop.components 1.0
 ApplicationWindow {
     id: window
 
-    readonly property bool largeDisplay: width > 800
+    readonly property bool largeDisplay: width > 100
     readonly property bool smallDisplay: width < 500
     property bool railMode: width > 1200
     property bool searchMode: false

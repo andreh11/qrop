@@ -74,14 +74,14 @@ configure_file(
 
 string(TIMESTAMP BUILD_DATE %Y%m)
 
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+if(ANDROID)
+    set(ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/desktop/android")
 #    if (ANDROID_ABI STREQUAL "armeabi-v7a")
 #        set(ANDROID_EXTRA_LIBS
 #            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
 #            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
 #    endif()
-#endif()
+endif()
 
 find_package(Qt5 ${MIN_QT_VERSION}
     COMPONENTS
