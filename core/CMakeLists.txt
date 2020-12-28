@@ -67,4 +67,9 @@ add_library(core SHARED
         )
 
 
-target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)
+if (ANDROID)
+    message(STATUS "Linking Android extras...")
+    target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport Qt5::AndroidExtras)
+else()
+    target_link_libraries(core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Sql Qt5::PrintSupport)
+endif()
