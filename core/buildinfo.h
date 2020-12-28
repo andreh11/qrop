@@ -20,10 +20,10 @@ public:
     inline Q_INVOKABLE bool isMobileDevice() const;
     inline Q_INVOKABLE QString rootPath() const;
 
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
     void createMobileRootFilesDirectory();
     Q_INVOKABLE QStringList getAvailableDataBasesNames() const;
-#endif
+//#endif
 
 private:
     QString m_version;
@@ -38,7 +38,8 @@ bool BuildInfo::isMobileDevice() const
 #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
     return true;
 #else
-    return false;
+    return true;
+//    return false;
 #endif
 }
 

@@ -65,7 +65,7 @@ QString BuildInfo::branch() const
 }
 
 
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
 #define APP_NAME "Qrop"
 #include <QDir>
 #if defined(Q_OS_ANDROID)
@@ -130,4 +130,4 @@ QStringList BuildInfo::getAvailableDataBasesNames() const
         dbPaths << fi.completeBaseName();
     return dbPaths;
 }
-#endif // #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+//#endif // #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
