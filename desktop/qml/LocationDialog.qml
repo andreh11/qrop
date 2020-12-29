@@ -152,6 +152,8 @@ Dialog {
 
             Layout.fillWidth: true
 
+            validator: RegExpValidator { regExp: /\S.*/ }
+
             Keys.onReturnPressed: if (formAccepted) dialog.accept();
             Keys.onEnterPressed: if (formAccepted) dialog.accept();
         }

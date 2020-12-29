@@ -80,4 +80,49 @@ TestCase {
         verify(widthField.text === "1,2");
         verify(item.bedWidth === 1.2);
     }
+
+    function test_name_validity() {
+        var item = create_location_dialog();
+        item.open();
+
+        var widthField = item.get_field("bed_width");
+        verify(widthField);
+        widthField.text = "5";
+
+        var lengthField = item.get_field("bed_length");
+        verify(lengthField);
+        lengthField.text = "5";
+
+        var quantityField = item.get_field("quantity");
+        verify(quantityField);
+        quantityField.text = "5";
+
+        verify(!item.formAccepted);
+
+        var nameField = item.get_field("name");
+        verify(nameField);
+        nameField.text = "a";
+        verify(item.formAccepted);
+
+        nameField.text = "loc.1";
+        verify(item.formAccepted);
+
+        nameField.text = "Name_1";
+        verify(item.formAccepted);
+
+        nameField.text = "BED A";
+        verify(item.formAccepted);
+
+        nameField.text = "";
+        verify(!item.formAccepted);
+
+        nameField.text = " ";
+        verify(!item.formAccepted);
+
+        nameField.text = " A";
+        verify(!item.formAccepted);
+
+        nameField.text = "A ";
+        verify(item.formAccepted);
+    }
 }
