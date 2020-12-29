@@ -71,7 +71,8 @@ ApplicationWindow {
         if (lastFolder === "")
             lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice()?'':'file://').arg(FileSystem.rootPath);
 
-        info("Debug Popup", "Is mobile device: "+BuildInfo.isMobileDevice())
+        info("Debug Popup", "Is mobile device: "+BuildInfo.isMobileDevice()+
+             ", root folder: "+FileSystem.rootPath)
     }
 
     function toggleFullScreen() {

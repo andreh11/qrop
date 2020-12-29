@@ -6,7 +6,11 @@ FileSystem::FileSystem(QObject *parent)
 //      m_rootPath("/home/bruel/Documents/Qrop"),
       m_rootPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
       m_subFolders({ {"csv", "csv"}, {"pdf", "pdf"} })
-{}
+{
+#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    createMobileRootFilesDirectories();
+#endif
+}
 
 
 //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
