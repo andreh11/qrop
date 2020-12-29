@@ -436,7 +436,7 @@ void Planting::duplicateListToNextYear(const QList<int> &idList) const
 {
     qDebug() << "Batch duplicate to next year:" << idList;
     QSqlDatabase::database().transaction();
-    for (const int id : idList){
+    for (const int id : idList) {
         QDate fromDate = plantingDate(id);
         duplicateToYear(id, fromDate.year() + 1);
     }
@@ -802,14 +802,18 @@ QVariantList Planting::highestRevenueCropRevenues(int year, bool greenhouse) con
     return list;
 }
 
-void Planting::csvImportPlan(int year, const QUrl &path) const
+QString Planting::csvImportPlan(int year, const QUrl &path) const
 {
+    qDebug() << "[MB_TRACE][Planting::csvExportPlan] year: " << year << ", path: " << path.toString();
+
     if (year < 1000 || year > 3000)
-        return;
+        return tr("Wrong year (must be between 1000 and 3000)");
 
     QFile f(path.toLocalFile());
-    if (!f.open(QIODevice::ReadOnly))
-        return;
+    if (!f.open(QIODevice::ReadOnly)) {
+        qDebug() << "[MB_TRACE][Planting::csvImportPlan] can't open file...";
+        return tr("Can't open csv file %1").arg(path.toString());
+    }
 
     QTextStream ts(&f);
     QList<QString> fieldList = ts.readLine().split(";");
@@ -904,18 +908,16 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                 sdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!sdate.isValid()) {
                     sdate = QrpDate::dateFromIsoString(line[i].trimmed());
-                    if(!sdate.isValid()){
-                        qDebug() << "Bad date format, should be week number:" << line[i];
-                        return;
+                    if (!sdate.isValid()) {
+                        return tr("Bad date format, should be week number or ISO date: %1").arg(line[i]);
                     }
                 }
             } else if (field == "planting_date") {
                 pdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!pdate.isValid()) {
                     pdate = QrpDate::dateFromIsoString(line[i].trimmed());
-                    if(!pdate.isValid()){
-                        qDebug() << "Bad date format, should be week number:" << line[i];
-                        return;
+                    if (!pdate.isValid()) {
+                        return tr("Bad date format, should be week number or ISO date: %1").arg(line[i]);
                     }
                 }
                 map[field] = pdate;
@@ -923,18 +925,16 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
                 bhdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!bhdate.isValid()) {
                     bhdate = QrpDate::dateFromIsoString(line[i].trimmed());
-                    if(!bhdate.isValid()){
-                        qDebug() << "Bad date format, should be week number:" << line[i];
-                        return;
+                    if (!bhdate.isValid()) {
+                        return tr("Bad date format, should be week number or ISO date: %1").arg(line[i]);
                     }
                 }
             } else if (field == "end_harvest_date") {
                 ehdate = QrpDate::dateFromWeekString(line[i].trimmed(), year);
                 if (!ehdate.isValid()) {
                     ehdate = QrpDate::dateFromIsoString(line[i].trimmed());
-                    if(!ehdate.isValid()){
-                        qDebug() << "Bad date format, should be week number:" << line[i];
-                        return;
+                    if (!ehdate.isValid()) {
+                        return tr("Bad date format, should be week number or ISO date: %1").arg(line[i]);
                     }
                 }
             } else if (field == "in_greenhouse") {
@@ -1012,20 +1012,27 @@ void Planting::csvImportPlan(int year, const QUrl &path) const
     }
     QSqlDatabase::database().commit();
     f.close();
+    return QString();
 }
 
-void Planting::csvExportPlan(int year, const QUrl &path) const
+QString Planting::csvExportPlan(int year, const QUrl &path) const
 {
+    qDebug() << "[MB_TRACE][Planting::csvExportPlan] year: " << year << ", path: " << path.toString();
+
     QFile f(path.toLocalFile());
 
     if (f.exists())
         f.remove();
 
-    if (!f.open(QIODevice::ReadWrite))
-        return;
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "[MB_TRACE][Planting::csvExportPlan] can't open file...";
+        return tr("Can't write file: %1").arg(path.toString());
+    }
 
     QTextStream ts(&f);
     auto idList = yearPlantingList(year);
+
+    qDebug() << "[MB_TRACE][Planting::csvExportPlan] idList: " << idList;
 
     QList<QString> keyList = { "family",
                                "crop",
@@ -1096,6 +1103,7 @@ void Planting::csvExportPlan(int year, const QUrl &path) const
         ts << "\n";
     }
     f.close();
+    return QString();
 }
 
 QString Planting::toolTip(int plantingId, int locationId) const

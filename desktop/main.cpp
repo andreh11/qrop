@@ -15,6 +15,7 @@
  */
 
 #include "buildinfo.h"
+#include "filesystem.h"
 #include "helpers.h"
 #include "qrpdate.h"
 #include "nametree.h"
@@ -139,11 +140,13 @@ void registerTypes()
                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                             Q_UNUSED(engine)
                                             Q_UNUSED(scriptEngine)
-                                            BuildInfo *buildInfo = new BuildInfo();
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-                                            buildInfo->createMobileRootFilesDirectory();
-#endif
-                                            return buildInfo;
+                                            return new BuildInfo();
+                                        });
+    qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
+                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                            Q_UNUSED(engine)
+                                            Q_UNUSED(scriptEngine)
+                                            return new FileSystem();
                                         });
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
@@ -342,6 +345,13 @@ int main(int argc, char *argv[])
     QApplication::setApplicationDisplayName("Qrop");
     QApplication::setApplicationVersion("0.4.5");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
+
+#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    {
+        FileSystem fs;
+        fs.createMobileRootFilesDirectories();
+    }
+#endif
 
     registerFonts();
     registerTypes();

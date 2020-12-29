@@ -94,8 +94,8 @@ public:
     Q_INVOKABLE QVariantMap lastValues(int varietyId, int cropId, int plantingType,
                                        bool inGreenhouse) const;
 
-    Q_INVOKABLE void csvImportPlan(int year, const QUrl &path) const;
-    Q_INVOKABLE void csvExportPlan(int year, const QUrl &path) const;
+    Q_INVOKABLE QString csvImportPlan(int year, const QUrl &path) const;
+    Q_INVOKABLE QString csvExportPlan(int year, const QUrl &path) const;
 
     Q_INVOKABLE QString toolTip(int plantingId, int locationId) const;
     QString growBarDescription(const QSqlRecord &record, int year, bool showNames) const;

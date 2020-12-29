@@ -281,28 +281,93 @@ Page {
         }
     }
 
-    Platform.FileDialog {
-        id: importCropPlanDialog
-        defaultSuffix: "csv"
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        fileMode: Platform.FileDialog.OpenFile
-        nameFilters: [qsTr("CSV (*.csv)")]
-        onAccepted: {
-            Planting.csvImportPlan(page.year, file);
-            page.refresh();
+    property bool exportCSV: true
+
+    function openActionCsvDialog(doExport) {
+        exportCSV = doExport;
+        if (BuildInfo.isMobileDevice()){
+            if (exportCSV) {
+                csvCropPlanMobileDialog.nameField.visible = true;
+                csvCropPlanMobileDialog.combo.visible = false;
+                csvCropPlanMobileDialog.title = qsTr('Export crop plan');
+                csvCropPlanMobileDialog.text = qsTr("csv file name:");
+                csvCropPlanMobileDialog.open();
+            } else {
+                let availableCSVs = FileSystem.getAvailableCsvFileNames();
+                if (availableCSVs.length === 0)
+                    error(qsTr('There are no csv file to import...'),
+                          '%1: <b>%2</b>'.arg(
+                              qsTr("They should be in the following folder")).arg(
+                              FileSystem.csvPath));
+                else {
+                    for (var i=0; i < availableCSVs.length; ++i)
+                        print("[MB_TRACE] Available csv: "+availableCSVs[i]);
+                    csvCropPlanMobileDialog.nameField.visible = false;
+                    csvCropPlanMobileDialog.combo.visible = true;
+                    csvCropPlanMobileDialog.combo.model = availableCSVs;
+                    csvCropPlanMobileDialog.title = qsTr('Import Crop Plan');
+                    csvCropPlanMobileDialog.text = '%1<br/>%2 %3'.arg(
+                                qsTr("Please select a csv to import")).arg(
+                                qsTr("They must be in the folder:")).arg(
+                                FileSystem.csvPath);
+                    csvCropPlanMobileDialog.open();
+                }
+
+            }
         }
+        else // !BuildInfo.isMobileDevice
+            csvCropPlanDialog.open();
     }
 
+    function doActionCSV(file) {
+        if (exportCSV) {
+            let err = Planting.csvExportPlan(page.year, file);
+            if (err.length > 0)
+                window.error(qsTr('Error exporting Crop plan'), err);
+            else
+                window.info("", qsTr('Export done.'));
+        } else {
+            let err = Planting.csvImportPlan(page.year, file);
+            if (err.length > 0)
+                window.error(qsTr('Error importing Crop plan'), err);
+            else {
+                page.refresh();
+                window.info("", qsTr('Import done.'));
+            }
+        }
+    } // doActionCSV
+
     Platform.FileDialog {
-        id: exportCropPlanDialog
+        id: csvCropPlanDialog
+
         defaultSuffix: "csv"
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        fileMode: Platform.FileDialog.SaveFile
+        folder: Qt.resolvedUrl(window.lastFolder)
+        fileMode: exportCSV ? Platform.FileDialog.SaveFile : Platform.FileDialog.OpenFile
         nameFilters: [qsTr("CSV (*.csv)")]
         onAccepted: {
-            Planting.csvExportPlan(page.year, file)
+            print("export? "+exportCSV+", fileMode: " + fileMode);
+            doActionCSV(file);
         }
-    }
+    } // csvCropPlanDialog
+
+    MobileFileDialog {
+        id: csvCropPlanMobileDialog
+
+//        width: window.width *4/5
+        x: (window.width - width) / 2
+        y: (window.height - height) / 2
+
+        onAccepted: {
+            if (exportCSV && nameField.text === "") {
+                window.error(qsTr('Empty name'), qsTr('You should provide a database name...'));
+                return;
+            }
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            let csvName = exportCSV ? nameField.text : combo.currentText;
+            doActionCSV('file://%1/%2.csv'.arg(FileSystem.csvPath).arg(csvName));
+        }
+    } // csvCropPlanMobileDialog
+
 
     Column {
         id: columnLayout
@@ -644,12 +709,12 @@ Page {
 
                             MenuItem {
                                 text: qsTr("Import crop plan...")
-                                onTriggered: importCropPlanDialog.open()
+                                onTriggered: openActionCsvDialog(false)
                             }
 
                             MenuItem {
                                 text: qsTr("Export crop plan...")
-                                onTriggered: exportCropPlanDialog.open()
+                                onTriggered: openActionCsvDialog(true)
                             }
                         }
 

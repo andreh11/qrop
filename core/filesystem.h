@@ -1,0 +1,41 @@
+#pragma once
+
+#include "core_global.h"
+
+#include <QObject>
+#include <QMap>
+
+class CORESHARED_EXPORT FileSystem : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString rootPath READ rootPath)
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    Q_PROPERTY(QString csvPath  READ csvPath)
+    Q_PROPERTY(QString pdfPath  READ pdfPath)
+//#endif
+
+public:
+    explicit FileSystem(QObject *parent = nullptr);
+
+    inline QString rootPath() const;
+
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    inline QString csvPath() const;
+    inline QString pdfPath() const;
+
+    void createMobileRootFilesDirectories();
+    Q_INVOKABLE QStringList getAvailableDataBasesNames() const;
+    Q_INVOKABLE QStringList getAvailableCsvFileNames() const;
+//#endif
+
+private:
+    QString m_rootPath;
+
+    const QMap<QString, QString> m_subFolders;
+};
+
+QString FileSystem::rootPath() const { return m_rootPath; }
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+QString FileSystem::csvPath() const { return QString("%1/%2").arg(m_rootPath).arg(m_subFolders.value("csv")); }
+QString FileSystem::pdfPath() const { return QString("%1/%2").arg(m_rootPath).arg(m_subFolders.value("pdf")); }
+//#endif

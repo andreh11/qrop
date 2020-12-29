@@ -12,6 +12,7 @@ add_definitions(-DCORE_LIBRARY)
 add_library(core SHARED
         buildinfo.cpp
         core_resources.qrc
+        filesystem.cpp
         helpers.cpp
         qrpdate.cpp
         nametree.cpp
