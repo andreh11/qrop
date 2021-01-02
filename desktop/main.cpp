@@ -346,6 +346,10 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.4.5");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
+#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    FileSystem::createMobileRootFilesDirectories();
+#endif
+
     registerFonts();
     registerTypes();
     installTranslator();

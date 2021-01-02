@@ -23,19 +23,19 @@ public:
     inline QString csvPath() const;
     inline QString pdfPath() const;
 
-    void createMobileRootFilesDirectories();
     Q_INVOKABLE QStringList getAvailableDataBasesNames() const;
     Q_INVOKABLE QStringList getAvailableCsvFileNames() const;
+
+    static void createMobileRootFilesDirectories();
 //#endif
 
 private:
-    QString m_rootPath;
-
-    const QMap<QString, QString> m_subFolders;
+    static QString s_rootPath;
+    static const QMap<QString, QString> s_subFolders;
 };
 
-QString FileSystem::rootPath() const { return m_rootPath; }
+QString FileSystem::rootPath() const { return s_rootPath; }
 //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-QString FileSystem::csvPath() const { return QString("%1/%2").arg(m_rootPath).arg(m_subFolders.value("csv")); }
-QString FileSystem::pdfPath() const { return QString("%1/%2").arg(m_rootPath).arg(m_subFolders.value("pdf")); }
+QString FileSystem::csvPath() const { return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("csv")); }
+QString FileSystem::pdfPath() const { return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("pdf")); }
 //#endif

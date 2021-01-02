@@ -1,16 +1,14 @@
 #include "filesystem.h"
 #include <QStandardPaths>
 #include <QDebug>
+
+//QString FileSystem::s_rootPath = "/home/bruel/Documents/Qrop";
+QString FileSystem::s_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+const QMap<QString, QString> FileSystem::s_subFolders = { {"csv", "csv"}, {"pdf", "pdf"} };
+
 FileSystem::FileSystem(QObject *parent)
-    : QObject(parent),
-//      m_rootPath("/home/bruel/Documents/Qrop"),
-      m_rootPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-      m_subFolders({ {"csv", "csv"}, {"pdf", "pdf"} })
-{
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-    createMobileRootFilesDirectories();
-#endif
-}
+    : QObject(parent)
+{}
 
 
 //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
@@ -28,7 +26,7 @@ void FileSystem::createMobileRootFilesDirectories()
 //    qDebug() << "[MB_TRACE] standard writable doc loc: "      << QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 //    qDebug() << "[MB_TRACE] standard writable down loc: "     << QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
 
-    m_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    s_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #if defined(Q_OS_ANDROID)
     QtAndroid::PermissionResultMap res = QtAndroid::requestPermissionsSync({"android.permission.WRITE_EXTERNAL_STORAGE"});
     if (res["android.permission.WRITE_EXTERNAL_STORAGE"] != QtAndroid::PermissionResult::Granted) {
@@ -38,9 +36,9 @@ void FileSystem::createMobileRootFilesDirectories()
 #endif
 
     // 1. Check if main Documents folder exist
-    if (!QDir(m_rootPath).exists()) {
-        qDebug() << "Creating Documents folder: " << m_rootPath;
-        QFileInfo fi(m_rootPath);
+    if (!QDir(s_rootPath).exists()) {
+        qDebug() << "Creating Documents folder: " << s_rootPath;
+        QFileInfo fi(s_rootPath);
         QDir dir(fi.absolutePath());
         if (!dir.mkdir(fi.fileName())){
             qCritical() << "Couldn't create Documents folder...";
@@ -49,9 +47,9 @@ void FileSystem::createMobileRootFilesDirectories()
     }
 
     // 2.: Create Qrop subFolder
-    QFileInfo fi(QString("%1/%2").arg(m_rootPath).arg(APP_NAME));
+    QFileInfo fi(QString("%1/%2").arg(s_rootPath).arg(APP_NAME));
     if (!fi.exists()) {
-        QDir dir(m_rootPath);
+        QDir dir(s_rootPath);
         if (!dir.mkdir(APP_NAME))
             qCritical() << "Couldn't create folder: " << fi.absoluteFilePath();
     }
@@ -59,10 +57,10 @@ void FileSystem::createMobileRootFilesDirectories()
     // 3.: create all subFolders
     if (fi.exists())
     {
-        m_rootPath = fi.absoluteFilePath();
-        QDir dir(m_rootPath);
-        for (const auto & folder : m_subFolders.values()) {
-            if (!QFileInfo(QString("%1/%2").arg(m_rootPath).arg(folder)).exists())
+        s_rootPath = fi.absoluteFilePath();
+        QDir dir(s_rootPath);
+        for (const auto & folder : s_subFolders.values()) {
+            if (!QFileInfo(QString("%1/%2").arg(s_rootPath).arg(folder)).exists())
                 dir.mkdir(folder);
         }
     }
@@ -71,7 +69,7 @@ void FileSystem::createMobileRootFilesDirectories()
 QStringList FileSystem::getAvailableDataBasesNames() const
 {
     QStringList dbNames;
-    QDir dir(m_rootPath);
+    QDir dir(s_rootPath);
     for(const QFileInfo &fi: dir.entryInfoList(QStringList("*.sqlite"),
                                                QDir::Filter::Files,
                                                QDir::SortFlag::Name))
