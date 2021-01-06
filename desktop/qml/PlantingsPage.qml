@@ -74,7 +74,7 @@ Page {
 
     function duplicateSelectedNextYear() {
         let idList = selectedIdList();
-        Planting.duplicateListToYear(idList, year + 1);
+        Planting.duplicateListToNextYear(idList);
         plantingsView.unselectAll();
         page.refresh();
         plantingsView.selectedIdsChanged();
