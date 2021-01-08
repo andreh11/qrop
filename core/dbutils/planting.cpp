@@ -432,6 +432,17 @@ void Planting::duplicateListToYear(const QList<int> &idList, int year) const
     QSqlDatabase::database().commit();
 }
 
+void Planting::duplicateListToNextYear(const QList<int> &idList) const
+{
+    qDebug() << "Batch duplicate to next year:" << idList;
+    QSqlDatabase::database().transaction();
+    for (const int id : idList){
+        QDate fromDate = plantingDate(id);
+        duplicateToYear(id, fromDate.year() + 1);
+    }
+    QSqlDatabase::database().commit();
+}
+
 QList<int> Planting::yearPlantingList(int year) const
 {
     QString queryString("SELECT planting_id, strftime('%Y', planting_date) AS planting_year "
