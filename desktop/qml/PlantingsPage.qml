@@ -50,6 +50,19 @@ Page {
     property alias checks: plantingsView.checks
     property alias dialogOpened: plantingDialog.opened
 
+    property var printTypeCbModel: [ // needed for Qt < 5.14
+        {text: qsTr("Entire plan"),        value: "entire" },
+        {text: qsTr("Greenhouse plan"),    value: "greenhouse" },
+        {text: qsTr("Field sowing plan"),  value: "field_sowing" },
+        {text: qsTr("Transplanting plan"), value: "field_transplanting" }
+    ]
+    property var dateRangeCbModel: [ // needed for Qt < 5.14
+         { text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week },
+         { text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month },
+         { text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year }
+    ]
+
+
     signal noteButtonClicked(int plantingId)
 
     property bool exportCSV: true
@@ -99,8 +112,11 @@ Page {
     }
 
     function doPrintCropPlan(file) {
-        let printType  = printTypeComboBox.currentValue;
-        let dateFilter = printDateRangeComboBox.currentValue;
+        let printType  = printTypeCbModel[printTypeComboBox.currentIndex];
+        let dateFilter = dateRangeCbModel[printDateRangeComboBox.currentIndex];
+// Can be used from Qt 5.14
+//        let printType  = printTypeComboBox.currentValue;
+//        let dateFilter = printDateRangeComboBox.currentValue;
         let month = dateFilter == PlantingsPage.DateFilter.Week  ? QrpDate.currentWeek()  : -1 ;
         let week  = dateFilter == PlantingsPage.DateFilter.Month ? QrpDate.currentMonth() : -1 ;
         Print.printCropPlan(page.year, month, week, file, printType)
@@ -808,13 +824,16 @@ Page {
                 Layout.fillWidth: true
                 showAddItem: false
                 textRole: "text"
-                valueRole: "value"
-                model: [
-                    {text: qsTr("Entire plan"),        value: "entire" },
-                    {text: qsTr("Greenhouse plan"),    value: "greenhouse" },
-                    {text: qsTr("Field sowing plan"),  value: "field_sowing" },
-                    {text: qsTr("Transplanting plan"), value: "field_transplanting" }
-                ]
+                model: printTypeCbModel
+// Can be used from Qt 5.14
+//                model: [
+//                    {text: qsTr("Entire plan"),        value: "entire" },
+//                    {text: qsTr("Greenhouse plan"),    value: "greenhouse" },
+//                    {text: qsTr("Field sowing plan"),  value: "field_sowing" },
+//                    {text: qsTr("Transplanting plan"), value: "field_transplanting" }
+//                ]
+//                valueRole: "value"
+
             }
 
             MyComboBox {
@@ -824,12 +843,14 @@ Page {
                 Layout.fillWidth: true
                 showAddItem: false
                 textRole: "text"
-                valueRole: "value"
-                model: [
-                    {text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week},
-                    {text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month},
-                    {text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year},
-                ]
+                model: dateRangeCbModel
+// Can be used from Qt 5.14
+//                model: [
+//                    {text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week},
+//                    {text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month},
+//                    {text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year},
+//                ]
+//                valueRole: "value"
             }
         }
 
