@@ -49,7 +49,7 @@ TextArea {
         implicitHeight: 40
         border.width: control.activeFocus ? 2 : 1
         radius: 4
-        color: control.palette.base
+        color: "white"
         border.color: control.activeFocus ? control.palette.highlight : control.palette.mid
         Behavior on border.color {
             ColorAnimation { duration: Units.mediumDuration }
