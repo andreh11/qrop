@@ -4475,47 +4475,47 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>Qrop</name>
     <message>
         <source>Dashboard</source>
         <translation type="vanished">Tableau de bord</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="42"/>
+        <location filename="../desktop/qml/Qrop.qml" line="42"/>
         <source>Plantings</source>
         <translation>Serioj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="43"/>
+        <location filename="../desktop/qml/Qrop.qml" line="43"/>
         <source>Tasks</source>
         <translation>Taskoj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="44"/>
+        <location filename="../desktop/qml/Qrop.qml" line="44"/>
         <source>Crop Map</source>
         <translation>Parcelaro</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="45"/>
+        <location filename="../desktop/qml/Qrop.qml" line="45"/>
         <source>Harvests</source>
         <translation>Rikoltoj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="46"/>
+        <location filename="../desktop/qml/Qrop.qml" line="46"/>
         <source>Seed list</source>
         <translation>Semlisto</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="47"/>
+        <location filename="../desktop/qml/Qrop.qml" line="47"/>
         <source>Charts</source>
         <translation>Grafikaĵoj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="119"/>
-        <location filename="../desktop/qml/main.qml" line="131"/>
-        <location filename="../desktop/qml/main.qml" line="143"/>
-        <location filename="../desktop/qml/main.qml" line="154"/>
-        <location filename="../desktop/qml/main.qml" line="166"/>
+        <location filename="../desktop/qml/Qrop.qml" line="119"/>
+        <location filename="../desktop/qml/Qrop.qml" line="131"/>
+        <location filename="../desktop/qml/Qrop.qml" line="143"/>
+        <location filename="../desktop/qml/Qrop.qml" line="154"/>
+        <location filename="../desktop/qml/Qrop.qml" line="166"/>
         <source>SQLITE (*.sqlite)</source>
         <translation>SQLite (*.sqlite)</translation>
     </message>
@@ -4540,59 +4540,59 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Plein champs</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="239"/>
+        <location filename="../desktop/qml/Qrop.qml" line="239"/>
         <source>Main database</source>
         <translation>Ĉefa datumbazo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="248"/>
+        <location filename="../desktop/qml/Qrop.qml" line="248"/>
         <source>Main database menu</source>
         <translation>Menuo de la ĉefa datumbazo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="253"/>
+        <location filename="../desktop/qml/Qrop.qml" line="253"/>
         <source>Replace</source>
         <translation>Anstataŭigi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="261"/>
+        <location filename="../desktop/qml/Qrop.qml" line="261"/>
         <source>Second database</source>
         <translation>Duaranga datumbazo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="279"/>
+        <location filename="../desktop/qml/Qrop.qml" line="279"/>
         <source>No other database opened</source>
         <translation>Neniu alia datumbazo estas malferma</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="288"/>
+        <location filename="../desktop/qml/Qrop.qml" line="288"/>
         <source>Database menu</source>
         <translation>Menuo de la datumbazo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="292"/>
+        <location filename="../desktop/qml/Qrop.qml" line="292"/>
         <source>New</source>
         <translation>Nova</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="293"/>
+        <location filename="../desktop/qml/Qrop.qml" line="293"/>
         <source>Open</source>
         <translation>Malfermi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="252"/>
-        <location filename="../desktop/qml/main.qml" line="295"/>
+        <location filename="../desktop/qml/Qrop.qml" line="252"/>
+        <location filename="../desktop/qml/Qrop.qml" line="295"/>
         <source>Export</source>
         <translation>Eksporti</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="49"/>
-        <location filename="../desktop/qml/main.qml" line="306"/>
+        <location filename="../desktop/qml/Qrop.qml" line="49"/>
+        <location filename="../desktop/qml/Qrop.qml" line="306"/>
         <source>Settings</source>
         <translation>Agordoj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="321"/>
+        <location filename="../desktop/qml/Qrop.qml" line="321"/>
         <source>About</source>
         <translation>Pri</translation>
     </message>
@@ -4605,7 +4605,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Ce programme est fourni SANS AUCUNE GARANTIE. Pour plus de détails, visitez &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="48"/>
+        <location filename="../desktop/qml/Qrop.qml" line="48"/>
         <source>Notes</source>
         <translation>Notoj</translation>
     </message>
