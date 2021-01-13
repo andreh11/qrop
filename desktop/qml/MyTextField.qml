@@ -91,7 +91,7 @@ TextField {
         implicitHeight: 40
         border.width: control.activeFocus ? 2 : 1
         radius: 4
-        color: control.palette.base
+        color: "white"
         border.color: {
             if (control.hasError)
                 Units.colorError
