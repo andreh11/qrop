@@ -22,7 +22,7 @@ matrix:
     if: branch = master AND tag IS blank
     env:
     - QROP_PLATFORM="osx"
-    - QT_ROOT=${TRAVIS_BUILD_DIR}/Qt/5.13.0/clang_64
+    - QT_ROOT=${TRAVIS_BUILD_DIR}/Qt/5.12.10/clang_64
     - QT_QPA_PLATFORM_PLUGIN_PATH=${QT_ROOT}/plugins
     - PATH=${QT_ROOT}/bin:$PATH
     - CMAKE_PREFIX_PATH=${QT_ROOT}/lib/cmake
@@ -42,9 +42,9 @@ matrix:
 
 script:
   - echo "[Building]"
-  - mkdir -p Qt/5.13.0
-  - curl --output Qt-5.13.0-mac.tar.xz https://f002.backblazeb2.com/file/Subsurface-Travis/Qt-5.13.0-mac.tar.xz
-  - tar -xJ -C Qt/5.13.0 -f Qt-5.13.0-mac.tar.xz
+  - mkdir -p Qt/5.12.10
+  - curl --output Qt-5.12.10-mac.tar.xz http://qrop.ouvaton.org/archives/Qt-5.12.10-mac.tar.xz
+  - tar -xJ -C Qt/5.12.10 -f Qt-5.12.10-mac.tar.xz
   - sh ${TRAVIS_BUILD_DIR}/dist/${QROP_PLATFORM}/build.sh
 
 after_success:
