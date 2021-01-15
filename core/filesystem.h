@@ -8,20 +8,26 @@
 class CORESHARED_EXPORT FileSystem : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString rootPath READ rootPath)
+    Q_PROPERTY(QString rootPath READ rootPath CONSTANT FINAL)
     //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-    Q_PROPERTY(QString csvPath READ csvPath)
-    Q_PROPERTY(QString pdfPath READ pdfPath)
+    Q_PROPERTY(QString csvPath READ csvPath CONSTANT FINAL)
+    Q_PROPERTY(QString pdfPath READ pdfPath CONSTANT FINAL)
     //#endif
 
 public:
     explicit FileSystem(QObject *parent = nullptr);
 
-    inline QString rootPath() const;
+    inline QString rootPath() const { return s_rootPath; }
 
     //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-    inline QString csvPath() const;
-    inline QString pdfPath() const;
+    inline QString csvPath() const
+    {
+        return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("csv"));
+    }
+    inline QString pdfPath() const
+    {
+        return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("pdf"));
+    }
 
     Q_INVOKABLE static QStringList getAvailableDataBasesNames();
     Q_INVOKABLE QStringList getAvailableCsvFileNames() const;
@@ -37,18 +43,5 @@ private:
     static void createQropFolder();
 };
 
-QString FileSystem::rootPath() const
-{
-    return s_rootPath;
-}
-
 //#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-QString FileSystem::csvPath() const
-{
-    return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("csv"));
-}
-QString FileSystem::pdfPath() const
-{
-    return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("pdf"));
-}
 //#endif

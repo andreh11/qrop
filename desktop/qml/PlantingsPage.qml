@@ -57,9 +57,9 @@ Page {
         {text: qsTr("Transplanting plan"), value: "field_transplanting" }
     ]
     property var dateRangeCbModel: [ // needed for Qt < 5.14
-         { text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week },
-         { text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month },
-         { text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year }
+        { text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week },
+        { text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month },
+        { text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year }
     ]
 
 
@@ -77,7 +77,7 @@ Page {
         let idList = [];
         for (let key in selectedIds) {
             if (selectedIds[key])
-                idList.push(key);            
+                idList.push(key);
         }
         return idList;
     }
@@ -114,9 +114,9 @@ Page {
     function doPrintCropPlan(file) {
         let printType  = printTypeCbModel[printTypeComboBox.currentIndex];
         let dateFilter = dateRangeCbModel[printDateRangeComboBox.currentIndex];
-// Can be used from Qt 5.14
-//        let printType  = printTypeComboBox.currentValue;
-//        let dateFilter = printDateRangeComboBox.currentValue;
+        // Can be used from Qt 5.14
+        //        let printType  = printTypeComboBox.currentValue;
+        //        let dateFilter = printDateRangeComboBox.currentValue;
         let month = dateFilter == PlantingsPage.DateFilter.Week  ? QrpDate.currentWeek()  : -1 ;
         let week  = dateFilter == PlantingsPage.DateFilter.Month ? QrpDate.currentMonth() : -1 ;
         Print.printCropPlan(page.year, month, week, file, printType)
@@ -124,7 +124,7 @@ Page {
 
     function openActionCsvDialog(doExport) {
         exportCSV = doExport;
-        if (BuildInfo.isMobileDevice()){
+        if (BuildInfo.isMobileDevice()) {
             if (exportCSV) {
                 csvCropPlanMobileDialog.nameField.visible = true;
                 csvCropPlanMobileDialog.combo.visible = false;
@@ -153,10 +153,10 @@ Page {
                 }
 
             }
-        }
-        else // !BuildInfo.isMobileDevice
+        } else {
             csvCropPlanDialog.open();
-    } // openActionCsvDialog
+        }
+    }
 
     function doActionCSV(file) {
         if (exportCSV) {
@@ -164,22 +164,17 @@ Page {
             if (err.length > 0)
                 window.error(qsTr('Error exporting Crop plan'), err);
             else
-                window.info("", qsTr('Export done.'));
+                window.info(qsTr('Export done.'));
         } else {
             let err = Planting.csvImportPlan(page.year, file);
             if (err.length > 0)
                 window.error(qsTr('Error importing Crop plan'), err);
             else {
                 page.refresh();
-                window.info("", qsTr('Import done.'));
+                window.info(qsTr('Import done.'));
             }
         }
     } // doActionCSV
-
-
-
-
-
 
     Column {
         id: columnLayout
@@ -423,10 +418,10 @@ Page {
                         year: QrpDate.seasonYear(todayDate)
                     } // seasonSpinBox
 
-//                    TitleLabel {
-//                        title: "Revenue"
-//                        text: qsTr("%L1 €").arg(plantingsView.revenue)
-//                    }
+                    //                    TitleLabel {
+                    //                        title: "Revenue"
+                    //                        text: qsTr("%L1 €").arg(plantingsView.revenue)
+                    //                    }
 
                     IconButton {
                         id: menuButton
@@ -539,7 +534,7 @@ Page {
                 height: plantingsView.height
                 width: visible ? Math.min(Units.desktopSideSheetWidth, window.width*0.3) : 0
                 plantingId: page.checks ? page.selectedIdList()[0] : -1
-//                onClosed: photoPane.visible = false
+                //                onClosed: photoPane.visible = false
                 onShowPhoto: {
                     photoPane.photoIdList = Note.photoList(noteId)
                     photoPane.visible = true
@@ -561,14 +556,7 @@ Page {
         } // Pane
     } // columnLayout
 
-
-
-
-
-
-
-
-
+    // Dialogs
 
     PlantingDialog {
         id: plantingDialog
@@ -662,13 +650,12 @@ Page {
 
         onAccepted: {
             if (nameField.text === "") {
-                window.error(qsTr('Empty name'), qsTr('You should provide a name for the pdf file...'));
+                window.error(qsTr('You should provide a name for the pdf file...'));
                 return;
             }
             doPrintCropPlan('file://%1/%2.csv'.arg(FileSystem.pdfPath).arg(nameField.text));
         }
     } // printCropPlanMobileDialog
-
 
     Platform.FileDialog {
         id: csvCropPlanDialog
@@ -691,7 +678,7 @@ Page {
 
         onAccepted: {
             if (exportCSV && nameField.text === "") {
-                window.error(qsTr('Empty name'), qsTr('You should provide a database name...'));
+                window.error(qsTr('You should provide a database name...'));
                 return;
             }
             //MB_TODO: check if the file already exist? shall we overwrite or discard?
@@ -825,14 +812,14 @@ Page {
                 showAddItem: false
                 textRole: "text"
                 model: printTypeCbModel
-// Can be used from Qt 5.14
-//                model: [
-//                    {text: qsTr("Entire plan"),        value: "entire" },
-//                    {text: qsTr("Greenhouse plan"),    value: "greenhouse" },
-//                    {text: qsTr("Field sowing plan"),  value: "field_sowing" },
-//                    {text: qsTr("Transplanting plan"), value: "field_transplanting" }
-//                ]
-//                valueRole: "value"
+                // Can be used from Qt 5.14
+                //                model: [
+                //                    {text: qsTr("Entire plan"),        value: "entire" },
+                //                    {text: qsTr("Greenhouse plan"),    value: "greenhouse" },
+                //                    {text: qsTr("Field sowing plan"),  value: "field_sowing" },
+                //                    {text: qsTr("Transplanting plan"), value: "field_transplanting" }
+                //                ]
+                //                valueRole: "value"
 
             }
 
@@ -844,13 +831,13 @@ Page {
                 showAddItem: false
                 textRole: "text"
                 model: dateRangeCbModel
-// Can be used from Qt 5.14
-//                model: [
-//                    {text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week},
-//                    {text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month},
-//                    {text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year},
-//                ]
-//                valueRole: "value"
+                // Can be used from Qt 5.14
+                //                model: [
+                //                    {text: qsTr("Current week"),  value : PlantingsPage.DateFilter.Week},
+                //                    {text: qsTr("Current month"), value : PlantingsPage.DateFilter.Month},
+                //                    {text: qsTr("Current year"),  value : PlantingsPage.DateFilter.Year},
+                //                ]
+                //                valueRole: "value"
             }
         }
 
@@ -936,9 +923,7 @@ Page {
         }
     } // duplicateCropPlanDialog
 
-
-
-
+    // Shortcuts
 
     ApplicationShortcut {
         sequences: ["Ctrl+N"]
@@ -1020,5 +1005,4 @@ Page {
         enabled: shortcutEnabled && !deleteButton.visible
         onActivated: seasonSpinBox.previousYear();
     }
-
 }

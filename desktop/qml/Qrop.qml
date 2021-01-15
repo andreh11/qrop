@@ -70,9 +70,6 @@ ApplicationWindow {
             currentDatabase = 1;
         if (lastFolder === "")
             lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice()?'':'file://').arg(FileSystem.rootPath);
-
-        info("Debug Popup", "Is mobile device: "+BuildInfo.isMobileDevice()+
-             ", root folder: "+FileSystem.rootPath)
     }
 
     function toggleFullScreen() {
@@ -170,19 +167,28 @@ ApplicationWindow {
         }
     } // doDatabaseAction
     
-    function info(title, text) {
-        infoDialog.title = title;
-        infoDialog.text  = text;
-        infoDialog.open();
-        popupTimer.start();
-    } // info
+    function info(text) {
+        infoSnackbar.text = text;
+        infoSnackbar.open();
+    }
 
-    function error(title, text) {
-        infoDialog.title = '<font color="darkred">'+title+'</font>';
-        infoDialog.text  = '<font color="darkred">'+text+'</font>';
-        infoDialog.open();
-        popupTimer.start();
-    } // error
+    function error(text) {
+        info(text);
+    }
+
+//    function info(title, text) {
+//        infoDialog.title = title;
+//        infoDialog.text  = text;
+//        infoDialog.open();
+//        popupTimer.start();
+//    } // info
+
+//    function error(title, text) {
+//        infoDialog.title = '<font color="darkred">'+title+'</font>';
+//        infoDialog.text  = '<font color="darkred">'+text+'</font>';
+//        infoDialog.open();
+//        popupTimer.start();
+//    } // error
 
     title: "Qrop"
     visible: true
@@ -467,31 +473,39 @@ ApplicationWindow {
         width: 500
     }
 
-    Dialog {
-        id: infoDialog
-        property alias text: infoLbl.text
+    Snackbar {
+        id: infoSnackbar
+        z: 2
+        x: drawer.width + Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        visible: false
+    }
 
-        width: window.width *4/5
-        x: (window.width - width) / 2
-        y: (window.height - height) / 2
+//    Dialog {
+//        id: infoDialog
+//        property alias text: infoLbl.text
 
-        title: "none"
+//        width: window.width *4/5
+//        x: (window.width - width) / 2
+//        y: (window.height - height) / 2
 
-        Label {
-            id: infoLbl
-            width: parent.width - 5
-            wrapMode: Text.WordWrap
-            text: "to set..."
-        }
+//        title: "none"
 
-        Timer {
-            id: popupTimer
-            interval: popupTimeout;
-            running: false;
-            repeat: false
-            onTriggered: infoDialog.close()
-        }
-    } // infoDialog
+//        Label {
+//            id: infoLbl
+//            width: parent.width - 5
+//            wrapMode: Text.WordWrap
+//            text: "to set..."
+//        }
+
+//        Timer {
+//            id: popupTimer
+//            interval: popupTimeout;
+//            running: false;
+//            repeat: false
+//            onTriggered: infoDialog.close()
+//        }
+//    } // infoDialog
 
     Platform.FileDialog {
         id: databaseDialog
