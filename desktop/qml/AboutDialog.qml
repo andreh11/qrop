@@ -56,8 +56,8 @@ Popup {
                 width: parent.width
                 text: "Qrop"
                 font.family: "Roboto Regular"
-                wrapMode: Label.Wrap
                 font.pixelSize:  Units.fontSizeHeadline
+                wrapMode: Label.Wrap
                 horizontalAlignment: Text.AlignHCenter
             }
 

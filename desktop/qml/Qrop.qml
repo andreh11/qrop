@@ -130,7 +130,7 @@ ApplicationWindow {
                                 FileSystem.rootPath);
                     databaseMobileDialog.open();
                 }
-            } else { // !Qrop.DB_ACTION.OPEN
+            } else {
                 databaseMobileDialog.nameField.visible = true;
                 databaseMobileDialog.combo.visible = false;
                 if (action === Qrop.DB_ACTION.NEW) {
@@ -143,19 +143,18 @@ ApplicationWindow {
                 databaseMobileDialog.text = qsTr("Database name:");
                 databaseMobileDialog.open();
             }
-        }
-        else { // !BuildInfo.isMobileDevice
+        } else {
             databaseDialog.fileMode = action === Qrop.DB_ACTION.OPEN ?
                         Platform.FileDialog.OpenFile : Platform.FileDialog.SaveFile;
             databaseDialog.open();
         }
-    } // openDatabaseActionDialog
+    }
 
     function doDatabaseAction(file){
 //        print("DB Action: "+dbAction);
-        if (dbAction == Qrop.DB_ACTION.SAVE) // NOT === just a double == !!!
+        if (dbAction == Qrop.DB_ACTION.SAVE) { // NOT === just a double == !!!
             Database.copy(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
-        else {
+        } else {
             if (modifyMainDatabase) {
                 firstDatabaseFile = file;
                 currentDatabase = 1;
@@ -173,22 +172,8 @@ ApplicationWindow {
     }
 
     function error(text) {
-        info(text);
+        info("<font color='darkred'>%1</font>".arg(text));
     }
-
-//    function info(title, text) {
-//        infoDialog.title = title;
-//        infoDialog.text  = text;
-//        infoDialog.open();
-//        popupTimer.start();
-//    } // info
-
-//    function error(title, text) {
-//        infoDialog.title = '<font color="darkred">'+title+'</font>';
-//        infoDialog.text  = '<font color="darkred">'+text+'</font>';
-//        infoDialog.open();
-//        popupTimer.start();
-//    } // error
 
     title: "Qrop"
     visible: true
@@ -481,32 +466,6 @@ ApplicationWindow {
         visible: false
     }
 
-//    Dialog {
-//        id: infoDialog
-//        property alias text: infoLbl.text
-
-//        width: window.width *4/5
-//        x: (window.width - width) / 2
-//        y: (window.height - height) / 2
-
-//        title: "none"
-
-//        Label {
-//            id: infoLbl
-//            width: parent.width - 5
-//            wrapMode: Text.WordWrap
-//            text: "to set..."
-//        }
-
-//        Timer {
-//            id: popupTimer
-//            interval: popupTimeout;
-//            running: false;
-//            repeat: false
-//            onTriggered: infoDialog.close()
-//        }
-//    } // infoDialog
-
     Platform.FileDialog {
         id: databaseDialog
 
@@ -522,18 +481,13 @@ ApplicationWindow {
     MobileFileDialog {
         id: databaseMobileDialog
 
-//        width: window.width *4/5
         x: (window.width - width) / 2
         y: (window.height - height) / 2
 
         onAccepted: {
-            if (dbAction != Qrop.DB_ACTION.OPEN && nameField.text === "") {
-                error(qsTr('Empty name'), qsTr('You should provide a database name...'));
-                return;
-            }
-//MB_TODO: check if the file already exist? shall we overwrite or discard?
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
             let dbName = dbAction == Qrop.DB_ACTION.OPEN ? combo.currentText : nameField.text;
             doDatabaseAction('file://%1/%2.sqlite'.arg(FileSystem.rootPath).arg(dbName));
         }
-    } // databaseMobileDialog
+    }
 }

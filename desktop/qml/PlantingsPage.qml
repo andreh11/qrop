@@ -112,13 +112,15 @@ Page {
     }
 
     function doPrintCropPlan(file) {
-        let printType  = printTypeCbModel[printTypeComboBox.currentIndex];
-        let dateFilter = dateRangeCbModel[printDateRangeComboBox.currentIndex];
+        console.log("FILE", file)
+        let printType  = printTypeCbModel[printTypeComboBox.currentIndex].value;
+        let dateFilter = dateRangeCbModel[printDateRangeComboBox.currentIndex].value;
         // Can be used from Qt 5.14
         //        let printType  = printTypeComboBox.currentValue;
         //        let dateFilter = printDateRangeComboBox.currentValue;
-        let month = dateFilter == PlantingsPage.DateFilter.Week  ? QrpDate.currentWeek()  : -1 ;
-        let week  = dateFilter == PlantingsPage.DateFilter.Month ? QrpDate.currentMonth() : -1 ;
+        let month = dateFilter == PlantingsPage.DateFilter.Month  ? QrpDate.currentMonth() : -1 ;
+        let week  = dateFilter == PlantingsPage.DateFilter.Week ? QrpDate.currentWeek() : -1 ;
+        console.log("dateFilter", dateFilter, "printType", printType, "MONTH", month, "WEEK", week)
         Print.printCropPlan(page.year, month, week, file, printType)
     }
 
@@ -128,17 +130,17 @@ Page {
             if (exportCSV) {
                 csvCropPlanMobileDialog.nameField.visible = true;
                 csvCropPlanMobileDialog.combo.visible = false;
-                csvCropPlanMobileDialog.title = qsTr('Export crop plan');
-                csvCropPlanMobileDialog.text = qsTr("csv file name:");
+                csvCropPlanMobileDialog.title = qsTr('Export Crop Plan');
+                csvCropPlanMobileDialog.text = qsTr("Please type a name for the CSV.");
                 csvCropPlanMobileDialog.open();
             } else {
                 let availableCSVs = FileSystem.getAvailableCsvFileNames();
-                if (availableCSVs.length === 0)
-                    error(qsTr('There are no csv file to import...'),
+                if (availableCSVs.length === 0) {
+                    error(qsTr('There are no CSV file to import...'),
                           '%1: <b>%2</b>'.arg(
                               qsTr("They should be in the following folder")).arg(
                               FileSystem.csvPath));
-                else {
+                } else {
                     for (var i=0; i < availableCSVs.length; ++i)
                         print("[MB_TRACE] Available csv: "+availableCSVs[i]);
                     csvCropPlanMobileDialog.nameField.visible = false;
@@ -162,13 +164,13 @@ Page {
         if (exportCSV) {
             let err = Planting.csvExportPlan(page.year, file);
             if (err.length > 0)
-                window.error(qsTr('Error exporting Crop plan'), err);
+                window.error(qsTr('Error exporting crop plan: %s'.arg(err)));
             else
                 window.info(qsTr('Export done.'));
         } else {
             let err = Planting.csvImportPlan(page.year, file);
             if (err.length > 0)
-                window.error(qsTr('Error importing Crop plan'), err);
+                window.error(qsTr('Error importing crop plan: %s'.arg(err)))
             else {
                 page.refresh();
                 window.info(qsTr('Import done.'));
@@ -645,14 +647,10 @@ Page {
 
         nameField.visible : true;
         combo.visible : false;
-        title : qsTr('Print crop plan');
-        text : qsTr("pdf file name:");
+        title : qsTr("Print crop plan");
+        text : qsTr("Please type a name for the PDF.");
 
         onAccepted: {
-            if (nameField.text === "") {
-                window.error(qsTr('You should provide a name for the pdf file...'));
-                return;
-            }
             doPrintCropPlan('file://%1/%2.csv'.arg(FileSystem.pdfPath).arg(nameField.text));
         }
     } // printCropPlanMobileDialog
@@ -677,10 +675,6 @@ Page {
         y: buttonRectangle.height
 
         onAccepted: {
-            if (exportCSV && nameField.text === "") {
-                window.error(qsTr('You should provide a database name...'));
-                return;
-            }
             //MB_TODO: check if the file already exist? shall we overwrite or discard?
             let csvName = exportCSV ? nameField.text : combo.currentText;
             doActionCSV('file://%1/%2.csv'.arg(FileSystem.csvPath).arg(csvName));
