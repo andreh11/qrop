@@ -5,19 +5,16 @@ matrix:
     if: branch = master AND tag IS present
     env:
     - QROP_PLATFORM="osx"
-    - PATH="/usr/local/opt/qt/bin:$PATH"
-    - LDFLAGS="-L/usr/local/opt/qt/lib"
-    - CPPFLAGS="-I/usr/local/opt/qt/include"
-    - PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+    - QT_ROOT=${TRAVIS_BUILD_DIR}/Qt/5.12.10/clang_64
+    - QT_QPA_PLATFORM_PLUGIN_PATH=${QT_ROOT}/plugins
+    - PATH=${QT_ROOT}/bin:$PATH
+    - CMAKE_PREFIX_PATH=${QT_ROOT}/lib/cmake
+    - LDFLAGS="-L${QT_ROOT}/lib"
+    - CPPFLAGS="-I${QT_ROOT}/include"
+    - PKG_CONFIG_PATH="${QT_ROOT}/lib/pkgconfig"
     - QROP_BUILD_TYPE="release"
     osx_image: xcode10.2
     compiler: clang
-    addons:
-      homebrew:
-        packages:
-        - qt
-        - tree
-        update: true
   - os: osx
     if: branch = master AND tag IS blank
     env:
@@ -26,19 +23,12 @@ matrix:
     - QT_QPA_PLATFORM_PLUGIN_PATH=${QT_ROOT}/plugins
     - PATH=${QT_ROOT}/bin:$PATH
     - CMAKE_PREFIX_PATH=${QT_ROOT}/lib/cmake
-    # - PATH="/usr/local/opt/qt/bin:$PATH"
     - LDFLAGS="-L${QT_ROOT}/lib"
     - CPPFLAGS="-I${QT_ROOT}/include"
     - PKG_CONFIG_PATH="${QT_ROOT}/lib/pkgconfig"
     - QROP_BUILD_TYPE="snapshot"
     osx_image: xcode10.2
     compiler: clang
-    addons:
-      homebrew:
-        packages:
-        # - qt
-        - tree
-        update: true
 
 script:
   - echo "[Building]"
