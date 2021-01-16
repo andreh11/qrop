@@ -31,7 +31,9 @@ public:
 
 private:
     static QString s_rootPath;
+//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
     static const QMap<QString, QString> s_subFolders;
+//#endif
 };
 
 QString FileSystem::rootPath() const { return s_rootPath; }
