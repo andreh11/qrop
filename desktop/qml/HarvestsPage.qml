@@ -61,72 +61,16 @@ Page {
         harvestView.contentY = currentY
     }
 
+    function doPrint(file) {
+        Print.printHarvests(page.year, file)
+    }
+
     title: qsTr("Harvests")
     padding: 0
 
     Material.background: Material.color(Material.Grey, Material.Shade200)
 
     onTableSortColumnChanged: tableSortOrder = "descending"
-
-    ApplicationShortcut {
-        sequences: ["Ctrl+N"]; enabled: shortcutEnabled; onActivated: addButton.clicked()
-    }
-
-    ApplicationShortcut {
-        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: searchField.forceActiveFocus();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
-    }
-
-    ApplicationShortcut {
-        sequences: ["Up", "Down", "Left", "Right"]
-        enabled: shortcutEnabled && !harvestView.activeFocus
-        onActivated: {
-            harvestView.currentIndex = 0
-            harvestView.forceActiveFocus();
-        }
-    }
-
-    Snackbar {
-        id: addHarvestSnackbar
-        z: 2
-        x: Units.mediumSpacing
-        y: parent.height - height - Units.mediumSpacing
-        text: qsTr("Harvest added")
-        visible: false
-    }
-
-    Snackbar {
-        id: editHarvestsSnackBar
-        z: 2
-        x: Units.mediumSpacing
-        y: parent.height - height - Units.mediumSpacing
-        text: qsTr("Harvest modified")
-        visible: false
-    }
-
-    Platform.FileDialog {
-        id: saveDialog
-        fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        defaultSuffix: "pdf"
-        nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted: Print.printHarvests(page.year, file)
-    }
 
     Pane {
         anchors.fill: parent
@@ -246,7 +190,8 @@ Page {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Print the harvests list")
 
-                onClicked: saveDialog.open()
+                onClicked: BuildInfo.isMobileDevice() ? printHarvestsMobileDialog.open()
+                                                      : printHarvestsDialog.open()
             }
         }
 
@@ -504,6 +449,88 @@ Page {
                     }
                 }
             }
+        }
+    }
+
+    // Dialogs
+
+    Snackbar {
+        id: addHarvestSnackbar
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Harvest added")
+        visible: false
+    }
+
+    Snackbar {
+        id: editHarvestsSnackBar
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Harvest modified")
+        visible: false
+    }
+
+    Platform.FileDialog {
+        id: printHarvestsDialog
+        defaultSuffix: "pdf"
+        folder: Qt.resolvedUrl(window.lastFolder)
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: doPrint(file);
+    }
+
+    MobileFileDialog {
+        id: printHarvestsMobileDialog
+
+        title : qsTr("Print the harvests list")
+        text : qsTr("Please type a name for the PDF.")
+
+        x: page.width - width
+        y: buttonRectangle.height
+
+        nameField.visible : true;
+        combo.visible : false;
+
+        onAccepted: {
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            doPrint('file://%1/%2.pdf'.arg(FileSystem.pdfPath).arg(nameField.text));
+        }
+    }
+
+    // Shortcuts
+
+    ApplicationShortcut {
+        sequences: ["Ctrl+N"]; enabled: shortcutEnabled; onActivated: addButton.clicked()
+    }
+
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: searchField.forceActiveFocus();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
+    }
+
+    ApplicationShortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: shortcutEnabled && !harvestView.activeFocus
+        onActivated: {
+            harvestView.currentIndex = 0
+            harvestView.forceActiveFocus();
         }
     }
 }
