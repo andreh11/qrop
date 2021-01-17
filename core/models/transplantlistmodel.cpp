@@ -26,16 +26,16 @@ TransplantListModel::TransplantListModel(QObject *parent, const QString &tableNa
     setSortColumn("crop_id");
 }
 
-void TransplantListModel::csvExport(const QUrl &path)
+QString TransplantListModel::csvExport(const QUrl &path)
 {
     QFile f(path.toLocalFile());
 
     if (f.exists())
         f.remove();
 
-    if (!f.open(QIODevice::ReadWrite)) {
-        qDebug() << "Cannot open file";
-        return;
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "[MB_TRACE][TransplantListModel::csvExport] can't open file: " << path.toString();
+        return tr("Can't write file: %1").arg(path.toString());
     }
 
     QTextStream ts(&f);
@@ -64,6 +64,7 @@ void TransplantListModel::csvExport(const QUrl &path)
         }
         ts << "\n";
     }
+    return QString();
 }
 
 bool TransplantListModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

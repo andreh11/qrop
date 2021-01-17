@@ -26,16 +26,16 @@ SeedListModel::SeedListModel(QObject *parent, const QString &tableName)
     setSortColumn("crop_id");
 }
 
-void SeedListModel::csvExport(const QUrl &path)
+QString SeedListModel::csvExport(const QUrl &path)
 {
     QFile f(path.toLocalFile());
 
     if (f.exists())
         f.remove();
 
-    if (!f.open(QIODevice::ReadWrite)) {
-        qDebug() << "Cannot open file";
-        return;
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "[MB_TRACE][SeedListModel::csvExport] can't open file: " << path.toString();
+        return tr("Can't write file: %1").arg(path.toString());
     }
 
     QTextStream ts(&f);
@@ -62,6 +62,8 @@ void SeedListModel::csvExport(const QUrl &path)
         }
         ts << "\n";
     }
+
+    return QString();
 }
 
 bool SeedListModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

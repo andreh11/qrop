@@ -1025,7 +1025,7 @@ QString Planting::csvExportPlan(int year, const QUrl &path) const
         f.remove();
 
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "[MB_TRACE][Planting::csvExportPlan] can't open file...";
+        qDebug() << "[MB_TRACE][Planting::csvExportPlan] can't open file: " << path.toString();
         return tr("Can't write file: %1").arg(path.toString());
     }
 
