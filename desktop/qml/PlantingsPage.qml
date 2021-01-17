@@ -164,13 +164,13 @@ Page {
         if (exportCSV) {
             let err = Planting.csvExportPlan(page.year, file);
             if (err.length > 0)
-                window.error(qsTr('Error exporting crop plan: %s'.arg(err)));
+                window.error(qsTr('Error exporting crop plan: %1'.arg(err)));
             else
                 window.info(qsTr('Export done.'));
         } else {
             let err = Planting.csvImportPlan(page.year, file);
             if (err.length > 0)
-                window.error(qsTr('Error importing crop plan: %s'.arg(err)))
+                window.error(qsTr('Error importing crop plan: %1'.arg(err)))
             else {
                 page.refresh();
                 window.info(qsTr('Import done.'));
@@ -651,7 +651,7 @@ Page {
         text : qsTr("Please type a name for the PDF.");
 
         onAccepted: {
-            doPrintCropPlan('file://%1/%2.csv'.arg(FileSystem.pdfPath).arg(nameField.text));
+            doPrintCropPlan('file://%1/%2.pdf'.arg(FileSystem.pdfPath).arg(nameField.text));
         }
     } // printCropPlanMobileDialog
 
