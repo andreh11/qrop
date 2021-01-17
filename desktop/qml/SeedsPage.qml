@@ -96,7 +96,6 @@ Page {
                         exportCSV ? "CSV" : "PDF");
             exportMobileDialog.open();
         } else {
-            exportDialog.file = "";
             exportDialog.open();
         }
     }
