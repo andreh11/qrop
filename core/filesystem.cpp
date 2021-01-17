@@ -2,23 +2,27 @@
 #include <QStandardPaths>
 #include <QDebug>
 
-//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #define APP_NAME "Qrop"
 #include <QDir>
 #if defined(Q_OS_ANDROID)
 #include <QtAndroidExtras/QtAndroid>
 #endif
+#endif
 
 QString FileSystem::s_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 QString FileSystem::s_qropPath = QString("%1/%2").arg(s_rootPath, APP_NAME);
 const QMap<QString, QString> FileSystem::s_subFolders { { "csv", "csv" }, { "pdf", "pdf" } };
+#endif
 
 FileSystem::FileSystem(QObject *parent)
     : QObject(parent)
 {
 }
 
-void FileSystem::createDocumentsFolder()
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+bool FileSystem::createDocumentsFolder()
 {
     if (QDir(s_rootPath).exists())
         return;
@@ -87,4 +91,4 @@ QStringList FileSystem::getAvailableCsvFileNames() const
         csvNames << fi.completeBaseName();
     return csvNames;
 }
-//#endif // #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+#endif // #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
