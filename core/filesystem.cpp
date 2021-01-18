@@ -12,7 +12,6 @@
 
 QString FileSystem::s_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-QString FileSystem::s_qropPath = QString("%1/%2").arg(s_rootPath, APP_NAME);
 const QMap<QString, QString> FileSystem::s_subFolders { { "csv", "csv" }, { "pdf", "pdf" } };
 #endif
 
@@ -24,33 +23,40 @@ FileSystem::FileSystem(QObject *parent)
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 bool FileSystem::createDocumentsFolder()
 {
-    if (QDir(s_rootPath).exists())
-        return;
+    QFileInfo fi(s_rootPath);
+    if (fi.exists()) {
+        if (fi.isDir())
+            return true;
+        else {
+            qCritical() << "Documents exists but is a File...";
+            return false;
+        }
+    }
 
     qDebug() << "Creating Documents folder: " << s_rootPath;
-
-    QFileInfo fi(s_rootPath);
     QDir dir(fi.absolutePath());
-
     if (!dir.mkdir(fi.fileName())) {
         qCritical() << "Couldn't create Documents folder...";
         return;
     }
 }
 
-void FileSystem::createQropFolder()
+bool FileSystem::createQropFolder()
 {
-    QFileInfo fi(s_qropPath);
+    QFileInfo fi(QString("%1/%2").arg(s_rootPath, APP_NAME));
     if (!fi.exists()) {
         QDir dir(s_rootPath);
-        if (!dir.mkdir(APP_NAME))
-            qCritical() << "Couldn't create folder: " << fi.absoluteFilePath();
+        if (!dir.mkdir(APP_NAME)) {
+            qCritical() << "Couldn't create Qrop folder: " << fi.absoluteFilePath();
+            return false;
+        }
     }
+    s_rootPath = fi.absoluteFilePath();
+    return true;
 }
 
 void FileSystem::createMobileRootFilesDirectories()
 {
-    s_rootPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #if defined(Q_OS_ANDROID)
     QtAndroid::PermissionResultMap res =
             QtAndroid::requestPermissionsSync({ "android.permission.WRITE_EXTERNAL_STORAGE" });
@@ -60,13 +66,9 @@ void FileSystem::createMobileRootFilesDirectories()
     }
 #endif
 
-    createDocumentsFolder();
-    createQropFolder();
-
-    // 3.: create all subFolders
-    QFileInfo fi(s_qropPath);
-    if (fi.exists()) {
-        QDir dir(s_qropPath);
+    if (createDocumentsFolder() && createQropFolder()) {
+        // create all subFolders
+        QDir dir(s_rootPath);
         for (const auto &folder : s_subFolders.values())
             dir.mkdir(folder);
     }

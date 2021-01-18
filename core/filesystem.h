@@ -38,7 +38,6 @@ public:
 private:
     static QString s_rootPath;
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-    static QString s_qropPath;
     static const QMap<QString, QString> s_subFolders;
     static bool createDocumentsFolder();
     static bool createQropFolder();

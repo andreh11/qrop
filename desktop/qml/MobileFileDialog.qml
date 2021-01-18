@@ -9,13 +9,16 @@ Dialog {
     property alias combo: mobileCombo
     property alias nameField: mobileField
     property alias text: mobileLbl.text
-    property bool formAccepted: mobileField.text
 
     onAboutToShow: mobileField.clear()
 
     parent: Overlay.overlay
     focus: true
     modal: true
+
+    function enableValidation(){
+        return mobileCombo.visible || mobileField.text.length > 0;
+    }
 
     ColumnLayout {
         spacing: 20
@@ -45,9 +48,9 @@ Dialog {
         Button {
             text: qsTr("OK")
             flat: true
-            enabled: formAccepted
             Material.foreground: Material.accent
-            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            onClicked: enableValidation() ? accept()
+                                          : window.error(qsTr("Please provide a file name..."));
         }
         Button {
             text: qsTr("Cancel")
