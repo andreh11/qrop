@@ -163,8 +163,8 @@ Page {
                         width: 300
                         margins: 0
 
-                        onClicked: BuildInfo.isMobileDevice() ? saveCalendarDialog.open()
-                                                              : saveCalendarMobileDialog.open()
+                        onAccepted: BuildInfo.isMobileDevice() ? saveCalendarDialog.open()
+                                                               : saveCalendarMobileDialog.open()
 
                         ColumnLayout {
                             width: parent.width
