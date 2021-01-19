@@ -1,4 +1,3 @@
-
 #include <QtQuickTest>
 
 #include <QObject>
@@ -7,14 +6,13 @@
 
 #include "qropdoublevalidator.h"
 
-
 class Setup : public QObject
 {
     Q_OBJECT
 
 public:
-    Setup() {}
-    virtual ~Setup() {}
+    Setup() { }
+    virtual ~Setup() { }
 
 public slots:
     void qmlEngineAvailable(QQmlEngine *engine)

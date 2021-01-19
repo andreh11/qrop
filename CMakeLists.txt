@@ -131,6 +131,10 @@ set(SOURCE_FILES
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
+
+# QROP_SOURCE may be used in subdirs (tests)
+set(QROP_SOURCE ${CMAKE_SOURCE_DIR})
+
 # Tests
 set(ENABLE_TESTS TRUE CACHE BOOL "Build unit tests?")
 if (ENABLE_TESTS)
