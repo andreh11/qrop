@@ -649,6 +649,7 @@ Page {
         combo.visible : false;
         title : qsTr("Print crop plan");
         text : qsTr("Please type a name for the PDF.");
+        acceptText: qsTr("Print")
 
         onAccepted: {
             doPrintCropPlan('file://%1/%2.pdf'.arg(FileSystem.pdfPath).arg(nameField.text));
@@ -673,6 +674,7 @@ Page {
 
         x: page.width - width
         y: buttonRectangle.height
+        acceptText: qsTr("Export")
 
         onAccepted: {
             //MB_TODO: check if the file already exist? shall we overwrite or discard?

@@ -564,6 +564,7 @@ Page {
 
         nameField.visible : true;
         combo.visible : false;
+        acceptText: exportCSV ? qsTr("Export")  : qsTr("Print")
 
         onAccepted: {
             //MB_TODO: check if the file already exist? shall we overwrite or discard?

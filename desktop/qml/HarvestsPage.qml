@@ -490,6 +490,7 @@ Page {
 
         title : qsTr("Print the harvests list")
         text : qsTr("Please type a name for the PDF.")
+        acceptText: qsTr("Print")
 
         x: page.width - width
         y: buttonRectangle.height

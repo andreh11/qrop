@@ -9,9 +9,22 @@ Dialog {
     property alias combo: mobileCombo
     property alias nameField: mobileField
     property alias text: mobileLbl.text
+    property alias acceptText: acceptButton.text
     property bool formAccepted: mobileCombo.visible || mobileField.acceptableInput
 
-    onAboutToShow: mobileField.clear()
+    onAboutToShow: {
+        mobileField.clear();
+        mobileField.hasError = false;
+    }
+
+    function doValidation() {
+        if (formAccepted)
+            root.accept();
+        else {
+            mobileField.hasError = true;
+            mobileField.errorText = qsTr("Filename can't be empty");
+        }
+    }
 
     parent: Overlay.overlay
     focus: true
@@ -33,13 +46,11 @@ Dialog {
             id: mobileField
             focus: true
             Layout.fillWidth: true
-            hasError: !acceptableInput
-            errorText: qsTr("Filename can't be empty")
             validator: RegExpValidator { regExp: /\S.*/ }
 
             Keys.onReturnPressed: {
-                if (formAccepted)
-                    root.accept();
+                nextItemInFocusChain().forceActiveFocus(); // to force validation
+                doValidation();
             }
             Keys.onEscapePressed: root.reject()
             Keys.onBackPressed: root.reject() // especially necessary on Android
@@ -53,10 +64,12 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
+            id: acceptButton
+            focus: true
             text: qsTr("OK")
             flat: true
-            enabled: formAccepted
             Material.foreground: Material.accent
+            onClicked: doValidation();
         }
         Button {
             text: qsTr("Cancel")

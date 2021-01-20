@@ -17,20 +17,20 @@ class CORESHARED_EXPORT FileSystem : public QObject
 public:
     explicit FileSystem(QObject *parent = nullptr);
 
-    inline QString rootPath() const { return s_rootPath; }
+    inline static QString rootPath() { return s_rootPath; }
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-    inline QString csvPath() const
+    inline static QString csvPath()
     {
         return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("csv"));
     }
-    inline QString pdfPath() const
+    inline static QString pdfPath()
     {
         return QString("%1/%2").arg(s_rootPath).arg(s_subFolders.value("pdf"));
     }
 
     Q_INVOKABLE static QStringList getAvailableDataBasesNames();
-    Q_INVOKABLE QStringList getAvailableCsvFileNames() const;
+    Q_INVOKABLE static QStringList getAvailableCsvFileNames();
 
     static void createMobileRootFilesDirectories();
 #endif

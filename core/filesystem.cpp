@@ -84,7 +84,7 @@ QStringList FileSystem::getAvailableDataBasesNames()
     return dbNames;
 }
 
-QStringList FileSystem::getAvailableCsvFileNames() const
+QStringList FileSystem::getAvailableCsvFileNames()
 {
     QStringList csvNames;
     QDir dir(csvPath());
