@@ -92,8 +92,8 @@ Page {
                 exportMobileDialog.title = seedsRadioButton.checked ? qsTr("Print the seed order list")
                                                               : qsTr("Print the transplant order list");
             }
-            exportMobileDialog.text = qsTr("Please type a name for the %1.").arg(
-                        exportCSV ? "CSV" : "PDF");
+            exportMobileDialog.text = qsTr("Please type a name for the %1.").arg(exportCSV ? "CSV"
+                                                                                           : "PDF");
             exportMobileDialog.open();
         } else {
             exportDialog.open();
@@ -110,8 +110,7 @@ Page {
             }
             if (err.length > 0)
                 window.error(qsTr('Error exporting CSV: %1'.arg(err)));
-        }
-        else {
+        } else {
             if (seedsRadioButton.checked) {
                 Print.printSeedList(page.year, file, monthRangeButton.checked
                                     ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
@@ -139,8 +138,6 @@ Page {
     Material.background: Units.pageColor
 
     onTableSortColumnChanged: tableSortOrder = "descending"
-
-
 
     SeedListModel {
         id: seedListModel

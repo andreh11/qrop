@@ -190,8 +190,12 @@ Page {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Print the harvests list")
 
-                onClicked: BuildInfo.isMobileDevice() ? printHarvestsMobileDialog.open()
-                                                      : printHarvestsDialog.open()
+                onClicked: {
+                    if (BuildInfo.isMobileDevice())
+                        printHarvestsMobileDialog.open();
+                    else
+                        printHarvestsDialog.open();
+                }
             }
         }
 

@@ -163,8 +163,12 @@ Page {
                         width: 300
                         margins: 0
 
-                        onAccepted: BuildInfo.isMobileDevice() ? saveCalendarDialog.open()
-                                                               : saveCalendarMobileDialog.open()
+                        onAccepted: {
+                            if (BuildInfo.isMobileDevice())
+                                saveCalendarMobileDialog.open();
+                            else
+                                saveCalendarDialog.open();
+                        }
 
                         ColumnLayout {
                             width: parent.width
@@ -345,8 +349,8 @@ Page {
     MobileFileDialog {
         id: saveCalendarMobileDialog
 
-        title : qsTr("Print the task calendar")
-        text : qsTr("Please type a name for the PDF.")
+        title: qsTr("Print the task calendar")
+        text: qsTr("Please type a name for the PDF.")
 
         x: page.width - width
         y: buttonRectangle.height

@@ -69,7 +69,7 @@ ApplicationWindow {
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
-            lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice()?'':'file://').arg(FileSystem.rootPath);
+            lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
     }
 
     function toggleFullScreen() {

@@ -304,9 +304,12 @@ Page {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Print the crop map")
 
-                onClicked: BuildInfo.isMobileDevice() ? saveCropMapMobileDialog.open()
-                                                      : saveCropMapDialog.open()
-
+                onClicked: {
+                    if (BuildInfo.isMobileDevice())
+                        saveCropMapMobileDialog.open();
+                    else
+                        saveCropMapDialog.open();
+                }
             }
         }
     }
