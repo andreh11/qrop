@@ -1498,17 +1498,17 @@
 <context>
     <name>MobileFileDialog</name>
     <message>
-        <location filename="../desktop/qml/MobileFileDialog.qml" line="49"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/MobileFileDialog.qml" line="53"/>
-        <source>Please provide a file name...</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/MobileFileDialog.qml" line="37"/>
+        <source>Filename can&apos;t be empty</source>
+        <translation>Le nom de fichier ne peut être vide</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MobileFileDialog.qml" line="56"/>
+        <source>OK</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MobileFileDialog.qml" line="62"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1707,7 +1707,7 @@
     <message>
         <location filename="../core/dbutils/planting.cpp" line="799"/>
         <source>Wrong year (must be between 1000 and 3000)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="804"/>
