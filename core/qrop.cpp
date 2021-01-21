@@ -1,5 +1,7 @@
 #include <QDebug>
 #include <QUrl>
+#include <QTranslator>
+#include <QCoreApplication>
 
 #include "qrop.h"
 #include "dbutils/db.h"
@@ -8,6 +10,7 @@ Qrop::Qrop(QObject *parent)
     : QObject(parent)
     , Singleton<Qrop>()
     , m_settings()
+    , m_translator(new QTranslator)
     , m_db(new Database(this))
     , m_errors()
 {
@@ -15,17 +18,24 @@ Qrop::Qrop(QObject *parent)
 
 Qrop::~Qrop()
 {
-    m_db->close();
     m_settings.sync();
+
+    m_db->close();
+    delete m_db;
+    delete m_translator;
 }
 
 int Qrop::init()
 {
+    dumpSettings();
+
     // can we load SQLite driver?
     if (!m_db->addDefaultSqliteDatabase()) {
         qCritical() << "Cannot load SQLite driver...";
         return 1;
     }
+
+    installTranslator();
 
     // load current database (or default one)
     loadCurrentDatabase();
@@ -39,6 +49,7 @@ bool Qrop::loadDatabase(const QUrl &url)
         return m_db->connectToDatabase(url);
     else if (url.scheme().startsWith("http"))
         return false; // MB_TODO: load from json request
+    return false;
 }
 
 QUrl Qrop::defaultDatabaseUrl() const
@@ -65,4 +76,29 @@ void Qrop::loadCurrentDatabase()
                             defaultDatabaseUrl.toString());
         loadDatabase(defaultDatabaseUrl);
     }
+}
+
+void Qrop::installTranslator()
+{
+    QString lang = QLocale::system().name(),
+            preferredLanguage = m_settings.value("preferredLanguage", "system").toString();
+    qDebug() << "LANG: " << lang << ", preferredLanguage: " << preferredLanguage;
+
+    if (preferredLanguage == "system")
+        m_translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
+    else
+        m_translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
+
+    qApp->installTranslator(m_translator);
+}
+
+void Qrop::dumpSettings()
+{
+    qDebug() << "[dumpSettings] firstDatabaseFile: "
+             << m_settings.value("firstDatabaseFile", "NOT_SET").toString();
+    qDebug() << "[dumpSettings] secondDatabaseFile: "
+             << m_settings.value("secondDatabaseFile", "NOT_SET").toString();
+    qDebug() << "[dumpSettings] lastFolder: " << m_settings.value("lastFolder", "NOT_SET").toString();
+    qDebug() << "[dumpSettings] currentDatabase: "
+             << m_settings.value("currentDatabase", "NOT_SET").toString();
 }

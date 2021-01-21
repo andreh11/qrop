@@ -68,27 +68,12 @@
 #include "timevalidator.h"
 
 #include <QApplication>
-#include <QDoubleValidator>
 #include <QFileSystemModel>
 #include <QFontDatabase>
-#include <QHash>
 #include <QIcon>
-#include <QLibraryInfo>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQuickView>
-#include <QSettings>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QStandardPaths>
-#include <QTranslator>
-#include <QVariantMap>
 #include <QQmlFileSelector>
-
-//#if defined(Q_OS_ANDROID)
-//#include <QtAndroid>
-//#include <QAndroidJniObject>
-//#endif
 
 void registerFonts()
 {
@@ -145,11 +130,11 @@ void registerTypes()
                                             return new BuildInfo();
                                         });
     qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
-                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                            Q_UNUSED(engine)
-                                            Q_UNUSED(scriptEngine)
-                                            return new FileSystem();
-                                        });
+                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                             Q_UNUSED(engine)
+                                             Q_UNUSED(scriptEngine)
+                                             return new FileSystem();
+                                         });
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -315,26 +300,6 @@ void registerTypes()
                                               });
 }
 
-void installTranslator()
-{
-    auto translator(new QTranslator);
-    const QString &lang = QLocale::system().name();
-    QSettings settings;
-    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
-    qDebug() << "LANG " << lang << preferredLanguage;
-    qDebug() << "[MB_TRACE] firstDatabaseFile: " << settings.value("firstDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] secondDatabaseFile: " << settings.value("secondDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] lastFolder: " << settings.value("lastFolder", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] currentDatabase: " << settings.value("currentDatabase", "NOT_SET").toString();
-
-    if (preferredLanguage == "system")
-        translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
-    else
-        translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
-
-    QApplication::installTranslator(translator);
-}
-
 int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
@@ -348,13 +313,12 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.4.5");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     FileSystem::createMobileRootFilesDirectories();
 #endif
 
     registerFonts();
     registerTypes();
-    installTranslator();
 
     Qrop *qrop = Qrop::getInstance();
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::kill);

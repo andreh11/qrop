@@ -6,6 +6,7 @@
 #include "singleton.h"
 
 class Database;
+class QTranslator;
 
 class Qrop : public QObject, public Singleton<Qrop>
 {
@@ -14,6 +15,7 @@ class Qrop : public QObject, public Singleton<Qrop>
 
 private:
     QSettings m_settings;
+    QTranslator *m_translator;
     Database *const m_db;
     QStringList m_errors;
 
@@ -30,6 +32,7 @@ public:
     int init();
 
     Q_INVOKABLE bool loadDatabase(const QUrl &url);
+    Q_INVOKABLE QUrl defaultDatabaseUrl() const;
 
     inline bool hasErrors() const {return m_errors.size() != 0;}
     inline void showErrors() {
@@ -39,6 +42,9 @@ public:
 
 private:
     void loadCurrentDatabase();
+    void installTranslator();
+
+    void dumpSettings();
 
 };
 
