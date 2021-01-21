@@ -37,8 +37,9 @@ bool FileSystem::createDocumentsFolder()
     QDir dir(fi.absolutePath());
     if (!dir.mkdir(fi.fileName())) {
         qCritical() << "Couldn't create Documents folder...";
-        return;
+        return false;
     }
+    return true;
 }
 
 bool FileSystem::createQropFolder()

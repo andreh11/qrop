@@ -25,29 +25,35 @@ class CORESHARED_EXPORT Database : public QObject
 {
     Q_OBJECT
 
+    friend class Qrop;
+
 public:
     explicit Database(QObject *parent = nullptr);
 
     static QString defaultDatabasePath();
-    static Q_INVOKABLE QUrl defaultDatabasePathUrl();
-    static Q_INVOKABLE void connectToDatabase(const QUrl &url = QUrl());
-    static void close();
-    static void execSqlFile(const QString &fileNameFrom, const QString &separator = ";");
-    static void migrate();
-    static void backupDatabase();
-    static Q_INVOKABLE void saveAs(const QUrl &url);
-    static Q_INVOKABLE void replaceMainDatabase(const QUrl &url);
+    inline static Q_INVOKABLE QUrl defaultDatabasePathUrl()
+    {
+        return QUrl::fromLocalFile(defaultDatabasePath());
+    }
+    static Q_INVOKABLE bool connectToDatabase(const QUrl &url = QUrl());
     static Q_INVOKABLE void copy(const QUrl &from, const QUrl &to);
-    static Q_INVOKABLE void createDatabase();
-    static Q_INVOKABLE void deleteDatabase();
-    static Q_INVOKABLE void createData();
-    static Q_INVOKABLE void resetDatabase();
+    static void close();
 
 private:
+    bool addDefaultSqliteDatabase() const;
+
     static int databaseVersion();
     static void removeFileIfExists(const QUrl &url);
     static QString fileNameFrom(const QUrl &url);
-    static void shrink();
+    static bool shrink();
+
+    static int execSqlFile(const QString &fileNameFrom, const QString &separator = ";");
+    static bool migrate();
+    static bool createDatabase();
+
+    static void backupDatabase();
+    static void deleteDatabase();
+    static bool createData();
 };
 
 #endif // DB_H

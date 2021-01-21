@@ -35,6 +35,8 @@
 #include "dbutils/templatetask.h"
 #include "dbutils/variety.h"
 
+#include "core/qrop.h"
+
 #include "models/cropmodel.h"
 #include "models/cropstatmodel.h"
 #include "models/familymodel.h"
@@ -354,22 +356,29 @@ int main(int argc, char *argv[])
     registerTypes();
     installTranslator();
 
-    Database::connectToDatabase();
-
-    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
+    Qrop *qrop = Qrop::getInstance();
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::kill);
+    int res = qrop->init();
+    if (res != 0)
+        return res;
 
     QQmlApplicationEngine engine;
-    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
+
+    engine.rootContext()->setContextProperty("cppQrop", qrop);
+
+    //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url(QStringLiteral("qrc:/qml/Qrop.qml"));
-    QObject::connect(
-            &engine, &QQmlApplicationEngine::objectCreated, &app,
-            [url](QObject *obj, const QUrl &objUrl) {
-                if (!obj && url == objUrl)
-                    QCoreApplication::exit(-1);
-            },
-            Qt::QueuedConnection);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                     [url](QObject *obj, const QUrl &objUrl) {
+                         if (!obj && url == objUrl)
+                             QCoreApplication::exit(-1);
+                     },
+                     Qt::QueuedConnection);
     engine.load(url);
     engine.addImageProvider("pictures", new QrpImageProvider());
+
+    if (qrop->hasErrors())
+        qrop->showErrors();
 
     return app.exec();
 }

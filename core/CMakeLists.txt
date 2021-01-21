@@ -14,6 +14,7 @@ add_library(core SHARED
         core_resources.qrc
         filesystem.cpp
         helpers.cpp
+        qrop.cpp
         qrpdate.cpp
         nametree.cpp
         print.cpp

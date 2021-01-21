@@ -32,7 +32,9 @@
 #include "dbutils/location.h"
 #include "dbutils/task.h"
 #include "dbutils/variety.h"
-
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#include "filesystem.h"
+#endif
 Database::Database(QObject *parent)
     : QObject(parent)
 {
@@ -40,19 +42,15 @@ Database::Database(QObject *parent)
 
 QString Database::defaultDatabasePath()
 {
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    return FileSystem::rootPath();
+#else
     const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (!writeDir.mkpath("."))
         qFatal("Failed to create writable directory at %s", qPrintable(writeDir.absolutePath()));
 
-    // Ensure that we have a writable location on all devices.
-    const QString fileName = writeDir.absolutePath() + "/qrop.db";
-
-    return fileName;
-}
-
-QUrl Database::defaultDatabasePathUrl()
-{
-    return QUrl::fromLocalFile(defaultDatabasePath());
+    return QString("%1/qrop.db").arg(writeDir.absolutePath());
+#endif
 }
 
 void Database::deleteDatabase()
@@ -89,33 +87,19 @@ void Database::removeFileIfExists(const QUrl &url)
         QFile::remove(url.toLocalFile());
 }
 
-void Database::saveAs(const QUrl &url)
-{
-    removeFileIfExists(url);
-    QFileInfo fileInfo(defaultDatabasePath());
-    QFile::copy(fileInfo.absoluteFilePath(), url.toLocalFile());
-}
-
-void Database::replaceMainDatabase(const QUrl &url)
-{
-    //    removeFileIfExists(databasePath());
-    QFileInfo fileInfo(defaultDatabasePath());
-    qDebug() << url.toLocalFile() << fileInfo.absoluteFilePath();
-    //    QFile::copy(url.toLocalFile(), fileInfo.absoluteFilePath());
-}
-
 void Database::copy(const QUrl &from, const QUrl &to)
 {
     removeFileIfExists(to);
     QFile::copy(from.toLocalFile(), to.toLocalFile());
 }
 
-void Database::migrate()
+bool Database::migrate()
 {
-    QSqlDatabase database = QSqlDatabase::database();
-    if (!database.isValid())
-        connectToDatabase();
+    //    QSqlDatabase database = QSqlDatabase::database();
+    //    if (!database.isValid())
+    //        connectToDatabase();
 
+    int fullyMigrated = true;
     int dbVersion = databaseVersion();
 
     QDir dir(":/db/migrations");
@@ -132,13 +116,15 @@ void Database::migrate()
             int version = fileInfo.baseName().toInt();
             if (version > dbVersion) {
                 qInfo() << "==== Migrating to version" << version;
-                execSqlFile(fileInfo.absoluteFilePath());
+                fullyMigrated &= execSqlFile(fileInfo.absoluteFilePath()) == 0;
             }
         }
         shrink();
     } else {
         qInfo() << "Latest database version:" << dbVersion;
     }
+
+    return fullyMigrated;
 }
 
 QString Database::fileNameFrom(const QUrl &url)
@@ -160,25 +146,26 @@ QString Database::fileNameFrom(const QUrl &url)
     return url.toLocalFile();
 }
 
-void Database::connectToDatabase(const QUrl &url)
+bool Database::addDefaultSqliteDatabase() const
 {
-    QSqlDatabase database = QSqlDatabase::database();
-    if (!database.isValid()) {
-        database = QSqlDatabase::addDatabase("QSQLITE");
-        if (!database.isValid())
-            qFatal("Cannot add database: %s", qPrintable(database.lastError().text()));
-    }
-    close();
+    return QSqlDatabase::addDatabase("QSQLITE").isValid();
+}
 
-    QString fileName = fileNameFrom(url);
-    QFileInfo fileInfo(fileName);
-    bool create = !fileInfo.exists();
+bool Database::connectToDatabase(const QUrl &url)
+{
+    qDebug() << "connectToDatabase: " << url.toString();
+
+    close();
+    QSqlDatabase database = QSqlDatabase::database();
+
+    QString fileName = url.toLocalFile();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     database.setDatabaseName(fileName);
     if (!database.open()) {
-        QFile::remove(fileName);
-        qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
+        //        QFile::remove(fileName);
+        qCritical() << "Cannot open database: " << qPrintable(database.lastError().text());
+        return false;
     }
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
@@ -186,11 +173,10 @@ void Database::connectToDatabase(const QUrl &url)
     query.exec("PRAGMA wal_autocheckpoint = 16");
     query.exec("PRAGMA journal_size_limit = 1536");
 
-    if (create) {
-        createDatabase();
-    } else {
-        migrate();
-    }
+    if (QFileInfo(fileName).exists())
+        return migrate();
+    else
+        return createDatabase();
 }
 
 void Database::close()
@@ -203,17 +189,17 @@ void Database::close()
     QSqlQuery query;
     query.exec("PRAGMA optimize");
     qDebug() << "Closing database...";
-    QSqlDatabase::database().close();
+    database.close();
 }
 
-void Database::execSqlFile(const QString &fileName, const QString &separator)
+int Database::execSqlFile(const QString &fileName, const QString &separator)
 {
     Q_INIT_RESOURCE(core_resources); // Needed for the method to find the resource files.
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "execSqlFile: cannot open" << fileName;
-        return;
+        return -1;
     }
 
     QTextStream textStream(&file);
@@ -221,6 +207,7 @@ void Database::execSqlFile(const QString &fileName, const QString &separator)
     QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
 
     QSqlQuery query;
+    int nbFailed = 0;
     for (const auto &queryString : stringList) {
         QString end = separator;
         if (queryString.isNull() || queryString.trimmed().isEmpty()
@@ -231,23 +218,28 @@ void Database::execSqlFile(const QString &fileName, const QString &separator)
         if (queryString.trimmed().startsWith("CREATE TRIGGER"))
             end = "; END;";
 
-        if (!query.exec(queryString + end))
+        if (!query.exec(queryString + end)) {
             qDebug() << "execSqlFile: cannot execute query" << query.lastError().text()
                      << query.lastQuery();
+            ++nbFailed;
+        }
     }
+
+    return nbFailed;
 }
 
-void Database::createDatabase()
+bool Database::createDatabase()
 {
     qInfo() << "Creating database...";
-    execSqlFile(":/db/tables.sql");
-    execSqlFile(":/db/triggers.sql");
-    qInfo() << "Database created.";
-    migrate();
-    createData();
+    if (execSqlFile(":/db/tables.sql") == 0 && execSqlFile(":/db/triggers.sql") == 0) {
+        qInfo() << "Database created.";
+        migrate(); // MB_QUESTION: do we really need to migrate a new DB?
+        createData();
+    } else
+        return false;
 }
 
-void Database::createData()
+bool Database::createData()
 {
     qInfo() << "Adding default data...";
     // name, rotation interval
@@ -315,7 +307,10 @@ void Database::createData()
     QList<QString> companyList(
             { tr("Unknown company"), "Agrosemens", "Essembio", "Voltz", "Gautier", "Sativa" });
 
-    QSqlDatabase::database().transaction();
+    QSqlDatabase database = QSqlDatabase::database();
+    if (!database.transaction()) {
+        return false;
+    }
     QMap<QString, int> familyMap;
     Family family;
     for (const auto &pair : familyList) {
@@ -353,21 +348,19 @@ void Database::createData()
         seedCompany.add({ { "seed_company", company } });
     }
 
-    QSqlDatabase::database().commit();
-    qInfo() << "Default data added.";
+    bool success = database.commit();
+    if (success)
+        qInfo() << "Default data added.";
+    else
+        qCritical() << "Error creating data: " << qPrintable(database.lastError().text());
+
+    return success;
 }
 
-void Database::resetDatabase()
+bool Database::shrink()
 {
-    deleteDatabase();
-    connectToDatabase();
-    createDatabase();
-}
-
-void Database::shrink()
-{
-    if (!QSqlDatabase::database().isOpen())
-        return;
+    //    if (!QSqlDatabase::database().isOpen())
+    //        return;
     QSqlQuery query;
-    query.exec("VACUUM");
+    return query.exec("VACUUM");
 }

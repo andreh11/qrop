@@ -43,6 +43,3 @@ private:
     static bool createQropFolder();
 #endif
 };
-
-//#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
-//#endif

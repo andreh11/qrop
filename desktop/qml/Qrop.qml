@@ -65,11 +65,18 @@ ApplicationWindow {
 
     Component.onCompleted: {
         if (firstDatabaseFile === "")
-            firstDatabaseFile = Database.defaultDatabasePathUrl();
+            firstDatabaseFile = cppRemote.defaultDatabaseUrl();
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
             lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+    }
+
+    Connections {
+        target: cppQrop
+
+        onInfo: info(msg);
+        onError: error(err);
     }
 
     function toggleFullScreen() {
@@ -97,11 +104,12 @@ ApplicationWindow {
         }
     }
 
-    function switchToDatabase(db) {
-        Database.connectToDatabase(window.currentDatabase === 1 ? firstDatabaseFile : secondDatabaseFile)
-        if (locationsPage.item) {
+    function switchToDatabase() {
+        let dbName = window.currentDatabase === 1 ? firstDatabaseFile : secondDatabaseFile;
+        if (!cppQrop.loadDatabase(dbName))
+            error(qsTr("Error opening database: %1").arg(dbName));
+        if (locationsPage.item)
             locationsPage.item.reload();
-        }
         stackLayout.currentItem.refresh();
     }
     
@@ -153,6 +161,7 @@ ApplicationWindow {
     function doDatabaseAction(file){
 //        print("DB Action: "+dbAction);
         if (dbAction == Qrop.DB_ACTION.SAVE) { // NOT === just a double == !!!
+            // MB_TODO: remove all call to Database to use cppQrop instead
             Database.copy(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
         } else {
             if (modifyMainDatabase) {
