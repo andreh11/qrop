@@ -94,11 +94,6 @@ void Qrop::installTranslator()
 
 void Qrop::dumpSettings()
 {
-    qDebug() << "[dumpSettings] firstDatabaseFile: "
-             << m_settings.value("firstDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[dumpSettings] secondDatabaseFile: "
-             << m_settings.value("secondDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[dumpSettings] lastFolder: " << m_settings.value("lastFolder", "NOT_SET").toString();
-    qDebug() << "[dumpSettings] currentDatabase: "
-             << m_settings.value("currentDatabase", "NOT_SET").toString();
+    for (const QString &key : m_settings.allKeys())
+        qDebug() << "[dumpSettings] " << key << ": " << m_settings.value(key);
 }
