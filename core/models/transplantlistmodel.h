@@ -29,7 +29,7 @@ class CORESHARED_EXPORT TransplantListModel : public SortFilterProxyModel
 public:
     explicit TransplantListModel(QObject *parent = nullptr,
                                  const QString &tableName = "transplant_list_view");
-    Q_INVOKABLE void csvExport(const QUrl &path);
+    Q_INVOKABLE QString csvExport(const QUrl &path);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;

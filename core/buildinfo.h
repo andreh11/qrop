@@ -17,6 +17,15 @@ public:
     QString commit() const;
     QString branch() const;
 
+    inline Q_INVOKABLE bool isMobileDevice()
+    {
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+        return true;
+#else
+        return false;
+#endif
+    }
+
 private:
     QString m_version;
     QString m_commit;

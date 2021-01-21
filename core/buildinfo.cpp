@@ -39,8 +39,7 @@ BuildInfo::BuildInfo(QObject *parent)
 #else
     m_branch(tr("Unknown commit branch"))
 #endif
-{
-}
+{}
 
 QString BuildInfo::version() const
 {

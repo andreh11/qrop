@@ -72,12 +72,52 @@ Page {
     ]
 
     property int rowWidth: {
-        var width = 0;
-        for (var i = 0; i < tableHeaderModel.length; i++) {
+        let width = 0;
+        for (let i = 0; i < tableHeaderModel.length; i++) {
             if (tableHeaderModel[i].visible)
                 width += tableHeaderModel[i].width + Units.formSpacing
         }
         return width;
+    }
+
+    property bool exportCSV: true  // false means print pdf
+
+    function openExportDialog(doCsvExport) {
+        exportCSV = doCsvExport;
+        if (BuildInfo.isMobileDevice()) {
+            if (exportCSV) {
+                exportMobileDialog.title = seedsRadioButton.checked ? qsTr("Export the seed list")
+                                                              : qsTr("Export the transplant list");
+            } else {
+                exportMobileDialog.title = seedsRadioButton.checked ? qsTr("Print the seed order list")
+                                                              : qsTr("Print the transplant order list");
+            }
+            exportMobileDialog.text = qsTr("Please type a name for the %1.").arg(exportCSV ? "CSV"
+                                                                                           : "PDF");
+            exportMobileDialog.open();
+        } else {
+            exportDialog.open();
+        }
+    }
+
+    function doExport(file) {
+        if (exportCSV) {
+            let err = "";
+            if (seedsRadioButton.checked) {
+                err = seedListModel.csvExport(file);
+            } else {
+                err = transplantListModel.csvExport(file);
+            }
+            if (err.length > 0)
+                window.error(qsTr('Error exporting CSV: %1'.arg(err)));
+        } else {
+            if (seedsRadioButton.checked) {
+                Print.printSeedList(page.year, file, monthRangeButton.checked
+                                    ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
+            } else {
+                Print.printTransplantList(page.year, file);
+            }
+        }
     }
 
     function refresh() {
@@ -98,18 +138,6 @@ Page {
     Material.background: Units.pageColor
 
     onTableSortColumnChanged: tableSortOrder = "descending"
-
-    ApplicationShortcut {
-        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
-    }
 
     SeedListModel {
         id: seedListModel
@@ -141,39 +169,6 @@ Page {
         filterString: filterField.text
         sortColumn: tableHeaderModel[tableSortColumn].columnName
         sortOrder: tableSortOrder
-    }
-
-    Platform.FileDialog {
-        id: csvDialog
-
-        defaultSuffix: "csv"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("CSV (*.csv)")]
-        onAccepted: {
-            if (seedsRadioButton.checked) {
-                seedListModel.csvExport(file);
-            } else {
-                transplantListModel.csvExport(file);
-            }
-        }
-    }
-
-    Platform.FileDialog {
-        id: saveDialog
-
-        defaultSuffix: "pdf"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted: {
-            if (seedsRadioButton.checked) {
-                Print.printSeedList(page.year, file, monthRangeButton.checked
-                                    ? "month" : (quarterRangeButton.checked ? "quarter" : ""));
-            } else {
-                Print.printTransplantList(page.year, file);
-            }
-        }
     }
 
     Pane {
@@ -295,7 +290,7 @@ Page {
                 ToolTip.text: seedsRadioButton.checked ? qsTr("Export the seed list")
                                                        : qsTr("Export the transplant list")
 
-                onClicked: csvDialog.open()
+                onClicked: openExportDialog(true);
                 anchors {
                     right: printButton.left
                     rightMargin: - padding
@@ -314,7 +309,7 @@ Page {
                 ToolTip.text: seedsRadioButton.checked ? qsTr("Print the seed order list")
                                                        : qsTr("Print the transplant order list")
 
-                onClicked: saveDialog.open()
+                onClicked: openExportDialog(false);
 
                 anchors {
                     right: parent.right
@@ -547,5 +542,48 @@ Page {
                 }
             }
         }
+    }
+
+    // Dialogs
+
+    Platform.FileDialog {
+        id: exportDialog
+
+        defaultSuffix: exportCSV ? "csv" : "pdf"
+        nameFilters: exportCSV ? [qsTr("CSV (*.csv)")] : [qsTr("PDF (*.pdf)")]
+        fileMode: Platform.FileDialog.SaveFile
+        folder: Qt.resolvedUrl(window.lastFolder)
+        onAccepted: doExport(file);
+    }
+
+    MobileFileDialog {
+        id: exportMobileDialog
+
+        x: page.width - width
+        y: buttonRectangle.height
+
+        nameField.visible : true;
+        combo.visible : false;
+        acceptText: exportCSV ? qsTr("Export")  : qsTr("Print")
+
+        onAccepted: {
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            doExport('file://%1/%2.%3'.arg(exportCSV ? FileSystem.csvPath : FileSystem.pdfPath).arg(
+                         nameField.text).arg(exportCSV ? "csv" : "pdf"));
+        }
+    }
+
+    // Shortcuts
+
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear();
     }
 }

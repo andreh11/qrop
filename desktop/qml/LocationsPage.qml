@@ -54,54 +54,17 @@ Page {
         seasonSpinBox.nextSeason();
     }
 
+    function doPrint(file) {
+        Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
+                                                page.showOnlyGreenhouse)
+    }
+
     title: qsTr("Locations")
     focus: true
     padding: 0
     Material.background: Material.color(Material.Grey, Material.Shade100)
 
-    ApplicationShortcut {
-        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
-    }
 
-    ApplicationShortcut {
-        sequence: "Ctrl+P"; enabled: shortcutEnabled; onActivated: showPlantingPaneButton.clicked()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextSeason()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousSeason();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextYear()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousYear();
-    }
-
-    ApplicationShortcut {
-        sequence: "Shift+A"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(0)
-    }
-
-    ApplicationShortcut {
-        sequence: "Shift+B"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(1)
-    }
-
-    ApplicationShortcut {
-        sequence: "Shift+C"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(2)
-    }
-
-    ApplicationShortcut {
-        sequence: "Shift+D"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(3)
-    }
-
-    ApplicationShortcut {
-        sequence: "Shift+E"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(4)
-    }
 
     onEditModeChanged: {
         if (!editMode) {
@@ -109,16 +72,7 @@ Page {
         }
     }
 
-    Platform.FileDialog {
-        id: saveCropMapDialog
 
-        defaultSuffix: "pdf"
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        fileMode: Platform.FileDialog.SaveFile
-        nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted:  Print.printCropMap(page.year, page.season, file, familyColorButton.checked,
-                                        page.showOnlyGreenhouse)
-    }
 
     RoundButton {
         id: editCropMapButton
@@ -145,17 +99,6 @@ Page {
         }
 
         Behavior on rotation { NumberAnimation { duration: 200 } }
-    }
-
-    Snackbar {
-        id: rotationSnackbar
-        duration: 1000
-
-        z: 2
-        x: Units.mediumSpacing
-        y: parent.height - height - Units.mediumSpacing
-        text: qsTr("Rotation problem")
-        visible: false
     }
 
     Rectangle {
@@ -359,10 +302,14 @@ Page {
                 Layout.rightMargin: 16 - padding
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTr("Print the task calendar")
+                ToolTip.text: qsTr("Print the crop map")
 
-                onClicked: saveCropMapDialog.open()
-
+                onClicked: {
+                    if (BuildInfo.isMobileDevice())
+                        saveCropMapMobileDialog.open();
+                    else
+                        saveCropMapDialog.open();
+                }
             }
         }
     }
@@ -534,5 +481,93 @@ Page {
                 }
             }
         }
+    }
+
+    // Dialogs
+
+    Snackbar {
+        id: rotationSnackbar
+        duration: 1000
+
+        z: 2
+        x: Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        text: qsTr("Rotation problem")
+        visible: false
+    }
+
+    Platform.FileDialog {
+        id: saveCropMapDialog
+
+        defaultSuffix: "pdf"
+        folder: Qt.resolvedUrl(window.lastFolder)
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: doPrint(file)
+    }
+
+    MobileFileDialog {
+        id: saveCropMapMobileDialog
+
+        title : qsTr("Print the crop map")
+        text : qsTr("Please type a name for the PDF.")
+        acceptText: qsTr("Print")
+
+        x: page.width - width
+        y: buttonRectangle.height
+
+        nameField.visible : true;
+        combo.visible : false;
+
+        onAccepted: {
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            doPrint('file://%1/%2.pdf'.arg(FileSystem.pdfPath).arg(nameField.text));
+        }
+    }
+
+    // Shortcuts
+
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+P"; enabled: shortcutEnabled; onActivated: showPlantingPaneButton.clicked()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextSeason()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousSeason();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: seasonSpinBox.nextYear()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: seasonSpinBox.previousYear();
+    }
+
+    ApplicationShortcut {
+        sequence: "Shift+A"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(0)
+    }
+
+    ApplicationShortcut {
+        sequence: "Shift+B"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(1)
+    }
+
+    ApplicationShortcut {
+        sequence: "Shift+C"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(2)
+    }
+
+    ApplicationShortcut {
+        sequence: "Shift+D"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(3)
+    }
+
+    ApplicationShortcut {
+        sequence: "Shift+E"; enabled: shortcutEnabled; onActivated: expandButton.expandLevel(4)
     }
 }

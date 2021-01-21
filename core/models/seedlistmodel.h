@@ -27,7 +27,7 @@ class CORESHARED_EXPORT SeedListModel : public SortFilterProxyModel
     Q_OBJECT
 public:
     explicit SeedListModel(QObject *parent = nullptr, const QString &tableName = "seed_list_view");
-    Q_INVOKABLE void csvExport(const QUrl &path);
+    Q_INVOKABLE QString csvExport(const QUrl &path);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;

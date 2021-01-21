@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/main.qml</file>
+        <file>qml/Qrop.qml</file>
         <file alias="/qtquickcontrols2.conf">qml/qtquickcontrols2.conf</file>
         <file>qml/PlantingsPage.qml</file>
         <file>qml/CalendarPage.qml</file>
@@ -119,5 +119,6 @@
         <file>qml/SettingsPaneDivider.qml</file>
         <file>qml/TitleLabel.qml</file>
         <file>qml/ApplicationShortcut.qml</file>
+        <file>qml/MobileFileDialog.qml</file>
     </qresource>
 </RCC>

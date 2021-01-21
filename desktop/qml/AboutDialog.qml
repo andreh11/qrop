@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018−2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018−2021 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,21 +24,25 @@ import QtQuick.Window 2.10
 
 import io.qrop.components 1.0
 
-Dialog {
+Popup {
     id: root
     modal: true
     focus: true
-    title: qsTr("About Qrop")
+    width: 340
+
     contentHeight: aboutColumn.height
-    
-    Row {
-        spacing: Units.mediumSpacing
-        
+
+    StackLayout {
+        id: view
+        currentIndex: bar.currentIndex
+        anchors.fill: parent
+        clip: true
+
         Column {
             id: aboutColumn
             spacing: Units.mediumSpacing
             width: root.availableWidth -  2 * Units.smallSpacing
-            
+
             Image {
                 id: image
                 source: "/icon.png"
@@ -47,25 +51,25 @@ Dialog {
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter:  parent.horizontalCenter
             }
-            
+
             Label {
                 width: parent.width
                 text: "Qrop"
                 font.family: "Roboto Regular"
-                wrapMode: Label.Wrap
                 font.pixelSize:  Units.fontSizeHeadline
+                wrapMode: Label.Wrap
                 horizontalAlignment: Text.AlignHCenter
             }
-            
+
             Label {
                 width: parent.width
-                text: "v%1 (%2/%3)".arg(BuildInfo.version).arg(BuildInfo.commit).arg(BuildInfo.branch)
+                text: "v%1".arg(BuildInfo.version)
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize:  Units.fontSizeBodyAndButton
                 horizontalAlignment: Text.AlignHCenter
             }
-            
+
             Label {
                 width: parent.width
                 text: qsTr("A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop <a href='https://latelierpaysan.org'>L'Atelier paysan</a>.")
@@ -80,17 +84,17 @@ Dialog {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
-            
-            
+
+
             Label {
                 width: parent.width
-                text: "Copyright © 2018−2020, André Hoarau"
+                text: "Copyright © 2018−2021, André Hoarau"
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize: Units.fontSizeCaption
                 horizontalAlignment: Text.AlignHCenter
             }
-            
+
             Label {
                 width: parent.width
                 text: qsTr("This program comes with ABSOLUTELY NO WARRANTY, for more details, visit <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GNU General Public License version 3</a>.")
@@ -105,7 +109,38 @@ Dialog {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
-            
+
+        }
+
+        TextArea {
+            text: ("Version: %1\n"
+                   + "Commit: %2\n"
+                   + "Branch: %3\n"
+                   + "Mobile device: %4\n"
+                   + "Documents folder: %5\n")
+            .arg(BuildInfo.version)
+            .arg(BuildInfo.commit)
+            .arg(BuildInfo.branch)
+            .arg(BuildInfo.isMobileDevice() ? "true" : "false")
+            .arg(FileSystem.rootPath)
+            selectByMouse: true
+            selectByKeyboard: true
+            readOnly: true
+        }
+
+    }
+
+    TabBar {
+        id: bar
+        width: parent.width
+        anchors.bottom: view.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        TabButton {
+            text: qsTr("Credits")
+        }
+        TabButton {
+            text: qsTr("Debug informations")
         }
     }
+
 }

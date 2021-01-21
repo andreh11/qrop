@@ -15,6 +15,7 @@
  */
 
 #include "buildinfo.h"
+#include "filesystem.h"
 #include "helpers.h"
 #include "qrpdate.h"
 #include "nametree.h"
@@ -139,7 +140,13 @@ void registerTypes()
                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                             Q_UNUSED(engine)
                                             Q_UNUSED(scriptEngine)
-                                            return new BuildInfo;
+                                            return new BuildInfo();
+                                        });
+    qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
+                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                            Q_UNUSED(engine)
+                                            Q_UNUSED(scriptEngine)
+                                            return new FileSystem();
                                         });
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
@@ -313,6 +320,10 @@ void installTranslator()
     QSettings settings;
     auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
     qDebug() << "LANG " << lang << preferredLanguage;
+    qDebug() << "[MB_TRACE] firstDatabaseFile: " << settings.value("firstDatabaseFile", "NOT_SET").toString();
+    qDebug() << "[MB_TRACE] secondDatabaseFile: " << settings.value("secondDatabaseFile", "NOT_SET").toString();
+    qDebug() << "[MB_TRACE] lastFolder: " << settings.value("lastFolder", "NOT_SET").toString();
+    qDebug() << "[MB_TRACE] currentDatabase: " << settings.value("currentDatabase", "NOT_SET").toString();
 
     if (preferredLanguage == "system")
         translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
@@ -335,6 +346,10 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.4.5");
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
+#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+    FileSystem::createMobileRootFilesDirectories();
+#endif
+
     registerFonts();
     registerTypes();
     installTranslator();
@@ -345,7 +360,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QQmlFileSelector *selector = new QQmlFileSelector(&engine);
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/Qrop.qml"));
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,
             [url](QObject *obj, const QUrl &objUrl) {

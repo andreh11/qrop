@@ -27,7 +27,7 @@ import io.qrop.components 1.0
 ApplicationWindow {
     id: window
 
-    readonly property bool largeDisplay: width > 800
+    readonly property bool largeDisplay: width > 100
     readonly property bool smallDisplay: width < 500
     property bool railMode: width > 1200
     property bool searchMode: false
@@ -51,6 +51,26 @@ ApplicationWindow {
         { loader: settingsPage,  name: qsTr("Settings"),  iconText: "\ue616", component: "SettingsPage.qml",
           bindings: { "paneWidth": Math.min(600, stackLayout.width * 0.8) }}
     ]
+
+    enum DB_ACTION {
+        OPEN = 0,
+        NEW  = 1,
+        SAVE = 2
+    }
+
+    property bool modifyMainDatabase: true
+    property int dbAction: Qrop.DB_ACTION.OPEN
+
+    property int popupTimeout : 8000
+
+    Component.onCompleted: {
+        if (firstDatabaseFile === "")
+            firstDatabaseFile = Database.defaultDatabasePathUrl();
+        if (currentDatabase === 0)
+            currentDatabase = 1;
+        if (lastFolder === "")
+            lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+    }
 
     function toggleFullScreen() {
         if (window.visibility === Window.FullScreen) {
@@ -84,6 +104,76 @@ ApplicationWindow {
         }
         stackLayout.currentItem.refresh();
     }
+    
+    function openDatabaseActionDialog(action, mainDB) {
+        dbAction = action;
+        modifyMainDatabase = mainDB;
+        if (BuildInfo.isMobileDevice()){
+            if (action === Qrop.DB_ACTION.OPEN) {
+                let availableDBs = FileSystem.getAvailableDataBasesNames();
+                if (availableDBs.length === 0)
+                    error(qsTr('There are no database available...'),
+                          '%1: <b>%2</b>'.arg(
+                              qsTr("They should all be copied in the following folder")).arg(
+                              FileSystem.rootPath));
+                else {
+//                    for (var i=0; i < availableDBs.length; ++i)
+//                        print("[MB_TRACE] Available DB: "+availableDBs[i]);
+                    databaseMobileDialog.nameField.visible = false;
+                    databaseMobileDialog.combo.visible = true;
+                    databaseMobileDialog.combo.model = availableDBs;
+                    databaseMobileDialog.title = modifyMainDatabase ?
+                                qsTr('Open Main DataBase') : qsTr('Open Secondary DataBase');
+                    databaseMobileDialog.text = '%1<br/>%2 %3'.arg(
+                                qsTr("Please select a database to open")).arg(
+                                qsTr("They must all be in the folder:")).arg(
+                                FileSystem.rootPath);
+                    databaseMobileDialog.open();
+                }
+            } else {
+                databaseMobileDialog.nameField.visible = true;
+                databaseMobileDialog.combo.visible = false;
+                if (action === Qrop.DB_ACTION.NEW) {
+                    databaseMobileDialog.title = modifyMainDatabase ?
+                                qsTr('New Main DataBase') : qsTr('New Secondary DataBase');
+                } else {
+                    databaseMobileDialog.title = modifyMainDatabase ?
+                                qsTr('Export Main DataBase') : qsTr('Export Secondary DataBase');
+                }
+                databaseMobileDialog.text = qsTr("Database name:");
+                databaseMobileDialog.open();
+            }
+        } else {
+            databaseDialog.fileMode = action === Qrop.DB_ACTION.OPEN ?
+                        Platform.FileDialog.OpenFile : Platform.FileDialog.SaveFile;
+            databaseDialog.open();
+        }
+    }
+
+    function doDatabaseAction(file){
+//        print("DB Action: "+dbAction);
+        if (dbAction == Qrop.DB_ACTION.SAVE) { // NOT === just a double == !!!
+            Database.copy(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
+        } else {
+            if (modifyMainDatabase) {
+                firstDatabaseFile = file;
+                currentDatabase = 1;
+            } else {
+                secondDatabaseFile = file;
+                currentDatabase = 2;
+            }
+            switchToDatabase();
+        }
+    } // doDatabaseAction
+    
+    function info(text) {
+        infoSnackbar.text = text;
+        infoSnackbar.open();
+    }
+
+    function error(text) {
+        info("<font color='darkred'>%1</font>".arg(text));
+    }
 
     title: "Qrop"
     visible: true
@@ -93,85 +183,6 @@ ApplicationWindow {
 
     Material.primary: Material.color(Material.Teal, Material.Shade500)
     Material.accent: Material.color(Material.Blue, Material.Shade600)
-
-    Platform.FileDialog {
-        id: openFirstDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.OpenFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            firstDatabaseFile = file;
-            currentDatabase = 1;
-            switchToDatabase();
-        }
-    }
-
-    Platform.FileDialog {
-        id: openSecondDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.OpenFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            secondDatabaseFile = file;
-            currentDatabase = 2;
-            switchToDatabase();
-            window.lastFolder = folder
-        }
-    }
-
-    Platform.FileDialog {
-        id: newFirstDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            firstDatabaseFile = file;
-            currentDatabase = 1;
-            switchToDatabase();
-            window.lastFolder = folder
-        }
-    }
-
-    Platform.FileDialog {
-        id: newSecondDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            secondDatabaseFile = file;
-            currentDatabase = 2;
-            switchToDatabase();
-            window.lastFolder = folder
-        }
-    }
-
-    Platform.FileDialog {
-        id: saveFirstDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            Database.copy(firstDatabaseFile, file);
-            window.lastFolder = folder
-        }
-    }
-
-    Platform.FileDialog {
-        id: saveSecondDatabaseDialog
-        defaultSuffix: "sqlite"
-        fileMode: Platform.FileDialog.SaveFile
-        folder: window.lastFolder
-        nameFilters: [("SQLite (*.db *.sqlite)")]
-        onAccepted: {
-            Database.copy(secondDatabaseFile, file);
-            window.lastFolder = folder
-        }
-    }
 
     Settings {
         id: mainSettings
@@ -188,17 +199,10 @@ ApplicationWindow {
         property alias windowWidth: window.width
         property alias windowVisibility: window.visibility
 
-        property string firstDatabaseFile: Database.defaultDatabasePathUrl()
-        property string secondDatabaseFile: ""
-        property int currentDatabase: 1
-        property url lastFolder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-    }
-
-    Component.onDestruction: {
-        settings.firstDatabaseFile = window.firstDatabaseFile
-        settings.secondDatabaseFile = window.secondDatabaseFile
-        settings.currentDatabase = window.currentDatabase
-        settings.lastFolder = window.lastFolder
+        property alias firstDatabaseFile: window.firstDatabaseFile
+        property alias secondDatabaseFile: window.secondDatabaseFile
+        property alias currentDatabase: window.currentDatabase
+        property alias lastFolder: window.lastFolder
     }
 
     ApplicationShortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
@@ -273,15 +277,15 @@ ApplicationWindow {
 
                     MenuItem {
                         text: qsTr("New...");
-                        onTriggered: newFirstDatabaseDialog.open();
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.NEW, true);
                     }
                     MenuItem {
                         text: qsTr("Open...");
-                        onTriggered: openFirstDatabaseDialog.open();
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.OPEN, true);
                     }
                     MenuItem {
                         text: qsTr("Export...");
-                        onTriggered: saveFirstDatabaseDialog.open();
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.SAVE, true);
                     }
                 }
 
@@ -335,16 +339,16 @@ ApplicationWindow {
 
                     MenuItem {
                         text: qsTr("New...");
-                        onTriggered: newSecondDatabaseDialog.open()
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.NEW, false);
                     }
                     MenuItem {
                         text: qsTr("Open...");
-                        onTriggered: openSecondDatabaseDialog.open();
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.OPEN, false);
                     }
                     MenuItem {
                         text: qsTr("Export...")
                         enabled: secondDatabaseFile !== ""
-                        onTriggered: saveSecondDatabaseDialog.open();
+                        onTriggered: openDatabaseActionDialog(Qrop.DB_ACTION.SAVE, false);
                     }
                     MenuItem {
                         text: qsTr("Close");
@@ -452,5 +456,38 @@ ApplicationWindow {
         x: (window.width - width) / 2
         y: (window.height - height) / 2
         width: 500
+    }
+
+    Snackbar {
+        id: infoSnackbar
+        z: 2
+        x: drawer.width + Units.mediumSpacing
+        y: parent.height - height - Units.mediumSpacing
+        visible: false
+    }
+
+    Platform.FileDialog {
+        id: databaseDialog
+
+        defaultSuffix: "sqlite"
+        folder: Qt.resolvedUrl(window.lastFolder)
+        nameFilters: [("SQLite (*.db *.sqlite)")]
+        onAccepted: {
+            doDatabaseAction(file)
+            lastFolder = folder.toString();
+        }
+    } // databaseDialog
+
+    MobileFileDialog {
+        id: databaseMobileDialog
+
+        x: (window.width - width) / 2
+        y: (window.height - height) / 2
+
+        onAccepted: {
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            let dbName = dbAction == Qrop.DB_ACTION.OPEN ? combo.currentText : nameField.text;
+            doDatabaseAction('file://%1/%2.sqlite'.arg(FileSystem.rootPath).arg(dbName));
+        }
     }
 }

@@ -43,81 +43,10 @@ Page {
         taskView.refresh();
     }
 
-    ApplicationShortcut {
-        sequences: ["Ctrl+N"]; enabled: shortcutEnabled && addButton.visible; onActivated: addButton.clicked()
-    }
-
-    ApplicationShortcut {
-        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear()
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+J"; enabled: shortcutEnabled; onActivated: showDoneCheckBox.toggle();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+K"; enabled: shortcutEnabled; onActivated: showDueCheckBox.toggle();
-    }
-
-    ApplicationShortcut {
-        sequence: "Ctrl+L"; enabled: shortcutEnabled; onActivated: showOverdueCheckBox.toggle();
-    }
-
-    ApplicationShortcut {
-        sequences: ["Up", "Down", "Left", "Right"]
-        enabled: shortcutEnabled && !taskView.activeFocus
-        onActivated: {
-            taskView.currentIndex = 0
-            taskView.forceActiveFocus();
-        }
-    }
-
-    TaskDialog {
-        id: taskDialog
-        width: parent.width / 2
-//        height: parent.height - 2 * Units.mediumSpacing
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        onAccepted: page.refresh()
-        onApplied: page.refresh();
-        week: page.week
-        year: page.year
-    }
-
-    Platform.FileDialog {
-        id: saveCalendarDialog
-
-        defaultSuffix: "pdf"
-        folder: Platform.StandardPaths.writableLocation(Platform.StandardPaths.DocumentsLocation)
-        fileMode: Platform.FileDialog.SaveFile
-        nameFilters: [qsTr("PDF (*.pdf)")]
-        onAccepted: {
-            var month = -1;
-            var week = -1;
-
-            if (weekRadioButton.checked)
-                week = page.week ;
-            else if (monthRadioButton.checked)
-                month = QrpDate.month(QrpDate.mondayOfWeek(page.week, page.year));
-
-            Print.printCalendar(page.year, month, week, file, showDoneCheckBox.checked,showDueCheckBox.checked, showOverdueCheckBox.checked)
-        }
+    function doPrint(file) {
+        let month = weekRadioButton.checked ? page.week : -1;
+        let week = monthRadioButton.checked ? QrpDate.month(QrpDate.mondayOfWeek(page.week, page.year)) : -1;
+        Print.printCalendar(page.year, month, week, file, showDoneCheckBox.checked, showDueCheckBox.checked, showOverdueCheckBox.checked)
     }
 
     Settings {
@@ -234,7 +163,12 @@ Page {
                         width: 300
                         margins: 0
 
-                        onAccepted: saveCalendarDialog.open()
+                        onAccepted: {
+                            if (BuildInfo.isMobileDevice())
+                                saveCalendarMobileDialog.open();
+                            else
+                                saveCalendarDialog.open();
+                        }
 
                         ColumnLayout {
                             width: parent.width
@@ -385,6 +319,96 @@ Page {
             mainPane.visible = true;
             templatePane.visible = false;
             page.refresh();
+        }
+    }
+
+    // Dialogs
+
+    TaskDialog {
+        id: taskDialog
+        width: parent.width / 2
+//        height: parent.height/2
+//        height: parent.height - 2 * Units.mediumSpacing
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        onAccepted: page.refresh()
+        onApplied: page.refresh();
+        week: page.week
+        year: page.year
+    }
+
+    Platform.FileDialog {
+        id: saveCalendarDialog
+        defaultSuffix: "pdf"
+        folder: Qt.resolvedUrl(window.lastFolder)
+        fileMode: Platform.FileDialog.SaveFile
+        nameFilters: [qsTr("PDF (*.pdf)")]
+        onAccepted: doPrint(file);
+    }
+
+    MobileFileDialog {
+        id: saveCalendarMobileDialog
+
+        title: qsTr("Print the task calendar")
+        text: qsTr("Please type a name for the PDF.")
+        acceptText: qsTr("Print")
+
+        x: page.width - width
+        y: buttonRectangle.height
+
+        nameField.visible : true;
+        combo.visible : false;
+
+        onAccepted: {
+            //MB_TODO: check if the file already exist? shall we overwrite or discard?
+            doPrint('file://%1/%2.pdf'.arg(FileSystem.pdfPath).arg(nameField.text));
+        }
+    }
+
+    // Shortcuts
+
+    ApplicationShortcut {
+        sequences: ["Ctrl+N"]; enabled: shortcutEnabled && addButton.visible; onActivated: addButton.clicked()
+    }
+
+    ApplicationShortcut {
+        sequences: [StandardKey.Find]; enabled: shortcutEnabled; onActivated: filterField.forceActiveFocus();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Right"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextWeek()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Left"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousWeek()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Up"; enabled: shortcutEnabled; onActivated: weekSpinBox.nextYear()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+Down"; enabled: shortcutEnabled; onActivated: weekSpinBox.previousYear()
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+J"; enabled: shortcutEnabled; onActivated: showDoneCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+K"; enabled: shortcutEnabled; onActivated: showDueCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
+        sequence: "Ctrl+L"; enabled: shortcutEnabled; onActivated: showOverdueCheckBox.toggle();
+    }
+
+    ApplicationShortcut {
+        sequences: ["Up", "Down", "Left", "Right"]
+        enabled: shortcutEnabled && !taskView.activeFocus
+        onActivated: {
+            taskView.currentIndex = 0
+            taskView.forceActiveFocus();
         }
     }
 }

@@ -78,6 +78,7 @@ TextField {
     leftPadding: Units.smallSpacing
     rightPadding: leftPadding
     hoverEnabled: true
+    selectByMouse: true
 
     activeFocusOnPress: true
     activeFocusOnTab: true
