@@ -9,7 +9,7 @@ class QropNews :  public QObject
 {
     Q_OBJECT
 
-    static constexpr const char *s_newsJsonBaseLink = "https://mbruel.fr/qrop_news;"; //!< we might add "_lang" then the ".json"
+    static constexpr const char *s_newsJsonBaseLink = "https://mbruel.fr/qrop_news"; //!< we might add "_lang" then the ".json"
 
     typedef struct News {
         const QString date;

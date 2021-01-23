@@ -19,8 +19,12 @@ QropNews::QropNews(QObject *parent)
 
 void QropNews::fetchNews()
 {
-    QUrl proFileURL(QString("%1%2.json").arg(s_newsJsonBaseLink).arg("_fr"));
-    QNetworkRequest req(proFileURL);
+    const QString lang = Qrop::instance()->preferredLanguage();
+    QString url = QString("%1").arg(s_newsJsonBaseLink);
+    if (!lang.isEmpty() && lang != "en")
+        url += QString("_%1").arg(lang);
+    url += ".json";
+    QNetworkRequest req(url);
     req.setRawHeader("User-Agent", "Qrop Cpp app");
 
     QNetworkReply *reply = Qrop::instance()->networkManager().get(req);

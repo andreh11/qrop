@@ -65,6 +65,10 @@ public:
         qCritical() << err;
     }
 
+    inline QString preferredLanguage() const {
+        return m_settings.value("preferredLanguage", "").toString();
+    }
+
 private:
     void loadCurrentDatabase();
     void installTranslator();
