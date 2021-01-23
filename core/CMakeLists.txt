@@ -16,6 +16,7 @@ add_library(core SHARED
         helpers.cpp
         qrop.cpp
         qrpdate.cpp
+        qropnews.cpp
         nametree.cpp
         print.cpp
         qrpimageprovider.cpp

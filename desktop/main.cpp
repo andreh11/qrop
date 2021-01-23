@@ -74,6 +74,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlFileSelector>
+#include <QLoggingCategory>
 
 void registerFonts()
 {
@@ -88,6 +89,9 @@ void registerFonts()
 
 void registerTypes()
 {
+    qmlRegisterUncreatableType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
+                                          QStringLiteral("BuildInfo should not be created in QML"));
+
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
@@ -123,12 +127,6 @@ void registerTypes()
                                            return new Planting;
                                        });
 
-    qmlRegisterSingletonType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
-                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                            Q_UNUSED(engine)
-                                            Q_UNUSED(scriptEngine)
-                                            return new BuildInfo();
-                                        });
     qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
                                          [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                              Q_UNUSED(engine)
@@ -207,14 +205,6 @@ void registerTypes()
                                           auto *mdate = new QrpDate();
                                           return mdate;
                                       });
-
-    qmlRegisterSingletonType<Database>("io.qrop.components", 1, 0, "Database",
-                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                           Q_UNUSED(engine)
-                                           Q_UNUSED(scriptEngine)
-                                           auto *db = new Database();
-                                           return db;
-                                       });
 
     qmlRegisterSingletonType<Note>("io.qrop.components", 1, 0, "Note",
                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -304,6 +294,9 @@ int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
 
+    // disable SSL warnings
+    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     QApplication::setApplicationName("Qrop");
@@ -320,8 +313,8 @@ int main(int argc, char *argv[])
     registerFonts();
     registerTypes();
 
-    Qrop *qrop = Qrop::getInstance();
-    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::kill);
+    Qrop *qrop = Qrop::instance();
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::clear);
     int res = qrop->init();
     if (res != 0)
         return res;

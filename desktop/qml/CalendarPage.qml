@@ -164,7 +164,7 @@ Page {
                         margins: 0
 
                         onAccepted: {
-                            if (BuildInfo.isMobileDevice())
+                            if (cppQrop.isMobileDevice())
                                 saveCalendarMobileDialog.open();
                             else
                                 saveCalendarDialog.open();

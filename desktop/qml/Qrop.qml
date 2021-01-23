@@ -69,7 +69,7 @@ ApplicationWindow {
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
-            lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+            lastFolder = '%1%2'.arg(cppQrop.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
     }
 
     Connections {
@@ -116,7 +116,7 @@ ApplicationWindow {
     function openDatabaseActionDialog(action, mainDB) {
         dbAction = action;
         modifyMainDatabase = mainDB;
-        if (BuildInfo.isMobileDevice()){
+        if (cppQrop.isMobileDevice()){
             if (action === Qrop.DB_ACTION.OPEN) {
                 let availableDBs = FileSystem.getAvailableDataBasesNames();
                 if (availableDBs.length === 0)
@@ -161,8 +161,7 @@ ApplicationWindow {
     function doDatabaseAction(file){
 //        print("DB Action: "+dbAction);
         if (dbAction == Qrop.DB_ACTION.SAVE) { // NOT === just a double == !!!
-            // MB_TODO: remove all call to Database to use cppQrop instead
-            Database.copy(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
+            cppQrop.saveDatabase(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
         } else {
             if (modifyMainDatabase) {
                 firstDatabaseFile = file;

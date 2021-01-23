@@ -3,9 +3,13 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QNetworkAccessManager>
 #include "singleton.h"
+#include "buildinfo.h"
 
+class BuildInfo;
 class Database;
+class QropNews;
 class QTranslator;
 
 class Qrop : public QObject, public Singleton<Qrop>
@@ -16,8 +20,13 @@ class Qrop : public QObject, public Singleton<Qrop>
 private:
     QSettings m_settings;
     QTranslator *m_translator;
-    Database *const m_db;
-    QStringList m_errors;
+
+    Database *const m_db; //!< db connection
+    BuildInfo *const m_buildInfo;
+
+    QStringList m_errors; //!< non critical errors happening prior to the GUI
+    QNetworkAccessManager m_netMgr; //!< for http(s) requests
+    QropNews *m_news;
 
 signals:
     void info(const QString &msg);
@@ -33,6 +42,10 @@ public:
 
     Q_INVOKABLE bool loadDatabase(const QUrl &url);
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
+    Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);
+
+    inline Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
+
 
     inline bool hasErrors() const {return m_errors.size() != 0;}
     inline void showErrors() {
@@ -40,12 +53,25 @@ public:
         m_errors.clear();
     };
 
+    inline QNetworkAccessManager &networkManager() {return m_netMgr;}
+    Q_INVOKABLE inline BuildInfo *buildInfo() const {return m_buildInfo;}
+
+    inline void sendInfo(const QString &msg) {
+        emit info(msg);
+        qDebug() << msg;
+    }
+    void sendError(const QString &err){
+        emit error(err);
+        qCritical() << err;
+    }
+
 private:
     void loadCurrentDatabase();
     void installTranslator();
 
-    void dumpSettings();
 
+
+    void _dumpSettings();
 };
 
 #endif // QROP_H

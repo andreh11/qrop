@@ -191,7 +191,7 @@ Page {
                 ToolTip.text: qsTr("Print the harvests list")
 
                 onClicked: {
-                    if (BuildInfo.isMobileDevice())
+                    if (cppQrop.isMobileDevice())
                         printHarvestsMobileDialog.open();
                     else
                         printHarvestsDialog.open();

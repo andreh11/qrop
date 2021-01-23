@@ -63,7 +63,7 @@ Popup {
 
             Label {
                 width: parent.width
-                text: "v%1".arg(BuildInfo.version)
+                text: "v%1".arg(cppQrop.buildInfo().version)
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize:  Units.fontSizeBodyAndButton
@@ -118,10 +118,10 @@ Popup {
                    + "Branch: %3\n"
                    + "Mobile device: %4\n"
                    + "Documents folder: %5\n")
-            .arg(BuildInfo.version)
-            .arg(BuildInfo.commit)
-            .arg(BuildInfo.branch)
-            .arg(BuildInfo.isMobileDevice() ? "true" : "false")
+            .arg(cppQrop.buildInfo().version)
+            .arg(cppQrop.buildInfo().commit)
+            .arg(cppQrop.buildInfo().branch)
+            .arg(cppQrop.isMobileDevice() ? "true" : "false")
             .arg(FileSystem.rootPath)
             selectByMouse: true
             selectByKeyboard: true

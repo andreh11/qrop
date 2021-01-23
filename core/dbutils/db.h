@@ -35,12 +35,12 @@ public:
     {
         return QUrl::fromLocalFile(defaultDatabasePath());
     }
-    static Q_INVOKABLE bool connectToDatabase(const QUrl &url = QUrl());
-    static Q_INVOKABLE void copy(const QUrl &from, const QUrl &to);
+    static bool connectToDatabase(const QUrl &url = QUrl());
+    static void copy(const QUrl &from, const QUrl &to);
     static void close();
 
 private:
-    bool addDefaultSqliteDatabase() const;
+    static bool addDefaultSqliteDatabase();
 
     static int databaseVersion();
     static void removeFileIfExists(const QUrl &url);

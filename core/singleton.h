@@ -34,17 +34,16 @@ public:
     Singleton & operator=(const Singleton &&other) = delete;
 
     // Public Interface
-    static T *getInstance(){
-        if (!_singleton) {
+    static T *instance()
+    {
+        if (!_singleton)
             _singleton = new T;
-        }
         return (static_cast<T*> (_singleton));
     }
 
-    static void kill()
+    static void clear()
     {
-        if (_singleton)
-        {
+        if (_singleton) {
             delete _singleton;
             _singleton = nullptr;
         }

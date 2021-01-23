@@ -1,8 +1,8 @@
-#include <QDebug>
 #include <QUrl>
 #include <QTranslator>
 #include <QCoreApplication>
 
+#include "qropnews.h"
 #include "qrop.h"
 #include "dbutils/db.h"
 
@@ -12,7 +12,10 @@ Qrop::Qrop(QObject *parent)
     , m_settings()
     , m_translator(new QTranslator)
     , m_db(new Database(this))
+    , m_buildInfo(new BuildInfo)
     , m_errors()
+    , m_netMgr()
+    , m_news(new QropNews())
 {
 }
 
@@ -20,6 +23,8 @@ Qrop::~Qrop()
 {
     m_settings.sync();
 
+    delete m_news;
+    delete m_buildInfo;
     m_db->close();
     delete m_db;
     delete m_translator;
@@ -27,7 +32,7 @@ Qrop::~Qrop()
 
 int Qrop::init()
 {
-    dumpSettings();
+    _dumpSettings();
 
     // can we load SQLite driver?
     if (!m_db->addDefaultSqliteDatabase()) {
@@ -39,6 +44,8 @@ int Qrop::init()
 
     // load current database (or default one)
     loadCurrentDatabase();
+
+    m_news->fetchNews();
 
     return 0;
 }
@@ -55,6 +62,15 @@ bool Qrop::loadDatabase(const QUrl &url)
 QUrl Qrop::defaultDatabaseUrl() const
 {
     return m_db->defaultDatabasePathUrl();
+}
+
+bool Qrop::saveDatabase(const QUrl &from, const QUrl &to)
+{
+    if (from.isLocalFile() && to.isLocalFile()) {
+        m_db->copy(from, to);
+        return true;
+    } else
+        return false;
 }
 
 void Qrop::loadCurrentDatabase()
@@ -92,7 +108,7 @@ void Qrop::installTranslator()
     qApp->installTranslator(m_translator);
 }
 
-void Qrop::dumpSettings()
+void Qrop::_dumpSettings()
 {
     for (const QString &key : m_settings.allKeys())
         qDebug() << "[dumpSettings] " << key << ": " << m_settings.value(key);

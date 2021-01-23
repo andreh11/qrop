@@ -146,7 +146,7 @@ QString Database::fileNameFrom(const QUrl &url)
     return url.toLocalFile();
 }
 
-bool Database::addDefaultSqliteDatabase() const
+bool Database::addDefaultSqliteDatabase()
 {
     return QSqlDatabase::addDatabase("QSQLITE").isValid();
 }
