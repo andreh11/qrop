@@ -61,7 +61,8 @@ ApplicationWindow {
     property bool modifyMainDatabase: true
     property int dbAction: Qrop.DB_ACTION.OPEN
 
-    property int popupTimeout : 8000
+    property color badgeColor : "#ec3e3a"  // redish color (exactly the one used in OS X 10.10)
+    property int badgeHeight : 25
 
     Component.onCompleted: {
         if (firstDatabaseFile === "")
@@ -77,6 +78,18 @@ ApplicationWindow {
 
         onInfo: info(msg);
         onError: error(err);
+    }
+
+    Connections {
+        target: cppQrop.news()
+
+        onNewsReceived: {
+            let numberOfUnreadNews = cppQrop.news().numberOfUnreadNews();
+            print("News received (unread: %1)".arg(numberOfUnreadNews));
+            aboutDialog.setNews(cppQrop.news().mainText, cppQrop.news().toHtml, numberOfUnreadNews);
+            if ( numberOfUnreadNews > 0)
+                displayNewsBadges("%1".arg(numberOfUnreadNews));
+        }
     }
 
     function toggleFullScreen() {
@@ -181,6 +194,11 @@ ApplicationWindow {
 
     function error(text) {
         info("<font color='darkred'>%1</font>".arg(text));
+    }
+
+    function displayNewsBadges(text) {
+        aboutBadge.displayBadge(text);
+        aboutDialog.newsBadge.displayBadge(text);
     }
 
     title: "Qrop"
@@ -396,6 +414,13 @@ ApplicationWindow {
                 isActive: false
 
                 onClicked: aboutDialog.open();
+
+                Badge {
+                    id: aboutBadge
+                    visible: false
+                    color: window.badgeColor
+                    height: window.badgeHeight
+                }
             }
         }
     }
@@ -463,7 +488,7 @@ ApplicationWindow {
         id: aboutDialog
         x: (window.width - width) / 2
         y: (window.height - height) / 2
-        width: 500
+        width: 2*window.width/3 > 500 ? 2*window.width/3 : 500
     }
 
     Snackbar {

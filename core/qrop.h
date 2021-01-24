@@ -46,6 +46,7 @@ public:
 
     inline Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
 
+    inline Q_INVOKABLE QropNews *news() const {return m_news;}
 
     inline bool hasErrors() const {return m_errors.size() != 0;}
     inline void showErrors() {
@@ -54,7 +55,7 @@ public:
     };
 
     inline QNetworkAccessManager &networkManager() {return m_netMgr;}
-    Q_INVOKABLE inline BuildInfo *buildInfo() const {return m_buildInfo;}
+    inline Q_INVOKABLE BuildInfo *buildInfo() const {return m_buildInfo;}
 
     inline void sendInfo(const QString &msg) {
         emit info(msg);
@@ -68,6 +69,13 @@ public:
     inline QString preferredLanguage() const {
         return m_settings.value("preferredLanguage", "").toString();
     }
+
+    inline QDate lastNewsUpdate() const {
+        QString dateStr = m_settings.value("lastNewsUpdate", "").toString();
+        return dateStr.isEmpty() ? QDate() : QDate::fromString(dateStr, "yyyy/MM/dd");
+    }
+
+    bool newReleaseAvailable(const QString &lastOnlineVersion);
 
 private:
     void loadCurrentDatabase();

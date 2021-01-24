@@ -1,6 +1,7 @@
 #include <QUrl>
 #include <QTranslator>
 #include <QCoreApplication>
+#include <QRegularExpression>
 
 #include "qropnews.h"
 #include "qrop.h"
@@ -21,6 +22,8 @@ Qrop::Qrop(QObject *parent)
 
 Qrop::~Qrop()
 {
+    if (m_news->areRead())
+        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString("yyyy/MM/dd"));
     m_settings.sync();
 
     delete m_news;
@@ -33,6 +36,7 @@ Qrop::~Qrop()
 int Qrop::init()
 {
     _dumpSettings();
+    qDebug() << "Qrop version: " << m_buildInfo->version();
 
     // can we load SQLite driver?
     if (!m_db->addDefaultSqliteDatabase()) {
@@ -44,8 +48,6 @@ int Qrop::init()
 
     // load current database (or default one)
     loadCurrentDatabase();
-
-    m_news->fetchNews();
 
     return 0;
 }
@@ -71,6 +73,29 @@ bool Qrop::saveDatabase(const QUrl &from, const QUrl &to)
         return true;
     } else
         return false;
+}
+
+bool Qrop::newReleaseAvailable(const QString &lastOnlineVersion)
+{
+    QRegularExpression versionRegExp("^(\\d+)\\.(\\d+)\\.(\\d+)$");
+    QRegularExpressionMatch matchLastVersion = versionRegExp.match(lastOnlineVersion),
+                            matchCurrent = versionRegExp.match(m_buildInfo->version());
+    if (matchLastVersion.hasMatch() && matchCurrent.hasMatch()) {
+        int majorLast = matchLastVersion.captured(1).toInt(),
+            majorCurrent = matchCurrent.captured(1).toInt();
+        if (majorLast > majorCurrent)
+            return true;
+        else if (majorLast == majorCurrent) {
+            int minorLast = matchLastVersion.captured(2).toInt(),
+                minorCurrent = matchCurrent.captured(2).toInt();
+            if (minorLast > minorCurrent)
+                return true;
+            else if (minorLast == minorCurrent
+                     && matchLastVersion.captured(3).toInt() > matchCurrent.captured(3).toInt())
+                return true;
+        }
+    }
+    return false;
 }
 
 void Qrop::loadCurrentDatabase()

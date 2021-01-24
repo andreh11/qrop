@@ -17,6 +17,7 @@
 #include "buildinfo.h"
 #include "filesystem.h"
 #include "helpers.h"
+#include "qropnews.h"
 #include "qrpdate.h"
 #include "nametree.h"
 #include "print.h"
@@ -91,6 +92,8 @@ void registerTypes()
 {
     qmlRegisterUncreatableType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
                                           QStringLiteral("BuildInfo should not be created in QML"));
+    qmlRegisterUncreatableType<QropNews>("io.qrop.components", 1, 0, "QropNews",
+                                         QStringLiteral("QropNews should not be created in QML"));
 
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
@@ -323,6 +326,11 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("cppQrop", qrop);
 
+    // really important, otherwise QML could take ownership and delete them
+    // (cf http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#data-ownership )
+    engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
+
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url(QStringLiteral("qrc:/qml/Qrop.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
@@ -336,6 +344,8 @@ int main(int argc, char *argv[])
 
     if (qrop->hasErrors())
         qrop->showErrors();
+
+    qrop->news()->fetchNews();
 
     return app.exec();
 }
