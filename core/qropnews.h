@@ -12,7 +12,7 @@ class QropNews :  public QObject
     Q_PROPERTY(QString mainText READ mainText CONSTANT FINAL)
     Q_PROPERTY(QString toHtml READ toHtml CONSTANT FINAL)
 
-    static constexpr const char *s_newsJsonBaseLink = "https://mbruel.fr/qrop_news"; //!< we might add "_lang" then the ".json"
+    static constexpr const char *s_newsJsonBaseLink = "https://framagit.org/ah/qrop/-/raw/284-bdd-erreur-ouverture-logiciel/news/qrop_news"; //!< we might add "_lang" then the ".json"
     static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
 
     typedef struct News {
