@@ -20,6 +20,8 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
+namespace dbutils {
+
 class CORESHARED_EXPORT Family : public DatabaseUtility
 {
     Q_OBJECT
@@ -30,4 +32,5 @@ public:
     Q_INVOKABLE int interval(int familyId) const;
 };
 
+}
 #endif // FAMILY_H

@@ -39,12 +39,12 @@
 Planting::Planting(QObject *parent)
     : DatabaseUtility(parent)
     , m_crop(new DatabaseUtility(this))
-    , m_family(new Family(this))
+    , m_family(new dbutils::Family(this))
     , m_seedCompany(new DatabaseUtility(this))
     , m_keyword(new Keyword(this))
     , m_task(new Task(this))
     , m_unit(new DatabaseUtility(this))
-    , m_variety(new Variety(this))
+    , m_variety(new dbutils::Variety(this))
     , m_settings(new QSettings(this))
 {
     m_table = "planting";

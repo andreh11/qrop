@@ -20,6 +20,8 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
+namespace dbutils {
+
 class CORESHARED_EXPORT Variety : public DatabaseUtility
 {
     Q_OBJECT
@@ -33,5 +35,5 @@ public:
     Q_INVOKABLE int defaultVariety(int cropId) const;
     Q_INVOKABLE void addDefault(int cropId) const;
 };
-
+}
 #endif // VARIETY_H

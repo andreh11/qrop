@@ -22,37 +22,37 @@
 #include "variety.h"
 #include "task.h"
 
-Variety::Variety(QObject *parent)
+dbutils::Variety::Variety(QObject *parent)
     : DatabaseUtility(parent)
 {
     m_table = "variety";
     m_viewTable = "variety";
 }
 
-int Variety::cropId(int varietyId) const
+int dbutils::Variety::cropId(int varietyId) const
 {
     QVariantMap map = mapFromId("variety", varietyId);
     return map["crop_id"].toInt();
 }
 
-QString Variety::varietyName(int varietyId) const
+QString dbutils::Variety::varietyName(int varietyId) const
 {
     QVariantMap map = mapFromId("variety", varietyId);
     return map["variety"].toString();
 }
 
-bool Variety::isDefault(int varietyId) const
+bool dbutils::Variety::isDefault(int varietyId) const
 {
     QVariantMap map = mapFromId("variety", varietyId);
     return map["is_default"].toInt() == 1;
 }
 
-void Variety::setDefault(int varietyId, bool def)
+void dbutils::Variety::setDefault(int varietyId, bool def)
 {
     update(varietyId, { { "is_default", def ? 1 : 0 } });
 }
 
-int Variety::defaultVariety(int cropId) const
+int dbutils::Variety::defaultVariety(int cropId) const
 {
     QString queryString("SELECT variety_id "
                         "FROM variety "
@@ -64,7 +64,7 @@ int Variety::defaultVariety(int cropId) const
     return list.constFirst();
 }
 
-void Variety::addDefault(int cropId) const
+void dbutils::Variety::addDefault(int cropId) const
 {
     add({ { "variety", tr("Unknown") }, { "crop_id", cropId }, { "is_default", 1 } });
 }

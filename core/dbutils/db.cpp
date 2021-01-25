@@ -312,14 +312,14 @@ bool Database::createData()
         return false;
     }
     QMap<QString, int> familyMap;
-    Family family;
+    dbutils::Family family;
     for (const auto &pair : familyList) {
         familyMap[pair.first] = family.add({ { "family", pair.first }, { "interval", pair.second } });
     }
 
     QMap<QString, int> cropMap;
     DatabaseUtility crop;
-    Variety variety;
+    dbutils::Variety variety;
     crop.setTable("crop");
     for (const auto &pair : cropList) {
         cropMap[pair.first] =

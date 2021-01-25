@@ -153,21 +153,22 @@ void registerTypes()
                                           return helpers;
                                       });
 
-    qmlRegisterSingletonType<Family>("io.qrop.components", 1, 0, "Family",
-                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                         Q_UNUSED(engine)
-                                         Q_UNUSED(scriptEngine)
-                                         auto *family = new Family();
-                                         return family;
-                                     });
+    qmlRegisterSingletonType<dbutils::Family>("io.qrop.components", 1, 0, "Family",
+                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                                  Q_UNUSED(engine)
+                                                  Q_UNUSED(scriptEngine)
+                                                  auto *family = new dbutils::Family();
+                                                  return family;
+                                              });
 
-    qmlRegisterSingletonType<Variety>("io.qrop.components", 1, 0, "Variety",
-                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                          Q_UNUSED(engine)
-                                          Q_UNUSED(scriptEngine)
-                                          auto *variety = new Variety();
-                                          return variety;
-                                      });
+    qmlRegisterSingletonType<dbutils::Variety>(
+            "io.qrop.components", 1, 0, "Variety",
+            [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                Q_UNUSED(engine)
+                Q_UNUSED(scriptEngine)
+                auto *variety = new dbutils::Variety();
+                return variety;
+            });
 
     qmlRegisterSingletonType<SeedCompany>("io.qrop.components", 1, 0, "SeedCompany",
                                           [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
