@@ -102,7 +102,7 @@ void QropNews::onNewsReceived()
     }
 
     QVariant contentType = reply->header(QNetworkRequest::ContentTypeHeader);
-    if (!contentType.isValid() || contentType.toString() != s_newsJsonContentType) {
+    if (!contentType.isValid() || !contentType.toString().startsWith(s_newsJsonContentType)) {
         _error(tr("Error fetching news: invalid contentType from url: %1 : %2")
                        .arg(reply->url().toString())
                        .arg(contentType.toString()));
