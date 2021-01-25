@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2021 André Hoarau <ah@ouvaton.org>
+ *                  & Matthieu Bruel <Matthieu.Bruel@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef QROPNEWS_H
 #define QROPNEWS_H
 
@@ -12,16 +29,20 @@ class QropNews :  public QObject
     Q_PROPERTY(QString mainText READ mainText CONSTANT FINAL)
     Q_PROPERTY(QString toHtml READ toHtml CONSTANT FINAL)
 
-    static constexpr const char *s_newsJsonBaseLink = "https://framagit.org/ah/qrop/-/raw/284-bdd-erreur-ouverture-logiciel/news/qrop_news"; //!< we might add "_lang" then the ".json"
+    static constexpr const char *s_newsJsonBaseLink = "https://framagit.org/ah/qrop/-/raw/284-bdd-erreur-ouverture-logiciel/news/qrop_news"; //!< we add "_<lang>.json"
+    static constexpr const char *s_newsJsonContentType = "text/plain";
+//    static constexpr const char *s_newsJsonBaseLink = "https://mbruel.fr/qrop_news"; //!< we add "_<lang>.json"
+//    static constexpr const char *s_newsJsonContentType = "application/json";
+
     static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
 
     typedef struct News {
-        const QString date;
+        const QDate date;
         const QString title;
         const QString link;
         const QString desc;
         const bool unread;
-        News(const QString &date_, const QString &title_, const QString &link_, const QString &desc_, bool unread_):
+        News(const QDate &date_, const QString &title_, const QString &link_, const QString &desc_, bool unread_):
             date(date_), title(title_), link(link_), desc(desc_), unread(unread_)
         {}
     } News;

@@ -1,12 +1,12 @@
 {
 	"lastRelease":"0.4.6",
-	"mainText": "Actualité du logiciel <b>Qrop</b><br/>De temps à autre il y aura quelques sondages pour orienter le développement des nouvelles fonctionnalités.",
+	"mainText": "From time to time we'll display some news and polls to orientate <b>Qrop</b> developement.",
 	"news": [
 		{
 			"date": "2021-01-23",
-			"title": "Création de l'interface de News",
+			"title": "Creation of the News interface in Qrop",
 			"link": "https://framagit.org/ah/qrop/-/issues/309",
-			"desc": "Permettre aux utilisateurs de connaitres les dernières évolutions de l'outil ainsi que la diffusion de sondages aux utilisateurs pour mettre en place la roadmap"
+			"desc": "Allow users to know about the latest features of Qrop and participate in the roadmap via some polls."
 		},
 		{
 			"date":"2021-01-14",

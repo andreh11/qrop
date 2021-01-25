@@ -1,5 +1,23 @@
+/*
+ * Copyright (C) 2021 André Hoarau <ah@ouvaton.org>
+ *                  & Matthieu Bruel <Matthieu.Bruel@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "qropnews.h"
 #include "qrop.h"
+#include "qrpdate.h"
 
 #include <QUrl>
 #include <QNetworkRequest>
@@ -31,15 +49,8 @@ void QropNews::fetchNews()
     if (m_lang == "system")
         m_lang = QLocale::system().name().left(2);
 
-    QString url = QString("%1").arg(s_newsJsonBaseLink);
-    if (!m_lang.isEmpty() && m_lang != "en")
-        url += QString("_%1").arg(m_lang);
-    url += ".json";
-
-    //    qDebug() << "[QropNews::fetchNews] url: " << url;
-
-    QNetworkRequest req(url);
-    req.setRawHeader("User-Agent", "Qrop Cpp app");
+    QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink).arg(m_lang));
+    req.setRawHeader("User-Agent", "Qrop Qt app");
 
     QNetworkReply *reply = Qrop::instance()->networkManager().get(req);
     connect(reply, &QNetworkReply::finished, this, &QropNews::onNewsReceived);
@@ -58,11 +69,13 @@ QString QropNews::toHtml()
         return QString();
 
     QString news("<ul>");
+    QLocale locale(m_lang);
     for (News *n : m_news) {
         if (n->unread)
-            news += QString("<b><li><font color=\"darkRed\"><i> %1</i></font>").arg(n->date);
+            news += QString("<b><li><font color=\"darkRed\"><i>%1 : </i></font>")
+                            .arg(locale.toString(n->date, QLocale::ShortFormat));
         else
-            news += QString("<li><i> %1</i> ").arg(n->date);
+            news += QString("<li><i>%1 : </i> ").arg(locale.toString(n->date, QLocale::ShortFormat));
         if (n->link.isEmpty())
             news += QString("<b>%1</b>").arg(n->title);
         else
@@ -70,7 +83,7 @@ QString QropNews::toHtml()
         if (n->unread)
             news += "</b>";
         if (!n->desc.isEmpty())
-            news += ": <br/>" + n->desc;
+            news += "<br/>" + n->desc;
         news += "<br/></li>";
     }
     news += "</ul>";
@@ -89,7 +102,7 @@ void QropNews::onNewsReceived()
     }
 
     QVariant contentType = reply->header(QNetworkRequest::ContentTypeHeader);
-    if (!contentType.isValid() || !contentType.toString().startsWith("text/plain")) {
+    if (!contentType.isValid() || contentType.toString() != s_newsJsonContentType) {
         _error(tr("Error fetching news: invalid contentType from url: %1 : %2")
                        .arg(reply->url().toString())
                        .arg(contentType.toString()));
@@ -123,18 +136,17 @@ void QropNews::onNewsReceived()
     QDate lastNewsUpdate = Qrop::instance()->lastNewsUpdate();
     for (auto it = news.begin(), itEnd = news.end(); it != itEnd; ++it) {
         QJsonObject n = it->toObject();
-        QString date, title, link, desc;
+        QString title, link, desc;
+        QDate date;
         bool unread = false;
         if (n.contains("date")) {
-            date = n["date"].toString();
-            if (lastNewsUpdate.isNull()
-                || QDate::fromString(date, m_lang == "en" ? "MM/dd/yyyy" : "dd/MM/yyyy")
-                        > lastNewsUpdate) {
+            date = QDate::fromString(n["date"].toString(), Qt::ISODate);
+            if (lastNewsUpdate.isNull() || date > lastNewsUpdate) {
                 unread = true;
                 ++m_numberOfUnreadNews;
             }
             if (m_lastUpdate.isNull())
-                m_lastUpdate = QDate::fromString(date, m_lang == "en" ? "MM/dd/yyyy" : "dd/MM/yyyy");
+                m_lastUpdate = date;
         }
         if (n.contains("title"))
             title = n["title"].toString();
@@ -143,7 +155,7 @@ void QropNews::onNewsReceived()
         if (n.contains("desc"))
             desc = n["desc"].toString();
 
-        if (!date.isEmpty() && !title.isEmpty())
+        if (date.isValid() && !title.isEmpty())
             m_news << new News(date, title, link, desc, unread);
         else
             qCritical() << "unexpected News: " << n;

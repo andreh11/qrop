@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2021 André Hoarau <ah@ouvaton.org>
+ *                  & Matthieu Bruel <Matthieu.Bruel@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QUrl>
 #include <QTranslator>
 #include <QCoreApplication>
@@ -16,14 +33,14 @@ Qrop::Qrop(QObject *parent)
     , m_buildInfo(new BuildInfo)
     , m_errors()
     , m_netMgr()
-    , m_news(new QropNews())
+    , m_news(new QropNews)
 {
 }
 
 Qrop::~Qrop()
 {
     if (m_news->areRead())
-        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString("yyyy/MM/dd"));
+        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
     m_settings.sync();
 
     delete m_news;
@@ -121,14 +138,13 @@ void Qrop::loadCurrentDatabase()
 
 void Qrop::installTranslator()
 {
-    QString lang = QLocale::system().name(),
-            preferredLanguage = m_settings.value("preferredLanguage", "system").toString();
-    qDebug() << "LANG: " << lang << ", preferredLanguage: " << preferredLanguage;
+    QString lang = QLocale::system().name(), prefLanguage = preferredLanguage();
+    qDebug() << "LANG: " << lang << ", preferredLanguage: " << prefLanguage;
 
-    if (preferredLanguage == "system")
+    if (prefLanguage == "system")
         m_translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
     else
-        m_translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
+        m_translator->load(":/translations/qrop_" + prefLanguage + ".qm");
 
     qApp->installTranslator(m_translator);
 }
