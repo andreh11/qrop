@@ -21,6 +21,7 @@
 #include <QUrl>
 #include "core_global.h"
 
+class Qrop;
 class CORESHARED_EXPORT Database : public QObject
 {
     Q_OBJECT
@@ -39,7 +40,13 @@ public:
     static void copy(const QUrl &from, const QUrl &to);
     static void close();
 
+    void loadDatabase(Qrop *qrop);
+
 private:
+    void loadFamilies(Qrop *qrop);
+    void loadCrops(Qrop *qrop);
+    void loadVarieties(Qrop *qrop);
+
     static bool addDefaultSqliteDatabase();
 
     static int databaseVersion();

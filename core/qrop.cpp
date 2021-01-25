@@ -34,11 +34,26 @@ Qrop::Qrop(QObject *parent)
     , m_errors()
     , m_netMgr()
     , m_news(new QropNews)
+    , m_families()
+    , m_crops()
+    , m_varieties()
 {
+}
+
+void Qrop::clearBusinessObjects()
+{
+    qDeleteAll(m_families);
+    m_families.clear();
+    qDeleteAll(m_crops);
+    m_crops.clear();
+    qDeleteAll(m_varieties);
+    m_varieties.clear();
 }
 
 Qrop::~Qrop()
 {
+    clearBusinessObjects();
+
     if (m_news->areRead())
         m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
     m_settings.sync();
@@ -71,10 +86,18 @@ int Qrop::init()
 
 bool Qrop::loadDatabase(const QUrl &url)
 {
-    if (url.isLocalFile())
-        return m_db->connectToDatabase(url);
-    else if (url.scheme().startsWith("http"))
+    clearBusinessObjects();
+    if (url.isLocalFile()) {
+        if (m_db->connectToDatabase(url)) {
+            m_db->loadDatabase(this);
+            qDebug() << "[Qrop::loadDatabase] "
+                     << "nb Families: " << m_families.size() << ", nb Crops: " << m_crops.size()
+                     << ", nb Varieties: " << m_varieties.size();
+            return true;
+        }
+    } else if (url.scheme().startsWith("http"))
         return false; // MB_TODO: load from json request
+
     return false;
 }
 

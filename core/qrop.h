@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QNetworkAccessManager>
+#include <QHash>
 #include "singleton.h"
 #include "buildinfo.h"
 
@@ -29,6 +30,7 @@ class Database;
 class QropNews;
 class QTranslator;
 
+#include "business/family.h"
 class Qrop : public QObject, public Singleton<Qrop>
 {
     Q_OBJECT
@@ -45,12 +47,19 @@ private:
     QNetworkAccessManager m_netMgr; //!< for http(s) requests
     QropNews *m_news;
 
+    QHash<uint, qrp::Family*> m_families;
+    QHash<uint, qrp::Crop*> m_crops;
+    QHash<uint, qrp::Variety*> m_varieties;
+
+
 signals:
     void info(const QString &msg);
     void error(const QString &err);
 
 private:
     Qrop(QObject *parent = nullptr);
+
+    void clearBusinessObjects();
 
 public:
     ~Qrop();
@@ -93,6 +102,28 @@ public:
     }
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
+
+
+    void addFamily(uint id, const QString &name, ushort interval, const QString &color) {
+        m_families.insert(id, new qrp::Family(id, name, interval, color));
+    }
+    void addCrop(uint id, const QString &name, const QString &color, uint family_id) {
+        qrp::Family *family = m_families.value(family_id, nullptr);
+        if (family) {
+            qrp::Crop *crop = new qrp::Crop(id, name, color, family);
+            m_crops.insert(id, crop);
+            family->addCrop(crop);
+        }
+    }
+    void addVariety(uint id, const QString &name, uint crop_id, bool is_default) {
+        qrp::Crop *crop = m_crops.value(crop_id, nullptr);
+        if (crop) {
+            qrp::Variety *variety = new qrp::Variety(id, name, is_default, crop);
+            m_varieties.insert(id, variety);
+            crop->addVariety(variety);
+        }
+    }
+
 
 private:
     void loadCurrentDatabase();

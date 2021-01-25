@@ -192,6 +192,53 @@ void Database::close()
     database.close();
 }
 
+#include "qrop.h"
+void Database::loadDatabase(Qrop *qrop)
+{
+    loadFamilies(qrop);
+    loadCrops(qrop);
+    loadVarieties(qrop);
+}
+
+void Database::loadFamilies(Qrop *qrop)
+{
+    QSqlQuery query;
+    if (!query.exec("select family_id, family, interval, color from family")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    while (query.next()) {
+        qrop->addFamily(query.value(0).toUInt(), query.value(1).toString(),
+                        static_cast<ushort>(query.value(2).toUInt()), query.value(3).toString());
+    }
+}
+
+void Database::loadCrops(Qrop *qrop)
+{
+    QSqlQuery query;
+    if (!query.exec("select crop_id, crop, color, family_id from crop")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    while (query.next()) {
+        qrop->addCrop(query.value(0).toUInt(), query.value(1).toString(), query.value(2).toString(),
+                      query.value(3).toUInt());
+    }
+}
+
+void Database::loadVarieties(Qrop *qrop)
+{
+    QSqlQuery query;
+    if (!query.exec("select variety_id, variety, crop_id, is_default from variety")) {
+        qCritical() << "Can't Execute Query";
+        return;
+    }
+    while (query.next()) {
+        qrop->addVariety(query.value(0).toUInt(), query.value(1).toString(),
+                         query.value(2).toUInt(), query.value(3).toBool());
+    }
+}
+
 int Database::execSqlFile(const QString &fileName, const QString &separator)
 {
     Q_INIT_RESOURCE(core_resources); // Needed for the method to find the resource files.

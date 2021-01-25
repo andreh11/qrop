@@ -23,6 +23,8 @@ add_library(core SHARED
         tableprinter.cpp
         qropdoublevalidator.cpp
 
+        business/family.cpp
+
         dbutils/db.cpp
         dbutils/databaseutility.cpp
         dbutils/family.cpp
