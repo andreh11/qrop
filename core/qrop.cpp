@@ -23,6 +23,7 @@
 #include "qropnews.h"
 #include "qrop.h"
 #include "dbutils/db.h"
+#include "models/familymodel.h"
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
@@ -37,13 +38,23 @@ Qrop::Qrop(QObject *parent)
     , m_families()
     , m_crops()
     , m_varieties()
+    , m_familyModel(new FamilyModel2(this))
+    , m_familyProxyModel(new QSortFilterProxyModel)
 {
+    m_familyProxyModel->setSourceModel(m_familyModel);
+    m_familyProxyModel->setSortRole(FamilyModel2::FamilyRole::name);
+    m_familyProxyModel->setDynamicSortFilter(true);
+    m_familyProxyModel->sort(0, Qt::AscendingOrder);
 }
 
 void Qrop::clearBusinessObjects()
 {
-    qDeleteAll(m_families);
-    m_families.clear();
+    if (!m_families.isEmpty()) {
+        emit beginResetFamilyModel();
+        qDeleteAll(m_families);
+        m_families.clear();
+        emit endResetFamilyModel();
+    }
     qDeleteAll(m_crops);
     m_crops.clear();
     qDeleteAll(m_varieties);
@@ -52,6 +63,9 @@ void Qrop::clearBusinessObjects()
 
 Qrop::~Qrop()
 {
+    delete m_familyProxyModel;
+    delete m_familyModel;
+
     clearBusinessObjects();
 
     if (m_news->areRead())

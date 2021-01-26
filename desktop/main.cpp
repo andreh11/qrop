@@ -76,6 +76,7 @@
 #include <QQmlContext>
 #include <QQmlFileSelector>
 #include <QLoggingCategory>
+#include <QAbstractItemModel>
 
 void registerFonts()
 {
@@ -90,10 +91,15 @@ void registerFonts()
 
 void registerTypes()
 {
+    qmlRegisterUncreatableType<Qrop>("io.qrop.components", 1, 0, "Qrop",
+                                     QStringLiteral("Qrop should not be created in QML"));
+
     qmlRegisterUncreatableType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
                                           QStringLiteral("BuildInfo should not be created in QML"));
     qmlRegisterUncreatableType<QropNews>("io.qrop.components", 1, 0, "QropNews",
                                          QStringLiteral("QropNews should not be created in QML"));
+
+    qmlRegisterInterface<QAbstractItemModel>("io.qrop.components");
 
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
@@ -331,9 +337,10 @@ int main(int argc, char *argv[])
     // (cf http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#data-ownership )
     engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
     engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->modelFamily(), QQmlEngine::CppOwnership);
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
-    const QUrl url(QStringLiteral("qrc:/qml/Qrop.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/MainWindow.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
                          if (!obj && url == objUrl)

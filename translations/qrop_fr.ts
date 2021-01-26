@@ -3358,38 +3358,38 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     </message>
 </context>
 <context>
-    <name>Qrop</name>
+    <name>MainWindow</name>
     <message>
         <source>Dashboard</source>
         <translation type="vanished">Tableau de bord</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="44"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="44"/>
         <source>Plantings</source>
         <translation>Séries</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="45"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="45"/>
         <source>Tasks</source>
         <translation>Tâches</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="46"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="46"/>
         <source>Crop Map</source>
         <translation>Assolement</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="47"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="47"/>
         <source>Harvests</source>
         <translation>Récoltes</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="48"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="48"/>
         <source>Seed list</source>
         <translation>Semences</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="49"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="49"/>
         <source>Charts</source>
         <translation>Graphiques</translation>
     </message>
@@ -3422,7 +3422,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Base de données principale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="274"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="274"/>
         <source>Main database menu</source>
         <translation>Menu base de donnée principale</translation>
     </message>
@@ -3435,12 +3435,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Base de données secondaire</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="327"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="327"/>
         <source>No other database opened</source>
         <translation>Aucune autre base de données n&apos;est ouverte</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="336"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="336"/>
         <source>Database menu</source>
         <translation>Menu base de données</translation>
     </message>
@@ -3457,91 +3457,91 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Exporter</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="51"/>
-        <location filename="../desktop/qml/Qrop.qml" line="371"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="51"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="371"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="115"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="115"/>
         <source>There are no database available...</source>
         <translation>Il n&apos;y as de base de données disponibles.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="117"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="117"/>
         <source>They should all be copied in the following folder</source>
         <translation>Elle doivent toutes être copiées dans le répertoire suivant : </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="126"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="126"/>
         <source>Open Main DataBase</source>
         <translation>Ouvrir la base de données principale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="126"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="126"/>
         <source>Open Secondary DataBase</source>
         <translation>Ouvrir la base de donnée secondaire</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="128"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="128"/>
         <source>Please select a database to open</source>
         <translation>Veuillez sélectionner une base de données à ouvrir</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="129"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="129"/>
         <source>They must all be in the folder:</source>
         <translation>Elles doivent toutes se trouver dans le répertoire suivant : </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="138"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="138"/>
         <source>New Main DataBase</source>
         <translation>Nouvelle base de données principale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="138"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="138"/>
         <source>New Secondary DataBase</source>
         <translation>Nouvelle base de données secondaire</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="141"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="141"/>
         <source>Export Main DataBase</source>
         <translation>Exporter la base de données principale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="141"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="141"/>
         <source>Export Secondary DataBase</source>
         <translation>Exporter la base de données secondaire</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="143"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="143"/>
         <source>Database name:</source>
         <translation>Nom de la base de données :</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="279"/>
-        <location filename="../desktop/qml/Qrop.qml" line="341"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="279"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="341"/>
         <source>New...</source>
         <translation>Nouvelle...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="283"/>
-        <location filename="../desktop/qml/Qrop.qml" line="345"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="283"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="345"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="287"/>
-        <location filename="../desktop/qml/Qrop.qml" line="349"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="287"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="349"/>
         <source>Export...</source>
         <translation>Exporter...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="354"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="354"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="386"/>
+        <location filename="../desktop/qml/MainWindow.qml" line="386"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>

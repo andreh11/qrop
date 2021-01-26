@@ -207,10 +207,12 @@ void Database::loadFamilies(Qrop *qrop)
         qCritical() << "Can't Execute Query !";
         return;
     }
+    emit qrop->beginResetFamilyModel();
     while (query.next()) {
         qrop->addFamily(query.value(0).toUInt(), query.value(1).toString(),
                         static_cast<ushort>(query.value(2).toUInt()), query.value(3).toString());
     }
+    emit qrop->endResetFamilyModel();
 }
 
 void Database::loadCrops(Qrop *qrop)

@@ -31,7 +31,7 @@ Pane {
     signal close();
 
     function refresh() {
-        familyModel.refresh();
+//        familyModel.refresh();
     }
 
     Material.elevation: 0
@@ -107,7 +107,11 @@ Pane {
         Keys.onDownPressed: scrollBar.increase()
 
         spacing: 0
-        model: FamilyModel { id: familyModel }
+        model: cppQrop.modelFamily()
+//        model: FamilyProxyModel {
+//            id: familyModel
+//            qrop: cppQrop
+//        }
         delegate: SettingsFamilyDelegate {
             width: paneWidth
             anchors.horizontalCenter: parent.horizontalCenter

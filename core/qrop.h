@@ -21,7 +21,8 @@
 #include <QObject>
 #include <QSettings>
 #include <QNetworkAccessManager>
-#include <QHash>
+#include <QMap>
+#include <QSortFilterProxyModel>
 #include "singleton.h"
 #include "buildinfo.h"
 
@@ -29,6 +30,7 @@ class BuildInfo;
 class Database;
 class QropNews;
 class QTranslator;
+class FamilyModel2;
 
 #include "business/family.h"
 class Qrop : public QObject, public Singleton<Qrop>
@@ -47,14 +49,22 @@ private:
     QNetworkAccessManager m_netMgr; //!< for http(s) requests
     QropNews *m_news;
 
-    QHash<uint, qrp::Family*> m_families;
-    QHash<uint, qrp::Crop*> m_crops;
-    QHash<uint, qrp::Variety*> m_varieties;
+    QMap<uint, qrp::Family*> m_families;
+    QMap<uint, qrp::Crop*> m_crops;
+    QMap<uint, qrp::Variety*> m_varieties;
+
+    FamilyModel2 *m_familyModel;
+    QSortFilterProxyModel *m_familyProxyModel;
 
 
 signals:
     void info(const QString &msg);
     void error(const QString &err);
+
+    // signals for FamilyModel
+    void beginResetFamilyModel();
+    void endResetFamilyModel();
+
 
 private:
     Qrop(QObject *parent = nullptr);
@@ -70,20 +80,20 @@ public:
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
     Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);
 
-    inline Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
+    Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
 
-    inline Q_INVOKABLE QropNews *news() const {return m_news;}
+    Q_INVOKABLE QropNews *news() const {return m_news;}
 
-    inline bool hasErrors() const {return m_errors.size() != 0;}
-    inline void showErrors() {
+    bool hasErrors() const {return m_errors.size() != 0;}
+    void showErrors() {
         emit error(m_errors.join("\n"));
         m_errors.clear();
     };
 
-    inline QNetworkAccessManager &networkManager() {return m_netMgr;}
-    inline Q_INVOKABLE BuildInfo *buildInfo() const {return m_buildInfo;}
+    QNetworkAccessManager &networkManager() {return m_netMgr;}
+    Q_INVOKABLE BuildInfo *buildInfo() const {return m_buildInfo;}
 
-    inline void sendInfo(const QString &msg) {
+    void sendInfo(const QString &msg) {
         emit info(msg);
         qDebug() << msg;
     }
@@ -92,11 +102,11 @@ public:
         qCritical() << err;
     }
 
-    inline QString preferredLanguage() const {
+    QString preferredLanguage() const {
         return m_settings.value("preferredLanguage", "system").toString();
     }
 
-    inline QDate lastNewsUpdate() const {
+    QDate lastNewsUpdate() const {
         QString dateStr = m_settings.value("lastNewsUpdate", "").toString();
         return dateStr.isEmpty() ? QDate() : QDate::fromString(dateStr, Qt::ISODate);
     }
@@ -123,6 +133,18 @@ public:
             crop->addVariety(variety);
         }
     }
+
+    int numberOfFamilies() const {return m_families.size();}
+    qrp::Family *family(int row) const {
+        if (row > m_families.size())
+            return nullptr;
+        auto it = m_families.cbegin();
+        it += row;
+        return it.value();
+    }
+
+    Q_INVOKABLE QAbstractItemModel *modelFamily() const {return m_familyProxyModel;}
+
 
 
 private:
