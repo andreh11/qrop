@@ -2,7 +2,7 @@
 #define QRP_FAMILY_H
 #include <QtGlobal>
 #include <QString>
-#include <QSet>
+#include <QList>
 
 namespace qrp {
 
@@ -15,12 +15,18 @@ struct Family
     QString name;
     ushort interval;
     QString color;
-    QSet<Crop*> crops;
+    QList<Crop*> crops;
 
     Family(uint id_, const QString &n, ushort i, const QString &c):
         id(id_), name(n), interval(i), color(c), crops() {}
 
-    void addCrop(Crop *c) {crops.insert(c);}
+    void addCrop(Crop *c) {crops << c;}
+
+    Crop *crop(int row) const {
+        if (row >= crops.size())
+            return nullptr;
+        return crops.at(row);
+    }
 };
 
 struct Crop
@@ -29,11 +35,17 @@ struct Crop
     QString name;
     QString color;
     Family *family;
-    QSet<Variety*> varieties;
+    QList<Variety*> varieties;
     Crop(uint id_, const QString &n, const QString &c, Family *f) :
         id(id_), name(n), color(c), family(f), varieties(){}
 
-    void addVariety(Variety *v) {varieties.insert(v);}
+    void addVariety(Variety *v) {varieties << v;}
+
+    Variety *variety(int row) const {
+        if (row >= varieties.size())
+            return nullptr;
+        return varieties.at(row);
+    }
 };
 
 struct Variety {

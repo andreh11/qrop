@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2021 André Hoarau <ah@ouvaton.org>
+ *                  & Matthieu Bruel <Matthieu.Bruel@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +38,57 @@ signals:
 
 private:
     int m_familyId { -1 };
+};
+
+#include <QAbstractListModel>
+#include "business/family.h"
+class Qrop;
+
+class CropModel2 : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
+
+    static const QHash<int, QByteArray> sRoleNames;
+
+public:
+    explicit CropModel2(QObject *parent = nullptr);
+
+    enum CropRole { name = Qt::UserRole, color, id };
+
+    // Basic functionality:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
+
+    int familyId() const { return m_familyId; }
+    void setFamilyId(int familyId);
+
+private:
+    int m_familyId;
+    qrp::Family *m_family;
+};
+
+class CropProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
+
+public:
+    CropProxyModel(QObject *parent = nullptr);
+    ~CropProxyModel() override;
+
+    int familyId() const { return m_model ? m_model->familyId() : -1; }
+    void setFamilyId(int familyId)
+    {
+        if (m_model)
+            m_model->setFamilyId(familyId);
+    }
+
+private:
+    CropModel2 *m_model;
 };
 
 #endif // CROPMODEL_H

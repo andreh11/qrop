@@ -78,6 +78,16 @@
 #include <QLoggingCategory>
 #include <QAbstractItemModel>
 
+struct PkgVersion {
+    const int maj;
+    const int min;
+    PkgVersion(int major, int minor)
+        : maj(major)
+        , min(minor)
+    {
+    }
+};
+
 void registerFonts()
 {
     const int ret1 = QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
@@ -91,59 +101,64 @@ void registerFonts()
 
 void registerTypes()
 {
-    qmlRegisterUncreatableType<Qrop>("io.qrop.components", 1, 0, "Qrop",
+    const char *packageURI = "io.qrop.components";
+    const PkgVersion ver { 1, 0 };
+
+    qmlRegisterUncreatableType<Qrop>(packageURI, ver.maj, ver.min, "Qrop",
                                      QStringLiteral("Qrop should not be created in QML"));
 
-    qmlRegisterUncreatableType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
+    qmlRegisterUncreatableType<BuildInfo>(packageURI, ver.maj, ver.min, "BuildInfo",
                                           QStringLiteral("BuildInfo should not be created in QML"));
-    qmlRegisterUncreatableType<QropNews>("io.qrop.components", 1, 0, "QropNews",
+    qmlRegisterUncreatableType<QropNews>(packageURI, ver.maj, ver.min, "QropNews",
                                          QStringLiteral("QropNews should not be created in QML"));
 
     qmlRegisterInterface<QAbstractItemModel>("io.qrop.components");
+    //    qmlRegisterType<CropModel2>(packageURI, ver.maj, ver.min, "CropModel2");
+    qmlRegisterType<CropProxyModel>(packageURI, ver.maj, ver.min, "CropProxyModel");
 
-    qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
-    qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
-    qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
-    qmlRegisterType<HarvestModel>("io.qrop.components", 1, 0, "HarvestModel");
-    qmlRegisterType<KeywordModel>("io.qrop.components", 1, 0, "KeywordModel");
-    qmlRegisterType<LocationModel>("io.qrop.components", 1, 0, "LocationModel");
-    qmlRegisterType<NoteModel>("io.qrop.components", 1, 0, "NoteModel");
-    qmlRegisterType<PlantingModel>("io.qrop.components", 1, 0, "PlantingModel");
-    qmlRegisterType<QFileSystemModel>("io.qrop.components", 1, 0, "FileSystemModel");
-    qmlRegisterType<QropDoubleValidator>("io.qrop.components", 1, 0, "QropDoubleValidator");
-    qmlRegisterType<RecordModel>("io.qrop.components", 1, 0, "RecordModel");
-    qmlRegisterType<SeedCompanyModel>("io.qrop.components", 1, 0, "SeedCompanyModel");
-    qmlRegisterType<SeedListModel>("io.qrop.components", 1, 0, "SeedListModel");
-    qmlRegisterType<SeedListMonthModel>("io.qrop.components", 1, 0, "SeedListMonthModel");
-    qmlRegisterType<SeedListQuarterModel>("io.qrop.components", 1, 0, "SeedListQuarterModel");
-    qmlRegisterType<SqlTreeModel>("io.qrop.components", 1, 0, "SqlTreeModel");
-    qmlRegisterType<TaskImplementModel>("io.qrop.components", 1, 0, "TaskImplementModel");
-    qmlRegisterType<TaskMethodModel>("io.qrop.components", 1, 0, "TaskMethodModel");
-    qmlRegisterType<TaskModel>("io.qrop.components", 1, 0, "TaskModel");
-    qmlRegisterType<TaskTemplateModel>("io.qrop.components", 1, 0, "TaskTemplateModel");
-    qmlRegisterType<TaskTypeModel>("io.qrop.components", 1, 0, "TaskTypeModel");
-    qmlRegisterType<TemplateTaskModel>("io.qrop.components", 1, 0, "TemplateTaskModel");
-    qmlRegisterType<TimeValidator>("io.qrop.components", 1, 0, "TimeValidator");
-    qmlRegisterType<TransplantListModel>("io.qrop.components", 1, 0, "TransplantListModel");
-    qmlRegisterType<UnitModel>("io.qrop.components", 1, 0, "UnitModel");
-    qmlRegisterType<VarietyModel>("io.qrop.components", 1, 0, "VarietyModel");
-    qmlRegisterType<QQuickTreeModelAdaptor>("io.qrop.components", 1, 0, "TreeModelAdaptor");
+    qmlRegisterType<CropModel>(packageURI, ver.maj, ver.min, "CropModel");
+    qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
+    qmlRegisterType<FamilyModel>(packageURI, ver.maj, ver.min, "FamilyModel");
+    qmlRegisterType<HarvestModel>(packageURI, ver.maj, ver.min, "HarvestModel");
+    qmlRegisterType<KeywordModel>(packageURI, ver.maj, ver.min, "KeywordModel");
+    qmlRegisterType<LocationModel>(packageURI, ver.maj, ver.min, "LocationModel");
+    qmlRegisterType<NoteModel>(packageURI, ver.maj, ver.min, "NoteModel");
+    qmlRegisterType<PlantingModel>(packageURI, ver.maj, ver.min, "PlantingModel");
+    qmlRegisterType<QFileSystemModel>(packageURI, ver.maj, ver.min, "FileSystemModel");
+    qmlRegisterType<QropDoubleValidator>(packageURI, ver.maj, ver.min, "QropDoubleValidator");
+    qmlRegisterType<RecordModel>(packageURI, ver.maj, ver.min, "RecordModel");
+    qmlRegisterType<SeedCompanyModel>(packageURI, ver.maj, ver.min, "SeedCompanyModel");
+    qmlRegisterType<SeedListModel>(packageURI, ver.maj, ver.min, "SeedListModel");
+    qmlRegisterType<SeedListMonthModel>(packageURI, ver.maj, ver.min, "SeedListMonthModel");
+    qmlRegisterType<SeedListQuarterModel>(packageURI, ver.maj, ver.min, "SeedListQuarterModel");
+    qmlRegisterType<SqlTreeModel>(packageURI, ver.maj, ver.min, "SqlTreeModel");
+    qmlRegisterType<TaskImplementModel>(packageURI, ver.maj, ver.min, "TaskImplementModel");
+    qmlRegisterType<TaskMethodModel>(packageURI, ver.maj, ver.min, "TaskMethodModel");
+    qmlRegisterType<TaskModel>(packageURI, ver.maj, ver.min, "TaskModel");
+    qmlRegisterType<TaskTemplateModel>(packageURI, ver.maj, ver.min, "TaskTemplateModel");
+    qmlRegisterType<TaskTypeModel>(packageURI, ver.maj, ver.min, "TaskTypeModel");
+    qmlRegisterType<TemplateTaskModel>(packageURI, ver.maj, ver.min, "TemplateTaskModel");
+    qmlRegisterType<TimeValidator>(packageURI, ver.maj, ver.min, "TimeValidator");
+    qmlRegisterType<TransplantListModel>(packageURI, ver.maj, ver.min, "TransplantListModel");
+    qmlRegisterType<UnitModel>(packageURI, ver.maj, ver.min, "UnitModel");
+    qmlRegisterType<VarietyModel>(packageURI, ver.maj, ver.min, "VarietyModel");
+    qmlRegisterType<QQuickTreeModelAdaptor>(packageURI, ver.maj, ver.min, "TreeModelAdaptor");
 
-    qmlRegisterSingletonType<Planting>("io.qrop.components", 1, 0, "Planting",
+    qmlRegisterSingletonType<Planting>(packageURI, ver.maj, ver.min, "Planting",
                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                            Q_UNUSED(engine)
                                            Q_UNUSED(scriptEngine)
                                            return new Planting;
                                        });
 
-    qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
+    qmlRegisterSingletonType<FileSystem>(packageURI, ver.maj, ver.min, "FileSystem",
                                          [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                              Q_UNUSED(engine)
                                              Q_UNUSED(scriptEngine)
                                              return new FileSystem();
                                          });
 
-    qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
+    qmlRegisterSingletonType<Print>(packageURI, ver.maj, ver.min, "Print",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                         Q_UNUSED(engine)
                                         Q_UNUSED(scriptEngine)
@@ -151,7 +166,7 @@ void registerTypes()
                                         return print;
                                     });
 
-    qmlRegisterSingletonType<Helpers>("io.qrop.components", 1, 0, "Helpers",
+    qmlRegisterSingletonType<Helpers>(packageURI, ver.maj, ver.min, "Helpers",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
@@ -159,7 +174,7 @@ void registerTypes()
                                           return helpers;
                                       });
 
-    qmlRegisterSingletonType<dbutils::Family>("io.qrop.components", 1, 0, "Family",
+    qmlRegisterSingletonType<dbutils::Family>(packageURI, ver.maj, ver.min, "Family",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -168,7 +183,7 @@ void registerTypes()
                                               });
 
     qmlRegisterSingletonType<dbutils::Variety>(
-            "io.qrop.components", 1, 0, "Variety",
+            packageURI, ver.maj, ver.min, "Variety",
             [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                 Q_UNUSED(engine)
                 Q_UNUSED(scriptEngine)
@@ -176,7 +191,7 @@ void registerTypes()
                 return variety;
             });
 
-    qmlRegisterSingletonType<SeedCompany>("io.qrop.components", 1, 0, "SeedCompany",
+    qmlRegisterSingletonType<SeedCompany>(packageURI, ver.maj, ver.min, "SeedCompany",
                                           [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                               Q_UNUSED(engine)
                                               Q_UNUSED(scriptEngine)
@@ -184,7 +199,7 @@ void registerTypes()
                                               return seedCompany;
                                           });
 
-    qmlRegisterSingletonType<Keyword>("io.qrop.components", 1, 0, "Keyword",
+    qmlRegisterSingletonType<Keyword>(packageURI, ver.maj, ver.min, "Keyword",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
@@ -192,7 +207,7 @@ void registerTypes()
                                           return keyword;
                                       });
 
-    qmlRegisterSingletonType<Task>("io.qrop.components", 1, 0, "Task",
+    qmlRegisterSingletonType<Task>(packageURI, ver.maj, ver.min, "Task",
                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                        Q_UNUSED(engine)
                                        Q_UNUSED(scriptEngine)
@@ -200,7 +215,7 @@ void registerTypes()
                                        return task;
                                    });
 
-    qmlRegisterSingletonType<Location>("io.qrop.components", 1, 0, "Location",
+    qmlRegisterSingletonType<Location>(packageURI, ver.maj, ver.min, "Location",
                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                            Q_UNUSED(engine)
                                            Q_UNUSED(scriptEngine)
@@ -208,7 +223,7 @@ void registerTypes()
                                            return location;
                                        });
 
-    qmlRegisterSingletonType<QrpDate>("io.qrop.components", 1, 0, "QrpDate",
+    qmlRegisterSingletonType<QrpDate>(packageURI, ver.maj, ver.min, "QrpDate",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                           Q_UNUSED(engine)
                                           Q_UNUSED(scriptEngine)
@@ -216,7 +231,7 @@ void registerTypes()
                                           return mdate;
                                       });
 
-    qmlRegisterSingletonType<Note>("io.qrop.components", 1, 0, "Note",
+    qmlRegisterSingletonType<Note>(packageURI, ver.maj, ver.min, "Note",
                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                        Q_UNUSED(engine)
                                        Q_UNUSED(scriptEngine)
@@ -225,7 +240,7 @@ void registerTypes()
                                        return db;
                                    });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Crop",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "Crop",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -234,7 +249,7 @@ void registerTypes()
                                                   return crop;
                                               });
 
-    qmlRegisterSingletonType<TemplateTask>("io.qrop.components", 1, 0, "TemplateTask",
+    qmlRegisterSingletonType<TemplateTask>(packageURI, ver.maj, ver.min, "TemplateTask",
                                            [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                Q_UNUSED(engine)
                                                Q_UNUSED(scriptEngine)
@@ -242,7 +257,7 @@ void registerTypes()
                                                return db;
                                            });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Unit",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "Unit",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -252,7 +267,7 @@ void registerTypes()
                                                   return unit;
                                               });
 
-    qmlRegisterSingletonType<TaskTemplate>("io.qrop.components", 1, 0, "TaskTemplate",
+    qmlRegisterSingletonType<TaskTemplate>(packageURI, ver.maj, ver.min, "TaskTemplate",
                                            [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                Q_UNUSED(engine)
                                                Q_UNUSED(scriptEngine)
@@ -260,7 +275,7 @@ void registerTypes()
                                                return tasktemplate;
                                            });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskType",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "TaskType",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -270,7 +285,7 @@ void registerTypes()
                                                   return tasktype;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskMethod",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "TaskMethod",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -280,7 +295,7 @@ void registerTypes()
                                                   return taskmethod;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "TaskImplement",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "TaskImplement",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
@@ -290,7 +305,7 @@ void registerTypes()
                                                   return taskimplement;
                                               });
 
-    qmlRegisterSingletonType<DatabaseUtility>("io.qrop.components", 1, 0, "Harvest",
+    qmlRegisterSingletonType<DatabaseUtility>(packageURI, ver.maj, ver.min, "Harvest",
                                               [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
                                                   Q_UNUSED(engine)
                                                   Q_UNUSED(scriptEngine)
