@@ -66,7 +66,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         if (firstDatabaseFile === "")
-            firstDatabaseFile = cppRemote.defaultDatabaseUrl();
+            firstDatabaseFile = cppQrop.defaultDatabaseUrl();
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
