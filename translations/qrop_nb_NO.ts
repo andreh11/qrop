@@ -499,7 +499,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="139"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Søk …</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="185"/>
@@ -525,7 +525,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="205"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivhus</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="214"/>
@@ -550,7 +550,7 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediger</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
@@ -684,7 +684,7 @@
     <message>
         <location filename="../core/db.cpp" line="255"/>
         <source>Parsnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastinakk</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="256"/>
@@ -719,7 +719,7 @@
     <message>
         <location filename="../core/db.cpp" line="262"/>
         <source>Cauliflower</source>
-        <translation type="unfinished"></translation>
+        <translation>Blokmål</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="263"/>
@@ -759,7 +759,7 @@
     <message>
         <location filename="../core/db.cpp" line="270"/>
         <source>Zucchini</source>
-        <translation type="unfinished"></translation>
+        <translation>Squash</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="271"/>
@@ -804,7 +804,7 @@
     <message>
         <location filename="../core/db.cpp" line="279"/>
         <source>Potatoe</source>
-        <translation type="unfinished"></translation>
+        <translation>Potet</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="280"/>
@@ -874,12 +874,12 @@
     <message>
         <location filename="../core/db.cpp" line="295"/>
         <source>kilogram</source>
-        <translation type="unfinished"></translation>
+        <translation>kilogram</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="295"/>
         <source>kg</source>
-        <translation type="unfinished"></translation>
+        <translation>kg</translation>
     </message>
     <message>
         <location filename="../core/db.cpp" line="296"/>
@@ -1964,12 +1964,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1168"/>
         <source>Seeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Frø</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1178"/>
         <source>Seeds per hole</source>
-        <translation type="unfinished"></translation>
+        <translation>Frø per hull</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1194"/>
@@ -1979,12 +1979,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1198"/>
         <source>Number of seeds: %L1</source>
-        <translation type="unfinished"></translation>
+        <translation>Antall frø: %L1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1212"/>
         <source>Per gram</source>
-        <translation type="unfinished"></translation>
+        <translation>Per gram</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1213"/>
@@ -3061,17 +3061,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="137"/>
         <source>Seeds/hole</source>
-        <translation type="unfinished"></translation>
+        <translation>Frø/hull</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="138"/>
         <source># seeds</source>
-        <translation type="unfinished"></translation>
+        <translation># frø</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="139"/>
         <source>Seed weight</source>
-        <translation type="unfinished"></translation>
+        <translation>frøvekt</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="156"/>
@@ -3103,7 +3103,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="244"/>
         <location filename="../core/print.cpp" line="270"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="245"/>
@@ -3119,7 +3119,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="248"/>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiketter</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="249"/>
@@ -3325,7 +3325,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="218"/>
         <source>Seeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Frø</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="224"/>
@@ -3416,9 +3416,9 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message numerus="yes">
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="97"/>
         <source>%L1 years</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 år</numerusform>
+            <numerusform>%L1 år</numerusform>
         </translation>
     </message>
     <message>
@@ -4517,7 +4517,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/Qrop.qml" line="154"/>
         <location filename="../desktop/qml/Qrop.qml" line="166"/>
         <source>SQLITE (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Search</source>
