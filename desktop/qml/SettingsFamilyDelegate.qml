@@ -35,7 +35,13 @@ Column {
         NumberAnimation { duration: Units.shortDuration }
     }
 
+    width: parent.width
+    height: loaderCrops.sourceComponent != undefined
+            ? familyLine.height + loaderCrops.item.height + endLine.height
+            : familyLine.height + endLine.height
+
     Rectangle {
+        id: familyLine
         color: "white"
 //        Material.color(Material.Grey, Material.Shade100)
         width: parent.width
@@ -153,58 +159,75 @@ Column {
                     ToolTip.text: checked ? qsTr("Hide crops") : qsTr("Show crop")
                     ToolTip.visible: hovered
                     ToolTip.delay: 200
+
+                    onClicked: {
+                        loaderCrops.sourceComponent = checked ? crops : undefined;
+                    }
                 }
             }
         }
     }
 
-    ListView {
-        id: cropView
-        boundsBehavior: Flickable.StopAtBounds
-        flickableDirection: Flickable.HorizontalAndVerticalFlick
-        spacing: 0
-        visible: showCropsButton.checked
-        width: parent.width
-        height: contentHeight
-
-//        onVisibleChanged: if (visible) cropModel.refresh();
-
-        model: CropProxyModel {
-            id: cropModel
-            familyId: family_id
-        }
-
-        delegate: SettingsCropDelegate {
-            width: parent.width
-            onRefresh: cropModel.refreshRow(index)
-            firstColumnWidth: control.firstColumnWidth
-            secondColumnWidth: control.secondColumnWidth
-        }
+    Loader {
+        id : loaderCrops
+//        property int familyIndex: index
     }
 
-    Button {
-        id: addCropButton
-        visible: showCropsButton.checked
-        anchors.right: parent.right
-        anchors.rightMargin: Units.mediumSpacing
-        text: qsTr("Add crop")
-        flat: true
-        Material.foreground: Material.accent
-        onClicked: addCropDialog.open();
-        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-        Layout.rightMargin: Units.formSpacing
+    ThinDivider {
+        id: endLine
+        width: parent.width
+    }
 
-        AddCropDialog {
-            id: addCropDialog
-            margins: 0
-            alreadyAssignedFamilyId: true
-            onAccepted: {
-                var id = Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
-                Variety.add({ "variety": qsTr("Unknown"), "crop_id": id, "is_default" : 1 });
-                cropModel.refresh();
+    Component {
+        id: crops
+
+        Column {
+            height: cropView.height + addCropButton.height
+            width: control.width
+
+            ListView {
+                id: cropView
+                boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.HorizontalAndVerticalFlick
+                spacing: 0
+                width: control.width
+                height: contentHeight
+
+                model: CropProxyModel {
+                    id: cropModel
+                    familyId: family_id
+                }
+
+                delegate: SettingsCropDelegate {
+                    width: parent.width
+//                    onRefresh: cropModel.refreshRow(familyIndex)
+                    firstColumnWidth: control.firstColumnWidth
+                    secondColumnWidth: control.secondColumnWidth
+                }
+            }
+
+            Button {
+                id: addCropButton
+                anchors.right: parent.right
+                anchors.rightMargin: Units.mediumSpacing
+                text: qsTr("Add crop")
+                flat: true
+                Material.foreground: Material.accent
+                onClicked: addCropDialog.open();
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.rightMargin: Units.formSpacing
+
+                AddCropDialog {
+                    id: addCropDialog
+                    margins: 0
+                    alreadyAssignedFamilyId: true
+                    onAccepted: {
+                        var id = Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
+                        Variety.add({ "variety": qsTr("Unknown"), "crop_id": id, "is_default" : 1 });
+                        cropModel.refresh();
+                    }
+                }
             }
         }
     }
-
-    ThinDivider { width: parent.width }
 }

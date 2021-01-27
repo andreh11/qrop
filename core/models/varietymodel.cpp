@@ -18,6 +18,7 @@
 #include "sqltablemodel.h"
 #include "varietymodel.h"
 #include "qrop.h"
+#include "version.h"
 
 VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -112,6 +113,9 @@ void VarietyModel2::setCropId(int cropId)
     if (!m_crop)
         m_cropId = -1;
     endResetModel();
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[CropProxyModel] set family: " << (m_crop ? m_crop->name : QString("none"));
+#endif
 }
 
 VarietyProxyModel::VarietyProxyModel(QObject *parent)
@@ -122,9 +126,15 @@ VarietyProxyModel::VarietyProxyModel(QObject *parent)
     setSortRole(VarietyModel2::VarietyRole::name);
     setDynamicSortFilter(true);
     sort(0, Qt::AscendingOrder);
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[VarietyProxyModel] VarietyProxyModel";
+#endif
 }
 
 VarietyProxyModel::~VarietyProxyModel()
 {
     delete m_model;
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[VarietyProxyModel] Delete";
+#endif
 }
