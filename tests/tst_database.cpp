@@ -23,7 +23,7 @@ private slots:
     void cleanup();
 };
 
-tst_Database::tst_Database() { }
+tst_Database::tst_Database() {}
 
 tst_Database::~tst_Database() = default;
 
@@ -44,6 +44,7 @@ void tst_Database::databasePath()
 
 void tst_Database::connectToDatabase()
 {
+    QVERIFY(mDatabase->addDefaultSqliteDatabase());
     mDatabase->connectToDatabase();
     QVERIFY(QSqlDatabase::database().isValid());
 }

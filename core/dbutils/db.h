@@ -27,6 +27,7 @@ class CORESHARED_EXPORT Database : public QObject
     Q_OBJECT
 
     friend class Qrop;
+    friend class tst_Database;
 
 public:
     explicit Database(QObject *parent = nullptr);
