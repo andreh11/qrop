@@ -24,6 +24,7 @@
 #include "qrop.h"
 #include "dbutils/db.h"
 #include "models/familymodel.h"
+#include "models/seedcompanymodel.h"
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
@@ -38,17 +39,31 @@ Qrop::Qrop(QObject *parent)
     , m_families()
     , m_crops()
     , m_varieties()
+    , m_seedCompanies()
     , m_familyModel(new FamilyModel2(this))
     , m_familyProxyModel(new QSortFilterProxyModel)
+    , m_seedCompanyModel(new SeedCompanyModel2(this))
+    , m_seedCompanyProxyModel(new QSortFilterProxyModel)
 {
     m_familyProxyModel->setSourceModel(m_familyModel);
     m_familyProxyModel->setSortRole(FamilyModel2::FamilyRole::name);
     m_familyProxyModel->setDynamicSortFilter(true);
-    m_familyProxyModel->sort(0, Qt::AscendingOrder);
+    //    m_familyProxyModel->sort(0, Qt::AscendingOrder);
+
+    m_seedCompanyProxyModel->setSourceModel(m_seedCompanyModel);
+    m_seedCompanyProxyModel->setSortRole(SeedCompanyModel2::SeedCompanyRole::name);
+    m_seedCompanyProxyModel->setDynamicSortFilter(true);
+    //    m_seedCompanyProxyModel->sort(0, Qt::AscendingOrder);
 }
 
 void Qrop::clearBusinessObjects()
 {
+    if (!m_seedCompanies.isEmpty()) {
+        emit beginResetSeedCompanyModel();
+        qDeleteAll(m_seedCompanies);
+        m_seedCompanies.clear();
+        emit endResetSeedCompanyModel();
+    }
     if (!m_families.isEmpty()) {
         emit beginResetFamilyModel();
         qDeleteAll(m_families);
@@ -63,6 +78,8 @@ void Qrop::clearBusinessObjects()
 
 Qrop::~Qrop()
 {
+    delete m_seedCompanyProxyModel;
+    delete m_seedCompanyModel;
     delete m_familyProxyModel;
     delete m_familyModel;
 
@@ -150,6 +167,19 @@ bool Qrop::newReleaseAvailable(const QString &lastOnlineVersion)
         }
     }
     return false;
+}
+
+int Qrop::seedCompanyProxyIndex(uint seedCompanyId) const
+{
+    for (int row = 0; row < m_seedCompanyProxyModel->rowCount(); ++row) {
+        if (seedCompanyId
+            == m_seedCompanyProxyModel
+                       ->data(m_seedCompanyProxyModel->index(row, 0),
+                              SeedCompanyModel2::SeedCompanyRole::id)
+                       .toUInt())
+            return row;
+    }
+    return 0;
 }
 
 void Qrop::loadCurrentDatabase()

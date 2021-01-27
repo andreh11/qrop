@@ -42,4 +42,55 @@ private:
     int m_cropId { -1 };
 };
 
+#include <QAbstractListModel>
+#include "business/family.h"
+
+class VarietyModel2 : public QAbstractListModel
+{
+    //    Q_OBJECT
+    //    Q_PROPERTY(int cropId READ cropId WRITE setCropId)
+
+    static const QHash<int, QByteArray> sRoleNames;
+
+public:
+    explicit VarietyModel2(QObject *parent = nullptr);
+
+    enum VarietyRole { name = Qt::UserRole, isDefault, seedCompanyId, seedCompanyName, id };
+
+    // Basic functionality:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
+
+    int cropId() const { return m_cropId; }
+    void setCropId(int cropId);
+
+private:
+    int m_cropId;
+    qrp::Crop *m_crop;
+};
+
+class VarietyProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int cropId READ cropId WRITE setCropId)
+
+public:
+    VarietyProxyModel(QObject *parent = nullptr);
+    ~VarietyProxyModel() override;
+
+    int cropId() const { return m_model ? m_model->cropId() : -1; }
+    void setCropId(int cropId)
+    {
+        if (m_model)
+            m_model->setCropId(cropId);
+    }
+
+private:
+    VarietyModel2 *m_model;
+};
+
 #endif // VARIETYMODEL_H

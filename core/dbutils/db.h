@@ -43,6 +43,7 @@ public:
     void loadDatabase(Qrop *qrop);
 
 private:
+    void loadSeedCompanies(Qrop *qrop);
     void loadFamilies(Qrop *qrop);
     void loadCrops(Qrop *qrop);
     void loadVarieties(Qrop *qrop);

@@ -29,4 +29,27 @@ public:
     explicit SeedCompanyModel(QObject *parent = nullptr, const QString &tableName = "seed_company");
 };
 
+#include <QAbstractListModel>
+class Qrop;
+
+class SeedCompanyModel2 : public QAbstractListModel
+{
+    static const QHash<int, QByteArray> sRoleNames;
+
+public:
+    explicit SeedCompanyModel2(Qrop *qrop, QObject *parent = nullptr);
+
+    enum SeedCompanyRole { name = Qt::UserRole, isDefault, id };
+
+    // Basic functionality:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
+
+private:
+    Qrop *m_qrop;
+};
+
 #endif // SEEDCOMPANYMODEL_H

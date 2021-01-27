@@ -9,6 +9,14 @@ namespace qrp {
 struct Crop;
 struct Variety;
 
+struct SeedCompany {
+    uint id;
+    QString name;
+    bool isDefault;
+    SeedCompany(uint id_, const QString &n, bool d) :
+        id(id_), name(n), isDefault(d){}
+};
+
 struct Family
 {
     uint id;
@@ -53,8 +61,12 @@ struct Variety {
     QString name;
     bool isDefault;
     Crop *crop;
+    QList<SeedCompany*> seedCompanies; //!< update from DB schema to allow several companies
     Variety(uint id_, const QString &n, bool d, Crop *c) :
         id(id_), name(n), isDefault(d), crop(c){}
+
+    void addSeedCompany(SeedCompany *c) {seedCompanies << c;}
 };
-}
+
+}  // namespace qrp
 #endif // FAMILY_H

@@ -70,27 +70,32 @@ Column {
                 ComboBox {
                     id: seedCompanyField
 
-                    property int rowId: seed_company_id
+//                    property int rowId: seed_company_id
 
-                    function setRowId(rowId) {
-                        var i = 0;
-                        while (model.rowId(i) !== rowId && i < model.rowCount)
-                            i++;
-                        if (i < model.rowCount)
-                            currentIndex = i;
+//                    function setRowId(rowId) {
+//                       print("MB_QML: rowId: "+rowId + ", rowCount: " + model.rowCount()+
+//                             "currentIndex: " + cppQrop.seedCompanyProxyIndex(seed_company_id))
+
+//                       currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
+//                    }
+
+                    Component.onCompleted: {
+                        currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
                     }
 
-                    onRowIdChanged: setRowId(rowId)
+//                    onRowIdChanged: setRowId(rowId)
                     flat: true
                     Layout.minimumWidth: secondColumnWidth
-                    model: SeedCompanyModel {
-                        id: seedCompanyModel
-                    }
+                    model: cppQrop.modelSeedCompany()
+//                    model: SeedCompanyModel {
+//                        id: seedCompanyModel
+//                    }
                     textRole: "seed_company"
 
+
                     onCurrentIndexChanged: {
-                        var companyId = seedCompanyModel.rowId(seedCompanyField.currentIndex)
-                        Variety.update(variety_id, {"seed_company_id": companyId})
+//                        var companyId = seedCompanyModel.rowId(seedCompanyField.currentIndex)
+//                        Variety.update(variety_id, {"seed_company_id": companyId})
                     }
                 }
 

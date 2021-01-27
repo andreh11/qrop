@@ -115,6 +115,7 @@ void registerTypes()
     qmlRegisterInterface<QAbstractItemModel>("io.qrop.components");
     //    qmlRegisterType<CropModel2>(packageURI, ver.maj, ver.min, "CropModel2");
     qmlRegisterType<CropProxyModel>(packageURI, ver.maj, ver.min, "CropProxyModel");
+    qmlRegisterType<VarietyProxyModel>(packageURI, ver.maj, ver.min, "VarietyProxyModel");
 
     qmlRegisterType<CropModel>(packageURI, ver.maj, ver.min, "CropModel");
     qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
@@ -345,7 +346,6 @@ int main(int argc, char *argv[])
         return res;
 
     QQmlApplicationEngine engine;
-
     engine.rootContext()->setContextProperty("cppQrop", qrop);
 
     // really important, otherwise QML could take ownership and delete them
@@ -353,6 +353,7 @@ int main(int argc, char *argv[])
     engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
     engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
     engine.setObjectOwnership(qrop->modelFamily(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->modelSeedCompany(), QQmlEngine::CppOwnership);
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url(QStringLiteral("qrc:/qml/MainWindow.qml"));

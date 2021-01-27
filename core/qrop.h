@@ -31,6 +31,7 @@ class Database;
 class QropNews;
 class QTranslator;
 class FamilyModel2;
+class SeedCompanyModel2;
 
 #include "business/family.h"
 class Qrop : public QObject, public Singleton<Qrop>
@@ -52,9 +53,13 @@ private:
     QMap<uint, qrp::Family*> m_families;
     QMap<uint, qrp::Crop*> m_crops;
     QMap<uint, qrp::Variety*> m_varieties;
+    QMap<uint, qrp::SeedCompany*> m_seedCompanies;
 
     FamilyModel2 *m_familyModel;
     QSortFilterProxyModel *m_familyProxyModel;
+
+    SeedCompanyModel2 *m_seedCompanyModel;
+    QSortFilterProxyModel *m_seedCompanyProxyModel;
 
 
 signals:
@@ -65,6 +70,9 @@ signals:
     void beginResetFamilyModel();
     void endResetFamilyModel();
 
+    // signals for SeedCompanyModel
+    void beginResetSeedCompanyModel();
+    void endResetSeedCompanyModel();
 
 private:
     Qrop(QObject *parent = nullptr);
@@ -114,6 +122,9 @@ public:
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
 
+    void addSeedCompany(uint id, const QString &name, bool is_default) {
+        m_seedCompanies.insert(id, new qrp::SeedCompany(id, name, is_default));
+    }
     void addFamily(uint id, const QString &name, ushort interval, const QString &color) {
         m_families.insert(id, new qrp::Family(id, name, interval, color));
     }
@@ -125,25 +136,42 @@ public:
             family->addCrop(crop);
         }
     }
-    void addVariety(uint id, const QString &name, uint crop_id, bool is_default) {
+    void addVariety(uint id, const QString &name, uint crop_id, bool is_default, uint seed_company_id) {
         qrp::Crop *crop = m_crops.value(crop_id, nullptr);
         if (crop) {
             qrp::Variety *variety = new qrp::Variety(id, name, is_default, crop);
+            qrp::SeedCompany *seedCompany = m_seedCompanies.value(seed_company_id, nullptr);
+            if (seedCompany)
+                variety->addSeedCompany(seedCompany);
             m_varieties.insert(id, variety);
             crop->addVariety(variety);
         }
     }
 
+    Q_INVOKABLE QAbstractItemModel *modelFamily() const {return m_familyProxyModel;}
     int numberOfFamilies() const {return m_families.size();}
-    qrp::Family *family(int row) const {
-        if (row > m_families.size())
+    qrp::Family *familyFromIndexRow(int row) const {
+        if (row >= m_families.size())
             return nullptr;
         auto it = m_families.cbegin();
         it += row;
         return it.value();
     }
 
-    Q_INVOKABLE QAbstractItemModel *modelFamily() const {return m_familyProxyModel;}
+    qrp::Family *family(int familyId) const {return m_families.value(familyId, nullptr);}
+    qrp::Crop *crop(int cropId) const {return m_crops.value(cropId, nullptr);}
+    qrp::SeedCompany *seedCompany(int seedCompanyId) {return m_seedCompanies.value(seedCompanyId, nullptr);}
+
+    Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const {return m_seedCompanyProxyModel;}
+    int numberOfSeedCompanies() const {return m_seedCompanies.size();}
+    qrp::SeedCompany *seedCompanyFromIndexRow(int row) const {
+        if (row >= m_seedCompanies.size())
+            return nullptr;
+        auto it = m_seedCompanies.cbegin();
+        it += row;
+        return it.value();
+    }
+    Q_INVOKABLE int seedCompanyProxyIndex(uint seedCompanyId) const;
 
 
 

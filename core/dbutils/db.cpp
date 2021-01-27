@@ -195,9 +195,25 @@ void Database::close()
 #include "qrop.h"
 void Database::loadDatabase(Qrop *qrop)
 {
+    loadSeedCompanies(qrop);
     loadFamilies(qrop);
     loadCrops(qrop);
     loadVarieties(qrop);
+}
+
+void Database::loadSeedCompanies(Qrop *qrop)
+{
+    QSqlQuery query;
+    if (!query.exec("select seed_company_id, seed_company, is_default from seed_company")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    emit qrop->beginResetSeedCompanyModel();
+    while (query.next()) {
+        qrop->addSeedCompany(query.value(0).toUInt(), query.value(1).toString(),
+                             query.value(2).toBool());
+    }
+    emit qrop->endResetSeedCompanyModel();
 }
 
 void Database::loadFamilies(Qrop *qrop)
@@ -231,13 +247,14 @@ void Database::loadCrops(Qrop *qrop)
 void Database::loadVarieties(Qrop *qrop)
 {
     QSqlQuery query;
-    if (!query.exec("select variety_id, variety, crop_id, is_default from variety")) {
+    if (!query.exec(
+                "select variety_id, variety, crop_id, is_default, seed_company_id from variety")) {
         qCritical() << "Can't Execute Query";
         return;
     }
     while (query.next()) {
         qrop->addVariety(query.value(0).toUInt(), query.value(1).toString(),
-                         query.value(2).toUInt(), query.value(3).toBool());
+                         query.value(2).toUInt(), query.value(3).toBool(), query.value(4).toUInt());
     }
 }
 

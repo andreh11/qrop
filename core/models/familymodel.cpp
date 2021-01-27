@@ -57,7 +57,7 @@ QVariant FamilyModel2::data(const QModelIndex &index, int role) const
     if (!index.isValid() || !m_qrop)
         return QVariant();
 
-    qrp::Family *family = m_qrop->family(index.row());
+    qrp::Family *family = m_qrop->familyFromIndexRow(index.row());
     if (!family)
         return QVariant();
 

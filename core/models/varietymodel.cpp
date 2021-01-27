@@ -17,6 +17,7 @@
 #include <QDebug>
 #include "sqltablemodel.h"
 #include "varietymodel.h"
+#include "qrop.h"
 
 VarietyModel::VarietyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -44,4 +45,86 @@ bool VarietyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePare
 {
     int cropId = sourceRowValue(sourceRow, sourceParent, "crop_id").toInt();
     return cropId == m_cropId && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+}
+
+const QHash<int, QByteArray> VarietyModel2::sRoleNames = {
+    { VarietyRole::name, "variety" },
+    { VarietyRole::isDefault, "isDefault" },
+    { VarietyRole::seedCompanyId, "seed_company_id" },
+    { VarietyRole::seedCompanyName, "seed_company_name" },
+    { VarietyRole::id, "variety_id" },
+};
+
+VarietyModel2::VarietyModel2(QObject *parent)
+    : QAbstractListModel(parent)
+    , m_cropId(-1)
+    , m_crop(nullptr)
+{
+}
+
+int VarietyModel2::rowCount(const QModelIndex &parent) const
+{
+    // For list models only the root node (an invalid parent) should return the list's size. For all
+    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
+    if (parent.isValid() || !m_crop)
+        return 0;
+
+    return m_crop->varieties.size();
+}
+
+QVariant VarietyModel2::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || !m_crop)
+        return QVariant();
+
+    qrp::Variety *variety = m_crop->variety(index.row());
+    if (!variety)
+        return QVariant();
+
+    switch (role) {
+    case VarietyRole::name:
+        return variety->name;
+    case VarietyRole::isDefault:
+        return variety->isDefault;
+    case VarietyRole::seedCompanyId:
+        return variety->seedCompanies.isEmpty() ? 0 : variety->seedCompanies.first()->id;
+    case VarietyRole::seedCompanyName:
+        return variety->seedCompanies.isEmpty() ? QString() : variety->seedCompanies.first()->name;
+    case VarietyRole::id:
+        return variety->id;
+    }
+
+    return QVariant();
+}
+
+Qt::ItemFlags VarietyModel2::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+void VarietyModel2::setCropId(int cropId)
+{
+    beginResetModel();
+    m_crop = Qrop::instance()->crop(cropId);
+    if (!m_crop)
+        m_cropId = -1;
+    endResetModel();
+}
+
+VarietyProxyModel::VarietyProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(new VarietyModel2)
+{
+    setSourceModel(m_model);
+    setSortRole(VarietyModel2::VarietyRole::name);
+    setDynamicSortFilter(true);
+    sort(0, Qt::AscendingOrder);
+}
+
+VarietyProxyModel::~VarietyProxyModel()
+{
+    delete m_model;
 }

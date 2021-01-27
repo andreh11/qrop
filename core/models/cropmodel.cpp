@@ -106,6 +106,7 @@ void CropModel2::setFamilyId(int familyId)
     if (!m_family)
         m_familyId = -1;
     endResetModel();
+    qDebug() << "[CropProxyModel] set family: " << (m_family ? m_family->name : QString("none"));
 }
 
 CropProxyModel::CropProxyModel(QObject *parent)
@@ -116,9 +117,11 @@ CropProxyModel::CropProxyModel(QObject *parent)
     setSortRole(CropModel2::CropRole::name);
     setDynamicSortFilter(true);
     sort(0, Qt::AscendingOrder);
+    qDebug() << "[CropProxyModel] Create";
 }
 
 CropProxyModel::~CropProxyModel()
 {
     delete m_model;
+    qDebug() << "[CropProxyModel] Delete";
 }

@@ -46,8 +46,8 @@ class Qrop;
 
 class CropModel2 : public QAbstractListModel
 {
-    Q_OBJECT
-    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
+    //    Q_OBJECT
+    //    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
 
     static const QHash<int, QByteArray> sRoleNames;
 

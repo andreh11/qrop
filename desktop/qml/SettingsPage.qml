@@ -439,7 +439,7 @@ Page {
             }
         }
     }
-
+/*
     SettingsKeywordPane {
         id: keywordPane
         height: parent.height
@@ -499,5 +499,6 @@ Page {
             }
         }
     }
+*/
 }
 
