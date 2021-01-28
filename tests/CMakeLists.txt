@@ -17,12 +17,10 @@ TEST(TstDatabase tst_database.cpp)
 TEST(TstQrpDate tst_qrpdate.cpp)
 TEST(TstHelpers tst_helpers.cpp)
 
-if(APPLE OR UNIX) # QML tests don't seem to compile properly on Windows.
-    # This is needed for Qt Creator to see Qt Quick tests.
-    # no need to copy around qml test files for shadow builds - just set the respective define
-    add_definitions(-DQUICK_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
-    TEST(TstQml tst_qml.cpp)
-endif()
+# This is needed for Qt Creator to see Qt Quick tests.
+# no need to copy around qml test files for shadow builds - just set the respective define
+add_definitions(-DQUICK_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+TEST(TstQml tst_qml.cpp)
 
 
 
