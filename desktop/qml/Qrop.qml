@@ -32,7 +32,6 @@ ApplicationWindow {
     property bool railMode: width > 1200
     property bool searchMode: false
     property bool showSaveButton: false
-    property int oldWindowVisibility: Window.Windowed
 
     property string firstDatabaseFile: settings.firstDatabaseFile
     property string secondDatabaseFile: settings.secondDatabaseFile
@@ -70,14 +69,42 @@ ApplicationWindow {
             currentDatabase = 1;
         if (lastFolder === "")
             lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+
+        if (mainSettings.windowFullScreen)
+            window.visibility = Window.FullScreen;
+        else {
+            window.visibility = Window.Windowed;
+            window.x = mainSettings.windowX;
+            window.y = mainSettings.windowY;
+            window.height = mainSettings.windowHeight;
+            window.width = mainSettings.windowWidth;
+        }
+    }
+
+    Component.onDestruction: {
+        if (!mainSettings.windowFullScreen) {
+            mainSettings.windowX = window.x;
+            mainSettings.windowY = window.y;
+            mainSettings.windowHeight = window.height;
+            mainSettings.windowWidth = window.width;
+        }
     }
 
     function toggleFullScreen() {
         if (window.visibility === Window.FullScreen) {
-            window.visibility = oldWindowVisibility
+            window.visibility = Window.Windowed;
+            mainSettings.windowFullScreen = false;
+            window.x = mainSettings.windowX;
+            window.y = mainSettings.windowY;
+            window.height = mainSettings.windowHeight;
+            window.width = mainSettings.windowWidth;
         } else {
-            oldWindowVisibility = window.visibility
-            window.visibility = Window.FullScreen
+            mainSettings.windowX = window.x;
+            mainSettings.windowY = window.y;
+            mainSettings.windowHeight = window.height;
+            mainSettings.windowWidth = window.width;
+            mainSettings.windowFullScreen = true;
+            window.visibility = Window.FullScreen;
         }
     }
 
@@ -189,16 +216,16 @@ ApplicationWindow {
         property bool useStandardBedLength
         property int standardBedLength
         property bool showPlantingSuccessionNumber
+
+        property bool windowFullScreen
+        property int windowX
+        property int windowY
+        property int windowHeight
+        property int windowWidth
     }
 
     Settings {
         id: settings
-        property alias windowX: window.x
-        property alias windowY: window.y
-        property alias windowHeight: window.height
-        property alias windowWidth: window.width
-        property alias windowVisibility: window.visibility
-
         property alias firstDatabaseFile: window.firstDatabaseFile
         property alias secondDatabaseFile: window.secondDatabaseFile
         property alias currentDatabase: window.currentDatabase
