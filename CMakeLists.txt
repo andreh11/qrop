@@ -103,6 +103,7 @@ if (ANDROID)
         AndroidExtras
         REQUIRED
     )
+    include("/home/bruel/android/android_openssl/CMakeLists.txt")
 endif()
 
 include_directories(lib)
