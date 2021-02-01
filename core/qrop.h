@@ -32,6 +32,7 @@ class QropNews;
 class QTranslator;
 class FamilyModel2;
 class SeedCompanyModel2;
+class QUndoStack;
 
 #include "business/family.h"
 class Qrop : public QObject, public Singleton<Qrop>
@@ -50,10 +51,10 @@ private:
     QNetworkAccessManager m_netMgr; //!< for http(s) requests
     QropNews *m_news;
 
-    QMap<uint, qrp::Family*> m_families;
-    QMap<uint, qrp::Crop*> m_crops;
-    QMap<uint, qrp::Variety*> m_varieties;
-    QMap<uint, qrp::SeedCompany*> m_seedCompanies;
+    QMap<int, qrp::Family *> m_families;
+    QMap<int, qrp::Crop *> m_crops;
+    QMap<int, qrp::Variety *> m_varieties;
+    QMap<int, qrp::SeedCompany *> m_seedCompanies;
 
     FamilyModel2 *m_familyModel;
     QSortFilterProxyModel *m_familyProxyModel;
@@ -61,6 +62,8 @@ private:
     SeedCompanyModel2 *m_seedCompanyModel;
     QSortFilterProxyModel *m_seedCompanyProxyModel;
 
+    QUndoStack *m_undoStack;
+    bool m_isLocalDatabase;
 
 signals:
     void info(const QString &msg);
@@ -69,6 +72,10 @@ signals:
     // signals for FamilyModel
     void beginResetFamilyModel();
     void endResetFamilyModel();
+
+    void familyUpdated(int srcRow);
+    void cropUpdated(int familyId, int srcRow);
+    void varietyUpdated(int cropId, int srcRow);
 
     // signals for SeedCompanyModel
     void beginResetSeedCompanyModel();
@@ -80,7 +87,7 @@ private:
     void clearBusinessObjects();
 
 public:
-    ~Qrop();
+    ~Qrop() override;
 
     int init();
 
@@ -88,47 +95,56 @@ public:
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
     Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);
 
-    Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
+    Q_INVOKABLE bool isMobileDevice() { return m_buildInfo->isMobileDevice(); }
 
-    Q_INVOKABLE QropNews *news() const {return m_news;}
+    Q_INVOKABLE QropNews *news() const { return m_news; }
 
-    bool hasErrors() const {return m_errors.size() != 0;}
-    void showErrors() {
+    bool hasErrors() const { return m_errors.size() != 0; }
+    void showErrors()
+    {
         emit error(m_errors.join("\n"));
         m_errors.clear();
     };
 
-    QNetworkAccessManager &networkManager() {return m_netMgr;}
-    Q_INVOKABLE BuildInfo *buildInfo() const {return m_buildInfo;}
+    bool isLocalDatabase() const { return m_isLocalDatabase; }
 
-    void sendInfo(const QString &msg) {
+    QNetworkAccessManager &networkManager() { return m_netMgr; }
+    Q_INVOKABLE BuildInfo *buildInfo() const { return m_buildInfo; }
+
+    void sendInfo(const QString &msg)
+    {
         emit info(msg);
         qDebug() << msg;
     }
-    void sendError(const QString &err){
+    void sendError(const QString &err)
+    {
         emit error(err);
         qCritical() << err;
     }
 
-    QString preferredLanguage() const {
+    QString preferredLanguage() const
+    {
         return m_settings.value("preferredLanguage", "system").toString();
     }
 
-    QDate lastNewsUpdate() const {
+    QDate lastNewsUpdate() const
+    {
         QString dateStr = m_settings.value("lastNewsUpdate", "").toString();
         return dateStr.isEmpty() ? QDate() : QDate::fromString(dateStr, Qt::ISODate);
     }
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
-
-    void addSeedCompany(uint id, const QString &name, bool is_default) {
+    void addSeedCompany(int id, const QString &name, bool is_default)
+    {
         m_seedCompanies.insert(id, new qrp::SeedCompany(id, name, is_default));
     }
-    void addFamily(uint id, const QString &name, ushort interval, const QString &color) {
+    void addFamily(int id, const QString &name, ushort interval, const QString &color)
+    {
         m_families.insert(id, new qrp::Family(id, name, interval, color));
     }
-    void addCrop(uint id, const QString &name, const QString &color, uint family_id) {
+    void addCrop(int id, const QString &name, const QString &color, int family_id)
+    {
         qrp::Family *family = m_families.value(family_id, nullptr);
         if (family) {
             qrp::Crop *crop = new qrp::Crop(id, name, color, family);
@@ -136,7 +152,8 @@ public:
             family->addCrop(crop);
         }
     }
-    void addVariety(uint id, const QString &name, uint crop_id, bool is_default, uint seed_company_id) {
+    void addVariety(int id, const QString &name, int crop_id, bool is_default, int seed_company_id)
+    {
         qrp::Crop *crop = m_crops.value(crop_id, nullptr);
         if (crop) {
             qrp::Variety *variety = new qrp::Variety(id, name, is_default, crop);
@@ -148,9 +165,10 @@ public:
         }
     }
 
-    Q_INVOKABLE QAbstractItemModel *modelFamily() const {return m_familyProxyModel;}
-    int numberOfFamilies() const {return m_families.size();}
-    qrp::Family *familyFromIndexRow(int row) const {
+    Q_INVOKABLE QAbstractItemModel *modelFamily() const { return m_familyProxyModel; }
+    int numberOfFamilies() const { return m_families.size(); }
+    qrp::Family *familyFromIndexRow(int row) const
+    {
         if (row >= m_families.size())
             return nullptr;
         auto it = m_families.cbegin();
@@ -158,13 +176,17 @@ public:
         return it.value();
     }
 
-    qrp::Family *family(int familyId) const {return m_families.value(familyId, nullptr);}
-    qrp::Crop *crop(int cropId) const {return m_crops.value(cropId, nullptr);}
-    qrp::SeedCompany *seedCompany(int seedCompanyId) {return m_seedCompanies.value(seedCompanyId, nullptr);}
+    qrp::Family *family(int familyId) const { return m_families.value(familyId, nullptr); }
+    qrp::Crop *crop(int cropId) const { return m_crops.value(cropId, nullptr); }
+    qrp::SeedCompany *seedCompany(int seedCompanyId)
+    {
+        return m_seedCompanies.value(seedCompanyId, nullptr);
+    }
 
-    Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const {return m_seedCompanyProxyModel;}
-    int numberOfSeedCompanies() const {return m_seedCompanies.size();}
-    qrp::SeedCompany *seedCompanyFromIndexRow(int row) const {
+    Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const { return m_seedCompanyProxyModel; }
+    int numberOfSeedCompanies() const { return m_seedCompanies.size(); }
+    qrp::SeedCompany *seedCompanyFromIndexRow(int row) const
+    {
         if (row >= m_seedCompanies.size())
             return nullptr;
         auto it = m_seedCompanies.cbegin();
@@ -173,13 +195,20 @@ public:
     }
     Q_INVOKABLE int seedCompanyProxyIndex(uint seedCompanyId) const;
 
+    Q_INVOKABLE void updateFamilyName(int proxyRow, uint family_id, const QString &oldV,
+                                      const QString &newV);
+    Q_INVOKABLE void updateFamilyColor(int proxyRow, uint family_id, const QString &oldV,
+                                       const QString &newV);
+    Q_INVOKABLE void updateFamilyInterval(int proxyRow, uint family_id, int oldV, int newV);
 
+    Q_INVOKABLE void updateCropName(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+                                    const QString &newV);
+    Q_INVOKABLE void updateCropColor(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+                                     const QString &newV);
 
 private:
     void loadCurrentDatabase();
     void installTranslator();
-
-
 
     void _dumpSettings();
 };

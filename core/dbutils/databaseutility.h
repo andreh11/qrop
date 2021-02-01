@@ -35,6 +35,7 @@ class CORESHARED_EXPORT DatabaseUtility : public QObject
     Q_OBJECT
 public:
     DatabaseUtility(QObject *parent = nullptr);
+    DatabaseUtility(const QString &table, QObject *parent = nullptr);
 
     QString table() const;
     void setTable(const QString &table);

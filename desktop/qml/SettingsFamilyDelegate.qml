@@ -72,9 +72,12 @@ Column {
                         ColorPicker {
                             anchors.fill: parent
                             onNewColorSelected: {
-                                colorPickerDialog.close()
-                                Family.update(model.family_id, {"color": color});
-                                refresh();
+                                colorPickerDialog.close();
+                                print("Edit family color"+family_id+": "+color);
+                                cppQrop.updateFamilyColor(index, family_id, model.color, color);
+
+//                                Family.update(model.family_id, {"color": color});
+//                                refresh();
                             }
                         }
                     }
@@ -87,8 +90,11 @@ Column {
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillHeight: true
                     onEditingFinished: {
-                        Family.update(family_id, {"family": text})
-                        refresh();
+//                        Family.update(family_id, {"family": text})
+                        print("Edit family name"+family_id+": "+text);
+                        cppQrop.updateFamilyName(index, family_id, family, text);
+//                        model.family = text;
+//                        refresh();
                     }
                 }
 
@@ -101,7 +107,11 @@ Column {
                     font.family: "Roboto Regular"
                     font.pixelSize: Units.fontSizeBodyAndButton
                     displayText: qsTr("%L1 years", "", currentIndex).arg(currentIndex)
-                    onCurrentIndexChanged: Family.update(family_id, {"interval": currentIndex})
+                    onCurrentIndexChanged: {
+                        if (interval !== currentIndex)
+                            cppQrop.updateFamilyInterval(index, family_id, interval, currentIndex);
+//                        Family.update(family_id, {"interval": currentIndex});
+                    }
 
                     ToolTip.text: qsTr("Minimum rotation interval for %1").arg(family)
                     ToolTip.visible: hovered

@@ -63,8 +63,10 @@ Item {
         onActiveFocusChanged: oldText = text
 
         onEditingFinished: {
+            // avoid double signal from QTBUG-40 solved only in Qt5.14...
+            if (control.state !== "display")
+                control.editingFinished();
             control.state = "display";
-            control.editingFinished();
         }
 
         Keys.onEscapePressed: {

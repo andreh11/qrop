@@ -10,46 +10,62 @@ struct Crop;
 struct Variety;
 
 struct SeedCompany {
-    uint id;
+    int id;
     QString name;
     bool isDefault;
-    SeedCompany(uint id_, const QString &n, bool d) :
-        id(id_), name(n), isDefault(d){}
+    SeedCompany(int id_, const QString &n, bool d)
+        : id(id_)
+        , name(n)
+        , isDefault(d)
+    {
+    }
 };
 
-struct Family
-{
-    uint id;
+struct Family {
+    int id;
     QString name;
-    ushort interval;
+    uint interval;
     QString color;
-    QList<Crop*> crops;
+    QList<Crop *> crops;
 
-    Family(uint id_, const QString &n, ushort i, const QString &c):
-        id(id_), name(n), interval(i), color(c), crops() {}
+    Family(int id_, const QString &n, uint i, const QString &c)
+        : id(id_)
+        , name(n)
+        , interval(i)
+        , color(c)
+        , crops()
+    {
+    }
 
-    void addCrop(Crop *c) {crops << c;}
+    void addCrop(Crop *c) { crops << c; }
 
-    Crop *crop(int row) const {
+    Crop *crop(int row) const
+    {
         if (row >= crops.size())
             return nullptr;
         return crops.at(row);
     }
 };
 
-struct Crop
-{
-    uint id;
+struct Crop {
+    int id;
     QString name;
     QString color;
     Family *family;
-    QList<Variety*> varieties;
-    Crop(uint id_, const QString &n, const QString &c, Family *f) :
-        id(id_), name(n), color(c), family(f), varieties(){}
+    QList<Variety *> varieties;
+    Crop(int id_, const QString &n, const QString &c, Family *f)
+        : id(id_)
+        , name(n)
+        , color(c)
+        , family(f)
+        , varieties()
+    {
+    }
 
-    void addVariety(Variety *v) {varieties << v;}
+    void addVariety(Variety *v) { varieties << v; }
 
-    Variety *variety(int row) const {
+    Variety *variety(int row) const
+    {
         if (row >= varieties.size())
             return nullptr;
         return varieties.at(row);
@@ -57,16 +73,21 @@ struct Crop
 };
 
 struct Variety {
-    uint id;
+    int id;
     QString name;
     bool isDefault;
     Crop *crop;
-    QList<SeedCompany*> seedCompanies; //!< update from DB schema to allow several companies
-    Variety(uint id_, const QString &n, bool d, Crop *c) :
-        id(id_), name(n), isDefault(d), crop(c){}
+    QList<SeedCompany *> seedCompanies; //!< update from DB schema to allow several companies
+    Variety(int id_, const QString &n, bool d, Crop *c)
+        : id(id_)
+        , name(n)
+        , isDefault(d)
+        , crop(c)
+    {
+    }
 
-    void addSeedCompany(SeedCompany *c) {seedCompanies << c;}
+    void addSeedCompany(SeedCompany *c) { seedCompanies << c; }
 };
 
-}  // namespace qrp
+} // namespace qrp
 #endif // FAMILY_H

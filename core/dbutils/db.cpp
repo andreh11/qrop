@@ -299,10 +299,10 @@ bool Database::createDatabase()
     qInfo() << "Creating database...";
     if (execSqlFile(":/db/tables.sql") == 0 && execSqlFile(":/db/triggers.sql") == 0) {
         qInfo() << "Database created.";
-        migrate(); // MB_QUESTION: do we really need to migrate a new DB?
-        createData();
-    } else
-        return false;
+        if (migrate()) // MB_QUESTION: do we really need to migrate a new DB?
+            return createData();
+    }
+    return false;
 }
 
 bool Database::createData()

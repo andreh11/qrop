@@ -115,7 +115,7 @@ Pane {
         delegate: SettingsFamilyDelegate {
             width: paneWidth
             anchors.horizontalCenter: parent.horizontalCenter
-            onRefresh: familyModel.refreshRow(index)
+//            onRefresh: familyModel.refreshRow(index)
             firstColumnWidth: pane.firstColumnWidth
             secondColumnWidth: pane.secondColumnWidth
         }

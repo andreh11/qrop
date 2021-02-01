@@ -40,6 +40,11 @@ FamilyModel2::FamilyModel2(Qrop *qrop, QObject *parent)
 {
     connect(m_qrop, &Qrop::beginResetFamilyModel, this, [=]() { beginResetModel(); });
     connect(m_qrop, &Qrop::endResetFamilyModel, this, [=]() { endResetModel(); });
+    connect(m_qrop, &Qrop::familyUpdated, this, [=](int row) {
+        QModelIndex idx = index(row);
+        if (idx.isValid())
+            emit dataChanged(idx, idx);
+    });
 }
 
 int FamilyModel2::rowCount(const QModelIndex &parent) const

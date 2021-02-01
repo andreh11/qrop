@@ -64,9 +64,12 @@ Column {
                         ColorPicker {
                             anchors.fill: parent
                             onNewColorSelected:{
-                                colorPickerDialog.close()
-                                Crop.update(model.crop_id, {"color": color});
-                                refresh();
+                                colorPickerDialog.close();
+                                print("Edit Crop color"+crop_id+": "+color);
+                                cppQrop.updateCropColor(cropModel.sourceRow(index), family_id, crop_id, model.color, color);
+
+//                                Crop.update(model.crop_id, {"color": color});
+//                                refresh();
                             }
                         }
                     }
@@ -79,8 +82,11 @@ Column {
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillHeight: true
                     onEditingFinished: {
-                        Crop.update(model.crop_id, {"crop": text});
-                        refresh();
+                        print("Edit Crop name"+crop_id+": "+color);
+                        cppQrop.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
+
+//                        Crop.update(model.crop_id, {"crop": text});
+//                        refresh();
                     }
                 }
 

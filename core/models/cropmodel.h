@@ -62,6 +62,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
+    static QString roleName(CropRole r) { return sRoleNames.value(r); }
 
     int familyId() const { return m_familyId; }
     void setFamilyId(int familyId);
@@ -86,6 +87,8 @@ public:
         if (m_model)
             m_model->setFamilyId(familyId);
     }
+
+    Q_INVOKABLE int sourceRow(int proxyRow) const;
 
 private:
     CropModel2 *m_model;

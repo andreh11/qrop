@@ -61,6 +61,17 @@ VarietyModel2::VarietyModel2(QObject *parent)
     , m_cropId(-1)
     , m_crop(nullptr)
 {
+    connect(Qrop::instance(), &Qrop::varietyUpdated, this, [=](int cropId, int srcRow) {
+        qDebug() << "[varietyUpdated] cropId: " << cropId << ", m_cropId: " << m_cropId
+                 << ", row: " << srcRow;
+        if (cropId != m_cropId)
+            return;
+        QModelIndex idx = index(srcRow);
+        if (idx.isValid()) {
+            qDebug() << "[varietyUpdated] dataChanged!";
+            emit dataChanged(idx, idx);
+        }
+    });
 }
 
 int VarietyModel2::rowCount(const QModelIndex &parent) const
@@ -110,11 +121,13 @@ void VarietyModel2::setCropId(int cropId)
 {
     beginResetModel();
     m_crop = Qrop::instance()->crop(cropId);
-    if (!m_crop)
+    if (m_crop)
+        m_cropId = cropId;
+    else
         m_cropId = -1;
     endResetModel();
 #ifdef TRACE_CPP_MODELS
-    qDebug() << "[CropProxyModel] set family: " << (m_crop ? m_crop->name : QString("none"));
+    qDebug() << "[VarietyModel2] set crop: " << (m_crop ? m_crop->name : QString("none"));
 #endif
 }
 

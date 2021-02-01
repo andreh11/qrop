@@ -59,6 +59,17 @@ CropModel2::CropModel2(QObject *parent)
     , m_familyId(-1)
     , m_family(nullptr)
 {
+    connect(Qrop::instance(), &Qrop::cropUpdated, this, [=](int familyId, int srcRow) {
+        qDebug() << "[cropUpdated] familyId: " << familyId << ", m_familyId: " << m_familyId
+                 << ", row: " << srcRow;
+        if (familyId != m_familyId)
+            return;
+        QModelIndex idx = index(srcRow);
+        if (idx.isValid()) {
+            qDebug() << "[cropUpdated] dataChanged!";
+            emit dataChanged(idx, idx);
+        }
+    });
 }
 
 int CropModel2::rowCount(const QModelIndex &parent) const
@@ -104,11 +115,13 @@ void CropModel2::setFamilyId(int familyId)
 {
     beginResetModel();
     m_family = Qrop::instance()->family(familyId);
-    if (!m_family)
+    if (m_family)
+        m_familyId = familyId;
+    else
         m_familyId = -1;
     endResetModel();
 #ifdef TRACE_CPP_MODELS
-    qDebug() << "[CropProxyModel] set family: " << (m_family ? m_family->name : QString("none"));
+    qDebug() << "[CropModel2] set family: " << (m_family ? m_family->name : QString("none"));
 #endif
 }
 
@@ -131,4 +144,13 @@ CropProxyModel::~CropProxyModel()
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[CropProxyModel] Delete";
 #endif
+}
+
+int CropProxyModel::sourceRow(int proxyRow) const
+{
+    QModelIndex proxyIndex = index(proxyRow, 0);
+    if (proxyIndex.isValid())
+        return mapToSource(proxyIndex).row();
+    else
+        return -1;
 }

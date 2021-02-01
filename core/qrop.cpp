@@ -19,6 +19,7 @@
 #include <QTranslator>
 #include <QCoreApplication>
 #include <QRegularExpression>
+#include <QUndoStack>
 
 #include "qropnews.h"
 #include "qrop.h"
@@ -44,6 +45,8 @@ Qrop::Qrop(QObject *parent)
     , m_familyProxyModel(new QSortFilterProxyModel)
     , m_seedCompanyModel(new SeedCompanyModel2(this))
     , m_seedCompanyProxyModel(new QSortFilterProxyModel)
+    , m_undoStack(new QUndoStack)
+    , m_isLocalDatabase(true)
 {
     m_familyProxyModel->setSourceModel(m_familyModel);
     m_familyProxyModel->setSortRole(FamilyModel2::FamilyRole::name);
@@ -58,6 +61,8 @@ Qrop::Qrop(QObject *parent)
 
 void Qrop::clearBusinessObjects()
 {
+    m_undoStack->clear();
+
     if (!m_seedCompanies.isEmpty()) {
         emit beginResetSeedCompanyModel();
         qDeleteAll(m_seedCompanies);
@@ -84,6 +89,7 @@ Qrop::~Qrop()
     delete m_familyModel;
 
     clearBusinessObjects();
+    delete m_undoStack;
 
     if (m_news->areRead())
         m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
@@ -124,6 +130,7 @@ bool Qrop::loadDatabase(const QUrl &url)
             qDebug() << "[Qrop::loadDatabase] "
                      << "nb Families: " << m_families.size() << ", nb Crops: " << m_crops.size()
                      << ", nb Varieties: " << m_varieties.size();
+            m_isLocalDatabase = true;
             return true;
         }
     } else if (url.scheme().startsWith("http"))
@@ -180,6 +187,61 @@ int Qrop::seedCompanyProxyIndex(uint seedCompanyId) const
             return row;
     }
     return 0;
+}
+
+#include "commands/cmdfamilyupdate.h"
+#include "commands/cmdcropupdate.h"
+void Qrop::updateFamilyName(int proxyRow, uint family_id, const QString &oldV, const QString &newV)
+{
+    QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
+    if (!proxyIdx.isValid())
+        return;
+    int srcRow = m_familyProxyModel->mapToSource(proxyIdx).row();
+    qDebug() << "[Qrop::updateFamilyName] Row: " << srcRow << ", family_id: " << family_id
+             << ", oldV : " << oldV << ", newV: " << newV;
+    m_undoStack->push(new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::name, oldV, newV));
+}
+
+void Qrop::updateFamilyColor(int proxyRow, uint family_id, const QString &oldV, const QString &newV)
+{
+    QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
+    if (!proxyIdx.isValid())
+        return;
+    int srcRow = m_familyProxyModel->mapToSource(proxyIdx).row();
+    qDebug() << "[Qrop::updateFamilyColor] Row: " << srcRow << ", family_id: " << family_id
+             << ", oldV : " << oldV << ", newV: " << newV;
+    m_undoStack->push(
+            new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::color, oldV, newV));
+}
+
+void Qrop::updateFamilyInterval(int proxyRow, uint family_id, int oldV, int newV)
+{
+    QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
+    if (!proxyIdx.isValid())
+        return;
+    int srcRow = m_familyProxyModel->mapToSource(proxyIdx).row();
+    qDebug() << "[Qrop::updateFamilyInterval] Row: " << srcRow << ", family_id: " << family_id
+             << ", oldV : " << oldV << ", newV: " << newV;
+    m_undoStack->push(
+            new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::interval, oldV, newV));
+}
+
+void Qrop::updateCropName(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+                          const QString &newV)
+{
+    qDebug() << "[Qrop::updateCropName] Row: " << srcRow << ", family_id: " << family_id
+             << ", crop_id: " << crop_id << ", oldV : " << oldV << ", newV: " << newV;
+    m_undoStack->push(
+            new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::name, oldV, newV));
+}
+
+void Qrop::updateCropColor(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+                           const QString &newV)
+{
+    qDebug() << "[Qrop::updateCropColor] Row: " << srcRow << ", family_id: " << family_id
+             << ", crop_id: " << crop_id << ", oldV : " << oldV << ", newV: " << newV;
+    m_undoStack->push(
+            new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::color, oldV, newV));
 }
 
 void Qrop::loadCurrentDatabase()
