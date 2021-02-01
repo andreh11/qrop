@@ -2,7 +2,7 @@
 #define VERSION_H
 
 #define TRACE_CPP_MODELS 1
-
+#define TRACE_CPP_COMMANDS 1
 
 #define QROP_VERSION "@QROP_VERSION@"
 #define GIT_BRANCH "@GIT_BRANCH@"

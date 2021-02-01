@@ -15,29 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CMDCROPUPDATE_H
-#define CMDCROPUPDATE_H
-
+#ifndef CMDVARIETYUPDATE_H
+#define CMDVARIETYUPDATE_H
 
 #include "CmdUpdate.h"
-#include "models/cropmodel.h"
-class CmdCropUpdate : public CmdUpdate
+#include "models/varietymodel.h"
+class CmdVarietyUpdate : public CmdUpdate
 {
 public:
-    CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::CropRole role, const QVariant &oldV, const QVariant &newV);
+    CmdVarietyUpdate(int row, int crop_id, int variety_id, VarietyModel2::VarietyRole role, QVariant oldV, QVariant newV);
 
     void redo() override;
     void undo() override;
 
     QString str() const override {
-        return QString("[CmdCropUpdate] family_id: %1, crop_id: %2, %3").arg(
-                    m_family_id).arg(m_crop_id).arg(CmdUpdate::str());
+        return QString("[CmdVarietyUpdate] crop_id: %1, family_id: %2, %3").arg(
+                    m_crop_id).arg(m_variety_id).arg(CmdUpdate::str());
     }
 
+
 private:
-    const int m_family_id;
     const int m_crop_id;
+    const int m_variety_id;
 };
 
 
-#endif // CMDCROPUPDATE_H
+#endif // CMDVARIETYUPDATE_H

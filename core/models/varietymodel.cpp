@@ -99,9 +99,9 @@ QVariant VarietyModel2::data(const QModelIndex &index, int role) const
     case VarietyRole::isDefault:
         return variety->isDefault;
     case VarietyRole::seedCompanyId:
-        return variety->seedCompanies.isEmpty() ? 0 : variety->seedCompanies.first()->id;
+        return variety->seedCompany ? variety->seedCompany->id : -1;
     case VarietyRole::seedCompanyName:
-        return variety->seedCompanies.isEmpty() ? QString() : variety->seedCompanies.first()->name;
+        return variety->seedCompany ? variety->seedCompany->name : QString();
     case VarietyRole::id:
         return variety->id;
     }

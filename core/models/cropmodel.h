@@ -62,7 +62,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
-    static QString roleName(CropRole r) { return sRoleNames.value(r); }
+    static QString roleName(int r) { return sRoleNames.value(r); }
 
     int familyId() const { return m_familyId; }
     void setFamilyId(int familyId);

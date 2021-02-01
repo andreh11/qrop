@@ -135,6 +135,14 @@ public:
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
+    qrp::Family *family(int familyId) const { return m_families.value(familyId, nullptr); }
+    qrp::Crop *crop(int cropId) const { return m_crops.value(cropId, nullptr); }
+    qrp::Variety *variety(int varietyId) const { return m_varieties.value(varietyId, nullptr); }
+    qrp::SeedCompany *seedCompany(int seedCompanyId)
+    {
+        return m_seedCompanies.value(seedCompanyId, nullptr);
+    }
+
     void addSeedCompany(int id, const QString &name, bool is_default)
     {
         m_seedCompanies.insert(id, new qrp::SeedCompany(id, name, is_default));
@@ -145,23 +153,21 @@ public:
     }
     void addCrop(int id, const QString &name, const QString &color, int family_id)
     {
-        qrp::Family *family = m_families.value(family_id, nullptr);
-        if (family) {
-            qrp::Crop *crop = new qrp::Crop(id, name, color, family);
+        qrp::Family *fam = family(family_id);
+        if (fam) {
+            qrp::Crop *crop = new qrp::Crop(id, name, color, fam);
             m_crops.insert(id, crop);
-            family->addCrop(crop);
+            fam->addCrop(crop);
         }
     }
     void addVariety(int id, const QString &name, int crop_id, bool is_default, int seed_company_id)
     {
-        qrp::Crop *crop = m_crops.value(crop_id, nullptr);
-        if (crop) {
-            qrp::Variety *variety = new qrp::Variety(id, name, is_default, crop);
-            qrp::SeedCompany *seedCompany = m_seedCompanies.value(seed_company_id, nullptr);
-            if (seedCompany)
-                variety->addSeedCompany(seedCompany);
+        qrp::Crop *crp = crop(crop_id);
+        if (crp) {
+            qrp::SeedCompany *seed = seedCompany(seed_company_id);
+            qrp::Variety *variety = new qrp::Variety(id, name, is_default, crp, seed);
             m_varieties.insert(id, variety);
-            crop->addVariety(variety);
+            crp->addVariety(variety);
         }
     }
 
@@ -174,13 +180,6 @@ public:
         auto it = m_families.cbegin();
         it += row;
         return it.value();
-    }
-
-    qrp::Family *family(int familyId) const { return m_families.value(familyId, nullptr); }
-    qrp::Crop *crop(int cropId) const { return m_crops.value(cropId, nullptr); }
-    qrp::SeedCompany *seedCompany(int seedCompanyId)
-    {
-        return m_seedCompanies.value(seedCompanyId, nullptr);
     }
 
     Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const { return m_seedCompanyProxyModel; }

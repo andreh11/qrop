@@ -1,16 +1,31 @@
+/*
+ * Copyright (C) 2021 André Hoarau <ah@ouvaton.org>
+ *                  & Matthieu Bruel <Matthieu.Bruel@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "cmdcropupdate.h"
 #include "qrop.h"
 #include "dbutils/family.h"
 #include "dbutils/databaseutility.h"
+#include "version.h"
+
 CmdCropUpdate::CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::CropRole role,
-                             QVariant oldV, QVariant newV)
-    : QUndoCommand(nullptr)
-    , m_row(row)
+                             const QVariant &oldV, const QVariant &newV)
+    : CmdUpdate(row, role, oldV, newV)
     , m_family_id(family_id)
     , m_crop_id(crop_id)
-    , m_role(role)
-    , m_oldValue(oldV)
-    , m_newValue(newV)
 {
     Qrop *qrop = Qrop::instance();
     setText(QString("Update family %1").arg(qrop->crop(m_crop_id)->name));
@@ -18,11 +33,17 @@ CmdCropUpdate::CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::Cr
 
 void CmdCropUpdate::redo()
 {
-    qDebug() << "[CmdCropUpdate::redo] Row: " << m_row << ", family_id: " << m_family_id
-             << ", oldV : " << m_oldValue << ", newV: " << m_newValue;
+#ifdef TRACE_CPP_COMMANDS
+    qDebug() << "[redo] " << str();
+#endif
 
     Qrop *qrop = Qrop::instance();
     qrp::Crop *crop = qrop->crop(m_crop_id);
+    if (!crop) {
+        qCritical() << "[CmdCropUpdate::redo] INVALID crop_id: " << m_crop_id;
+        return;
+    }
+
     switch (m_role) {
     case CropModel2::CropRole::name:
         crop->name = m_newValue.toString();
@@ -38,14 +59,22 @@ void CmdCropUpdate::redo()
         DatabaseUtility sql("crop");
         sql.update(m_crop_id, { { CropModel2::roleName(m_role), m_newValue } });
     }
-
     emit qrop->cropUpdated(m_family_id, m_row);
 }
 
 void CmdCropUpdate::undo()
 {
+#ifdef TRACE_CPP_COMMANDS
+    qDebug() << "[undo] " << str();
+#endif
+
     Qrop *qrop = Qrop::instance();
     qrp::Crop *crop = qrop->crop(m_crop_id);
+    if (!crop) {
+        qCritical() << "[CmdCropUpdate::undo] INVALID crop_id: " << m_crop_id;
+        return;
+    }
+
     switch (m_role) {
     case CropModel2::CropRole::name:
         crop->name = m_oldValue.toString();
