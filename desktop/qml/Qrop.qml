@@ -20,13 +20,14 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.3
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Platform
-import QtQuick.Window 2.10
+import QtQuick.Window 2.12
 
 import io.qrop.components 1.0
 
 ApplicationWindow {
     id: window
 
+    readonly property int minLoadingDisplaySize: 100
     readonly property bool largeDisplay: width > 100
     readonly property bool smallDisplay: width < 500
     property bool railMode: width > 1200
@@ -74,10 +75,15 @@ ApplicationWindow {
             window.visibility = Window.FullScreen;
         else {
             window.visibility = Window.Windowed;
-            window.x = mainSettings.windowX;
+            if (mainSettings.windowWidth < minLoadingDisplaySize) {
+                window.x = Screen.width*1/8;
+                window.width = Screen.width*3/4;
+            } else {
+                window.x = mainSettings.windowX;
+                window.width = mainSettings.windowWidth;
+            }
             window.y = mainSettings.windowY;
-            window.height = mainSettings.windowHeight;
-            window.width = mainSettings.windowWidth;
+            window.height = mainSettings.windowHeight < minLoadingDisplaySize ? Screen.height : mainSettings.windowHeight;
         }
     }
 
