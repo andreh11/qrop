@@ -289,6 +289,7 @@ void Print::printCropPlan(int year, int month, int week, const QUrl &path, const
 void Print::printCalendar(int year, int month, int week, const QUrl &path, bool showDone,
                           bool showDue, bool showOverdue)
 {
+    qDebug() << "year" << year << "month" << month << "week" << week;
     int begWeek;
     int endWeek;
     QList<int> month31({ 1, 3, 5, 7, 8, 10, 12 });
