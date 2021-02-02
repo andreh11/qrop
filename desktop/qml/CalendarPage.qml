@@ -46,7 +46,6 @@ Page {
     function doPrint(file) {
         let week = weekRadioButton.checked ? page.week : -1;
         let month = monthRadioButton.checked ? QrpDate.month(QrpDate.mondayOfWeek(page.week, page.year)) : -1;
-        console.log("month", month, "week", week);
         Print.printCalendar(page.year, month, week, file, showDoneCheckBox.checked, showDueCheckBox.checked, showOverdueCheckBox.checked)
     }
 
