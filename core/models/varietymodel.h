@@ -47,9 +47,6 @@ private:
 
 class VarietyModel2 : public QAbstractListModel
 {
-    //    Q_OBJECT
-    //    Q_PROPERTY(int cropId READ cropId WRITE setCropId)
-
     static const QHash<int, QByteArray> sRoleNames;
 
 public:
@@ -88,6 +85,15 @@ public:
     {
         if (m_model)
             m_model->setCropId(cropId);
+    }
+
+    Q_INVOKABLE int sourceRow(int proxyRow) const
+    {
+        QModelIndex proxyIndex = index(proxyRow, 0);
+        if (proxyIndex.isValid())
+            return mapToSource(proxyIndex).row();
+        else
+            return -1;
     }
 
 private:

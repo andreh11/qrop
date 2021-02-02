@@ -145,12 +145,3 @@ CropProxyModel::~CropProxyModel()
     qDebug() << "[CropProxyModel] Delete";
 #endif
 }
-
-int CropProxyModel::sourceRow(int proxyRow) const
-{
-    QModelIndex proxyIndex = index(proxyRow, 0);
-    if (proxyIndex.isValid())
-        return mapToSource(proxyIndex).row();
-    else
-        return -1;
-}

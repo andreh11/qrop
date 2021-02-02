@@ -46,9 +46,6 @@ class Qrop;
 
 class CropModel2 : public QAbstractListModel
 {
-    //    Q_OBJECT
-    //    Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
-
     static const QHash<int, QByteArray> sRoleNames;
 
 public:
@@ -88,7 +85,14 @@ public:
             m_model->setFamilyId(familyId);
     }
 
-    Q_INVOKABLE int sourceRow(int proxyRow) const;
+    Q_INVOKABLE int sourceRow(int proxyRow) const
+    {
+        QModelIndex proxyIndex = index(proxyRow, 0);
+        if (proxyIndex.isValid())
+            return mapToSource(proxyIndex).row();
+        else
+            return -1;
+    }
 
 private:
     CropModel2 *m_model;
