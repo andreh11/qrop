@@ -243,6 +243,18 @@ ApplicationWindow {
     ApplicationShortcut { sequence: StandardKey.NextChild; onActivated: switchToNextPane() }
     ApplicationShortcut { sequence: StandardKey.PreviousChild; onActivated: switchToPreviousPane() }
     ApplicationShortcut { sequence: "F11"; onActivated: toggleFullScreen() }
+    ApplicationShortcut { sequence: "Ctrl+z"; onActivated: undo() }
+    ApplicationShortcut { sequence: "Ctrl+Shift+z"; onActivated: redo() }
+    ApplicationShortcut { sequence: "Ctrl+y"; onActivated: redo() }
+
+    function undo(){
+        print("Undo!");
+        cppQrop.undo();
+    }
+    function redo(){
+        print("Redo!");
+        cppQrop.redo();
+    }
 
     Drawer {
         id: drawer

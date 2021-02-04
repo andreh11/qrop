@@ -88,6 +88,9 @@ public:
 
     int init();
 
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
+
     Q_INVOKABLE bool loadDatabase(const QUrl &url);
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
     Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);

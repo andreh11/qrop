@@ -108,6 +108,15 @@ int Qrop::init()
     return 0;
 }
 
+void Qrop::undo()
+{
+    m_undoStack->undo();
+}
+void Qrop::redo()
+{
+    m_undoStack->redo();
+}
+
 bool Qrop::loadDatabase(const QUrl &url)
 {
     clearBusinessObjects();
