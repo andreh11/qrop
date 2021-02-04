@@ -101,7 +101,7 @@ public:
     {
         emit error(m_errors.join("\n"));
         m_errors.clear();
-    };
+    }
 
     bool isLocalDatabase() const { return m_isLocalDatabase; }
 
@@ -140,29 +140,30 @@ public:
         return m_seedCompanies.value(seedCompanyId, nullptr);
     }
 
-    void addSeedCompany(int id, const QString &name, bool is_default)
+    void addSeedCompany(int id, bool del, const QString &name, bool is_default)
     {
-        m_seedCompanies.insert(id, new qrp::SeedCompany(id, name, is_default));
+        m_seedCompanies.insert(id, new qrp::SeedCompany(id, del, name, is_default));
     }
-    void addFamily(int id, const QString &name, ushort interval, const QString &color)
+    void addFamily(int id, bool del, const QString &name, ushort interval, const QString &color)
     {
-        m_families.insert(id, new qrp::Family(id, name, interval, color));
+        m_families.insert(id, new qrp::Family(id, del, name, interval, color));
     }
-    void addCrop(int id, const QString &name, const QString &color, int family_id)
+    void addCrop(int id, bool del, const QString &name, const QString &color, int family_id)
     {
         qrp::Family *fam = family(family_id);
         if (fam) {
-            qrp::Crop *crop = new qrp::Crop(id, name, color, fam);
+            qrp::Crop *crop = new qrp::Crop(id, del, name, color, fam);
             m_crops.insert(id, crop);
             fam->addCrop(crop);
         }
     }
-    void addVariety(int id, const QString &name, int crop_id, bool is_default, int seed_company_id)
+    void addVariety(int id, bool del, const QString &name, int crop_id, bool is_default,
+                    int seed_company_id)
     {
         qrp::Crop *crp = crop(crop_id);
         if (crp) {
             qrp::SeedCompany *seed = seedCompany(seed_company_id);
-            qrp::Variety *variety = new qrp::Variety(id, name, is_default, crp, seed);
+            qrp::Variety *variety = new qrp::Variety(id, del, name, is_default, crp, seed);
             m_varieties.insert(id, variety);
             crp->addVariety(variety);
         }

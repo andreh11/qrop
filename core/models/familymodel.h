@@ -39,7 +39,7 @@ class FamilyModel2 : public QAbstractListModel
 public:
     explicit FamilyModel2(Qrop *qrop, QObject *parent = nullptr);
 
-    enum FamilyRole { name = Qt::UserRole, interval, color, id };
+    enum FamilyRole { name = Qt::UserRole, interval, color, id, deleted };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -64,6 +64,9 @@ public:
         QModelIndex proxyIndex = index(proxyRow, 0);
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     FamilyModel2 *m_model;

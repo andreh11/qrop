@@ -52,7 +52,14 @@ class VarietyModel2 : public QAbstractListModel
 public:
     explicit VarietyModel2(QObject *parent = nullptr);
 
-    enum VarietyRole { name = Qt::UserRole, isDefault, seedCompanyId, seedCompanyName, id };
+    enum VarietyRole {
+        name = Qt::UserRole,
+        isDefault,
+        seedCompanyId,
+        seedCompanyName,
+        id,
+        deleted
+    };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -92,6 +99,9 @@ public:
         QModelIndex proxyIndex = index(proxyRow, 0);
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     VarietyModel2 *m_model;

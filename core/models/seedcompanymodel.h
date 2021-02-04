@@ -39,7 +39,7 @@ class SeedCompanyModel2 : public QAbstractListModel
 public:
     explicit SeedCompanyModel2(Qrop *qrop, QObject *parent = nullptr);
 
-    enum SeedCompanyRole { name = Qt::UserRole, isDefault, id };
+    enum SeedCompanyRole { name = Qt::UserRole, isDefault, id, deleted };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -63,6 +63,9 @@ public:
         QModelIndex proxyIndex = index(proxyRow, 0);
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     SeedCompanyModel2 *m_model;

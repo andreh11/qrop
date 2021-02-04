@@ -1,4 +1,4 @@
--- 018
+-- 019
 -- add finished column to planting 
 
 PRAGMA foreign_keys = OFF;

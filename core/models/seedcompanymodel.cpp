@@ -28,6 +28,7 @@ const QHash<int, QByteArray> SeedCompanyModel2::sRoleNames = {
     { SeedCompanyRole::name, "seed_company" },
     { SeedCompanyRole::isDefault, "is_default" },
     { SeedCompanyRole::id, "seed_commpany_id" },
+    { SeedCompanyRole::deleted, "deleted" },
 };
 
 SeedCompanyModel2::SeedCompanyModel2(Qrop *qrop, QObject *parent)
@@ -64,6 +65,8 @@ QVariant SeedCompanyModel2::data(const QModelIndex &index, int role) const
         return seedCompany->isDefault;
     case SeedCompanyRole::id:
         return seedCompany->id;
+    case SeedCompanyRole::deleted:
+        return seedCompany->deleted;
     }
 
     return QVariant();
@@ -96,4 +99,11 @@ SeedCompanyProxyModel::~SeedCompanyProxyModel()
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[SeedCompanyProxyModel] Delete";
 #endif
+}
+
+bool SeedCompanyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
+    return modelIndex.isValid() ? !m_model->data(modelIndex, SeedCompanyModel2::deleted).toBool()
+                                : false;
 }

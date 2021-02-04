@@ -28,10 +28,12 @@ struct Variety;
 
 struct SeedCompany {
     int id;
+    bool deleted;
     QString name;
     bool isDefault;
-    SeedCompany(int id_, const QString &n, bool d)
+    SeedCompany(int id_, bool del, const QString &n, bool d)
         : id(id_)
+        , deleted(del)
         , name(n)
         , isDefault(d)
     {
@@ -40,13 +42,15 @@ struct SeedCompany {
 
 struct Family {
     int id;
+    bool deleted;
     QString name;
     uint interval;
     QString color;
     QList<Crop *> crops;
 
-    Family(int id_, const QString &n, uint i, const QString &c)
+    Family(int id_, bool del, const QString &n, uint i, const QString &c)
         : id(id_)
+        , deleted(del)
         , name(n)
         , interval(i)
         , color(c)
@@ -66,12 +70,14 @@ struct Family {
 
 struct Crop {
     int id;
+    bool deleted;
     QString name;
     QString color;
     Family *family;
     QList<Variety *> varieties;
-    Crop(int id_, const QString &n, const QString &c, Family *f)
+    Crop(int id_, bool del, const QString &n, const QString &c, Family *f)
         : id(id_)
+        , deleted(del)
         , name(n)
         , color(c)
         , family(f)
@@ -91,12 +97,14 @@ struct Crop {
 
 struct Variety {
     int id;
+    bool deleted;
     QString name;
     bool isDefault;
     Crop *crop;
     SeedCompany *seedCompany; //!< update from DB schema to allow several companies
-    Variety(int id_, const QString &n, bool d, Crop *c, SeedCompany *s)
+    Variety(int id_, bool del, const QString &n, bool d, Crop *c, SeedCompany *s)
         : id(id_)
+        , deleted(del)
         , name(n)
         , isDefault(d)
         , crop(c)

@@ -54,6 +54,7 @@ const QHash<int, QByteArray> VarietyModel2::sRoleNames = {
     { VarietyRole::seedCompanyId, "seed_company_id" },
     { VarietyRole::seedCompanyName, "seed_company_name" },
     { VarietyRole::id, "variety_id" },
+    { VarietyRole::deleted, "deleted" },
 };
 
 VarietyModel2::VarietyModel2(QObject *parent)
@@ -104,6 +105,8 @@ QVariant VarietyModel2::data(const QModelIndex &index, int role) const
         return variety->seedCompany ? variety->seedCompany->name : QString();
     case VarietyRole::id:
         return variety->id;
+    case VarietyRole::deleted:
+        return variety->deleted;
     }
 
     return QVariant();
@@ -150,4 +153,10 @@ VarietyProxyModel::~VarietyProxyModel()
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[VarietyProxyModel] Delete";
 #endif
+}
+
+bool VarietyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
+    return modelIndex.isValid() ? !m_model->data(modelIndex, VarietyModel2::deleted).toBool() : false;
 }

@@ -52,6 +52,7 @@ const QHash<int, QByteArray> CropModel2::sRoleNames = {
     { CropRole::name, "crop" },
     { CropRole::color, "color" },
     { CropRole::id, "crop_id" },
+    { CropRole::deleted, "deleted" },
 };
 
 CropModel2::CropModel2(QObject *parent)
@@ -98,6 +99,8 @@ QVariant CropModel2::data(const QModelIndex &index, int role) const
         return crop->color;
     case CropRole::id:
         return crop->id;
+    case CropRole::deleted:
+        return crop->deleted;
     }
 
     return QVariant();
@@ -144,4 +147,10 @@ CropProxyModel::~CropProxyModel()
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[CropProxyModel] Delete";
 #endif
+}
+
+bool CropProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
+    return modelIndex.isValid() ? !m_model->data(modelIndex, CropModel2::deleted).toBool() : false;
 }

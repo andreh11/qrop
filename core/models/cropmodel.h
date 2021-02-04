@@ -51,7 +51,7 @@ class CropModel2 : public QAbstractListModel
 public:
     explicit CropModel2(QObject *parent = nullptr);
 
-    enum CropRole { name = Qt::UserRole, color, id };
+    enum CropRole { name = Qt::UserRole, color, id, deleted };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -90,6 +90,9 @@ public:
         QModelIndex proxyIndex = index(proxyRow, 0);
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     CropModel2 *m_model;

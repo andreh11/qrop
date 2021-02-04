@@ -28,12 +28,11 @@ FamilyModel::FamilyModel(QObject *parent, const QString &tableName)
     setSortColumn("family");
 }
 
-const QHash<int, QByteArray> FamilyModel2::sRoleNames = {
-    { FamilyRole::name, "family" },
-    { FamilyRole::interval, "interval" },
-    { FamilyRole::color, "color" },
-    { FamilyRole::id, "family_id" },
-};
+const QHash<int, QByteArray> FamilyModel2::sRoleNames = { { FamilyRole::name, "family" },
+                                                          { FamilyRole::interval, "interval" },
+                                                          { FamilyRole::color, "color" },
+                                                          { FamilyRole::id, "family_id" },
+                                                          { FamilyRole::deleted, "deleted" } };
 
 FamilyModel2::FamilyModel2(Qrop *qrop, QObject *parent)
     : QAbstractListModel(parent)
@@ -76,6 +75,8 @@ QVariant FamilyModel2::data(const QModelIndex &index, int role) const
         return family->color;
     case FamilyRole::id:
         return family->id;
+    case FamilyRole::deleted:
+        return family->deleted;
     }
 
     return QVariant();
@@ -108,4 +109,10 @@ FamilyProxyModel::~FamilyProxyModel()
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[FamilyProxyModel] Delete";
 #endif
+}
+
+bool FamilyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
+    return modelIndex.isValid() ? !m_model->data(modelIndex, FamilyModel2::deleted).toBool() : false;
 }
