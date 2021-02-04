@@ -50,7 +50,7 @@ bool VarietyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePare
 
 const QHash<int, QByteArray> VarietyModel2::sRoleNames = {
     { VarietyRole::name, "variety" },
-    { VarietyRole::isDefault, "isDefault" },
+    { VarietyRole::isDefault, "is_default" },
     { VarietyRole::seedCompanyId, "seed_company_id" },
     { VarietyRole::seedCompanyName, "seed_company_name" },
     { VarietyRole::id, "variety_id" },

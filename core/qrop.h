@@ -192,18 +192,26 @@ public:
         it += row;
         return it.value();
     }
-    Q_INVOKABLE int seedCompanyProxyIndex(uint seedCompanyId) const;
+    Q_INVOKABLE int seedCompanyIdFromProxyRow(int proxyRow) const;
+    Q_INVOKABLE int seedCompanyProxyIndex(int seedCompanyId) const;
 
-    Q_INVOKABLE void updateFamilyName(int proxyRow, uint family_id, const QString &oldV,
+    Q_INVOKABLE void updateFamilyName(int proxyRow, int family_id, const QString &oldV,
                                       const QString &newV);
-    Q_INVOKABLE void updateFamilyColor(int proxyRow, uint family_id, const QString &oldV,
+    Q_INVOKABLE void updateFamilyColor(int proxyRow, int family_id, const QString &oldV,
                                        const QString &newV);
-    Q_INVOKABLE void updateFamilyInterval(int proxyRow, uint family_id, int oldV, int newV);
+    Q_INVOKABLE void updateFamilyInterval(int proxyRow, int family_id, int oldV, int newV);
 
-    Q_INVOKABLE void updateCropName(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+    Q_INVOKABLE void updateCropName(int srcRow, int family_id, int crop_id, const QString &oldV,
                                     const QString &newV);
-    Q_INVOKABLE void updateCropColor(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+    Q_INVOKABLE void updateCropColor(int srcRow, int family_id, int crop_id, const QString &oldV,
                                      const QString &newV);
+
+    Q_INVOKABLE void updateVarietyName(int srcRow, int crop_id, int variety_id, const QString &oldV,
+                                       const QString &newV);
+    Q_INVOKABLE void updateVarietyCompanySeed(int srcRow, int crop_id, int variety_id, int oldV,
+                                              int newV);
+    Q_INVOKABLE void updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool oldV,
+                                            bool newV);
 
 private:
     void loadCurrentDatabase();

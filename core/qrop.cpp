@@ -50,13 +50,13 @@ Qrop::Qrop(QObject *parent)
 {
     m_familyProxyModel->setSourceModel(m_familyModel);
     m_familyProxyModel->setSortRole(FamilyModel2::FamilyRole::name);
+    m_familyProxyModel->sort(0, Qt::AscendingOrder);
     m_familyProxyModel->setDynamicSortFilter(true);
-    //    m_familyProxyModel->sort(0, Qt::AscendingOrder);
 
     m_seedCompanyProxyModel->setSourceModel(m_seedCompanyModel);
     m_seedCompanyProxyModel->setSortRole(SeedCompanyModel2::SeedCompanyRole::name);
+    m_seedCompanyProxyModel->sort(0, Qt::AscendingOrder);
     m_seedCompanyProxyModel->setDynamicSortFilter(true);
-    //    m_seedCompanyProxyModel->sort(0, Qt::AscendingOrder);
 }
 
 void Qrop::clearBusinessObjects()
@@ -176,23 +176,35 @@ bool Qrop::newReleaseAvailable(const QString &lastOnlineVersion)
     return false;
 }
 
-int Qrop::seedCompanyProxyIndex(uint seedCompanyId) const
+int Qrop::seedCompanyIdFromProxyRow(int proxyRow) const
+{
+    QModelIndex proxyIndex = m_seedCompanyProxyModel->index(proxyRow, 0);
+    if (proxyIndex.isValid())
+        return m_seedCompanyProxyModel->data(proxyIndex, SeedCompanyModel2::SeedCompanyRole::id).toInt();
+    return 0;
+}
+
+int Qrop::seedCompanyProxyIndex(int seedCompanyId) const
 {
     for (int row = 0; row < m_seedCompanyProxyModel->rowCount(); ++row) {
         if (seedCompanyId
             == m_seedCompanyProxyModel
                        ->data(m_seedCompanyProxyModel->index(row, 0),
                               SeedCompanyModel2::SeedCompanyRole::id)
-                       .toUInt())
+                       .toInt())
             return row;
     }
+    qDebug() << "[Qrop::seedCompanyProxyIndex] NOT FOUND seedCompanyId: " << seedCompanyId;
     return 0;
 }
 
 #include "commands/cmdfamilyupdate.h"
 #include "commands/cmdcropupdate.h"
-void Qrop::updateFamilyName(int proxyRow, uint family_id, const QString &oldV, const QString &newV)
+#include "commands/cmdvarietyupdate.h"
+void Qrop::updateFamilyName(int proxyRow, int family_id, const QString &oldV, const QString &newV)
 {
+    if (oldV == newV)
+        return;
     QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
     if (!proxyIdx.isValid())
         return;
@@ -202,20 +214,25 @@ void Qrop::updateFamilyName(int proxyRow, uint family_id, const QString &oldV, c
     m_undoStack->push(new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::name, oldV, newV));
 }
 
-void Qrop::updateFamilyColor(int proxyRow, uint family_id, const QString &oldV, const QString &newV)
+void Qrop::updateFamilyColor(int proxyRow, int family_id, const QString &oldV, const QString &newV)
 {
+    if (oldV == newV)
+        return;
     QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
     if (!proxyIdx.isValid())
         return;
     int srcRow = m_familyProxyModel->mapToSource(proxyIdx).row();
     qDebug() << "[Qrop::updateFamilyColor] Row: " << srcRow << ", family_id: " << family_id
              << ", oldV : " << oldV << ", newV: " << newV;
+
     m_undoStack->push(
             new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::color, oldV, newV));
 }
 
-void Qrop::updateFamilyInterval(int proxyRow, uint family_id, int oldV, int newV)
+void Qrop::updateFamilyInterval(int proxyRow, int family_id, int oldV, int newV)
 {
+    if (oldV == newV)
+        return;
     QModelIndex proxyIdx = m_familyProxyModel->index(proxyRow, 0);
     if (!proxyIdx.isValid())
         return;
@@ -226,22 +243,53 @@ void Qrop::updateFamilyInterval(int proxyRow, uint family_id, int oldV, int newV
             new CmdFamilyUpdate(srcRow, family_id, FamilyModel2::FamilyRole::interval, oldV, newV));
 }
 
-void Qrop::updateCropName(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+void Qrop::updateCropName(int srcRow, int family_id, int crop_id, const QString &oldV,
                           const QString &newV)
 {
     qDebug() << "[Qrop::updateCropName] Row: " << srcRow << ", family_id: " << family_id
              << ", crop_id: " << crop_id << ", oldV : " << oldV << ", newV: " << newV;
-    m_undoStack->push(
-            new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::name, oldV, newV));
+    if (oldV != newV)
+        m_undoStack->push(new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::name,
+                                            oldV, newV));
 }
 
-void Qrop::updateCropColor(int srcRow, uint family_id, uint crop_id, const QString &oldV,
+void Qrop::updateCropColor(int srcRow, int family_id, int crop_id, const QString &oldV,
                            const QString &newV)
 {
     qDebug() << "[Qrop::updateCropColor] Row: " << srcRow << ", family_id: " << family_id
              << ", crop_id: " << crop_id << ", oldV : " << oldV << ", newV: " << newV;
-    m_undoStack->push(
-            new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::color, oldV, newV));
+    if (oldV != newV)
+        m_undoStack->push(new CmdCropUpdate(srcRow, family_id, crop_id, CropModel2::CropRole::color,
+                                            oldV, newV));
+}
+
+void Qrop::updateVarietyName(int srcRow, int crop_id, int variety_id, const QString &oldV,
+                             const QString &newV)
+{
+    qDebug() << "[Qrop::updateVarietyName] Row: " << srcRow << ", crop_id: " << crop_id
+             << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
+    if (oldV != newV)
+        m_undoStack->push(new CmdVarietyUpdate(srcRow, crop_id, variety_id,
+                                               VarietyModel2::VarietyRole::name, oldV, newV));
+}
+
+void Qrop::updateVarietyCompanySeed(int srcRow, int crop_id, int variety_id, int oldV, int newV)
+{
+    qDebug() << "[Qrop::updateVarietyCompanySeed] Row: " << srcRow << ", crop_id: " << crop_id
+             << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
+    if (oldV != newV)
+        m_undoStack->push(new CmdVarietyUpdate(
+                srcRow, crop_id, variety_id, VarietyModel2::VarietyRole::seedCompanyId, oldV, newV));
+}
+
+void Qrop::updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool oldV, bool newV)
+{
+    qDebug() << "[Qrop::updateVarietyIsDefault] Row: " << srcRow << ", crop_id: " << crop_id
+             << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
+
+    if (oldV != newV)
+        m_undoStack->push(new CmdVarietyUpdate(srcRow, crop_id, variety_id,
+                                               VarietyModel2::VarietyRole::isDefault, oldV, newV));
 }
 
 void Qrop::loadCurrentDatabase()

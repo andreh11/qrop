@@ -50,19 +50,23 @@ Column {
                     Layout.leftMargin: Units.mediumSpacing - leftPadding / 2
                     Layout.rightMargin: -rightPadding / 2
                     ButtonGroup.group: buttonGroup
-                    onCheckedChanged: Variety.setDefault(model.variety_id, checked)
-                    checked: model.is_default === 1
+                    onCheckedChanged: {
+//                        print("variety "+variety+" is_default checked: "+checked);
+                        cppQrop.updateVarietyIsDefault(varietyModel.sourceRow(index), crop_id, variety_id, is_default, checked);
+                    }
+                    checked: is_default
                 }
 
-                TextInput {
+                EditableLabel {
                     text: model.variety
                     color: Qt.rgba(0, 0, 0, 0.7)
-                    font.family: "Roboto Regular"
-                    maximumLength: 25
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: firstColumnWidth
-
-                    onEditingFinished: Variety.update(model.variety_id, {"variety": text})
+                    Layout.fillHeight: true
+                    onEditingFinished: {
+//                        print("Edit variety name "+variety_id+": "+text);
+                        cppQrop.updateVarietyName(varietyModel.sourceRow(index), crop_id, variety_id, variety, text);
+                    }
                 }
 
                 // BUG: this shouldb a MyComboBox, but this one seems to buggy; the height
@@ -70,32 +74,27 @@ Column {
                 ComboBox {
                     id: seedCompanyField
 
-//                    property int rowId: seed_company_id
+                    property int currentCompanyId : seed_company_id
+                    property bool initialized : false // hack to not save when doing onCompleted...
 
-//                    function setRowId(rowId) {
-//                       print("MB_QML: rowId: "+rowId + ", rowCount: " + model.rowCount()+
-//                             "currentIndex: " + cppQrop.seedCompanyProxyIndex(seed_company_id))
-
-//                       currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
-//                    }
-
-                    Component.onCompleted: {
-                        currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
-                    }
-
-//                    onRowIdChanged: setRowId(rowId)
                     flat: true
                     Layout.minimumWidth: secondColumnWidth
+
                     model: cppQrop.modelSeedCompany()
-//                    model: SeedCompanyModel {
-//                        id: seedCompanyModel
-//                    }
                     textRole: "seed_company"
 
-
+                    Component.onCompleted: {
+//                        print("variety: "+variety+ " has company: "+ seed_company_id);
+                        currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
+                        initialized = true;
+                    }
                     onCurrentIndexChanged: {
-//                        var companyId = seedCompanyModel.rowId(seedCompanyField.currentIndex)
-//                        Variety.update(variety_id, {"seed_company_id": companyId})
+                        if (!initialized)
+                            return;
+                        let newCompanyId = cppQrop.seedCompanyIdFromProxyRow(currentIndex);
+                        if (currentCompanyId !== newCompanyId)
+                            cppQrop.updateVarietyCompanySeed(varietyModel.sourceRow(index), crop_id, variety_id,
+                                                             currentCompanyId, newCompanyId);
                     }
                 }
 

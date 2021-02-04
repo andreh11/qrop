@@ -163,7 +163,7 @@ Column {
 
         delegate: SettingsVarietyDelegate {
             width: parent.width
-            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
+//            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
             buttonGroup: buttonGroupL

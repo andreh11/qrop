@@ -26,7 +26,7 @@ public:
     explicit CmdUpdate(int row, int role, const QVariant &oldV, const QVariant &newV)
         : QUndoCommand(nullptr), m_row(row), m_role(role), m_oldValue(oldV), m_newValue(newV){}
 
-    virtual QString str() const {return QString("row: %1, role: %2, <old: >, <new: >").arg(
+    virtual QString str() const {return QString("row: %1, role: %2, <old: %3>, <new: %4>").arg(
                     m_row).arg(m_role).arg(variantStr(m_oldValue)).arg(variantStr(m_newValue));}
 
     QString variantStr(const QVariant &v) const {
