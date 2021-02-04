@@ -53,4 +53,20 @@ private:
     Qrop *m_qrop;
 };
 
+class FamilyProxyModel : public QSortFilterProxyModel
+{
+public:
+    FamilyProxyModel(Qrop *qrop, QObject *parent = nullptr);
+    ~FamilyProxyModel() override;
+
+    Q_INVOKABLE int sourceRow(int proxyRow) const
+    {
+        QModelIndex proxyIndex = index(proxyRow, 0);
+        return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
+    }
+
+private:
+    FamilyModel2 *m_model;
+};
+
 #endif // FAMILYTABLE_H

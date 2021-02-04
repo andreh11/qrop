@@ -52,4 +52,20 @@ private:
     Qrop *m_qrop;
 };
 
+class SeedCompanyProxyModel : public QSortFilterProxyModel
+{
+public:
+    SeedCompanyProxyModel(Qrop *qrop, QObject *parent = nullptr);
+    ~SeedCompanyProxyModel() override;
+
+    Q_INVOKABLE int sourceRow(int proxyRow) const
+    {
+        QModelIndex proxyIndex = index(proxyRow, 0);
+        return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
+    }
+
+private:
+    SeedCompanyModel2 *m_model;
+};
+
 #endif // SEEDCOMPANYMODEL_H

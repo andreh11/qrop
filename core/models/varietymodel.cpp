@@ -137,8 +137,8 @@ VarietyProxyModel::VarietyProxyModel(QObject *parent)
 {
     setSourceModel(m_model);
     setSortRole(VarietyModel2::VarietyRole::name);
-    setDynamicSortFilter(true);
     sort(0, Qt::AscendingOrder);
+    setDynamicSortFilter(true);
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[VarietyProxyModel] VarietyProxyModel";
 #endif

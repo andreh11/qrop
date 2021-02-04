@@ -30,8 +30,8 @@ class BuildInfo;
 class Database;
 class QropNews;
 class QTranslator;
-class FamilyModel2;
-class SeedCompanyModel2;
+class FamilyProxyModel;
+class SeedCompanyProxyModel;
 class QUndoStack;
 
 #include "business/family.h"
@@ -56,11 +56,8 @@ private:
     QMap<int, qrp::Variety *> m_varieties;
     QMap<int, qrp::SeedCompany *> m_seedCompanies;
 
-    FamilyModel2 *m_familyModel;
-    QSortFilterProxyModel *m_familyProxyModel;
-
-    SeedCompanyModel2 *m_seedCompanyModel;
-    QSortFilterProxyModel *m_seedCompanyProxyModel;
+    FamilyProxyModel *m_familyProxyModel;
+    SeedCompanyProxyModel *m_seedCompanyProxyModel;
 
     QUndoStack *m_undoStack;
     bool m_isLocalDatabase;
@@ -171,7 +168,7 @@ public:
         }
     }
 
-    Q_INVOKABLE QAbstractItemModel *modelFamily() const { return m_familyProxyModel; }
+    Q_INVOKABLE QAbstractItemModel *modelFamily() const;
     int numberOfFamilies() const { return m_families.size(); }
     qrp::Family *familyFromIndexRow(int row) const
     {
@@ -182,7 +179,7 @@ public:
         return it.value();
     }
 
-    Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const { return m_seedCompanyProxyModel; }
+    Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const;
     int numberOfSeedCompanies() const { return m_seedCompanies.size(); }
     qrp::SeedCompany *seedCompanyFromIndexRow(int row) const
     {

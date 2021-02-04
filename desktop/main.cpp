@@ -113,7 +113,6 @@ void registerTypes()
                                          QStringLiteral("QropNews should not be created in QML"));
 
     qmlRegisterInterface<QAbstractItemModel>("io.qrop.components");
-    //    qmlRegisterType<CropModel2>(packageURI, ver.maj, ver.min, "CropModel2");
     qmlRegisterType<CropProxyModel>(packageURI, ver.maj, ver.min, "CropProxyModel");
     qmlRegisterType<VarietyProxyModel>(packageURI, ver.maj, ver.min, "VarietyProxyModel");
 

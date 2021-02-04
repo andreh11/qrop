@@ -16,6 +16,8 @@
 
 #include "seedcompanymodel.h"
 #include "qrop.h"
+#include "version.h"
+
 SeedCompanyModel::SeedCompanyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
@@ -73,4 +75,25 @@ Qt::ItemFlags SeedCompanyModel2::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+SeedCompanyProxyModel::SeedCompanyProxyModel(Qrop *qrop, QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(new SeedCompanyModel2(qrop))
+{
+    setSourceModel(m_model);
+    setSortRole(SeedCompanyModel2::SeedCompanyRole::name);
+    sort(0, Qt::AscendingOrder);
+    setDynamicSortFilter(true);
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[SeedCompanyProxyModel] Create";
+#endif
+}
+
+SeedCompanyProxyModel::~SeedCompanyProxyModel()
+{
+    delete m_model;
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[SeedCompanyProxyModel] Delete";
+#endif
 }

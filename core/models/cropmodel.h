@@ -88,10 +88,7 @@ public:
     Q_INVOKABLE int sourceRow(int proxyRow) const
     {
         QModelIndex proxyIndex = index(proxyRow, 0);
-        if (proxyIndex.isValid())
-            return mapToSource(proxyIndex).row();
-        else
-            return -1;
+        return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
 
 private:

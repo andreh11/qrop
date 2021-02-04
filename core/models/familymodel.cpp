@@ -18,8 +18,9 @@
 #include <QSqlRecord>
 
 #include "familymodel.h"
-#include "../qrop.h"
+#include "qrop.h"
 #include "business/family.h"
+#include "version.h"
 
 FamilyModel::FamilyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -86,4 +87,25 @@ Qt::ItemFlags FamilyModel2::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+FamilyProxyModel::FamilyProxyModel(Qrop *qrop, QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(new FamilyModel2(qrop))
+{
+    setSourceModel(m_model);
+    setSortRole(FamilyModel2::FamilyRole::name);
+    sort(0, Qt::AscendingOrder);
+    setDynamicSortFilter(true);
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[FamilyProxyModel] Create";
+#endif
+}
+
+FamilyProxyModel::~FamilyProxyModel()
+{
+    delete m_model;
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[FamilyProxyModel] Delete";
+#endif
 }

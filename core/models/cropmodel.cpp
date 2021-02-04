@@ -131,8 +131,8 @@ CropProxyModel::CropProxyModel(QObject *parent)
 {
     setSourceModel(m_model);
     setSortRole(CropModel2::CropRole::name);
-    setDynamicSortFilter(true);
     sort(0, Qt::AscendingOrder);
+    setDynamicSortFilter(true);
 #ifdef TRACE_CPP_MODELS
     qDebug() << "[CropProxyModel] Create";
 #endif
