@@ -4,8 +4,10 @@
 #include <QObject>
 #include <QDoubleValidator>
 
+#include "core_global.h"
+
 // A subclass of QDoubleValidator which always use "." as a decimalPoint.
-class QropDoubleValidator : public QDoubleValidator
+class CORESHARED_EXPORT QropDoubleValidator : public QDoubleValidator
 {
     Q_OBJECT
 
