@@ -27,6 +27,7 @@ add_library(core SHARED
 
         commands/cmdcropupdate.cpp
         commands/cmdfamilyupdate.cpp
+        commands/cmdvarietyadddel.cpp
         commands/cmdvarietyupdate.cpp
 
         dbutils/db.cpp

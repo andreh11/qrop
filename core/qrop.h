@@ -73,6 +73,7 @@ signals:
     void familyUpdated(int srcRow);
     void cropUpdated(int familyId, int srcRow);
     void varietyUpdated(int cropId, int srcRow);
+    void varietyDeleted(int cropId, int varietyId);
 
     // signals for SeedCompanyModel
     void beginResetSeedCompanyModel();
@@ -213,6 +214,8 @@ public:
                                               int newV);
     Q_INVOKABLE void updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool oldV,
                                             bool newV);
+
+    Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
 
 private:
     void loadCurrentDatabase();

@@ -110,11 +110,17 @@ int Qrop::init()
 
 void Qrop::undo()
 {
-    m_undoStack->undo();
+    if (m_undoStack->canUndo()) {
+        sendInfo(tr("Undo %1").arg(m_undoStack->undoText()));
+        m_undoStack->undo();
+    }
 }
 void Qrop::redo()
 {
-    m_undoStack->redo();
+    if (m_undoStack->canRedo()) {
+        sendInfo(tr("Redo %1").arg(m_undoStack->redoText()));
+        m_undoStack->redo();
+    }
 }
 
 bool Qrop::loadDatabase(const QUrl &url)
@@ -207,6 +213,7 @@ int Qrop::seedCompanyProxyIndex(int seedCompanyId) const
 #include "commands/cmdfamilyupdate.h"
 #include "commands/cmdcropupdate.h"
 #include "commands/cmdvarietyupdate.h"
+#include "commands/cmdvarietyadddel.h"
 void Qrop::updateFamilyName(int proxyRow, int family_id, const QString &oldV, const QString &newV)
 {
     int srcRow = m_familyProxyModel->sourceRow(proxyRow);
@@ -284,6 +291,13 @@ void Qrop::updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool 
     if (oldV != newV)
         m_undoStack->push(new CmdVarietyUpdate(srcRow, crop_id, variety_id,
                                                VarietyModel2::VarietyRole::isDefault, oldV, newV));
+}
+
+void Qrop::deleteVariety(int crop_id, int variety_id)
+{
+    qDebug() << "[Qrop::deleteVariety]  crop_id: " << crop_id << ", variety_id: " << variety_id;
+
+    m_undoStack->push(new CmdVarietyAddDel(crop_id, variety_id));
 }
 
 void Qrop::loadCurrentDatabase()

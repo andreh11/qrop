@@ -128,11 +128,7 @@ Column {
                             text: qsTr("All plantings will be lost.")
                         }
 
-                        onAccepted: {
-                            Variety.remove(model.variety_id)
-                            refresh()
-                        }
-
+                        onAccepted: cppQrop.deleteVariety(crop_id, variety_id)
                         onRejected: confirmVarietyDeleteDialog.close()
                     }
                 }

@@ -93,6 +93,8 @@ struct Crop {
             return nullptr;
         return varieties.at(row);
     }
+
+    int row(int variety_id) const;
 };
 
 struct Variety {
