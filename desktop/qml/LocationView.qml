@@ -389,12 +389,13 @@ Item {
             property var plantingRowList: model.nonOverlappingPlantingList
             property var taskRowList: model.taskList
             property int rows: plantingRowList.length
+            property int taskRows: taskRowList.length
             property bool hasLocationTasks: taskRowList.length > plantingRowList.length
             property bool isSelected: root.isSelected(currentRow)
 
             clip: true
             width: ListView.view.width // fill available width
-            height: Math.max(1,rows) * Units.rowHeight + 1 // always show at least one row
+            height: root.showTimeline ? Math.max(1,rows,taskRows) * Units.rowHeight + 1 : Units.rowHeight + 1 // always show at least one row
 
             color: Qt.darker(model.hasChildren ? colorList[model.depth] : "white",
                              (isSelected) ? 1.1 : 1)
@@ -608,20 +609,22 @@ Item {
                     Layout.fillWidth: true
 
                     MonthGrid {
-                        visible: !locationDelegate.plantingRowList.length
+                        id: monthGrid
                         height: parent.height
                         width: parent.width
                     }
 
                     TaskTimeline {
                         id: locationTaskTimeline
-                        visible: locationDelegate.hasLocationTasks
+                        visible: locationDelegate.hasLocationTasks && root.showTimeline
                         model: visible ? locationDelegate.taskRowList[taskRowList.length - 1] : []
                         seasonBegin: root.seasonBegin
                         season: root.season
                         year: root.year
-                        height: locationDelegate.height
+                        height: Units.rowHeight
+                        y: locationDelegate.plantingRowList.length * Units.rowHeight
                         width: parent.width
+
                     }
 
                     Column {
@@ -635,6 +638,8 @@ Item {
                                 visible: root.showTimeline
                                 year: root.year
                                 season: root.season
+                                showMonthGrid: false
+                                showTodayLine: false
                                 showGreenhouseSow: false
                                 showNames: true
                                 showTasks: locationSettings.showTasks

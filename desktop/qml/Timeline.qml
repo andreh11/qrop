@@ -34,9 +34,11 @@ Item {
     property var plantingIdList
 //    property var plantingDrawMapList
     property var taskIdList
+    property bool showMonthGrid: true
     property bool showGreenhouseSow: true
     property bool showOnlyActiveColor: false
     property bool showFamilyColor: false
+    property bool showTodayLine: true
     property int locationId: -1
     property real locationLength: -1
     property bool showNames: false
@@ -61,13 +63,14 @@ Item {
         id: gridRow
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
+        visible: showMonthGrid
     }
 
     Rectangle {
         id: todayLine
         x: Helpers.position(seasonBegin, todayDate)
         z: 3
-        visible: x != 0 && x != graphWidth
+        visible: x != 0 && x != graphWidth && showTodayLine
         width: 1
         anchors.topMargin: -1
         anchors.bottomMargin: -1

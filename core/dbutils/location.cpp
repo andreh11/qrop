@@ -443,8 +443,8 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
     QMap<int, QVariantList> map;
     int locationId = query->value("location_id").toInt();
 
-    QVector<QVariantList> rows;
-    rows.push_back({ query->value("planting_id").toInt() });
+    QVector<QVariantList> currentTimelineRows;
+    currentTimelineRows.push_back({ query->value("planting_id").toInt() });
 
     // rowDate[i] is pair of the planting and end harvest dates of the last planting we added
     // to row i.
@@ -452,32 +452,31 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
     rowDate.push_back({ QrpDate::dateFromIsoString(query->value("planting_date").toString()),
                         QrpDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
 
-    int lid;
+    int nextLocationId;
     int plantingId;
     int i;
     while (query->next()) {
-        lid = query->value("location_id").toInt();
+        nextLocationId = query->value("location_id").toInt();
         plantingId = query->value("planting_id").toInt();
         auto plantingDate = QrpDate::dateFromIsoString(query->value("planting_date").toString());
         auto endHarvestDate = QrpDate::dateFromIsoString(query->value("end_harvest_date").toString());
 
-        if (lid != locationId) {
+        if (nextLocationId != locationId) {
             // We've found a new location, so we add the list we've just built to the QMap
             // and clear the temporary lists.
             // Since QML cannot use a QList of QList<int>, we convert the
             // list to a QVariantList. This may introduce a performance problem,
             // but it is a working solution.
-            QVariantList variantList;
-            for (const auto &lst : rows) {
-                if (!lst.isEmpty())
-                    variantList.push_back(lst);
+            QVariantList timelineRows;
+            for (const auto &timelineRow : currentTimelineRows) {
+                if (!timelineRow.isEmpty())
+                    timelineRows.push_back(timelineRow);
             }
-            map[locationId] = variantList;
-            rows.clear();
+            map[locationId] = timelineRows;
+            currentTimelineRows.clear();
             rowDate.clear();
-            locationId = lid;
-            rows.push_back({ plantingId });
-            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
+            locationId = nextLocationId;
+            currentTimelineRows.push_back({ plantingId });
             rowDate.push_back({ plantingDate, endHarvestDate });
             continue;
         }
@@ -485,8 +484,7 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
         i = 0;
         for (; i < rowDate.count(); ++i) {
             if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
-                rows[i].push_back(plantingId);
-                //                rows[i].push_back(m_planting->drawInfoMap(query->record(), season, year, false, true));
+                currentTimelineRows[i].push_back(plantingId);
                 rowDate[i] = { plantingDate, endHarvestDate };
                 break;
             }
@@ -496,14 +494,13 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
             // The current planting overlaps every plantings we've already assigned,
             // so we create a new row for it.
             rowDate.push_back({ plantingDate, endHarvestDate });
-            rows.push_back({ plantingId });
-            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
+            currentTimelineRows.push_back({ plantingId });
         }
     }
 
     // Add last location.
     QVariantList variantList;
-    for (const auto &lst : rows) {
+    for (const auto &lst : currentTimelineRows) {
         if (!lst.isEmpty())
             variantList.push_back(lst);
     }
@@ -766,10 +763,11 @@ QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, in
     CropRotationInfoList infoList;
 
     const auto push = [&infoList, &query]() {
-        infoList.push_back({ query->value("planting_id").toInt(), query->value("crop").toString(),
-                             query->value("family_id").toInt(), query->value("family_interval").toInt(),
-                             QrpDate::dateFromIsoString(query->value("planting_date").toString()),
-                             QrpDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+        infoList.push_back(
+                { query->value("planting_id").toInt(), query->value("crop").toString(),
+                  query->value("family_id").toInt(), query->value("family_interval").toInt(),
+                  QrpDate::dateFromIsoString(query->value("planting_date").toString()),
+                  QrpDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
     };
 
     push();

@@ -13,7 +13,6 @@ Item {
         id: repeater
         TaskTimegraph {
             taskId: modelData
-            height: control.height
             seasonBegin: control.seasonBegin
             season: control.season
             year: control.year
