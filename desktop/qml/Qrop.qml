@@ -61,9 +61,6 @@ ApplicationWindow {
     property bool modifyMainDatabase: true
     property int dbAction: Qrop.DB_ACTION.OPEN
 
-    property color badgeColor : "#ec3e3a"  // redish color (exactly the one used in OS X 10.10)
-    property int badgeHeight : 25
-
     Component.onCompleted: {
         if (firstDatabaseFile === "")
             firstDatabaseFile = cppRemote.defaultDatabaseUrl();
@@ -451,8 +448,6 @@ ApplicationWindow {
                 Badge {
                     id: aboutBadge
                     visible: false
-                    color: window.badgeColor
-                    height: window.badgeHeight
                 }
             }
         }

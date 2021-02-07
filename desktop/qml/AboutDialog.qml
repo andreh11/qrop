@@ -257,8 +257,6 @@ Popup {
 
             Badge {
                 id: newsBadge
-                color: window.badgeColor
-                height: window.badgeHeight
             }
         }
         TabButton {
