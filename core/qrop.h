@@ -35,21 +35,6 @@ class Qrop : public QObject, public Singleton<Qrop>
     friend class Singleton<Qrop>;
 
 private:
-    QSettings m_settings;
-    QTranslator *m_translator;
-
-    Database *const m_db; //!< db connection
-    BuildInfo *const m_buildInfo;
-
-    QStringList m_errors; //!< non critical errors happening prior to the GUI
-    QNetworkAccessManager m_netMgr; //!< for http(s) requests
-    QropNews *m_news;
-
-signals:
-    void info(const QString &msg);
-    void error(const QString &err);
-
-private:
     Qrop(QObject *parent = nullptr);
 
 public:
@@ -61,44 +46,60 @@ public:
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
     Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);
 
-    inline Q_INVOKABLE bool isMobileDevice() {return m_buildInfo->isMobileDevice();}
+    inline Q_INVOKABLE bool isMobileDevice() { return m_buildInfo->isMobileDevice(); }
+    inline Q_INVOKABLE QropNews *news() const { return m_news; }
+    inline QNetworkAccessManager &networkManager() { return m_networkManager; }
+    inline Q_INVOKABLE BuildInfo *buildInfo() const { return m_buildInfo; }
 
-    inline Q_INVOKABLE QropNews *news() const {return m_news;}
-
-    inline bool hasErrors() const {return m_errors.size() != 0;}
-    inline void showErrors() {
+    inline bool hasErrors() const { return m_errors.size() != 0; }
+    inline void showErrors()
+    {
         emit error(m_errors.join("\n"));
         m_errors.clear();
     };
 
-    inline QNetworkAccessManager &networkManager() {return m_netMgr;}
-    inline Q_INVOKABLE BuildInfo *buildInfo() const {return m_buildInfo;}
-
-    inline void sendInfo(const QString &msg) {
+    inline void sendInfo(const QString &msg)
+    {
         emit info(msg);
         qDebug() << msg;
     }
-    void sendError(const QString &err){
+
+    void sendError(const QString &err)
+    {
         emit error(err);
         qCritical() << err;
     }
 
-    inline QString preferredLanguage() const {
+    inline QString preferredLanguage() const
+    {
         return m_settings.value("preferredLanguage", "system").toString();
     }
 
-    inline QDate lastNewsUpdate() const {
+    inline QDate lastNewsUpdate() const
+    {
         QString dateStr = m_settings.value("lastNewsUpdate", "").toString();
         return dateStr.isEmpty() ? QDate() : QDate::fromString(dateStr, Qt::ISODate);
     }
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
+signals:
+    void info(const QString &msg);
+    void error(const QString &err);
+
 private:
+    QSettings m_settings;
+    QTranslator *m_translator;
+
+    Database *const m_db; //!< db connection
+    BuildInfo *const m_buildInfo;
+
+    QStringList m_errors; //!< non critical errors happening prior to the GUI
+    QNetworkAccessManager m_networkManager; //!< for http(s) requests
+    QropNews *m_news;
+
     void loadCurrentDatabase();
     void installTranslator();
-
-
 
     void _dumpSettings();
 };

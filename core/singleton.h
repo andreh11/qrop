@@ -18,39 +18,25 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-template <typename T> class Singleton
+template<typename T>
+class Singleton
 {
 protected:
-    // Constructor /Destructor
     Singleton() = default;
-    virtual ~Singleton() = default;
+    ~Singleton() = default;
 
 public:
-    Singleton(const Singleton &other) = delete;
-    Singleton(const Singleton &&other) = delete;
-    Singleton & operator=(const Singleton &other) = delete;
-    Singleton & operator=(const Singleton &&other) = delete;
-
-    // Public Interface
-    static T *instance()
+    static T &instance()
     {
-        if (!_singleton)
-            _singleton = new T;
-        return (static_cast<T*> (_singleton));
-    }
-
-    static void clear()
-    {
-        if (_singleton) {
-            delete _singleton;
-            _singleton = nullptr;
-        }
+        static T instance;
+        return instance;
     }
 
 private:
-    // Unique instance
-    static T *_singleton;
+    Singleton(const Singleton &other) = delete;
+    Singleton(const Singleton &&other) = delete;
+    Singleton &operator=(const Singleton &other) = delete;
+    Singleton &operator=(const Singleton &&other) = delete;
 };
 
-template <typename T> T *Singleton<T>::_singleton;
 #endif // SINGLETON_H
