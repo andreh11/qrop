@@ -21,8 +21,32 @@
 #include "dbutils/variety.h"
 #include "models/varietymodel.h"
 
+CmdVarietyAddDel::CmdVarietyAddDel(int crop_id, const QString &name, int seedCompanyId)
+    : QUndoCommand()
+    , m_creation(true)
+    , m_crop_id(crop_id)
+    , m_variety_id(-1)
+{
+    Qrop *qrop = Qrop::instance();
+    setText(QString("Create variety for crop: %1").arg(qrop->crop(m_crop_id)->name));
+    if (qrop->isLocalDatabase()) {
+        dbutils::Variety sql;
+        m_variety_id = sql.add({ { "crop_id", m_crop_id },
+                                 { "variety", name },
+                                 { "seed_company_id", seedCompanyId },
+                                 { "deleted", "true" } });
+    } else
+        m_variety_id = qrp::Variety::getNextId();
+
+    // Add non visible Variety in Qrop data structure
+    emit qrop->beginAppendVariety(m_crop_id);
+    qrop->addVariety(m_variety_id, true, name, m_crop_id, false, seedCompanyId);
+    emit qrop->endAppendVariety(m_crop_id);
+}
+
 CmdVarietyAddDel::CmdVarietyAddDel(int crop_id, int variety_id)
     : QUndoCommand()
+    , m_creation(false)
     , m_crop_id(crop_id)
     , m_variety_id(variety_id)
 {
@@ -43,13 +67,12 @@ void CmdVarietyAddDel::redo()
         return;
     }
 
-    if (!variety->deleted) {
-        variety->deleted = true;
-        if (qrop->isLocalDatabase()) {
-            dbutils::Variety sql;
-            sql.update(m_variety_id, { { VarietyModel2::roleName(VarietyModel2::deleted), true } });
-        }
-        emit qrop->varietyDeleted(m_crop_id, m_variety_id);
+    if (m_creation) {
+        if (variety->deleted)
+            _setVarietyDelete(variety, false, qrop);
+    } else {
+        if (!variety->deleted)
+            _setVarietyDelete(variety, true, qrop);
     }
 }
 
@@ -66,12 +89,21 @@ void CmdVarietyAddDel::undo()
         return;
     }
 
-    if (variety->deleted) {
-        variety->deleted = false;
-        if (qrop->isLocalDatabase()) {
-            dbutils::Variety sql;
-            sql.update(m_variety_id, { { VarietyModel2::roleName(VarietyModel2::deleted), false } });
-        }
-        emit qrop->varietyDeleted(m_crop_id, m_variety_id);
+    if (m_creation) {
+        if (!variety->deleted)
+            _setVarietyDelete(variety, true, qrop);
+    } else {
+        if (variety->deleted)
+            _setVarietyDelete(variety, false, qrop);
     }
+}
+
+void CmdVarietyAddDel::_setVarietyDelete(qrp::Variety *variety, bool value, Qrop *qrop)
+{
+    variety->deleted = value;
+    if (qrop->isLocalDatabase()) {
+        dbutils::Variety sql;
+        sql.update(m_variety_id, { { VarietyModel2::roleName(VarietyModel2::deleted), value } });
+    }
+    emit qrop->varietyVisible(m_crop_id, m_variety_id);
 }

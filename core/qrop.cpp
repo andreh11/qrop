@@ -296,8 +296,13 @@ void Qrop::updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool 
 void Qrop::deleteVariety(int crop_id, int variety_id)
 {
     qDebug() << "[Qrop::deleteVariety]  crop_id: " << crop_id << ", variety_id: " << variety_id;
-
     m_undoStack->push(new CmdVarietyAddDel(crop_id, variety_id));
+}
+
+void Qrop::addNewVariety(int crop_id, const QString &name, int seedCompanyId)
+{
+    qDebug() << "[Qrop::addNewVariety]  crop_id: " << crop_id;
+    m_undoStack->push(new CmdVarietyAddDel(crop_id, name, seedCompanyId));
 }
 
 void Qrop::loadCurrentDatabase()

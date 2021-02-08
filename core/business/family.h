@@ -27,6 +27,9 @@ struct Crop;
 struct Variety;
 
 struct SeedCompany {
+    static int sLastId;
+    static int getNextId() {return ++sLastId;}
+
     int id;
     bool deleted;
     QString name;
@@ -41,6 +44,9 @@ struct SeedCompany {
 };
 
 struct Family {
+    static int sLastId;
+    static int getNextId() {return ++sLastId;}
+
     int id;
     bool deleted;
     QString name;
@@ -66,9 +72,14 @@ struct Family {
             return nullptr;
         return crops.at(row);
     }
+
+    int row(int crop_id) const;
 };
 
 struct Crop {
+    static int sLastId;
+    static int getNextId() {return ++sLastId;}
+
     int id;
     bool deleted;
     QString name;
@@ -98,6 +109,9 @@ struct Crop {
 };
 
 struct Variety {
+    static int sLastId;
+    static int getNextId() {return ++sLastId;}
+
     int id;
     bool deleted;
     QString name;

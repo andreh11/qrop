@@ -182,17 +182,7 @@ Column {
         AddVarietyDialog {
             id: addVarietyDialog
             margins: 0
-            onAccepted: {
-                if (seedCompanyId > 0)
-                    Variety.add({"variety" : varietyName,
-                                    "crop_id" : model.crop_id,
-                                    "seed_company_id" : seedCompanyId});
-                else
-                    Variety.add({"variety" : varietyName,
-                                    "crop_id" : model.crop_id});
-
-                varietyModel.refresh();
-            }
+            onAccepted: cppQrop.addNewVariety(crop_id, varietyName, seedCompanyId)
         }
     }
 }

@@ -75,8 +75,8 @@ VarietyModel2::VarietyModel2(QObject *parent)
         }
     });
 
-    connect(qrop, &Qrop::varietyDeleted, this, [=](int cropId, int varietyId) {
-        qDebug() << "[varietyDeleted] cropId: " << cropId << ", m_cropId: " << m_cropId
+    connect(qrop, &Qrop::varietyVisible, this, [=](int cropId, int varietyId) {
+        qDebug() << "[varietyVisible] cropId: " << cropId << ", m_cropId: " << m_cropId
                  << ", varietyId: " << varietyId;
         if (cropId != m_cropId)
             return;
@@ -88,6 +88,20 @@ VarietyModel2::VarietyModel2(QObject *parent)
                 emit dataChanged(idx, idx);
             }
         }
+    });
+
+    connect(qrop, &Qrop::beginAppendVariety, this, [=](int cropId) {
+        qDebug() << "[beginAppendVariety] cropId: " << cropId << ", m_cropId: " << m_cropId;
+        if (cropId != m_cropId)
+            return;
+        int lastRow = rowCount();
+        beginInsertRows(QModelIndex(), lastRow, lastRow);
+    });
+    connect(qrop, &Qrop::endAppendVariety, this, [=](int cropId) {
+        qDebug() << "[endAppendVariety] cropId: " << cropId << ", m_cropId: " << m_cropId;
+        if (cropId != m_cropId)
+            return;
+        endInsertRows();
     });
 }
 

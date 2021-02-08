@@ -73,7 +73,10 @@ signals:
     void familyUpdated(int srcRow);
     void cropUpdated(int familyId, int srcRow);
     void varietyUpdated(int cropId, int srcRow);
-    void varietyDeleted(int cropId, int varietyId);
+
+    void beginAppendVariety(int cropId);
+    void endAppendVariety(int endId);
+    void varietyVisible(int cropId, int varietyId);
 
     // signals for SeedCompanyModel
     void beginResetSeedCompanyModel();
@@ -147,10 +150,14 @@ public:
     void addSeedCompany(int id, bool del, const QString &name, bool is_default)
     {
         m_seedCompanies.insert(id, new qrp::SeedCompany(id, del, name, is_default));
+        if (id > qrp::SeedCompany::sLastId)
+            qrp::SeedCompany::sLastId = id;
     }
     void addFamily(int id, bool del, const QString &name, ushort interval, const QString &color)
     {
         m_families.insert(id, new qrp::Family(id, del, name, interval, color));
+        if (id > qrp::Family::sLastId)
+            qrp::Family::sLastId = id;
     }
     void addCrop(int id, bool del, const QString &name, const QString &color, int family_id)
     {
@@ -159,6 +166,8 @@ public:
             qrp::Crop *crop = new qrp::Crop(id, del, name, color, fam);
             m_crops.insert(id, crop);
             fam->addCrop(crop);
+            if (id > qrp::Crop::sLastId)
+                qrp::Crop::sLastId = id;
         }
     }
     void addVariety(int id, bool del, const QString &name, int crop_id, bool is_default,
@@ -170,6 +179,8 @@ public:
             qrp::Variety *variety = new qrp::Variety(id, del, name, is_default, crp, seed);
             m_varieties.insert(id, variety);
             crp->addVariety(variety);
+            if (id > qrp::Variety::sLastId)
+                qrp::Variety::sLastId = id;
         }
     }
 
@@ -216,6 +227,7 @@ public:
                                             bool newV);
 
     Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
+    Q_INVOKABLE void addNewVariety(int crop_id, const QString &name, int seedCompanyId);
 
 private:
     void loadCurrentDatabase();
