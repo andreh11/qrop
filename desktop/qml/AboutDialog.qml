@@ -174,13 +174,6 @@ Popup {
             }
         }
         Pane {
-            HtmlLabel {
-                id: feedbackLbl
-                width: parent.width
-                text: "<center><h1>%1</h1></center>".arg(qsTr("Feedback Page"))
-            }
-        }
-        Pane {
             TextArea {
                 width: parent.width
                 height: parent.height
@@ -224,9 +217,6 @@ Popup {
                 }
                 z: 1
             }
-        }
-        TabButton {
-            text: qsTr("Feedback")
         }
         TabButton {
             text: qsTr("Debug information")

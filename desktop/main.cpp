@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("AH");
     QApplication::setOrganizationDomain("io.qrop");
     QApplication::setApplicationDisplayName("Qrop");
-    QApplication::setApplicationVersion("0.4.6");
+    QApplication::setApplicationVersion(QROP_VERSION);
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
@@ -332,13 +332,12 @@ int main(int argc, char *argv[])
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url("qrc:/qml/Qrop.qml");
-    QObject::connect(
-            &engine, &QQmlApplicationEngine::objectCreated, &app,
-            [url](QObject *obj, const QUrl &objUrl) {
-                if (!obj && url == objUrl)
-                    QCoreApplication::exit(-1);
-            },
-            Qt::QueuedConnection);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                     [url](QObject *obj, const QUrl &objUrl) {
+                         if (!obj && url == objUrl)
+                             QCoreApplication::exit(-1);
+                     },
+                     Qt::QueuedConnection);
     engine.load(url);
     engine.addImageProvider("pictures", new QrpImageProvider());
 
