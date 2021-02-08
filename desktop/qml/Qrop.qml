@@ -447,7 +447,12 @@ ApplicationWindow {
 
                 Badge {
                     id: aboutBadge
-                    visible: false
+                    anchors {
+                        right: parent.right
+                        top: parent.top
+                        topMargin: 4
+                        rightMargin: 14
+                    }
                 }
             }
         }

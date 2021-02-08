@@ -144,7 +144,7 @@ Popup {
                     height: newsTitle.height
                     Label {
                         id: newsTitle
-                        text: qsTr("<h1>%1</h1>").arg(qsTr("News"));
+                        text: "<h1>%1</h1>".arg(qsTr("News"));
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
@@ -208,7 +208,7 @@ Popup {
             Label {
                 id: feedback
                 width: parent.width
-                text: "<center><h1>Feedback Page</h1></center>"
+                text: "<center><h1>%1</h1></center>".arg(qsTr("Feedback Page"))
                 font.family: "Roboto Regular"
                 wrapMode: Label.Wrap
                 font.pixelSize: Units.fontSizeCaption
@@ -257,6 +257,13 @@ Popup {
 
             Badge {
                 id: newsBadge
+                anchors {
+                    top: parent.top
+                    topMargin: 2
+                    left: parent.left
+                    leftMargin: (parent.width + newsTab.contentItem.implicitWidth) / 2 - 5
+                }
+                z: 1
             }
         }
         TabButton {

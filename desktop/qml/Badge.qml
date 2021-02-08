@@ -17,32 +17,15 @@ Rectangle {
 
     visible: false
     smooth: true
+    color: Material.color(Material.Red, Material.Shade900)
+    radius: width / 2
+    height: 18
+    // Make the rectangle and ellipse if the length of the text is bigger than 2 characters
+    width: badgeLbl.text.length > 2 ? badgeLbl.paintedWidth + height / 2 : height
 
     // Create an animation when the opacity changes
     Behavior on opacity { NumberAnimation { } }
 
-    // Setup the anchors so that the badge appears on the bottom right
-    // area of its parent
-    anchors {
-        right: parent.right
-        top: parent.top
-        topMargin: 4
-        rightMargin: 14
-    }
-
-    color: Material.color(Material.Red, Material.Shade900)
-
-    // Make the rectangle a circle
-    radius: width / 2
-
-    // Setup height of the rectangle (the default is 18 pixels)
-    height: 18
-
-    // Make the rectangle and ellipse if the length of the text is bigger than 2 characters
-    width: badgeLbl.text.length > 2 ? badgeLbl.paintedWidth + height / 2 : height
-
-
-    // Create a label that will display the number of connected users.
     Label {
         id: badgeLbl
         color: "#fdfdfdfd"
