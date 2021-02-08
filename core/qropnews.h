@@ -33,9 +33,6 @@ class QropNews : public QObject
     static constexpr const char *s_newsJsonBaseLink =
             "https://framagit.org/ah/qrop/-/raw/284-bdd-erreur-ouverture-logiciel/news/qrop_news"; //!< we add "_<lang>.json"
     static constexpr const char *s_newsJsonContentType = "text/plain";
-    //    static constexpr const char *s_newsJsonBaseLink = "https://mbruel.fr/qrop_news"; //!< we add "_<lang>.json"
-    //    static constexpr const char *s_newsJsonContentType = "application/json";
-
     static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
 
     typedef struct News {
