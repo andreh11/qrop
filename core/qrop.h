@@ -38,7 +38,7 @@ private:
     Qrop(QObject *parent = nullptr);
 
 public:
-    ~Qrop();
+    ~Qrop() override;
 
     int init();
 
@@ -88,6 +88,12 @@ signals:
     void error(const QString &err);
 
 private:
+    void loadCurrentDatabase();
+    void installTranslator();
+
+    void _dumpSettings();
+
+private:
     QSettings m_settings;
     QTranslator *m_translator;
 
@@ -97,11 +103,6 @@ private:
     QStringList m_errors; //!< non critical errors happening prior to the GUI
     QNetworkAccessManager m_networkManager; //!< for http(s) requests
     QropNews *m_news;
-
-    void loadCurrentDatabase();
-    void installTranslator();
-
-    void _dumpSettings();
 };
 
 #endif // QROP_H

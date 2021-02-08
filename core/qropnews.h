@@ -31,7 +31,7 @@ class QropNews : public QObject
     Q_PROPERTY(QString toHtml READ toHtml CONSTANT FINAL)
 
     static constexpr const char *s_newsJsonBaseLink =
-            "https://framagit.org/ah/qrop/-/raw/284-bdd-erreur-ouverture-logiciel/news/qrop_news"; //!< we add "_<lang>.json"
+            "https://framagit.org/ah/qrop/-/raw/master/news/qrop_news"; //!< we add "_<lang>.json"
     static constexpr const char *s_newsJsonContentType = "text/plain";
     static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
 
@@ -52,24 +52,9 @@ class QropNews : public QObject
         }
     } News;
 
-private:
-    QString m_lang;
-    QDate m_lastUpdate;
-    QString m_mainText;
-    QString m_lastRelease;
-    QVector<News *> m_news;
-    ushort m_numberOfUnreadNews;
-    bool m_markAsRead;
-
-signals:
-    void newsReceived();
-
-private slots:
-    void onNewsReceived();
-
 public:
     QropNews(QObject *parent = nullptr);
-    ~QropNews();
+    ~QropNews() override;
 
     inline QDate lastUpdate() const { return m_lastUpdate; }
     inline QString lastRelease() const { return m_lastRelease; }
@@ -83,8 +68,23 @@ public:
     inline Q_INVOKABLE void markAsRead(bool read) { m_markAsRead = read; }
     inline bool areRead() const { return m_markAsRead; }
 
+signals:
+    void newsReceived();
+
+private slots:
+    void onNewsReceived();
+
 private:
     void _error(const QString &err);
+
+private:
+    QString m_lang;
+    QDate m_lastUpdate;
+    QString m_mainText;
+    QString m_lastRelease;
+    QVector<News *> m_news;
+    ushort m_numberOfUnreadNews;
+    bool m_markAsRead;
 };
 
 #endif // QROPNEWS_H

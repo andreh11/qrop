@@ -23,20 +23,19 @@ class Singleton
 {
 protected:
     Singleton() = default;
-    ~Singleton() = default;
+    virtual ~Singleton() = default;
 
 public:
+    Singleton(const Singleton &other) = delete;
+    Singleton(const Singleton &&other) = delete;
+    Singleton &operator=(const Singleton &other) = delete;
+    Singleton &operator=(const Singleton &&other) = delete;
+
     static T &instance()
     {
         static T instance;
         return instance;
     }
-
-private:
-    Singleton(const Singleton &other) = delete;
-    Singleton(const Singleton &&other) = delete;
-    Singleton &operator=(const Singleton &other) = delete;
-    Singleton &operator=(const Singleton &&other) = delete;
 };
 
 #endif // SINGLETON_H

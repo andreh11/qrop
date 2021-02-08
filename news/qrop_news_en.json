@@ -1,6 +1,6 @@
 {
 	"lastRelease":"0.4.6",
-	"mainText": "From time to time we'll display some news and polls to orientate <b>Qrop</b> developement.",
+	"mainText": "From time to time we'll display some news and polls to orientate <b>Qrop</b>'s developement.",
 	"news": [
 		{
 			"date": "2021-01-23",
@@ -10,22 +10,9 @@
 		},
 		{
 			"date":"2021-01-14",
-			"title": "Sondage d'utilisation de Qrop",
+			"title": "Poll on Qrop usage",
 			"link": "https://framaforms.org/sondage-dutilisation-de-qrop-1610631611",
-			"desc": "Nous vous proposons ce sondage afin de mieux connaître les utilisateurs de Qrop, et ainsi pouvoir établir une feuille de route adaptée aux usages actuels de Qrop. Vous nous aiderez ainsi à prioriser les prochaines fonctionnalités de l'outil."
-		},
-		{
-			"date":"2021-01-11",
-			"title": "Sondage d'utilisation de Qrop",
-			"link": "https://framaforms.org/sondage-dutilisation-de-qrop-1610631611",
-			"desc": "Nous vous proposons ce sondage afin de mieux connaître les utilisateurs de Qrop, et ainsi pouvoir établir une feuille de route adaptée aux usages actuels de Qrop. Vous nous aiderez ainsi à prioriser les prochaines fonctionnalités de l'outil."
-		},
-		{
-			"date":"2021-01-08",
-			"title": "Sondage d'utilisation de Qrop",
-			"link": "https://framaforms.org/sondage-dutilisation-de-qrop-1610631611",
-			"desc": "Nous vous proposons ce sondage afin de mieux connaître les utilisateurs de Qrop, et ainsi pouvoir établir une feuille de route adaptée aux usages actuels de Qrop. Vous nous aiderez ainsi à prioriser les prochaines fonctionnalités de l'outil."
+			"desc": "We propose this poll in order to better know Qrop's users and understand your needs to orientate accordingly our development roadmap."
 		}
-
 	]
 }
