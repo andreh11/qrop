@@ -97,7 +97,6 @@ private:
     QSettings m_settings;
     QTranslator *m_translator;
 
-    Database *const m_db; //!< db connection
     BuildInfo *const m_buildInfo;
 
     QStringList m_errors; //!< non critical errors happening prior to the GUI
