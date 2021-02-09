@@ -79,7 +79,7 @@ Dialog {
             textRole: function (model) { return model.family; }
             idRole: function (model) { return model.family_id; }
             showAddItem: false
-            model: cppQrop.modelFamily()
+            model: cppFamily.modelFamily()
 //            model: FamilyModel {
 //                id: familyModel
 //            }

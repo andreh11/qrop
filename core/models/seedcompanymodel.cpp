@@ -15,7 +15,7 @@
  */
 
 #include "seedcompanymodel.h"
-#include "qrop.h"
+#include "services/familyservice.h"
 #include "version.h"
 
 SeedCompanyModel::SeedCompanyModel(QObject *parent, const QString &tableName)
@@ -31,30 +31,31 @@ const QHash<int, QByteArray> SeedCompanyModel2::sRoleNames = {
     { SeedCompanyRole::deleted, "deleted" },
 };
 
-SeedCompanyModel2::SeedCompanyModel2(Qrop *qrop, QObject *parent)
+SeedCompanyModel2::SeedCompanyModel2(FamilyService *svcFamily, QObject *parent)
     : QAbstractListModel(parent)
-    , m_qrop(qrop)
+    , m_svcFamily(svcFamily)
 {
-    connect(m_qrop, &Qrop::beginResetSeedCompanyModel, this, [=]() { beginResetModel(); });
-    connect(m_qrop, &Qrop::endResetSeedCompanyModel, this, [=]() { endResetModel(); });
+    connect(m_svcFamily, &FamilyService::beginResetSeedCompanyModel, this,
+            [=]() { beginResetModel(); });
+    connect(m_svcFamily, &FamilyService::endResetSeedCompanyModel, this, [=]() { endResetModel(); });
 }
 
 int SeedCompanyModel2::rowCount(const QModelIndex &parent) const
 {
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
-    if (parent.isValid() || !m_qrop)
+    if (parent.isValid() || !m_svcFamily)
         return 0;
 
-    return m_qrop->numberOfSeedCompanies();
+    return m_svcFamily->numberOfSeedCompanies();
 }
 
 QVariant SeedCompanyModel2::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || !m_qrop)
+    if (!index.isValid() || !m_svcFamily)
         return QVariant();
 
-    qrp::SeedCompany *seedCompany = m_qrop->seedCompanyFromIndexRow(index.row());
+    qrp::SeedCompany *seedCompany = m_svcFamily->seedCompanyFromIndexRow(index.row());
     if (!seedCompany)
         return QVariant();
 
@@ -80,9 +81,9 @@ Qt::ItemFlags SeedCompanyModel2::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
-SeedCompanyProxyModel::SeedCompanyProxyModel(Qrop *qrop, QObject *parent)
+SeedCompanyProxyModel::SeedCompanyProxyModel(FamilyService *svcFamily, QObject *parent)
     : QSortFilterProxyModel(parent)
-    , m_model(new SeedCompanyModel2(qrop))
+    , m_model(new SeedCompanyModel2(svcFamily))
 {
     setSourceModel(m_model);
     setSortRole(SeedCompanyModel2::SeedCompanyRole::name);

@@ -20,6 +20,7 @@
 #include "cropmodel.h"
 #include "qrop.h"
 #include "version.h"
+#include "services/familyservice.h"
 
 CropModel::CropModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
@@ -60,8 +61,8 @@ CropModel2::CropModel2(QObject *parent)
     , m_familyId(-1)
     , m_family(nullptr)
 {
-    Qrop *qrop = Qrop::instance();
-    connect(qrop, &Qrop::cropUpdated, this, [=](int familyId, int srcRow) {
+    FamilyService *svcFamily = Qrop::instance()->familyService();
+    connect(svcFamily, &FamilyService::cropUpdated, this, [=](int familyId, int srcRow) {
         qDebug() << "[cropUpdated] familyId: " << familyId << ", m_familyId: " << m_familyId
                  << ", row: " << srcRow;
         if (familyId != m_familyId)
@@ -118,7 +119,7 @@ Qt::ItemFlags CropModel2::flags(const QModelIndex &index) const
 void CropModel2::setFamilyId(int familyId)
 {
     beginResetModel();
-    m_family = Qrop::instance()->family(familyId);
+    m_family = Qrop::instance()->familyService()->family(familyId);
     if (m_family)
         m_familyId = familyId;
     else

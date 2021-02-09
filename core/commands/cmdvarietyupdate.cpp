@@ -19,6 +19,7 @@
 #include "qrop.h"
 #include "dbutils/variety.h"
 #include "version.h"
+#include "services/familyservice.h"
 
 CmdVarietyUpdate::CmdVarietyUpdate(int row, int crop_id, int variety_id,
                                    VarietyModel2::VarietyRole role, QVariant oldV, QVariant newV)
@@ -26,7 +27,7 @@ CmdVarietyUpdate::CmdVarietyUpdate(int row, int crop_id, int variety_id,
     , m_crop_id(crop_id)
     , m_variety_id(variety_id)
 {
-    setText(QString("Update variety %1").arg(Qrop::instance()->variety(m_variety_id)->name));
+    setText(QString("Update variety %1").arg(s_familySvc->variety(m_variety_id)->name));
 }
 
 void CmdVarietyUpdate::redo()
@@ -34,9 +35,7 @@ void CmdVarietyUpdate::redo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[redo] " << str();
 #endif
-
-    Qrop *qrop = Qrop::instance();
-    qrp::Variety *variety = qrop->variety(m_variety_id);
+    qrp::Variety *variety = s_familySvc->variety(m_variety_id);
     if (!variety) {
         qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
         return;
@@ -50,16 +49,16 @@ void CmdVarietyUpdate::redo()
         variety->isDefault = m_newValue.toBool();
         break;
     case VarietyModel2::VarietyRole::seedCompanyId:
-        variety->seedCompany = qrop->seedCompany(m_newValue.toInt());
+        variety->seedCompany = s_familySvc->seedCompany(m_newValue.toInt());
         break;
     default:
         break;
     }
-    if (qrop->isLocalDatabase()) {
+    if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
         sql.update(m_variety_id, { { VarietyModel2::roleName(m_role), m_newValue } });
     }
-    emit qrop->varietyUpdated(m_crop_id, m_row);
+    emit s_familySvc->varietyUpdated(m_crop_id, m_row);
 }
 
 void CmdVarietyUpdate::undo()
@@ -67,9 +66,7 @@ void CmdVarietyUpdate::undo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[undo] " << str();
 #endif
-
-    Qrop *qrop = Qrop::instance();
-    qrp::Variety *variety = qrop->variety(m_variety_id);
+    qrp::Variety *variety = s_familySvc->variety(m_variety_id);
     if (!variety) {
         qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
         return;
@@ -83,14 +80,14 @@ void CmdVarietyUpdate::undo()
         variety->isDefault = m_oldValue.toBool();
         break;
     case VarietyModel2::VarietyRole::seedCompanyId:
-        variety->seedCompany = qrop->seedCompany(m_oldValue.toInt());
+        variety->seedCompany = s_familySvc->seedCompany(m_oldValue.toInt());
         break;
     default:
         break;
     }
-    if (qrop->isLocalDatabase()) {
+    if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
         sql.update(m_variety_id, { { VarietyModel2::roleName(m_role), m_oldValue } });
     }
-    emit qrop->varietyUpdated(m_crop_id, m_row);
+    emit s_familySvc->varietyUpdated(m_crop_id, m_row);
 }

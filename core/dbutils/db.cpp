@@ -37,6 +37,7 @@
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #include "filesystem.h"
 #endif
+#include "services/familyservice.h"
 
 QString Database::defaultDatabasePath()
 {
@@ -187,16 +188,15 @@ void Database::close()
     database.close();
 }
 
-#include "qrop.h"
-void Database::loadDatabase(Qrop *qrop)
+void Database::loadDatabase(FamilyService *svcFamily)
 {
-    loadSeedCompanies(qrop);
-    loadFamilies(qrop);
-    loadCrops(qrop);
-    loadVarieties(qrop);
+    loadSeedCompanies(svcFamily);
+    loadFamilies(svcFamily);
+    loadCrops(svcFamily);
+    loadVarieties(svcFamily);
 }
 
-void Database::loadSeedCompanies(Qrop *qrop)
+void Database::loadSeedCompanies(FamilyService *svcFamily)
 {
     QSqlQuery query;
     if (!query.exec(
@@ -204,30 +204,31 @@ void Database::loadSeedCompanies(Qrop *qrop)
         qCritical() << "Can't Execute Query !";
         return;
     }
-    emit qrop->beginResetSeedCompanyModel();
+    emit svcFamily->beginResetSeedCompanyModel();
     while (query.next()) {
-        qrop->addSeedCompany(query.value(0).toInt(), query.value(1).toBool(),
-                             query.value(2).toString(), query.value(3).toBool());
+        svcFamily->addSeedCompany(query.value(0).toInt(), query.value(1).toBool(),
+                                  query.value(2).toString(), query.value(3).toBool());
     }
-    emit qrop->endResetSeedCompanyModel();
+    emit svcFamily->endResetSeedCompanyModel();
 }
 
-void Database::loadFamilies(Qrop *qrop)
+void Database::loadFamilies(FamilyService *svcFamily)
 {
     QSqlQuery query;
     if (!query.exec("select family_id, deleted, family, interval, color from family")) {
         qCritical() << "Can't Execute Query !";
         return;
     }
-    emit qrop->beginResetFamilyModel();
+    emit svcFamily->beginResetFamilyModel();
     while (query.next()) {
-        qrop->addFamily(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
-                        static_cast<ushort>(query.value(3).toUInt()), query.value(4).toString());
+        svcFamily->addFamily(query.value(0).toInt(), query.value(1).toBool(),
+                             query.value(2).toString(), static_cast<ushort>(query.value(3).toUInt()),
+                             query.value(4).toString());
     }
-    emit qrop->endResetFamilyModel();
+    emit svcFamily->endResetFamilyModel();
 }
 
-void Database::loadCrops(Qrop *qrop)
+void Database::loadCrops(FamilyService *svcFamily)
 {
     QSqlQuery query;
     if (!query.exec("select crop_id, deleted, crop, color, family_id from crop")) {
@@ -235,12 +236,12 @@ void Database::loadCrops(Qrop *qrop)
         return;
     }
     while (query.next()) {
-        qrop->addCrop(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
-                      query.value(3).toString(), query.value(4).toInt());
+        svcFamily->addCrop(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
+                           query.value(3).toString(), query.value(4).toInt());
     }
 }
 
-void Database::loadVarieties(Qrop *qrop)
+void Database::loadVarieties(FamilyService *svcFamily)
 {
     QSqlQuery query;
     if (!query.exec("select variety_id, deleted, variety, crop_id, is_default, seed_company_id "
@@ -249,8 +250,9 @@ void Database::loadVarieties(Qrop *qrop)
         return;
     }
     while (query.next()) {
-        qrop->addVariety(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
-                         query.value(3).toInt(), query.value(4).toBool(), query.value(5).toInt());
+        svcFamily->addVariety(query.value(0).toInt(), query.value(1).toBool(),
+                              query.value(2).toString(), query.value(3).toInt(),
+                              query.value(4).toBool(), query.value(5).toInt());
     }
 }
 

@@ -315,6 +315,7 @@ void registerTypes()
                                               });
 }
 
+#include "services/familyservice.h"
 int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
@@ -344,15 +345,17 @@ int main(int argc, char *argv[])
     if (res != 0)
         return res;
 
+    FamilyService *svcFamily = qrop->familyService();
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("cppQrop", qrop);
+    engine.rootContext()->setContextProperty("cppFamily", svcFamily);
 
     // really important, otherwise QML could take ownership and delete them
     // (cf http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#data-ownership )
     engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
     engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
-    engine.setObjectOwnership(qrop->modelFamily(), QQmlEngine::CppOwnership);
-    engine.setObjectOwnership(qrop->modelSeedCompany(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(svcFamily->modelFamily(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(svcFamily->modelSeedCompany(), QQmlEngine::CppOwnership);
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url(QStringLiteral("qrc:/qml/MainWindow.qml"));

@@ -20,10 +20,11 @@
 
 #include <QUndoCommand>
 #include <QPersistentModelIndex>
+#include "cmdfamily.h"
 #include "business/family.h"
 class Qrop;
 
-class CmdVarietyAddDel : public QUndoCommand
+class CmdVarietyAddDel : public QUndoCommand, public CmdFamily
 {
 public:
     CmdVarietyAddDel(int crop_id, const QString &name, int seedCompanyId = -1); //!< for creation
@@ -38,7 +39,7 @@ public:
 //    }
 
 private:
-    void _setVarietyDelete(qrp::Variety *variety, bool value, Qrop *qrop);
+    void _setVarietyDelete(qrp::Variety *variety, bool value);
 
 private:
     const bool m_creation;

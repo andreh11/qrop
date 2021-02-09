@@ -74,7 +74,7 @@ Column {
                             onNewColorSelected: {
                                 colorPickerDialog.close();
                                 print("Edit family color"+family_id+": "+color);
-                                cppQrop.updateFamilyColor(index, family_id, model.color, color);
+                                cppFamily.updateFamilyColor(index, family_id, model.color, color);
 
 //                                Family.update(model.family_id, {"color": color});
 //                                refresh();
@@ -92,7 +92,7 @@ Column {
                     onEditingFinished: {
 //                        Family.update(family_id, {"family": text})
                         print("Edit family name"+family_id+": "+text);
-                        cppQrop.updateFamilyName(index, family_id, family, text);
+                        cppFamily.updateFamilyName(index, family_id, family, text);
 //                        model.family = text;
 //                        refresh();
                     }
@@ -109,7 +109,7 @@ Column {
                     displayText: qsTr("%L1 years", "", currentIndex).arg(currentIndex)
                     onCurrentIndexChanged: {
                         if (interval !== currentIndex)
-                            cppQrop.updateFamilyInterval(index, family_id, interval, currentIndex);
+                            cppFamily.updateFamilyInterval(index, family_id, interval, currentIndex);
 //                        Family.update(family_id, {"interval": currentIndex});
                     }
 

@@ -66,7 +66,7 @@ Column {
                             onNewColorSelected:{
                                 colorPickerDialog.close();
                                 print("Edit Crop color"+crop_id+": "+color);
-                                cppQrop.updateCropColor(cropModel.sourceRow(index), family_id, crop_id, model.color, color);
+                                cppFamily.updateCropColor(cropModel.sourceRow(index), family_id, crop_id, model.color, color);
 
 //                                Crop.update(model.crop_id, {"color": color});
 //                                refresh();
@@ -83,7 +83,7 @@ Column {
                     Layout.fillHeight: true
                     onEditingFinished: {
                         print("Edit Crop name"+crop_id+": "+color);
-                        cppQrop.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
+                        cppFamily.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
 
 //                        Crop.update(model.crop_id, {"crop": text});
 //                        refresh();
@@ -182,7 +182,7 @@ Column {
         AddVarietyDialog {
             id: addVarietyDialog
             margins: 0
-            onAccepted: cppQrop.addNewVariety(crop_id, varietyName, seedCompanyId)
+            onAccepted: cppFamily.addNewVariety(crop_id, varietyName, seedCompanyId)
         }
     }
 }

@@ -107,7 +107,7 @@ Pane {
         Keys.onDownPressed: scrollBar.increase()
 
         spacing: 0
-        model: cppQrop.modelFamily()
+        model: cppFamily.modelFamily()
 //        model: FamilyProxyModel {
 //            id: familyModel
 //            qrop: cppQrop

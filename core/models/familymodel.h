@@ -30,14 +30,14 @@ public:
 };
 
 #include <QAbstractListModel>
-class Qrop;
+class FamilyService;
 
 class FamilyModel2 : public QAbstractListModel
 {
     static const QHash<int, QByteArray> sRoleNames;
 
 public:
-    explicit FamilyModel2(Qrop *qrop, QObject *parent = nullptr);
+    explicit FamilyModel2(FamilyService *svcFamily, QObject *parent = nullptr);
 
     enum FamilyRole { name = Qt::UserRole, interval, color, id, deleted };
 
@@ -50,13 +50,13 @@ public:
     static QString roleName(int r) { return sRoleNames.value(r); }
 
 private:
-    Qrop *m_qrop;
+    FamilyService *m_svcFamily;
 };
 
 class FamilyProxyModel : public QSortFilterProxyModel
 {
 public:
-    FamilyProxyModel(Qrop *qrop, QObject *parent = nullptr);
+    FamilyProxyModel(FamilyService *svcFamily, QObject *parent = nullptr);
     ~FamilyProxyModel() override;
 
     Q_INVOKABLE int sourceRow(int proxyRow) const

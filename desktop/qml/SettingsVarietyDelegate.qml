@@ -52,7 +52,7 @@ Column {
                     ButtonGroup.group: buttonGroup
                     onCheckedChanged: {
 //                        print("variety "+variety+" is_default checked: "+checked);
-                        cppQrop.updateVarietyIsDefault(varietyModel.sourceRow(index), crop_id, variety_id, is_default, checked);
+                        cppFamily.updateVarietyIsDefault(varietyModel.sourceRow(index), crop_id, variety_id, is_default, checked);
                     }
                     checked: is_default
                 }
@@ -65,7 +65,7 @@ Column {
                     Layout.fillHeight: true
                     onEditingFinished: {
 //                        print("Edit variety name "+variety_id+": "+text);
-                        cppQrop.updateVarietyName(varietyModel.sourceRow(index), crop_id, variety_id, variety, text);
+                        cppFamily.updateVarietyName(varietyModel.sourceRow(index), crop_id, variety_id, variety, text);
                     }
                 }
 
@@ -80,20 +80,20 @@ Column {
                     flat: true
                     Layout.minimumWidth: secondColumnWidth
 
-                    model: cppQrop.modelSeedCompany()
+                    model: cppFamily.modelSeedCompany()
                     textRole: "seed_company"
 
                     Component.onCompleted: {
 //                        print("variety: "+variety+ " has company: "+ seed_company_id);
-                        currentIndex = cppQrop.seedCompanyProxyIndex(seed_company_id);
+                        currentIndex = cppFamily.seedCompanyProxyIndex(seed_company_id);
                         initialized = true;
                     }
                     onCurrentIndexChanged: {
                         if (!initialized)
                             return;
-                        let newCompanyId = cppQrop.seedCompanyIdFromProxyRow(currentIndex);
+                        let newCompanyId = cppFamily.seedCompanyIdFromProxyRow(currentIndex);
                         if (currentCompanyId !== newCompanyId)
-                            cppQrop.updateVarietyCompanySeed(varietyModel.sourceRow(index), crop_id, variety_id,
+                            cppFamily.updateVarietyCompanySeed(varietyModel.sourceRow(index), crop_id, variety_id,
                                                              currentCompanyId, newCompanyId);
                     }
                 }
@@ -128,7 +128,7 @@ Column {
                             text: qsTr("All plantings will be lost.")
                         }
 
-                        onAccepted: cppQrop.deleteVariety(crop_id, variety_id)
+                        onAccepted: cppFamily.deleteVariety(crop_id, variety_id)
                         onRejected: confirmVarietyDeleteDialog.close()
                     }
                 }

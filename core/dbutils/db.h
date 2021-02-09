@@ -21,7 +21,7 @@
 #include <QUrl>
 #include "core_global.h"
 #include "purestaticclass.h"
-class Qrop;
+class FamilyService;
 
 class CORESHARED_EXPORT Database : public PureStaticClass
 {
@@ -45,13 +45,13 @@ public:
     static void copy(const QUrl &from, const QUrl &to);
     static void close();
 
-    static void loadDatabase(Qrop *qrop);
+    static void loadDatabase(FamilyService *svcFamily);
 
 private:
-    static void loadSeedCompanies(Qrop *qrop);
-    static void loadFamilies(Qrop *qrop);
-    static void loadCrops(Qrop *qrop);
-    static void loadVarieties(Qrop *qrop);
+    static void loadSeedCompanies(FamilyService *svcFamily);
+    static void loadFamilies(FamilyService *svcFamily);
+    static void loadCrops(FamilyService *svcFamily);
+    static void loadVarieties(FamilyService *svcFamily);
 
     static void initStatics();
 

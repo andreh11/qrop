@@ -20,7 +20,8 @@
 
 #include <QUndoCommand>
 #include <QVariant>
-class CmdUpdate : public QUndoCommand
+#include "cmdfamily.h"
+class CmdUpdate : public QUndoCommand, public CmdFamily
 {
 public:
     explicit CmdUpdate(int row, int role, const QVariant &oldV, const QVariant &newV)
