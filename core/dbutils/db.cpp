@@ -27,6 +27,7 @@
 #include <QSqlDriver>
 #include <QSettings>
 #include <QCoreApplication>
+#include <QRegularExpression>
 
 #include "db.h"
 #include "dbutils/family.h"
@@ -202,6 +203,9 @@ int Database::execSqlFile(const QString &fileName, const QString &separator)
 
     QTextStream textStream(&file);
     QString fileString = textStream.readAll();
+    // Remove commented out lines to prevent errors.
+    fileString.replace(QRegularExpression("--.*?\\n"), " ");
+
     QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
 
     QSqlQuery query;
@@ -230,12 +234,11 @@ bool Database::createDatabase()
 {
     qInfo() << "Creating database...";
     int nb = execSqlFile(":/db/tables.sql");
-    qDebug() << "Create tables: " << nb;
-    nb = execSqlFile(":/db/triggers.sql");
-    qDebug() << "Create triggers: " << nb;
+    qDebug() << "Create tables:" << nb << "errors.";
+    nb += execSqlFile(":/db/triggers.sql");
+    qDebug() << "Create triggers:" << nb << "errors.";
 
     if (nb == 0) {
-        //    if (execSqlFile(":/db/tables.sql") == 0 && execSqlFile(":/db/triggers.sql") == 0) {
         qInfo() << "Database created.";
         if (migrate()) // MB_QUESTION: do we really need to migrate a new DB?
             return createData();
