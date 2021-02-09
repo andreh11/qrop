@@ -62,8 +62,8 @@ VarietyModel2::VarietyModel2(QObject *parent)
     , m_cropId(-1)
     , m_crop(nullptr)
 {
-    Qrop *qrop = Qrop::instance();
-    connect(qrop, &Qrop::varietyUpdated, this, [=](int cropId, int srcRow) {
+    Qrop &qrop = Qrop::instance();
+    connect(&qrop, &Qrop::varietyUpdated, this, [=](int cropId, int srcRow) {
         qDebug() << "[varietyUpdated] cropId: " << cropId << ", m_cropId: " << m_cropId
                  << ", row: " << srcRow;
         if (cropId != m_cropId)
@@ -75,12 +75,12 @@ VarietyModel2::VarietyModel2(QObject *parent)
         }
     });
 
-    connect(qrop, &Qrop::varietyVisible, this, [=](int cropId, int varietyId) {
+    connect(&qrop, &Qrop::varietyVisible, this, [&](int cropId, int varietyId) {
         qDebug() << "[varietyVisible] cropId: " << cropId << ", m_cropId: " << m_cropId
                  << ", varietyId: " << varietyId;
         if (cropId != m_cropId)
             return;
-        qrp::Crop *crop = qrop->crop(cropId);
+        qrp::Crop *crop = qrop.crop(cropId);
         if (crop) {
             QModelIndex idx = index(crop->row(varietyId));
             if (idx.isValid()) {
@@ -90,14 +90,14 @@ VarietyModel2::VarietyModel2(QObject *parent)
         }
     });
 
-    connect(qrop, &Qrop::beginAppendVariety, this, [=](int cropId) {
+    connect(&qrop, &Qrop::beginAppendVariety, this, [=](int cropId) {
         qDebug() << "[beginAppendVariety] cropId: " << cropId << ", m_cropId: " << m_cropId;
         if (cropId != m_cropId)
             return;
         int lastRow = rowCount();
         beginInsertRows(QModelIndex(), lastRow, lastRow);
     });
-    connect(qrop, &Qrop::endAppendVariety, this, [=](int cropId) {
+    connect(&qrop, &Qrop::endAppendVariety, this, [=](int cropId) {
         qDebug() << "[endAppendVariety] cropId: " << cropId << ", m_cropId: " << m_cropId;
         if (cropId != m_cropId)
             return;
@@ -153,7 +153,7 @@ Qt::ItemFlags VarietyModel2::flags(const QModelIndex &index) const
 void VarietyModel2::setCropId(int cropId)
 {
     beginResetModel();
-    m_crop = Qrop::instance()->crop(cropId);
+    m_crop = Qrop::instance().crop(cropId);
     if (m_crop)
         m_cropId = cropId;
     else

@@ -60,7 +60,8 @@ CropModel2::CropModel2(QObject *parent)
     , m_familyId(-1)
     , m_family(nullptr)
 {
-    connect(Qrop::instance(), &Qrop::cropUpdated, this, [=](int familyId, int srcRow) {
+    Qrop &qrop = Qrop::instance();
+    connect(&qrop, &Qrop::cropUpdated, this, [=](int familyId, int srcRow) {
         qDebug() << "[cropUpdated] familyId: " << familyId << ", m_familyId: " << m_familyId
                  << ", row: " << srcRow;
         if (familyId != m_familyId)
@@ -117,7 +118,7 @@ Qt::ItemFlags CropModel2::flags(const QModelIndex &index) const
 void CropModel2::setFamilyId(int familyId)
 {
     beginResetModel();
-    m_family = Qrop::instance()->family(familyId);
+    m_family = Qrop::instance().family(familyId);
     if (m_family)
         m_familyId = familyId;
     else

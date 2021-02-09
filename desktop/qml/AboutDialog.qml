@@ -92,21 +92,13 @@ Popup {
                     horizontalAlignment: Text.AlignHCenter
                 }
 
-                Label {
+                HtmlLabel {
+                    id: projectDescriptionLbl
                     width: parent.width
-                    text: qsTr("A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop <a href='https://latelierpaysan.org'>L'Atelier paysan</a>.")
-                    font.family: "Roboto Regular"
-                    wrapMode: Label.Wrap
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    onLinkActivated: Qt.openUrlExternally(link)
-                    horizontalAlignment: Text.AlignHCenter
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
+                    text: qsTr("A cross-platform tool for crop planning and recordkeeping. "
+                               + "Made by farmers, for farmers with the help of the French coop "
+                               + "<a href='https://latelierpaysan.org'>L'Atelier paysan</a>.")
                 }
-
 
                 Label {
                     width: parent.width
@@ -117,21 +109,14 @@ Popup {
                     horizontalAlignment: Text.AlignHCenter
                 }
 
-                Label {
+                HtmlLabel {
                     width: parent.width
-                    text: qsTr("This program comes with ABSOLUTELY NO WARRANTY,<br/>for more details, visit <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GNU General Public License version 3</a>.")
-                    font.family: "Roboto Regular"
-                    wrapMode: Label.Wrap
+                    text: qsTr("This program comes with ABSOLUTELY NO WARRANTY,"
+                               + "<br/>for more details, "
+                               + "visit <a href='https://www.gnu.org/licenses/gpl-3.0.html'>"
+                               +"GNU General Public License version 3</a>.")
                     font.pixelSize: Units.fontSizeCaption
-                    horizontalAlignment: Text.AlignHCenter
-                    onLinkActivated: Qt.openUrlExternally(link)
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
                 }
-
             }
         }
         Pane {
@@ -144,24 +129,14 @@ Popup {
                     height: newsTitle.height
                     Label {
                         id: newsTitle
-                        text: qsTr("<h1>%1</h1>").arg(qsTr("News"));
+                        text: "<h1>%1</h1>".arg(qsTr("News"));
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
-                Label {
+                HtmlLabel {
                     id: newsSubTitle
                     width: parent.width
-                    text: qsTr("you need an internet connection")
-                    font.family: "Roboto Regular"
-                    wrapMode: Label.Wrap
-                    font.pixelSize: Units.fontSizeBodyAndButton
-                    horizontalAlignment: Text.AlignHCenter
-                    onLinkActivated: Qt.openUrlExternally(link)
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
+                    text: qsTr("You need an internet connection")
                 }
                 Item {
                     width: 1 // dummy value != 0
@@ -177,23 +152,17 @@ Popup {
                     id: flickableNews
                     clip: true
                     width: view.width
-                    height: aboutColumn.height - newsTitle.height -newsSubTitle.height - markNewsAsRead.height + parent.spacing / 2
+                    height: aboutColumn.height
+                            - newsTitle.height
+                            - newsSubTitle.height
+                            - markNewsAsRead.height
+                            + parent.spacing / 2
                     contentHeight: news.height
                     contentWidth: view.width
-                    Label {
+                    HtmlLabel {
                         id: news
                         width: parent.width
-                        //                    text: qsTr("you need an internet connection");
-                        font.family: "Roboto Regular"
-                        wrapMode: Label.Wrap
-                        font.pixelSize: Units.fontSizeBodyAndButton
                         horizontalAlignment: Text.AlignLeft
-                        onLinkActivated: Qt.openUrlExternally(link)
-                        MouseArea {
-                            anchors.fill: parent
-                            acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                        }
                     }
                 }
                 CheckBox {
@@ -201,23 +170,6 @@ Popup {
                     text: qsTr("Mark news as read")
                     anchors.horizontalCenter: parent.horizontalCenter
                     onToggled: cppQrop.news().markAsRead(checked);
-                }
-            }
-        }
-        Pane {
-            Label {
-                id: feedback
-                width: parent.width
-                text: "<center><h1>Feedback Page</h1></center>"
-                font.family: "Roboto Regular"
-                wrapMode: Label.Wrap
-                font.pixelSize: Units.fontSizeCaption
-                horizontalAlignment: Text.AlignHCenter
-                onLinkActivated: Qt.openUrlExternally(link)
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
         }
@@ -257,16 +209,17 @@ Popup {
 
             Badge {
                 id: newsBadge
-                color: window.badgeColor
-                height: window.badgeHeight
+                anchors {
+                    top: parent.top
+                    topMargin: 2
+                    left: parent.left
+                    leftMargin: (parent.width + newsTab.contentItem.implicitWidth) / 2 - 5
+                }
+                z: 1
             }
-        }
-        TabButton {
-            text: qsTr("Feedback")
         }
         TabButton {
             text: qsTr("Debug information")
         }
     }
-
 }

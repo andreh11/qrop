@@ -121,5 +121,6 @@
         <file>qml/ApplicationShortcut.qml</file>
         <file>qml/MobileFileDialog.qml</file>
         <file>qml/Badge.qml</file>
+        <file>qml/HtmlLabel.qml</file>
     </qresource>
 </RCC>

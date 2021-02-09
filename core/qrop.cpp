@@ -29,18 +29,10 @@
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
-    , Singleton<Qrop>()
-    , m_settings()
     , m_translator(new QTranslator)
     , m_db(new Database(this))
     , m_buildInfo(new BuildInfo)
-    , m_errors()
-    , m_netMgr()
     , m_news(new QropNews)
-    , m_families()
-    , m_crops()
-    , m_varieties()
-    , m_seedCompanies()
     , m_familyProxyModel(new FamilyProxyModel(this))
     , m_seedCompanyProxyModel(new SeedCompanyProxyModel(this))
     , m_undoStack(new QUndoStack)
@@ -72,6 +64,8 @@ void Qrop::clearBusinessObjects()
 
 Qrop::~Qrop()
 {
+    qDebug() << "[Qrop] Deleting Qrop...";
+
     delete m_seedCompanyProxyModel;
     delete m_familyProxyModel;
 
@@ -151,28 +145,32 @@ bool Qrop::saveDatabase(const QUrl &from, const QUrl &to)
     if (from.isLocalFile() && to.isLocalFile()) {
         m_db->copy(from, to);
         return true;
-    } else
-        return false;
+    }
+    return false;
 }
 
 bool Qrop::newReleaseAvailable(const QString &lastOnlineVersion)
 {
     QRegularExpression versionRegExp("^(\\d+)\\.(\\d+)\\.(\\d+)$");
-    QRegularExpressionMatch matchLastVersion = versionRegExp.match(lastOnlineVersion),
-                            matchCurrent = versionRegExp.match(m_buildInfo->version());
+    QRegularExpressionMatch matchLastVersion = versionRegExp.match(lastOnlineVersion);
+    QRegularExpressionMatch matchCurrent = versionRegExp.match(m_buildInfo->version());
+
     if (matchLastVersion.hasMatch() && matchCurrent.hasMatch()) {
-        int majorLast = matchLastVersion.captured(1).toInt(),
-            majorCurrent = matchCurrent.captured(1).toInt();
+        int majorLast = matchLastVersion.captured(1).toInt();
+        int majorCurrent = matchCurrent.captured(1).toInt();
+
         if (majorLast > majorCurrent)
             return true;
-        else if (majorLast == majorCurrent) {
-            int minorLast = matchLastVersion.captured(2).toInt(),
-                minorCurrent = matchCurrent.captured(2).toInt();
+
+        if (majorLast == majorCurrent) {
+            int minorLast = matchLastVersion.captured(2).toInt();
+            int minorCurrent = matchCurrent.captured(2).toInt();
             if (minorLast > minorCurrent)
                 return true;
-            else if (minorLast == minorCurrent
-                     && matchLastVersion.captured(3).toInt() > matchCurrent.captured(3).toInt())
+            if (minorLast == minorCurrent
+                && matchLastVersion.captured(3).toInt() > matchCurrent.captured(3).toInt()) {
                 return true;
+            }
         }
     }
     return false;
@@ -328,7 +326,8 @@ void Qrop::loadCurrentDatabase()
 
 void Qrop::installTranslator()
 {
-    QString lang = QLocale::system().name(), prefLanguage = preferredLanguage();
+    QString lang = QLocale::system().name();
+    QString prefLanguage = preferredLanguage();
     qDebug() << "LANG: " << lang << ", preferredLanguage: " << prefLanguage;
 
     if (prefLanguage == "system")

@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.3
 
 Rectangle {
     id: root
@@ -16,32 +17,20 @@ Rectangle {
 
     visible: false
     smooth: true
-
-    // Create an animation when the opacity changes
-    Behavior on opacity {NumberAnimation{}}
-
-    // Setup the anchors so that the badge appears on the bottom right
-    // area of its parent
-    anchors.right: parent.right
-    anchors.top: parent.top
-
-    color: "#ec3e3a"  // redish color (exactly the one used in OS X 10.10)
-
-    // Make the rectangle a circle
+    color: Material.color(Material.Red, Material.Shade900)
     radius: width / 2
-
-    // Setup height of the rectangle (the default is 18 pixels)
-    height: 22
-
+    height: 18
     // Make the rectangle and ellipse if the length of the text is bigger than 2 characters
     width: badgeLbl.text.length > 2 ? badgeLbl.paintedWidth + height / 2 : height
 
+    // Create an animation when the opacity changes
+    Behavior on opacity { NumberAnimation { } }
 
-    // Create a label that will display the number of connected users.
     Label {
         id: badgeLbl
         color: "#fdfdfdfd"
-        font.pixelSize: 9
+        font.pixelSize: Units.fontSizeCaption
+        font.family: "Roboto Condensed"
         anchors.fill: parent
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

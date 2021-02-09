@@ -41,51 +41,7 @@ class Qrop : public QObject, public Singleton<Qrop>
     friend class Singleton<Qrop>;
 
 private:
-    QSettings m_settings;
-    QTranslator *m_translator;
-
-    Database *const m_db; //!< db connection
-    BuildInfo *const m_buildInfo;
-
-    QStringList m_errors; //!< non critical errors happening prior to the GUI
-    QNetworkAccessManager m_netMgr; //!< for http(s) requests
-    QropNews *m_news;
-
-    QMap<int, qrp::Family *> m_families;
-    QMap<int, qrp::Crop *> m_crops;
-    QMap<int, qrp::Variety *> m_varieties;
-    QMap<int, qrp::SeedCompany *> m_seedCompanies;
-
-    FamilyProxyModel *m_familyProxyModel;
-    SeedCompanyProxyModel *m_seedCompanyProxyModel;
-
-    QUndoStack *m_undoStack;
-    bool m_isLocalDatabase;
-
-signals:
-    void info(const QString &msg);
-    void error(const QString &err);
-
-    // signals for FamilyModel
-    void beginResetFamilyModel();
-    void endResetFamilyModel();
-
-    void familyUpdated(int srcRow);
-    void cropUpdated(int familyId, int srcRow);
-    void varietyUpdated(int cropId, int srcRow);
-
-    void beginAppendVariety(int cropId);
-    void endAppendVariety(int endId);
-    void varietyVisible(int cropId, int varietyId);
-
-    // signals for SeedCompanyModel
-    void beginResetSeedCompanyModel();
-    void endResetSeedCompanyModel();
-
-private:
     Qrop(QObject *parent = nullptr);
-
-    void clearBusinessObjects();
 
 public:
     ~Qrop() override;
@@ -99,39 +55,38 @@ public:
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
     Q_INVOKABLE bool saveDatabase(const QUrl &from, const QUrl &to);
 
-    Q_INVOKABLE bool isMobileDevice() { return m_buildInfo->isMobileDevice(); }
+    inline Q_INVOKABLE bool isMobileDevice() { return m_buildInfo->isMobileDevice(); }
+    inline Q_INVOKABLE QropNews *news() const { return m_news; }
+    inline QNetworkAccessManager &networkManager() { return m_networkManager; }
+    inline Q_INVOKABLE BuildInfo *buildInfo() const { return m_buildInfo; }
 
-    Q_INVOKABLE QropNews *news() const { return m_news; }
-
-    bool hasErrors() const { return m_errors.size() != 0; }
-    void showErrors()
+    inline bool hasErrors() const { return m_errors.size() != 0; }
+    inline void showErrors()
     {
         emit error(m_errors.join("\n"));
         m_errors.clear();
     }
 
-    bool isLocalDatabase() const { return m_isLocalDatabase; }
+    inline bool isLocalDatabase() const { return m_isLocalDatabase; }
 
-    QNetworkAccessManager &networkManager() { return m_netMgr; }
-    Q_INVOKABLE BuildInfo *buildInfo() const { return m_buildInfo; }
-
-    void sendInfo(const QString &msg)
+    inline void sendInfo(const QString &msg)
     {
         emit info(msg);
         qDebug() << msg;
     }
-    void sendError(const QString &err)
+
+    inline void sendError(const QString &err)
     {
         emit error(err);
         qCritical() << err;
     }
 
-    QString preferredLanguage() const
+    inline QString preferredLanguage() const
     {
         return m_settings.value("preferredLanguage", "system").toString();
     }
 
-    QDate lastNewsUpdate() const
+    inline QDate lastNewsUpdate() const
     {
         QString dateStr = m_settings.value("lastNewsUpdate", "").toString();
         return dateStr.isEmpty() ? QDate() : QDate::fromString(dateStr, Qt::ISODate);
@@ -142,7 +97,7 @@ public:
     qrp::Family *family(int familyId) const { return m_families.value(familyId, nullptr); }
     qrp::Crop *crop(int cropId) const { return m_crops.value(cropId, nullptr); }
     qrp::Variety *variety(int varietyId) const { return m_varieties.value(varietyId, nullptr); }
-    qrp::SeedCompany *seedCompany(int seedCompanyId)
+    qrp::SeedCompany *seedCompany(int seedCompanyId) const
     {
         return m_seedCompanies.value(seedCompanyId, nullptr);
     }
@@ -229,11 +184,55 @@ public:
     Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
     Q_INVOKABLE void addNewVariety(int crop_id, const QString &name, int seedCompanyId);
 
+signals:
+    void info(const QString &msg);
+    void error(const QString &err);
+
+    // signals for FamilyModel
+    void beginResetFamilyModel();
+    void endResetFamilyModel();
+
+    void familyUpdated(int srcRow);
+    void cropUpdated(int familyId, int srcRow);
+    void varietyUpdated(int cropId, int srcRow);
+
+    void beginAppendVariety(int cropId);
+    void endAppendVariety(int endId);
+    void varietyVisible(int cropId, int varietyId);
+
+    // signals for SeedCompanyModel
+    void beginResetSeedCompanyModel();
+    void endResetSeedCompanyModel();
+
 private:
     void loadCurrentDatabase();
     void installTranslator();
 
+    void clearBusinessObjects();
+
     void _dumpSettings();
+
+private:
+    QSettings m_settings;
+    QTranslator *m_translator;
+
+    Database *const m_db; //!< db connection
+    BuildInfo *const m_buildInfo;
+
+    QStringList m_errors; //!< non critical errors happening prior to the GUI
+    QNetworkAccessManager m_networkManager; //!< for http(s) requests
+    QropNews *m_news;
+
+    QMap<int, qrp::Family *> m_families;
+    QMap<int, qrp::Crop *> m_crops;
+    QMap<int, qrp::Variety *> m_varieties;
+    QMap<int, qrp::SeedCompany *> m_seedCompanies;
+
+    FamilyProxyModel *m_familyProxyModel;
+    SeedCompanyProxyModel *m_seedCompanyProxyModel;
+
+    QUndoStack *m_undoStack;
+    bool m_isLocalDatabase;
 };
 
 #endif // QROP_H

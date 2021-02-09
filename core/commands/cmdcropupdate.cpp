@@ -27,8 +27,7 @@ CmdCropUpdate::CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::Cr
     , m_family_id(family_id)
     , m_crop_id(crop_id)
 {
-    Qrop *qrop = Qrop::instance();
-    setText(QString("Update family %1").arg(qrop->crop(m_crop_id)->name));
+    setText(QString("Update family %1").arg(Qrop::instance().crop(m_crop_id)->name));
 }
 
 void CmdCropUpdate::redo()
@@ -37,8 +36,8 @@ void CmdCropUpdate::redo()
     qDebug() << "[redo] " << str();
 #endif
 
-    Qrop *qrop = Qrop::instance();
-    qrp::Crop *crop = qrop->crop(m_crop_id);
+    Qrop &qrop = Qrop::instance();
+    qrp::Crop *crop = qrop.crop(m_crop_id);
     if (!crop) {
         qCritical() << "[CmdCropUpdate::redo] INVALID crop_id: " << m_crop_id;
         return;
@@ -55,11 +54,11 @@ void CmdCropUpdate::redo()
         break;
     }
 
-    if (qrop->isLocalDatabase()) {
+    if (qrop.isLocalDatabase()) {
         DatabaseUtility sql("crop");
         sql.update(m_crop_id, { { CropModel2::roleName(m_role), m_newValue } });
     }
-    emit qrop->cropUpdated(m_family_id, m_row);
+    emit qrop.cropUpdated(m_family_id, m_row);
 }
 
 void CmdCropUpdate::undo()
@@ -68,8 +67,8 @@ void CmdCropUpdate::undo()
     qDebug() << "[undo] " << str();
 #endif
 
-    Qrop *qrop = Qrop::instance();
-    qrp::Crop *crop = qrop->crop(m_crop_id);
+    Qrop &qrop = Qrop::instance();
+    qrp::Crop *crop = qrop.crop(m_crop_id);
     if (!crop) {
         qCritical() << "[CmdCropUpdate::undo] INVALID crop_id: " << m_crop_id;
         return;
@@ -86,9 +85,9 @@ void CmdCropUpdate::undo()
         break;
     }
 
-    if (qrop->isLocalDatabase()) {
+    if (qrop.isLocalDatabase()) {
         DatabaseUtility sql("crop");
         sql.update(m_crop_id, { { CropModel2::roleName(m_role), m_oldValue } });
     }
-    emit qrop->cropUpdated(m_family_id, m_row);
+    emit qrop.cropUpdated(m_family_id, m_row);
 }

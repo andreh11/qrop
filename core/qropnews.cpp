@@ -29,10 +29,8 @@
 QropNews::QropNews(QObject *parent)
     : QObject(parent)
     , m_lang()
-    , m_lastUpdate()
     , m_mainText()
     , m_lastRelease()
-    , m_news()
     , m_numberOfUnreadNews(0)
     , m_markAsRead(false)
 {
@@ -45,14 +43,14 @@ QropNews::~QropNews()
 
 void QropNews::fetchNews()
 {
-    m_lang = Qrop::instance()->preferredLanguage();
+    m_lang = Qrop::instance().preferredLanguage();
     if (m_lang == "system")
         m_lang = QLocale::system().name().left(2);
 
-    QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink).arg(m_lang));
+    QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink, m_lang));
     req.setRawHeader("User-Agent", "Qrop Qt app");
 
-    QNetworkReply *reply = Qrop::instance()->networkManager().get(req);
+    QNetworkReply *reply = Qrop::instance().networkManager().get(req);
     connect(reply, &QNetworkReply::finished, this, &QropNews::onNewsReceived);
 }
 
@@ -60,7 +58,7 @@ void QropNews::_error(const QString &err)
 {
     m_mainText = err;
     emit newsReceived();
-    Qrop::instance()->sendError(err);
+    Qrop::instance().sendError(err);
 }
 
 QString QropNews::toHtml()
@@ -70,7 +68,8 @@ QString QropNews::toHtml()
 
     QString news("<ul>");
     QLocale locale(m_lang);
-    for (News *n : m_news) {
+    for (auto it = m_news.cbegin(), itEnd = m_news.cend(); it != itEnd; ++it) {
+        News *n = *it;
         if (n->unread)
             news += QString("<b><li><font color=\"darkRed\"><i>%1 : </i></font>")
                             .arg(locale.toString(n->date, QLocale::ShortFormat));
@@ -79,7 +78,7 @@ QString QropNews::toHtml()
         if (n->link.isEmpty())
             news += QString("<b>%1</b>").arg(n->title);
         else
-            news += QString("<a href=\"%1\">%2</a>").arg(n->link).arg(n->title);
+            news += QString("<a href=\"%1\">%2</a>").arg(n->link, n->title);
         if (n->unread)
             news += "</b>";
         if (!n->desc.isEmpty())
@@ -93,7 +92,7 @@ QString QropNews::toHtml()
 
 void QropNews::onNewsReceived()
 {
-    QNetworkReply *reply = static_cast<QNetworkReply *>(sender());
+    auto *reply = static_cast<QNetworkReply *>(sender());
     m_numberOfUnreadNews = 0;
     if (reply->error() != QNetworkReply::NoError) {
         _error(tr("Error fetching news: %1").arg(reply->errorString()));
@@ -104,8 +103,7 @@ void QropNews::onNewsReceived()
     QVariant contentType = reply->header(QNetworkRequest::ContentTypeHeader);
     if (!contentType.isValid() || !contentType.toString().startsWith(s_newsJsonContentType)) {
         _error(tr("Error fetching news: invalid contentType from url: %1 : %2")
-                       .arg(reply->url().toString())
-                       .arg(contentType.toString()));
+                       .arg(reply->url().toString(), contentType.toString()));
         reply->deleteLater();
         return;
     }
@@ -116,29 +114,26 @@ void QropNews::onNewsReceived()
     m_mainText = json["mainText"].toString();
     m_lastRelease = json["lastRelease"].toString();
 
-    if (Qrop::instance()->newReleaseAvailable(m_lastRelease)) {
+    if (Qrop::instance().newReleaseAvailable(m_lastRelease)) {
         m_mainText += QString("<br/><br/><b><a href=\"%1\">%2 : %3</a></b>")
-                              .arg(s_qropDownloadURL)
-                              .arg(tr("New version available"))
-                              .arg(m_lastRelease);
+                              .arg(s_qropDownloadURL, tr("New version available"), m_lastRelease);
         ++m_numberOfUnreadNews;
     }
 
     QJsonArray news = json["news"].toArray();
-    //        qDebug() << "[QropNews::onNewsReceived] lastUpdate: " << m_lastUpdate
-    //                 << ", lastRelease: " << m_lastRelease << ", news count : " << m_news.count()
-    //                 << ", mainText: " << m_mainText;
-
     qDeleteAll(m_news);
     m_news.clear();
     m_news.reserve(news.count());
     m_lastUpdate = QDate();
-    QDate lastNewsUpdate = Qrop::instance()->lastNewsUpdate();
+    QDate lastNewsUpdate = Qrop::instance().lastNewsUpdate();
     for (auto it = news.begin(), itEnd = news.end(); it != itEnd; ++it) {
         QJsonObject n = it->toObject();
-        QString title, link, desc;
+        QString title;
+        QString link;
+        QString desc;
         QDate date;
         bool unread = false;
+
         if (n.contains("date")) {
             date = QDate::fromString(n["date"].toString(), Qt::ISODate);
             if (lastNewsUpdate.isNull() || date > lastNewsUpdate) {
