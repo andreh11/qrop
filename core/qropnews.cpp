@@ -43,14 +43,14 @@ QropNews::~QropNews()
 
 void QropNews::fetchNews()
 {
-    m_lang = Qrop::instance().preferredLanguage();
+    m_lang = Qrop::instance()->preferredLanguage();
     if (m_lang == "system")
         m_lang = QLocale::system().name().left(2);
 
     QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink, m_lang));
     req.setRawHeader("User-Agent", "Qrop Qt app");
 
-    QNetworkReply *reply = Qrop::instance().networkManager().get(req);
+    QNetworkReply *reply = Qrop::instance()->networkManager().get(req);
     connect(reply, &QNetworkReply::finished, this, &QropNews::onNewsReceived);
 }
 
@@ -58,7 +58,7 @@ void QropNews::_error(const QString &err)
 {
     m_mainText = err;
     emit newsReceived();
-    Qrop::instance().sendError(err);
+    Qrop::instance()->sendError(err);
 }
 
 QString QropNews::toHtml()
@@ -114,7 +114,7 @@ void QropNews::onNewsReceived()
     m_mainText = json["mainText"].toString();
     m_lastRelease = json["lastRelease"].toString();
 
-    if (Qrop::instance().newReleaseAvailable(m_lastRelease)) {
+    if (Qrop::instance()->newReleaseAvailable(m_lastRelease)) {
         m_mainText += QString("<br/><br/><b><a href=\"%1\">%2 : %3</a></b>")
                               .arg(s_qropDownloadURL, tr("New version available"), m_lastRelease);
         ++m_numberOfUnreadNews;
@@ -125,7 +125,7 @@ void QropNews::onNewsReceived()
     m_news.clear();
     m_news.reserve(news.count());
     m_lastUpdate = QDate();
-    QDate lastNewsUpdate = Qrop::instance().lastNewsUpdate();
+    QDate lastNewsUpdate = Qrop::instance()->lastNewsUpdate();
     for (auto it = news.begin(), itEnd = news.end(); it != itEnd; ++it) {
         QJsonObject n = it->toObject();
         QString title;

@@ -31,11 +31,25 @@ public:
     Singleton &operator=(const Singleton &other) = delete;
     Singleton &operator=(const Singleton &&other) = delete;
 
-    static T &instance()
+    static T *instance()
     {
-        static T instance;
-        return instance;
+        if (!s_singleton)
+            s_singleton = new T;
+        return s_singleton;
     }
+
+    static void clear()
+    {
+        if (s_singleton) {
+            delete s_singleton;
+            s_singleton = nullptr;
+        }
+    }
+
+private:
+    static T *s_singleton;
 };
 
+template<typename T>
+T *Singleton<T>::s_singleton = nullptr;
 #endif // SINGLETON_H

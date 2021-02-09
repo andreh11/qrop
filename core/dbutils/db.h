@@ -24,6 +24,7 @@
 class CORESHARED_EXPORT Database : public PureStaticClass
 {
     friend class Qrop;
+    friend class tst_Database;
 
 public:
     static QString defaultDatabasePath();

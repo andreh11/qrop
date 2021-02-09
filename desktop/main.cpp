@@ -316,19 +316,20 @@ int main(int argc, char *argv[])
     registerFonts();
     registerTypes();
 
-    Qrop &qrop = Qrop::instance();
-    int res = qrop.init();
+    Qrop *qrop = Qrop::instance();
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::clear);
+    int res = qrop->init();
     if (res != 0)
         return res;
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("cppQrop", &qrop);
+    engine.rootContext()->setContextProperty("cppQrop", qrop);
 
     // really important, otherwise QML could take ownership and delete them
     // (cf http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#data-ownership )
-    engine.setObjectOwnership(qrop.buildInfo(), QQmlEngine::CppOwnership);
-    engine.setObjectOwnership(qrop.news(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url("qrc:/qml/Qrop.qml");
@@ -341,10 +342,10 @@ int main(int argc, char *argv[])
     engine.load(url);
     engine.addImageProvider("pictures", new QrpImageProvider());
 
-    if (qrop.hasErrors())
-        qrop.showErrors();
+    if (qrop->hasErrors())
+        qrop->showErrors();
 
-    qrop.news()->fetchNews();
+    qrop->news()->fetchNews();
 
     return QApplication::exec();
 }

@@ -42,6 +42,7 @@ Qrop::~Qrop()
     delete m_news;
     delete m_buildInfo;
     delete m_translator;
+    qDebug() << "Qrop properly deleted!";
 }
 
 int Qrop::init()

@@ -29,6 +29,7 @@ void tst_Database::databasePath()
 
 void tst_Database::connectToDatabase()
 {
+    QVERIFY(Database::addDefaultSqliteDatabase());
     Database::connectToDatabase();
     QVERIFY(QSqlDatabase::database().isValid());
 }
