@@ -93,10 +93,6 @@ void Database::copy(const QUrl &from, const QUrl &to)
 
 bool Database::migrate()
 {
-    //    QSqlDatabase database = QSqlDatabase::database();
-    //    if (!database.isValid())
-    //        connectToDatabase();
-
     int fullyMigrated = true;
     int dbVersion = databaseVersion();
 
@@ -233,16 +229,18 @@ int Database::execSqlFile(const QString &fileName, const QString &separator)
 bool Database::createDatabase()
 {
     qInfo() << "Creating database...";
-    int nb = execSqlFile(":/db/tables.sql");
-    qDebug() << "Create tables:" << nb << "errors.";
-    nb += execSqlFile(":/db/triggers.sql");
-    qDebug() << "Create triggers:" << nb << "errors.";
+    int nbErrors = execSqlFile(":/db/tables.sql");
+    nbErrors += execSqlFile(":/db/triggers.sql");
 
-    if (nb == 0) {
+    if (nbErrors == 0) {
         qInfo() << "Database created.";
-        if (migrate()) // MB_QUESTION: do we really need to migrate a new DB?
+        if (migrate())
             return createData();
-    }
+        else
+            qCritical() << "Error migrating Database  => data not created...";
+    } else
+        qCritical() << "Error creating Database (" << nbErrors << ")"
+                    << " => data not created...";
     return false;
 }
 
@@ -360,9 +358,6 @@ void Database::initStatics()
 bool Database::createData()
 {
     qInfo() << "Adding default data...";
-    // name, rotation interval
-
-    // crop, family
 
     QSqlDatabase database = QSqlDatabase::database();
     if (!database.transaction()) {
