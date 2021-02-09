@@ -38,7 +38,7 @@ public:
 //    }
 
 private:
-    void _setVarietyDelete(qrp::Variety *variety, bool value, Qrop &qrop);
+    void _setVarietyDelete(qrp::Variety *variety, bool value, Qrop *qrop);
 
 private:
     const bool m_creation;

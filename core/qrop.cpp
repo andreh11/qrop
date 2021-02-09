@@ -30,7 +30,6 @@
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
     , m_translator(new QTranslator)
-    , m_db(new Database(this))
     , m_buildInfo(new BuildInfo)
     , m_news(new QropNews)
     , m_familyProxyModel(new FamilyProxyModel(this))
@@ -64,7 +63,11 @@ void Qrop::clearBusinessObjects()
 
 Qrop::~Qrop()
 {
-    qDebug() << "[Qrop] Deleting Qrop...";
+    Database::close();
+
+    if (m_news->areRead())
+        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
+    m_settings.sync();
 
     delete m_seedCompanyProxyModel;
     delete m_familyProxyModel;
@@ -72,15 +75,10 @@ Qrop::~Qrop()
     clearBusinessObjects();
     delete m_undoStack;
 
-    if (m_news->areRead())
-        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
-    m_settings.sync();
-
     delete m_news;
     delete m_buildInfo;
-    m_db->close();
-    delete m_db;
     delete m_translator;
+    qDebug() << "Qrop properly deleted!";
 }
 
 int Qrop::init()
@@ -89,12 +87,14 @@ int Qrop::init()
     qDebug() << "Qrop version: " << m_buildInfo->version();
 
     // can we load SQLite driver?
-    if (!m_db->addDefaultSqliteDatabase()) {
+    if (!Database::addDefaultSqliteDatabase()) {
         qCritical() << "Cannot load SQLite driver...";
         return 1;
     }
 
     installTranslator();
+
+    Database::initStatics();
 
     // load current database (or default one)
     loadCurrentDatabase();
@@ -121,8 +121,8 @@ bool Qrop::loadDatabase(const QUrl &url)
 {
     clearBusinessObjects();
     if (url.isLocalFile()) {
-        if (m_db->connectToDatabase(url)) {
-            m_db->loadDatabase(this);
+        if (Database::connectToDatabase(url)) {
+            Database::loadDatabase(this);
             qDebug() << "[Qrop::loadDatabase] "
                      << "nb Families: " << m_families.size() << ", nb Crops: " << m_crops.size()
                      << ", nb Varieties: " << m_varieties.size();
@@ -137,13 +137,13 @@ bool Qrop::loadDatabase(const QUrl &url)
 
 QUrl Qrop::defaultDatabaseUrl() const
 {
-    return m_db->defaultDatabasePathUrl();
+    return Database::defaultDatabasePathUrl();
 }
 
 bool Qrop::saveDatabase(const QUrl &from, const QUrl &to)
 {
     if (from.isLocalFile() && to.isLocalFile()) {
-        m_db->copy(from, to);
+        Database::copy(from, to);
         return true;
     }
     return false;
@@ -306,7 +306,7 @@ void Qrop::addNewVariety(int crop_id, const QString &name, int seedCompanyId)
 void Qrop::loadCurrentDatabase()
 {
     int dbIdx = m_settings.value("currentDatabase", 1).toInt();
-    QUrl defaultDatabaseUrl = m_db->defaultDatabasePathUrl();
+    QUrl defaultDatabaseUrl = Database::defaultDatabasePathUrl();
     QString firstDatabaseFile =
             m_settings.value("firstDatabaseFile", defaultDatabaseUrl.toString()).toString();
     QString secondDatabaseFile = m_settings.value("secondDatabaseFile", "").toString();

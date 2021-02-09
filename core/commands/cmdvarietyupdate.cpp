@@ -26,7 +26,7 @@ CmdVarietyUpdate::CmdVarietyUpdate(int row, int crop_id, int variety_id,
     , m_crop_id(crop_id)
     , m_variety_id(variety_id)
 {
-    setText(QString("Update variety %1").arg(Qrop::instance().variety(m_variety_id)->name));
+    setText(QString("Update variety %1").arg(Qrop::instance()->variety(m_variety_id)->name));
 }
 
 void CmdVarietyUpdate::redo()
@@ -35,8 +35,8 @@ void CmdVarietyUpdate::redo()
     qDebug() << "[redo] " << str();
 #endif
 
-    Qrop &qrop = Qrop::instance();
-    qrp::Variety *variety = qrop.variety(m_variety_id);
+    Qrop *qrop = Qrop::instance();
+    qrp::Variety *variety = qrop->variety(m_variety_id);
     if (!variety) {
         qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
         return;
@@ -50,16 +50,16 @@ void CmdVarietyUpdate::redo()
         variety->isDefault = m_newValue.toBool();
         break;
     case VarietyModel2::VarietyRole::seedCompanyId:
-        variety->seedCompany = qrop.seedCompany(m_newValue.toInt());
+        variety->seedCompany = qrop->seedCompany(m_newValue.toInt());
         break;
     default:
         break;
     }
-    if (qrop.isLocalDatabase()) {
+    if (qrop->isLocalDatabase()) {
         dbutils::Variety sql;
         sql.update(m_variety_id, { { VarietyModel2::roleName(m_role), m_newValue } });
     }
-    emit qrop.varietyUpdated(m_crop_id, m_row);
+    emit qrop->varietyUpdated(m_crop_id, m_row);
 }
 
 void CmdVarietyUpdate::undo()
@@ -68,8 +68,8 @@ void CmdVarietyUpdate::undo()
     qDebug() << "[undo] " << str();
 #endif
 
-    Qrop &qrop = Qrop::instance();
-    qrp::Variety *variety = qrop.variety(m_variety_id);
+    Qrop *qrop = Qrop::instance();
+    qrp::Variety *variety = qrop->variety(m_variety_id);
     if (!variety) {
         qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
         return;
@@ -83,14 +83,14 @@ void CmdVarietyUpdate::undo()
         variety->isDefault = m_oldValue.toBool();
         break;
     case VarietyModel2::VarietyRole::seedCompanyId:
-        variety->seedCompany = qrop.seedCompany(m_oldValue.toInt());
+        variety->seedCompany = qrop->seedCompany(m_oldValue.toInt());
         break;
     default:
         break;
     }
-    if (qrop.isLocalDatabase()) {
+    if (qrop->isLocalDatabase()) {
         dbutils::Variety sql;
         sql.update(m_variety_id, { { VarietyModel2::roleName(m_role), m_oldValue } });
     }
-    emit qrop.varietyUpdated(m_crop_id, m_row);
+    emit qrop->varietyUpdated(m_crop_id, m_row);
 }

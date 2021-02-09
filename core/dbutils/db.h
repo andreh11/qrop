@@ -20,18 +20,22 @@
 #include <QObject>
 #include <QUrl>
 #include "core_global.h"
-
+#include "purestaticclass.h"
 class Qrop;
-class CORESHARED_EXPORT Database : public QObject
-{
-    Q_OBJECT
 
+class CORESHARED_EXPORT Database : public PureStaticClass
+{
     friend class Qrop;
     friend class tst_Database;
 
-public:
-    explicit Database(QObject *parent = nullptr);
+private:
+    static QList<std::pair<QString, int>> s_familyList;
+    static QList<std::pair<QString, QString>> s_cropList;
+    static QList<QString> s_taskList;
+    static QList<std::pair<QString, QString>> s_unitList;
+    static QList<QString> s_companyList;
 
+public:
     static QString defaultDatabasePath();
     inline static Q_INVOKABLE QUrl defaultDatabasePathUrl()
     {
@@ -41,13 +45,15 @@ public:
     static void copy(const QUrl &from, const QUrl &to);
     static void close();
 
-    void loadDatabase(Qrop *qrop);
+    static void loadDatabase(Qrop *qrop);
 
 private:
-    void loadSeedCompanies(Qrop *qrop);
-    void loadFamilies(Qrop *qrop);
-    void loadCrops(Qrop *qrop);
-    void loadVarieties(Qrop *qrop);
+    static void loadSeedCompanies(Qrop *qrop);
+    static void loadFamilies(Qrop *qrop);
+    static void loadCrops(Qrop *qrop);
+    static void loadVarieties(Qrop *qrop);
+
+    static void initStatics();
 
     static bool addDefaultSqliteDatabase();
 

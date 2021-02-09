@@ -25,7 +25,7 @@ CmdFamilyUpdate::CmdFamilyUpdate(int row, int family_id, FamilyModel2::FamilyRol
     : CmdUpdate(row, role, oldV, newV)
     , m_family_id(family_id)
 {
-    setText(QString("Update family %1").arg(Qrop::instance().family(m_family_id)->name));
+    setText(QString("Update family %1").arg(Qrop::instance()->family(m_family_id)->name));
 }
 
 void CmdFamilyUpdate::redo()
@@ -34,8 +34,8 @@ void CmdFamilyUpdate::redo()
     qDebug() << "[redo] " << str();
 #endif
 
-    Qrop &qrop = Qrop::instance();
-    qrp::Family *family = qrop.family(m_family_id);
+    Qrop *qrop = Qrop::instance();
+    qrp::Family *family = qrop->family(m_family_id);
     if (!family) {
         qCritical() << "[CmdFamilyUpdate::redo] INVALID crop_id: " << m_family_id;
         return;
@@ -54,11 +54,11 @@ void CmdFamilyUpdate::redo()
     default:
         break;
     }
-    if (qrop.isLocalDatabase()) {
+    if (qrop->isLocalDatabase()) {
         dbutils::Family sql;
         sql.update(m_family_id, { { FamilyModel2::roleName(m_role), m_newValue } });
     }
-    emit qrop.familyUpdated(m_row);
+    emit qrop->familyUpdated(m_row);
 }
 
 void CmdFamilyUpdate::undo()
@@ -67,8 +67,8 @@ void CmdFamilyUpdate::undo()
     qDebug() << "[undo] " << str();
 #endif
 
-    Qrop &qrop = Qrop::instance();
-    qrp::Family *family = qrop.family(m_family_id);
+    Qrop *qrop = Qrop::instance();
+    qrp::Family *family = qrop->family(m_family_id);
     if (!family) {
         qCritical() << "[CmdFamilyUpdate::undo] INVALID crop_id: " << m_family_id;
         return;
@@ -88,9 +88,9 @@ void CmdFamilyUpdate::undo()
         break;
     }
 
-    if (qrop.isLocalDatabase()) {
+    if (qrop->isLocalDatabase()) {
         dbutils::Family sql;
         sql.update(m_family_id, { { FamilyModel2::roleName(m_role), m_oldValue } });
     }
-    emit qrop.familyUpdated(m_row);
+    emit qrop->familyUpdated(m_row);
 }
