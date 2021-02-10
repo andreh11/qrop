@@ -11,6 +11,15 @@ normal-build:linux:
     - master
     - tags
 
+normal-build:windows:
+  stage: build
+  image: andreh11/mxe-build-container:1.0
+  script:
+    - bash dist/linux/build.sh
+  except:
+    - master
+    - tags
+
 master-build:linux:
   stage: build
   image: andreh11/qt:5.12.5-trusty

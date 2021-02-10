@@ -14,28 +14,17 @@ MXE_TARGETS :=  x86_64-w64-mingw32.shared i686-w64-mingw32.shared
 # early as possible
 LOCAL_PKG_LIST := gcc \
                   openssl \
-                  libmysqlclient \
-                  postgresql \
                   qtbase \
-                  qtwebkit \
                   nsis \
                   curl \
-                  libxml2 \
-                  libxslt \
                   libzip \
-                  libusb1 \
-                  hidapi \
                   libgit2 \
-                  libftdi1 \
-                  mdbtools \
                   qtconnectivity \
+                  qtcharts \
                   qtdeclarative \
                   qtimageformats \
-                  qtlocation \
-                  qtmultimedia \
                   qtquickcontrols \
                   qtquickcontrols2 \
-                  qtsvg \
                   qttools \
                   qttranslations \
                   zstd

@@ -13,5 +13,5 @@ pushd $SCRIPTPATH
 
 # we use the 'experimental' --squash argument to significantly reduce the size of the massively huge
 # Docker container this produces
-docker build --squash -t andreh11/mxe-build-container:$VERSION --build-arg=mxe_sha=$MXE_SHA -f Dockerfile .
+docker build -t andreh11/mxe-build-container:$VERSION --build-arg=mxe_sha=$MXE_SHA -f Dockerfile .
 popd
