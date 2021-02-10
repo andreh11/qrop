@@ -164,9 +164,12 @@ Item {
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
             color: Material.color(Material.Grey, Material.Shade100)
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 4
+            anchors {
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                leftMargin: 4
+            }
             elide: Text.ElideRight
         }
 
@@ -202,9 +205,13 @@ Item {
             font.pixelSize: Units.fontSizeBodyAndButton
             antialiasing: true
             color: Material.color(Material.Grey, Material.Shade100)
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 4
+            anchors {
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                leftMargin: 4
+            }
+            elide: Text.ElideRight
         }
     }
 
