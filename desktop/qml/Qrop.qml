@@ -61,15 +61,13 @@ ApplicationWindow {
     property bool modifyMainDatabase: true
     property int dbAction: Qrop.DB_ACTION.OPEN
 
-    property int popupTimeout : 8000
-
     Component.onCompleted: {
         if (firstDatabaseFile === "")
-            firstDatabaseFile = Database.defaultDatabasePathUrl();
+            firstDatabaseFile = cppRemote.defaultDatabaseUrl();
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
-            lastFolder = '%1%2'.arg(BuildInfo.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+            lastFolder = '%1%2'.arg(cppQrop.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
 
         if (mainSettings.windowFullScreen)
             window.visibility = Window.FullScreen;
@@ -93,6 +91,25 @@ ApplicationWindow {
             mainSettings.windowY = window.y;
             mainSettings.windowHeight = window.height;
             mainSettings.windowWidth = window.width;
+        }
+    }
+
+    Connections {
+        target: cppQrop
+
+        onInfo: info(msg);
+        onError: error(err);
+    }
+
+    Connections {
+        target: cppQrop.news()
+
+        onNewsReceived: {
+            let numberOfUnreadNews = cppQrop.news().numberOfUnreadNews();
+            print("News received (unread: %1)".arg(numberOfUnreadNews));
+            aboutDialog.setNews(cppQrop.news().mainText, cppQrop.news().toHtml, numberOfUnreadNews);
+            if ( numberOfUnreadNews > 0)
+                displayNewsBadges("%1".arg(numberOfUnreadNews));
         }
     }
 
@@ -130,18 +147,19 @@ ApplicationWindow {
         }
     }
 
-    function switchToDatabase(db) {
-        Database.connectToDatabase(window.currentDatabase === 1 ? firstDatabaseFile : secondDatabaseFile)
-        if (locationsPage.item) {
+    function switchToDatabase() {
+        let dbName = window.currentDatabase === 1 ? firstDatabaseFile : secondDatabaseFile;
+        if (!cppQrop.loadDatabase(dbName))
+            error(qsTr("Error opening database: %1").arg(dbName));
+        if (locationsPage.item)
             locationsPage.item.reload();
-        }
         stackLayout.currentItem.refresh();
     }
     
     function openDatabaseActionDialog(action, mainDB) {
         dbAction = action;
         modifyMainDatabase = mainDB;
-        if (BuildInfo.isMobileDevice()){
+        if (cppQrop.isMobileDevice()){
             if (action === Qrop.DB_ACTION.OPEN) {
                 let availableDBs = FileSystem.getAvailableDataBasesNames();
                 if (availableDBs.length === 0)
@@ -186,7 +204,7 @@ ApplicationWindow {
     function doDatabaseAction(file){
 //        print("DB Action: "+dbAction);
         if (dbAction == Qrop.DB_ACTION.SAVE) { // NOT === just a double == !!!
-            Database.copy(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
+            cppQrop.saveDatabase(modifyMainDatabase ? firstDatabaseFile : secondDatabaseFile, file);
         } else {
             if (modifyMainDatabase) {
                 firstDatabaseFile = file;
@@ -206,6 +224,11 @@ ApplicationWindow {
 
     function error(text) {
         info("<font color='darkred'>%1</font>".arg(text));
+    }
+
+    function displayNewsBadges(text) {
+        aboutBadge.displayBadge(text);
+        aboutDialog.newsBadge.displayBadge(text);
     }
 
     title: "Qrop"
@@ -421,6 +444,16 @@ ApplicationWindow {
                 isActive: false
 
                 onClicked: aboutDialog.open();
+
+                Badge {
+                    id: aboutBadge
+                    anchors {
+                        right: parent.right
+                        top: parent.top
+                        topMargin: 4
+                        rightMargin: 14
+                    }
+                }
             }
         }
     }
@@ -488,7 +521,7 @@ ApplicationWindow {
         id: aboutDialog
         x: (window.width - width) / 2
         y: (window.height - height) / 2
-        width: 500
+        width: 2*window.width/3 > 500 ? 2*window.width/3 : 500
     }
 
     Snackbar {

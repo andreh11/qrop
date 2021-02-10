@@ -26,33 +26,29 @@
 #include <QUrl>
 #include <QSqlDriver>
 #include <QSettings>
+#include <QCoreApplication>
+#include <QRegularExpression>
 
 #include "db.h"
 #include "dbutils/family.h"
 #include "dbutils/location.h"
 #include "dbutils/task.h"
 #include "dbutils/variety.h"
-
-Database::Database(QObject *parent)
-    : QObject(parent)
-{
-}
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#include "filesystem.h"
+#endif
 
 QString Database::defaultDatabasePath()
 {
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    return FileSystem::rootPath();
+#else
     const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (!writeDir.mkpath("."))
         qFatal("Failed to create writable directory at %s", qPrintable(writeDir.absolutePath()));
 
-    // Ensure that we have a writable location on all devices.
-    const QString fileName = writeDir.absolutePath() + "/qrop.db";
-
-    return fileName;
-}
-
-QUrl Database::defaultDatabasePathUrl()
-{
-    return QUrl::fromLocalFile(defaultDatabasePath());
+    return QString("%1/qrop.db").arg(writeDir.absolutePath());
+#endif
 }
 
 void Database::deleteDatabase()
@@ -89,33 +85,15 @@ void Database::removeFileIfExists(const QUrl &url)
         QFile::remove(url.toLocalFile());
 }
 
-void Database::saveAs(const QUrl &url)
-{
-    removeFileIfExists(url);
-    QFileInfo fileInfo(defaultDatabasePath());
-    QFile::copy(fileInfo.absoluteFilePath(), url.toLocalFile());
-}
-
-void Database::replaceMainDatabase(const QUrl &url)
-{
-    //    removeFileIfExists(databasePath());
-    QFileInfo fileInfo(defaultDatabasePath());
-    qDebug() << url.toLocalFile() << fileInfo.absoluteFilePath();
-    //    QFile::copy(url.toLocalFile(), fileInfo.absoluteFilePath());
-}
-
 void Database::copy(const QUrl &from, const QUrl &to)
 {
     removeFileIfExists(to);
     QFile::copy(from.toLocalFile(), to.toLocalFile());
 }
 
-void Database::migrate()
+bool Database::migrate()
 {
-    QSqlDatabase database = QSqlDatabase::database();
-    if (!database.isValid())
-        connectToDatabase();
-
+    int fullyMigrated = true;
     int dbVersion = databaseVersion();
 
     QDir dir(":/db/migrations");
@@ -132,13 +110,15 @@ void Database::migrate()
             int version = fileInfo.baseName().toInt();
             if (version > dbVersion) {
                 qInfo() << "==== Migrating to version" << version;
-                execSqlFile(fileInfo.absoluteFilePath());
+                fullyMigrated &= execSqlFile(fileInfo.absoluteFilePath()) == 0;
             }
         }
         shrink();
     } else {
         qInfo() << "Latest database version:" << dbVersion;
     }
+
+    return fullyMigrated;
 }
 
 QString Database::fileNameFrom(const QUrl &url)
@@ -160,25 +140,27 @@ QString Database::fileNameFrom(const QUrl &url)
     return url.toLocalFile();
 }
 
-void Database::connectToDatabase(const QUrl &url)
+bool Database::addDefaultSqliteDatabase()
 {
-    QSqlDatabase database = QSqlDatabase::database();
-    if (!database.isValid()) {
-        database = QSqlDatabase::addDatabase("QSQLITE");
-        if (!database.isValid())
-            qFatal("Cannot add database: %s", qPrintable(database.lastError().text()));
-    }
-    close();
+    return QSqlDatabase::addDatabase("QSQLITE").isValid();
+}
 
-    QString fileName = fileNameFrom(url);
-    QFileInfo fileInfo(fileName);
-    bool create = !fileInfo.exists();
+bool Database::connectToDatabase(const QUrl &url)
+{
+    qDebug() << "connectToDatabase: " << url.toString();
+
+    close();
+    QSqlDatabase database = QSqlDatabase::database();
+
+    QString fileName = url.toLocalFile();
+    bool dbAlreadyExists = QFileInfo(fileName).exists();
 
     // When using the SQLite driver, open() will create the SQLite database if it doesn't exist.
     database.setDatabaseName(fileName);
     if (!database.open()) {
-        QFile::remove(fileName);
-        qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
+        //        QFile::remove(fileName);
+        qCritical() << "Cannot open database: " << qPrintable(database.lastError().text());
+        return false;
     }
 
     QSqlQuery query("PRAGMA foreign_keys = ON");
@@ -186,11 +168,10 @@ void Database::connectToDatabase(const QUrl &url)
     query.exec("PRAGMA wal_autocheckpoint = 16");
     query.exec("PRAGMA journal_size_limit = 1536");
 
-    if (create) {
-        createDatabase();
-    } else {
-        migrate();
-    }
+    if (dbAlreadyExists)
+        return migrate();
+    else
+        return createDatabase();
 }
 
 void Database::close()
@@ -203,24 +184,28 @@ void Database::close()
     QSqlQuery query;
     query.exec("PRAGMA optimize");
     qDebug() << "Closing database...";
-    QSqlDatabase::database().close();
+    database.close();
 }
 
-void Database::execSqlFile(const QString &fileName, const QString &separator)
+int Database::execSqlFile(const QString &fileName, const QString &separator)
 {
     Q_INIT_RESOURCE(core_resources); // Needed for the method to find the resource files.
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "execSqlFile: cannot open" << fileName;
-        return;
+        return -1;
     }
 
     QTextStream textStream(&file);
     QString fileString = textStream.readAll();
+    // Remove commented out lines to prevent errors.
+    fileString.replace(QRegularExpression("--.*?\\n"), " ");
+
     QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
 
     QSqlQuery query;
+    int nbFailed = 0;
     for (const auto &queryString : stringList) {
         QString end = separator;
         if (queryString.isNull() || queryString.trimmed().isEmpty()
@@ -231,143 +216,202 @@ void Database::execSqlFile(const QString &fileName, const QString &separator)
         if (queryString.trimmed().startsWith("CREATE TRIGGER"))
             end = "; END;";
 
-        if (!query.exec(queryString + end))
+        if (!query.exec(queryString + end)) {
             qDebug() << "execSqlFile: cannot execute query" << query.lastError().text()
                      << query.lastQuery();
+            ++nbFailed;
+        }
     }
+
+    return nbFailed;
 }
 
-void Database::createDatabase()
+bool Database::createDatabase()
 {
     qInfo() << "Creating database...";
-    execSqlFile(":/db/tables.sql");
-    execSqlFile(":/db/triggers.sql");
-    qInfo() << "Database created.";
-    migrate();
-    createData();
+    int nbErrors = execSqlFile(":/db/tables.sql");
+    nbErrors += execSqlFile(":/db/triggers.sql");
+
+    if (nbErrors == 0) {
+        qInfo() << "Database created.";
+        if (migrate())
+            return createData();
+        else
+            qCritical() << "Error migrating Database  => data not created...";
+    } else
+        qCritical() << "Error creating Database (" << nbErrors << ")"
+                    << " => data not created...";
+    return false;
 }
 
-void Database::createData()
+QList<std::pair<QString, int>> Database::s_familyList;
+QList<std::pair<QString, QString>> Database::s_cropList;
+QList<QString> Database::s_taskList;
+QList<std::pair<QString, QString>> Database::s_unitList;
+QList<QString> Database::s_companyList;
+void Database::initStatics()
+{
+    s_familyList = { { QCoreApplication::translate("Database", "Alliaceae"), 4 },
+                     { QCoreApplication::translate("Database", "Apiaceae"), 3 },
+                     { QCoreApplication::translate("Database", "Asteraceae"), 2 },
+                     { QCoreApplication::translate("Database", "Brassicaceae"), 4 },
+                     { QCoreApplication::translate("Database", "Chenopodiaceae"), 3 },
+                     { QCoreApplication::translate("Database", "Cucurbitaceae"), 4 },
+                     { QCoreApplication::translate("Database", "Fabaceae"), 2 },
+                     { QCoreApplication::translate("Database", "Solanaceae"), 4 },
+                     { QCoreApplication::translate("Database", "Valerianaceae"), 2 } };
+
+    s_cropList = { { QCoreApplication::translate("Database", "Garlic"),
+                     QCoreApplication::translate("Database", "Alliaceae") },
+                   { QCoreApplication::translate("Database", "Onion"),
+                     QCoreApplication::translate("Database", "Alliaceae") },
+                   { QCoreApplication::translate("Database", "Leek"),
+                     QCoreApplication::translate("Database", "Alliaceae") },
+                   { QCoreApplication::translate("Database", "Carrot"),
+                     QCoreApplication::translate("Database", "Apiaceae") },
+                   { QCoreApplication::translate("Database", "Celery"),
+                     QCoreApplication::translate("Database", "Apiaceae") },
+                   { QCoreApplication::translate("Database", "Fennel"),
+                     QCoreApplication::translate("Database", "Apiaceae") },
+                   { QCoreApplication::translate("Database", "Parsnip"),
+                     QCoreApplication::translate("Database", "Apiaceae") },
+                   { QCoreApplication::translate("Database", "Chicory"),
+                     QCoreApplication::translate("Database", "Asteraceae") },
+                   { QCoreApplication::translate("Database", "Belgian endive"),
+                     QCoreApplication::translate("Database", "Asteraceae") },
+                   { QCoreApplication::translate("Database", "Lettuce"),
+                     QCoreApplication::translate("Database", "Asteraceae") },
+                   { QCoreApplication::translate("Database", "Cabbage"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Brussel Sprouts"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Kohlrabi"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Cauliflower"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Broccoli"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Turnip"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Radish"),
+                     QCoreApplication::translate("Database", "Brassicaceae") },
+                   { QCoreApplication::translate("Database", "Beetroot"),
+                     QCoreApplication::translate("Database", "Chenopodiaceae") },
+                   { QCoreApplication::translate("Database", "Chard"),
+                     QCoreApplication::translate("Database", "Chenopodiaceae") },
+                   { QCoreApplication::translate("Database", "Spinach"),
+                     QCoreApplication::translate("Database", "Chenopodiaceae") },
+                   { QCoreApplication::translate("Database", "Cucumber"),
+                     QCoreApplication::translate("Database", "Cucurbitaceae") },
+                   { QCoreApplication::translate("Database", "Zucchini"),
+                     QCoreApplication::translate("Database", "Cucurbitaceae") },
+                   { QCoreApplication::translate("Database", "Melon"),
+                     QCoreApplication::translate("Database", "Cucurbitaceae") },
+                   { QCoreApplication::translate("Database", "Watermelon"),
+                     QCoreApplication::translate("Database", "Cucurbitaceae") },
+                   { QCoreApplication::translate("Database", "Winter squash"),
+                     QCoreApplication::translate("Database", "Cucurbitaceae") },
+                   { QCoreApplication::translate("Database", "Bean"),
+                     QCoreApplication::translate("Database", "Fabaceae") },
+                   { QCoreApplication::translate("Database", "Fava bean"),
+                     QCoreApplication::translate("Database", "Fabaceae") },
+                   { QCoreApplication::translate("Database", "Pea"),
+                     QCoreApplication::translate("Database", "Fabaceae") },
+                   { QCoreApplication::translate("Database", "Eggplant"),
+                     QCoreApplication::translate("Database", "Solanaceae") },
+                   { QCoreApplication::translate("Database", "Pepper"),
+                     QCoreApplication::translate("Database", "Solanaceae") },
+                   { QCoreApplication::translate("Database", "Potatoe"),
+                     QCoreApplication::translate("Database", "Solanaceae") },
+                   { QCoreApplication::translate("Database", "Tomato"),
+                     QCoreApplication::translate("Database", "Solanaceae") },
+                   { QCoreApplication::translate("Database", "Mâche"),
+                     QCoreApplication::translate("Database", "Valerianaceae") } };
+
+    s_taskList = { QCoreApplication::translate("Database", "Cultivation and Tillage"),
+                   QCoreApplication::translate("Database", "Fertilize and Amend"),
+                   QCoreApplication::translate("Database", "Irrigate"),
+                   QCoreApplication::translate("Database", "Maintenance"),
+                   QCoreApplication::translate("Database", "Pest and Disease"),
+                   QCoreApplication::translate("Database", "Prune"),
+                   QCoreApplication::translate("Database", "Row Cover and Mulch"),
+                   QCoreApplication::translate("Database", "Stale Bed"),
+                   QCoreApplication::translate("Database", "Thin"),
+                   QCoreApplication::translate("Database", "Trellis"),
+                   QCoreApplication::translate("Database", "Weed") };
+
+    s_unitList = { { QCoreApplication::translate("Database", "kilogram"),
+                     QCoreApplication::translate("Database", "kg") },
+                   { QCoreApplication::translate("Database", "bunch"),
+                     QCoreApplication::translate("Database", "bn") },
+                   { QCoreApplication::translate("Database", "head"),
+                     QCoreApplication::translate("Database", "hd") } };
+
+    s_companyList = { QCoreApplication::translate("Database", "Unknown company"),
+                      "Agrosemens",
+                      "Essembio",
+                      "Voltz",
+                      "Gautier",
+                      "Sativa" };
+}
+
+bool Database::createData()
 {
     qInfo() << "Adding default data...";
-    // name, rotation interval
-    QList<std::pair<QString, int>> familyList({ { tr("Alliaceae"), 4 },
-                                                { tr("Apiaceae"), 3 },
-                                                { tr("Asteraceae"), 2 },
-                                                { tr("Brassicaceae"), 4 },
-                                                { tr("Chenopodiaceae"), 3 },
-                                                { tr("Cucurbitaceae"), 4 },
-                                                { tr("Fabaceae"), 2 },
-                                                { tr("Solanaceae"), 4 },
-                                                { tr("Valerianaceae"), 2 } });
 
-    // crop, family
-    QList<std::pair<QString, QString>> cropList({ { tr("Garlic"), tr("Alliaceae") },
-                                                  { tr("Onion"), tr("Alliaceae") },
-                                                  { tr("Leek"), tr("Alliaceae") },
-                                                  { tr("Carrot"), tr("Apiaceae") },
-                                                  { tr("Celery"), tr("Apiaceae") },
-                                                  { tr("Fennel"), tr("Apiaceae") },
-                                                  { tr("Parsnip"), tr("Apiaceae") },
-                                                  { tr("Chicory"), tr("Asteraceae") },
-                                                  { tr("Belgian endive"), tr("Asteraceae") },
-                                                  { tr("Lettuce"), tr("Asteraceae") },
-                                                  { tr("Cabbage"), tr("Brassicaceae") },
-                                                  { tr("Brussel Sprouts"), tr("Brassicaceae") },
-                                                  { tr("Kohlrabi"), tr("Brassicaceae") },
-                                                  { tr("Cauliflower"), tr("Brassicaceae") },
-                                                  { tr("Broccoli"), tr("Brassicaceae") },
-                                                  { tr("Turnip"), tr("Brassicaceae") },
-                                                  { tr("Radish"), tr("Brassicaceae") },
-                                                  { tr("Beetroot"), tr("Chenopodiaceae") },
-                                                  { tr("Chard"), tr("Chenopodiaceae") },
-                                                  { tr("Spinach"), tr("Chenopodiaceae") },
-                                                  { tr("Cucumber"), tr("Cucurbitaceae") },
-                                                  { tr("Zucchini"), tr("Cucurbitaceae") },
-                                                  { tr("Melon"), tr("Cucurbitaceae") },
-                                                  { tr("Watermelon"), tr("Cucurbitaceae") },
-                                                  { tr("Winter squash"), tr("Cucurbitaceae") },
-                                                  { tr("Bean"), tr("Fabaceae") },
-                                                  { tr("Fava bean"), tr("Fabaceae") },
-                                                  { tr("Pea"), tr("Fabaceae") },
-                                                  { tr("Eggplant"), tr("Solanaceae") },
-                                                  { tr("Pepper"), tr("Solanaceae") },
-                                                  { tr("Potatoe"), tr("Solanaceae") },
-                                                  { tr("Tomato"), tr("Solanaceae") },
-                                                  { tr("Mâche"), tr("Valerianaceae") } });
-
-    QList<QString> taskList = { tr("Cultivation and Tillage"),
-                                tr("Fertilize and Amend"),
-                                tr("Irrigate"),
-                                tr("Maintenance"),
-                                tr("Pest and Disease"),
-                                tr("Prune"),
-                                tr("Row Cover and Mulch"),
-                                tr("Stale Bed"),
-                                tr("Thin"),
-                                tr("Trellis"),
-                                tr("Weed") };
-
-    QList<std::pair<QString, QString>> unitList = { { tr("kilogram"), tr("kg") },
-                                                    { tr("bunch"), tr("bn") },
-                                                    { tr("head"), tr("hd") } };
-
-    QList<QString> companyList(
-            { tr("Unknown company"), "Agrosemens", "Essembio", "Voltz", "Gautier", "Sativa" });
-
-    QSqlDatabase::database().transaction();
+    QSqlDatabase database = QSqlDatabase::database();
+    if (!database.transaction()) {
+        return false;
+    }
     QMap<QString, int> familyMap;
     Family family;
-    for (const auto &pair : familyList) {
-        familyMap[pair.first] = family.add({ { "family", pair.first }, { "interval", pair.second } });
-    }
+    for (auto it = s_familyList.cbegin(), itEnd = s_familyList.cend(); it != itEnd; ++it)
+        familyMap[it->first] = family.add({ { "family", it->first }, { "interval", it->second } });
 
     QMap<QString, int> cropMap;
     DatabaseUtility crop;
     Variety variety;
     crop.setTable("crop");
-    for (const auto &pair : cropList) {
-        cropMap[pair.first] =
-                crop.add({ { "crop", pair.first }, { "family_id", familyMap.value(pair.second) } });
-        variety.addDefault(cropMap[pair.first]);
+    for (auto it = s_cropList.cbegin(), itEnd = s_cropList.cend(); it != itEnd; ++it) {
+        cropMap[it->first] =
+                crop.add({ { "crop", it->first }, { "family_id", familyMap.value(it->second) } });
+        variety.addDefault(cropMap[it->first]);
     }
 
     DatabaseUtility taskType;
     taskType.setTable("task_type");
-    taskType.add({ { "type", tr("Direct sow") }, { "task_type_id", 1 } });
-    taskType.add({ { "type", tr("Greenhouse sow") }, { "task_type_id", 2 } });
-    taskType.add({ { "type", tr("Transplant") }, { "task_type_id", 3 } });
-    for (const auto &task : taskList) {
-        taskType.add({ { "type", task } });
-    }
+    taskType.add({ { "type", QCoreApplication::translate("Database", "Direct sow") },
+                   { "task_type_id", 1 } });
+    taskType.add({ { "type", QCoreApplication::translate("Database", "Greenhouse sow") },
+                   { "task_type_id", 2 } });
+    taskType.add({ { "type", QCoreApplication::translate("Database", "Transplant") },
+                   { "task_type_id", 3 } });
+    for (auto it = s_taskList.cbegin(), itEnd = s_taskList.cend(); it != itEnd; ++it)
+        taskType.add({ { "type", *it } });
 
     DatabaseUtility unit;
     unit.setTable("unit");
-    for (const auto &pair : unitList) {
-        unit.add({ { "fullname", pair.first }, { "abbreviation", pair.second } });
-    }
+    for (auto it = s_unitList.cbegin(), itEnd = s_unitList.cend(); it != itEnd; ++it)
+        unit.add({ { "fullname", it->first }, { "abbreviation", it->second } });
 
     DatabaseUtility seedCompany;
     seedCompany.setTable("seed_company");
-    for (const auto &company : companyList) {
-        seedCompany.add({ { "seed_company", company } });
-    }
+    for (auto it = s_companyList.cbegin(), itEnd = s_companyList.cend(); it != itEnd; ++it)
+        seedCompany.add({ { "seed_company", *it } });
 
-    QSqlDatabase::database().commit();
-    qInfo() << "Default data added.";
+    bool success = database.commit();
+    if (success)
+        qInfo() << "Default data added.";
+    else
+        qCritical() << "Error creating data: " << qPrintable(database.lastError().text());
+
+    return success;
 }
 
-void Database::resetDatabase()
+bool Database::shrink()
 {
-    deleteDatabase();
-    connectToDatabase();
-    createDatabase();
-}
-
-void Database::shrink()
-{
-    if (!QSqlDatabase::database().isOpen())
-        return;
+    //    if (!QSqlDatabase::database().isOpen())
+    //        return;
     QSqlQuery query;
-    query.exec("VACUUM");
+    return query.exec("VACUUM");
 }

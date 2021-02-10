@@ -305,7 +305,7 @@ Page {
                 ToolTip.text: qsTr("Print the crop map")
 
                 onClicked: {
-                    if (BuildInfo.isMobileDevice())
+                    if (cppQrop.isMobileDevice())
                         saveCropMapMobileDialog.open();
                     else
                         saveCropMapDialog.open();

@@ -20,34 +20,45 @@
 #include <QObject>
 #include <QUrl>
 #include "core_global.h"
-
-class CORESHARED_EXPORT Database : public QObject
+#include "purestaticclass.h"
+class CORESHARED_EXPORT Database : public PureStaticClass
 {
-    Q_OBJECT
+    friend class Qrop;
+    friend class tst_Database;
 
 public:
-    explicit Database(QObject *parent = nullptr);
-
     static QString defaultDatabasePath();
-    static Q_INVOKABLE QUrl defaultDatabasePathUrl();
-    static Q_INVOKABLE void connectToDatabase(const QUrl &url = QUrl());
+    inline static Q_INVOKABLE QUrl defaultDatabasePathUrl()
+    {
+        return QUrl::fromLocalFile(defaultDatabasePath());
+    }
+    static bool connectToDatabase(const QUrl &url = QUrl());
+    static void copy(const QUrl &from, const QUrl &to);
     static void close();
-    static void execSqlFile(const QString &fileNameFrom, const QString &separator = ";");
-    static void migrate();
-    static void backupDatabase();
-    static Q_INVOKABLE void saveAs(const QUrl &url);
-    static Q_INVOKABLE void replaceMainDatabase(const QUrl &url);
-    static Q_INVOKABLE void copy(const QUrl &from, const QUrl &to);
-    static Q_INVOKABLE void createDatabase();
-    static Q_INVOKABLE void deleteDatabase();
-    static Q_INVOKABLE void createData();
-    static Q_INVOKABLE void resetDatabase();
 
 private:
+    static QList<std::pair<QString, int>> s_familyList;
+    static QList<std::pair<QString, QString>> s_cropList;
+    static QList<QString> s_taskList;
+    static QList<std::pair<QString, QString>> s_unitList;
+    static QList<QString> s_companyList;
+
+    static void initStatics();
+
+    static bool addDefaultSqliteDatabase();
+
     static int databaseVersion();
     static void removeFileIfExists(const QUrl &url);
     static QString fileNameFrom(const QUrl &url);
-    static void shrink();
+    static bool shrink();
+
+    static int execSqlFile(const QString &fileNameFrom, const QString &separator = ";");
+    static bool migrate();
+    static bool createDatabase();
+
+    static void backupDatabase();
+    static void deleteDatabase();
+    static bool createData();
 };
 
 #endif // DB_H

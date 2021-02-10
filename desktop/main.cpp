@@ -17,6 +17,7 @@
 #include "buildinfo.h"
 #include "filesystem.h"
 #include "helpers.h"
+#include "qropnews.h"
 #include "qrpdate.h"
 #include "nametree.h"
 #include "print.h"
@@ -34,6 +35,8 @@
 #include "dbutils/tasktemplate.h"
 #include "dbutils/templatetask.h"
 #include "dbutils/variety.h"
+
+#include "core/qrop.h"
 
 #include "models/cropmodel.h"
 #include "models/cropstatmodel.h"
@@ -66,27 +69,13 @@
 #include "timevalidator.h"
 
 #include <QApplication>
-#include <QDoubleValidator>
 #include <QFileSystemModel>
 #include <QFontDatabase>
-#include <QHash>
 #include <QIcon>
-#include <QLibraryInfo>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQuickView>
-#include <QSettings>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QStandardPaths>
-#include <QTranslator>
-#include <QVariantMap>
 #include <QQmlFileSelector>
-
-//#if defined(Q_OS_ANDROID)
-//#include <QtAndroid>
-//#include <QAndroidJniObject>
-//#endif
+#include <QLoggingCategory>
 
 void registerFonts()
 {
@@ -101,6 +90,11 @@ void registerFonts()
 
 void registerTypes()
 {
+    qmlRegisterUncreatableType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
+                                          QStringLiteral("BuildInfo should not be created in QML"));
+    qmlRegisterUncreatableType<QropNews>("io.qrop.components", 1, 0, "QropNews",
+                                         QStringLiteral("QropNews should not be created in QML"));
+
     qmlRegisterType<CropModel>("io.qrop.components", 1, 0, "CropModel");
     qmlRegisterType<CropStatModel>("io.qrop.components", 1, 0, "CropStatModel");
     qmlRegisterType<FamilyModel>("io.qrop.components", 1, 0, "FamilyModel");
@@ -136,18 +130,12 @@ void registerTypes()
                                            return new Planting;
                                        });
 
-    qmlRegisterSingletonType<BuildInfo>("io.qrop.components", 1, 0, "BuildInfo",
-                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                            Q_UNUSED(engine)
-                                            Q_UNUSED(scriptEngine)
-                                            return new BuildInfo();
-                                        });
     qmlRegisterSingletonType<FileSystem>("io.qrop.components", 1, 0, "FileSystem",
-                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                            Q_UNUSED(engine)
-                                            Q_UNUSED(scriptEngine)
-                                            return new FileSystem();
-                                        });
+                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                                             Q_UNUSED(engine)
+                                             Q_UNUSED(scriptEngine)
+                                             return new FileSystem();
+                                         });
 
     qmlRegisterSingletonType<Print>("io.qrop.components", 1, 0, "Print",
                                     [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -220,14 +208,6 @@ void registerTypes()
                                           auto *mdate = new QrpDate();
                                           return mdate;
                                       });
-
-    qmlRegisterSingletonType<Database>("io.qrop.components", 1, 0, "Database",
-                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                           Q_UNUSED(engine)
-                                           Q_UNUSED(scriptEngine)
-                                           auto *db = new Database();
-                                           return db;
-                                       });
 
     qmlRegisterSingletonType<Note>("io.qrop.components", 1, 0, "Note",
                                    [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -313,29 +293,12 @@ void registerTypes()
                                               });
 }
 
-void installTranslator()
-{
-    auto translator(new QTranslator);
-    const QString &lang = QLocale::system().name();
-    QSettings settings;
-    auto preferredLanguage = settings.value("preferredLanguage", "system").toString();
-    qDebug() << "LANG " << lang << preferredLanguage;
-    qDebug() << "[MB_TRACE] firstDatabaseFile: " << settings.value("firstDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] secondDatabaseFile: " << settings.value("secondDatabaseFile", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] lastFolder: " << settings.value("lastFolder", "NOT_SET").toString();
-    qDebug() << "[MB_TRACE] currentDatabase: " << settings.value("currentDatabase", "NOT_SET").toString();
-
-    if (preferredLanguage == "system")
-        translator->load(QLocale(), "qrop", "_", ":/translations", ".qm");
-    else
-        translator->load(":/translations/qrop_" + preferredLanguage + ".qm");
-
-    QApplication::installTranslator(translator);
-}
-
 int main(int argc, char *argv[])
 {
     qInfo() << "qrop" << GIT_BRANCH << GIT_COMMIT_HASH;
+
+    // disable SSL warnings
+    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
@@ -343,33 +306,46 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("AH");
     QApplication::setOrganizationDomain("io.qrop");
     QApplication::setApplicationDisplayName("Qrop");
-    QApplication::setApplicationVersion("0.4.5");
+    QApplication::setApplicationVersion(QROP_VERSION);
     QApplication::setWindowIcon(QIcon(":/icon.png"));
 
-#if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     FileSystem::createMobileRootFilesDirectories();
 #endif
 
     registerFonts();
     registerTypes();
-    installTranslator();
 
-    Database::connectToDatabase();
-
-    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Database::close);
+    Qrop *qrop = Qrop::instance();
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &Qrop::clear);
+    int res = qrop->init();
+    if (res != 0)
+        return res;
 
     QQmlApplicationEngine engine;
-    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
-    const QUrl url(QStringLiteral("qrc:/qml/Qrop.qml"));
-    QObject::connect(
-            &engine, &QQmlApplicationEngine::objectCreated, &app,
-            [url](QObject *obj, const QUrl &objUrl) {
-                if (!obj && url == objUrl)
-                    QCoreApplication::exit(-1);
-            },
-            Qt::QueuedConnection);
+
+    engine.rootContext()->setContextProperty("cppQrop", qrop);
+
+    // really important, otherwise QML could take ownership and delete them
+    // (cf http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#data-ownership )
+    engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
+    engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
+
+    //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
+    const QUrl url("qrc:/qml/Qrop.qml");
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                     [url](QObject *obj, const QUrl &objUrl) {
+                         if (!obj && url == objUrl)
+                             QCoreApplication::exit(-1);
+                     },
+                     Qt::QueuedConnection);
     engine.load(url);
     engine.addImageProvider("pictures", new QrpImageProvider());
 
-    return app.exec();
+    if (qrop->hasErrors())
+        qrop->showErrors();
+
+    qrop->news()->fetchNews();
+
+    return QApplication::exec();
 }

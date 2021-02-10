@@ -1,0 +1,18 @@
+{
+	"lastRelease":"0.4.6",
+	"mainText": "From time to time we'll display some news and polls to orientate <b>Qrop</b>'s developement.",
+	"news": [
+		{
+			"date": "2021-01-23",
+			"title": "Creation of the News interface in Qrop",
+			"link": "https://framagit.org/ah/qrop/-/issues/309",
+			"desc": "Allow users to know about the latest features of Qrop and participate in the roadmap via some polls."
+		},
+		{
+			"date":"2021-01-14",
+			"title": "Poll on Qrop usage",
+			"link": "https://framaforms.org/sondage-dutilisation-de-qrop-1610631611",
+			"desc": "We propose this poll in order to better know Qrop's users and understand your needs to orientate accordingly our development roadmap."
+		}
+	]
+}

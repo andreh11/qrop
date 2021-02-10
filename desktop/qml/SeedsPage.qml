@@ -84,7 +84,7 @@ Page {
 
     function openExportDialog(doCsvExport) {
         exportCSV = doCsvExport;
-        if (BuildInfo.isMobileDevice()) {
+        if (cppQrop.isMobileDevice()) {
             if (exportCSV) {
                 exportMobileDialog.title = seedsRadioButton.checked ? qsTr("Export the seed list")
                                                               : qsTr("Export the transplant list");

@@ -126,7 +126,7 @@ Page {
 
     function openActionCsvDialog(doExport) {
         exportCSV = doExport;
-        if (BuildInfo.isMobileDevice()) {
+        if (cppQrop.isMobileDevice()) {
             if (exportCSV) {
                 csvCropPlanMobileDialog.nameField.visible = true;
                 csvCropPlanMobileDialog.combo.visible = false;
@@ -790,7 +790,7 @@ Page {
         y: buttonRectangle.height
 
         onAccepted: {
-            if (BuildInfo.isMobileDevice())
+            if (cppQrop.isMobileDevice())
                 printCropPlanMobileDialog.open();
             else
                 printCropPlanDialog.open();
