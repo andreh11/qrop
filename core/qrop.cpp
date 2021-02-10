@@ -28,12 +28,12 @@
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
-    , m_translator(new QTranslator)
-    , m_buildInfo(new BuildInfo)
-    , m_news(new QropNews)
-    , m_undoStack(new QUndoStack)
+    , m_translator(new QTranslator(this))
+    , m_buildInfo(new BuildInfo(this))
+    , m_news(new QropNews(this))
+    , m_undoStack(new QUndoStack(this))
     , m_isLocalDatabase(true)
-    , m_familySvc(new FamilyService)
+    , m_familySvc(new FamilyService(this))
 {
 }
 
@@ -50,13 +50,6 @@ Qrop::~Qrop()
     if (m_news->areRead())
         m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
     m_settings.sync();
-
-    delete m_familySvc;
-    delete m_undoStack;
-
-    delete m_news;
-    delete m_buildInfo;
-    delete m_translator;
     qDebug() << "Qrop properly deleted!";
 }
 
