@@ -8,43 +8,43 @@
         <translation type="vanished">Pri Qrop</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="98"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="103"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
         <translation>Plursistema ilo por planado kaj sekvado de utilĝardenaj kulturoj. Kreita de geutilĝardenistoj por geutilĝardenistoj, helpe de la franca kooperativo &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L’atelier paysan&lt;/a&gt; (la kamparana metiejo).</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="114"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="119"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
-        <location filename="../desktop/qml/AboutDialog.qml" line="208"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="213"/>
         <source>News</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="144"/>
         <source>You need an internet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="147"/>
-        <source>ReTry fetching News</source>
+        <location filename="../desktop/qml/AboutDialog.qml" line="152"/>
+        <source>Retry fetching News</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="170"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="175"/>
         <source>Mark news as read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="204"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="209"/>
         <source>Credits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="222"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
         <source>Debug information</source>
         <translation type="unfinished"></translation>
     </message>

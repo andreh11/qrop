@@ -149,7 +149,7 @@ Popup {
                 }
                 MyToolButton {
                     id: newsRefresh
-                    text: qsTr("ReTry fetching News")
+                    text: qsTr("Retry fetching News")
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: cppQrop.news().fetchNews()
                 }
