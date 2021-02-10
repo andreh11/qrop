@@ -52,6 +52,11 @@ Popup {
         newsRefresh.visible = newsHtml.length === 0;
     }
 
+    onClosed: {
+        if (markNewsAsRead.checked)
+            window.displayNewsBadges("");
+    }
+
     SwipeView {
         id: view
         currentIndex: bar.currentIndex
