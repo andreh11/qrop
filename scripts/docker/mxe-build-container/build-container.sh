@@ -3,7 +3,8 @@ set -x
 set -e
 
 # known good MXE sha
-MXE_SHA="8966a64"
+# MXE_SHA="8966a64"
+MXE_SHA="64b283d"
 SCRIPTPATH=$(dirname $0)
 
 # version of the docker image
