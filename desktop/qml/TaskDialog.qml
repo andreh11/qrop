@@ -126,10 +126,7 @@ Dialog {
     closePolicy: Popup.CloseOnEscape
     Material.background: Material.color(Material.Grey, Material.Shade100)
     padding: Units.mediumSpacing
-//    implicitHeight: taskDialogHeader.implicitHeight + taskForm.implicitHeight
-        implicitHeight: (!templateMode && sowPlantTask)
-                        ? taskForm.implicitHeight + Units.smallSpacing
-                        : parent.height - 2 * Units.smallSpacing
+    implicitHeight: parent.height - 2 * Units.smallSpacing
 
     ApplicationShortcut {
         sequences: ["Ctrl+Enter", "Ctrl+Return"]
