@@ -4,7 +4,7 @@
 set -x
 set -e
 
-sudo apt-get install -qq -y curl 
+apt-get install -qq -y curl 
 
 BUILD_DIR=$PWD
 
