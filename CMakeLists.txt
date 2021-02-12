@@ -160,6 +160,12 @@ if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(QML_FILES desktop/qml.qrc)
 endif()
 
+if(MINGW)
+     set(CMAKE_RC_COMPILER_INIT windres)
+     enable_language(RC)    
+     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> <DEFINES> -O coff -o <OBJECT> <SOURCE>")
+endif(MINGW)
+
 # Compile QML code for release only on Unix and Mac (doesn't work on Windows).
 if((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
     find_package(Qt5QuickCompiler)

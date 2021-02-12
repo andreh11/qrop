@@ -18,12 +18,14 @@
 #ifndef QROPNEWS_H
 #define QROPNEWS_H
 
+#include "core_global.h"
+
 #include <QObject>
 #include <QString>
 #include <QVector>
 #include <QDate>
 
-class QropNews : public QObject
+class CORESHARED_EXPORT QropNews : public QObject
 {
     Q_OBJECT
 
