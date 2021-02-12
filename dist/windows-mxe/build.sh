@@ -28,9 +28,12 @@ git clone https://github.com/saidinesh5/mxedeployqt
     --mxetarget=${MINGW_PREFIX} \
     --qmlrootpath=$PWD/desktop/qml release
 
-cp $DLL_DIR/opengl32.dll \
-   $DLL_DIR/libssl-1_1-x64.dll \
-   release
+cp $DLL_DIR/opengl32.dll release
+
+if [ "$WINDOWS_ARCH" == "32bit" ]; then
+   cp $DLL_DIR/libssl-1_1.dll release
+else
+   cp $DLL_DIR/libssl-1_1-x64.dll release
+fi
 
 ${MINGW_PREFIX}-makensis Qrop.nsi
-mv Qrop.exe ${}
