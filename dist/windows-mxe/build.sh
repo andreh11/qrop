@@ -4,6 +4,8 @@
 set -x
 set -e
 
+sudo apt-get install -qq -y curl 
+
 BUILD_DIR=$PWD
 
 if [ "$WINDOWS_ARCH" == "32bit" ]; then
