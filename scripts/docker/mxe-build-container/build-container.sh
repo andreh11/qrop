@@ -7,8 +7,8 @@ set -e
 SCRIPTPATH=$(dirname $0)
 
 # version of the docker image
-VERSION=5.15-static
+VERSION=5.15-shared
 
 pushd $SCRIPTPATH
-docker build -t andreh11/mxe-build-container:$VERSION -f Dockerfile .
+docker build -t andreh11/qt-mxe:$VERSION -f Dockerfile .
 popd

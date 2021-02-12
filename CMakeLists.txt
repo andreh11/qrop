@@ -161,7 +161,7 @@ if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 if(MINGW)
-     set(CMAKE_RC_COMPILER_INIT windres)    
+     set(CMAKE_RC_COMPILER_INIT windres)
      enable_language(RC)    
      set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> <DEFINES> -O coff -o <OBJECT> <SOURCE>")
 endif(MINGW)
