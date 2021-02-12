@@ -18,18 +18,20 @@
 #ifndef QROP_H
 #define QROP_H
 
+#include "singleton.h"
+#include "buildinfo.h"
+#include "core_global.h"
+
 #include <QObject>
 #include <QSettings>
 #include <QNetworkAccessManager>
-#include "singleton.h"
-#include "buildinfo.h"
 
 class BuildInfo;
 class Database;
 class QropNews;
 class QTranslator;
 
-class Qrop : public QObject, public Singleton<Qrop>
+class CORESHARED_EXPORT Qrop : public QObject, public Singleton<Qrop>
 {
     Q_OBJECT
     friend class Singleton<Qrop>;
