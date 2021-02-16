@@ -32,7 +32,7 @@ public:
 #include <QAbstractListModel>
 class FamilyService;
 
-class FamilyModel2 : public QAbstractListModel
+class CORESHARED_EXPORT FamilyModel2 : public QAbstractListModel
 {
     static const QHash<int, QByteArray> sRoleNames;
 
@@ -53,7 +53,7 @@ private:
     FamilyService *m_svcFamily;
 };
 
-class FamilyProxyModel : public QSortFilterProxyModel
+class CORESHARED_EXPORT FamilyProxyModel : public QSortFilterProxyModel
 {
 public:
     FamilyProxyModel(FamilyService *svcFamily, QObject *parent = nullptr);

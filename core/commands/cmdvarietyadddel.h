@@ -24,7 +24,7 @@
 #include "business/family.h"
 class Qrop;
 
-class CmdVarietyAddDel : public QUndoCommand, public CmdFamily
+class CORESHARED_EXPORT CmdVarietyAddDel : public QUndoCommand, public CmdFamily
 {
 public:
     CmdVarietyAddDel(int crop_id, const QString &name, int seedCompanyId = -1); //!< for creation

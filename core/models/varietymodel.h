@@ -45,7 +45,7 @@ private:
 #include <QAbstractListModel>
 #include "business/family.h"
 
-class VarietyModel2 : public QAbstractListModel
+class CORESHARED_EXPORT VarietyModel2 : public QAbstractListModel
 {
     static const QHash<int, QByteArray> sRoleNames;
 
@@ -77,7 +77,7 @@ private:
     qrp::Crop *m_crop;
 };
 
-class VarietyProxyModel : public QSortFilterProxyModel
+class CORESHARED_EXPORT VarietyProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 

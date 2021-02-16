@@ -20,7 +20,7 @@
 
 #include "CmdUpdate.h"
 #include "models/familymodel.h"
-class CmdFamilyUpdate : public CmdUpdate
+class CORESHARED_EXPORT CmdFamilyUpdate : public CmdUpdate
 {
 public:
     CmdFamilyUpdate(int row, int family_id, FamilyModel2::FamilyRole role, QVariant oldV, QVariant newV);

@@ -20,7 +20,7 @@
 
 #include "CmdUpdate.h"
 #include "models/varietymodel.h"
-class CmdVarietyUpdate : public CmdUpdate
+class CORESHARED_EXPORT CmdVarietyUpdate : public CmdUpdate
 {
 public:
     CmdVarietyUpdate(int row, int crop_id, int variety_id, VarietyModel2::VarietyRole role, QVariant oldV, QVariant newV);

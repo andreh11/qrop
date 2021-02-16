@@ -21,7 +21,7 @@
 
 #include "CmdUpdate.h"
 #include "models/cropmodel.h"
-class CmdCropUpdate : public CmdUpdate
+class CORESHARED_EXPORT CmdCropUpdate : public CmdUpdate
 {
 public:
     CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::CropRole role, const QVariant &oldV, const QVariant &newV);

@@ -20,13 +20,13 @@
 #include <QtGlobal>
 #include <QString>
 #include <QList>
-
+#include "core_global.h"
 namespace qrp {
 
 struct Crop;
 struct Variety;
 
-struct SeedCompany {
+struct CORESHARED_EXPORT SeedCompany {
     static int sLastId;
     static int getNextId() {return ++sLastId;}
 
@@ -43,7 +43,7 @@ struct SeedCompany {
     }
 };
 
-struct Family {
+struct CORESHARED_EXPORT Family {
     static int sLastId;
     static int getNextId() {return ++sLastId;}
 
@@ -76,7 +76,7 @@ struct Family {
     int row(int crop_id) const;
 };
 
-struct Crop {
+struct CORESHARED_EXPORT Crop {
     static int sLastId;
     static int getNextId() {return ++sLastId;}
 
@@ -108,7 +108,7 @@ struct Crop {
     int row(int variety_id) const;
 };
 
-struct Variety {
+struct CORESHARED_EXPORT Variety {
     static int sLastId;
     static int getNextId() {return ++sLastId;}
 

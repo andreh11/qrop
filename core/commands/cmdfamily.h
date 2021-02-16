@@ -1,6 +1,6 @@
 #ifndef CMDFAMILY_H
 #define CMDFAMILY_H
-
+#include "core_global.h"
 class FamilyService;
 
 class CmdFamily{

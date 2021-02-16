@@ -3,12 +3,13 @@
 
 #include <QObject>
 #include <QMap>
+#include "core_global.h"
 #include "../business/family.h"
 class FamilyProxyModel;
 class SeedCompanyProxyModel;
 class QAbstractItemModel;
 
-class FamilyService : public QObject
+class CORESHARED_EXPORT FamilyService : public QObject
 {
     Q_OBJECT
 

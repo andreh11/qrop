@@ -44,7 +44,7 @@ private:
 #include "business/family.h"
 class Qrop;
 
-class CropModel2 : public QAbstractListModel
+class CORESHARED_EXPORT CropModel2 : public QAbstractListModel
 {
     static const QHash<int, QByteArray> sRoleNames;
 
@@ -69,7 +69,7 @@ private:
     qrp::Family *m_family;
 };
 
-class CropProxyModel : public QSortFilterProxyModel
+class CORESHARED_EXPORT CropProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
