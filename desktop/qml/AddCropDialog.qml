@@ -42,7 +42,7 @@ Dialog {
     margins: 0
 
     onAboutToShow: {
-        familyModel.refresh();
+//        familyModel.refresh();
         cropNameField.text = ""
         familyField.selectedId = -1;
         familyField.text = "";
@@ -79,9 +79,10 @@ Dialog {
             textRole: function (model) { return model.family; }
             idRole: function (model) { return model.family_id; }
             showAddItem: false
-            model: FamilyModel {
-                id: familyModel
-            }
+            model: cppFamily.modelFamily()
+//            model: FamilyModel {
+//                id: familyModel
+//            }
             Keys.onReturnPressed: if (acceptableForm && !popup.opened) root.accept();
             Keys.onEnterPressed: if (acceptableForm && !popup.opened) root.accept();
             Layout.minimumWidth: 150

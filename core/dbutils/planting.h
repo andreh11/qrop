@@ -24,12 +24,15 @@
 #include "core_global.h"
 #include "databaseutility.h"
 
-class Crop;
+namespace dbutils {
 class Family;
+class Variety;
+}
+class Crop;
+// class Family;
 class Keyword;
 class Location;
 class Task;
-class Variety;
 class QSettings;
 
 class CORESHARED_EXPORT Planting : public DatabaseUtility
@@ -116,12 +119,12 @@ private:
     void updateKeywords(int plantingId, const QVariantList &newList, const QVariantList &oldList) const;
 
     DatabaseUtility *m_crop;
-    Family *m_family;
+    dbutils::Family *m_family;
     DatabaseUtility *m_seedCompany;
     Keyword *m_keyword;
     Task *m_task;
     DatabaseUtility *m_unit;
-    Variety *m_variety;
+    dbutils::Variety *m_variety;
     QSettings *m_settings;
 };
 

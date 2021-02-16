@@ -64,9 +64,12 @@ Column {
                         ColorPicker {
                             anchors.fill: parent
                             onNewColorSelected:{
-                                colorPickerDialog.close()
-                                Crop.update(model.crop_id, {"color": color});
-                                refresh();
+                                colorPickerDialog.close();
+                                print("Edit Crop color"+crop_id+": "+color);
+                                cppFamily.updateCropColor(cropModel.sourceRow(index), family_id, crop_id, model.color, color);
+
+//                                Crop.update(model.crop_id, {"color": color});
+//                                refresh();
                             }
                         }
                     }
@@ -79,8 +82,11 @@ Column {
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillHeight: true
                     onEditingFinished: {
-                        Crop.update(model.crop_id, {"crop": text});
-                        refresh();
+                        print("Edit Crop name"+crop_id+": "+color);
+                        cppFamily.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
+
+//                        Crop.update(model.crop_id, {"crop": text});
+//                        refresh();
                     }
                 }
 
@@ -144,9 +150,9 @@ Column {
         width: parent.width
         height: contentHeight
 
-        onVisibleChanged: if (visible) varietyModel.refresh();
+//        onVisibleChanged: if (visible) varietyModel.refresh();
 
-        model: VarietyModel {
+        model: VarietyProxyModel {
             id: varietyModel
             cropId: crop_id
         }
@@ -157,7 +163,7 @@ Column {
 
         delegate: SettingsVarietyDelegate {
             width: parent.width
-            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
+//            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
             buttonGroup: buttonGroupL
@@ -176,17 +182,7 @@ Column {
         AddVarietyDialog {
             id: addVarietyDialog
             margins: 0
-            onAccepted: {
-                if (seedCompanyId > 0)
-                    Variety.add({"variety" : varietyName,
-                                    "crop_id" : model.crop_id,
-                                    "seed_company_id" : seedCompanyId});
-                else
-                    Variety.add({"variety" : varietyName,
-                                    "crop_id" : model.crop_id});
-
-                varietyModel.refresh();
-            }
+            onAccepted: cppFamily.addNewVariety(crop_id, varietyName, seedCompanyId)
         }
     }
 }

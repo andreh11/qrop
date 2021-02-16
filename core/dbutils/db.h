@@ -21,10 +21,19 @@
 #include <QUrl>
 #include "core_global.h"
 #include "purestaticclass.h"
+class FamilyService;
+
 class CORESHARED_EXPORT Database : public PureStaticClass
 {
     friend class Qrop;
     friend class tst_Database;
+
+private:
+    static QList<std::pair<QString, int>> s_familyList;
+    static QList<std::pair<QString, QString>> s_cropList;
+    static QList<QString> s_taskList;
+    static QList<std::pair<QString, QString>> s_unitList;
+    static QList<QString> s_companyList;
 
 public:
     static QString defaultDatabasePath();
@@ -36,12 +45,13 @@ public:
     static void copy(const QUrl &from, const QUrl &to);
     static void close();
 
+    static void loadDatabase(FamilyService *svcFamily);
+
 private:
-    static QList<std::pair<QString, int>> s_familyList;
-    static QList<std::pair<QString, QString>> s_cropList;
-    static QList<QString> s_taskList;
-    static QList<std::pair<QString, QString>> s_unitList;
-    static QList<QString> s_companyList;
+    static void loadSeedCompanies(FamilyService *svcFamily);
+    static void loadFamilies(FamilyService *svcFamily);
+    static void loadCrops(FamilyService *svcFamily);
+    static void loadVarieties(FamilyService *svcFamily);
 
     static void initStatics();
 

@@ -29,4 +29,46 @@ public:
     explicit SeedCompanyModel(QObject *parent = nullptr, const QString &tableName = "seed_company");
 };
 
+#include <QAbstractListModel>
+class FamilyService;
+
+class SeedCompanyModel2 : public QAbstractListModel
+{
+    static const QHash<int, QByteArray> sRoleNames;
+
+public:
+    explicit SeedCompanyModel2(FamilyService *svcFamily, QObject *parent = nullptr);
+
+    enum SeedCompanyRole { name = Qt::UserRole, isDefault, id, deleted };
+
+    // Basic functionality:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
+
+private:
+    FamilyService *m_svcFamily;
+};
+
+class SeedCompanyProxyModel : public QSortFilterProxyModel
+{
+public:
+    SeedCompanyProxyModel(FamilyService *svcFamily, QObject *parent = nullptr);
+    ~SeedCompanyProxyModel() override;
+
+    Q_INVOKABLE int sourceRow(int proxyRow) const
+    {
+        QModelIndex proxyIndex = index(proxyRow, 0);
+        return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
+    }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    SeedCompanyModel2 *m_model;
+};
+
 #endif // SEEDCOMPANYMODEL_H

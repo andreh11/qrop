@@ -15,9 +15,96 @@
  */
 
 #include "seedcompanymodel.h"
+#include "services/familyservice.h"
+#include "version.h"
 
 SeedCompanyModel::SeedCompanyModel(QObject *parent, const QString &tableName)
     : SortFilterProxyModel(parent, tableName)
 {
     setSortColumn("seed_company");
+}
+
+const QHash<int, QByteArray> SeedCompanyModel2::sRoleNames = {
+    { SeedCompanyRole::name, "seed_company" },
+    { SeedCompanyRole::isDefault, "is_default" },
+    { SeedCompanyRole::id, "seed_commpany_id" },
+    { SeedCompanyRole::deleted, "deleted" },
+};
+
+SeedCompanyModel2::SeedCompanyModel2(FamilyService *svcFamily, QObject *parent)
+    : QAbstractListModel(parent)
+    , m_svcFamily(svcFamily)
+{
+    connect(m_svcFamily, &FamilyService::beginResetSeedCompanyModel, this,
+            [=]() { beginResetModel(); });
+    connect(m_svcFamily, &FamilyService::endResetSeedCompanyModel, this, [=]() { endResetModel(); });
+}
+
+int SeedCompanyModel2::rowCount(const QModelIndex &parent) const
+{
+    // For list models only the root node (an invalid parent) should return the list's size. For all
+    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
+    if (parent.isValid() || !m_svcFamily)
+        return 0;
+
+    return m_svcFamily->numberOfSeedCompanies();
+}
+
+QVariant SeedCompanyModel2::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || !m_svcFamily)
+        return QVariant();
+
+    qrp::SeedCompany *seedCompany = m_svcFamily->seedCompanyFromIndexRow(index.row());
+    if (!seedCompany)
+        return QVariant();
+
+    switch (role) {
+    case SeedCompanyRole::name:
+        return seedCompany->name;
+    case SeedCompanyRole::isDefault:
+        return seedCompany->isDefault;
+    case SeedCompanyRole::id:
+        return seedCompany->id;
+    case SeedCompanyRole::deleted:
+        return seedCompany->deleted;
+    }
+
+    return QVariant();
+}
+
+Qt::ItemFlags SeedCompanyModel2::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+SeedCompanyProxyModel::SeedCompanyProxyModel(FamilyService *svcFamily, QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(new SeedCompanyModel2(svcFamily))
+{
+    setSourceModel(m_model);
+    setSortRole(SeedCompanyModel2::SeedCompanyRole::name);
+    sort(0, Qt::AscendingOrder);
+    setDynamicSortFilter(true);
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[SeedCompanyProxyModel] Create";
+#endif
+}
+
+SeedCompanyProxyModel::~SeedCompanyProxyModel()
+{
+    delete m_model;
+#ifdef TRACE_CPP_MODELS
+    qDebug() << "[SeedCompanyProxyModel] Delete";
+#endif
+}
+
+bool SeedCompanyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
+    return modelIndex.isValid() ? !m_model->data(modelIndex, SeedCompanyModel2::deleted).toBool()
+                                : false;
 }

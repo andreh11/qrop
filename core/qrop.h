@@ -30,6 +30,9 @@ class BuildInfo;
 class Database;
 class QropNews;
 class QTranslator;
+class QUndoStack;
+class QUndoCommand;
+class FamilyService;
 
 class CORESHARED_EXPORT Qrop : public QObject, public Singleton<Qrop>
 {
@@ -43,6 +46,10 @@ public:
     ~Qrop() override;
 
     int init();
+
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
+    void pushCommand(QUndoCommand *cmd);
 
     Q_INVOKABLE bool loadDatabase(const QUrl &url);
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;
@@ -58,7 +65,9 @@ public:
     {
         emit error(m_errors.join("\n"));
         m_errors.clear();
-    };
+    }
+
+    inline bool isLocalDatabase() const { return m_isLocalDatabase; }
 
     inline void sendInfo(const QString &msg)
     {
@@ -66,7 +75,7 @@ public:
         qDebug() << msg;
     }
 
-    void sendError(const QString &err)
+    inline void sendError(const QString &err)
     {
         emit error(err);
         qCritical() << err;
@@ -85,13 +94,18 @@ public:
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
+    inline FamilyService *familyService() const { return m_familySvc; }
+
 signals:
     void info(const QString &msg);
     void error(const QString &err);
 
 private:
+    void initStatics();
     void loadCurrentDatabase();
     void installTranslator();
+
+    void clearBusinessObjects();
 
     void _dumpSettings();
 
@@ -104,6 +118,11 @@ private:
     QStringList m_errors; //!< non critical errors happening prior to the GUI
     QNetworkAccessManager m_networkManager; //!< for http(s) requests
     QropNews *m_news;
+
+    QUndoStack *m_undoStack;
+    bool m_isLocalDatabase;
+
+    FamilyService *m_familySvc;
 };
 
 #endif // QROP_H

@@ -31,6 +31,14 @@ DatabaseUtility::DatabaseUtility(QObject *parent)
 {
 }
 
+DatabaseUtility::DatabaseUtility(const QString &table, QObject *parent)
+    : QObject(parent)
+    , m_table(table)
+    , m_viewTable("")
+    , m_idFieldName("")
+{
+}
+
 void DatabaseUtility::rollback() const
 {
     qDebug() << "Rolling back...";

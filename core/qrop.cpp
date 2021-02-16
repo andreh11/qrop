@@ -19,28 +19,41 @@
 #include <QTranslator>
 #include <QCoreApplication>
 #include <QRegularExpression>
+#include <QUndoStack>
 
 #include "qropnews.h"
 #include "qrop.h"
 #include "dbutils/db.h"
+#include "services/familyservice.h"
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
     , m_translator(new QTranslator(this))
     , m_buildInfo(new BuildInfo(this))
     , m_news(new QropNews(this))
+    , m_undoStack(new QUndoStack(this))
+    , m_isLocalDatabase(true)
+    , m_familySvc(new FamilyService(this))
 {
+}
+
+void Qrop::clearBusinessObjects()
+{
+    m_undoStack->clear();
+    m_familySvc->clear();
 }
 
 Qrop::~Qrop()
 {
     Database::close();
+
     if (m_news->areRead())
         m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
     m_settings.sync();
     qDebug() << "Qrop properly deleted!";
 }
 
+#include "commands/cmdfamily.h"
 int Qrop::init()
 {
     _dumpSettings();
@@ -54,7 +67,7 @@ int Qrop::init()
 
     installTranslator();
 
-    Database::initStatics();
+    initStatics();
 
     // load current database (or default one)
     loadCurrentDatabase();
@@ -62,12 +75,48 @@ int Qrop::init()
     return 0;
 }
 
+void Qrop::initStatics()
+{
+    Database::initStatics();
+    CmdFamily::s_familySvc = m_familySvc;
+}
+
+void Qrop::undo()
+{
+    if (m_undoStack->canUndo()) {
+        sendInfo(tr("Undo %1").arg(m_undoStack->undoText()));
+        m_undoStack->undo();
+    }
+}
+void Qrop::redo()
+{
+    if (m_undoStack->canRedo()) {
+        sendInfo(tr("Redo %1").arg(m_undoStack->redoText()));
+        m_undoStack->redo();
+    }
+}
+
+void Qrop::pushCommand(QUndoCommand *cmd)
+{
+    m_undoStack->push(cmd);
+}
+
 bool Qrop::loadDatabase(const QUrl &url)
 {
-    if (url.isLocalFile())
-        return Database::connectToDatabase(url);
-    if (url.scheme().startsWith("http"))
+    clearBusinessObjects();
+    if (url.isLocalFile()) {
+        if (Database::connectToDatabase(url)) {
+            Database::loadDatabase(m_familySvc);
+            qDebug() << "[Qrop::loadDatabase] "
+                     << "nb Families: " << m_familySvc->numberOfFamilies()
+                     << ", nb Crops: " << m_familySvc->numberOfCrops()
+                     << ", nb Varieties: " << m_familySvc->numberOfVarieties();
+            m_isLocalDatabase = true;
+            return true;
+        }
+    } else if (url.scheme().startsWith("http"))
         return false; // MB_TODO: load from json request
+
     return false;
 }
 

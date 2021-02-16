@@ -50,19 +50,23 @@ Column {
                     Layout.leftMargin: Units.mediumSpacing - leftPadding / 2
                     Layout.rightMargin: -rightPadding / 2
                     ButtonGroup.group: buttonGroup
-                    onCheckedChanged: Variety.setDefault(model.variety_id, checked)
-                    checked: model.is_default === 1
+                    onCheckedChanged: {
+//                        print("variety "+variety+" is_default checked: "+checked);
+                        cppFamily.updateVarietyIsDefault(varietyModel.sourceRow(index), crop_id, variety_id, is_default, checked);
+                    }
+                    checked: is_default
                 }
 
-                TextInput {
+                EditableLabel {
                     text: model.variety
                     color: Qt.rgba(0, 0, 0, 0.7)
-                    font.family: "Roboto Regular"
-                    maximumLength: 25
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.minimumWidth: firstColumnWidth
-
-                    onEditingFinished: Variety.update(model.variety_id, {"variety": text})
+                    Layout.fillHeight: true
+                    onEditingFinished: {
+//                        print("Edit variety name "+variety_id+": "+text);
+                        cppFamily.updateVarietyName(varietyModel.sourceRow(index), crop_id, variety_id, variety, text);
+                    }
                 }
 
                 // BUG: this shouldb a MyComboBox, but this one seems to buggy; the height
@@ -70,27 +74,27 @@ Column {
                 ComboBox {
                     id: seedCompanyField
 
-                    property int rowId: seed_company_id
+                    property int currentCompanyId : seed_company_id
+                    property bool initialized : false // hack to not save when doing onCompleted...
 
-                    function setRowId(rowId) {
-                        var i = 0;
-                        while (model.rowId(i) !== rowId && i < model.rowCount)
-                            i++;
-                        if (i < model.rowCount)
-                            currentIndex = i;
-                    }
-
-                    onRowIdChanged: setRowId(rowId)
                     flat: true
                     Layout.minimumWidth: secondColumnWidth
-                    model: SeedCompanyModel {
-                        id: seedCompanyModel
-                    }
+
+                    model: cppFamily.modelSeedCompany()
                     textRole: "seed_company"
 
+                    Component.onCompleted: {
+//                        print("variety: "+variety+ " has company: "+ seed_company_id);
+                        currentIndex = cppFamily.seedCompanyProxyIndex(seed_company_id);
+                        initialized = true;
+                    }
                     onCurrentIndexChanged: {
-                        var companyId = seedCompanyModel.rowId(seedCompanyField.currentIndex)
-                        Variety.update(variety_id, {"seed_company_id": companyId})
+                        if (!initialized)
+                            return;
+                        let newCompanyId = cppFamily.seedCompanyIdFromProxyRow(currentIndex);
+                        if (currentCompanyId !== newCompanyId)
+                            cppFamily.updateVarietyCompanySeed(varietyModel.sourceRow(index), crop_id, variety_id,
+                                                             currentCompanyId, newCompanyId);
                     }
                 }
 
@@ -124,11 +128,7 @@ Column {
                             text: qsTr("All plantings will be lost.")
                         }
 
-                        onAccepted: {
-                            Variety.remove(model.variety_id)
-                            refresh()
-                        }
-
+                        onAccepted: cppFamily.deleteVariety(crop_id, variety_id)
                         onRejected: confirmVarietyDeleteDialog.close()
                     }
                 }

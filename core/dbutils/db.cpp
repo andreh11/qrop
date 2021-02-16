@@ -37,6 +37,7 @@
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #include "filesystem.h"
 #endif
+#include "services/familyservice.h"
 
 QString Database::defaultDatabasePath()
 {
@@ -185,6 +186,74 @@ void Database::close()
     query.exec("PRAGMA optimize");
     qDebug() << "Closing database...";
     database.close();
+}
+
+void Database::loadDatabase(FamilyService *svcFamily)
+{
+    loadSeedCompanies(svcFamily);
+    loadFamilies(svcFamily);
+    loadCrops(svcFamily);
+    loadVarieties(svcFamily);
+}
+
+void Database::loadSeedCompanies(FamilyService *svcFamily)
+{
+    QSqlQuery query;
+    if (!query.exec(
+                "select seed_company_id, deleted, seed_company, is_default from seed_company")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    emit svcFamily->beginResetSeedCompanyModel();
+    while (query.next()) {
+        svcFamily->addSeedCompany(query.value(0).toInt(), query.value(1).toBool(),
+                                  query.value(2).toString(), query.value(3).toBool());
+    }
+    emit svcFamily->endResetSeedCompanyModel();
+}
+
+void Database::loadFamilies(FamilyService *svcFamily)
+{
+    QSqlQuery query;
+    if (!query.exec("select family_id, deleted, family, interval, color from family")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    emit svcFamily->beginResetFamilyModel();
+    while (query.next()) {
+        svcFamily->addFamily(query.value(0).toInt(), query.value(1).toBool(),
+                             query.value(2).toString(), static_cast<ushort>(query.value(3).toUInt()),
+                             query.value(4).toString());
+    }
+    emit svcFamily->endResetFamilyModel();
+}
+
+void Database::loadCrops(FamilyService *svcFamily)
+{
+    QSqlQuery query;
+    if (!query.exec("select crop_id, deleted, crop, color, family_id from crop")) {
+        qCritical() << "Can't Execute Query !";
+        return;
+    }
+    while (query.next()) {
+        svcFamily->addCrop(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
+                           query.value(3).toString(), query.value(4).toInt());
+    }
+}
+
+void Database::loadVarieties(FamilyService *svcFamily)
+{
+    QSqlQuery query;
+    if (!query.exec("select variety_id, deleted, variety, crop_id, is_default, seed_company_id "
+                    "from variety")) {
+        qCritical() << "Can't Execute Query";
+        return;
+    }
+    while (query.next()) {
+        svcFamily->addVariety(query.value(0).toInt(), query.value(1).toBool(),
+                              query.value(2).toString(), query.value(3).toInt(),
+                              query.value(4).toBool(), query.value(5).toInt());
+    }
 }
 
 int Database::execSqlFile(const QString &fileName, const QString &separator)
@@ -364,13 +433,13 @@ bool Database::createData()
         return false;
     }
     QMap<QString, int> familyMap;
-    Family family;
+    dbutils::Family family;
     for (auto it = s_familyList.cbegin(), itEnd = s_familyList.cend(); it != itEnd; ++it)
         familyMap[it->first] = family.add({ { "family", it->first }, { "interval", it->second } });
 
     QMap<QString, int> cropMap;
     DatabaseUtility crop;
-    Variety variety;
+    dbutils::Variety variety;
     crop.setTable("crop");
     for (auto it = s_cropList.cbegin(), itEnd = s_cropList.cend(); it != itEnd; ++it) {
         cropMap[it->first] =

@@ -23,6 +23,14 @@ add_library(core SHARED
         tableprinter.cpp
         qropdoublevalidator.cpp
 
+        business/family.cpp
+
+        commands/cmdcropupdate.cpp
+        commands/cmdfamily.cpp
+        commands/cmdfamilyupdate.cpp
+        commands/cmdvarietyadddel.cpp
+        commands/cmdvarietyupdate.cpp
+
         dbutils/db.cpp
         dbutils/databaseutility.cpp
         dbutils/family.cpp
@@ -67,6 +75,8 @@ add_library(core SHARED
         models/unitmodel.cpp
         models/usermodel.cpp
         models/varietymodel.cpp
+
+        services/familyservice.cpp
         )
 
 

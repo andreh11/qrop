@@ -22,26 +22,26 @@
 #include "family.h"
 #include "task.h"
 
-Family::Family(QObject *parent)
+dbutils::Family::Family(QObject *parent)
     : DatabaseUtility(parent)
 {
     m_table = "family";
     m_viewTable = "family";
 }
 
-QString Family::name(int familyId) const
+QString dbutils::Family::name(int familyId) const
 {
     QVariantMap map = mapFromId("family", familyId);
     return map["family"].toString();
 }
 
-QString Family::color(int familyId) const
+QString dbutils::Family::color(int familyId) const
 {
     QVariantMap map = mapFromId("family", familyId);
     return map["color"].toString();
 }
 
-int Family::interval(int familyId) const
+int dbutils::Family::interval(int familyId) const
 {
     QVariantMap map = mapFromId("family", familyId);
     return map["interval"].toInt();
