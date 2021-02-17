@@ -24,7 +24,6 @@ public:
     int numberOfCrops() const { return m_crops.size(); }
     int numberOfVarieties() const { return m_varieties.size(); }
 
-
     qrp::Family *family(int familyId) const { return m_families.value(familyId, nullptr); }
     qrp::Crop *crop(int cropId) const { return m_crops.value(cropId, nullptr); }
     qrp::Variety *variety(int varietyId) const { return m_varieties.value(varietyId, nullptr); }
@@ -111,7 +110,7 @@ public:
                                             bool newV);
 
     Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
-    Q_INVOKABLE void addNewVariety(int crop_id, const QString &name, int seedCompanyId);
+    Q_INVOKABLE int addNewVariety(int crop_id, const QString &name, int seedCompanyId);
 
 signals:
     // signals for FamilyModel
@@ -138,7 +137,6 @@ private:
 
     FamilyProxyModel *m_familyProxyModel;
     SeedCompanyProxyModel *m_seedCompanyProxyModel;
-
 };
 
 #endif // FAMILYSERVICE_H

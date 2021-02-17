@@ -165,8 +165,11 @@ void FamilyService::deleteVariety(int crop_id, int variety_id)
     Qrop::instance()->pushCommand(new CmdVarietyAddDel(crop_id, variety_id));
 }
 
-void FamilyService::addNewVariety(int crop_id, const QString &name, int seedCompanyId)
+int FamilyService::addNewVariety(int crop_id, const QString &name, int seedCompanyId)
 {
-    qDebug() << "[FamilyService::addNewVariety]  crop_id: " << crop_id;
-    Qrop::instance()->pushCommand(new CmdVarietyAddDel(crop_id, name, seedCompanyId));
+    CmdVarietyAddDel *cmd = new CmdVarietyAddDel(crop_id, name, seedCompanyId);
+    qDebug() << "[FamilyService::addNewVariety]  crop_id: " << crop_id << ", name: " << name
+             << " => id: " << cmd->varietyId();
+    Qrop::instance()->pushCommand(cmd);
+    return cmd->varietyId();
 }

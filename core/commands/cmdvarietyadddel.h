@@ -27,24 +27,27 @@ class Qrop;
 class CORESHARED_EXPORT CmdVarietyAddDel : public QUndoCommand, public CmdFamily
 {
 public:
-    CmdVarietyAddDel(int crop_id, const QString &name, int seedCompanyId = -1); //!< for creation
-    CmdVarietyAddDel(int crop_id, int variety_id); //!< for deletion
+    CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId = -1); //!< for creation
+    CmdVarietyAddDel(int cropId, int varietyId); //!< for deletion
 
     void redo() override;
     void undo() override;
 
-//    QString str() const override {
-//        return QString("[CmdVarietyAddDel] crop_id: %1, family_id: %2, %3").arg(
-//                    m_crop_id).arg(m_variety_id).arg(CmdUpdate::str());
-//    }
+    QString str() const override
+    {
+        return QString("[CmdVarietyAddDel] %1 variety %2").arg(m_creation ? "Create" : "Delete").arg(m_varietyName);
+    }
+
+    int varietyId() const { return m_varietyId; }
 
 private:
     void _setVarietyDelete(qrp::Variety *variety, bool value);
 
 private:
     const bool m_creation;
-    int m_crop_id;
-    int m_variety_id;
+    int m_cropId;
+    int m_varietyId;
+    const QString m_varietyName;
 };
 
 #endif // CMDVARIETYADDDEL_H

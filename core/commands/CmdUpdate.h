@@ -25,14 +25,26 @@ class CmdUpdate : public QUndoCommand, public CmdFamily
 {
 public:
     explicit CmdUpdate(int row, int role, const QVariant &oldV, const QVariant &newV)
-        : QUndoCommand(nullptr), m_row(row), m_role(role), m_oldValue(oldV), m_newValue(newV){}
+        : QUndoCommand(nullptr)
+        , m_row(row)
+        , m_role(role)
+        , m_oldValue(oldV)
+        , m_newValue(newV)
+    {
+    }
 
-    virtual QString str() const {return QString("row: %1, role: %2, <old: %3>, <new: %4>").arg(
-                    m_row).arg(m_role).arg(variantStr(m_oldValue)).arg(variantStr(m_newValue));}
+    virtual QString str() const override
+    {
+        return QString("row: %1, role: %2, <old: %3>, <new: %4>")
+                .arg(m_row)
+                .arg(m_role)
+                .arg(variantStr(m_oldValue))
+                .arg(variantStr(m_newValue));
+    }
 
-    QString variantStr(const QVariant &v) const {
-        switch(v.type())
-        {
+    QString variantStr(const QVariant &v) const
+    {
+        switch (v.type()) {
         case QMetaType::QString:
             return v.toString();
         case QMetaType::Bool:
@@ -57,6 +69,7 @@ public:
             return QString("TODO variantStr...");
         }
     }
+
 protected:
     const int m_row;
     const int m_role;

@@ -22,35 +22,37 @@
 #include "models/varietymodel.h"
 #include "services/familyservice.h"
 
-CmdVarietyAddDel::CmdVarietyAddDel(int crop_id, const QString &name, int seedCompanyId)
+CmdVarietyAddDel::CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId)
     : QUndoCommand()
     , m_creation(true)
-    , m_crop_id(crop_id)
-    , m_variety_id(-1)
+    , m_cropId(cropId)
+    , m_varietyId(-1)
+    , m_varietyName(name)
 {
-    setText(QString("Create variety for crop: %1").arg(s_familySvc->crop(m_crop_id)->name));
+    setText(QString("Create variety %1").arg(m_varietyName));
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
-        m_variety_id = sql.add({ { "crop_id", m_crop_id },
-                                 { "variety", name },
-                                 { "seed_company_id", seedCompanyId },
-                                 { "deleted", "true" } });
+        m_varietyId = sql.add({ { "crop_id", m_cropId },
+                                { "variety", name },
+                                { "seed_company_id", seedCompanyId },
+                                { "deleted", "true" } });
     } else
-        m_variety_id = qrp::Variety::getNextId();
+        m_varietyId = qrp::Variety::getNextId();
 
     // Add non visible Variety in Qrop data structure
-    emit s_familySvc->beginAppendVariety(m_crop_id);
-    s_familySvc->addVariety(m_variety_id, true, name, m_crop_id, false, seedCompanyId);
-    emit s_familySvc->endAppendVariety(m_crop_id);
+    emit s_familySvc->beginAppendVariety(m_cropId);
+    s_familySvc->addVariety(m_varietyId, true, name, m_cropId, false, seedCompanyId);
+    emit s_familySvc->endAppendVariety(m_cropId);
 }
 
-CmdVarietyAddDel::CmdVarietyAddDel(int crop_id, int variety_id)
+CmdVarietyAddDel::CmdVarietyAddDel(int cropId, int varietyId)
     : QUndoCommand()
     , m_creation(false)
-    , m_crop_id(crop_id)
-    , m_variety_id(variety_id)
+    , m_cropId(cropId)
+    , m_varietyId(varietyId)
+    , m_varietyName(s_familySvc->variety(m_varietyId)->name)
 {
-    setText(QString("Delete variety %1").arg(s_familySvc->variety(m_variety_id)->name));
+    setText(QString("Delete variety %1").arg(m_varietyName));
 }
 
 void CmdVarietyAddDel::redo()
@@ -58,9 +60,9 @@ void CmdVarietyAddDel::redo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[CmdVarietyAddDel::redo] " << text();
 #endif
-    qrp::Variety *variety = s_familySvc->variety(m_variety_id);
+    qrp::Variety *variety = s_familySvc->variety(m_varietyId);
     if (!variety) {
-        qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
+        qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_varietyId;
         return;
     }
 
@@ -78,9 +80,9 @@ void CmdVarietyAddDel::undo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[CmdVarietyAddDel::undo] " << text();
 #endif
-    qrp::Variety *variety = s_familySvc->variety(m_variety_id);
+    qrp::Variety *variety = s_familySvc->variety(m_varietyId);
     if (!variety) {
-        qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_variety_id;
+        qCritical() << "[CmdVarietyUpdate::redo] INVALID variety_id: " << m_varietyId;
         return;
     }
 
@@ -98,7 +100,7 @@ void CmdVarietyAddDel::_setVarietyDelete(qrp::Variety *variety, bool value)
     variety->deleted = value;
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
-        sql.update(m_variety_id, { { VarietyModel2::roleName(VarietyModel2::deleted), value } });
+        sql.update(m_varietyId, { { VarietyModel2::roleName(VarietyModel2::deleted), value } });
     }
-    emit s_familySvc->varietyVisible(m_crop_id, m_variety_id);
+    emit s_familySvc->varietyVisible(m_cropId, m_varietyId);
 }
