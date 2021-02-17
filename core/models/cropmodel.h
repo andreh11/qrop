@@ -61,6 +61,7 @@ public:
     QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
     static QString roleName(int r) { return sRoleNames.value(r); }
 
+    qrp::Family *family() const { return m_family; }
     int familyId() const { return m_familyId; }
     void setFamilyId(int familyId);
 

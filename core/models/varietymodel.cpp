@@ -189,5 +189,12 @@ VarietyProxyModel::~VarietyProxyModel()
 bool VarietyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
-    return modelIndex.isValid() ? !m_model->data(modelIndex, VarietyModel2::deleted).toBool() : false;
+    if (!modelIndex.isValid())
+        return false;
+    if (m_model->data(modelIndex, VarietyModel2::deleted).toBool())
+        return false;
+    qrp::Crop *crop = m_model->crop();
+    if (crop->deleted || crop->family->deleted)
+        return false;
+    return true;
 }

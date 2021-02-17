@@ -69,6 +69,7 @@ public:
     QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
     static QString roleName(int r) { return sRoleNames.value(r); }
 
+    qrp::Crop *crop() const { return m_crop; }
     int cropId() const { return m_cropId; }
     void setCropId(int cropId);
 
