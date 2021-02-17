@@ -27,8 +27,6 @@ Column {
     property int secondColumnWidth
     property ButtonGroup buttonGroup
 
-    signal refresh()
-
     Rectangle {
         height: childrenRect.height
         width: parent.width
@@ -51,7 +49,6 @@ Column {
                     Layout.rightMargin: -rightPadding / 2
                     ButtonGroup.group: buttonGroup
                     onCheckedChanged: {
-//                        print("variety "+variety+" is_default checked: "+checked);
                         cppFamily.updateVarietyIsDefault(varietyModel.sourceRow(index), crop_id, variety_id, is_default, checked);
                     }
                     checked: is_default
@@ -64,7 +61,6 @@ Column {
                     Layout.minimumWidth: firstColumnWidth
                     Layout.fillHeight: true
                     onEditingFinished: {
-//                        print("Edit variety name "+variety_id+": "+text);
                         cppFamily.updateVarietyName(varietyModel.sourceRow(index), crop_id, variety_id, variety, text);
                     }
                 }
@@ -84,7 +80,6 @@ Column {
                     textRole: "seed_company"
 
                     Component.onCompleted: {
-//                        print("variety: "+variety+ " has company: "+ seed_company_id);
                         currentIndex = cppFamily.seedCompanyProxyIndex(seed_company_id);
                         initialized = true;
                     }
@@ -133,7 +128,6 @@ Column {
                     }
                 }
             }
-
         }
     }
 }

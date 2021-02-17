@@ -15,31 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CMDCROPUPDATE_H
-#define CMDCROPUPDATE_H
+#ifndef CMDADDDEL_H
+#define CMDADDDEL_H
 
-#include "cmdupdate.h"
-#include "models/cropmodel.h"
-class CORESHARED_EXPORT CmdCropUpdate : public CmdUpdate
+#include <QUndoCommand>
+#include "cmdfamily.h"
+
+class CmdAddDel : public QUndoCommand, public CmdFamily
 {
 public:
-    CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::CropRole role,
-                  const QVariant &oldV, const QVariant &newV);
+    explicit CmdAddDel(bool creation, const QString &name)
+        : QUndoCommand(nullptr)
+        , m_creation(creation)
+        , m_name(name)
+    {}
 
-    void redo() override;
-    void undo() override;
-
-    QString str() const override
-    {
-        return QString("[CmdCropUpdate] family_id: %1, crop_id: %2, %3")
-                .arg(m_family_id)
-                .arg(m_crop_id)
-                .arg(CmdUpdate::str());
-    }
-
-private:
-    const int m_family_id;
-    const int m_crop_id;
+protected:
+    const bool m_creation;
+    const QString m_name;
 };
-
-#endif // CMDCROPUPDATE_H
+#endif // CMDADDDEL_H

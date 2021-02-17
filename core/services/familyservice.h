@@ -112,6 +112,9 @@ public:
     Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
     Q_INVOKABLE int addNewVariety(int crop_id, const QString &name, int seedCompanyId);
 
+    Q_INVOKABLE void deleteCrop(int familyId, int cropId);
+    Q_INVOKABLE int addNewCrop(int familyId, const QString &name, const QString &color);
+
 signals:
     // signals for FamilyModel
     void beginResetFamilyModel();
@@ -121,8 +124,12 @@ signals:
     void cropUpdated(int familyId, int srcRow);
     void varietyUpdated(int cropId, int srcRow);
 
+    void beginAppendCrop(int familyId);
+    void endAppendCrop(int familyId);
+    void cropVisible(int familyId, int cropId);
+
     void beginAppendVariety(int cropId);
-    void endAppendVariety(int endId);
+    void endAppendVariety(int cropId);
     void varietyVisible(int cropId, int varietyId);
 
     // signals for SeedCompanyModel

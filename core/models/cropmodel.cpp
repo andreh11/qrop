@@ -73,6 +73,35 @@ CropModel2::CropModel2(QObject *parent)
             emit dataChanged(idx, idx);
         }
     });
+
+    connect(svcFamily, &FamilyService::cropVisible, this, [=](int familyId, int cropId) {
+        qDebug() << "[cropVisible] familyId: " << familyId << ", m_familyId: " << m_familyId
+                 << ", cropId: " << cropId;
+        if (familyId != m_familyId)
+            return; // not concerned
+        qrp::Family *family = svcFamily->family(familyId);
+        if (family) {
+            QModelIndex idx = index(family->row(cropId));
+            if (idx.isValid()) {
+                qDebug() << "[cropVisible] dataChanged!";
+                emit dataChanged(idx, idx);
+            }
+        }
+    });
+
+    connect(svcFamily, &FamilyService::beginAppendCrop, this, [=](int familyId) {
+        qDebug() << "[beginAppendCrop] familyId: " << familyId << ", m_familyId: " << m_familyId;
+        if (familyId != m_familyId)
+            return;
+        int lastRow = rowCount();
+        beginInsertRows(QModelIndex(), lastRow, lastRow);
+    });
+    connect(svcFamily, &FamilyService::endAppendCrop, this, [=](int familyId) {
+        qDebug() << "[endAppendCrop] familyId: " << familyId << ", m_familyId: " << m_familyId;
+        if (familyId != m_familyId)
+            return;
+        endInsertRows();
+    });
 }
 
 int CropModel2::rowCount(const QModelIndex &parent) const

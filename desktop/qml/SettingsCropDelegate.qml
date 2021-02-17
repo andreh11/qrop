@@ -29,8 +29,6 @@ Column {
     property int firstColumnWidth
     property int secondColumnWidth
 
-    signal refresh()
-
     Rectangle {
         id: delegate
         height: childrenRect.height
@@ -65,11 +63,7 @@ Column {
                             anchors.fill: parent
                             onNewColorSelected:{
                                 colorPickerDialog.close();
-                                print("Edit Crop color"+crop_id+": "+color);
                                 cppFamily.updateCropColor(cropModel.sourceRow(index), family_id, crop_id, model.color, color);
-
-//                                Crop.update(model.crop_id, {"color": color});
-//                                refresh();
                             }
                         }
                     }
@@ -81,13 +75,7 @@ Column {
                     Layout.minimumWidth: pane.firstColumnWidth
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillHeight: true
-                    onEditingFinished: {
-                        print("Edit Crop name"+crop_id+": "+color);
-                        cppFamily.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
-
-//                        Crop.update(model.crop_id, {"crop": text});
-//                        refresh();
-                    }
+                    onEditingFinished: cppFamily.updateCropName(cropModel.sourceRow(index), family_id, crop_id, crop, text);
                 }
 
                 Item { height: 1; Layout.fillWidth: true }
@@ -116,11 +104,7 @@ Column {
                             text: qsTr("All plantings will be lost.")
                         }
 
-                        onAccepted: {
-                            Crop.remove(model.crop_id)
-                            refresh();
-                        }
-
+                        onAccepted: cppFamily.deleteCrop(family_id, model.crop_id)
                         onRejected: confirmCropDeleteDialog.close()
                     }
                 }
@@ -150,8 +134,6 @@ Column {
         width: parent.width
         height: contentHeight
 
-//        onVisibleChanged: if (visible) varietyModel.refresh();
-
         model: VarietyProxyModel {
             id: varietyModel
             cropId: crop_id
@@ -163,7 +145,6 @@ Column {
 
         delegate: SettingsVarietyDelegate {
             width: parent.width
-//            onRefresh: { varietyModel.refreshRow(index); varietyModel.resetFilter(); }
             firstColumnWidth: control.firstColumnWidth
             secondColumnWidth: control.secondColumnWidth
             buttonGroup: buttonGroupL

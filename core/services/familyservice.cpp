@@ -6,6 +6,7 @@
 #include "commands/cmdcropupdate.h"
 #include "commands/cmdvarietyupdate.h"
 #include "commands/cmdvarietyadddel.h"
+#include "commands/cmdcropadddel.h"
 FamilyService::FamilyService(QObject *parent)
     : QObject(parent)
     , m_familyProxyModel(new FamilyProxyModel(this))
@@ -172,4 +173,20 @@ int FamilyService::addNewVariety(int crop_id, const QString &name, int seedCompa
              << " => id: " << cmd->varietyId();
     Qrop::instance()->pushCommand(cmd);
     return cmd->varietyId();
+}
+
+void FamilyService::deleteCrop(int familyId, int cropId)
+{
+    qDebug() << "[FamilyService::deleteCrop]  familyId: " << familyId << ", cropId: " << cropId;
+    Qrop::instance()->pushCommand(new CmdCropAddDel(familyId, cropId));
+}
+
+int FamilyService::addNewCrop(int familyId, const QString &name, const QString &color)
+{
+    CmdCropAddDel *cmd = new CmdCropAddDel(familyId, name, color);
+    qDebug() << "[FamilyService::addNewCrop]  familyId: " << familyId << ", name: " << name
+             << " => id: " << cmd->cropId();
+    Qrop::instance()->pushCommands(tr("Create crop %1").arg(name),
+                                   { cmd, new CmdVarietyAddDel(cmd->cropId(), tr("Unknown"), 0, true) });
+    return cmd->cropId();
 }

@@ -18,16 +18,14 @@
 #ifndef CMDVARIETYADDDEL_H
 #define CMDVARIETYADDDEL_H
 
-#include <QUndoCommand>
-#include <QPersistentModelIndex>
-#include "cmdfamily.h"
+#include "cmdadddel.h"
 #include "business/family.h"
-class Qrop;
 
-class CORESHARED_EXPORT CmdVarietyAddDel : public QUndoCommand, public CmdFamily
+class CORESHARED_EXPORT CmdVarietyAddDel : public CmdAddDel
 {
 public:
-    CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId = -1); //!< for creation
+    CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId,
+                     bool isDefault = false); //!< for creation
     CmdVarietyAddDel(int cropId, int varietyId); //!< for deletion
 
     void redo() override;
@@ -35,7 +33,7 @@ public:
 
     QString str() const override
     {
-        return QString("[CmdVarietyAddDel] %1 variety %2").arg(m_creation ? "Create" : "Delete").arg(m_varietyName);
+        return QString("[CmdVarietyAddDel] %1 variety %2").arg(m_creation ? "Create" : "Delete").arg(m_name);
     }
 
     int varietyId() const { return m_varietyId; }
@@ -44,10 +42,8 @@ private:
     void _setVarietyDelete(qrp::Variety *variety, bool value);
 
 private:
-    const bool m_creation;
-    int m_cropId;
+    const int m_cropId;
     int m_varietyId;
-    const QString m_varietyName;
 };
 
 #endif // CMDVARIETYADDDEL_H

@@ -18,26 +18,28 @@
 #ifndef CMDVARIETYUPDATE_H
 #define CMDVARIETYUPDATE_H
 
-#include "CmdUpdate.h"
+#include "cmdupdate.h"
 #include "models/varietymodel.h"
 class CORESHARED_EXPORT CmdVarietyUpdate : public CmdUpdate
 {
 public:
-    CmdVarietyUpdate(int row, int crop_id, int variety_id, VarietyModel2::VarietyRole role, QVariant oldV, QVariant newV);
+    CmdVarietyUpdate(int row, int crop_id, int variety_id, VarietyModel2::VarietyRole role,
+                     QVariant oldV, QVariant newV);
 
     void redo() override;
     void undo() override;
 
-    QString str() const override {
-        return QString("[CmdVarietyUpdate] crop_id: %1, family_id: %2, %3").arg(
-                    m_crop_id).arg(m_variety_id).arg(CmdUpdate::str());
+    QString str() const override
+    {
+        return QString("[CmdVarietyUpdate] crop_id: %1, family_id: %2, %3")
+                .arg(m_crop_id)
+                .arg(m_variety_id)
+                .arg(CmdUpdate::str());
     }
-
 
 private:
     const int m_crop_id;
     const int m_variety_id;
 };
-
 
 #endif // CMDVARIETYUPDATE_H

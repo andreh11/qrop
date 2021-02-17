@@ -29,8 +29,6 @@ Column {
     property int firstColumnWidth
     property int secondColumnWidth
 
-    signal refresh()
-
     Behavior on height {
         NumberAnimation { duration: Units.shortDuration }
     }
@@ -73,11 +71,7 @@ Column {
                             anchors.fill: parent
                             onNewColorSelected: {
                                 colorPickerDialog.close();
-                                print("Edit family color"+family_id+": "+color);
                                 cppFamily.updateFamilyColor(index, family_id, model.color, color);
-
-//                                Family.update(model.family_id, {"color": color});
-//                                refresh();
                             }
                         }
                     }
@@ -90,11 +84,7 @@ Column {
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillHeight: true
                     onEditingFinished: {
-//                        Family.update(family_id, {"family": text})
-                        print("Edit family name"+family_id+": "+text);
                         cppFamily.updateFamilyName(index, family_id, family, text);
-//                        model.family = text;
-//                        refresh();
                     }
                 }
 
@@ -110,7 +100,6 @@ Column {
                     onCurrentIndexChanged: {
                         if (interval !== currentIndex)
                             cppFamily.updateFamilyInterval(index, family_id, interval, currentIndex);
-//                        Family.update(family_id, {"interval": currentIndex});
                     }
 
                     ToolTip.text: qsTr("Minimum rotation interval for %1").arg(family)
@@ -147,7 +136,7 @@ Column {
 
                         onAccepted: {
                             Family.remove(family_id)
-                            refresh();
+//                            refresh();
                         }
 
                         onRejected: confirmFamilyDeleteDialog.close()
@@ -210,7 +199,6 @@ Column {
 
                 delegate: SettingsCropDelegate {
                     width: parent.width
-//                    onRefresh: cropModel.refreshRow(familyIndex)
                     firstColumnWidth: control.firstColumnWidth
                     secondColumnWidth: control.secondColumnWidth
                 }
@@ -229,13 +217,9 @@ Column {
 
                 AddCropDialog {
                     id: addCropDialog
-                    margins: 0
+//                    margins: 0
                     alreadyAssignedFamilyId: true
-                    onAccepted: {
-                        var id = Crop.add({"crop" : cropName, "family_id" : family_id, "color" : color});
-                        Variety.add({ "variety": qsTr("Unknown"), "crop_id": id, "is_default" : 1 });
-                        cropModel.refresh();
-                    }
+                    onAccepted: cppFamily.addNewCrop(family_id, cropName, color)
                 }
             }
         }

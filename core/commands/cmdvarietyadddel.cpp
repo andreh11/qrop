@@ -22,20 +22,20 @@
 #include "models/varietymodel.h"
 #include "services/familyservice.h"
 
-CmdVarietyAddDel::CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId)
-    : QUndoCommand()
-    , m_creation(true)
+CmdVarietyAddDel::CmdVarietyAddDel(int cropId, const QString &name, int seedCompanyId, bool isDefault)
+    : CmdAddDel(true, name)
     , m_cropId(cropId)
     , m_varietyId(-1)
-    , m_varietyName(name)
 {
-    setText(QString("Create variety %1").arg(m_varietyName));
+    setText(QString("Create variety %1").arg(m_name));
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
-        m_varietyId = sql.add({ { "crop_id", m_cropId },
-                                { "variety", name },
-                                { "seed_company_id", seedCompanyId },
-                                { "deleted", "true" } });
+        QVariantMap attribs = { { "crop_id", m_cropId }, { "variety", name }, { "deleted", true } };
+        if (seedCompanyId != 0)
+            attribs.insert("seed_company_id", seedCompanyId);
+        if (isDefault)
+            attribs.insert("is_default", true);
+        m_varietyId = sql.add(attribs);
     } else
         m_varietyId = qrp::Variety::getNextId();
 
@@ -46,13 +46,11 @@ CmdVarietyAddDel::CmdVarietyAddDel(int cropId, const QString &name, int seedComp
 }
 
 CmdVarietyAddDel::CmdVarietyAddDel(int cropId, int varietyId)
-    : QUndoCommand()
-    , m_creation(false)
+    : CmdAddDel(false, s_familySvc->variety(m_varietyId)->name)
     , m_cropId(cropId)
     , m_varietyId(varietyId)
-    , m_varietyName(s_familySvc->variety(m_varietyId)->name)
 {
-    setText(QString("Delete variety %1").arg(m_varietyName));
+    setText(QString("Delete variety %1").arg(m_name));
 }
 
 void CmdVarietyAddDel::redo()

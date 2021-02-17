@@ -81,11 +81,11 @@ VarietyModel2::VarietyModel2(QObject *parent)
                  << ", varietyId: " << varietyId;
         if (cropId != m_cropId)
             return;
-        qrp::Crop *crop = Qrop::instance()->familyService()->crop(cropId);
+        qrp::Crop *crop = svcFamily->crop(cropId);
         if (crop) {
             QModelIndex idx = index(crop->row(varietyId));
             if (idx.isValid()) {
-                qDebug() << "[varietyDeleted] dataChanged!";
+                qDebug() << "[varietyVisible] dataChanged!";
                 emit dataChanged(idx, idx);
             }
         }

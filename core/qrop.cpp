@@ -101,6 +101,16 @@ void Qrop::pushCommand(QUndoCommand *cmd)
     m_undoStack->push(cmd);
 }
 
+void Qrop::pushCommands(const QString &title, const QList<QUndoCommand *> &cmds)
+{
+    if (cmds.isEmpty())
+        return;
+    m_undoStack->beginMacro(title);
+    for (QUndoCommand *cmd : cmds)
+        m_undoStack->push(cmd);
+    m_undoStack->endMacro();
+}
+
 bool Qrop::loadDatabase(const QUrl &url)
 {
     clearBusinessObjects();

@@ -25,6 +25,7 @@ add_library(core SHARED
 
         business/family.cpp
 
+        commands/cmdcropadddel.cpp
         commands/cmdcropupdate.cpp
         commands/cmdfamily.cpp
         commands/cmdfamilyupdate.cpp

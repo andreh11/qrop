@@ -15,31 +15,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CMDCROPUPDATE_H
-#define CMDCROPUPDATE_H
+#ifndef CMDCROPADDDEL_H
+#define CMDCROPADDDEL_H
 
-#include "cmdupdate.h"
-#include "models/cropmodel.h"
-class CORESHARED_EXPORT CmdCropUpdate : public CmdUpdate
+#include "cmdadddel.h"
+#include "business/family.h"
+class Qrop;
+
+class CORESHARED_EXPORT CmdCropAddDel : public CmdAddDel
 {
 public:
-    CmdCropUpdate(int row, int family_id, int crop_id, CropModel2::CropRole role,
-                  const QVariant &oldV, const QVariant &newV);
+    CmdCropAddDel(int familyId, const QString &name, const QString &color); //!< for creation
+    CmdCropAddDel(int familyId, int cropId); //!< for deletion
 
     void redo() override;
     void undo() override;
 
     QString str() const override
     {
-        return QString("[CmdCropUpdate] family_id: %1, crop_id: %2, %3")
-                .arg(m_family_id)
-                .arg(m_crop_id)
-                .arg(CmdUpdate::str());
+        return QString("[CmdCropAddDel] %1 crop %2").arg(m_creation ? "Create" : "Delete").arg(m_name);
     }
 
+    int cropId() const { return m_cropId; }
+
 private:
-    const int m_family_id;
-    const int m_crop_id;
+    void _setCropDelete(qrp::Crop *crop, bool value);
+
+private:
+    const int m_familyId;
+    int m_cropId;
 };
 
-#endif // CMDCROPUPDATE_H
+
+#endif // CMDCROPADDDEL_H

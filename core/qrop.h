@@ -50,6 +50,7 @@ public:
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
     void pushCommand(QUndoCommand *cmd);
+    void pushCommands(const QString &title, const QList<QUndoCommand *> &cmds);
 
     Q_INVOKABLE bool loadDatabase(const QUrl &url);
     Q_INVOKABLE QUrl defaultDatabaseUrl() const;

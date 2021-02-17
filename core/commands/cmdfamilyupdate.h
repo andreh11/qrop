@@ -18,7 +18,7 @@
 #ifndef CMDFAMILYUPDATE_H
 #define CMDFAMILYUPDATE_H
 
-#include "CmdUpdate.h"
+#include "cmdupdate.h"
 #include "models/familymodel.h"
 class CORESHARED_EXPORT CmdFamilyUpdate : public CmdUpdate
 {
@@ -28,7 +28,8 @@ public:
     void redo() override;
     void undo() override;
 
-    QString str() const override {
+    QString str() const override
+    {
         return QString("[CmdFamilyUpdate] family_id: %1, %2").arg(m_family_id).arg(CmdUpdate::str());
     }
 
