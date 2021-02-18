@@ -28,6 +28,7 @@ add_library(core SHARED
         commands/cmdcropadddel.cpp
         commands/cmdcropupdate.cpp
         commands/cmdfamily.cpp
+        commands/cmdfamilyadddel.cpp
         commands/cmdfamilyupdate.cpp
         commands/cmdvarietyadddel.cpp
         commands/cmdvarietyupdate.cpp

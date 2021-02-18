@@ -35,9 +35,7 @@ CmdCropAddDel::CmdCropAddDel(int familyId, const QString &name, const QString &c
         m_cropId = qrp::Crop::getNextId();
 
     // Add non visible Crop in Qrop data structure
-    emit s_familySvc->beginAppendCrop(m_familyId);
-    s_familySvc->addCrop(m_cropId, true, name, color, m_familyId);
-    emit s_familySvc->endAppendCrop(m_familyId);
+    s_familySvc->addCrop(m_cropId, true, name, color, m_familyId, true);
 }
 
 CmdCropAddDel::CmdCropAddDel(int familyId, int cropId)

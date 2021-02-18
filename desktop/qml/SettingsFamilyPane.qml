@@ -30,9 +30,7 @@ Pane {
 
     signal close();
 
-    function refresh() {
-//        familyModel.refresh();
-    }
+//    function refresh() {}
 
     Material.elevation: 0
     Material.background: Units.pageColor
@@ -95,10 +93,7 @@ Pane {
 
                 AddFamilyDialog {
                     id: addFamilyDialog
-                    onAccepted: {
-                        Family.add({"family" : cropName, "color" : color});
-                        familyModel.refresh();
-                    }
+                    onAccepted: cppFamily.addNewFamily(cropName, color)
                 }
             }
         }
@@ -108,14 +103,10 @@ Pane {
 
         spacing: 0
         model: cppFamily.modelFamily()
-//        model: FamilyProxyModel {
-//            id: familyModel
-//            qrop: cppQrop
-//        }
+
         delegate: SettingsFamilyDelegate {
             width: paneWidth
             anchors.horizontalCenter: parent.horizontalCenter
-//            onRefresh: familyModel.refreshRow(index)
             firstColumnWidth: pane.firstColumnWidth
             secondColumnWidth: pane.secondColumnWidth
         }

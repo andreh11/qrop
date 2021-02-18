@@ -134,11 +134,7 @@ Column {
                             text: qsTr("All crops and plantings will be lost.")
                         }
 
-                        onAccepted: {
-                            Family.remove(family_id)
-//                            refresh();
-                        }
-
+                        onAccepted: cppFamily.deleteFamily(family_id)
                         onRejected: confirmFamilyDeleteDialog.close()
                     }
                 }

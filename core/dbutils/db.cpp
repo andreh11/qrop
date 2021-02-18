@@ -223,7 +223,7 @@ void Database::loadFamilies(FamilyService *svcFamily)
     while (query.next()) {
         svcFamily->addFamily(query.value(0).toInt(), query.value(1).toBool(),
                              query.value(2).toString(), static_cast<ushort>(query.value(3).toUInt()),
-                             query.value(4).toString());
+                             query.value(4).toString(), false);
     }
     emit svcFamily->endResetFamilyModel();
 }
@@ -237,7 +237,7 @@ void Database::loadCrops(FamilyService *svcFamily)
     }
     while (query.next()) {
         svcFamily->addCrop(query.value(0).toInt(), query.value(1).toBool(), query.value(2).toString(),
-                           query.value(3).toString(), query.value(4).toInt());
+                           query.value(3).toString(), query.value(4).toInt(), false);
     }
 }
 
@@ -252,7 +252,7 @@ void Database::loadVarieties(FamilyService *svcFamily)
     while (query.next()) {
         svcFamily->addVariety(query.value(0).toInt(), query.value(1).toBool(),
                               query.value(2).toString(), query.value(3).toInt(),
-                              query.value(4).toBool(), query.value(5).toInt());
+                              query.value(4).toBool(), query.value(5).toInt(), false);
     }
 }
 
@@ -271,7 +271,7 @@ int Database::execSqlFile(const QString &fileName, const QString &separator)
     // Remove commented out lines to prevent errors.
     fileString.replace(QRegularExpression("--.*?\\n"), " ");
 
-    QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
+    const QStringList stringList = fileString.split(separator, QString::SkipEmptyParts);
 
     QSqlQuery query;
     int nbFailed = 0;

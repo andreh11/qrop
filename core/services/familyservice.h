@@ -38,34 +38,48 @@ public:
         if (id > qrp::SeedCompany::sLastId)
             qrp::SeedCompany::sLastId = id;
     }
-    void addFamily(int id, bool del, const QString &name, ushort interval, const QString &color)
+    void addFamily(int id, bool del, const QString &name, ushort interval, const QString &color,
+                   bool sendSignal)
     {
+        if (sendSignal)
+            emit beginAppendFamily();
         m_families.insert(id, new qrp::Family(id, del, name, interval, color));
+        if (sendSignal)
+            emit endAppendFamily();
         if (id > qrp::Family::sLastId)
             qrp::Family::sLastId = id;
     }
-    void addCrop(int id, bool del, const QString &name, const QString &color, int family_id)
+    void addCrop(int id, bool del, const QString &name, const QString &color, int family_id,
+                 bool sendSignal)
     {
         qrp::Family *fam = family(family_id);
         if (fam) {
+            if (sendSignal)
+                emit beginAppendCrop(family_id);
             qrp::Crop *crop = new qrp::Crop(id, del, name, color, fam);
             m_crops.insert(id, crop);
             fam->addCrop(crop);
+            if (sendSignal)
+                emit endAppendCrop(family_id);
             if (id > qrp::Crop::sLastId)
                 qrp::Crop::sLastId = id;
         }
     }
     void addVariety(int id, bool del, const QString &name, int crop_id, bool is_default,
-                    int seed_company_id)
+                    int seed_company_id, bool sendSignal)
     {
         qrp::Crop *crp = crop(crop_id);
         if (crp) {
+            if (sendSignal)
+                emit beginAppendVariety(crop_id);
             qrp::SeedCompany *seed = seedCompany(seed_company_id);
             qrp::Variety *variety = new qrp::Variety(id, del, name, is_default, crp, seed);
             m_varieties.insert(id, variety);
             crp->addVariety(variety);
             if (id > qrp::Variety::sLastId)
                 qrp::Variety::sLastId = id;
+            if (sendSignal)
+                emit endAppendVariety(crop_id);
         }
     }
 
@@ -77,6 +91,13 @@ public:
         auto it = m_families.cbegin();
         it += row;
         return it.value();
+    }
+    int familyRow(int familyId) const
+    {
+        const auto it = m_families.find(familyId);
+        if (it == m_families.cend())
+            return -1;
+        return static_cast<int>(std::distance(m_families.cbegin(), it));
     }
 
     Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const;
@@ -115,6 +136,9 @@ public:
     Q_INVOKABLE void deleteCrop(int familyId, int cropId);
     Q_INVOKABLE int addNewCrop(int familyId, const QString &name, const QString &color);
 
+    Q_INVOKABLE void deleteFamily(int familyId);
+    Q_INVOKABLE int addNewFamily(const QString &name, const QString &color);
+
 signals:
     // signals for FamilyModel
     void beginResetFamilyModel();
@@ -123,6 +147,10 @@ signals:
     void familyUpdated(int srcRow);
     void cropUpdated(int familyId, int srcRow);
     void varietyUpdated(int cropId, int srcRow);
+
+    void beginAppendFamily();
+    void endAppendFamily();
+    void familyVisible(int familyId);
 
     void beginAppendCrop(int familyId);
     void endAppendCrop(int familyId);

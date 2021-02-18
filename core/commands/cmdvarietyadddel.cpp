@@ -40,9 +40,7 @@ CmdVarietyAddDel::CmdVarietyAddDel(int cropId, const QString &name, int seedComp
         m_varietyId = qrp::Variety::getNextId();
 
     // Add non visible Variety in Qrop data structure
-    emit s_familySvc->beginAppendVariety(m_cropId);
-    s_familySvc->addVariety(m_varietyId, true, name, m_cropId, false, seedCompanyId);
-    emit s_familySvc->endAppendVariety(m_cropId);
+    s_familySvc->addVariety(m_varietyId, true, name, m_cropId, false, seedCompanyId, true);
 }
 
 CmdVarietyAddDel::CmdVarietyAddDel(int cropId, int varietyId)

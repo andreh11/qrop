@@ -44,6 +44,28 @@ FamilyModel2::FamilyModel2(FamilyService *svcFamily, QObject *parent)
         if (idx.isValid())
             emit dataChanged(idx, idx);
     });
+
+    connect(svcFamily, &FamilyService::familyVisible, this, [=](int familyId) {
+        qDebug() << "[familyVisible] familyId: " << familyId;
+        int row = svcFamily->familyRow(familyId);
+        if (row != -1) {
+            QModelIndex idx = index(row);
+            if (idx.isValid()) {
+                qDebug() << "[familyVisible] dataChanged!";
+                emit dataChanged(idx, idx);
+            }
+        }
+    });
+
+    connect(svcFamily, &FamilyService::beginAppendFamily, this, [=]() {
+        qDebug() << "[beginAppendFamily]";
+        int lastRow = rowCount();
+        beginInsertRows(QModelIndex(), lastRow, lastRow);
+    });
+    connect(svcFamily, &FamilyService::endAppendFamily, this, [=]() {
+        qDebug() << "[endAppendFamily]";
+        endInsertRows();
+    });
 }
 
 int FamilyModel2::rowCount(const QModelIndex &parent) const

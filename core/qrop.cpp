@@ -208,6 +208,7 @@ void Qrop::installTranslator()
 
 void Qrop::_dumpSettings()
 {
-    for (const QString &key : m_settings.allKeys())
+    const QStringList keys = m_settings.allKeys();
+    for (const QString &key : keys)
         qDebug() << "[dumpSettings] " << key << ": " << m_settings.value(key);
 }

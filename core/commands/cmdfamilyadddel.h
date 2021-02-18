@@ -15,35 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CMDCROPADDDEL_H
-#define CMDCROPADDDEL_H
+#ifndef CMDFAMILYADDDEL_H
+#define CMDFAMILYADDDEL_H
 
 #include "cmdadddel.h"
 #include "business/family.h"
 
-class CORESHARED_EXPORT CmdCropAddDel : public CmdAddDel
+class CORESHARED_EXPORT CmdFamilyAddDel : public CmdAddDel
 {
 public:
-    CmdCropAddDel(int familyId, const QString &name, const QString &color); //!< for creation
-    CmdCropAddDel(int familyId, int cropId); //!< for deletion
+    CmdFamilyAddDel(const QString &name, const QString &color); //!< for creation
+    CmdFamilyAddDel(int familyId); //!< for deletion
 
     void redo() override;
     void undo() override;
 
     QString str() const override
     {
-        return QString("[CmdCropAddDel] %1 crop %2").arg(m_creation ? "Create" : "Delete").arg(m_name);
+        return QString("[CmdFamilyAddDel] %1 family %2").arg(m_creation ? "Create" : "Delete").arg(m_name);
     }
 
-    int cropId() const { return m_cropId; }
+    int familyId() const { return m_familyId; }
 
 private:
-    void _setCropDelete(qrp::Crop *crop, bool value);
+    void _setFamilyDelete(qrp::Family *family, bool value);
 
 private:
-    const int m_familyId;
-    int m_cropId;
+    int m_familyId;
 };
 
-
-#endif // CMDCROPADDDEL_H
+#endif // CMDFAMILYADDDEL_H
