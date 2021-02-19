@@ -139,14 +139,7 @@ struct CORESHARED_EXPORT Variety {
         r_seedCompanyName,
     };
 
-    inline static const QHash<int, QByteArray> sRoleNames = {
-        { Role::r_name, "variety" },
-        { Role::r_id, "variety_id" },
-        { Role::r_deleted, "deleted" },
-        { Role::r_isDefault, "is_default" },
-        { Role::r_seedCompanyId, "seed_company_id" },
-        { Role::r_seedCompanyName, "seed_company_name" },
-    };
+    static const QHash<int, QByteArray> sRoleNames;
     inline static QString roleName(int role) { return sRoleNames.value(role, ""); }
 
     inline QVariant data(int role) const
