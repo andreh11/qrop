@@ -82,7 +82,8 @@ class CORESHARED_EXPORT VarietyProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int cropId READ cropId WRITE setCropId)
+    Q_PROPERTY(int cropId READ cropId WRITE setCropId NOTIFY cropIdChanged)
+    Q_PROPERTY(QString filterString READ filterString WRITE setFilterString)
 
 public:
     VarietyProxyModel(QObject *parent = nullptr);
@@ -91,8 +92,17 @@ public:
     int cropId() const { return m_model ? m_model->cropId() : -1; }
     void setCropId(int cropId)
     {
-        if (m_model)
+        if (m_model->cropId() != cropId) {
             m_model->setCropId(cropId);
+            emit cropIdChanged();
+        }
+    }
+
+    QString filterString() const { return m_string; };
+    void setFilterString(const QString &str)
+    {
+        m_string = str;
+        setFilterFixedString(m_string);
     }
 
     Q_INVOKABLE int sourceRow(int proxyRow) const
@@ -101,11 +111,18 @@ public:
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
 
+    Q_INVOKABLE int rowId(int row) const;
+    Q_INVOKABLE int idRow(int id) const;
+
+signals:
+    void cropIdChanged();
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     VarietyModel2 *m_model;
+    QString m_string;
 };
 
 #endif // VARIETYMODEL_H

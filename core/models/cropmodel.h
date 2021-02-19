@@ -51,7 +51,7 @@ class CORESHARED_EXPORT CropModel2 : public QAbstractListModel
 public:
     explicit CropModel2(QObject *parent = nullptr);
 
-    enum CropRole { name = Qt::UserRole, color, id, deleted };
+    enum CropRole { name = Qt::UserRole, color, id, deleted, ptr };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -74,6 +74,7 @@ class CORESHARED_EXPORT CropProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(int familyId READ familyId WRITE setFamilyId)
+    Q_PROPERTY(QString filterString READ filterString WRITE setFilterString)
 
 public:
     CropProxyModel(QObject *parent = nullptr);
@@ -82,8 +83,11 @@ public:
     int familyId() const { return m_model ? m_model->familyId() : -1; }
     void setFamilyId(int familyId)
     {
-        if (m_model)
+        if (m_model->familyId() != familyId) {
+            m_string = QString();
+            //        invalidateFilter();
             m_model->setFamilyId(familyId);
+        }
     }
 
     Q_INVOKABLE int sourceRow(int proxyRow) const
@@ -92,11 +96,19 @@ public:
         return proxyIndex.isValid() ? mapToSource(proxyIndex).row() : -1;
     }
 
+    QString filterString() const { return m_string; };
+    void setFilterString(const QString &str)
+    {
+        m_string = str;
+        setFilterFixedString(m_string);
+    }
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     CropModel2 *m_model;
+    QString m_string;
 };
 
 #endif // CROPMODEL_H

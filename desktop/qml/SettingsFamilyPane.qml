@@ -30,8 +30,6 @@ Pane {
 
     signal close();
 
-//    function refresh() {}
-
     Material.elevation: 0
     Material.background: Units.pageColor
     padding: 0

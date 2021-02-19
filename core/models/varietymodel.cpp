@@ -108,8 +108,6 @@ VarietyModel2::VarietyModel2(QObject *parent)
 
 int VarietyModel2::rowCount(const QModelIndex &parent) const
 {
-    // For list models only the root node (an invalid parent) should return the list's size. For all
-    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
     if (parent.isValid() || !m_crop)
         return 0;
 
@@ -171,6 +169,8 @@ VarietyProxyModel::VarietyProxyModel(QObject *parent)
 {
     setSourceModel(m_model);
     setSortRole(VarietyModel2::VarietyRole::name);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
+    setSortLocaleAware(true);
     sort(0, Qt::AscendingOrder);
     setDynamicSortFilter(true);
 #ifdef TRACE_CPP_MODELS
@@ -186,6 +186,24 @@ VarietyProxyModel::~VarietyProxyModel()
 #endif
 }
 
+int VarietyProxyModel::rowId(int row) const
+{
+    QModelIndex proxyIdx = index(row, 0);
+    if (proxyIdx.isValid())
+        return data(proxyIdx, VarietyModel2::VarietyRole::id).toInt();
+    else
+        return -1;
+}
+
+int VarietyProxyModel::idRow(int id) const
+{
+    for (int row = 0; row < rowCount(); ++row) {
+        if (data(index(row, 0), VarietyModel2::VarietyRole::id).toInt() == id)
+            return row;
+    }
+    return -1;
+}
+
 bool VarietyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
@@ -196,5 +214,7 @@ bool VarietyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     qrp::Crop *crop = m_model->crop();
     if (crop->deleted || crop->family->deleted)
         return false;
-    return true;
+    return m_string.isEmpty()
+            ? true
+            : m_model->data(modelIndex, sortRole()).toString().contains(m_string, Qt::CaseInsensitive);
 }

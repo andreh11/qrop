@@ -34,11 +34,20 @@ Rectangle {
     property alias cropField: cropField
     property alias cropId: cropField.selectedId
     property string mode
+    property string newCropName : ""
+    property string newCropColor : ""
+    property int newCropFamilyId : -1
+
+
 
     signal cropSelected()
 
+    function createNewCrop() {
+        return newCropFamilyId != -1;
+    }
+
     function refresh() {
-        cropModel.refresh();
+//        cropModel.refresh();
     }
 
     function reset() {
@@ -53,7 +62,7 @@ Rectangle {
     implicitHeight: Units.dialogHeaderHeight
     width: parent.width
 
-    CropModel {
+    CropProxyModel {
         id: cropModel
     }
 
@@ -119,7 +128,12 @@ Rectangle {
                 addCropDialog.prefill(text)
             }
 
-            onSelectedIdChanged: if (selectedId > 0) cropSelected()
+            onSelectedIdChanged: {
+                if (selectedId > 0) {
+                    cropSelected();
+                    newCropFamilyId = -1;
+                }
+            }
 
             AddCropDialog {
                 id: addCropDialog
@@ -137,12 +151,17 @@ Rectangle {
                 }
 
                 onAccepted: {
-                    var id = Crop.add({"crop" : cropName,
-                                       "family_id" : familyId,
-                                       "color" : color});
-                    cropModel.refresh();
+                    newCropName = cropName;
+                    newCropColor = color;
+                    newCropFamilyId = familyId;
+
+//                    var id = Crop.add({"crop" : cropName,
+//                                       "family_id" : familyId,
+//                                       "color" : color});
+//                    cropModel.refresh();
                     cropField.text = cropName
-                    newId = id
+                    newId = 0
+                    cropSelected();
                 }
 
                 onClosed: cropField.selectedId = newId

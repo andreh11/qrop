@@ -117,8 +117,8 @@ void registerTypes()
     qmlRegisterType<VarietyProxyModel>(packageURI, ver.maj, ver.min, "VarietyProxyModel");
 
     qmlRegisterType<CropModel>(packageURI, ver.maj, ver.min, "CropModel");
-    qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
-    qmlRegisterType<FamilyModel>(packageURI, ver.maj, ver.min, "FamilyModel");
+    //    qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
+    //    qmlRegisterType<FamilyModel>(packageURI, ver.maj, ver.min, "FamilyModel");
     qmlRegisterType<HarvestModel>(packageURI, ver.maj, ver.min, "HarvestModel");
     qmlRegisterType<KeywordModel>(packageURI, ver.maj, ver.min, "KeywordModel");
     qmlRegisterType<LocationModel>(packageURI, ver.maj, ver.min, "LocationModel");
@@ -174,13 +174,13 @@ void registerTypes()
                                           return helpers;
                                       });
 
-    qmlRegisterSingletonType<dbutils::Family>(packageURI, ver.maj, ver.min, "Family",
-                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                                                  Q_UNUSED(engine)
-                                                  Q_UNUSED(scriptEngine)
-                                                  auto *family = new dbutils::Family();
-                                                  return family;
-                                              });
+    //    qmlRegisterSingletonType<dbutils::Family>(packageURI, ver.maj, ver.min, "Family",
+    //                                              [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+    //                                                  Q_UNUSED(engine)
+    //                                                  Q_UNUSED(scriptEngine)
+    //                                                  auto *family = new dbutils::Family();
+    //                                                  return family;
+    //                                              });
 
     qmlRegisterSingletonType<dbutils::Variety>(
             packageURI, ver.maj, ver.min, "Variety",

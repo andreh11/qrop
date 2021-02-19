@@ -48,7 +48,7 @@ Flickable {
     property bool bulkEditMode: false
 
     property bool coherentDates: (plantingType != 2 || dtt > 0) && dtm > 0 && harvestWindow > 0
-    property bool accepted: bulkEditMode || (varietyId > 0 && coherentDates)
+    property bool accepted: bulkEditMode || (varietyId >= 0 && coherentDates)
 
     property int plantingType: directSeedRadio.checked ? 1 : (greenhouseRadio.checked ? 2 : 3)
     readonly property int dtm: Number(plantingType === 1 ? sowDtmField.text : plantingDtmField.text)
@@ -193,6 +193,9 @@ Flickable {
         // TODO: trays to start
     ]
 
+    property string newVarietyName: ""
+    property int newVarietySeedCompanyId: -1
+
     function editedValues() {
         var map = {};
 
@@ -229,7 +232,7 @@ Flickable {
         bulkEditMode = false;
 
         // Refresh models
-        varietyModel.refresh();
+//        varietyModel.refresh();
         locationView.reload();
         keywordModel.refresh();
         unitModel.refresh();
@@ -302,7 +305,7 @@ Flickable {
     function setFormValues(val) {
         if (mode === "edit" && 'variety_id' in val) {
             var varietyId = Number(val['variety_id'])
-            varietyModel.refresh();
+//            varietyModel.refresh();
             varietyField.selectedId = varietyId
             varietyField.text = Variety.varietyName(varietyId)
         }
@@ -561,6 +564,11 @@ Flickable {
         updateFromFirstHarvestDate(false, true);
     }
 
+    function createNewVariety() {
+        return newVarietyName !== "";
+    }
+
+
     focus: true
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
@@ -590,7 +598,7 @@ Flickable {
         property bool showDensityField
     }
 
-    VarietyModel {
+    VarietyProxyModel {
         id: varietyModel
         cropId: control.cropId
 
@@ -627,7 +635,7 @@ Flickable {
 
                 ComboTextField {
                     id: varietyField
-                    enabled: cropId > 0
+                    enabled: cropId >= 0
                     Layout.topMargin: Units.mediumSpacing
                     textRole: function (model) {
                         if (settings.showSeedCompanyBesideVariety) {
@@ -640,7 +648,7 @@ Flickable {
                     addItemText: text ? qsTr('Add new variety "%1"').arg(text) : qsTr("Add new variety")
                     autoOpenPopupOnFocus: mode === "add"
                     onActiveFocusChanged: ensureItemVisible(varietyField)
-                    hasError: selectedId < 1
+                    hasError: selectedId < 0
                     errorText: qsTr("Choose a variety")
 
                     Layout.fillWidth: true
@@ -648,10 +656,19 @@ Flickable {
                     labelText: qsTr("Variety")
 
                     onAddItemClicked: {
+                        print("MB_TRACE: varietyField onAddItemClicked");
                         addVarietyDialog.seedCompanyModel.refresh();
                         addVarietyDialog.open()
                         addVarietyDialog.prefill(text)
                     }
+
+                    onSelectedIdChanged: {
+                        if (selectedId > 0) {
+                            newVarietyName = "";
+                            newVarietySeedCompanyId = -1;
+                        }
+                    }
+
 
                     AddVarietyDialog {
                         id: addVarietyDialog
@@ -661,18 +678,20 @@ Flickable {
                         }
 
                         onAccepted: {
-                            var id = -1
-                            if (seedCompanyId > 0)
-                                id = Variety.add({"variety" : varietyName,
-                                                     "crop_id" : varietyModel.cropId,
-                                                     "seed_company_id" : seedCompanyId});
-                            else
-                                id = Variety.add({"variety" : varietyName,
-                                                     "crop_id" : varietyModel.cropId});
+                            newVarietyName = varietyName;
+                            newVarietySeedCompanyId = seedCompanyId;
+//                            var id = -1
+//                            if (seedCompanyId > 0)
+//                                id = Variety.add({"variety" : varietyName,
+//                                                     "crop_id" : varietyModel.cropId,
+//                                                     "seed_company_id" : seedCompanyId});
+//                            else
+//                                id = Variety.add({"variety" : varietyName,
+//                                                     "crop_id" : varietyModel.cropId});
 
-                            varietyModel.refresh();
+//                            varietyModel.refresh();
                             varietyField.manuallyModified = true
-                            varietyField.selectedId = id
+                            varietyField.selectedId = 0
                             varietyField.text = varietyName
                             inGreenhouseCheckBox.forceActiveFocus()
                         }

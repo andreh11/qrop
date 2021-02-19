@@ -50,10 +50,8 @@ void CropModel::setFamilyId(int familyId)
 }
 
 const QHash<int, QByteArray> CropModel2::sRoleNames = {
-    { CropRole::name, "crop" },
-    { CropRole::color, "color" },
-    { CropRole::id, "crop_id" },
-    { CropRole::deleted, "deleted" },
+    { CropRole::name, "crop" },       { CropRole::color, "color" }, { CropRole::id, "crop_id" },
+    { CropRole::deleted, "deleted" }, { CropRole::ptr, "ptr" },
 };
 
 CropModel2::CropModel2(QObject *parent)
@@ -106,20 +104,19 @@ CropModel2::CropModel2(QObject *parent)
 
 int CropModel2::rowCount(const QModelIndex &parent) const
 {
-    // For list models only the root node (an invalid parent) should return the list's size. For all
-    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
-    if (parent.isValid() || !m_family)
+    if (parent.isValid())
         return 0;
 
-    return m_family->crops.size();
+    return m_family ? m_family->crops.size() : Qrop::instance()->familyService()->numberOfCrops();
 }
 
 QVariant CropModel2::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || !m_family)
+    if (!index.isValid())
         return QVariant();
 
-    qrp::Crop *crop = m_family->crop(index.row());
+    qrp::Crop *crop = m_family ? m_family->crop(index.row())
+                               : Qrop::instance()->familyService()->cropFromIndexRow(index.row());
     if (!crop)
         return QVariant();
 
@@ -132,6 +129,8 @@ QVariant CropModel2::data(const QModelIndex &index, int role) const
         return crop->id;
     case CropRole::deleted:
         return crop->deleted;
+    case CropRole::ptr:
+        return QVariant::fromValue<void *>(static_cast<void *>(crop));
     }
 
     return QVariant();
@@ -155,7 +154,7 @@ void CropModel2::setFamilyId(int familyId)
         m_familyId = -1;
     endResetModel();
 #ifdef TRACE_CPP_MODELS
-    qDebug() << "[CropModel2] set family: " << (m_family ? m_family->name : QString("none"));
+    qDebug() << "[CropModel2] set family: " << (m_family ? m_family->name : tr("none"));
 #endif
 }
 
@@ -165,6 +164,8 @@ CropProxyModel::CropProxyModel(QObject *parent)
 {
     setSourceModel(m_model);
     setSortRole(CropModel2::CropRole::name);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
+    setSortLocaleAware(true);
     sort(0, Qt::AscendingOrder);
     setDynamicSortFilter(true);
 #ifdef TRACE_CPP_MODELS
@@ -187,7 +188,11 @@ bool CropProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
         return false;
     if (m_model->data(modelIndex, CropModel2::deleted).toBool())
         return false;
-    if (m_model->family()->deleted)
+    qrp::Crop *crop =
+            static_cast<qrp::Crop *>(m_model->data(modelIndex, CropModel2::ptr).value<void *>());
+    if (crop && crop->family->deleted)
         return false;
-    return true;
+    return m_string.isEmpty()
+            ? true
+            : m_model->data(modelIndex, sortRole()).toString().contains(m_string, Qt::CaseInsensitive);
 }

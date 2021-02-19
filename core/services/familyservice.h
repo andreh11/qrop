@@ -99,6 +99,14 @@ public:
             return -1;
         return static_cast<int>(std::distance(m_families.cbegin(), it));
     }
+    qrp::Crop *cropFromIndexRow(int row) const
+    {
+        if (row >= m_crops.size())
+            return nullptr;
+        auto it = m_crops.cbegin();
+        it += row;
+        return it.value();
+    }
 
     Q_INVOKABLE QAbstractItemModel *modelSeedCompany() const;
     qrp::SeedCompany *seedCompanyFromIndexRow(int row) const

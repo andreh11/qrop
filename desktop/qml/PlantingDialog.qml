@@ -73,20 +73,36 @@ Dialog {
     }
 
     function applyAccept() {
-        if (mode === "add") {
-            var idList = Planting.addSuccessions(plantingForm.successions,
-                                                 plantingForm.weeksBetween,
-                                                 plantingForm.values);
-            if (!idList.length)
-                return;
+        //MB_TODO: we should only have 1 call of PlantingService to create everything
+        // using a succession of commands in Qrop::pushCommands
+        // depending if we need to create Crop or Variety, the function is overloaded
+        // with different set of parameters
 
-            if (idList.length === 1) {
-                var plantingId = idList[0]
-                for (var locationId in plantingForm.assignedLengthMap) {
-                    var length = plantingForm.assignedLengthMap[locationId]
-                    Location.addPlanting(plantingId, locationId, length)
-                }
-            }
+        let cropId = plantingFormHeader.cropId;
+        if (plantingFormHeader.createNewCrop())
+            cropId = cppFamily.addNewCrop(plantingFormHeader.newCropFamilyId,
+                                          plantingFormHeader.newCropName,
+                                          plantingFormHeader.newCropColor);
+        let varietyId = plantingForm.varietyId;
+        if (plantingForm.createNewVariety())
+            varietyId = cppFamily.addNewVariety(cropId,
+                                                plantingForm.newVarietyName,
+                                                plantingForm.newVarietySeedCompanyId);
+
+        if (mode === "add") {
+//            var idList = Planting.addSuccessions(plantingForm.successions,
+//                                                 plantingForm.weeksBetween,
+//                                                 plantingForm.values);
+//            if (!idList.length)
+//                return;
+
+//            if (idList.length === 1) {
+//                var plantingId = idList[0]
+//                for (var locationId in plantingForm.assignedLengthMap) {
+//                    var length = plantingForm.assignedLengthMap[locationId]
+//                    Location.addPlanting(plantingId, locationId, length)
+//                }
+//            }
             dialog.plantingsAdded(plantingForm.successions)
         } else {
             console.log("Edited values:");
@@ -135,7 +151,11 @@ Dialog {
         mode: dialog.mode
         estimatedYield: plantingForm.estimatedYield
         unitText: plantingForm.unitText
-        onCropSelected: if (mode === "add") plantingForm.varietyField.forceActiveFocus();
+        onCropSelected: {
+            print("plantingFormHeader cropSelected, mode: " + mode)  ;
+            if (mode === "add")
+                plantingForm.varietyField.forceActiveFocus();
+        }
     }
 
     footer: AddEditDialogFooter {
@@ -186,11 +206,15 @@ Dialog {
     }
 
     onApplied: {
+        print("MB_TRACE: PlantingDialog onApplied");
         applyAccept();
         refresh();
         plantingForm.clearAll();
         plantingFormHeader.cropField.forceActiveFocus();
     }
 
-    onAccepted: applyAccept();
+    onAccepted: {
+        print("MB_TRACE: PlantingDialog onAccepted");
+        applyAccept();
+    }
 }

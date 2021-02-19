@@ -70,8 +70,6 @@ FamilyModel2::FamilyModel2(FamilyService *svcFamily, QObject *parent)
 
 int FamilyModel2::rowCount(const QModelIndex &parent) const
 {
-    // For list models only the root node (an invalid parent) should return the list's size. For all
-    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
     if (parent.isValid() || !m_svcFamily)
         return 0;
 
@@ -117,6 +115,8 @@ FamilyProxyModel::FamilyProxyModel(FamilyService *svcFamily, QObject *parent)
 {
     setSourceModel(m_model);
     setSortRole(FamilyModel2::FamilyRole::name);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
+    setSortLocaleAware(true);
     sort(0, Qt::AscendingOrder);
     setDynamicSortFilter(true);
 #ifdef TRACE_CPP_MODELS
