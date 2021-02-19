@@ -47,27 +47,16 @@ private:
 
 class CORESHARED_EXPORT VarietyModel2 : public QAbstractListModel
 {
-    static const QHash<int, QByteArray> sRoleNames;
-
 public:
     explicit VarietyModel2(QObject *parent = nullptr);
-
-    enum VarietyRole {
-        name = Qt::UserRole,
-        isDefault,
-        seedCompanyId,
-        seedCompanyName,
-        id,
-        deleted
-    };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    QHash<int, QByteArray> roleNames() const override { return sRoleNames; }
-    static QString roleName(int r) { return sRoleNames.value(r); }
+    QHash<int, QByteArray> roleNames() const override { return qrp::Variety::sRoleNames; }
+    static QString roleName(int r) { return qrp::Variety::roleName(r); }
 
     qrp::Crop *crop() const { return m_crop; }
     int cropId() const { return m_cropId; }

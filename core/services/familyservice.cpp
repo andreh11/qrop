@@ -139,8 +139,8 @@ void FamilyService::updateVarietyName(int srcRow, int crop_id, int variety_id, c
     qDebug() << "[FamilyService::updateVarietyName] Row: " << srcRow << ", crop_id: " << crop_id
              << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
     if (oldV != newV)
-        Qrop::instance()->pushCommand(new CmdVarietyUpdate(
-                srcRow, crop_id, variety_id, VarietyModel2::VarietyRole::name, oldV, newV));
+        Qrop::instance()->pushCommand(new CmdVarietyUpdate(srcRow, crop_id, variety_id,
+                                                           qrp::Variety::r_name, oldV, newV));
 }
 
 void FamilyService::updateVarietyCompanySeed(int srcRow, int crop_id, int variety_id, int oldV, int newV)
@@ -149,7 +149,7 @@ void FamilyService::updateVarietyCompanySeed(int srcRow, int crop_id, int variet
              << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
     if (oldV != newV)
         Qrop::instance()->pushCommand(new CmdVarietyUpdate(
-                srcRow, crop_id, variety_id, VarietyModel2::VarietyRole::seedCompanyId, oldV, newV));
+                srcRow, crop_id, variety_id, qrp::Variety::r_seedCompanyId, oldV, newV));
 }
 
 void FamilyService::updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool oldV, bool newV)
@@ -158,8 +158,8 @@ void FamilyService::updateVarietyIsDefault(int srcRow, int crop_id, int variety_
              << ", variety_id: " << variety_id << ", oldV : " << oldV << ", newV: " << newV;
 
     if (oldV != newV)
-        Qrop::instance()->pushCommand(new CmdVarietyUpdate(
-                srcRow, crop_id, variety_id, VarietyModel2::VarietyRole::isDefault, oldV, newV));
+        Qrop::instance()->pushCommand(new CmdVarietyUpdate(srcRow, crop_id, variety_id,
+                                                           qrp::Variety::r_isDefault, oldV, newV));
 }
 
 void FamilyService::deleteVariety(int crop_id, int variety_id)

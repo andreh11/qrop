@@ -20,6 +20,8 @@
 #include <QtGlobal>
 #include <QString>
 #include <QList>
+#include <QHash>
+#include <QVariantMap>
 #include "core_global.h"
 namespace qrp {
 
@@ -28,7 +30,7 @@ struct Variety;
 
 struct CORESHARED_EXPORT SeedCompany {
     static int sLastId;
-    static int getNextId() {return ++sLastId;}
+    static int getNextId() { return ++sLastId; }
 
     int id;
     bool deleted;
@@ -45,7 +47,7 @@ struct CORESHARED_EXPORT SeedCompany {
 
 struct CORESHARED_EXPORT Family {
     static int sLastId;
-    static int getNextId() {return ++sLastId;}
+    static int getNextId() { return ++sLastId; }
 
     int id;
     bool deleted;
@@ -78,7 +80,7 @@ struct CORESHARED_EXPORT Family {
 
 struct CORESHARED_EXPORT Crop {
     static int sLastId;
-    static int getNextId() {return ++sLastId;}
+    static int getNextId() { return ++sLastId; }
 
     int id;
     bool deleted;
@@ -110,7 +112,7 @@ struct CORESHARED_EXPORT Crop {
 
 struct CORESHARED_EXPORT Variety {
     static int sLastId;
-    static int getNextId() {return ++sLastId;}
+    static int getNextId() { return ++sLastId; }
 
     int id;
     bool deleted;
@@ -126,6 +128,53 @@ struct CORESHARED_EXPORT Variety {
         , crop(c)
         , seedCompany(s)
     {
+    }
+
+    enum Role {
+        r_name = Qt::DisplayRole,
+        r_id = Qt::UserRole,
+        r_deleted,
+        r_isDefault,
+        r_seedCompanyId,
+        r_seedCompanyName,
+    };
+
+    inline static const QHash<int, QByteArray> sRoleNames = {
+        { Role::r_name, "variety" },
+        { Role::r_id, "variety_id" },
+        { Role::r_deleted, "deleted" },
+        { Role::r_isDefault, "is_default" },
+        { Role::r_seedCompanyId, "seed_company_id" },
+        { Role::r_seedCompanyName, "seed_company_name" },
+    };
+    inline static QString roleName(int role) { return sRoleNames.value(role, ""); }
+
+    inline QVariant data(int role) const
+    {
+        switch (role) {
+        case Role::r_name:
+            return name;
+        case Role::r_id:
+            return id;
+        case Role::r_deleted:
+            return deleted;
+        case Role::r_isDefault:
+            return isDefault;
+        case Role::r_seedCompanyId:
+            return seedCompany ? seedCompany->id : -1;
+        case Role::r_seedCompanyName:
+            return seedCompany ? seedCompany->name : "";
+        default:
+            return QVariant();
+        }
+    }
+
+    inline QVariantMap toMap() const
+    {
+        QVariantMap map;
+        for (auto it = sRoleNames.cbegin(), itEnd = sRoleNames.cend(); it != itEnd; ++it)
+            map.insert(it.value(), data(static_cast<Role>(it.key())));
+        return map;
     }
 };
 

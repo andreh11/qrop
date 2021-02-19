@@ -21,8 +21,8 @@
 #include "version.h"
 #include "services/familyservice.h"
 
-CmdVarietyUpdate::CmdVarietyUpdate(int row, int crop_id, int variety_id,
-                                   VarietyModel2::VarietyRole role, QVariant oldV, QVariant newV)
+CmdVarietyUpdate::CmdVarietyUpdate(int row, int crop_id, int variety_id, qrp::Variety::Role role,
+                                   const QVariant &oldV, const QVariant &newV)
     : CmdUpdate(row, role, oldV, newV)
     , m_crop_id(crop_id)
     , m_variety_id(variety_id)
@@ -42,13 +42,13 @@ void CmdVarietyUpdate::redo()
     }
 
     switch (m_role) {
-    case VarietyModel2::VarietyRole::name:
+    case qrp::Variety::r_name:
         variety->name = m_newValue.toString();
         break;
-    case VarietyModel2::VarietyRole::isDefault:
+    case qrp::Variety::r_isDefault:
         variety->isDefault = m_newValue.toBool();
         break;
-    case VarietyModel2::VarietyRole::seedCompanyId:
+    case qrp::Variety::r_seedCompanyId:
         variety->seedCompany = s_familySvc->seedCompany(m_newValue.toInt());
         break;
     default:
@@ -73,13 +73,13 @@ void CmdVarietyUpdate::undo()
     }
 
     switch (m_role) {
-    case VarietyModel2::VarietyRole::name:
+    case qrp::Variety::r_name:
         variety->name = m_oldValue.toString();
         break;
-    case VarietyModel2::VarietyRole::isDefault:
+    case qrp::Variety::r_isDefault:
         variety->isDefault = m_oldValue.toBool();
         break;
-    case VarietyModel2::VarietyRole::seedCompanyId:
+    case qrp::Variety::r_seedCompanyId:
         variety->seedCompany = s_familySvc->seedCompany(m_oldValue.toInt());
         break;
     default:

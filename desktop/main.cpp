@@ -141,7 +141,7 @@ void registerTypes()
     qmlRegisterType<TimeValidator>(packageURI, ver.maj, ver.min, "TimeValidator");
     qmlRegisterType<TransplantListModel>(packageURI, ver.maj, ver.min, "TransplantListModel");
     qmlRegisterType<UnitModel>(packageURI, ver.maj, ver.min, "UnitModel");
-    qmlRegisterType<VarietyModel>(packageURI, ver.maj, ver.min, "VarietyModel");
+    //    qmlRegisterType<VarietyModel>(packageURI, ver.maj, ver.min, "VarietyModel");
     qmlRegisterType<QQuickTreeModelAdaptor>(packageURI, ver.maj, ver.min, "TreeModelAdaptor");
 
     qmlRegisterSingletonType<Planting>(packageURI, ver.maj, ver.min, "Planting",

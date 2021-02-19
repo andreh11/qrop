@@ -49,15 +49,6 @@ bool VarietyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePare
     return cropId == m_cropId && SortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }
 
-const QHash<int, QByteArray> VarietyModel2::sRoleNames = {
-    { VarietyRole::name, "variety" },
-    { VarietyRole::isDefault, "is_default" },
-    { VarietyRole::seedCompanyId, "seed_company_id" },
-    { VarietyRole::seedCompanyName, "seed_company_name" },
-    { VarietyRole::id, "variety_id" },
-    { VarietyRole::deleted, "deleted" },
-};
-
 VarietyModel2::VarietyModel2(QObject *parent)
     : QAbstractListModel(parent)
     , m_cropId(-1)
@@ -120,25 +111,10 @@ QVariant VarietyModel2::data(const QModelIndex &index, int role) const
         return QVariant();
 
     qrp::Variety *variety = m_crop->variety(index.row());
-    if (!variety)
+    if (variety)
+        return variety->data(role);
+    else
         return QVariant();
-
-    switch (role) {
-    case VarietyRole::name:
-        return variety->name;
-    case VarietyRole::isDefault:
-        return variety->isDefault;
-    case VarietyRole::seedCompanyId:
-        return variety->seedCompany ? variety->seedCompany->id : -1;
-    case VarietyRole::seedCompanyName:
-        return variety->seedCompany ? variety->seedCompany->name : QString();
-    case VarietyRole::id:
-        return variety->id;
-    case VarietyRole::deleted:
-        return variety->deleted;
-    }
-
-    return QVariant();
 }
 
 Qt::ItemFlags VarietyModel2::flags(const QModelIndex &index) const
@@ -168,7 +144,7 @@ VarietyProxyModel::VarietyProxyModel(QObject *parent)
     , m_model(new VarietyModel2)
 {
     setSourceModel(m_model);
-    setSortRole(VarietyModel2::VarietyRole::name);
+    setSortRole(qrp::Variety::r_name);
     setSortCaseSensitivity(Qt::CaseInsensitive);
     setSortLocaleAware(true);
     sort(0, Qt::AscendingOrder);
@@ -190,7 +166,7 @@ int VarietyProxyModel::rowId(int row) const
 {
     QModelIndex proxyIdx = index(row, 0);
     if (proxyIdx.isValid())
-        return data(proxyIdx, VarietyModel2::VarietyRole::id).toInt();
+        return data(proxyIdx, qrp::Variety::r_id).toInt();
     else
         return -1;
 }
@@ -198,7 +174,7 @@ int VarietyProxyModel::rowId(int row) const
 int VarietyProxyModel::idRow(int id) const
 {
     for (int row = 0; row < rowCount(); ++row) {
-        if (data(index(row, 0), VarietyModel2::VarietyRole::id).toInt() == id)
+        if (data(index(row, 0), qrp::Variety::r_id).toInt() == id)
             return row;
     }
     return -1;
@@ -209,7 +185,7 @@ bool VarietyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     QModelIndex modelIndex = m_model->index(sourceRow, 0, sourceParent);
     if (!modelIndex.isValid())
         return false;
-    if (m_model->data(modelIndex, VarietyModel2::deleted).toBool())
+    if (m_model->data(modelIndex, qrp::Variety::r_deleted).toBool())
         return false;
     qrp::Crop *crop = m_model->crop();
     if (crop->deleted || crop->family->deleted)

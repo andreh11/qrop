@@ -23,8 +23,8 @@
 class CORESHARED_EXPORT CmdVarietyUpdate : public CmdUpdate
 {
 public:
-    CmdVarietyUpdate(int row, int crop_id, int variety_id, VarietyModel2::VarietyRole role,
-                     QVariant oldV, QVariant newV);
+    CmdVarietyUpdate(int row, int crop_id, int variety_id, qrp::Variety::Role role,
+                     const QVariant &oldV, const QVariant &newV);
 
     void redo() override;
     void undo() override;

@@ -90,13 +90,12 @@ void CmdVarietyAddDel::undo()
             _setVarietyDelete(variety, false);
     }
 }
-
 void CmdVarietyAddDel::_setVarietyDelete(qrp::Variety *variety, bool value)
 {
     variety->deleted = value;
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Variety sql;
-        sql.update(m_varietyId, { { VarietyModel2::roleName(VarietyModel2::deleted), value } });
+        sql.update(m_varietyId, { { qrp::Variety::roleName(qrp::Variety::r_deleted), value } });
     }
     emit s_familySvc->varietyVisible(m_cropId, m_varietyId);
 }
