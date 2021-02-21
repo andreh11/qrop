@@ -1234,8 +1234,8 @@
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante&#xa0;: %L1&#xa0;m</numerusform>
-            <numerusform>Longueur restante&#xa0;: %L1&#xa0;m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
         </translation>
     </message>
     <message>
@@ -1707,32 +1707,32 @@
     <message>
         <location filename="../core/dbutils/planting.cpp" line="799"/>
         <source>Wrong year (must be between 1000 and 3000)</source>
-        <translation type="unfinished">(</translation>
+        <translation>Mauvaise année (doit être comprise entre 1000 et 3000)</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="804"/>
         <source>Can&apos;t open csv file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier CSV %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="900"/>
         <source>[sdate] Bad date format, should be week number: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[sdate] Mauvais format de date, devrait être un numéro de semaine : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="906"/>
         <source>[pdate] Bad date format, should be week number: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[pdate] Mauvais format de date, devrait être un numéro de semaine : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="913"/>
         <source>[bhdate] Bad date format, should be week number: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[bhdate] Mauvais format de date, devrait être un numéro de semaine : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="919"/>
         <source>[ehdate] Bad date format, should be week number: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[ehdate] Mauvais format de date, devrait être un numéro de semaine : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="931"/>
@@ -1747,7 +1747,7 @@
     <message>
         <location filename="../core/dbutils/planting.cpp" line="1010"/>
         <source>Can&apos;t write file: %1</source>
-        <translation type="unfinished">Impossible d&apos;écrire le fichier : %1</translation>
+        <translation>Impossible d&apos;écrire le fichier : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="1095"/>
@@ -2010,8 +2010,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1087"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante&#xa0;: %L1 m</numerusform>
-            <numerusform>Longueur restante&#xa0;: %L1 &#xa0;m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1  m</numerusform>
         </translation>
     </message>
     <message>
@@ -2086,8 +2086,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1221"/>
         <source>Quantity: %L1 g</source>
         <translation>
-            <numerusform>Quantité&#xa0;: %L1&#xa0;g</numerusform>
-            <numerusform>Quantité&#xa0;: %L1&#xa0;g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
         </translation>
     </message>
     <message>
@@ -2691,7 +2691,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="152"/>
         <source>They must be in the folder:</source>
-        <translation>Ils doivent se trouver dans le répertoire </translation>
+        <translation>Ils doivent se trouver dans le répertoire :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="169"/>
@@ -3470,7 +3470,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="117"/>
         <source>They should all be copied in the following folder</source>
-        <translation>Elle doivent toutes être copiées dans le répertoire suivant : </translation>
+        <translation>Elles doivent toutes être copiées dans le répertoire suivant :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="126"/>
@@ -3490,7 +3490,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="129"/>
         <source>They must all be in the folder:</source>
-        <translation>Elles doivent toutes se trouver dans le répertoire suivant : </translation>
+        <translation>Elles doivent toutes se trouver dans le répertoire suivant :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="138"/>
