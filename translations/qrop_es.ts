@@ -1809,7 +1809,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="640"/>
         <source>Add new variety &quot;%1&quot;</source>
-        <translation>Añadir una nueva variedad &quot;%1&quot;</translation>
+        <translation>Añadir la nueva variedad &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="640"/>
