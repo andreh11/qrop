@@ -286,48 +286,48 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="238"/>
         <source>No tasks done, due or overdue for week %1</source>
-        <translation>No hay tareas hechas, previstas o atrasadas en la semana %1</translation>
+        <translation>Ninguna tarea acabada, prevista o atrasada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="240"/>
         <source>No tasks done or due for week %1</source>
-        <translation>No hay tareas hechas o previstas en la semana %1</translation>
+        <translation>Ninguna tarea acabada o prevista en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="242"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation>Ninguna tarea completada o atrasada para la semana %1</translation>
+        <translation>Ninguna tarea completada o atrasada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="244"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="246"/>
         <source>No tasks due or overdue for week %1</source>
-        <translation>Ninguna tarea prevista o retrasada para la semana %1</translation>
+        <translation>Ninguna tarea prevista o atrasada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="248"/>
         <source>No tasks done week %1</source>
-        <translation type="unfinished">Ninguna tarea completada para la semana %1</translation>
+        <translation>Ninguna tarea acabada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="250"/>
         <source>No task due for week %1</source>
-        <translation>Ninguna tarea prevista para la semana %1</translation>
+        <translation>Ninguna tarea prevista en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="252"/>
         <source>No tasks overdue for week %1</source>
-        <translation>Ninguna tarea retrasada para la semana %1</translation>
+        <translation>Ninguna tarea atrasada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="254"/>
         <source>No tasks to show</source>
-        <translation type="unfinished">No hay ninguna tarea para mostrar</translation>
+        <translation>Ninguna tarea que mostrar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="266"/>
         <source>Check at least one type to see them</source>
-        <translation type="unfinished">Selecciona al menos un tipo de tareas para verlas</translation>
+        <translation>Selecciona al menos un tipo de tarea para verla</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="274"/>
@@ -337,7 +337,7 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="353"/>
         <source>Please type a name for the PDF.</source>
-        <translation>Entra un nombre para el PDF por favor.</translation>
+        <translation>Introduce un nombre para el PDF por favor.</translation>
     </message>
     <message>
         <source>No tasks to show. Check at least one type to see them!</source>
@@ -472,7 +472,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="35"/>
         <source>Crop</source>
-        <translation type="unfinished">Especie</translation>
+        <translation>Cultivo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="40"/>
@@ -492,7 +492,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="55"/>
         <source>Total Revenue</source>
-        <translation>Ingresos total</translation>
+        <translation>Ingresos totales</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
@@ -532,7 +532,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="183"/>
         <source>Estimated revenue</source>
-        <translation>Estimación de ingresos</translation>
+        <translation>Ingresos previstos</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="184"/>
@@ -578,12 +578,12 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation>Modificar</translation>
+        <translation>Editar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
         <source>Unassign</source>
-        <translation type="unfinished">Quitar</translation>
+        <translation>Desasignar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="173"/>
@@ -596,7 +596,7 @@
     <message>
         <location filename="../desktop/qml/CropRevenueChart.qml" line="25"/>
         <source>Crop revenue distribution (in €)</source>
-        <translation type="unfinished">Distribución de los ingresos (en €)</translation>
+        <translation>Distribución de los ingresos por cultivo (en €)</translation>
     </message>
 </context>
 <context>
@@ -607,7 +607,7 @@
         <location filename="../core/dbutils/db.cpp" line="266"/>
         <location filename="../core/dbutils/db.cpp" line="267"/>
         <source>Alliaceae</source>
-        <translation>Aliáceas</translation>
+        <translation>Alliaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="255"/>
@@ -616,7 +616,7 @@
         <location filename="../core/dbutils/db.cpp" line="270"/>
         <location filename="../core/dbutils/db.cpp" line="271"/>
         <source>Apiaceae</source>
-        <translation>Apiáceas</translation>
+        <translation>Apiaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="256"/>
@@ -624,7 +624,7 @@
         <location filename="../core/dbutils/db.cpp" line="273"/>
         <location filename="../core/dbutils/db.cpp" line="274"/>
         <source>Asteraceae</source>
-        <translation>Asteráceas</translation>
+        <translation>Asteraceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="257"/>
@@ -636,7 +636,7 @@
         <location filename="../core/dbutils/db.cpp" line="280"/>
         <location filename="../core/dbutils/db.cpp" line="281"/>
         <source>Brassicaceae</source>
-        <translation>Brasicáceas</translation>
+        <translation>Brassicaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="258"/>
@@ -644,7 +644,7 @@
         <location filename="../core/dbutils/db.cpp" line="283"/>
         <location filename="../core/dbutils/db.cpp" line="284"/>
         <source>Chenopodiaceae</source>
-        <translation>Chenopodiáceas</translation>
+        <translation>Chenopodiaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="259"/>
@@ -654,7 +654,7 @@
         <location filename="../core/dbutils/db.cpp" line="288"/>
         <location filename="../core/dbutils/db.cpp" line="289"/>
         <source>Cucurbitaceae</source>
-        <translation>Cucurbitáceas</translation>
+        <translation>Cucurbitaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="260"/>
@@ -662,7 +662,7 @@
         <location filename="../core/dbutils/db.cpp" line="291"/>
         <location filename="../core/dbutils/db.cpp" line="292"/>
         <source>Fabaceae</source>
-        <translation>Fabáceas</translation>
+        <translation>Fabaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="261"/>
@@ -671,13 +671,13 @@
         <location filename="../core/dbutils/db.cpp" line="295"/>
         <location filename="../core/dbutils/db.cpp" line="296"/>
         <source>Solanaceae</source>
-        <translation>Solanáceas</translation>
+        <translation>Solanaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="262"/>
         <location filename="../core/dbutils/db.cpp" line="297"/>
         <source>Valerianaceae</source>
-        <translation>Valerianáceas</translation>
+        <translation>Valerianaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="265"/>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="275"/>
         <source>Cabbage</source>
-        <translation>Repollo</translation>
+        <translation>Col</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="276"/>
@@ -807,7 +807,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="290"/>
         <source>Bean</source>
-        <translation>Alubia &amp; Judía</translation>
+        <translation>Alubia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="291"/>
@@ -852,12 +852,12 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="300"/>
         <source>Fertilize and Amend</source>
-        <translation type="unfinished">Fertilización y acondicionamiento</translation>
+        <translation>Fertilizar y enmendar</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="301"/>
         <source>Irrigate</source>
-        <translation>Irrigación</translation>
+        <translation>Irrigar</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="302"/>
@@ -877,7 +877,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="305"/>
         <source>Row Cover and Mulch</source>
-        <translation>Mantillo o Acolchado</translation>
+        <translation>Ocultación del bancal y acolchado</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="306"/>
@@ -897,12 +897,12 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="309"/>
         <source>Weed</source>
-        <translation type="unfinished">Desmalezar</translation>
+        <translation>Desherbar</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="311"/>
         <source>kilogram</source>
-        <translation>kilogramo</translation>
+        <translation>kilo</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="311"/>
@@ -917,17 +917,17 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="312"/>
         <source>bn</source>
-        <translation type="unfinished">mnj</translation>
+        <translation>mn</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="313"/>
         <source>head</source>
-        <translation type="unfinished">pieza</translation>
+        <translation>cabeza</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="313"/>
         <source>hd</source>
-        <translation type="unfinished">pz</translation>
+        <translation>cb</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="316"/>
@@ -947,7 +947,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="339"/>
         <source>Transplant</source>
-        <translation>Trasplante</translation>
+        <translation>Trasplantar</translation>
     </message>
     <message>
         <source>Transplant sow</source>
