@@ -2163,7 +2163,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1298"/>
         <source>Price/</source>
-        <translation type="unfinished"></translation>
+        <translation>Prètz/</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1307"/>
@@ -2300,7 +2300,7 @@
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="63"/>
         <source>Bulk edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificacion per lòt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="110"/>
@@ -2315,7 +2315,7 @@
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="112"/>
         <source>Choose a crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Causir ua especia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="155"/>
