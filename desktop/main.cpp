@@ -333,12 +333,13 @@ int main(int argc, char *argv[])
 
     //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url("qrc:/qml/Qrop.qml");
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
-                     [url](QObject *obj, const QUrl &objUrl) {
-                         if (!obj && url == objUrl)
-                             QCoreApplication::exit(-1);
-                     },
-                     Qt::QueuedConnection);
+    QObject::connect(
+            &engine, &QQmlApplicationEngine::objectCreated, &app,
+            [url](QObject *obj, const QUrl &objUrl) {
+                if (!obj && url == objUrl)
+                    QCoreApplication::exit(-1);
+            },
+            Qt::QueuedConnection);
     engine.load(url);
     engine.addImageProvider("pictures", new QrpImageProvider());
 

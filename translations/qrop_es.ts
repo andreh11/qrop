@@ -8,24 +8,53 @@
         <translation type="vanished">À propos de Qrop</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="75"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="98"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
         <translation>Una herramienta multi-plataforma para organizar cultivos y mantener registros. Hecho por y para agricultores, con la ayuda de la cooperativa francesa &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="100"/>
-        <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Esta aplicación NO TIENE NINGUNA GARANTÍA. Para más detalles visite &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 32&lt;/a&gt;.</translation>
+        <location filename="../desktop/qml/AboutDialog.qml" line="114"/>
+        <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
+        <location filename="../desktop/qml/AboutDialog.qml" line="208"/>
+        <source>News</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
+        <source>You need an internet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/AboutDialog.qml" line="147"/>
+        <source>ReTry fetching News</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/AboutDialog.qml" line="170"/>
+        <source>Mark news as read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/AboutDialog.qml" line="222"/>
+        <source>Debug information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
+        <translation type="vanished">Esta aplicación NO TIENE NINGUNA GARANTÍA. Para más detalles visite &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 32&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/AboutDialog.qml" line="204"/>
         <source>Credits</source>
         <translation>Créditos</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutDialog.qml" line="142"/>
         <source>Debug informations</source>
-        <translation>Depuración de la aplicación</translation>
+        <translation type="vanished">Depuración de la aplicación</translation>
     </message>
 </context>
 <context>
@@ -280,6 +309,7 @@
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="207"/>
+        <location filename="../desktop/qml/CalendarPage.qml" line="354"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
@@ -604,83 +634,83 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="254"/>
         <location filename="../core/dbutils/db.cpp" line="265"/>
-        <location filename="../core/dbutils/db.cpp" line="266"/>
         <location filename="../core/dbutils/db.cpp" line="267"/>
+        <location filename="../core/dbutils/db.cpp" line="269"/>
         <source>Alliaceae</source>
         <translation>Aliáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="255"/>
-        <location filename="../core/dbutils/db.cpp" line="268"/>
-        <location filename="../core/dbutils/db.cpp" line="269"/>
-        <location filename="../core/dbutils/db.cpp" line="270"/>
         <location filename="../core/dbutils/db.cpp" line="271"/>
+        <location filename="../core/dbutils/db.cpp" line="273"/>
+        <location filename="../core/dbutils/db.cpp" line="275"/>
+        <location filename="../core/dbutils/db.cpp" line="277"/>
         <source>Apiaceae</source>
         <translation>Apiáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="256"/>
-        <location filename="../core/dbutils/db.cpp" line="272"/>
-        <location filename="../core/dbutils/db.cpp" line="273"/>
-        <location filename="../core/dbutils/db.cpp" line="274"/>
+        <location filename="../core/dbutils/db.cpp" line="279"/>
+        <location filename="../core/dbutils/db.cpp" line="281"/>
+        <location filename="../core/dbutils/db.cpp" line="283"/>
         <source>Asteraceae</source>
         <translation>Asteráceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="257"/>
-        <location filename="../core/dbutils/db.cpp" line="275"/>
-        <location filename="../core/dbutils/db.cpp" line="276"/>
-        <location filename="../core/dbutils/db.cpp" line="277"/>
-        <location filename="../core/dbutils/db.cpp" line="278"/>
-        <location filename="../core/dbutils/db.cpp" line="279"/>
-        <location filename="../core/dbutils/db.cpp" line="280"/>
-        <location filename="../core/dbutils/db.cpp" line="281"/>
+        <location filename="../core/dbutils/db.cpp" line="285"/>
+        <location filename="../core/dbutils/db.cpp" line="287"/>
+        <location filename="../core/dbutils/db.cpp" line="289"/>
+        <location filename="../core/dbutils/db.cpp" line="291"/>
+        <location filename="../core/dbutils/db.cpp" line="293"/>
+        <location filename="../core/dbutils/db.cpp" line="295"/>
+        <location filename="../core/dbutils/db.cpp" line="297"/>
         <source>Brassicaceae</source>
         <translation>Brasicáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="258"/>
-        <location filename="../core/dbutils/db.cpp" line="282"/>
-        <location filename="../core/dbutils/db.cpp" line="283"/>
-        <location filename="../core/dbutils/db.cpp" line="284"/>
+        <location filename="../core/dbutils/db.cpp" line="299"/>
+        <location filename="../core/dbutils/db.cpp" line="301"/>
+        <location filename="../core/dbutils/db.cpp" line="303"/>
         <source>Chenopodiaceae</source>
         <translation>Chenopodiáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="259"/>
-        <location filename="../core/dbutils/db.cpp" line="285"/>
-        <location filename="../core/dbutils/db.cpp" line="286"/>
-        <location filename="../core/dbutils/db.cpp" line="287"/>
-        <location filename="../core/dbutils/db.cpp" line="288"/>
-        <location filename="../core/dbutils/db.cpp" line="289"/>
+        <location filename="../core/dbutils/db.cpp" line="305"/>
+        <location filename="../core/dbutils/db.cpp" line="307"/>
+        <location filename="../core/dbutils/db.cpp" line="309"/>
+        <location filename="../core/dbutils/db.cpp" line="311"/>
+        <location filename="../core/dbutils/db.cpp" line="313"/>
         <source>Cucurbitaceae</source>
         <translation>Cucurbitáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="260"/>
-        <location filename="../core/dbutils/db.cpp" line="290"/>
-        <location filename="../core/dbutils/db.cpp" line="291"/>
-        <location filename="../core/dbutils/db.cpp" line="292"/>
+        <location filename="../core/dbutils/db.cpp" line="315"/>
+        <location filename="../core/dbutils/db.cpp" line="317"/>
+        <location filename="../core/dbutils/db.cpp" line="319"/>
         <source>Fabaceae</source>
         <translation>Fabáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="261"/>
-        <location filename="../core/dbutils/db.cpp" line="293"/>
-        <location filename="../core/dbutils/db.cpp" line="294"/>
-        <location filename="../core/dbutils/db.cpp" line="295"/>
-        <location filename="../core/dbutils/db.cpp" line="296"/>
+        <location filename="../core/dbutils/db.cpp" line="321"/>
+        <location filename="../core/dbutils/db.cpp" line="323"/>
+        <location filename="../core/dbutils/db.cpp" line="325"/>
+        <location filename="../core/dbutils/db.cpp" line="327"/>
         <source>Solanaceae</source>
         <translation>Solanáceas</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="262"/>
-        <location filename="../core/dbutils/db.cpp" line="297"/>
+        <location filename="../core/dbutils/db.cpp" line="329"/>
         <source>Valerianaceae</source>
         <translation>Valerianáceas</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="265"/>
+        <location filename="../core/dbutils/db.cpp" line="264"/>
         <source>Garlic</source>
         <translation>Ajo</translation>
     </message>
@@ -690,262 +720,262 @@
         <translation>Cebolla</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="267"/>
+        <location filename="../core/dbutils/db.cpp" line="268"/>
         <source>Leek</source>
         <translation>Puerro</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="268"/>
+        <location filename="../core/dbutils/db.cpp" line="270"/>
         <source>Carrot</source>
         <translation>Zanahoria</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="269"/>
+        <location filename="../core/dbutils/db.cpp" line="272"/>
         <source>Celery</source>
         <translation>Apio</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="270"/>
+        <location filename="../core/dbutils/db.cpp" line="274"/>
         <source>Fennel</source>
         <translation>Hinojo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="271"/>
+        <location filename="../core/dbutils/db.cpp" line="276"/>
         <source>Parsnip</source>
         <translation>Chirivía</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="272"/>
+        <location filename="../core/dbutils/db.cpp" line="278"/>
         <source>Chicory</source>
         <translation>Achicoria</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="273"/>
+        <location filename="../core/dbutils/db.cpp" line="280"/>
         <source>Belgian endive</source>
         <translation>Endibia</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="274"/>
+        <location filename="../core/dbutils/db.cpp" line="282"/>
         <source>Lettuce</source>
         <translation>Lechuga</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="275"/>
+        <location filename="../core/dbutils/db.cpp" line="284"/>
         <source>Cabbage</source>
         <translation>Repollo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="276"/>
+        <location filename="../core/dbutils/db.cpp" line="286"/>
         <source>Brussel Sprouts</source>
         <translation>Coles de Bruselas</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="277"/>
+        <location filename="../core/dbutils/db.cpp" line="288"/>
         <source>Kohlrabi</source>
         <translation>Colinabo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="278"/>
+        <location filename="../core/dbutils/db.cpp" line="290"/>
         <source>Cauliflower</source>
         <translation>Coliflor</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="279"/>
+        <location filename="../core/dbutils/db.cpp" line="292"/>
         <source>Broccoli</source>
         <translation>Brócoli</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="280"/>
+        <location filename="../core/dbutils/db.cpp" line="294"/>
         <source>Turnip</source>
         <translation>Nabo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="281"/>
+        <location filename="../core/dbutils/db.cpp" line="296"/>
         <source>Radish</source>
         <translation>Rábano</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="282"/>
+        <location filename="../core/dbutils/db.cpp" line="298"/>
         <source>Beetroot</source>
         <translation>Remolacha</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="283"/>
+        <location filename="../core/dbutils/db.cpp" line="300"/>
         <source>Chard</source>
         <translation>Acelga</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="284"/>
+        <location filename="../core/dbutils/db.cpp" line="302"/>
         <source>Spinach</source>
         <translation>Espinaca</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="285"/>
+        <location filename="../core/dbutils/db.cpp" line="304"/>
         <source>Cucumber</source>
         <translation>Pepino</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="286"/>
+        <location filename="../core/dbutils/db.cpp" line="306"/>
         <source>Zucchini</source>
         <translation>Calabacín</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="287"/>
+        <location filename="../core/dbutils/db.cpp" line="308"/>
         <source>Melon</source>
         <translation>Melón</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="288"/>
+        <location filename="../core/dbutils/db.cpp" line="310"/>
         <source>Watermelon</source>
         <translation>Sandía</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="289"/>
+        <location filename="../core/dbutils/db.cpp" line="312"/>
         <source>Winter squash</source>
         <translation>Calabaza</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="290"/>
+        <location filename="../core/dbutils/db.cpp" line="314"/>
         <source>Bean</source>
         <translation>Alubia &amp; Judía</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="291"/>
+        <location filename="../core/dbutils/db.cpp" line="316"/>
         <source>Fava bean</source>
         <translation>Haba</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="292"/>
+        <location filename="../core/dbutils/db.cpp" line="318"/>
         <source>Pea</source>
         <translation>Guisante</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="293"/>
+        <location filename="../core/dbutils/db.cpp" line="320"/>
         <source>Eggplant</source>
         <translation>Berenjena</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="294"/>
+        <location filename="../core/dbutils/db.cpp" line="322"/>
         <source>Pepper</source>
         <translation>Pimiento</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="295"/>
+        <location filename="../core/dbutils/db.cpp" line="324"/>
         <source>Potatoe</source>
         <translation>Patata</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="296"/>
+        <location filename="../core/dbutils/db.cpp" line="326"/>
         <source>Tomato</source>
         <translation>Tomate</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="297"/>
+        <location filename="../core/dbutils/db.cpp" line="328"/>
         <source>Mâche</source>
         <translation>Canónigo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="299"/>
+        <location filename="../core/dbutils/db.cpp" line="331"/>
         <source>Cultivation and Tillage</source>
         <translation type="unfinished">Trabajo del suelo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="300"/>
+        <location filename="../core/dbutils/db.cpp" line="332"/>
         <source>Fertilize and Amend</source>
         <translation type="unfinished">Fertilización y acondicionamiento</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="301"/>
+        <location filename="../core/dbutils/db.cpp" line="333"/>
         <source>Irrigate</source>
         <translation>Irrigación</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="302"/>
+        <location filename="../core/dbutils/db.cpp" line="334"/>
         <source>Maintenance</source>
         <translation type="unfinished">Mantenimiento</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="303"/>
+        <location filename="../core/dbutils/db.cpp" line="335"/>
         <source>Pest and Disease</source>
         <translation>Parásitos y enfermedades</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="304"/>
+        <location filename="../core/dbutils/db.cpp" line="336"/>
         <source>Prune</source>
         <translation>Podar</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="305"/>
+        <location filename="../core/dbutils/db.cpp" line="337"/>
         <source>Row Cover and Mulch</source>
         <translation>Mantillo o Acolchado</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="306"/>
+        <location filename="../core/dbutils/db.cpp" line="338"/>
         <source>Stale Bed</source>
         <translation>Falsa siembra</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="307"/>
+        <location filename="../core/dbutils/db.cpp" line="339"/>
         <source>Thin</source>
         <translation type="unfinished">Clarear</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="308"/>
+        <location filename="../core/dbutils/db.cpp" line="340"/>
         <source>Trellis</source>
         <translation type="unfinished">Enrejado</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="309"/>
+        <location filename="../core/dbutils/db.cpp" line="341"/>
         <source>Weed</source>
         <translation type="unfinished">Desmalezar</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="311"/>
+        <location filename="../core/dbutils/db.cpp" line="343"/>
         <source>kilogram</source>
         <translation>kilogramo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="311"/>
+        <location filename="../core/dbutils/db.cpp" line="344"/>
         <source>kg</source>
         <translation>kg</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="312"/>
+        <location filename="../core/dbutils/db.cpp" line="345"/>
         <source>bunch</source>
         <translation>manojo</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="312"/>
+        <location filename="../core/dbutils/db.cpp" line="346"/>
         <source>bn</source>
         <translation type="unfinished">mnj</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="313"/>
+        <location filename="../core/dbutils/db.cpp" line="347"/>
         <source>head</source>
         <translation type="unfinished">pieza</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="313"/>
+        <location filename="../core/dbutils/db.cpp" line="348"/>
         <source>hd</source>
         <translation type="unfinished">pz</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="316"/>
+        <location filename="../core/dbutils/db.cpp" line="350"/>
         <source>Unknown company</source>
         <translation>Proveedor desconocido</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="337"/>
+        <location filename="../core/dbutils/db.cpp" line="383"/>
         <source>Direct sow</source>
         <translation>Siembra directa</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="338"/>
+        <location filename="../core/dbutils/db.cpp" line="385"/>
         <source>Greenhouse sow</source>
         <translation type="unfinished">Siembra en invernadero</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/db.cpp" line="339"/>
+        <location filename="../core/dbutils/db.cpp" line="387"/>
         <source>Transplant</source>
         <translation>Trasplante</translation>
     </message>
@@ -1093,6 +1123,11 @@
         <translation>Por favor, entra un nombre para el PDF.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/HarvestsPage.qml" line="493"/>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="91"/>
         <source>No harvests for week %1</source>
         <translation>Ninguna cosecha para la semana %1</translation>
@@ -1140,7 +1175,7 @@
     <message>
         <location filename="../qml/HorizontalBarView.qml" line="19"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1174,47 +1209,47 @@
 <context>
     <name>LocationDialog</name>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="108"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="126"/>
         <source>Add Locations</source>
         <translation>Añadir emplazamientos</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="108"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="126"/>
         <source>Edit Locations</source>
         <translation>Modificar emplazamientos</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="132"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="150"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="143"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="163"/>
         <source>Length</source>
         <translation>Longitud</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="144"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="164"/>
         <source>bed m</source>
         <translation>m bancal</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="160"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="180"/>
         <source>Width</source>
         <translation>Ancho</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="161"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="181"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="180"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="200"/>
         <source>Quantity</source>
         <translation>Cantidad</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LocationDialog.qml" line="197"/>
+        <location filename="../desktop/qml/LocationDialog.qml" line="217"/>
         <source>Greenhouse</source>
         <translation>Invernadero</translation>
     </message>
@@ -1443,6 +1478,11 @@
         <translation>Entra un nombre para el PDF por favor.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/LocationsPage.qml" line="514"/>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
+    </message>
+    <message>
         <source>Show unassigned plantings</source>
         <translation type="vanished">Afficher les séries non placées</translation>
     </message>
@@ -1498,17 +1538,17 @@
 <context>
     <name>MobileFileDialog</name>
     <message>
-        <location filename="../desktop/qml/MobileFileDialog.qml" line="37"/>
+        <location filename="../desktop/qml/MobileFileDialog.qml" line="25"/>
         <source>Filename can&apos;t be empty</source>
         <translation>El nombre del archivo no debe dejarse vacío</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MobileFileDialog.qml" line="56"/>
+        <location filename="../desktop/qml/MobileFileDialog.qml" line="69"/>
         <source>OK</source>
         <translation>De acuerdo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MobileFileDialog.qml" line="62"/>
+        <location filename="../desktop/qml/MobileFileDialog.qml" line="75"/>
         <source>Cancel</source>
         <translation>Deshacer</translation>
     </message>
@@ -1705,67 +1745,71 @@
 <context>
     <name>Planting</name>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="799"/>
+        <location filename="../core/dbutils/planting.cpp" line="810"/>
         <source>Wrong year (must be between 1000 and 3000)</source>
         <translation>Año equivocado (debe estar entre 1000 y 3000)</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="804"/>
+        <location filename="../core/dbutils/planting.cpp" line="815"/>
         <source>Can&apos;t open csv file %1</source>
         <translation>No se puede abrir el archivo CSV %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="900"/>
         <source>[sdate] Bad date format, should be week number: %1</source>
-        <translation>[sdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
+        <translation type="vanished">[sdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="906"/>
         <source>[pdate] Bad date format, should be week number: %1</source>
-        <translation>[pdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
+        <translation type="vanished">[pdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="913"/>
         <source>[bhdate] Bad date format, should be week number: %1</source>
-        <translation>[bhdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
+        <translation type="vanished">[bhdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="919"/>
         <source>[ehdate] Bad date format, should be week number: %1</source>
-        <translation>[ehdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
+        <translation type="vanished">[ehdate] Formato de fecha equivocado, debería ser un número de semana: %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="931"/>
+        <location filename="../core/dbutils/planting.cpp" line="912"/>
+        <location filename="../core/dbutils/planting.cpp" line="920"/>
+        <location filename="../core/dbutils/planting.cpp" line="929"/>
+        <location filename="../core/dbutils/planting.cpp" line="937"/>
+        <source>Bad date format, should be week number or ISO date: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/dbutils/planting.cpp" line="950"/>
         <source>Unknown company</source>
         <translation>Proveedor desconocido</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="937"/>
+        <location filename="../core/dbutils/planting.cpp" line="956"/>
         <source>Unkown company</source>
         <translation>Proveedor desconocido</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="1010"/>
+        <location filename="../core/dbutils/planting.cpp" line="1029"/>
         <source>Can&apos;t write file: %1</source>
         <translation>No se puede escribir el archivo: %1</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="1095"/>
+        <location filename="../core/dbutils/planting.cpp" line="1114"/>
         <source>beds</source>
         <translation>bancales</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="1095"/>
+        <location filename="../core/dbutils/planting.cpp" line="1114"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="1099"/>
+        <location filename="../core/dbutils/planting.cpp" line="1118"/>
         <source>%1, %2 (%L3/%L4 %5 assigned)</source>
         <translation type="unfinished">%1, %2 (%L3/%L4 %5 atribuidos)</translation>
     </message>
     <message>
-        <location filename="../core/dbutils/planting.cpp" line="1107"/>
+        <location filename="../core/dbutils/planting.cpp" line="1126"/>
         <source>%1, %2 (%L3/%L4 %5 to assign)</source>
         <translation type="unfinished">%1, %2 (%L3/%L4 %5 a atribuir)</translation>
     </message>
@@ -2595,7 +2639,7 @@
         <translation>Entra un nombre para el PDF por favor.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="664"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="665"/>
         <source>CSV (*.csv)</source>
         <translation>CSV (*.csv)</translation>
     </message>
@@ -2654,17 +2698,22 @@
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="289"/>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="743"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="745"/>
         <source>Finish</source>
         <translation>Acabar</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="687"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="677"/>
+        <source>Export</source>
+        <translation type="unfinished">Exporter</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="689"/>
         <source>Finish plantings</source>
         <translation>Acabar cultivos</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="700"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="702"/>
         <source>Why are you finishing these plantings?</source>
         <translation type="unfinished">Porque termina estos cultivos ?</translation>
     </message>
@@ -2759,38 +2808,38 @@
         </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="752"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="754"/>
         <source>Crop plan</source>
         <translation>Programa de cultivo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="758"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="760"/>
         <source>Export as PDF...</source>
         <translation>Exportar como PDF...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="763"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="765"/>
         <source>Duplicate crop plan...</source>
         <translation>Duplicar el programa de cultivo...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="768"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="770"/>
         <source>Import crop plan...</source>
         <translation>Importar el programa de cultivo...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="773"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="775"/>
         <source>Export crop plan...</source>
         <translation>Exportar el programa de cultivo...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="650"/>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="786"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="788"/>
         <source>Print crop plan</source>
         <translation>Imprimir el programa de cultivo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="803"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="805"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
@@ -2815,7 +2864,7 @@
         <translation>Programa de trasplantes</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="822"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="824"/>
         <source>Date range</source>
         <translation>Intervalo</translation>
     </message>
@@ -2835,28 +2884,28 @@
         <translation>Año corriente</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="735"/>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="842"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="737"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="844"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="715"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="717"/>
         <source>Finished harvest </source>
         <translation>Cosecha acabada </translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="716"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="718"/>
         <source>Crop failure</source>
         <translation>Fracaso del cultivo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="717"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="719"/>
         <source>Never seeded</source>
         <translation>Nunca sembrado</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="718"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="720"/>
         <source>Never transplanted</source>
         <translation>Nunca trasplantado</translation>
     </message>
@@ -2865,22 +2914,23 @@
         <translation type="vanished">%L1 €</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="851"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="652"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="853"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="861"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="863"/>
         <source>Duplicate crop plan</source>
         <translation>Duplicar el programa de cultivo</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="903"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="905"/>
         <source>From</source>
         <translation>Desde</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/PlantingsPage.qml" line="913"/>
+        <location filename="../desktop/qml/PlantingsPage.qml" line="915"/>
         <source>To</source>
         <translation>Hasta</translation>
     </message>
@@ -3422,7 +3472,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Base de données principale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="274"/>
+        <location filename="../desktop/qml/Qrop.qml" line="330"/>
         <source>Main database menu</source>
         <translation type="unfinished">Menu de base de datos principal</translation>
     </message>
@@ -3435,12 +3485,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">Base de données secondaire</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="327"/>
+        <location filename="../desktop/qml/Qrop.qml" line="383"/>
         <source>No other database opened</source>
         <translation>Ninguna otra base de datos abierta</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="336"/>
+        <location filename="../desktop/qml/Qrop.qml" line="392"/>
         <source>Database menu</source>
         <translation type="unfinished">Menu base de datos</translation>
     </message>
@@ -3458,90 +3508,95 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="51"/>
-        <location filename="../desktop/qml/Qrop.qml" line="371"/>
+        <location filename="../desktop/qml/Qrop.qml" line="427"/>
         <source>Settings</source>
         <translation>Parámetros</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="115"/>
+        <location filename="../desktop/qml/Qrop.qml" line="153"/>
+        <source>Error opening database: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/Qrop.qml" line="166"/>
         <source>There are no database available...</source>
         <translation>No hay ninguna base de datos disponible...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="117"/>
+        <location filename="../desktop/qml/Qrop.qml" line="168"/>
         <source>They should all be copied in the following folder</source>
         <translation>Deberían estar copiados en la siguiente carpeta:</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="126"/>
+        <location filename="../desktop/qml/Qrop.qml" line="177"/>
         <source>Open Main DataBase</source>
         <translation>Abrir la base de datos principal</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="126"/>
+        <location filename="../desktop/qml/Qrop.qml" line="177"/>
         <source>Open Secondary DataBase</source>
         <translation>Abrir la base de datos secundaria</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="128"/>
+        <location filename="../desktop/qml/Qrop.qml" line="179"/>
         <source>Please select a database to open</source>
         <translation type="unfinished">Selecciona una base de datos para abrir por favor</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="129"/>
+        <location filename="../desktop/qml/Qrop.qml" line="180"/>
         <source>They must all be in the folder:</source>
         <translation>Todos deberían encontrarse en la carpeta:</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="138"/>
+        <location filename="../desktop/qml/Qrop.qml" line="189"/>
         <source>New Main DataBase</source>
         <translation>Nueva base de datos principal</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="138"/>
+        <location filename="../desktop/qml/Qrop.qml" line="189"/>
         <source>New Secondary DataBase</source>
         <translation>Nueva base de datos secundaria</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="141"/>
+        <location filename="../desktop/qml/Qrop.qml" line="192"/>
         <source>Export Main DataBase</source>
         <translation>Exportar la base de datos principal</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="141"/>
+        <location filename="../desktop/qml/Qrop.qml" line="192"/>
         <source>Export Secondary DataBase</source>
         <translation>Exportar la base de datos secundaria</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="143"/>
+        <location filename="../desktop/qml/Qrop.qml" line="194"/>
         <source>Database name:</source>
         <translation>Nombre de la base de datos:</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="279"/>
-        <location filename="../desktop/qml/Qrop.qml" line="341"/>
+        <location filename="../desktop/qml/Qrop.qml" line="335"/>
+        <location filename="../desktop/qml/Qrop.qml" line="397"/>
         <source>New...</source>
         <translation>Nueva...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="283"/>
-        <location filename="../desktop/qml/Qrop.qml" line="345"/>
+        <location filename="../desktop/qml/Qrop.qml" line="339"/>
+        <location filename="../desktop/qml/Qrop.qml" line="401"/>
         <source>Open...</source>
         <translation>Abrir...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="287"/>
-        <location filename="../desktop/qml/Qrop.qml" line="349"/>
+        <location filename="../desktop/qml/Qrop.qml" line="343"/>
+        <location filename="../desktop/qml/Qrop.qml" line="405"/>
         <source>Export...</source>
         <translation>Exportar...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="354"/>
+        <location filename="../desktop/qml/Qrop.qml" line="410"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Qrop.qml" line="386"/>
+        <location filename="../desktop/qml/Qrop.qml" line="442"/>
         <source>About</source>
         <translation>Acerca de</translation>
     </message>
@@ -3592,6 +3647,39 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <source>About Qrop</source>
         <translation type="vanished">À propos de Qrop</translation>
+    </message>
+    <message>
+        <location filename="../core/qrop.cpp" line="129"/>
+        <source>Error loading current Database: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/qrop.cpp" line="165"/>
+        <source>English</source>
+        <comment>The name of the language in the translated language.</comment>
+        <translation type="unfinished">Español</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="vanished">Español</translation>
+    </message>
+</context>
+<context>
+    <name>QropNews</name>
+    <message>
+        <location filename="../core/qropnews.cpp" line="98"/>
+        <source>Error fetching news: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/qropnews.cpp" line="105"/>
+        <source>Error fetching news: invalid contentType from url: %1 : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/qropnews.cpp" line="119"/>
+        <source>New version available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3736,6 +3824,16 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/SeedsPage.qml" line="553"/>
         <source>PDF (*.pdf)</source>
         <translation>PDF (*.pdf)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SeedsPage.qml" line="567"/>
+        <source>Export</source>
+        <translation type="unfinished">Exporter</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SeedsPage.qml" line="567"/>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="184"/>
