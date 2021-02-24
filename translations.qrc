@@ -4,5 +4,6 @@
         <file>translations/qrop_eo.qm</file>
         <file>translations/qrop_es.qm</file>
         <file>translations/qrop_nb_NO.qm</file>
+        <file>translations/qrop_oc.qm</file>
     </qresource>
 </RCC>
