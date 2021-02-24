@@ -15,33 +15,33 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="114"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br/&gt;Aquest logiciau N&apos;A PAS NADA DE GARANTIDA.&lt;br/&gt;Enta mei de detalhs, vedatz &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="208"/>
         <source>News</source>
-        <translation type="unfinished"></translation>
+        <translation>Novèlas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
         <source>You need an internet connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Qu&apos;hètz besonha d&apos;ua connexion internèt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="147"/>
         <source>ReTry fetching News</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tornar sajar arrecaptar las novèlas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="170"/>
         <source>Mark news as read</source>
-        <translation type="unfinished"></translation>
+        <translation>Mercar las novèlas com légidas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="222"/>
         <source>Debug information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información entà espedolhar</translation>
     </message>
     <message>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
@@ -1772,7 +1772,7 @@
         <location filename="../core/dbutils/planting.cpp" line="929"/>
         <location filename="../core/dbutils/planting.cpp" line="937"/>
         <source>Bad date format, should be week number or ISO date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Format de data erronèu, que cau estar un numèro de setmana o ua data ISO : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="950"/>
@@ -2320,12 +2320,12 @@
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="155"/>
         <source>Yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrendament</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="162"/>
         <source>Revenue</source>
-        <translation type="unfinished">Chiffre d&apos;affaire</translation>
+        <translation>Arrevengut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingFormHeader.qml" line="163"/>
@@ -2351,9 +2351,9 @@
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingLabel.qml" line="88"/>
         <source> ⋅ %L1 bed ⋅ %2</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform> ⋅ %L1 taula ⋅ %2</numerusform>
+            <numerusform> ⋅ %L1 taulas ⋅ %2</numerusform>
         </translation>
     </message>
     <message>
@@ -2371,27 +2371,27 @@
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="44"/>
         <source>Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="65"/>
         <source>No planting selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nada cotivada seleccionada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="66"/>
         <source>Please select at least one planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Causitz au mensh ua cotivada si vos plai</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="99"/>
         <source>Several plantings selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Mes d&apos;ua cotivada seleccionadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="100"/>
         <source>Select templates to bulk apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Causitz los itineraris tecnics de aplicar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="110"/>
@@ -2404,9 +2404,9 @@
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingTaskView.qml" line="124"/>
         <source>%L1 bed @ </source>
-        <translation type="unfinished">
-            <numerusform>%L1 planche @ </numerusform>
-            <numerusform>%L1 planches @ </numerusform>
+        <translation>
+            <numerusform>%L1 taula @ </numerusform>
+            <numerusform>%L1 taulas @ </numerusform>
         </translation>
     </message>
     <message>
@@ -2437,22 +2437,22 @@
     <message>
         <location filename="../desktop/qml/PlantingTaskView.qml" line="198"/>
         <source>Move to previous week</source>
-        <translation type="unfinished">Reporter à la semaine précédente</translation>
+        <translation>Tresmudar a la setmana precedenta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskView.qml" line="213"/>
         <source>Move to next week</source>
-        <translation type="unfinished">Reporter à la semaine suivante</translation>
+        <translation>Tresmudar a la setmana qui vien</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskView.qml" line="228"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Tirar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingTaskView.qml" line="253"/>
         <source>Click to complete task. Hold to select date.</source>
-        <translation type="unfinished">Cliquer pour effectuer la tâche. Clic long pour sélectionner la date.</translation>
+        <translation>Har clic entà acabar lo tribalh. Clic long entà seleccionar la data.</translation>
     </message>
 </context>
 <context>
@@ -2476,7 +2476,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="86"/>
         <source>S%1 %2%</source>
-        <translation type="unfinished"></translation>
+        <translation>S%1 %2%</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="87"/>
@@ -2736,7 +2736,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="152"/>
         <source>They must be in the folder:</source>
-        <translation>Que deurén trobar&apos;s dens lo dossièr&#xa0;:</translation>
+        <translation>Que deurén trobar&apos;s dens lo dossièr :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="169"/>
@@ -3521,7 +3521,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="168"/>
         <source>They should all be copied in the following folder</source>
-        <translation>Que deurén estar copiats dens lo dossièr&#xa0;:</translation>
+        <translation>Que deurén estar copiats dens lo dossièr :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="177"/>
@@ -3922,7 +3922,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="103"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="110"/>
@@ -3966,7 +3966,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="123"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="129"/>
@@ -4017,7 +4017,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="62"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="68"/>
@@ -4050,7 +4050,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="138"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <source>Keyword</source>
@@ -4273,7 +4273,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="150"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <source>Add seed company</source>
@@ -4294,7 +4294,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="63"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="70"/>
@@ -4342,7 +4342,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="94"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="100"/>
@@ -4390,7 +4390,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="146"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
 </context>
 <context>
@@ -4403,7 +4403,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="118"/>
         <source>Delete %1?</source>
-        <translation>Esfaçar %1&#xa0;?</translation>
+        <translation>Esfaçar %1 ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="124"/>
@@ -4881,7 +4881,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="275"/>
         <source>Add this task to all current applications of this template?</source>
-        <translation>Ajustar aqueste tribalh entà totas las cotivadas dab aqueths itineraris tecnics&#xa0;?</translation>
+        <translation>Ajustar aqueste tribalh entà totas las cotivadas dab aqueths itineraris tecnics ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="283"/>
