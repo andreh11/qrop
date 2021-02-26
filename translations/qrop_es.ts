@@ -326,7 +326,7 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="242"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation>Ninguna tarea completada o atrasada en la semana %1</translation>
+        <translation>Ninguna tarea acabada o atrasada en la semana %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="244"/>
