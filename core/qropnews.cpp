@@ -33,6 +33,7 @@ QropNews::QropNews(QObject *parent)
     , m_lastRelease()
     , m_numberOfUnreadNews(0)
     , m_markAsRead(false)
+    , m_defaultLangTried(false)
 {
 }
 
@@ -47,7 +48,12 @@ void QropNews::fetchNews()
     if (m_lang == "system")
         m_lang = QLocale::system().name().left(2);
 
-    QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink, m_lang));
+    fetchNews(m_lang);
+}
+
+void QropNews::fetchNews(const QString &lang)
+{
+    QNetworkRequest req(QString("%1_%2.json").arg(s_newsJsonBaseLink, lang));
     req.setRawHeader("User-Agent", "Qrop Qt app");
 
     QNetworkReply *reply = Qrop::instance()->networkManager().get(req);
@@ -94,9 +100,18 @@ void QropNews::onNewsReceived()
 {
     auto *reply = static_cast<QNetworkReply *>(sender());
     m_numberOfUnreadNews = 0;
-    if (reply->error() != QNetworkReply::NoError) {
+    if (m_defaultLangTried && reply->error() != QNetworkReply::NoError) {
+        qDebug() << "[QropNews::onNewsReceived] error #" << reply->error() << " : "
+                 << reply->errorString();
         _error(tr("Error fetching news: %1").arg(reply->errorString()));
         reply->deleteLater();
+        m_defaultLangTried = false;
+        return;
+    } else if (reply->error() == QNetworkReply::ContentNotFoundError) {
+        qDebug() << "[QropNews::onNewsReceived] Failing fetching news for language " << m_lang
+                 << " => trying default one: " << s_defaultLanguage;
+        fetchNews(s_defaultLanguage);
+        m_defaultLangTried = true;
         return;
     }
 
@@ -105,9 +120,11 @@ void QropNews::onNewsReceived()
         _error(tr("Error fetching news: invalid contentType from url: %1 : %2")
                        .arg(reply->url().toString(), contentType.toString()));
         reply->deleteLater();
+        m_defaultLangTried = false;
         return;
     }
 
+    m_defaultLangTried = false;
     QString jsonTxt = reply->readAll();
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonTxt.toUtf8());
     QJsonObject json = jsonDoc.object();
