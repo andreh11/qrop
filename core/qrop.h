@@ -18,21 +18,25 @@
 #ifndef QROP_H
 #define QROP_H
 
+#include "singleton.h"
+#include "buildinfo.h"
+#include "core_global.h"
+
 #include <QObject>
 #include <QSettings>
 #include <QNetworkAccessManager>
-#include "singleton.h"
-#include "buildinfo.h"
 
 class BuildInfo;
 class Database;
 class QropNews;
 class QTranslator;
 
-class Qrop : public QObject, public Singleton<Qrop>
+class CORESHARED_EXPORT Qrop : public QObject, public Singleton<Qrop>
 {
     Q_OBJECT
     friend class Singleton<Qrop>;
+    Q_PROPERTY(QStringList languageNames READ languageNames NOTIFY languageNamesChanged)
+    Q_PROPERTY(QStringList languageCodes READ languageCodes NOTIFY languageCodesChanged)
 
 private:
     Qrop(QObject *parent = nullptr);
@@ -83,9 +87,16 @@ public:
 
     bool newReleaseAvailable(const QString &lastOnlineVersion);
 
+    QStringList languageNames() const;
+    QStringList languageCodes() const;
+    QStringList findQmFiles() const;
+    QString languageName(const QString &qmFile) const;
+
 signals:
     void info(const QString &msg);
     void error(const QString &err);
+    void languageNamesChanged();
+    void languageCodesChanged();
 
 private:
     void loadCurrentDatabase();

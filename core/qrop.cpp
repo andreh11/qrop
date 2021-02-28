@@ -15,14 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QUrl>
-#include <QTranslator>
-#include <QCoreApplication>
-#include <QRegularExpression>
-
-#include "qropnews.h"
-#include "qrop.h"
 #include "dbutils/db.h"
+#include "qrop.h"
+#include "qropnews.h"
+
+#include <QCoreApplication>
+#include <QDir>
+#include <QRegularExpression>
+#include <QTranslator>
+#include <QUrl>
 
 Qrop::Qrop(QObject *parent)
     : QObject(parent)
@@ -145,6 +146,48 @@ void Qrop::installTranslator()
         m_translator->load(":/translations/qrop_" + prefLanguage + ".qm");
 
     qApp->installTranslator(m_translator);
+}
+
+QStringList Qrop::languageNames() const
+{
+    QStringList qmFiles = findQmFiles();
+    QStringList nameList = { tr("System"), "English" };
+
+    for (const QString &qmFile : findQmFiles())
+        nameList << languageName(qmFile);
+    return nameList;
+}
+
+QStringList Qrop::languageCodes() const
+{
+    QStringList qmFiles = findQmFiles();
+    QStringList nameList = { "system", "en" };
+    QString prefix = "qrop_";
+
+    for (const QString &qmFile : findQmFiles()) {
+        QString locale = qmFile.midRef(qmFile.indexOf(prefix) + prefix.length()).toString();
+        locale.truncate(locale.lastIndexOf('.'));
+        nameList << locale;
+    }
+    return nameList;
+}
+
+QStringList Qrop::findQmFiles() const
+{
+    QDir dir(":/translations");
+    QStringList fileNames = dir.entryList(QStringList("*.qm"), QDir::Files, QDir::Name);
+    for (QString &fileName : fileNames)
+        fileName = dir.filePath(fileName);
+    return fileNames;
+}
+
+QString Qrop::languageName(const QString &qmFile) const
+{
+    QTranslator translator;
+    translator.load(qmFile);
+
+    return translator.translate("Qrop", "English",
+                                "The name of the language in the translated language.");
 }
 
 void Qrop::_dumpSettings()

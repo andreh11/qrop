@@ -164,22 +164,10 @@ Page {
                                 font.family: "Roboto Regular"
                                 font.pixelSize: Units.fontSizeBodyAndButton
                                 Layout.minimumWidth: 200
-                                currentIndex: {
-                                    if (settings.preferredLanguage == "system")
-                                        return 0;
-                                    else if (settings.preferredLanguage == "en")
-                                        return 1;
-                                    else
-                                        return 2;
-                                }
-                                model: [qsTr("System"), "English", "Français"]
+                                currentIndex: cppQrop.languageCodes.indexOf(settings.preferredLanguage)
+                                model: cppQrop.languageNames
                                 onCurrentTextChanged: {
-                                    if (currentIndex == 0)
-                                        settings.preferredLanguage = "system"
-                                    else if (currentIndex == 1)
-                                        settings.preferredLanguage = "en"
-                                    else
-                                        settings.preferredLanguage = "fr"
+                                    settings.preferredLanguage = cppQrop.languageCodes[currentIndex]
                                     restartSnackbar.open();
                                 }
                             }

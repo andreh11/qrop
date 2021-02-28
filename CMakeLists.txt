@@ -114,7 +114,9 @@ add_subdirectory(core)
 set(TS_FILES
     translations/qrop_fr.ts
     translations/qrop_eo.ts
+    translations/qrop_es.ts
     translations/qrop_nb_NO.ts
+    translations/qrop_oc.ts
     )
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${PROJECT_SOURCE_DIR}/translations")
 #file(GLOB_RECURSE TS_SOURCES "*.cpp" "*.h" "*.qml")
@@ -159,6 +161,12 @@ ENDIF(ENABLE_COVERAGE)
 if (WIN32 OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(QML_FILES desktop/qml.qrc)
 endif()
+
+if(MINGW)
+     set(CMAKE_RC_COMPILER_INIT windres)
+     enable_language(RC)    
+     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> <DEFINES> -O coff -o <OBJECT> <SOURCE>")
+endif(MINGW)
 
 # Compile QML code for release only on Unix and Mac (doesn't work on Windows).
 if((APPLE OR UNIX) AND CMAKE_BUILD_TYPE STREQUAL "Release")
