@@ -102,7 +102,7 @@ Item {
         color: Material.color(Material.Grey)
         font.family: "Roboto Condensed"
         font.pixelSize: Units.fontSizeBodyAndButton
-        visible: seedingCircle.visible
+        visible: seedingCircle.visible && parent.x > seedingLabel.width
 
         anchors.right: seedingCircle.left
         anchors.verticalCenter: seedingCircle.verticalCenter
@@ -113,7 +113,6 @@ Item {
         id: seedingCircle
         x: -width/4
         visible: showGreenhouseSow && drawMap["greenhouseWidth"]
-//        visible: showGreenhouseSow && seedingDate < plantingDate && x < growBar.x
         width: parent.height * 0.3
         anchors.verticalCenter: parent.verticalCenter
         height: width
@@ -137,9 +136,7 @@ Item {
 
     Rectangle {
         id: growBar
-//        x: Helpers.widthBetween(control.x, seasonBegin, plantingDate)
         x: drawMap["growStart"]
-//        width: Helpers.widthBetween(x+control.x, seasonBegin, beginHarvestDate)
         width: drawMap["growWidth"]
         visible: width > 0
         height: parent.height * 0.7
@@ -178,9 +175,7 @@ Item {
 
     Rectangle {
         id: harvestBar
-//        x: Helpers.widthBetween(control.x, seasonBegin, beginHarvestDate)
         x: drawMap["harvestStart"]
-//        width: Helpers.widthBetween(x+control.x, seasonBegin, endHarvestDate)
         width: drawMap["harvestWidth"]
         visible: width > 0
         height: parent.height * 0.7
