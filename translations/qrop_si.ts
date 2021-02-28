@@ -4985,7 +4985,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/dbutils/variety.cpp" line="69"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>නොදන්නා</translation>
     </message>
 </context>
 <context>
@@ -5014,7 +5014,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/WeekSpinBox.qml" line="98"/>
         <source>Previous season</source>
-        <translation type="unfinished"></translation>
+        <translation>පෙර සමය</translation>
     </message>
 </context>
 </TS>
