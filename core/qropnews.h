@@ -18,12 +18,14 @@
 #ifndef QROPNEWS_H
 #define QROPNEWS_H
 
+#include "core_global.h"
+
 #include <QObject>
 #include <QString>
 #include <QVector>
 #include <QDate>
 
-class QropNews : public QObject
+class CORESHARED_EXPORT QropNews : public QObject
 {
     Q_OBJECT
 
@@ -34,6 +36,8 @@ class QropNews : public QObject
             "https://framagit.org/ah/qrop/-/raw/master/news/qrop_news"; //!< we add "_<lang>.json"
     static constexpr const char *s_newsJsonContentType = "text/plain";
     static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
+
+    static constexpr const char *s_defaultLanguage = "en";
 
     typedef struct News {
         const QDate date;
@@ -76,6 +80,7 @@ private slots:
 
 private:
     void _error(const QString &err);
+    void fetchNews(const QString &lang);
 
 private:
     QString m_lang;
@@ -85,6 +90,7 @@ private:
     QVector<News *> m_news;
     ushort m_numberOfUnreadNews;
     bool m_markAsRead;
+    bool m_defaultLangTried;
 };
 
 #endif // QROPNEWS_H
