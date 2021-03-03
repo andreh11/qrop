@@ -111,6 +111,7 @@ void QropNews::onNewsReceived()
         qDebug() << "[QropNews::onNewsReceived] Failing fetching news for language " << m_lang
                  << " => trying default one: " << s_defaultLanguage;
         fetchNews(s_defaultLanguage);
+        reply->deleteLater();
         m_defaultLangTried = true;
         return;
     }
