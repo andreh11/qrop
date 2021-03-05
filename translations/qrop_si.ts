@@ -21,7 +21,7 @@
         <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="208"/>
         <source>News</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">පුවත්</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
@@ -67,12 +67,12 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">බෝග විශේෂ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">පවුලේ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="97"/>
