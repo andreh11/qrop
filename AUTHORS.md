@@ -1,5 +1,8 @@
 ### Curent Team
 
+* **Julien Boulay** @julienboulay
+* **Matthieu Bruel** @mbruel
+* **Nicolas Deverge** @ndeverge
 * **André Hoarau** @ah (creator, maintainer)
 
 ### Alumni

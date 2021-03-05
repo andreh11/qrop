@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## Added
+
+## Changed
+
+## Fixed
+
+## 0.4.6 − 2021-03-05
+
+## Added
+ - Add Spanish translation (Joey Albert and BotaFlo).
+ - Add Occitan translation (BotaFlo).
+ - Add cross-compilation for Windows using MXE (@ah).
+ - Add news window (@mbruel).
+ - *Android.* Add APKs and necessary dialogs for Android (@mbruel).
+
+## Changed
+ - *Settings.* The language list shows all available translations (@ah).
+
+## Fixed
+ - *Tasks*. Fix the task dialog's height for automatically created tasks (#311,
+   @julienboulay).
+ - *Field map.* Fix planting description's length in timegraph (#299,
+   @julienboulay).
+ - *Database.* Fix error when opening database (#284, @mbruel).
+ - Fix application freezing at startup (#326, @mbruel). 
+ - *Android.* Fix PDF outputs on Android (@mbruel).
+ - *Field map.* Fix crash when creating a location with empty name
+   (@Mickael_G).
+ - *Plantings.* Fix CSV import date issue (#184, @Xeros).
+ - Fix display issue with dark theme (@julienboulay).
+
+## 0.4.5 "La Rauze" - 2020-12-07 
+
 ## Changed
  - *Database* − Both database buttons behave the same way and remember last
    opened database (#219).

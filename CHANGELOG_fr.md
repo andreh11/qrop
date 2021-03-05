@@ -4,6 +4,43 @@ Tous les changements importants seront documentés dans ce fichier.
 
 ## Non publiés
 
+## Ajouts
+
+## Changements
+
+## Correctifs
+
+## 0.4.6 − 2021-03-05
+
+## Ajouts
+ - Ajout de la traduction en espagnol (Joey Albert and BotaFlo).
+ - Ajout de la traduction en occitan (BotaFlo).
+ - Ajout de la compilation croisée MXE pour Windows (@ah).
+ - Ajout d'une fenêtre de nouvelles (@mbruel).
+ - *Android.* Ajout des APKs et des dialogues nécessaires pour Android (@mbruel).
+
+## Changements
+ - *Paramètres.* La liste des langues affiche dorénavant toutes les traductions
+   disponibles (@ah). 
+
+## Correctifs
+ - *Tâches*. Correction de la hauteur de la fenêtre des tâches pour les tâches
+   créées automatiquement (#311, @julienboulay).
+ - *Assolement.* Correction de la longueur de la description dans le diagramme
+   des séries (#299, @julienboulay).
+ - *Base de données.* Correction d'une erreur à l'ouverture de la base de
+   données (#284, @mbruel).
+ - Correction du gel de l'application au démarrage (#326, @mbruel). 
+ - *Android.* Correction des sorties PDF pour Android (@mbruel).
+ - *Parcellaire.* Correction du crash de l'application lors de la création d'un
+   emplacement sans renseigner un nom (@Mickael_G).
+ - *Séries.* Correction d'une problème de date lors de l'import CSV (#184,
+   @Xeros).
+ - Correction d'une problème d'affichage avec un thème système sombre
+   (@julienboulay).
+
+## 0.4.5 "La Rauze" - 2020-12-07 
+
 ### Changements
  - *Sélecteur de date* − Amélioration du sélecteur de date et conformité au
    style Material.
