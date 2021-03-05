@@ -8,76 +8,43 @@
         <translation type="vanished">Om</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="98"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="103"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
         <translation>Vertkøy for flere plattformer for avlingsplanlegging og registrering. Laget av bønder, for bønder. Med hjelp fra det Franske kooperativet &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="114"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="119"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
-        <location filename="../desktop/qml/AboutDialog.qml" line="208"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="213"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>News</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="144"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>You need an internet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="147"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="152"/>
->>>>>>> 0fded28 (French translation for the News)
-        <source>ReTry fetching News</source>
+        <source>Retry fetching News</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="170"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="175"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>Mark news as read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="204"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="209"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>Credits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../desktop/qml/AboutDialog.qml" line="222"/>
-=======
         <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
->>>>>>> 0fded28 (French translation for the News)
         <source>Debug information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3658,38 +3625,36 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation type="vanished">À propos de Qrop</translation>
     </message>
     <message>
-<<<<<<< HEAD
         <location filename="../core/qrop.cpp" line="129"/>
         <source>Error loading current Database: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/qrop.cpp" line="165"/>
+        <location filename="../core/qrop.cpp" line="154"/>
+        <source>System</source>
+        <translation type="unfinished">System</translation>
+    </message>
+    <message>
+        <location filename="../core/qrop.cpp" line="189"/>
         <source>English</source>
         <comment>The name of the language in the translated language.</comment>
         <translation>Norsk bokmål</translation>
     </message>
-=======
-        <location filename="../core/qrop.cpp" line="128"/>
-        <source>Error loading current Database: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
->>>>>>> 0fded28 (French translation for the News)
 </context>
 <context>
     <name>QropNews</name>
     <message>
-        <location filename="../core/qropnews.cpp" line="98"/>
+        <location filename="../core/qropnews.cpp" line="106"/>
         <source>Error fetching news: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/qropnews.cpp" line="105"/>
+        <location filename="../core/qropnews.cpp" line="121"/>
         <source>Error fetching news: invalid contentType from url: %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/qropnews.cpp" line="119"/>
+        <location filename="../core/qropnews.cpp" line="137"/>
         <source>New version available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4117,133 +4082,132 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <translation>Språk</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="175"/>
         <source>System</source>
-        <translation>System</translation>
+        <translation type="vanished">System</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="306"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="294"/>
         <source>Show seed company beside variety names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="312"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="300"/>
         <source>Show planting succession numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="193"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="181"/>
         <source>Beds</source>
         <translation>Bed</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="259"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="247"/>
         <source>Standard bed length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="272"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="260"/>
         <source>Bed length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="280"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="268"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="211"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="199"/>
         <source>Bed width</source>
         <translation>Bed-bredde</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="220"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="247"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="208"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="235"/>
         <source>cm</source>
         <translation>cm</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="238"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="226"/>
         <source>Path width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="294"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="282"/>
         <source>Plantings view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="306"/>
         <source>Compute from durations by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="324"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="312"/>
         <source>Show duration fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="330"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
         <source>Show density field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="338"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="326"/>
         <source>Field map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="350"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="338"/>
         <source>Show complete name of locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="356"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="344"/>
         <source>Allow plantings conflicts on same location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="362"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="350"/>
         <source>Show tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="370"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="358"/>
         <source>Harvests</source>
         <translation>Avlinger</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="382"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="370"/>
         <source>Show all plantings if there is none in harvest window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="389"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="377"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="399"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="387"/>
         <source>Families, crops and varieties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="404"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="392"/>
         <source>Keywords</source>
         <translation>Nøkkelord</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="409"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="397"/>
         <source>Seed companies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="414"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="402"/>
         <source>Task types</source>
         <translation>Gjøremålstyper</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="419"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="407"/>
         <source>Units</source>
         <translation>Enheter</translation>
     </message>
