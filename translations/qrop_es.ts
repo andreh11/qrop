@@ -26,12 +26,12 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="139"/>
         <source>You need an internet connection</source>
-        <translation>Se necesita una conexión a internet</translation>
+        <translation>Necesitas una conexión a internet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="147"/>
         <source>ReTry fetching News</source>
-        <translation>Reintentar de recibir las noticias</translation>
+        <translation>Reintentar recoger noticias</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="170"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="222"/>
         <source>Debug information</source>
-        <translation>Informaciones de fallo</translation>
+        <translation>Información sobre fallos</translation>
     </message>
     <message>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
@@ -285,7 +285,7 @@
         <location filename="../desktop/qml/CalendarPage.qml" line="162"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="352"/>
         <source>Print the task calendar</source>
-        <translation>Imprimir el calendario de tareas</translation>
+        <translation>Imprimir calendario de tareas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="179"/>
@@ -892,7 +892,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="334"/>
         <source>Maintenance</source>
-        <translation type="unfinished">Mantenimiento</translation>
+        <translation>Mantenimiento</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="335"/>
@@ -917,12 +917,12 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="339"/>
         <source>Thin</source>
-        <translation type="unfinished">Clarear</translation>
+        <translation>Aclarar</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="340"/>
         <source>Trellis</source>
-        <translation type="unfinished">Enrejado</translation>
+        <translation>Entutorado</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="341"/>
@@ -972,7 +972,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="385"/>
         <source>Greenhouse sow</source>
-        <translation type="unfinished">Siembra en invernadero</translation>
+        <translation>Siembra en invernadero</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="387"/>
@@ -1183,7 +1183,7 @@
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="102"/>
         <source>Greenhouse start date</source>
-        <translation>Siembra</translation>
+        <translation>Fecha siembra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="117"/>
@@ -1998,7 +1998,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="972"/>
         <source>Greenhouse start date</source>
-        <translation>Siembra</translation>
+        <translation>Fecha siembra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="974"/>
@@ -2725,7 +2725,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="141"/>
         <source>They should be in the following folder</source>
-        <translation>Tienen que encontrarse en la carpeta siguiente:</translation>
+        <translation>Tienen que estar en la siguiente carpeta:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="149"/>
@@ -3525,7 +3525,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="168"/>
         <source>They should all be copied in the following folder</source>
-        <translation>Deberían estar copiados en la siguiente carpeta:</translation>
+        <translation>Todo tiene que estar copiado en la siguiente carpeta:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="177"/>
@@ -4203,7 +4203,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="382"/>
         <source>Show all plantings if there is none in harvest window</source>
-        <translation type="unfinished">Mostrar todos los cultivos si ninguno se encuentra en la pestaña de cosechas</translation>
+        <translation>Mostrar todos los cultivos si ninguno se encuentra en la ventana de cosechas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="389"/>
