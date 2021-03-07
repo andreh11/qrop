@@ -927,7 +927,7 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="341"/>
         <source>Weed</source>
-        <translation>Desherbar</translation>
+        <translation>Deshierbar</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="343"/>
