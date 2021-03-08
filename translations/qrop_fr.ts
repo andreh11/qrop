@@ -512,7 +512,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="45"/>
         <source>Total length</source>
-        <translation>Longueur totale</translation>
+        <translation>Nb. tt. pl. (Nombre total de planches)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="50"/>
@@ -522,37 +522,37 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="55"/>
         <source>Total Revenue</source>
-        <translation>CA total</translation>
+        <translation>CA total (Chiffre d&apos;Affaire total)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
         <source>Field length</source>
-        <translation>Longueur PC</translation>
+        <translation>Nb. pl. PC (Nombre de planches en plein champ)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="65"/>
         <source>Field yield</source>
-        <translation>Rendement PC</translation>
+        <translation>Rdmt PC (Rendement plein champ)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="70"/>
         <source>Field Revenue</source>
-        <translation>CA PC</translation>
+        <translation>CA PC (Chiffre d&apos;Affaire plein champ)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="75"/>
         <source>Greenhouse length</source>
-        <translation>Longueur SA</translation>
+        <translation>Nb. pl. SA (Nombre de planches sous abri)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="80"/>
         <source>Greenhouse yield</source>
-        <translation>Rendement SA</translation>
+        <translation>Rdmt SA (Rendement sous abri)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="85"/>
         <source>Greenhouse Revenue</source>
-        <translation>CA SA</translation>
+        <translation>CA SA (Chiffre d&apos;Affaire sous abri)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="137"/>
@@ -1269,8 +1269,8 @@
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante&#xa0;: %L1&#xa0;m</numerusform>
-            <numerusform>Longueur restante&#xa0;: %L1&#xa0;m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
         </translation>
     </message>
     <message>
@@ -2054,8 +2054,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1087"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Longueur restante&#xa0;: %L1 m</numerusform>
-            <numerusform>Longueur restante&#xa0;: %L1 &#xa0;m</numerusform>
+            <numerusform>Longueur restante : %L1 m</numerusform>
+            <numerusform>Longueur restante : %L1  m</numerusform>
         </translation>
     </message>
     <message>
@@ -2130,8 +2130,8 @@
         <location filename="../desktop/qml/PlantingForm.qml" line="1221"/>
         <source>Quantity: %L1 g</source>
         <translation>
-            <numerusform>Quantité&#xa0;: %L1&#xa0;g</numerusform>
-            <numerusform>Quantité&#xa0;: %L1&#xa0;g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
+            <numerusform>Quantité : %L1 g</numerusform>
         </translation>
     </message>
     <message>
