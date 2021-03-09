@@ -502,17 +502,17 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="35"/>
         <source>Crop</source>
-        <translation>Cultivo</translation>
+        <translation>Especie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="40"/>
         <source>Varieties</source>
-        <translation>Variedades</translation>
+        <translation>Núm. Var. (Número de variedades)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="45"/>
         <source>Total length</source>
-        <translation>Longitud total</translation>
+        <translation>bancales (número total de bancales)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="50"/>
@@ -527,32 +527,32 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
         <source>Field length</source>
-        <translation>Longitud de la parcela</translation>
+        <translation>bancales CA (número de bancales en campo abierto)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="65"/>
         <source>Field yield</source>
-        <translation>Rendimiento de la parcela</translation>
+        <translation>Rdm CA (Rendimiento de los bancales de campo abierto)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="70"/>
         <source>Field Revenue</source>
-        <translation>Ingresos de la parcela</translation>
+        <translation>Ing. CA (Ingresos totales de los bancales en campo abierto)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="75"/>
         <source>Greenhouse length</source>
-        <translation>Longitud del invernadero</translation>
+        <translation>bancales inv. (número de bancales en invernadero)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="80"/>
         <source>Greenhouse yield</source>
-        <translation>Rendimiento del invernadero</translation>
+        <translation>Rdm. inv. (Rendimiento del invernadero)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="85"/>
         <source>Greenhouse Revenue</source>
-        <translation>Ingresos del invernadero</translation>
+        <translation>Ing. inv. (Ingresos en invernadero)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="137"/>
@@ -578,7 +578,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="193"/>
         <source>Field</source>
-        <translation>Parcela</translation>
+        <translation>Campo abierto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="203"/>
@@ -1993,7 +1993,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="958"/>
         <source>(first succession)</source>
-        <translation>(primero cultivo)</translation>
+        <translation>(1º cultivo)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="972"/>
@@ -2008,12 +2008,12 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="994"/>
         <source>Field planting</source>
-        <translation>Plantación en exterior</translation>
+        <translation>Plantación</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="994"/>
         <source>Field sowing</source>
-        <translation>Siembra en exterior</translation>
+        <translation>Siembra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="997"/>
@@ -2023,7 +2023,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1019"/>
         <source>First harvest</source>
-        <translation>Primera cosecha</translation>
+        <translation>1ª cosecha</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1022"/>
