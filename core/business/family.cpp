@@ -14,6 +14,29 @@ const QHash<int, QByteArray> qrp::Variety::sRoleNames = {
     { Role::r_seedCompanyName, "seed_company_name" },
 };
 
+qrp::ModelOject::ModelOject(int id_, const QString &n, bool del)
+    : id(id_)
+    , name(n)
+    , deleted(del)
+{
+}
+
+qrp::ModelOject::~ModelOject() {}
+
+qrp::SeedCompany::SeedCompany(int id_, bool del, const QString &n, bool d)
+    : ModelOject(id_, n, del)
+    , isDefault(d)
+{
+}
+
+qrp::Family::Family(int id_, bool del, const QString &n, uint i, const QString &c)
+    : ModelOject(id_, n, del)
+    , interval(i)
+    , color(c)
+    , crops()
+{
+}
+
 int qrp::Family::row(int crop_id) const
 {
     int r = 0;
@@ -25,6 +48,14 @@ int qrp::Family::row(int crop_id) const
     return -1;
 }
 
+qrp::Crop::Crop(int id_, bool del, const QString &n, const QString &c, qrp::Family *f)
+    : ModelOject(id_, n, del)
+    , color(c)
+    , family(f)
+    , varieties()
+{
+}
+
 int qrp::Crop::row(int variety_id) const
 {
     int r = 0;
@@ -34,4 +65,12 @@ int qrp::Crop::row(int variety_id) const
         ++r;
     }
     return -1;
+}
+
+qrp::Variety::Variety(int id_, bool del, const QString &n, bool d, qrp::Crop *c, qrp::SeedCompany *s)
+    : ModelOject(id_, n, del)
+    , isDefault(d)
+    , crop(c)
+    , seedCompany(s)
+{
 }

@@ -32,7 +32,7 @@ Qrop::Qrop(QObject *parent)
     , m_buildInfo(new BuildInfo(this))
     , m_news(new QropNews(this))
     , m_undoStack(new QUndoStack(this))
-    , m_isLocalDatabase(true)
+    , m_isLocalDatabase(false)
     , m_familySvc(new FamilyService(this))
 {
 }

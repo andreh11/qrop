@@ -38,6 +38,7 @@ class CORESHARED_EXPORT Qrop : public QObject, public Singleton<Qrop>
 {
     Q_OBJECT
     friend class Singleton<Qrop>;
+    friend class TstFamilyService; //!< to use initStatics()
 
 private:
     Qrop(QObject *parent = nullptr);

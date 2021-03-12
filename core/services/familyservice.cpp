@@ -47,6 +47,11 @@ void FamilyService::clear()
     m_crops.clear();
     qDeleteAll(m_varieties);
     m_varieties.clear();
+
+    qrp::SeedCompany::sLastId = 0;
+    qrp::Family::sLastId = 0;
+    qrp::Crop::sLastId = 0;
+    qrp::Variety::sLastId = 0;
 }
 
 QAbstractItemModel *FamilyService::modelFamily() const

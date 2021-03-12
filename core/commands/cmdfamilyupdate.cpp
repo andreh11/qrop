@@ -24,9 +24,9 @@
 CmdFamilyUpdate::CmdFamilyUpdate(int row, int family_id, FamilyModel2::FamilyRole role,
                                  QVariant oldV, QVariant newV)
     : CmdUpdate(row, role, oldV, newV)
-    , m_family_id(family_id)
+    , m_familyId(family_id)
 {
-    setText(QString("Update family %1").arg(s_familySvc->family(m_family_id)->name));
+    setText(QString("Update family %1").arg(s_familySvc->family(m_familyId)->name));
 }
 
 void CmdFamilyUpdate::redo()
@@ -34,9 +34,9 @@ void CmdFamilyUpdate::redo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[redo] " << str();
 #endif
-    qrp::Family *family = s_familySvc->family(m_family_id);
+    qrp::Family *family = s_familySvc->family(m_familyId);
     if (!family) {
-        qCritical() << "[CmdFamilyUpdate::redo] INVALID crop_id: " << m_family_id;
+        qCritical() << "[CmdFamilyUpdate::redo] INVALID crop_id: " << m_familyId;
         return;
     }
 
@@ -55,7 +55,7 @@ void CmdFamilyUpdate::redo()
     }
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Family sql;
-        sql.update(m_family_id, { { FamilyModel2::roleName(m_role), m_newValue } });
+        sql.update(m_familyId, { { FamilyModel2::roleName(m_role), m_newValue } });
     }
     emit s_familySvc->familyUpdated(m_row);
 }
@@ -65,9 +65,9 @@ void CmdFamilyUpdate::undo()
 #ifdef TRACE_CPP_COMMANDS
     qDebug() << "[undo] " << str();
 #endif
-    qrp::Family *family = s_familySvc->family(m_family_id);
+    qrp::Family *family = s_familySvc->family(m_familyId);
     if (!family) {
-        qCritical() << "[CmdFamilyUpdate::undo] INVALID crop_id: " << m_family_id;
+        qCritical() << "[CmdFamilyUpdate::undo] INVALID crop_id: " << m_familyId;
         return;
     }
 
@@ -87,7 +87,7 @@ void CmdFamilyUpdate::undo()
 
     if (Qrop::instance()->isLocalDatabase()) {
         dbutils::Family sql;
-        sql.update(m_family_id, { { FamilyModel2::roleName(m_role), m_oldValue } });
+        sql.update(m_familyId, { { FamilyModel2::roleName(m_role), m_oldValue } });
     }
     emit s_familySvc->familyUpdated(m_row);
 }

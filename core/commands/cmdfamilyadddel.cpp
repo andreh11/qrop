@@ -33,7 +33,7 @@ CmdFamilyAddDel::CmdFamilyAddDel(const QString &name, const QString &color)
         m_familyId = qrp::Family::getNextId();
 
     // Add non visible Family in Qrop data structure
-    emit s_familySvc->addFamily(m_familyId, true, name, 0, color, true);
+    s_familySvc->addFamily(m_familyId, true, name, 0, color, true);
 }
 
 CmdFamilyAddDel::CmdFamilyAddDel(int familyId)

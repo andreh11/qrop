@@ -116,8 +116,8 @@ void registerTypes()
     qmlRegisterType<CropProxyModel>(packageURI, ver.maj, ver.min, "CropProxyModel");
     qmlRegisterType<VarietyProxyModel>(packageURI, ver.maj, ver.min, "VarietyProxyModel");
 
-    qmlRegisterType<CropModel>(packageURI, ver.maj, ver.min, "CropModel");
-    //    qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
+    //    qmlRegisterType<CropModel>(packageURI, ver.maj, ver.min, "CropModel");
+    qmlRegisterType<CropStatModel>(packageURI, ver.maj, ver.min, "CropStatModel");
     //    qmlRegisterType<FamilyModel>(packageURI, ver.maj, ver.min, "FamilyModel");
     qmlRegisterType<HarvestModel>(packageURI, ver.maj, ver.min, "HarvestModel");
     qmlRegisterType<KeywordModel>(packageURI, ver.maj, ver.min, "KeywordModel");

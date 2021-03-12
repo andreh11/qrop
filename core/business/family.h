@@ -28,43 +28,32 @@ namespace qrp {
 struct Crop;
 struct Variety;
 
-struct CORESHARED_EXPORT SeedCompany {
-    static int sLastId;
-    static int getNextId() { return ++sLastId; }
-
+struct ModelOject {
     int id;
-    bool deleted;
     QString name;
-    bool isDefault;
-    SeedCompany(int id_, bool del, const QString &n, bool d)
-        : id(id_)
-        , deleted(del)
-        , name(n)
-        , isDefault(d)
-    {
-    }
+    bool deleted;
+
+    ModelOject(int id_, const QString &n, bool del);
+    virtual ~ModelOject();
 };
 
-struct CORESHARED_EXPORT Family {
+struct CORESHARED_EXPORT SeedCompany : public ModelOject {
+    static int sLastId;
+    static int getNextId() { return ++sLastId; }
+    bool isDefault;
+
+    SeedCompany(int id_, bool del, const QString &n, bool d);
+};
+
+struct CORESHARED_EXPORT Family : public ModelOject {
     static int sLastId;
     static int getNextId() { return ++sLastId; }
 
-    int id;
-    bool deleted;
-    QString name;
     uint interval;
     QString color;
     QList<Crop *> crops;
 
-    Family(int id_, bool del, const QString &n, uint i, const QString &c)
-        : id(id_)
-        , deleted(del)
-        , name(n)
-        , interval(i)
-        , color(c)
-        , crops()
-    {
-    }
+    Family(int id_, bool del, const QString &n, uint i, const QString &c);
 
     void addCrop(Crop *c) { crops << c; }
 
@@ -78,25 +67,15 @@ struct CORESHARED_EXPORT Family {
     int row(int crop_id) const;
 };
 
-struct CORESHARED_EXPORT Crop {
+struct CORESHARED_EXPORT Crop : public ModelOject {
     static int sLastId;
     static int getNextId() { return ++sLastId; }
 
-    int id;
-    bool deleted;
-    QString name;
     QString color;
     Family *family;
     QList<Variety *> varieties;
-    Crop(int id_, bool del, const QString &n, const QString &c, Family *f)
-        : id(id_)
-        , deleted(del)
-        , name(n)
-        , color(c)
-        , family(f)
-        , varieties()
-    {
-    }
+
+    Crop(int id_, bool del, const QString &n, const QString &c, Family *f);
 
     void addVariety(Variety *v) { varieties << v; }
 
@@ -110,25 +89,14 @@ struct CORESHARED_EXPORT Crop {
     int row(int variety_id) const;
 };
 
-struct CORESHARED_EXPORT Variety {
+struct CORESHARED_EXPORT Variety : public ModelOject {
     static int sLastId;
     static int getNextId() { return ++sLastId; }
 
-    int id;
-    bool deleted;
-    QString name;
     bool isDefault;
     Crop *crop;
     SeedCompany *seedCompany; //!< update from DB schema to allow several companies
-    Variety(int id_, bool del, const QString &n, bool d, Crop *c, SeedCompany *s)
-        : id(id_)
-        , deleted(del)
-        , name(n)
-        , isDefault(d)
-        , crop(c)
-        , seedCompany(s)
-    {
-    }
+    Variety(int id_, bool del, const QString &n, bool d, Crop *c, SeedCompany *s);
 
     enum Role {
         r_name = Qt::DisplayRole,

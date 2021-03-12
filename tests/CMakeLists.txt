@@ -12,7 +12,7 @@ function(TEST NAME FILE)
     target_link_libraries(${NAME} PRIVATE core Qt5::Core Qt5::Quick Qt5::Gui Qt5::Widgets Qt5::Test Qt5::QuickTest)
 endfunction()
 
-
+TEST(TstFamilyService tst_familyservice.cpp)
 TEST(TstDatabase tst_database.cpp)
 TEST(TstQrpDate tst_qrpdate.cpp)
 TEST(TstHelpers tst_helpers.cpp)

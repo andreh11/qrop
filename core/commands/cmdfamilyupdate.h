@@ -30,11 +30,11 @@ public:
 
     QString str() const override
     {
-        return QString("[CmdFamilyUpdate] family_id: %1, %2").arg(m_family_id).arg(CmdUpdate::str());
+        return QString("[CmdFamilyUpdate] family_id: %1, %2").arg(m_familyId).arg(CmdUpdate::str());
     }
 
 private:
-    const int m_family_id;
+    const int m_familyId;
 };
 
 #endif // CMDFAMILYUPDATE_H
