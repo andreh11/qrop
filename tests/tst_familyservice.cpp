@@ -2,6 +2,7 @@
 
 #include "qrop.h"
 #include "services/familyservice.h"
+#include "models/familymodel.h"
 
 class TstFamilyService : public QObject
 {
@@ -17,6 +18,7 @@ private slots:
 
     void testPrivateInsertionMethods();
     void testAddMethods();
+    void testUndoRedoOnCreationThenDeletion();
 
 private:
     void _testInitialFamilyServiceState(FamilyService *familySvc);
@@ -129,6 +131,49 @@ void TstFamilyService::testAddMethods()
     QVERIFY(var1 != nullptr);
     QVERIFY(var1->crop == crop1);
     QVERIFY(crop1->varieties.last() == var1);
+
+    _cleanupTestCase();
+}
+
+void TstFamilyService::testUndoRedoOnCreationThenDeletion()
+{
+    FamilyService *familySvc = Qrop::instance()->familyService();
+    _testInitialFamilyServiceState(familySvc);
+
+    // add 1 family
+    int famId1 = familySvc->addNewFamily("Family 1", "black");
+    QVERIFY(famId1 == 1);
+    QVERIFY(familySvc->m_families.size() == 1);
+    qrp::Family *fam1 = familySvc->family(famId1);
+    QVERIFY(fam1 != nullptr);
+    QVERIFY(fam1->deleted == false); // CmdFamilyAddDel::redo has been executed
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 1);
+
+    Qrop *qrop = Qrop::instance();
+    // undo => fam1 deleted
+    qrop->undo();
+    QVERIFY(fam1->deleted == true);
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 0);
+
+    // redo => fam1 visible
+    qrop->redo();
+    QVERIFY(fam1->deleted == false);
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 1);
+
+    // delete fam1
+    familySvc->deleteFamily(fam1->id);
+    QVERIFY(fam1->deleted == true);
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 0);
+
+    // undo => fam1 visible again
+    qrop->undo();
+    QVERIFY(fam1->deleted == false);
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 1);
+
+    // undo again (creation) => fam1 deleted
+    qrop->undo();
+    QVERIFY(fam1->deleted == true);
+    QVERIFY(familySvc->m_familyProxyModel->rowCount() == 0);
 
     _cleanupTestCase();
 }
