@@ -15,7 +15,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="114"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>&lt;br/&gt;Aquest logiciau N&apos;A PAS NADA DE GARANTIDA.&lt;br/&gt;Enta mei de detalhs, vedatz &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
+        <translation>Aquest logiciau N&apos;A PAS NADA DE GARANTIDA.&lt;br/&gt;Enta mei de detalhs, vedatz &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="132"/>
@@ -1045,7 +1045,7 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="250"/>
         <source>Show only currently harvested plantings for date</source>
-        <translation>Muishar sonque las cuelhudas corrantas tà la data balhada.</translation>
+        <translation>Muishar sonque las cuelhudas corrantas tà la data balhada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="251"/>
@@ -1121,7 +1121,7 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="493"/>
         <source>Print</source>
-        <translation type="unfinished">Estampar</translation>
+        <translation>Estampar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="91"/>
@@ -1345,13 +1345,13 @@
         <location filename="../desktop/qml/LocationsPage.qml" line="218"/>
         <source>F</source>
         <comment>Abbreviation for family</comment>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="218"/>
         <source>C</source>
         <comment>Abbreviation for crop</comment>
-        <translation type="unfinished"></translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="221"/>
@@ -1476,7 +1476,7 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="514"/>
         <source>Print</source>
-        <translation type="unfinished">Estampar</translation>
+        <translation>Estampar</translation>
     </message>
     <message>
         <source>Show unassigned plantings</source>
@@ -2024,7 +2024,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1022"/>
         <source>Harvest end before begin</source>
-        <translation type="unfinished">Fin de la cuelhuda abans lo son debut</translation>
+        <translation>Fin de la cuelhuda abans lo son debut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1039"/>
@@ -2396,7 +2396,7 @@
     <message>
         <location filename="../desktop/qml/PlantingTaskSideSheet.qml" line="110"/>
         <source>Templates</source>
-        <translation type="unfinished">Itinerari tecnic</translation>
+        <translation>Itinerari tecnic</translation>
     </message>
 </context>
 <context>
@@ -2486,7 +2486,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="112"/>
         <source>Relative</source>
-        <translation type="unfinished"></translation>
+        <translation>Relatiu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="118"/>
@@ -2496,7 +2496,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="135"/>
         <source>Estimated field and greenhouse space occupied this year</source>
-        <translation type="unfinished"></translation>
+        <translation>Estimacion de l&apos;espaci aucupat au camp e jos sèrra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="191"/>
@@ -2506,7 +2506,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsChartPane.qml" line="200"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Jos sèrra</translation>
     </message>
     <message>
         <source>%2</source>
@@ -2586,53 +2586,53 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="30"/>
         <source>Plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="133"/>
         <source>Export Crop Plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar lo programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="134"/>
         <source>Please type a name for the CSV.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vos plai, hicatz un nom entá lo fichèr CSV.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="139"/>
         <source>There are no CSV file to import...</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas de fichèr CSV tà importar...</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingsPage.qml" line="593"/>
         <source>Added %L1 planting(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 cotivada ajustada</numerusform>
+            <numerusform>%L1 cotivadas ajustadas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingsPage.qml" line="610"/>
         <source>Modified %L1 planting(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 cotivada modificada</numerusform>
+            <numerusform>%L1 cotivadas modificadas</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="628"/>
         <source>Crop plan of %1 duplicated to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de cotivadas de %1 desdoblat entá %2</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="638"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished">PDF (*.pdf)</translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="651"/>
         <source>Please type a name for the PDF.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vos plai, hicatz un nom entá lo PDF.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="665"/>
@@ -2660,32 +2660,32 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="233"/>
         <source>Hide timegraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner lo diagrama</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="233"/>
         <source>Show timegraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar lo diagrama</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="249"/>
         <source>Hide finished plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner las cotivadas acabadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="249"/>
         <source>Show finished plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar las cotivadas acabadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="256"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="268"/>
         <source>Duplicate</source>
-        <translation type="unfinished">Arredoblar</translation>
+        <translation>Arredoblar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="279"/>
@@ -2701,7 +2701,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="677"/>
         <source>Export</source>
-        <translation type="unfinished">Exporter</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="689"/>
@@ -2711,27 +2711,27 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="702"/>
         <source>Why are you finishing these plantings?</source>
-        <translation type="unfinished"></translation>
+        <translation>Perqué acabatz aquestas cotivadas ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="298"/>
         <source>Duplicate to next year</source>
-        <translation type="unfinished"></translation>
+        <translation>Desdoblar entá l&apos;annada qui vien</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="141"/>
         <source>They should be in the following folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Deven trobar&apos;s densh lo repertòri seguent :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="149"/>
         <source>Import Crop Plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar un programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="151"/>
         <source>Please select a csv to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vos plai, seleccionatz un fichèr CSV tá importar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="152"/>
@@ -2741,12 +2741,12 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="169"/>
         <source>Export done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportacion acabada.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="176"/>
         <source>Import done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importacion acabada.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="316"/>
@@ -2756,44 +2756,44 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="320"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tot</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="348"/>
         <source>Hide planting&apos;s tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner los tribalhs de las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="349"/>
         <source>Show planting&apos;s tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar los tribalhs de las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="377"/>
         <source>Hide notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner las notas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="377"/>
         <source>Show notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar las notas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="393"/>
         <source>Hide chart</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner lo grafic</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="394"/>
         <source>Show chart</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar lo grafic</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingsPage.qml" line="406"/>
         <source>%L1 planting(s) selected</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 cotivada seleccionada</numerusform>
+            <numerusform>%L1 cotivadas seleccionadas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -2806,73 +2806,73 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="754"/>
         <source>Crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="760"/>
         <source>Export as PDF...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar au format PDF...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="765"/>
         <source>Duplicate crop plan...</source>
-        <translation type="unfinished"></translation>
+        <translation>Desdoblar lo programa de cotivadas...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="770"/>
         <source>Import crop plan...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar un programa de cotivadas...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="775"/>
         <source>Export crop plan...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar lo programa de cotivadas...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="650"/>
         <location filename="../desktop/qml/PlantingsPage.qml" line="788"/>
         <source>Print crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Estampar lo programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="805"/>
         <source>Type</source>
-        <translation type="unfinished">Tipe</translation>
+        <translation>Tipe</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="54"/>
         <source>Entire plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa complet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="55"/>
         <source>Greenhouse plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de la plantanha</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="56"/>
         <source>Field sowing plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de semiar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="57"/>
         <source>Transplanting plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de plantacion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="824"/>
         <source>Date range</source>
-        <translation type="unfinished"></translation>
+        <translation>Temporada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="60"/>
         <source>Current week</source>
-        <translation type="unfinished">Setmana correnta</translation>
+        <translation>Setmana correnta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="61"/>
         <source>Current month</source>
-        <translation type="unfinished">Mes corrent</translation>
+        <translation>Mes corrent</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="62"/>
@@ -2893,17 +2893,17 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="718"/>
         <source>Crop failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauescudada de cotivada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="719"/>
         <source>Never seeded</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;a pas semiat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="720"/>
         <source>Never transplanted</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;a pas plantat</translation>
     </message>
     <message>
         <source>%L1 €</source>
@@ -2913,12 +2913,12 @@
         <location filename="../desktop/qml/PlantingsPage.qml" line="652"/>
         <location filename="../desktop/qml/PlantingsPage.qml" line="853"/>
         <source>Print</source>
-        <translation type="unfinished">Estampar</translation>
+        <translation>Estampar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="863"/>
         <source>Duplicate crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Desdoblar lo programa de cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="905"/>
@@ -2928,12 +2928,12 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="915"/>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Cap a</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="451"/>
         <source>No plantings for this season</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas de cotivadas entá aquesta sason</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="452"/>
@@ -2976,7 +2976,7 @@
     <message>
         <location filename="../desktop/qml/PlantingsPage.qml" line="320"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Jos sèrra</translation>
     </message>
     <message>
         <source>Revenue</source>
@@ -3041,82 +3041,82 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="65"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Varietat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="71"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçaments</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="77"/>
         <source>Sowing</source>
-        <translation type="unfinished">Semis</translation>
+        <translation>Semiar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="83"/>
         <source>Planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantacion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="90"/>
         <source>Begin</source>
-        <translation type="unfinished">Début</translation>
+        <translation>Debut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="97"/>
         <source>End</source>
-        <translation type="unfinished">Fin</translation>
+        <translation>Fin</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="104"/>
         <source>DTT</source>
-        <translation type="unfinished">Durée pépinière</translation>
+        <translation>Temporada dens la sèrra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="111"/>
         <source>DTM</source>
-        <translation type="unfinished">Durée croissance</translation>
+        <translation>Temporada de creishença</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="118"/>
         <source>Harvest Window</source>
-        <translation type="unfinished">Récolte</translation>
+        <translation>Temporada de cuelhuda</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="125"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Longor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="132"/>
         <source>Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Linhas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="139"/>
         <source>Spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaçament</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="146"/>
         <source>Avg. Yield</source>
-        <translation type="unfinished">Rendement moyen</translation>
+        <translation>Arrendament miejancèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="153"/>
         <source>Avg. Price</source>
-        <translation type="unfinished">Prix moyen</translation>
+        <translation>Prètz miejancèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="159"/>
         <source>Revenue</source>
-        <translation type="unfinished">Chiffre d&apos;affaire</translation>
+        <translation>Arrevengut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="165"/>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiquetas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingsView.qml" line="543"/>
@@ -3129,9 +3129,9 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message numerus="yes">
         <location filename="../desktop/qml/PlantingsView.qml" line="547"/>
         <source>%L1 bed</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 tl.</numerusform>
+            <numerusform>%L1 tl.</numerusform>
         </translation>
     </message>
     <message>
@@ -3152,7 +3152,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="78"/>
         <source>General crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa generau de las cotivadas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="92"/>
@@ -3172,52 +3172,52 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="371"/>
         <location filename="../core/print.cpp" line="419"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Varietat</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="94"/>
         <location filename="../core/print.cpp" line="131"/>
         <location filename="../core/print.cpp" line="169"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="95"/>
         <location filename="../core/print.cpp" line="134"/>
         <location filename="../core/print.cpp" line="208"/>
         <source>TP</source>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="96"/>
         <location filename="../core/print.cpp" line="172"/>
         <location filename="../core/print.cpp" line="211"/>
         <source>FH</source>
-        <translation type="unfinished"></translation>
+        <translation>PC</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="97"/>
         <source>LH</source>
-        <translation type="unfinished"></translation>
+        <translation>DC</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="98"/>
         <location filename="../core/print.cpp" line="173"/>
         <location filename="../core/print.cpp" line="212"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Longor</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="99"/>
         <location filename="../core/print.cpp" line="175"/>
         <location filename="../core/print.cpp" line="214"/>
         <source>Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Linhas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="100"/>
         <source>Spac.</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaç.</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="101"/>
@@ -3226,60 +3226,60 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="246"/>
         <location filename="../core/print.cpp" line="272"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçaments</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="118"/>
         <source>Greenhouse crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de plantanha</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="135"/>
         <location filename="../core/print.cpp" line="215"/>
         <source># trays</source>
-        <translation type="unfinished"></translation>
+        <translation>Num. de placas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="136"/>
         <location filename="../core/print.cpp" line="216"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Talha</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="137"/>
         <source>Seeds/hole</source>
-        <translation type="unfinished"></translation>
+        <translation>Gr./trauc</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="138"/>
         <source># seeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Num. granas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="139"/>
         <source>Seed weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Pes</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="156"/>
         <source>Field sowing crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de semiars</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="174"/>
         <location filename="../core/print.cpp" line="213"/>
         <source>Spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaç.</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="176"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Pes</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="194"/>
         <source>Field transplanting crop plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa de plantacion</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="234"/>
@@ -3290,7 +3290,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="244"/>
         <location filename="../core/print.cpp" line="270"/>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="245"/>
@@ -3306,12 +3306,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="248"/>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiquetas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="249"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="261"/>
@@ -3327,32 +3327,32 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="274"/>
         <source>Labor time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps de tribalh</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="379"/>
         <source>Monthly Seed List (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de semenças per mes (%1)</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="382"/>
         <source>Quarterly Seed List (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de semenças per trimèstre (%1)</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="385"/>
         <source>Yearly Seed List (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de semenças (%1)</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="417"/>
         <source>Transplanting date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data de plantacion</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="423"/>
         <source>Transplant List (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de plantons (%1)</translation>
     </message>
     <message>
         <source>Seed list</source>
@@ -3362,13 +3362,13 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../core/print.cpp" line="372"/>
         <location filename="../core/print.cpp" line="420"/>
         <source>Company</source>
-        <translation type="unfinished">Fournisseur</translation>
+        <translation>Hornidor</translation>
     </message>
     <message>
         <location filename="../core/print.cpp" line="373"/>
         <location filename="../core/print.cpp" line="421"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero</translation>
     </message>
     <message>
         <source>Transplant list</source>
@@ -3400,7 +3400,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/print.cpp" line="843"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçament</translation>
     </message>
 </context>
 <context>
@@ -3417,7 +3417,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="45"/>
         <source>Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Tribalhs</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="46"/>
@@ -3432,12 +3432,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="48"/>
         <source>Seed list</source>
-        <translation type="unfinished">Liste des semences</translation>
+        <translation>Lista de semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="49"/>
         <source>Charts</source>
-        <translation type="unfinished">Grafics</translation>
+        <translation>Grafics</translation>
     </message>
     <message>
         <source>SQLITE (*.sqlite)</source>
@@ -3470,7 +3470,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="330"/>
         <source>Main database menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menut basa de dadas principau</translation>
     </message>
     <message>
         <source>Replace</source>
@@ -3483,12 +3483,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="383"/>
         <source>No other database opened</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas d&apos;auta basa de dadas obèrta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="392"/>
         <source>Database menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menut basa de dadas</translation>
     </message>
     <message>
         <source>New</source>
@@ -3506,17 +3506,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/Qrop.qml" line="51"/>
         <location filename="../desktop/qml/Qrop.qml" line="427"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="153"/>
         <source>Error opening database: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error tà obrir la basa de dadas : %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="166"/>
         <source>There are no database available...</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas de basa de dadas disponibla...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="168"/>
@@ -3536,43 +3536,43 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="179"/>
         <source>Please select a database to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vos plai, seleccionatz ua basa de dadas entà obrir</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="180"/>
         <source>They must all be in the folder:</source>
-        <translation type="unfinished"></translation>
+        <translation>Que deven totas trobar&apos;s dens lo repertòri seguent :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="189"/>
         <source>New Main DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Navèra basa de dadas principau</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="189"/>
         <source>New Secondary DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Navèra basa de dadas segondària</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="192"/>
         <source>Export Main DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar la basa de dadas principau</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="192"/>
         <source>Export Secondary DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar la basa de dadas segondària</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="194"/>
         <source>Database name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la basa de dadas :</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="335"/>
         <location filename="../desktop/qml/Qrop.qml" line="397"/>
         <source>New...</source>
-        <translation type="unfinished"></translation>
+        <translation>Navèra...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="339"/>
@@ -3584,7 +3584,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/Qrop.qml" line="343"/>
         <location filename="../desktop/qml/Qrop.qml" line="405"/>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Qrop.qml" line="410"/>
@@ -3647,12 +3647,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/qrop.cpp" line="129"/>
         <source>Error loading current Database: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error entà cargar la basa de dadas correnta : %1</translation>
     </message>
     <message>
         <location filename="../core/qrop.cpp" line="154"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistèma</translation>
     </message>
     <message>
         <location filename="../core/qrop.cpp" line="189"/>
@@ -3666,17 +3666,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/qropnews.cpp" line="98"/>
         <source>Error fetching news: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error entà recrubar navèras : %1</translation>
     </message>
     <message>
         <location filename="../core/qropnews.cpp" line="105"/>
         <source>Error fetching news: invalid contentType from url: %1 : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Error entà recrubar navèras : %1 : %2</translation>
     </message>
     <message>
         <location filename="../core/qropnews.cpp" line="119"/>
         <source>New version available</source>
-        <translation type="unfinished"></translation>
+        <translation>Navèra version disponibla</translation>
     </message>
 </context>
 <context>
@@ -3684,33 +3684,33 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/qrpdate.cpp" line="225"/>
         <source>Winter</source>
-        <translation type="unfinished">Hiver</translation>
+        <translation>Ivèrn</translation>
     </message>
     <message>
         <location filename="../core/qrpdate.cpp" line="227"/>
         <source>Spring</source>
-        <translation type="unfinished">Printemps</translation>
+        <translation>Primavèra</translation>
     </message>
     <message>
         <location filename="../core/qrpdate.cpp" line="229"/>
         <source>Summer</source>
-        <translation type="unfinished">Été</translation>
+        <translation>Estiu</translation>
     </message>
     <message>
         <location filename="../core/qrpdate.cpp" line="231"/>
         <source>Fall</source>
-        <translation type="unfinished">Automne</translation>
+        <translation>Agòr</translation>
     </message>
     <message>
         <location filename="../core/qrpdate.cpp" line="287"/>
         <source>today</source>
-        <translation type="unfinished"></translation>
+        <translation>uei</translation>
     </message>
     <message>
         <location filename="../core/qrpdate.cpp" line="294"/>
         <source>today</source>
         <comment>abbreviation</comment>
-        <translation type="unfinished"></translation>
+        <translation>uei</translation>
     </message>
 </context>
 <context>
@@ -3726,32 +3726,32 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="29"/>
         <source>Winter</source>
-        <translation type="unfinished">Hiver</translation>
+        <translation>Ivèrn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="30"/>
         <source>Spring</source>
-        <translation type="unfinished">Printemps</translation>
+        <translation>Primavèra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="31"/>
         <source>Summer</source>
-        <translation type="unfinished">Été</translation>
+        <translation>Estiu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="32"/>
         <source>Fall</source>
-        <translation type="unfinished">Automne</translation>
+        <translation>Agòr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="154"/>
         <source>Next season</source>
-        <translation type="unfinished"></translation>
+        <translation>Sason seguenta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeasonSpinBox.qml" line="102"/>
         <source>Previous season</source>
-        <translation type="unfinished"></translation>
+        <translation>Sason precedenta</translation>
     </message>
     <message>
         <source>Previous year</source>
@@ -3767,7 +3767,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/models/seedlistmodel.cpp" line="38"/>
         <source>Can&apos;t write file: %1</source>
-        <translation type="unfinished">Ne&apos;s pòt pas escríver lo fichèr: %1</translation>
+        <translation>Ne&apos;s pòt pas escríver lo fichèr: %1</translation>
     </message>
 </context>
 <context>
@@ -3775,7 +3775,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="42"/>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="47"/>
@@ -3785,17 +3785,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="52"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Varietat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="57"/>
         <source>Seed company</source>
-        <translation type="unfinished"></translation>
+        <translation>Hornidor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="62"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="67"/>
@@ -3805,12 +3805,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="95"/>
         <source>Please type a name for the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vos plai, hicatz un nom entà %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="134"/>
         <source>Seed &amp; transplant lists</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de semenças e plantons</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="553"/>
@@ -3820,37 +3820,37 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="553"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished">PDF (*.pdf)</translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="567"/>
         <source>Export</source>
-        <translation type="unfinished">Exporter</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="567"/>
         <source>Print</source>
-        <translation type="unfinished">Estampar</translation>
+        <translation>Estampar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="184"/>
         <source>No seeds to order for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas de semença a comandar entà %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="192"/>
         <source>No transplants to order for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;i a pas de plantons a comandar entà %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="215"/>
         <source>Seeds</source>
-        <translation type="unfinished">Semenças</translation>
+        <translation>Semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="221"/>
         <source>Transplants</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantons</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="228"/>
@@ -3870,36 +3870,36 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="260"/>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Trimèstre</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="266"/>
         <source>Month</source>
-        <translation type="unfinished"></translation>
+        <translation>Mes</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="89"/>
         <location filename="../desktop/qml/SeedsPage.qml" line="290"/>
         <source>Export the seed list</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar la lista de semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="90"/>
         <location filename="../desktop/qml/SeedsPage.qml" line="291"/>
         <source>Export the transplant list</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar la lista de plantons</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="92"/>
         <location filename="../desktop/qml/SeedsPage.qml" line="309"/>
         <source>Print the seed order list</source>
-        <translation type="unfinished"></translation>
+        <translation>Estampa la lista de semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="93"/>
         <location filename="../desktop/qml/SeedsPage.qml" line="310"/>
         <source>Print the transplant order list</source>
-        <translation type="unfinished"></translation>
+        <translation>Estampa la lista de plantons</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SeedsPage.qml" line="502"/>
@@ -3917,7 +3917,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="95"/>
         <source>Remove crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir la especia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="103"/>
@@ -3927,7 +3927,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="110"/>
         <source>All plantings will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Totas las cotivadas que seràn perdudas.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsCropDelegate.qml" line="173"/>
@@ -3948,20 +3948,20 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message numerus="yes">
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="97"/>
         <source>%L1 years</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 annada</numerusform>
+            <numerusform>%1 annadas</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="100"/>
         <source>Minimum rotation interval for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Temporada minimau dens la rotacion entaus %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="112"/>
         <source>Remove family</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir la familha</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="123"/>
@@ -3971,27 +3971,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="129"/>
         <source>All crops and plantings will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Totas las especias e cotivadas que seràn perdudas.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="153"/>
         <source>Hide crops</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner las especias</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="153"/>
         <source>Show crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar las especias</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="190"/>
         <source>Add crop</source>
-        <translation>Ajustar ua cotivada</translation>
+        <translation>Ajustar ua especia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="203"/>
         <source>Unknown</source>
-        <translation>Desconegut</translation>
+        <translation>Desconeguda</translation>
     </message>
 </context>
 <context>
@@ -3999,7 +3999,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsFamilyPane.qml" line="81"/>
         <source>Families and crops</source>
-        <translation type="unfinished"></translation>
+        <translation>Familhas e especias</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyPane.qml" line="89"/>
@@ -4012,7 +4012,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="51"/>
         <source>Remove implement</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir l&apos;apèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="62"/>
@@ -4022,7 +4022,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsImplementDelegate.qml" line="68"/>
         <source>All related tasks will lose their implement.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots los tribalhs pertocats que perderàn las suas apèrs.</translation>
     </message>
 </context>
 <context>
@@ -4030,7 +4030,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="65"/>
         <source>Keywords</source>
-        <translation type="unfinished">Mots-clef</translation>
+        <translation>Etiqueta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="72"/>
@@ -4045,7 +4045,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="128"/>
         <source>Remove keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir l&apos;etiqueta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsKeywordPane.qml" line="138"/>
@@ -4066,7 +4066,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>Recent the application for modifications to take effect</source>
@@ -4075,7 +4075,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="84"/>
         <source>Restart the application for modifications to take effect</source>
-        <translation type="unfinished"></translation>
+        <translation>Tornar aviar l&apos;aplicacion entà préner en compte los cambiaments</translation>
     </message>
     <message>
         <source>General Settings</source>
@@ -4084,32 +4084,32 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="125"/>
         <source>Date type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipe de data</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="137"/>
         <source>Week</source>
-        <translation type="unfinished"></translation>
+        <translation>Setmana</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="137"/>
         <source>Full</source>
-        <translation type="unfinished"></translation>
+        <translation>Completa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="156"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Lenga</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="294"/>
         <source>Show seed company beside variety names</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar lo nom deu hornidor dab la varietat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="300"/>
         <source>Show planting succession numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar la numerotacion de las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="181"/>
@@ -4119,17 +4119,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="247"/>
         <source>Standard bed length</source>
-        <translation type="unfinished"></translation>
+        <translation>Taulas estandardizadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="260"/>
         <source>Bed length</source>
-        <translation type="unfinished"></translation>
+        <translation>Longor de las taulas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="268"/>
         <source>m</source>
-        <translation type="unfinished">m</translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="199"/>
@@ -4150,32 +4150,32 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="282"/>
         <source>Plantings view</source>
-        <translation>Plan de las cotivadas</translation>
+        <translation>Programa de las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="306"/>
         <source>Compute from durations by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcular a comptar de las duradas per defaut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="312"/>
         <source>Show duration fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar los camps de durada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
         <source>Show density field</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar lo camp densidat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="326"/>
         <source>Field map</source>
-        <translation type="unfinished"></translation>
+        <translation>Parcellari</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="338"/>
         <source>Show complete name of locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar lo nom complet deus emplaçaments</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="344"/>
@@ -4185,7 +4185,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="350"/>
         <source>Show tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar los tribalhs</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="358"/>
@@ -4195,37 +4195,37 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="370"/>
         <source>Show all plantings if there is none in harvest window</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar totas las cotivadas si n&apos;i a pas briga dens la frinèsta de cuelhuda</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="377"/>
         <source>Lists</source>
-        <translation type="unfinished"></translation>
+        <translation>Listas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="387"/>
         <source>Families, crops and varieties</source>
-        <translation type="unfinished"></translation>
+        <translation>Familhas, especias e varietats</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="392"/>
         <source>Keywords</source>
-        <translation type="unfinished">Mots-clef</translation>
+        <translation>Etiquetas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="397"/>
         <source>Seed companies</source>
-        <translation type="unfinished"></translation>
+        <translation>Hornidor de semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="402"/>
         <source>Task types</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipe de tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="407"/>
         <source>Units</source>
-        <translation type="unfinished">Unités</translation>
+        <translation>Unitats</translation>
     </message>
     <message>
         <source>Farm name</source>
@@ -4253,7 +4253,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="72"/>
         <source>Seeds companies</source>
-        <translation type="unfinished"></translation>
+        <translation>Hornidor de semenças</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="80"/>
@@ -4268,7 +4268,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="140"/>
         <source>Remove seed company</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir lo hornidor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSeedCompanyPane.qml" line="150"/>
@@ -4289,7 +4289,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="55"/>
         <source>Remove method</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir lo metòde</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="63"/>
@@ -4299,23 +4299,23 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="70"/>
         <source>All related tasks will lose their method.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots los tribalhs pertocats que perderàn lo son metòde.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="92"/>
         <source>Hide implements</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner las apèrs</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="92"/>
         <source>Show implements</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar las apèrs</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="125"/>
         <location filename="../desktop/qml/SettingsTaskMethodDelegate.qml" line="130"/>
         <source>Add implement</source>
-        <translation>Ajustar un apèr</translation>
+        <translation>Ajustar ua apèr</translation>
     </message>
 </context>
 <context>
@@ -4323,7 +4323,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskPane.qml" line="67"/>
         <source>Task types</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipe de tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskPane.qml" line="74"/>
@@ -4337,7 +4337,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="85"/>
         <source>Remove task type</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir lo tipe de tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="94"/>
@@ -4347,17 +4347,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="100"/>
         <source>All related tasks will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots los tribalhs pertocats que seràn perduts.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="122"/>
         <source>Hide methods</source>
-        <translation type="unfinished"></translation>
+        <translation>Escóner los metòdes</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="122"/>
         <source>Show methods</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar los metòdes</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTaskTypeDelegate.qml" line="162"/>
@@ -4371,7 +4371,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="58"/>
         <source>Units</source>
-        <translation type="unfinished">Unités</translation>
+        <translation>Unitats</translation>
     </message>
     <message>
         <source>Add unit</source>
@@ -4385,7 +4385,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="136"/>
         <source>Remove unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir l&apos;unitat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsUnitPane.qml" line="146"/>
@@ -4398,7 +4398,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="107"/>
         <source>Remove variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir la varietat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="118"/>
@@ -4408,7 +4408,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsVarietyDelegate.qml" line="124"/>
         <source>All plantings will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Totas las cotivadas pertocadas que seràn perdudas.</translation>
     </message>
 </context>
 <context>
@@ -4446,7 +4446,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/dbutils/task.cpp" line="106"/>
         <source>%L1 bed m.</source>
-        <translation>%L1 m taula</translation>
+        <translation>%L1 m tl.</translation>
     </message>
     <message>
         <location filename="../core/dbutils/task.cpp" line="108"/>
@@ -4472,7 +4472,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialog.qml" line="123"/>
         <source>Edit Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar lo tribalh</translation>
     </message>
 </context>
 <context>
@@ -4480,7 +4480,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="79"/>
         <source>Type</source>
-        <translation type="unfinished">Tipe</translation>
+        <translation>Tipe</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="83"/>
@@ -4495,7 +4495,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="89"/>
         <source>Choose a type</source>
-        <translation type="unfinished"></translation>
+        <translation>Causir un tipe</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="100"/>
@@ -4505,12 +4505,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="116"/>
         <source>Done on %1. Click to undo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Heit lo %1. Clicar entà des·hèr.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskDialogHeader.qml" line="117"/>
         <source>Click to complete task. Hold to select date.</source>
-        <translation type="unfinished">Cliquer pour effectuer la tâche. Clic long pour sélectionner la date.</translation>
+        <translation>Clicar entà har lo tribalh. Clic long entà seleccionar la data.</translation>
     </message>
 </context>
 <context>
@@ -4518,7 +4518,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="252"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metòde</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="255"/>
@@ -4538,7 +4538,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="291"/>
         <source>Implement</source>
-        <translation type="unfinished"></translation>
+        <translation>Apèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="293"/>
@@ -4548,12 +4548,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="293"/>
         <source>Add new implement</source>
-        <translation>Ajustar un navèth apèr</translation>
+        <translation>Ajustar ua navèra apèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="310"/>
         <source>Add Implement</source>
-        <translation>Ajustar un apèr</translation>
+        <translation>Ajustar ua apèr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="327"/>
@@ -4563,33 +4563,33 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="348"/>
         <source>Due Date</source>
-        <translation type="unfinished">Date prévue</translation>
+        <translation>Data prevista</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="359"/>
         <location filename="../desktop/qml/TaskForm.qml" line="572"/>
         <source>days</source>
-        <translation type="unfinished">dias</translation>
+        <translation>dias</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="360"/>
         <source>Duration in field</source>
-        <translation type="unfinished"></translation>
+        <translation>Durada au camp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="370"/>
         <source>Labor Time</source>
-        <translation type="unfinished">Temps de tribalh</translation>
+        <translation>Temps de tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="388"/>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tornar har</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="400"/>
         <source>Weeks between</source>
-        <translation type="unfinished">Setmanas d&apos;entertemps</translation>
+        <translation>Setmanas d&apos;entertemps</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="418"/>
@@ -4599,17 +4599,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="424"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçaments</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="464"/>
         <source>Unelect all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar la seleccion entà totas las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="465"/>
         <source>Select all plantings</source>
-        <translation type="unfinished">Seleccionar totas las cotivadas</translation>
+        <translation>Seleccionar totas las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="476"/>
@@ -4619,32 +4619,32 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="479"/>
         <source>Show only active plantings for due date</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar sonque las cotivadas activas entà la data prevista</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="480"/>
         <source>Show all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Muishar totas las cotivadas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="502"/>
         <source>Choose at least one planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionatz au mensh ua cotivada</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="542"/>
         <source>Selected locations: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçaments seleccionats : %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="549"/>
         <source>Choose at least one location</source>
-        <translation type="unfinished"></translation>
+        <translation>Causir au mensh un emplaçament</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="573"/>
         <source>Plan for</source>
-        <translation type="unfinished"></translation>
+        <translation>Prevéder entà</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="588"/>
@@ -4654,27 +4654,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="594"/>
         <source>After</source>
-        <translation type="unfinished"></translation>
+        <translation>Puish</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="605"/>
         <source>Greenhouse sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Semiar jos sèrra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="611"/>
         <source>Sowing/planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Semiar / plantacion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="616"/>
         <source>First harvest</source>
-        <translation type="unfinished">Purmèra cuelhuda</translation>
+        <translation>Purmèra cuelhuda</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskForm.qml" line="621"/>
         <source>Last harvest</source>
-        <translation type="unfinished">Darrèra cuelhuda</translation>
+        <translation>Darrèra cuelhuda</translation>
     </message>
     <message>
         <source>Duration</source>
@@ -4734,12 +4734,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskTemplateView.qml" line="109"/>
         <source>Duplicate template</source>
-        <translation type="unfinished">Dupliquer l&apos;itinéraire</translation>
+        <translation>Desdoblar l&apos;itinerari</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskTemplateView.qml" line="125"/>
         <source>Delete template</source>
-        <translation type="unfinished">Supprimer l&apos;itinéraire</translation>
+        <translation>Suprimir l&apos;itinerari</translation>
     </message>
 </context>
 <context>
@@ -4752,7 +4752,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="25"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplaçaments</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="26"/>
@@ -4762,37 +4762,37 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="27"/>
         <source>Due Date</source>
-        <translation type="unfinished">Date prévue</translation>
+        <translation>Data prevista</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="214"/>
         <source>Move to previous week</source>
-        <translation type="unfinished">Reporter à la semaine précédente</translation>
+        <translation>Arreportar a la setmana precedenta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="229"/>
         <source>Move to next week</source>
-        <translation type="unfinished">Reporter à la semaine suivante</translation>
+        <translation>Arreportar a la setmana seguenta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="244"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="271"/>
         <source>Click to complete task. Hold to select date.</source>
-        <translation type="unfinished">Cliquer pour effectuer la tâche. Clic long pour sélectionner la date.</translation>
+        <translation>Clicar entà har lo tribalh. Clic long entà seleccionar la data.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="306"/>
         <source>Hide plantings and locations details</source>
-        <translation type="unfinished">Cacher le détail des séries et emplacements.</translation>
+        <translation>Escóner los detalhs de las cotivadas e emplaçaments</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TaskView.qml" line="307"/>
         <source>Show plantings and locations details</source>
-        <translation type="unfinished">Afficher le détail des séries et emplacements.</translation>
+        <translation>Muishar los detalhs de las cotivadas e emplaçaments</translation>
     </message>
     <message numerus="yes">
         <source>%L1 bed @ </source>
@@ -4827,12 +4827,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="79"/>
         <source>Edit task</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar lo tribalh</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="91"/>
         <source>Duplicate template</source>
-        <translation type="unfinished">Dupliquer l&apos;itinéraire</translation>
+        <translation>Desdoblar l&apos;itinerari</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="102"/>
@@ -4857,12 +4857,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="130"/>
         <source>Same day</source>
-        <translation type="unfinished"></translation>
+        <translation>Lo medish dia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="132"/>
         <source>%L1 days after</source>
-        <translation>%L1 dias après</translation>
+        <translation>%L1 dias despuish</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplateListView.qml" line="134"/>
@@ -4881,17 +4881,17 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="275"/>
         <source>Add this task to all current applications of this template?</source>
-        <translation>Ajustar aqueste tribalh entà totas las cotivadas dab aqueths itineraris tecnics ?</translation>
+        <translation>Ajustar aqueste tribalh entà totas las cotivadas dab aqueth itinerari tecnic ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="283"/>
         <source>Apply update to all current applications of this template?</source>
-        <translation type="unfinished"></translation>
+        <translation>Préner en compte la mesa au dia entà totas las cotivadas de aquest itinerari ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="291"/>
         <source>Remove this task from all current applications of this template?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tirar aquest tribalh de totas las cotivadas qu&apos;an aquest itinerari ?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="308"/>
@@ -4901,22 +4901,22 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="355"/>
         <source>Greenhouse sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Semiar jos sèrra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="373"/>
         <source>Sowing/planting </source>
-        <translation type="unfinished"></translation>
+        <translation>Semiar/plantacion </translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="391"/>
         <source>First harvest</source>
-        <translation type="unfinished">Purmèra cuelhuda</translation>
+        <translation>Purmèra cuelhuda</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TemplatePane.qml" line="409"/>
         <source>Last harvest</source>
-        <translation type="unfinished">Darrèra cuelhuda</translation>
+        <translation>Darrèra cuelhuda</translation>
     </message>
     <message>
         <source>Duplicate template</source>
@@ -4936,13 +4936,13 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="27"/>
         <source>Enter a valid time format (HH:MM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hicatz un format de temps valid (HH:MM)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TimeEdit.qml" line="32"/>
         <source>h</source>
         <comment>Abbreviaton for hour</comment>
-        <translation type="unfinished">h</translation>
+        <translation>h</translation>
     </message>
 </context>
 <context>
@@ -4969,7 +4969,7 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../core/models/transplantlistmodel.cpp" line="38"/>
         <source>Can&apos;t write file: %1</source>
-        <translation type="unfinished">Ne&apos;s pòt pas escríver lo fichèr: %1</translation>
+        <translation>Ne&apos;s pòt pas escríver lo fichèr: %1</translation>
     </message>
 </context>
 <context>
@@ -5001,12 +5001,12 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/WeekSpinBox.qml" line="166"/>
         <source>Next season</source>
-        <translation type="unfinished"></translation>
+        <translation>Sason seguenta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/WeekSpinBox.qml" line="98"/>
         <source>Previous season</source>
-        <translation type="unfinished"></translation>
+        <translation>Sason precedenta</translation>
     </message>
 </context>
 </TS>
