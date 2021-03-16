@@ -223,11 +223,11 @@ QString QrpDate::seasonName(int season)
 {
     if (season == 0)
         return tr("Winter");
-    else if (season == 1)
+    if (season == 1)
         return tr("Spring");
-    else if (season == 2)
+    if (season == 2)
         return tr("Summer");
-    else if (season == 3)
+    if (season == 3)
         return tr("Fall");
     return {};
 }

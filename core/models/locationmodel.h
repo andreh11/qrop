@@ -59,6 +59,7 @@ public:
     Q_INVOKABLE void refresh() override;
     Q_INVOKABLE void refreshIndex(const QModelIndex &index);
     Q_INVOKABLE void refreshTree(const QModelIndex &root = QModelIndex());
+    Q_INVOKABLE void rebuildAndRefresh();
 
     Q_INVOKABLE QVariantList plantings(int locationId, int season, int year) const;
     Q_INVOKABLE QVariantList plantings(const QModelIndex &index, int season, int year) const;
@@ -118,6 +119,10 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     QVariant sourceRowValue(int row, const QModelIndex &parent, const QString &field) const override;
 
+private slots:
+    void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    bool rebuildAllMaps();
+
 private:
     bool buildNonOverlapPlantingMap();
     bool buildNonOverlapTaskMap();
@@ -137,10 +142,6 @@ private:
     QMap<int, QString> m_historyDescriptionMap;
     QMap<int, QVariantList> m_rotationConflictMap;
     QMap<int, QVariantMap> m_spaceConflictMap;
-
-private slots:
-    void rebuildAndRefresh();
-    void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif // LOCATIONMODEL_H

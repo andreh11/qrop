@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 André Hoarau <ah@ouvaton.org>
+ * Copyright (C) 2018-2021 André Hoarau <ah@ouvaton.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ Item {
     signal addPlantingLength(real length)
 
     function refresh() {
-        locationModel.refreshTree();
+        locationModel.rebuildAndRefresh();
     }
 
     function reload() {
@@ -408,16 +408,16 @@ Item {
                 anchors.fill: parent
 
                 onEntered: {
-                    const list = drag.text.split(";")
-                    const plantingId = Number(list[0])
-                    const sourceLocationId = Number(list[1])
+                    const list = drag.text.split(";");
+                    const plantingId = Number(list[0]);
+                    const sourceLocationId = Number(list[1]);
                     if (plantingId !== root.draggedPlantingId)
                         root.draggedPlantingId = plantingId;
 
                     if (model.hasChildren) {
                         if (!model.expanded) {
-                            root.expandIndex = currentRow
-                            root.draggedOnIndex = currentRow
+                            root.expandIndex = currentRow;
+                            root.draggedOnIndex = currentRow;
                             root.expandTimer.stop();
                             root.expandTimer.start();
                         }
@@ -428,16 +428,13 @@ Item {
                     } else {
                         drag.accepted = false;
                     }
-
                 }
-
                 onExited: {
                     root.draggedPlantingId = -1;
-                    root.draggedOnIndex = null
+                    root.draggedOnIndex = null;
                 }
-
                 onDropped: {
-                    root.draggedPlantingId = -1
+                    root.draggedPlantingId = -1;
 
                     if (drop.hasText
                             && (drop.proposedAction == Qt.MoveAction
@@ -455,7 +452,7 @@ Item {
                         else // drag comes from planting view
                             length = Planting.lengthToAssign(plantingId);
 
-                        root.addPlanting(currentRow, plantingId, length, drop.proposedAction === Qt.CopyAction)
+                        root.addPlanting(currentRow, plantingId, length, drop.proposedAction === Qt.CopyAction);
 
                         root.draggedOnIndex = null;
                         root.expandIndex = null;
@@ -472,7 +469,7 @@ Item {
                     if (model.hasChildren || !root.plantingEditMode)
                         return;
 
-                    var plantings = root.plantings(currentRow);
+                    let plantings = root.plantings(currentRow);
                     if (!locationSettings.allowPlantingsConflict
                             && !isSelected
                             && !root.acceptPlantingDate(currentRow,
@@ -488,21 +485,20 @@ Item {
                         root.setAssignedLength(currentRow,
                                                Location.plantingLength(editedPlantingId, model.location_id));
                     } else {
-                        var space = root.availableSpace(currentRow,
+                        let space = root.availableSpace(currentRow,
                                                         editedPlantingPlantingDate,
                                                         editedPlantingEndHarvestDate)
                         if (remainingLength === 0) {
                             root.setAssignedLength(currentRow, space);
                             root.addPlantingLength(root.assignedLengthRow(currentRow));
                         } else {
-                            console.log(2) ;
                             setAssignedLength(currentRow, Math.min(remainingLength, space));
                         }
                     }
 
-                    selectRow(currentRow)
-                    assignedLengthMapChanged()
-                    refreshRow(currentRow)
+                    selectRow(currentRow);
+                    assignedLengthMapChanged();
+                    refreshRow(currentRow);
                 }
             }
 
@@ -640,10 +636,9 @@ Item {
                                 showTasks: locationSettings.showTasks
                                 showOnlyActiveColor: true
                                 showFamilyColor: root.showFamilyColor
+                                showTodayLine: false
                                 dragActive: true
-//                                plantingIdList: modelData["plantingId"]
                                 plantingIdList: modelData
-//                                plantingDrawMapList: modelData
 
                                 taskIdList: locationDelegate.taskRowList[index]
                                 locationId: currentLocationId
@@ -659,7 +654,6 @@ Item {
                         }
                     }
                 }
-
             }
 
             ThinDivider {
@@ -707,8 +701,7 @@ Item {
             id: expandTimer
             interval: 300
             onTriggered: {
-                if ((root.expandIndex > 0)
-                        && (root.expandIndex === root.draggedOnIndex)) {
+                if ((root.expandIndex > 0) && (root.expandIndex === root.draggedOnIndex)) {
                     expandRow(root.expandIndex);
                     root.draggedOnIndex = -1;
                 }

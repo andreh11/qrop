@@ -286,9 +286,9 @@ std::unique_ptr<QSqlQuery> Location::allLocationsPlantingsQuery(const QDate &sea
                         "WHERE ((planting_date    BETWEEN '%1' AND '%2') "
                         "    OR (beg_harvest_date BETWEEN '%1' AND '%2') "
                         "    OR (end_harvest_date BETWEEN '%1' AND '%2') "
-                        "    OR (planting_date < '%2' AND '%3' < end_harvest_date)) "
+                        "    OR (planting_date < '%1' AND '%2' < end_harvest_date)) "
                         "ORDER BY location_id, planting_date");
-    return buildQuery(queryString.arg(begString).arg(endString));
+    return buildQuery(queryString.arg(begString, endString));
 }
 
 QList<int> Location::tasks(int locationId, const QDate &seasonBeg, const QDate &seasonEnd) const
@@ -380,7 +380,7 @@ bool Location::overlap(int plantingId, const QDate &plantingDate, const QDate &e
  * overlap.
  */
 QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
-                                                  const QDate &seasonEnd)
+                                                  const QDate &seasonEnd) const
 {
     // Use a single query for performance.
     auto query = plantingsQuery(locationId, seasonBeg, seasonEnd);
@@ -422,7 +422,7 @@ QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &s
     // list to a QVariantList. This may introduce a performance problem,
     // but it is a working solution.
     QVariantList variantList;
-    for (const auto &lst : rows) {
+    for (const auto &lst : qAsConst(rows)) {
         if (!lst.isEmpty())
             variantList.push_back(lst);
     }
@@ -431,6 +431,7 @@ QVariantList Location::nonOverlappingPlantingList(int locationId, const QDate &s
 
 QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int year) const
 {
+
     const auto dates = QrpDate::seasonDates(season, year);
     const QDate seasonBeg = dates.first;
     const QDate seasonEnd = dates.second;
@@ -440,7 +441,6 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
     if (!query->next())
         return {};
 
-    QMap<int, QVariantList> map;
     int locationId = query->value("location_id").toInt();
 
     QVector<QVariantList> rows;
@@ -455,6 +455,7 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
     int lid;
     int plantingId;
     int i;
+    QMap<int, QVariantList> map;
     while (query->next()) {
         lid = query->value("location_id").toInt();
         plantingId = query->value("planting_id").toInt();
@@ -477,7 +478,6 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
             rowDate.clear();
             locationId = lid;
             rows.push_back({ plantingId });
-            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
             rowDate.push_back({ plantingDate, endHarvestDate });
             continue;
         }
@@ -486,7 +486,6 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
         for (; i < rowDate.count(); ++i) {
             if (!overlap(rowDate[i].first, rowDate[i].second, plantingDate, endHarvestDate)) {
                 rows[i].push_back(plantingId);
-                //                rows[i].push_back(m_planting->drawInfoMap(query->record(), season, year, false, true));
                 rowDate[i] = { plantingDate, endHarvestDate };
                 break;
             }
@@ -497,13 +496,12 @@ QMap<int, QVariantList> Location::allNonOverlappingPlantingList(int season, int 
             // so we create a new row for it.
             rowDate.push_back({ plantingDate, endHarvestDate });
             rows.push_back({ plantingId });
-            //            rows.push_back({ m_planting->drawInfoMap(query->record(), season, year, false, true) });
         }
     }
 
     // Add last location.
     QVariantList variantList;
-    for (const auto &lst : rows) {
+    for (const auto &lst : qAsConst(rows)) {
         if (!lst.isEmpty())
             variantList.push_back(lst);
     }
@@ -766,10 +764,11 @@ QMap<int, QVariantList> Location::allRotationConflictingPlantings(int season, in
     CropRotationInfoList infoList;
 
     const auto push = [&infoList, &query]() {
-        infoList.push_back({ query->value("planting_id").toInt(), query->value("crop").toString(),
-                             query->value("family_id").toInt(), query->value("family_interval").toInt(),
-                             QrpDate::dateFromIsoString(query->value("planting_date").toString()),
-                             QrpDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
+        infoList.push_back(
+                { query->value("planting_id").toInt(), query->value("crop").toString(),
+                  query->value("family_id").toInt(), query->value("family_interval").toInt(),
+                  QrpDate::dateFromIsoString(query->value("planting_date").toString()),
+                  QrpDate::dateFromIsoString(query->value("end_harvest_date").toString()) });
     };
 
     push();

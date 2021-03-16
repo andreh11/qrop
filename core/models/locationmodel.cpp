@@ -36,12 +36,11 @@ LocationModel::LocationModel(QObject *parent, const QString &tableName)
     setSourceModel(m_treeModel);
     setRecursiveFilteringEnabled(true);
 
-    //    rebuildAndRefresh();
+    rebuildAndRefresh();
 
-    connect(this, SIGNAL(filterYearChanged()), this, SLOT(rebuildAndRefresh()));
-    connect(this, SIGNAL(filterSeasonChanged()), this, SLOT(rebuildAndRefresh()));
-    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this,
-            SLOT(onDataChanged(const QModelIndex &, const QModelIndex &)));
+    connect(this, &LocationModel::filterYearChanged, this, &LocationModel::rebuildAndRefresh);
+    connect(this, &LocationModel::filterSeasonChanged, this, &LocationModel::rebuildAndRefresh);
+    connect(this, &LocationModel::dataChanged, this, &LocationModel::onDataChanged);
 }
 
 QVariant LocationModel::data(const QModelIndex &proxyIndex, int role) const
@@ -103,31 +102,14 @@ void LocationModel::refreshIndex(const QModelIndex &index)
     emit dataChanged(index, index);
 }
 
-/** Emit dataChanged signal for all indexes of the subtree whose root is \a root. */
 void LocationModel::refreshTree(const QModelIndex &root)
 {
     // Check for empty tree
     if (!root.isValid() && rowCount() == 0)
         return;
 
-    //    QModelIndexList treeList;
-    //    treeList.push_back(root);
-
     emit layoutAboutToBeChanged();
     emit layoutChanged();
-
-    //    QModelIndex parent;
-    //    for (int i = 0; i < treeList.length(); ++i) {
-    //        parent = treeList[i];
-    //        dataChanged(index(0, 0, parent), index(rowCount(parent) - 1, 0, parent));
-
-    //        int count = rowCount(parent);
-    //        for (int row = 0; row < count; ++row) {
-    //            const QModelIndex child = index(row, 0, parent);
-    //            if (hasChildren(child))
-    //                treeList.push_back(child);
-    //        }
-    //    }
 }
 
 int LocationModel::locationId(const QModelIndex &idx) const
@@ -150,7 +132,7 @@ qreal LocationModel::length(const QModelIndex &index) const
 /** Return the value of \a field for the source index of \a row, \a parent. */
 QVariant LocationModel::sourceRowValue(int row, const QModelIndex &parent, const QString &field) const
 {
-    if (!m_treeModel)
+    if (m_treeModel == nullptr)
         return {};
 
     QModelIndex index = m_treeModel->index(row, 0, parent);
@@ -515,7 +497,7 @@ bool LocationModel::duplicateLocations(const QModelIndexList &indexList)
     int newId;
 
     // TODO: This is ugly, we should redesign the class hierarchy.
-    auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
+    auto *treeModel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
     for (const auto &idx : indexList) {
         Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
@@ -525,7 +507,7 @@ bool LocationModel::duplicateLocations(const QModelIndexList &indexList)
         recordList.push_back(m_location->recordFromId("location", newId));
         for (int childrenId : m_location->childrenTree(newId))
             recordList.push_back(m_location->recordFromId("location", childrenId));
-        tmodel->addRecordTree(recordList, mapToSource(idx.parent()));
+        treeModel->addRecordTree(recordList, mapToSource(idx.parent()));
     }
 
     return true;
@@ -536,7 +518,7 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
     int id;
 
     // TODO: This is ugly, we should redesign the class hierarchy.
-    auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
+    auto *treeModel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
     for (const auto &idx : indexList) {
         Q_ASSERT(checkIndex(idx, CheckIndexOption::IndexIsValid));
@@ -545,8 +527,8 @@ bool LocationModel::updateIndexes(const QVariantMap &map, const QModelIndexList 
 
         const auto end = map.cend();
         for (auto it = map.cbegin(); it != end; it++)
-            tmodel->setData(mapToSource(idx), it.value(), it.key());
-        dataChanged(idx, idx);
+            treeModel->setData(mapToSource(idx), it.value(), it.key());
+        emit dataChanged(idx, idx);
     }
 
     return true;
@@ -576,7 +558,7 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
     QList<QModelIndex> sourceIndexList;
 
     // TODO: This is ugly, we should redesign the class hierarchy.
-    auto tmodel = dynamic_cast<SqlTreeModel *>(sourceModel());
+    auto *treeModel = dynamic_cast<SqlTreeModel *>(sourceModel());
 
     QList<int> idList;
     for (const auto &index : indexList) {
@@ -587,7 +569,7 @@ bool LocationModel::removeIndexes(const QModelIndexList &indexList)
     m_location->removeList(idList);
     emit depthChanged();
 
-    return tmodel->removeIndexes(sourceIndexList);
+    return treeModel->removeIndexes(sourceIndexList);
 }
 
 /**
@@ -801,46 +783,26 @@ bool LocationModel::buildSpaceConflictMap()
 /** Rebuild the planting, task and history maps. Refresh the model if needed. */
 void LocationModel::rebuildAndRefresh()
 {
+    qDebug() << "[REFRESH START]";
     QElapsedTimer timer;
-    //    timer.start();
-    QList<bool> blist;
-    blist.push_back(buildNonOverlapPlantingMap());
-    //    qDebug() << "[planting]" << timer.elapsed() << "ms";
-    //    timer.start();
-    blist.push_back(buildNonOverlapTaskMap());
-    //    qDebug() << "[task]" << timer.elapsed() << "ms";
-    //    timer.start();
-    blist.push_back(buildHistoryDescriptionMap());
-    //    qDebug() << "[history]" << timer.elapsed() << "ms";
-    //    timer.start();
-    blist.push_back(buildRotationConflictMap());
-    //    qDebug() << "[rotation]" << timer.elapsed() << "ms";
-    //    timer.start();
-    blist.push_back(buildSpaceConflictMap());
-    //    qDebug() << "[space]" << timer.elapsed() << "ms";
-
     timer.start();
-    for (const bool b : blist) {
-        if (b) {
-            refreshTree();
-            break;
-        }
-    }
+
+    if (rebuildAllMaps())
+        refreshTree();
+
     qDebug() << "[REFRESH]" << timer.elapsed() << "ms";
+}
+
+bool LocationModel::rebuildAllMaps()
+{
+    return buildNonOverlapPlantingMap() || buildNonOverlapTaskMap() || buildHistoryDescriptionMap()
+            || buildRotationConflictMap() || buildSpaceConflictMap();
 }
 
 void LocationModel::onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     if (topLeft != bottomRight) {
-        if (buildNonOverlapPlantingMap()) {
-            buildNonOverlapTaskMap();
-            buildHistoryDescriptionMap();
-            buildRotationConflictMap();
-            buildSpaceConflictMap();
-            //            emit dataChanged(topLeft, bottomRight,
-            //                             { NonOverlappingPlantingList, TaskList, History, RotationConflictList,
-            //                               SpaceConflictList });
-        }
+        //        rebuildAllMaps();
         return;
     }
 

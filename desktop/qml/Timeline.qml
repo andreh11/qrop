@@ -41,6 +41,7 @@ Item {
     property real locationLength: -1
     property bool showNames: false
     property bool showTasks: false
+    property bool showTodayLine: true
     property bool dragActive: false
 
     signal plantingClicked(int plantingId)
@@ -67,7 +68,7 @@ Item {
         id: todayLine
         x: Helpers.position(seasonBegin, todayDate)
         z: 3
-        visible: x != 0 && x != graphWidth
+        visible: root.showTodayLine && x != 0 && x != graphWidth
         width: 1
         anchors.topMargin: -1
         anchors.bottomMargin: -1

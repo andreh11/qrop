@@ -16,7 +16,7 @@ Tous les changements importants seront documentés dans ce fichier.
  - Ajout de la traduction en espagnol (Joey Albert and BotaFlo).
  - Ajout de la traduction en occitan (BotaFlo).
  - Ajout de la compilation croisée MXE pour Windows (@ah).
- - Ajout d'une fenêtre de nouvelles (@mbruel).
+ - Ajout d'une fenêtre d'affichage des nouvelles du projet (@mbruel).
  - *Android.* Ajout des APKs et des dialogues nécessaires pour Android (@mbruel).
 
 ## Changements
@@ -24,6 +24,10 @@ Tous les changements importants seront documentés dans ce fichier.
    disponibles (@ah). 
 
 ## Correctifs
+ - *Assolement* Correction d'un bug de raffraîchissement (@ah).
+ - *Assolement.* Correction de la mauvaise liste des séries pour la saison en
+   cours (certaines séries apparaissaient alors qu'elle ne faisaient pas partie
+   de la saison affichée) (@ah).
  - *Tâches*. Correction de la hauteur de la fenêtre des tâches pour les tâches
    créées automatiquement (#311, @julienboulay).
  - *Assolement.* Correction de la longueur de la description dans le diagramme

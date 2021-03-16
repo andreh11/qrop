@@ -16,13 +16,16 @@ All notable changes to this project will be documented in this file.
  - Add Spanish translation (Joey Albert and BotaFlo).
  - Add Occitan translation (BotaFlo).
  - Add cross-compilation for Windows using MXE (@ah).
- - Add news window (@mbruel).
+ - Add window to display news about the project (@mbruel).
  - *Android.* Add APKs and necessary dialogs for Android (@mbruel).
 
 ## Changed
  - *Settings.* The language list shows all available translations (@ah).
 
-## Fixed
+## Fixed 
+ - *Field map.* Fix refreshing bug (@ah).
+ - *Field map.* Fix bad planting list for the current season (some plantings
+   would appear while not being part of the current season) (@ah).
  - *Tasks*. Fix the task dialog's height for automatically created tasks (#311,
    @julienboulay).
  - *Field map.* Fix planting description's length in timegraph (#299,

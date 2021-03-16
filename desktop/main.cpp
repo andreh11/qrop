@@ -331,7 +331,6 @@ int main(int argc, char *argv[])
     engine.setObjectOwnership(qrop->buildInfo(), QQmlEngine::CppOwnership);
     engine.setObjectOwnership(qrop->news(), QQmlEngine::CppOwnership);
 
-    //    QQmlFileSelector *selector = new QQmlFileSelector(&engine);
     const QUrl url("qrc:/qml/Qrop.qml");
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,

@@ -62,7 +62,7 @@ public:
                  const QDate &plantingDate2, const QDate &endHarvestDate2) const;
 
     Q_INVOKABLE QVariantList nonOverlappingPlantingList(int locationId, const QDate &seasonBeg,
-                                                        const QDate &seasonEnd);
+                                                        const QDate &seasonEnd) const;
 
     QMap<int, QVariantList> allNonOverlappingPlantingList(int season, int year) const;
 
