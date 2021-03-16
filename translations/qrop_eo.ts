@@ -21,7 +21,7 @@
         <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="213"/>
         <source>News</source>
-        <translation type="unfinished"></translation>
+        <translation>Novaĵoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="144"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="209"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontribuintoj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
@@ -1265,7 +1265,7 @@
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
         <translation>
-            <numerusform>Restanta larĝo: %L1&#xa0;m</numerusform>
+            <numerusform>Restanta larĝo: %L1 m</numerusform>
             <numerusform>Restanta larĝo: %L1 m</numerusform>
         </translation>
     </message>
@@ -3932,8 +3932,8 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="97"/>
         <source>%L1 years</source>
         <translation>
-            <numerusform>%L1&#xa0;jaro</numerusform>
-            <numerusform>%L1&#xa0;jaroj</numerusform>
+            <numerusform>%L1 jaro</numerusform>
+            <numerusform>%L1 jaroj</numerusform>
         </translation>
     </message>
     <message>
