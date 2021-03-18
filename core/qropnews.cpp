@@ -26,13 +26,19 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+const char *QropNews::s_newsJsonBaseLink =
+        "https://framagit.org/ah/qrop/-/raw/master/news/qrop_news"; //!< we add "_<lang>.json"
+const char *QropNews::s_newsJsonContentType = "text/plain";
+const char *QropNews::s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
+
+const char *QropNews::s_defaultLanguage = "en";
+
 QropNews::QropNews(QObject *parent)
     : QObject(parent)
     , m_lang()
     , m_mainText()
     , m_lastRelease()
     , m_numberOfUnreadNews(0)
-    , m_markAsRead(false)
     , m_defaultLangTried(false)
 {
 }

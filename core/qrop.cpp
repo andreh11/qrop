@@ -35,10 +35,8 @@ Qrop::Qrop(QObject *parent)
 
 Qrop::~Qrop()
 {
-    Database::close();
-    if (m_news->areRead())
-        m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
     m_settings.sync();
+    Database::close();
     qDebug() << "Qrop properly deleted!";
 }
 
@@ -84,6 +82,11 @@ bool Qrop::saveDatabase(const QUrl &from, const QUrl &to)
         return true;
     }
     return false;
+}
+
+void Qrop::markNewsAsRead()
+{
+    m_settings.setValue("lastNewsUpdate", m_news->lastUpdate().toString(Qt::ISODate));
 }
 
 bool Qrop::newReleaseAvailable(const QString &lastOnlineVersion)

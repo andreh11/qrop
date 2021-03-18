@@ -52,6 +52,8 @@ public:
 
     inline Q_INVOKABLE bool isMobileDevice() { return m_buildInfo->isMobileDevice(); }
     inline Q_INVOKABLE QropNews *news() const { return m_news; }
+    Q_INVOKABLE void markNewsAsRead();
+
     inline QNetworkAccessManager &networkManager() { return m_networkManager; }
     inline Q_INVOKABLE BuildInfo *buildInfo() const { return m_buildInfo; }
 

@@ -103,6 +103,10 @@ if (ANDROID)
         AndroidExtras
         REQUIRED
     )
+
+    # TO BE UPDATED FOR AUTO BUILD OR OTHER ENV... (openssl needed for QropNews)
+    message(STATUS "Adding openssl libs from local mb env...")
+    include(/home/bruel/android/android_openssl/CMakeLists.txt)
 endif()
 
 include_directories(lib)
