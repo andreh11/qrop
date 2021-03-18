@@ -163,7 +163,7 @@ void TstFamilyService::testUndoRedoOnCreationThenDeletion()
     QVERIFY(m_familySvc->m_familyProxyModel->rowCount() == 1);
 
     // delete fam1
-    m_familySvc->deleteFamily(fam1->id);
+    QVERIFY(m_familySvc->deleteFamily(fam1->id));
     QVERIFY(fam1->deleted == true);
     QVERIFY(m_familySvc->m_familyProxyModel->rowCount() == 0);
 
@@ -176,6 +176,9 @@ void TstFamilyService::testUndoRedoOnCreationThenDeletion()
     qrop->undo();
     QVERIFY(fam1->deleted == true);
     QVERIFY(m_familySvc->m_familyProxyModel->rowCount() == 0);
+
+    // test deleting non existing family
+    QVERIFY(!m_familySvc->deleteFamily(666));
 
     _cleanupTestCase();
 }

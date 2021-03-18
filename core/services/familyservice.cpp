@@ -167,10 +167,13 @@ void FamilyService::updateVarietyIsDefault(int srcRow, int crop_id, int variety_
                                                            qrp::Variety::r_isDefault, oldV, newV));
 }
 
-void FamilyService::deleteVariety(int crop_id, int variety_id)
+bool FamilyService::deleteVariety(int crop_id, int variety_id)
 {
+    if (!m_varieties.contains(variety_id))
+        return false;
     qDebug() << "[FamilyService::deleteVariety]  crop_id: " << crop_id << ", variety_id: " << variety_id;
     Qrop::instance()->pushCommand(new CmdVarietyAddDel(crop_id, variety_id));
+    return true;
 }
 
 int FamilyService::addNewVariety(int crop_id, const QString &name, int seedCompanyId)
@@ -182,10 +185,13 @@ int FamilyService::addNewVariety(int crop_id, const QString &name, int seedCompa
     return cmd->varietyId();
 }
 
-void FamilyService::deleteCrop(int familyId, int cropId)
+bool FamilyService::deleteCrop(int familyId, int cropId)
 {
+    if (!m_crops.contains(cropId))
+        return false;
     qDebug() << "[FamilyService::deleteCrop]  familyId: " << familyId << ", cropId: " << cropId;
     Qrop::instance()->pushCommand(new CmdCropAddDel(familyId, cropId));
+    return true;
 }
 
 int FamilyService::addNewCrop(int familyId, const QString &name, const QString &color)
@@ -198,10 +204,13 @@ int FamilyService::addNewCrop(int familyId, const QString &name, const QString &
     return cmd->cropId();
 }
 
-void FamilyService::deleteFamily(int familyId)
+bool FamilyService::deleteFamily(int familyId)
 {
+    if (!m_families.contains(familyId))
+        return false;
     qDebug() << "[FamilyService::deleteFamily]  familyId: " << familyId;
     Qrop::instance()->pushCommand(new CmdFamilyAddDel(familyId));
+    return true;
 }
 
 int FamilyService::addNewFamily(const QString &name, const QString &color)

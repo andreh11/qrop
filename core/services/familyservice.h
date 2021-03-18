@@ -93,13 +93,13 @@ public:
     Q_INVOKABLE void updateVarietyIsDefault(int srcRow, int crop_id, int variety_id, bool oldV,
                                             bool newV);
 
-    Q_INVOKABLE void deleteVariety(int crop_id, int variety_id);
+    Q_INVOKABLE bool deleteVariety(int crop_id, int variety_id);
     Q_INVOKABLE int addNewVariety(int crop_id, const QString &name, int seedCompanyId);
 
-    Q_INVOKABLE void deleteCrop(int familyId, int cropId);
+    Q_INVOKABLE bool deleteCrop(int familyId, int cropId);
     Q_INVOKABLE int addNewCrop(int familyId, const QString &name, const QString &color);
 
-    Q_INVOKABLE void deleteFamily(int familyId);
+    Q_INVOKABLE bool deleteFamily(int familyId);
     Q_INVOKABLE int addNewFamily(const QString &name, const QString &color);
 
 signals:
