@@ -3,6 +3,12 @@
 	"mainText": "Actualité du logiciel <b>Qrop</b><br/>De temps à autre il y aura quelques sondages pour orienter le développement des nouvelles fonctionnalités.",
 	"news": [
 		{
+			"date": "2021-02-19",
+			"title": "Ouverture du forum pour la communauté des utilisateurs de Qrop",
+			"link": "https://forum.latelierpaysan.org/viewforum.php?f=276",
+			"desc": "Le but du forum est d'accueillir la communauté des utilisateurs de Qrop. Il y a différentes sections pour se présenter, poser des questions autour de l'installation de Qrop et de sa prise en main, demander de l'aide, signaler des bugs, être au courant des nouveautés et futures versions, trouver des liens vers des formations..."
+		},
+		{
 			"date": "2021-01-23",
 			"title": "Création de l'interface de News",
 			"link": "https://framagit.org/ah/qrop/-/issues/309",
