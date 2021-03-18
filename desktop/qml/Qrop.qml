@@ -63,11 +63,15 @@ ApplicationWindow {
 
     Component.onCompleted: {
         if (firstDatabaseFile === "")
-            firstDatabaseFile = cppRemote.defaultDatabaseUrl();
+            firstDatabaseFile = cppQrop.defaultDatabaseUrl();
         if (currentDatabase === 0)
             currentDatabase = 1;
         if (lastFolder === "")
             lastFolder = '%1%2'.arg(cppQrop.isMobileDevice() ? "" : "file://").arg(FileSystem.rootPath);
+
+        //print("QML: currentDatabase: "+currentDatabase+", firstDatabaseFile: "+firstDatabaseFile+", secondDatabaseFile: "+secondDatabaseFile);
+        if (cppQrop.isMobileDevice())
+            return; // only full screen on Android devices
 
         if (mainSettings.windowFullScreen)
             window.visibility = Window.FullScreen;
@@ -86,7 +90,7 @@ ApplicationWindow {
     }
 
     Component.onDestruction: {
-        if (!mainSettings.windowFullScreen) {
+        if (!cppQrop.isMobileDevice() && !mainSettings.windowFullScreen) {
             mainSettings.windowX = window.x;
             mainSettings.windowY = window.y;
             mainSettings.windowHeight = window.height;
@@ -114,6 +118,9 @@ ApplicationWindow {
     }
 
     function toggleFullScreen() {
+        if (cppQrop.isMobileDevice())
+            return; // only full screen on Android devices
+
         if (window.visibility === Window.FullScreen) {
             window.visibility = Window.Windowed;
             mainSettings.windowFullScreen = false;

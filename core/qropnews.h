@@ -32,12 +32,11 @@ class CORESHARED_EXPORT QropNews : public QObject
     Q_PROPERTY(QString mainText READ mainText CONSTANT FINAL)
     Q_PROPERTY(QString toHtml READ toHtml CONSTANT FINAL)
 
-    static constexpr const char *s_newsJsonBaseLink =
-            "https://framagit.org/ah/qrop/-/raw/master/news/qrop_news"; //!< we add "_<lang>.json"
-    static constexpr const char *s_newsJsonContentType = "text/plain";
-    static constexpr const char *s_qropDownloadURL = "https://qrop.frama.io/fr/download/";
+    static const char *s_newsJsonBaseLink;
+    static const char *s_newsJsonContentType;
+    static const char *s_qropDownloadURL;
 
-    static constexpr const char *s_defaultLanguage = "en";
+    static const char *s_defaultLanguage;
 
     typedef struct News {
         const QDate date;
@@ -69,9 +68,6 @@ public:
     Q_INVOKABLE void fetchNews();
     inline Q_INVOKABLE int numberOfUnreadNews() const { return m_numberOfUnreadNews; }
 
-    inline Q_INVOKABLE void markAsRead(bool read) { m_markAsRead = read; }
-    inline bool areRead() const { return m_markAsRead; }
-
 signals:
     void newsReceived();
 
@@ -89,7 +85,6 @@ private:
     QString m_lastRelease;
     QVector<News *> m_news;
     ushort m_numberOfUnreadNews;
-    bool m_markAsRead;
     bool m_defaultLangTried;
 };
 

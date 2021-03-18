@@ -41,7 +41,7 @@
 QString Database::defaultDatabasePath()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-    return FileSystem::rootPath();
+    return QString("%1/qrop.sqlite").arg(FileSystem::rootPath());
 #else
     const QDir writeDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (!writeDir.mkpath("."))

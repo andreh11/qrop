@@ -53,8 +53,10 @@ Popup {
     }
 
     onClosed: {
-        if (markNewsAsRead.checked)
+        if (markNewsAsRead.checked) {
             window.displayNewsBadges("");
+            cppQrop.markNewsAsRead();
+        }
     }
 
     SwipeView {
@@ -174,7 +176,6 @@ Popup {
                     id: markNewsAsRead
                     text: qsTr("Mark news as read")
                     anchors.horizontalCenter: parent.horizontalCenter
-                    onToggled: cppQrop.news().markAsRead(checked);
                 }
             }
         }
