@@ -2167,7 +2167,7 @@
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1298"/>
         <source>Price/</source>
-        <translation>Precio/</translation>
+        <translation>Precio/unidad</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PlantingForm.qml" line="1307"/>
