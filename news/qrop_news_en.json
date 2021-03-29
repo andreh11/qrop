@@ -3,6 +3,12 @@
 	"mainText": "From time to time we'll display some news and polls to orientate <b>Qrop</b>'s developement.",
 	"news": [
 		{
+			"date": "2021-02-19",
+			"title": "New forum for the Qrop's community",
+			"link": "https://forum.latelierpaysan.org/viewforum.php?f=276",
+			"desc": "The aim of the forum is to create a community for Qrop's users. There are different sections to meet other users, find some help, ask questions, raise bugs, be aware of new versions and future features, find some training links..."
+		},
+		{
 			"date": "2021-01-23",
 			"title": "Creation of the News interface in Qrop",
 			"link": "https://framagit.org/ah/qrop/-/issues/309",
