@@ -3974,27 +3974,27 @@ Cliquez sur « Ajouter des séries » pour commencer à planifier !</translation
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="129"/>
         <source>All crops and plantings will be lost.</source>
-        <translation>Todos los cultivos y plantaciones serán perdidos.</translation>
+        <translation>Todas las especies y cultivos definidos serán perdidos.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="153"/>
         <source>Hide crops</source>
-        <translation>Esconder los cultivos</translation>
+        <translation>Esconder las especies</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="153"/>
         <source>Show crop</source>
-        <translation>Mostrar los cultivos</translation>
+        <translation>Mostrar las especies</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="190"/>
         <source>Add crop</source>
-        <translation>Añadir un cultivo</translation>
+        <translation>Añadir una especie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsFamilyDelegate.qml" line="203"/>
         <source>Unknown</source>
-        <translation>Desconocido</translation>
+        <translation>Desconocida</translation>
     </message>
 </context>
 <context>
