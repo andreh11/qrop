@@ -15,7 +15,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="119"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Ce programme est fourni SANS AUCUNE GARANTIE. Pour plus de détails, visitez &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
+        <translation>Ce programme est fourni SANS AUCUNE GARANTIE.&lt;br/&gt;Pour plus de détails, visitez &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
         <source>Debug information</source>
-        <translation>Informations de déboguage</translation>
+        <translation>Informations de débogage</translation>
     </message>
     <message>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
@@ -522,7 +522,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="55"/>
         <source>Total Revenue</source>
-        <translation>CA total (Chiffre d&apos;Affaire total)</translation>
+        <translation>CA total (Chiffre d&apos;affaire total)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
@@ -537,7 +537,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="70"/>
         <source>Field Revenue</source>
-        <translation>CA PC (Chiffre d&apos;Affaire plein champ)</translation>
+        <translation>CA PC (Chiffre d&apos;affaire plein champ)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="75"/>
@@ -552,7 +552,7 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="85"/>
         <source>Greenhouse Revenue</source>
-        <translation>CA SA (Chiffre d&apos;Affaire sous abri)</translation>
+        <translation>CA SA (Chiffre d&apos;affaire sous abri)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="137"/>
@@ -1776,7 +1776,7 @@
         <location filename="../core/dbutils/planting.cpp" line="929"/>
         <location filename="../core/dbutils/planting.cpp" line="937"/>
         <source>Bad date format, should be week number or ISO date: %1</source>
-        <translation>Mauvais format de date, devait être un numéro de semaine ou une date ISO: %1</translation>
+        <translation>Mauvais format de date, devait être un numéro de semaine ou une date ISO : %1</translation>
     </message>
     <message>
         <location filename="../core/dbutils/planting.cpp" line="950"/>
