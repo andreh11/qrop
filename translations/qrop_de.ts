@@ -21,7 +21,7 @@
         <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="213"/>
         <source>News</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuhigkeiten</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="144"/>
@@ -31,17 +31,17 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="152"/>
         <source>Retry fetching News</source>
-        <translation type="unfinished"></translation>
+        <translation>Abruf von Nachrichten wiederholen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="175"/>
         <source>Mark news as read</source>
-        <translation type="unfinished"></translation>
+        <translation>als gelesen markieren</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
         <source>Debug information</source>
-        <translation type="unfinished"></translation>
+        <translation>Debug-Informationen</translation>
     </message>
     <message>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
@@ -50,7 +50,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="209"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kredit</translation>
     </message>
     <message>
         <source>Debug informations</source>
@@ -62,22 +62,22 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="40"/>
         <source>Add New Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Kulture hinzufügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Kulture</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="97"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbe</translation>
     </message>
 </context>
 <context>
@@ -85,12 +85,12 @@
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="39"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinfügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="48"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Stornieren</translation>
     </message>
 </context>
 <context>
@@ -98,22 +98,22 @@
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="37"/>
         <source>Do not close</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht schließen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="46"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Stornieren</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -121,17 +121,17 @@
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="15"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Familie hinzufügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="39"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="52"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbe</translation>
     </message>
 </context>
 <context>
@@ -139,12 +139,12 @@
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="16"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Familie Hinzufügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="33"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlüsselwort</translation>
     </message>
 </context>
 <context>
@@ -152,17 +152,17 @@
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="35"/>
         <source>Add Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Einheit</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="68"/>
         <source>Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Abkürzung</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="79"/>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>voller Name</translation>
     </message>
 </context>
 <context>
@@ -170,22 +170,22 @@
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="41"/>
         <source>Add New Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Sorte hinzufügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="74"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorte</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="86"/>
         <source>Choose a company</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie eine Firma</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="87"/>
         <source>Seed Company</source>
-        <translation type="unfinished"></translation>
+        <translation>Saatgut Unternehmen</translation>
     </message>
 </context>
 <context>
@@ -197,17 +197,17 @@
     <message>
         <location filename="../core/buildinfo.cpp" line="28"/>
         <source>Unknown build version</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannte Build-Version</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="34"/>
         <source>Unknown commit hash</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Commit-Hash</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="40"/>
         <source>Unknown commit branch</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Commit-Zweig</translation>
     </message>
 </context>
 <context>
@@ -235,139 +235,139 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="37"/>
         <source>Task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitplans</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="345"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF (*.pdf)</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/CalendarPage.qml" line="80"/>
         <source>%L1 task(s) selected</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%L1 Aufgabe selektioniert</numerusform>
+            <numerusform>%L1  Aufgaben selektioniert</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="93"/>
         <source>Add task</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufgabe Hinfügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="102"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorlagen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="113"/>
         <source>Search Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufgabe suchen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="125"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Erledigt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="131"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation>zu tun</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="136"/>
         <source>Overdue</source>
-        <translation type="unfinished"></translation>
+        <translation>Verspätung</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="156"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="162"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="352"/>
         <source>Print the task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitplans ausdrucken</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="179"/>
         <source>Current week</source>
-        <translation type="unfinished"></translation>
+        <translation>laufende Woche</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="185"/>
         <source>Current month</source>
-        <translation type="unfinished"></translation>
+        <translation>laufende Monat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="190"/>
         <source>Current year</source>
-        <translation type="unfinished"></translation>
+        <translation>laufende Jahr</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="198"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>stornieren</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="207"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="354"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>ausdrucken</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="238"/>
         <source>No tasks done, due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine erledigten, fälligen oder überfälligen Aufgaben für Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="240"/>
         <source>No tasks done or due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Aufgaben erledigt oder fällig für Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="242"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Aufgaben erledigt oder überfällig für Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="244"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="246"/>
         <source>No tasks due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine fälligen oder überfälligen Aufgaben für Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="248"/>
         <source>No tasks done week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine fertige Aufgaben Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="250"/>
         <source>No task due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Aufgaben zu tun am Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="252"/>
         <source>No tasks overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine überfälligen Aufgaben für Woche %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="254"/>
         <source>No tasks to show</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Aufgaben zum Anzeigen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="266"/>
         <source>Check at least one type to see them</source>
-        <translation type="unfinished"></translation>
+        <translation>Prüfen Sie mindestens einen Typ, um sie zu sehen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="274"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinfügen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="353"/>
         <source>Please type a name for the PDF.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte geben Sie einen Namen für das PDF ein.</translation>
     </message>
     <message>
         <source>No tasks to show. Check at least one type to see them!</source>
@@ -484,12 +484,12 @@
     <message>
         <location filename="../desktop/qml/CalendarView.qml" line="178"/>
         <source>Previous month</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriger Monat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarView.qml" line="195"/>
         <source>Next month</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächster Monat</translation>
     </message>
 </context>
 <context>
@@ -502,93 +502,93 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="35"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Playlist auf das markierte Lied reduzieren</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="40"/>
         <source>Varieties</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorten</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="45"/>
         <source>Total length</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtlänge</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="50"/>
         <source>Total yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtertrag</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="55"/>
         <source>Total Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtumsatz</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
         <source>Field length</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldlänge</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="65"/>
         <source>Field yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldertrag</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="70"/>
         <source>Field Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldumsatz</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="75"/>
         <source>Greenhouse length</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewächshauslänge</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="80"/>
         <source>Greenhouse yield</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewächshausertrag</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="85"/>
         <source>Greenhouse Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewächshaus-Einnahmen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="137"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="183"/>
         <source>Estimated revenue</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschätzter Umsatz</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="184"/>
         <source>$%L1</source>
-        <translation type="unfinished"></translation>
+        <translation>$%L1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="192"/>
         <location filename="../desktop/qml/ChartsPage.qml" line="202"/>
         <source>Number of beds</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Betten</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="193"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Feld</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="203"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewächshaus</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="212"/>
         <source>Number of cultivars</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Sorten</translation>
     </message>
     <message>
         <source>Number of crops</source>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
