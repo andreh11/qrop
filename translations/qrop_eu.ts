@@ -10,38 +10,38 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="103"/>
         <source>A cross-platform tool for crop planning and recordkeeping. Made by farmers, for farmers with the help of the French coop &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baratzegintza arloan, barazkien planifikatzeko eta segitzeko plataformaniztun tresna. Baratzezain batzuek sortu dutena, baratzezainentzat, &lt;a href=&apos;https://latelierpaysan.org&apos;&gt;L&apos;Atelier paysan&lt;/a&gt; frantses kooperatibaren laguntzarekin.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="119"/>
         <source>This program comes with ABSOLUTELY NO WARRANTY,&lt;br/&gt;for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programa hori, BERMERIK GABE banatua da.&lt;br/&gt;Xehetasun gehiagorentzat,  &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt; bisita ezazu(e).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="137"/>
         <location filename="../desktop/qml/AboutDialog.qml" line="213"/>
         <source>News</source>
-        <translation type="unfinished"></translation>
+        <translation>Berriak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="144"/>
         <source>You need an internet connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Internet konexio bat beharrezkoa da</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="152"/>
         <source>Retry fetching News</source>
-        <translation type="unfinished"></translation>
+        <translation>Berrien berreskuratzea berriz entseatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="175"/>
         <source>Mark news as read</source>
-        <translation type="unfinished"></translation>
+        <translation>Irakurria bezala agertu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="227"/>
         <source>Debug information</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errorea kentzeko informazioak</translation>
     </message>
     <message>
         <source>This program comes with ABSOLUTELY NO WARRANTY, for more details, visit &lt;a href=&apos;https://www.gnu.org/licenses/gpl-3.0.html&apos;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
@@ -50,7 +50,7 @@
     <message>
         <location filename="../desktop/qml/AboutDialog.qml" line="209"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kredituak</translation>
     </message>
     <message>
         <source>Debug informations</source>
@@ -62,22 +62,22 @@
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="40"/>
         <source>Add New Crop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Espezie berri bat gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="68"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Espezie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="78"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddCropDialog.qml" line="97"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolorea</translation>
     </message>
 </context>
 <context>
@@ -85,12 +85,12 @@
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="39"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddDialogButtonBox.qml" line="48"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezabatu</translation>
     </message>
 </context>
 <context>
@@ -98,22 +98,22 @@
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="37"/>
         <source>Do not close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ez itxi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="46"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezabatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddEditDialogFooter.qml" line="55"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldatu</translation>
     </message>
 </context>
 <context>
@@ -121,17 +121,17 @@
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="15"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Famili berria gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="39"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddFamilyDialog.qml" line="52"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolorea</translation>
     </message>
 </context>
 <context>
@@ -139,12 +139,12 @@
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="16"/>
         <source>Add New Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Famili berria gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddKeywordDialog.qml" line="33"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gako-hitza</translation>
     </message>
 </context>
 <context>
@@ -152,17 +152,17 @@
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="35"/>
         <source>Add Unit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neurri bat gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="68"/>
         <source>Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Laburdura</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddUnitDialog.qml" line="79"/>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulazio osoa</translation>
     </message>
 </context>
 <context>
@@ -170,22 +170,22 @@
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="41"/>
         <source>Add New Variety</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aldaera bat gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="74"/>
         <source>Variety</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aldaera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="86"/>
         <source>Choose a company</source>
-        <translation type="unfinished"></translation>
+        <translation>Enpresa bat hautatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddVarietyDialog.qml" line="87"/>
         <source>Seed Company</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enpresa</translation>
     </message>
 </context>
 <context>
@@ -197,17 +197,17 @@
     <message>
         <location filename="../core/buildinfo.cpp" line="28"/>
         <source>Unknown build version</source>
-        <translation type="unfinished"></translation>
+        <translation>Eraikuntza-bertsio ezezaguna</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="34"/>
         <source>Unknown commit hash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Commit hash ezezaguna</translation>
     </message>
     <message>
         <location filename="../core/buildinfo.cpp" line="40"/>
         <source>Unknown commit branch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Commit adar ezezaguna</translation>
     </message>
 </context>
 <context>
@@ -235,139 +235,139 @@
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="37"/>
         <source>Task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eginbeharren egutegia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="345"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PDFa (* .pdf)</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/CalendarPage.qml" line="80"/>
         <source>%L1 task(s) selected</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Eginbehar % L1 hautatua</numerusform>
+            <numerusform>% L1 eginbehar hautatuak</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="93"/>
         <source>Add task</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eginbehar bat hautatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="102"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Txantiloiak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="113"/>
         <source>Search Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eginbeharrak bilatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="125"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egina</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="131"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egitekoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="136"/>
         <source>Overdue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Berandutakoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="156"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="162"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="352"/>
         <source>Print the task calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Eginbeharren egutegia inprimatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="179"/>
         <source>Current week</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraingo astea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="185"/>
         <source>Current month</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraingo hilabetea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="190"/>
         <source>Current year</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraingo urtea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="198"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezabatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="207"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="354"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Inprimatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="238"/>
         <source>No tasks done, due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. asterako, egin, egiteko edo berandu eginbeharrik ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="240"/>
         <source>No tasks done or due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. asterako, egin edo egiteko eginbeharrik ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="242"/>
         <source>No tasks done or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. asterako, eginbeharrik, eginik edo beranduan denik, ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="244"/>
         <location filename="../desktop/qml/CalendarPage.qml" line="246"/>
         <source>No tasks due or overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. asterako, eginbeharrik, egiteko edo beranduan denik, ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="248"/>
         <source>No tasks done week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. astean, ez duzu(e) eginbeharrik egin</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="250"/>
         <source>No task due for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. astean, ez duzu(e) eginbeharrik egiteko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="252"/>
         <source>No tasks overdue for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1. astean, ez duzu(e) eginbeharrik beranduan</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="254"/>
         <source>No tasks to show</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eginbeharrik ez agertzeko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="266"/>
         <source>Check at least one type to see them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eginbehar mota bat hautatu bederen, ikusteko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="274"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarPage.qml" line="353"/>
         <source>Please type a name for the PDF.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PDFrako izena idatzi.</translation>
     </message>
     <message>
         <source>No tasks to show. Check at least one type to see them!</source>
@@ -484,12 +484,12 @@
     <message>
         <location filename="../desktop/qml/CalendarView.qml" line="178"/>
         <source>Previous month</source>
-        <translation type="unfinished"></translation>
+        <translation>Aitzineko hilabetea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/CalendarView.qml" line="195"/>
         <source>Next month</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondoko hilabetea</translation>
     </message>
 </context>
 <context>
@@ -497,98 +497,98 @@
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="27"/>
         <source>Charts</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikoak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="35"/>
         <source>Crop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Espezie</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="40"/>
         <source>Varieties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aldaerak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="45"/>
         <source>Total length</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plantxen kopuru osoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="50"/>
         <source>Total yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Emaitza osoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="55"/>
         <source>Total Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Negozio kopuru osoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="60"/>
         <source>Field length</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plantxen kopurua, alorrean</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="65"/>
         <source>Field yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Emaitza alorrean</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="70"/>
         <source>Field Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Negozio kopurua alorrean</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="75"/>
         <source>Greenhouse length</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantxen kopurua landaretegian</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="80"/>
         <source>Greenhouse yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Emaitza landaretegian</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="85"/>
         <source>Greenhouse Revenue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Negozio kopurua landaretegian</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="137"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bilatu...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="183"/>
         <source>Estimated revenue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Negozio kopuruaren balorazioa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="184"/>
         <source>$%L1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%L1 €</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="192"/>
         <location filename="../desktop/qml/ChartsPage.qml" line="202"/>
         <source>Number of beds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plantxen kopurua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="193"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alorra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="203"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Landaretegia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChartsPage.qml" line="212"/>
         <source>Number of cultivars</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aldaeren kopurua</translation>
     </message>
     <message>
         <source>Number of crops</source>
@@ -608,17 +608,17 @@
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="155"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="163"/>
         <source>Unassign</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ateratu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ConflictAlertButton.qml" line="173"/>
         <source>Split</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatitu</translation>
     </message>
 </context>
 <context>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../desktop/qml/CropRevenueChart.qml" line="25"/>
         <source>Crop revenue distribution (in €)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nogozio kopuruaren banaketa (€-tan)</translation>
     </message>
 </context>
 <context>
@@ -637,7 +637,7 @@
         <location filename="../core/dbutils/db.cpp" line="267"/>
         <location filename="../core/dbutils/db.cpp" line="269"/>
         <source>Alliaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alliaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="255"/>
@@ -646,7 +646,7 @@
         <location filename="../core/dbutils/db.cpp" line="275"/>
         <location filename="../core/dbutils/db.cpp" line="277"/>
         <source>Apiaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Apiaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="256"/>
@@ -654,7 +654,7 @@
         <location filename="../core/dbutils/db.cpp" line="281"/>
         <location filename="../core/dbutils/db.cpp" line="283"/>
         <source>Asteraceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Asteraceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="257"/>
@@ -666,7 +666,7 @@
         <location filename="../core/dbutils/db.cpp" line="295"/>
         <location filename="../core/dbutils/db.cpp" line="297"/>
         <source>Brassicaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brassicaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="258"/>
@@ -674,7 +674,7 @@
         <location filename="../core/dbutils/db.cpp" line="301"/>
         <location filename="../core/dbutils/db.cpp" line="303"/>
         <source>Chenopodiaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chenopodiaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="259"/>
@@ -684,7 +684,7 @@
         <location filename="../core/dbutils/db.cpp" line="311"/>
         <location filename="../core/dbutils/db.cpp" line="313"/>
         <source>Cucurbitaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cucurbitaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="260"/>
@@ -692,7 +692,7 @@
         <location filename="../core/dbutils/db.cpp" line="317"/>
         <location filename="../core/dbutils/db.cpp" line="319"/>
         <source>Fabaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fabaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="261"/>
@@ -701,73 +701,73 @@
         <location filename="../core/dbutils/db.cpp" line="325"/>
         <location filename="../core/dbutils/db.cpp" line="327"/>
         <source>Solanaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Solanaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="262"/>
         <location filename="../core/dbutils/db.cpp" line="329"/>
         <source>Valerianaceae</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valerianaceae</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="264"/>
         <source>Garlic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baratxuria</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="266"/>
         <source>Onion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tipula</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="268"/>
         <source>Leek</source>
-        <translation type="unfinished"></translation>
+        <translation>Porrua</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="270"/>
         <source>Carrot</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastanagrea</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="272"/>
         <source>Celery</source>
-        <translation type="unfinished"></translation>
+        <translation>Apioa</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="274"/>
         <source>Fennel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mihilua</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="276"/>
         <source>Parsnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastinaka</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="278"/>
         <source>Chicory</source>
-        <translation type="unfinished"></translation>
+        <translation>Txikoria</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="280"/>
         <source>Belgian endive</source>
-        <translation type="unfinished"></translation>
+        <translation>Endibia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="282"/>
         <source>Lettuce</source>
-        <translation type="unfinished"></translation>
+        <translation>Uraza</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="284"/>
         <source>Cabbage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aza burutua</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="286"/>
         <source>Brussel Sprouts</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruselako aza</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="288"/>
@@ -777,137 +777,137 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="290"/>
         <source>Cauliflower</source>
-        <translation type="unfinished"></translation>
+        <translation>Azalorea</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="292"/>
         <source>Broccoli</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brokolia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="294"/>
         <source>Turnip</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="296"/>
         <source>Radish</source>
-        <translation type="unfinished"></translation>
+        <translation>Errefaua</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="298"/>
         <source>Beetroot</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erremolatxa</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="300"/>
         <source>Chard</source>
-        <translation type="unfinished"></translation>
+        <translation>Zerba</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="302"/>
         <source>Spinach</source>
-        <translation type="unfinished"></translation>
+        <translation>Espinaka</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="304"/>
         <source>Cucumber</source>
-        <translation type="unfinished"></translation>
+        <translation>Luzoker</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="306"/>
         <source>Zucchini</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuiatxoa</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="308"/>
         <source>Melon</source>
-        <translation type="unfinished"></translation>
+        <translation>Meloia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="310"/>
         <source>Watermelon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ur meloia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="312"/>
         <source>Winter squash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="314"/>
         <source>Bean</source>
-        <translation type="unfinished"></translation>
+        <translation>Ilarra</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="316"/>
         <source>Fava bean</source>
-        <translation type="unfinished"></translation>
+        <translation>Baba</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="318"/>
         <source>Pea</source>
-        <translation type="unfinished"></translation>
+        <translation>Ilar biribila</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="320"/>
         <source>Eggplant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alberjinia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="322"/>
         <source>Pepper</source>
-        <translation type="unfinished"></translation>
+        <translation>Biper-handi</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="324"/>
         <source>Potatoe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lur sagarra</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="326"/>
         <source>Tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomatea</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="328"/>
         <source>Mâche</source>
-        <translation type="unfinished"></translation>
+        <translation>Ardi-mihia</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="331"/>
         <source>Cultivation and Tillage</source>
-        <translation type="unfinished"></translation>
+        <translation>Lurraren lana</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="332"/>
         <source>Fertilize and Amend</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongarritze eta Emendakin</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="333"/>
         <source>Irrigate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ureztatze</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="334"/>
         <source>Maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation>Mantentze</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="335"/>
         <source>Pest and Disease</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bizkarkinak eta eritasunak</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="336"/>
         <source>Prune</source>
-        <translation type="unfinished"></translation>
+        <translation>Mozketa</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="337"/>
         <source>Row Cover and Mulch</source>
-        <translation type="unfinished"></translation>
+        <translation>Olana</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="338"/>
@@ -917,67 +917,67 @@
     <message>
         <location filename="../core/dbutils/db.cpp" line="339"/>
         <source>Thin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Argaltze</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="340"/>
         <source>Trellis</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hesitze</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="341"/>
         <source>Weed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Belar kentze</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="343"/>
         <source>kilogram</source>
-        <translation type="unfinished"></translation>
+        <translation>kilogramo</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="344"/>
         <source>kg</source>
-        <translation type="unfinished"></translation>
+        <translation>kg</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="345"/>
         <source>bunch</source>
-        <translation type="unfinished"></translation>
+        <translation>sorta</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="346"/>
         <source>bn</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sta</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="347"/>
         <source>head</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pieza</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="348"/>
         <source>hd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">na</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="350"/>
         <source>Unknown company</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enpresa ezezaguna</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="383"/>
         <source>Direct sow</source>
-        <translation type="unfinished"></translation>
+        <translation>Zuzenean ereina</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="385"/>
         <source>Greenhouse sow</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaretegian ereina</translation>
     </message>
     <message>
         <location filename="../core/dbutils/db.cpp" line="387"/>
         <source>Transplant</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa</translation>
     </message>
     <message>
         <source>Transplant sow</source>
@@ -993,7 +993,7 @@
     <message>
         <location filename="../desktop/qml/DatePicker.qml" line="62"/>
         <source>Done on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1an egina</translation>
     </message>
 </context>
 <context>
@@ -1001,7 +1001,7 @@
     <message>
         <location filename="../desktop/qml/DistributionChart.qml" line="25"/>
         <source>Crop space distribution (in bed meter)</source>
-        <translation type="unfinished"></translation>
+        <translation>Espazioaren banaketa (plantxa-metrotan)</translation>
     </message>
 </context>
 <context>
@@ -1009,52 +1009,52 @@
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="127"/>
         <source>Add Harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketa bat gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="127"/>
         <source>Edit Harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketa aldatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="165"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopurua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="183"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="196"/>
         <source>Labor Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Lan denbora</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="235"/>
         <source>Unselect all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa guztien hautaketa ezabatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="236"/>
         <source>Select all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa guztiak hautatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="247"/>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Aribidean</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="250"/>
         <source>Show only currently harvested plantings for date</source>
-        <translation type="unfinished"></translation>
+        <translation>Biltze aribidean diren landaketak erakutsi bakarrik, idatzia den datarentzat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestDialog.qml" line="251"/>
         <source>Show all plantings</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa guztiak erakutsi</translation>
     </message>
     <message>
         <source>kg</source>
@@ -1075,88 +1075,88 @@
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="42"/>
         <source>Planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="43"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="44"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopourua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="45"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="46"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Iraupena</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="68"/>
         <source>Harvests</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="466"/>
         <source>Harvest added</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketa gehitua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="475"/>
         <source>Harvest modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketa aldatua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="484"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDFa (* .pdf)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="492"/>
         <source>Please type a name for the PDF.</source>
-        <translation type="unfinished"></translation>
+        <translation>PDFrako izena sartu, otoi.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="493"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Inprimatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="91"/>
         <source>No harvests for week %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 . astean, bilketarik ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="99"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="119"/>
         <source>Add harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketa bat gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="160"/>
         <source>Search harvests</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketak bilatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="191"/>
         <location filename="../desktop/qml/HarvestsPage.qml" line="491"/>
         <source>Print the harvests list</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilketen zerrenda inprimatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HarvestsPage.qml" line="394"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezabatu</translation>
     </message>
     <message numerus="yes">
         <source>%L1 harvest(s) selected</source>
@@ -1183,27 +1183,27 @@
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="102"/>
         <source>Greenhouse start date</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaretegian hasiera data</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="117"/>
         <source>Field sowing</source>
-        <translation type="unfinished"></translation>
+        <translation>Landa ereitea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="117"/>
         <source>Field planting</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaketa alorrean</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="132"/>
         <source>First harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Lehen bilketa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LightPlantingForm.qml" line="147"/>
         <source>Last harvest</source>
-        <translation type="unfinished"></translation>
+        <translation>Azken bilketa</translation>
     </message>
 </context>
 <context>
@@ -1211,47 +1211,47 @@
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="126"/>
         <source>Add Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="126"/>
         <source>Edit Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak aldatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="150"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Izena</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="163"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Luzetasuna</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="164"/>
         <source>bed m</source>
-        <translation type="unfinished"></translation>
+        <translation>m plantxa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="180"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Zabaltasuna</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="181"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="200"/>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopurua</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationDialog.qml" line="217"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaretegian</translation>
     </message>
     <message>
         <source>cm</source>
@@ -1263,25 +1263,25 @@
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="50"/>
         <source>Remaining beds: %L1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelditzen diren plantxak: %L1</translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/LocationFormBox.qml" line="51"/>
         <source>Remaining length: %L1 m</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Gelditzen den luzetasuna: m %L1</numerusform>
+            <numerusform>Gelditzen den luzetasuna: %L1 m</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="57"/>
         <source>Unassign all beds</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantxa guztien hautaketa kendu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationFormBox.qml" line="67"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Itxi</translation>
     </message>
 </context>
 <context>
@@ -1289,7 +1289,7 @@
     <message>
         <location filename="../desktop/qml/LocationView.qml" line="354"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Izena</translation>
     </message>
 </context>
 <context>
@@ -1297,75 +1297,75 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="62"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="505"/>
         <source>PDF (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDFa (* .pdf)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="98"/>
         <source>Edit Crop Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Lursaila aldatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="98"/>
         <source>Assign locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak esleitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="305"/>
         <location filename="../desktop/qml/LocationsPage.qml" line="512"/>
         <source>Print the crop map</source>
-        <translation type="unfinished"></translation>
+        <translation>Baratzegintza plana inprimatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="495"/>
         <source>Rotation problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Lur aldizkatze arazoa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="121"/>
         <source>Add sublocations</source>
-        <translation type="unfinished"></translation>
+        <translation>Azpi-kokalekuak gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="121"/>
         <source>Add Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokalekuak gehitu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="138"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aldatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="191"/>
         <source>Expand and collapse location levels</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kokalekuak mailaz maila zabaldu eta plegatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="218"/>
         <source>F</source>
         <comment>Abbreviation for family</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="218"/>
         <source>C</source>
         <comment>Abbreviation for crop</comment>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="221"/>
         <source>Click to show crop color</source>
-        <translation type="unfinished"></translation>
+        <translation>Egin klik landareen koloreak erakusteko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="221"/>
         <source>Click to show family color</source>
-        <translation type="unfinished"></translation>
+        <translation>Egin klik familien koloreak erakusteko</translation>
     </message>
     <message>
         <source>GH</source>
@@ -1376,47 +1376,47 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="229"/>
         <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <translation>Bikoiztu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="240"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezabatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="248"/>
         <source>Remove selected locations?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hautatu kokalekuak ezabatu?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="254"/>
         <source>This will remove the selected locations and their sublocations. The whole planting history will be lost!</source>
-        <translation type="unfinished"></translation>
+        <translation>Horrek, hautatuak dituzu(e)n kokalekuak eta azpi-kokalekuak, ezabatuko ditu. Landareen historia galduko duzu(e)!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="264"/>
         <source>Only show empty locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Hutsik diren kokalekuak erakutsi bakarrik</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="273"/>
         <source>Search Plantings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Landareak bilatu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="277"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Guztiak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="278"/>
         <source>Greenhouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Landaretegian</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="279"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Alorrean</translation>
     </message>
     <message>
         <source>Print the task calendar</source>
@@ -1425,12 +1425,12 @@
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="348"/>
         <source>No locations yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraindik, kokalekurik ez duzu(e)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="348"/>
         <source>No greenhouse locations yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraindik, kokalekurik ez duzu(e) landaretegian</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LocationsPage.qml" line="349"/>
